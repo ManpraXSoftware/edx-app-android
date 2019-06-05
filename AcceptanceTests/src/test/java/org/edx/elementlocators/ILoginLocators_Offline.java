@@ -1,4 +1,4 @@
-package org.edx.elementlocators;
+package org.tta.elementlocators;
 
 public interface ILoginLocators_Offline {
 	
@@ -38,21 +38,21 @@ public interface ILoginLocators_Offline {
 	public String getTxtOrSignInWithName();
 	
 	/* Android Locator Ids */
-	String Android_btnLogOutId = "org.edx.mobile:id/logout_button";
+	String Android_btnLogOutId = "org.tta.mobile:id/logout_button";
 	String Android_btnHeaderId = "android:id/up";
-	String Android_btnOkPopupId = "org.edx.mobile:id/positiveButton";
-	String ANDROID_ID_EMAIL = "org.edx.mobile:id/email_et";
-	String Android_tbPasswordId = "org.edx.mobile:id/password_et";
-	String Android_btnSigninId = "org.edx.mobile:id/login_button_layout";
-	String Android_btnForgotPasswordId = "org.edx.mobile:id/forgot_password_tv";
-	String Android_btnEULAId = "org.edx.mobile:id/end_user_agreement_tv";
-	String Android_btnNeedAnAccountId = "org.edx.mobile:id/new_user_tv";
-	String Android_lbSignupId = "org.edx.mobile:id/by_signing_up_tv";
-	String Android_lbNewUserId = "org.edx.mobile:id/signup_text";
-	String Android_btnCancelPopupId = "org.edx.mobile:id/negativeButton";
-	String Android_txtEULAHeaderId = "org.edx.mobile:id/tv_dialog_title";
-	String Android_btnfacebookId="org.edx.mobile:id/img_facebook";
-	String Android_btnGmailId="org.edx.mobile:id/img_google";
+	String Android_btnOkPopupId = "org.tta.mobile:id/positiveButton";
+	String ANDROID_ID_EMAIL = "org.tta.mobile:id/email_et";
+	String Android_tbPasswordId = "org.tta.mobile:id/password_et";
+	String Android_btnSigninId = "org.tta.mobile:id/login_button_layout";
+	String Android_btnForgotPasswordId = "org.tta.mobile:id/forgot_password_tv";
+	String Android_btnEULAId = "org.tta.mobile:id/end_user_agreement_tv";
+	String Android_btnNeedAnAccountId = "org.tta.mobile:id/new_user_tv";
+	String Android_lbSignupId = "org.tta.mobile:id/by_signing_up_tv";
+	String Android_lbNewUserId = "org.tta.mobile:id/signup_text";
+	String Android_btnCancelPopupId = "org.tta.mobile:id/negativeButton";
+	String Android_txtEULAHeaderId = "org.tta.mobile:id/tv_dialog_title";
+	String Android_btnfacebookId="org.tta.mobile:id/img_facebook";
+	String Android_btnGmailId="org.tta.mobile:id/img_google";
 	
 
 	/* iOS Locator Ids */

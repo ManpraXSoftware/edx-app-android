@@ -1,6 +1,6 @@
-package org.edx.androidtestsuite;
+package org.tta.androidtestsuite;
 
-import org.edx.basetest.SignUpTestSuiteBase;
+import org.tta.basetest.SignUpTestSuiteBase;
 import org.testng.annotations.Test;
 
 @Test(groups ="Android")

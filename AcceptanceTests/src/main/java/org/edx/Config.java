@@ -1,7 +1,7 @@
-package org.edx;
+package org.tta;
 
-import org.edx.utils.PropertyLoader;
-import org.edx.utils.StringUtils;
+import org.tta.utils.PropertyLoader;
+import org.tta.utils.StringUtils;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 /**
@@ -43,8 +43,8 @@ public final class Config {
 			cap.setCapability("capture-html", true);
 			cap.setCapability("name","edX-Android-test");
 			
-			cap.setCapability("appPackage","org.edx.mobile");
-			cap.setCapability("appActivity","org.edx.mobile.view.SplashActivity");
+			cap.setCapability("appPackage","org.tta.mobile");
+			cap.setCapability("appActivity","org.tta.mobile.view.SplashActivity");
 			cap.setCapability("newCommandTimeout", 10000);
 			cap.setCapability("command-timeout", 600);
 			cap.setCapability("idle-timeout", 800);

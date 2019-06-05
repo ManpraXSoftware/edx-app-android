@@ -1,6 +1,6 @@
-package org.edx.iostestsuite;
+package org.tta.iostestsuite;
 
-import org.edx.basetest.Offline_MyCoursesTestSuiteBase;
+import org.tta.basetest.Offline_MyCoursesTestSuiteBase;
 import org.testng.Reporter;
 import org.testng.annotations.Test;
 

@@ -1,8 +1,8 @@
-package org.edx.nativeapp;
+package org.tta.nativeapp;
 
 import java.util.List;
 
-import org.edx.utils.PropertyLoader;
+import org.tta.utils.PropertyLoader;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;

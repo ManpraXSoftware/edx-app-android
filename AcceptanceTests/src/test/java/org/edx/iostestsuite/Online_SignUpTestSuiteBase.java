@@ -1,6 +1,6 @@
-package org.edx.iostestsuite;
+package org.tta.iostestsuite;
 
-import org.edx.basetest.SignUpTestSuiteBase;
+import org.tta.basetest.SignUpTestSuiteBase;
 
 public class Online_SignUpTestSuiteBase extends SignUpTestSuiteBase{
 

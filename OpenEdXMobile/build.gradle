@@ -1,5 +1,5 @@
 import groovy.json.JsonBuilder
-import org.edx.builder.TaskHelper
+import org.tta.builder.TaskHelper
 
 buildscript {
     repositories {
@@ -23,7 +23,7 @@ buildscript {
         classpath "com.newrelic.agent.android:agent-gradle-plugin:5.4.1"
 
         classpath 'com.facebook.testing.screenshot:plugin:0.8.0'
-        classpath 'com.google.gms:google-services:4.0.1'
+        classpath 'com.google.gms:google-services:4.2.0'
     }
 }
 
@@ -293,7 +293,7 @@ def config = new TaskHelper().loadConfig(project)
 def firebase = config.get('FIREBASE')
 def firebaseEnabled = firebase?.get('ENABLED')
 if (firebaseEnabled?: false) {
-//    apply plugin: 'com.google.gms.google-services'
+    apply plugin: 'com.google.gms.google-services'
 }
 
 android {
@@ -329,7 +329,7 @@ android {
     flavorDimensions "default"
 
     defaultConfig {
-        applicationId "org.edx.mobile"
+        applicationId "org.tta.mobile"
         // minimum version is Android 4.1
         minSdkVersion MIN_SDK_VERSION
         targetSdkVersion TARGET_SDK_VERSION
@@ -343,17 +343,17 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         // test configuration
-        testApplicationId 'org.edx.mobile.test'
+        testApplicationId 'org.tta.mobile.test'
 
         for (task in project.gradle.startParameter.taskNames) {
             if (task.contains("ScreenshotTest")) {
                 Map<String, String> map = new HashMap<String, String>();
-                map.put("package", "org.edx.mobile.test.screenshot");
+                map.put("package", "org.tta.mobile.test.screenshot");
                 setTestInstrumentationRunnerArguments map
             }
         }
 
-        testInstrumentationRunner "org.edx.mobile.test.EdXTestRunner"
+        testInstrumentationRunner "org.tta.mobile.test.EdXTestRunner"
 
         testHandleProfiling true
         testFunctionalTest true
@@ -560,4 +560,4 @@ android.applicationVariants.all { variant ->
     }
 }
 
-//apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.gms.google-services'

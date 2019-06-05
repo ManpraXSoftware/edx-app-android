@@ -1,6 +1,6 @@
-package org.edx.mobile.view.custom.speed;
+package org.tta.mobile.view.custom.speed;
 
-import org.edx.mobile.view.custom.BaseListAdapter;
+import org.tta.mobile.view.custom.BaseListAdapter;
 
 import android.content.Context;
 import android.view.View;

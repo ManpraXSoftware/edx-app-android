@@ -1,6 +1,6 @@
-package org.edx.basetest;
+package org.tta.basetest;
 
-import org.edx.nativeapp.NativeAppDriver;
+import org.tta.nativeapp.NativeAppDriver;
 
 public class CommonFunctionalities extends BaseTest {
 

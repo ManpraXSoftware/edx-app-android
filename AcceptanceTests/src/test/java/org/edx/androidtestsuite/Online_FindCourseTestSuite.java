@@ -1,6 +1,6 @@
-package org.edx.androidtestsuite;
+package org.tta.androidtestsuite;
 
-import org.edx.basetest.FindCourseTestSuiteBase;
+import org.tta.basetest.FindCourseTestSuiteBase;
 import org.testng.annotations.Test;
 
 @Test

@@ -1,10 +1,10 @@
-package org.edx.basetest;
+package org.tta.basetest;
 
 import org.testng.ITestResult;
 import org.testng.Reporter;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
-import org.edx.elementlocators.IFindCourseLocators;
+import org.tta.elementlocators.IFindCourseLocators;
 
 public abstract class FindCourseTestSuiteBase extends CommonFunctionalities
 		implements IFindCourseLocators {

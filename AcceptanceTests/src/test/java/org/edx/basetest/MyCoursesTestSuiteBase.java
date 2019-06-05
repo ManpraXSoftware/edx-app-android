@@ -1,6 +1,6 @@
-package org.edx.basetest;
+package org.tta.basetest;
 
-import org.edx.elementlocators.IMyCoursesLocators;
+import org.tta.elementlocators.IMyCoursesLocators;
 import org.testng.ITestResult;
 import org.testng.Reporter;
 import org.testng.annotations.AfterClass;

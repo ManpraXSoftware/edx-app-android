@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="org.edx.mobile.tta.ui.custom.FormEditText" />
+            type="org.tta.mobile.tta.ui.custom.FormEditText" />
     </data>
 
     <LinearLayout
@@ -36,7 +36,7 @@
 
         </android.support.design.widget.TextInputLayout>
         <TextView
-            android:id="@+id/sub_label"
+            android:id="@+id/etText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="12sp"

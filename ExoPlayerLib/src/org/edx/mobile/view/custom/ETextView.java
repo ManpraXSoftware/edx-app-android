@@ -1,4 +1,4 @@
-package org.edx.mobile.view.custom;
+package org.tta.mobile.view.custom;
 
 
 import android.content.Context;

@@ -6,7 +6,7 @@
             name="viewModel"
             type="OtpViewModel" />
 
-        <import type="org.edx.mobile.tta.ui.otp.view_model.OtpViewModel" />
+        <import type="org.tta.mobile.tta.ui.otp.view_model.OtpViewModel" />
     </data>
 
     <ScrollView

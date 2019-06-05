@@ -1,4 +1,4 @@
-package org.edx.mobile.view.custom.speed;
+package org.tta.mobile.view.custom.speed;
 
 import java.util.List;
 

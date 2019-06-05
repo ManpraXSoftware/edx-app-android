@@ -1,4 +1,4 @@
-package org.edx.utils;
+package org.tta.utils;
 
 public class StringUtils {
 

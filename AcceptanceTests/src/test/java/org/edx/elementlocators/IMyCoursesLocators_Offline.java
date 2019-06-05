@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.edx.elementlocators;
+package org.tta.elementlocators;
 
 /**
  * @author divakarpatil
@@ -78,33 +78,33 @@ public interface IMyCoursesLocators_Offline {
 	// Android id
 	String btnHeaderId = "android:id/up";
 	String btnHeaderNameId = "android:id/action_bar_title";
-	String btnCourseId = "org.edx.mobile:id/course_row_layout";
+	String btnCourseId = "org.tta.mobile:id/course_row_layout";
 	String btnCourseWareName = "Courseware";
-	String btnSectionSubsectionId = "org.edx.mobile:id/chapter_row_layout";
-	String hlnkOpenInBrowserId = "org.edx.mobile:id/open_in_browser_btn";//
-	String btnVideoId = "org.edx.mobile:id/video_row_layout";
+	String btnSectionSubsectionId = "org.tta.mobile:id/chapter_row_layout";
+	String hlnkOpenInBrowserId = "org.tta.mobile:id/open_in_browser_btn";//
+	String btnVideoId = "org.tta.mobile:id/video_row_layout";
 	String txtMyCourseName = "My Courses";
-	String vpVideoPlayerId = "org.edx.mobile:id/preview";
+	String vpVideoPlayerId = "org.tta.mobile:id/preview";
 	
-	String txtMyCourseId = "org.edx.mobile:id/drawer_option_my_courses";
-	String btnLastAccessedId = "org.edx.mobile:id/last_viewed_tv";
-	String btnLMS = "org.edx.mobile:id/lms_btn";
-	String btnPlayPause = "org.edx.mobile:id/pause";
-	String btnRewind = "org.edx.mobile:id/rew";
-	String btnSettings = "org.edx.mobile:id/settings";
-	String btnFullScreenId = "org.edx.mobile:id/fullscreen";
-	String btnLogOutId = "org.edx.mobile:id/logout_button";
-	String popupCC = "org.edx.mobile:id/tv_closedcaption";
-	String popupLanguages = "org.edx.mobile:id/cc_list";
-	String popupLanguagesCancel = "org.edx.mobile:id/tv_cc_cancel";
-	String txtSectionName="org.edx.mobile:id/txt_chapter_title";
+	String txtMyCourseId = "org.tta.mobile:id/drawer_option_my_courses";
+	String btnLastAccessedId = "org.tta.mobile:id/last_viewed_tv";
+	String btnLMS = "org.tta.mobile:id/lms_btn";
+	String btnPlayPause = "org.tta.mobile:id/pause";
+	String btnRewind = "org.tta.mobile:id/rew";
+	String btnSettings = "org.tta.mobile:id/settings";
+	String btnFullScreenId = "org.tta.mobile:id/fullscreen";
+	String btnLogOutId = "org.tta.mobile:id/logout_button";
+	String popupCC = "org.tta.mobile:id/tv_closedcaption";
+	String popupLanguages = "org.tta.mobile:id/cc_list";
+	String popupLanguagesCancel = "org.tta.mobile:id/tv_cc_cancel";
+	String txtSectionName="org.tta.mobile:id/txt_chapter_title";
 
 	// offline
-	String btnOkPopupId = "org.edx.mobile:id/positiveButton";
-	String btnDeleteId = "org.edx.mobile:id/delete_btn";
-	String cbVideoSelectId = "org.edx.mobile:id/video_select_checkbox";
-	String btnEditId = "org.edx.mobile:id/edit_btn";
-	String offlineBarId = "org.edx.mobile:id/offline_bar";
+	String btnOkPopupId = "org.tta.mobile:id/positiveButton";
+	String btnDeleteId = "org.tta.mobile:id/delete_btn";
+	String cbVideoSelectId = "org.tta.mobile:id/video_select_checkbox";
+	String btnEditId = "org.tta.mobile:id/edit_btn";
+	String offlineBarId = "org.tta.mobile:id/offline_bar";
 
 	// IOS Locators id's
 	String btnHeaderIdiOS = "btnNavigation";

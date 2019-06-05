@@ -1,6 +1,6 @@
-package org.edx.basetest;
+package org.tta.basetest;
 
-import org.edx.elementlocators.ISignUpLocators;
+import org.tta.elementlocators.ISignUpLocators;
 import org.testng.annotations.Test;
 
 public abstract class SignUpTestSuiteBase extends BaseTest implements ISignUpLocators{

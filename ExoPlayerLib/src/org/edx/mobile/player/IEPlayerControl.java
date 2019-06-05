@@ -1,4 +1,4 @@
-package org.edx.mobile.player;
+package org.tta.mobile.player;
 
 import android.widget.MediaController.MediaPlayerControl;
 

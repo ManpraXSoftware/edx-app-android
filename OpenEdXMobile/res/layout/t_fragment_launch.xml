@@ -8,7 +8,7 @@
             name="viewModel"
             type="LaunchViewModel" />
 
-        <import type="org.edx.mobile.tta.ui.launch.view_model.LaunchViewModel" />
+        <import type="org.tta.mobile.tta.ui.launch.view_model.LaunchViewModel" />
     </data>
 
     <RelativeLayout

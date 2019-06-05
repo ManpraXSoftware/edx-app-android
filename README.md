@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/edx/edx-app-android.svg?branch=master)](https://travis-ci.org/edx/edx-app-android)
+[![Build Status](https://travis-ci.org.tta/edx-app-android.svg?branch=master)](https://travis-ci.org.tta/edx-app-android)
 
 # edX Android
 
@@ -62,7 +62,7 @@ To use a custom configuration in place of the default configuration, you will ne
 
 
 The full set of known keys can be found in the
-`org/edx/mobile/util/Config.java` file or see [additional documentation](<https://openedx.atlassian.net/wiki/display/MA/App+Configuration+Flags>).
+`org.tta/mobile/util/Config.java` file or see [additional documentation](<https://openedx.atlassian.net/wiki/display/MA/App+Configuration+Flags>).
 
 
 Build Variants

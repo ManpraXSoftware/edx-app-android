@@ -117,4 +117,6 @@
     <string name="error_diet">कृपया अपना DIET कोड चुनिए</string>
     <string name="error_pmis">PMIS कोड रिक्त नहीं हो सकता</string>
     <string name="error_teacher_id">टीचर ID रिक्त नहीं हो सकती</string>
+
+    <string name="com.crashlytics.android.build_id">RANDOM_UUID</string>
 </resources>

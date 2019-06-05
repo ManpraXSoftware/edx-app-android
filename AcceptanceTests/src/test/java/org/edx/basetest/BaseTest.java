@@ -1,11 +1,11 @@
-package org.edx.basetest;
+package org.tta.basetest;
 
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
-import org.edx.nativeapp.NativeAppDriver;
-import org.edx.utils.FileGenerator;
-import org.edx.utils.PropertyLoader;
+import org.tta.nativeapp.NativeAppDriver;
+import org.tta.utils.FileGenerator;
+import org.tta.utils.PropertyLoader;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeTest;

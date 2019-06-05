@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.edx.mobile.player;
+package org.tta.mobile.player;
 
-import org.edx.mobile.player.PlayerDemoActivity.RendererBuilder;
-import org.edx.mobile.player.PlayerDemoActivity.RendererBuilderCallback;
+import org.tta.mobile.player.PlayerDemoActivity.RendererBuilder;
+import org.tta.mobile.player.PlayerDemoActivity.RendererBuilderCallback;
 
 import android.app.Activity;
 import android.media.MediaCodec;

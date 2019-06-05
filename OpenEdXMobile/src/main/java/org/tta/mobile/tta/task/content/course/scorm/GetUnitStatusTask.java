@@ -1,0 +1,29 @@
+package org.tta.mobile.tta.task.content.course.scorm;
+
+import android.content.Context;
+
+import com.google.inject.Inject;
+
+import org.tta.mobile.task.Task;
+import org.tta.mobile.tta.data.local.db.table.UnitStatus;
+import org.tta.mobile.tta.data.remote.api.TaAPI;
+
+import java.util.List;
+
+public class GetUnitStatusTask extends Task<List<UnitStatus>> {
+
+    private String courseId;
+
+    @Inject
+    private TaAPI taAPI;
+
+    public GetUnitStatusTask(Context context, String courseId) {
+        super(context);
+        this.courseId = courseId;
+    }
+
+    @Override
+    public List<UnitStatus> call() throws Exception {
+        return taAPI.getUnitStatus(courseId).execute().body();
+    }
+}

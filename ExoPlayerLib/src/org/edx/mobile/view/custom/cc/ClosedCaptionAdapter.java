@@ -1,7 +1,7 @@
-package org.edx.mobile.view.custom.cc;
+package org.tta.mobile.view.custom.cc;
 
-import org.edx.mobile.player.IVideo.IClosedCaption;
-import org.edx.mobile.view.custom.BaseListAdapter;
+import org.tta.mobile.player.IVideo.IClosedCaption;
+import org.tta.mobile.view.custom.BaseListAdapter;
 
 import android.content.Context;
 import android.view.View;
