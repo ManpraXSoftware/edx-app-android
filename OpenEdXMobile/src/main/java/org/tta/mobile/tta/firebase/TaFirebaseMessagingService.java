@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.DataManager;
 import org.tta.mobile.tta.data.enums.NotificationType;
 import org.tta.mobile.tta.data.local.db.table.Notification;
@@ -72,6 +73,21 @@ public class TaFirebaseMessagingService extends FirebaseMessagingService {
             notificationIntent = new Intent(getApplicationContext(), SplashActivity.class);
         }
 
+        if (loginPrefs.getUsername() != null) {
+            Notification notification = new Notification();
+            notification.setCreated_time(System.currentTimeMillis());
+            notification.setDescription(messageBody);
+            notification.setTitle(messageTitle);
+            notification.setUsername(loginPrefs.getUsername());
+            notification.setType(NotificationType.content.name());
+            notification.setRef_id(path);
+
+            DataManager dataManager = DataManager.getInstance(this);
+            dataManager.addNotification(notification);
+
+            notificationIntent.putExtra(Constants.EXTRA_NOTIFICATION, notification);
+        }
+
         //**add this line**
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
@@ -89,18 +105,6 @@ public class TaFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentIntent(contentIntent)
                 .show();
 
-        if (loginPrefs.getUsername() != null) {
-            Notification notification = new Notification();
-            notification.setCreated_time(System.currentTimeMillis());
-            notification.setDescription(messageBody);
-            notification.setTitle(messageTitle);
-            notification.setUsername(loginPrefs.getUsername());
-            notification.setType(NotificationType.content.name());
-            notification.setRef_id(path);
-
-            DataManager dataManager = DataManager.getInstance(this);
-            dataManager.addNotification(notification);
-        }
     }
 
     private Intent getNavigationIntent(String type,String path)
@@ -109,7 +113,7 @@ public class TaFirebaseMessagingService extends FirebaseMessagingService {
 
         //if user is not logged in navigate to splash screen
         //removed this check "|| (path==null && path.equals(""))"
-        if(type==null || type.equals("") || loginPrefs==null || loginPrefs.getUsername()==null || loginPrefs.getUsername().equals(""))
+        if(type==null || type.equals("") || loginPrefs==null || !loginPrefs.isLoggedIn())
         {
             navigationIntent = new Intent(getApplicationContext(), SplashActivity.class);
             //return here default intent for dashboard

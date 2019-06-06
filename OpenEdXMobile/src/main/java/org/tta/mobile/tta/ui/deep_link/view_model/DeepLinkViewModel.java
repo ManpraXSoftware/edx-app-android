@@ -17,6 +17,7 @@ public class DeepLinkViewModel extends BaseViewModel {
 
     public DeepLinkViewModel(BaseVMActivity activity) {
         super(activity);
+        mDataManager.onAppStart();
     }
 
     public void fetchContent(long contentId){

@@ -3,12 +3,14 @@ package org.tta.mobile.tta.data.local.db.table;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import androidx.annotation.Nullable;
 
 @Entity(tableName = "notification")
-public class Notification {
+public class Notification implements Parcelable {
 
     @PrimaryKey (autoGenerate = true)
     private int local_id;
@@ -21,6 +23,34 @@ public class Notification {
     private boolean seen;
     private long created_time;
     private boolean updated;
+
+    public Notification() {
+    }
+
+    protected Notification(Parcel in) {
+        local_id = in.readInt();
+        id = in.readString();
+        username = in.readString();
+        type = in.readString();
+        ref_id = in.readString();
+        title = in.readString();
+        description = in.readString();
+        seen = in.readByte() != 0;
+        created_time = in.readLong();
+        updated = in.readByte() != 0;
+    }
+
+    public static final Creator<Notification> CREATOR = new Creator<Notification>() {
+        @Override
+        public Notification createFromParcel(Parcel in) {
+            return new Notification(in);
+        }
+
+        @Override
+        public Notification[] newArray(int size) {
+            return new Notification[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -105,5 +135,24 @@ public class Notification {
     @Override
     public boolean equals(@Nullable Object obj) {
         return obj instanceof Notification && (((Notification) obj).local_id==local_id);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(local_id);
+        dest.writeString(id);
+        dest.writeString(username);
+        dest.writeString(type);
+        dest.writeString(ref_id);
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeByte((byte) (seen ? 1 : 0));
+        dest.writeLong(created_time);
+        dest.writeByte((byte) (updated ? 1 : 0));
     }
 }

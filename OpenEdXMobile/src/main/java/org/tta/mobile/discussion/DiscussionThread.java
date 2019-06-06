@@ -254,6 +254,14 @@ public class DiscussionThread implements Serializable, IAuthorData, ProfileImage
         }
     }
 
+    public String getDisplayName(){
+        if (users == null || isAuthorAnonymous()) {
+            return null;
+        } else {
+            return users.get(author).getProfile().getDisplayName();
+        }
+    }
+
     /**
      * Incase of PATCH calls we get a {@link DiscussionThread} object that doesn't have
      * {@link #users} object, so, we patch the new object with existing {@link #users}

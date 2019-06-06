@@ -10,6 +10,7 @@ import org.tta.mobile.R;
 import org.tta.mobile.event.NewVersionAvailableEvent;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
+import org.tta.mobile.tta.data.local.db.table.Notification;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.deep_link.view_model.DeepLinkViewModel;
 import org.tta.mobile.tta.ui.landing.LandingActivity;
@@ -19,6 +20,7 @@ import org.tta.mobile.tta.utils.BreadcrumbUtil;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Collections;
 
 import de.greenrobot.event.EventBus;
 
@@ -43,7 +45,7 @@ public class DeepLinkActivity extends BaseVMActivity {
         viewModel = new DeepLinkViewModel(this);
         binding(R.layout.t_activity_deep_link, viewModel);
 
-        if (loginPrefs == null || loginPrefs.getUsername() == null || loginPrefs.getUsername().equals("")) {
+        if (loginPrefs == null || !loginPrefs.isLoggedIn()) {
             ActivityUtil.gotoPage(this, SigninRegisterActivity.class);
             this.finish();
             return;
@@ -58,6 +60,14 @@ public class DeepLinkActivity extends BaseVMActivity {
                 ispush = push_notification_extras.getBoolean(EXTRA_ISPUSH);
             }
 
+            if (push_notification_extras.containsKey(Constants.EXTRA_NOTIFICATION)) {
+                Notification notification = push_notification_extras.getParcelable(Constants.EXTRA_NOTIFICATION);
+                if (notification != null) {
+                    notification.setSeen(true);
+                    viewModel.getDataManager().updateNotificationsInLocal(Collections.singletonList(notification));
+                }
+            }
+
             if (ispush) {
                 if (push_notification_extras.containsKey(EXTRA_PATH)) {
                     path =push_notification_extras.getString(EXTRA_PATH);
@@ -70,10 +80,22 @@ public class DeepLinkActivity extends BaseVMActivity {
                 if (type != null && path != null){
                     if (type.equalsIgnoreCase("course")){
 
+                        if (!path.equals("")){
+                            viewModel.fetchContent(path);
+                        } else {
+                            ActivityUtil.gotoPage(this, LandingActivity.class);
+                            this.finish();
+                        }
+
                     } else if (type.equalsIgnoreCase("connect")){
 
                         String slug = getSlug(path);
-
+                        if (slug != null && !slug.equals("")){
+                            viewModel.fetchContent(slug);
+                        } else {
+                            ActivityUtil.gotoPage(this, LandingActivity.class);
+                            this.finish();
+                        }
 
                     } else {
                         ActivityUtil.gotoPage(this, LandingActivity.class);

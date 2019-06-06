@@ -10,6 +10,7 @@ import org.tta.mobile.logger.Logger;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -156,6 +157,16 @@ public class DateUtil {
         SimpleDateFormat outputFormat = new SimpleDateFormat("h:mm a", locale);
         return outputFormat.format(new Date(timestamp));
 
+    }
+
+    public static Date getEndOfDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        return calendar.getTime();
     }
 
     private static String getMonthInShort(int month) {

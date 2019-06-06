@@ -102,8 +102,8 @@ public class SigninViewModel extends BaseViewModel {
                     ActivityUtil.gotoPage(mActivity, UserInfoActivity.class, Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 } else {
                     mDataManager.refreshLocalDatabase();
+                    mDataManager.scheduleDeleteFeeds();
                     ActivityUtil.gotoPage(mActivity, LandingActivity.class);
-
                     mActivity.analytic.addMxAnalytics_db(null, Action.SignIn, Nav.signin.name(),
                             Source.Mobile, null);
 

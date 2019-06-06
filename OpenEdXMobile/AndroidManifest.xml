@@ -32,6 +32,10 @@
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     <!--required into assistant search-->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- TTA: To listen boot completed -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <!-- Setup for Code Coverage -->
     <instrumentation
         android:name="org.tta.mobile.instrumentation.EdxInstrumentation"
@@ -465,6 +469,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.CustomStatusBar"/>
 
+        <activity
+            android:name=".tta.ui.survey.UserSurveyActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.CustomStatusBar"/>
+
         <!-- TTA activities end -->
 
         <!-- Setup Google -->
@@ -493,6 +503,14 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".tta.receiver.DeleteFeedsReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 

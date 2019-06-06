@@ -556,4 +556,8 @@ public class LoginPrefs {
     public String getFireBaseToken() {
         return pref.getString(PrefManager.Key.FIREBASE_TOKEN);
     }
+
+    public boolean isLoggedIn(){
+        return getUsername() != null && !getUsername().equals("");
+    }
 }

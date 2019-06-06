@@ -27,5 +27,12 @@ public class DiscussionUser implements Serializable {
         public ProfileImage getImage() {
             return image;
         }
+
+        @SerializedName("display_name")
+        private String displayName;
+
+        public String getDisplayName() {
+            return displayName;
+        }
     }
 }

@@ -36,6 +36,7 @@ public interface ILocalDataSource {
 
     List<Feed> getFeeds(String username, int take, int skip);
     void insertFeeds(List<Feed> feeds);
+    void deleteFeeds(String username);
 
     Category getCategoryBySourceId(long sourceId);
 
@@ -52,7 +53,9 @@ public interface ILocalDataSource {
 
     List<Notification> getAllNotifications(String username);
     List<Notification> getAllNotificationsInPage(String username, int take, int skip);
+    List<Notification> getAllUncreatedNotifications(String username);
     List<Notification> getAllUnupdatedNotifications(String username);
+    Notification getNotificationById(String username, String id);
     void insertNotification(Notification notification);
     void insertNotifications(List<Notification> notifications);
     void updateNotifications(List<Notification> notifications);

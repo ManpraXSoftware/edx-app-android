@@ -421,7 +421,7 @@ public class ScormManager {
             //add user specific folder
 
             //if user is not logged in just skip
-            if(loginPrefs==null ||loginPrefs.getUsername()==null ||loginPrefs.getUsername().equals(""))
+            if(loginPrefs==null || !loginPrefs.isLoggedIn())
                 return;
 
             userSpecificFolder = new File(scormFolder, loginPrefs.getUsername());

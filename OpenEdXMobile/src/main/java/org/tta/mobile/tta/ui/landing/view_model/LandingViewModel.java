@@ -140,7 +140,6 @@ public class LandingViewModel extends BaseViewModel {
     }
 
     private void onAppStart(){
-        mDataManager.updateNotifications(null);
         mDataManager.getMyContentStatuses(new OnResponseCallback<List<ContentStatus>>() {
             @Override
             public void onSuccess(List<ContentStatus> data) {

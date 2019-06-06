@@ -25,11 +25,16 @@ public interface NotificationDao {
     List<Notification> getAllInPage(String username, int take, int skip);
 
     @Query("Select * from notification " +
+            "where username = :username and id = null")
+    List<Notification> getAllUncreated(String username);
+
+    @Query("Select * from notification " +
             "where username = :username and updated = 0 and seen = 1")
     List<Notification> getAllUnupdated(String username);
 
-    @Query("Select * from notification where id = :id")
-    Notification getById(long id);
+    @Query("Select * from notification " +
+            "where username = :username and id = :id")
+    Notification getById(String username, String id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Notification notification);

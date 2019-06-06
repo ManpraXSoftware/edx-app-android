@@ -3,6 +3,7 @@ package org.tta.mobile.tta.data;
 import android.app.Activity;
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -93,6 +94,7 @@ import org.tta.mobile.tta.data.remote.api.MxSurveyAPI;
 import org.tta.mobile.tta.exception.TaException;
 import org.tta.mobile.tta.firebase.FirebaseHelper;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
+import org.tta.mobile.tta.receiver.DeleteFeedsReceiver;
 import org.tta.mobile.tta.scorm.ScormBlockModel;
 import org.tta.mobile.tta.scorm.ScormStartResponse;
 import org.tta.mobile.tta.task.agenda.GetMyAgendaContentTask;
@@ -147,6 +149,7 @@ import org.tta.mobile.tta.task.profile.SubmitFeedbackTask;
 import org.tta.mobile.tta.task.profile.UpdateMyProfileTask;
 import org.tta.mobile.tta.task.search.GetSearchFilterTask;
 import org.tta.mobile.tta.task.search.SearchTask;
+import org.tta.mobile.tta.utils.AlarmManagerUtil;
 import org.tta.mobile.tta.utils.FirebaseUtil;
 import org.tta.mobile.tta.utils.RxUtil;
 import org.tta.mobile.tta.wordpress_client.model.Comment;
@@ -168,6 +171,7 @@ import org.tta.mobile.util.NetworkUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -315,6 +319,7 @@ public class DataManager extends BaseRoboInjector {
 
     public void logout() {
         syncAnalytics();
+        unscheduleDeleteFeeds();
         edxEnvironment.getRouter().performManualLogout(
                 context,
                 mDataManager.getEdxEnvironment().getAnalyticsRegistry(),
@@ -2629,6 +2634,13 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
+    public void syncNotifications(){
+        if (loginPrefs != null && loginPrefs.isLoggedIn()) {
+            createNotifications();
+            updateNotifications(null);
+        }
+    }
+
     public void updateNotifications(OnResponseCallback<CountResponse> callback){
 
         if (NetworkUtil.isConnected(context)) {
@@ -2757,27 +2769,38 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void createNotification(Notification notification){
+    public void createNotifications(){
 
         if (NetworkUtil.isConnected(context)){
 
-            new CreateNotificationsTask(context, Collections.singletonList(notification)){
+            new AsyncTask<Void, Void, List<Notification>>() {
                 @Override
-                protected void onSuccess(List<Notification> notifications) throws Exception {
-                    super.onSuccess(notifications);
-                    if (notifications != null && !notifications.isEmpty()){
-                        new Thread(){
-                            @Override
-                            public void run() {
-                                mLocalDataSource.updateNotifications(notifications);
-                            }
-                        }.start();
-                    }
+                protected List<Notification> doInBackground(Void... voids) {
+                    return mLocalDataSource.getAllUncreatedNotifications(loginPrefs.getUsername());
                 }
 
                 @Override
-                protected void onException(Exception ex) {
+                protected void onPostExecute(List<Notification> notifications) {
+                    super.onPostExecute(notifications);
 
+                    if (notifications != null && !notifications.isEmpty()){
+
+                        new CreateNotificationsTask(context, notifications){
+                            @Override
+                            protected void onSuccess(List<Notification> notifications) throws Exception {
+                                super.onSuccess(notifications);
+                                if (notifications != null && !notifications.isEmpty()){
+                                    updateNotificationsInLocal(notifications);
+                                }
+                            }
+
+                            @Override
+                            protected void onException(Exception ex) {
+
+                            }
+                        }.execute();
+
+                    }
                 }
             }.execute();
 
@@ -2796,15 +2819,18 @@ public class DataManager extends BaseRoboInjector {
 
     public void onAppStart(){
         syncAnalytics();
+        syncNotifications();
     }
 
     public void syncAnalytics(){
 
-        try {
-            Analytic analytic =new Analytic(context);
-            analytic.syncAnalytics();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (loginPrefs != null && loginPrefs.isLoggedIn()) {
+            try {
+                Analytic analytic =new Analytic(context);
+                analytic.syncAnalytics();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -3416,8 +3442,28 @@ public class DataManager extends BaseRoboInjector {
     }
 
     public void updateFirebaseToken(){
-       FirebaseUtil firebaseUtil=new FirebaseUtil(context);
+        FirebaseUtil firebaseUtil=new FirebaseUtil(context);
         firebaseUtil.syncFirebaseToken();
+    }
+
+    public void scheduleDeleteFeeds(){
+        Intent intent = new Intent(context, DeleteFeedsReceiver.class);
+        new AlarmManagerUtil(context).scheduleRepeatingAlarm(intent, Constants.REQUEST_CODE_DELETE_FEEDS,
+                DateUtil.getEndOfDay(new Date()).getTime(), Constants.INTERVAL_DELETE_FEEDS);
+    }
+
+    public void unscheduleDeleteFeeds(){
+        Intent intent = new Intent(context, DeleteFeedsReceiver.class);
+        new AlarmManagerUtil(context).cancelAlarm(intent, Constants.REQUEST_CODE_DELETE_FEEDS);
+    }
+
+    public void deleteAllFeeds(){
+        new Thread(){
+            @Override
+            public void run() {
+                mLocalDataSource.deleteFeeds(loginPrefs.getUsername());
+            }
+        }.start();
     }
 }
 

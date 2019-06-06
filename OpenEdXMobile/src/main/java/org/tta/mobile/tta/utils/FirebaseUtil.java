@@ -50,7 +50,7 @@ public class FirebaseUtil {
     }
 
     private void updateFirebaseTokenToServer(String token) {
-        if (loginPrefs == null || loginPrefs.getUsername() == null || loginPrefs.getUsername().equals(""))
+        if (loginPrefs == null || !loginPrefs.isLoggedIn())
             return;
 
         Bundle parameters = new Bundle();

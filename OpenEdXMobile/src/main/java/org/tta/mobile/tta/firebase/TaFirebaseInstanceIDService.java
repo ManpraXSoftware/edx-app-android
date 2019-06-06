@@ -40,7 +40,7 @@ public class TaFirebaseInstanceIDService extends FirebaseInstanceIdService {
         //update Firebase token , we will update it on sign-in or registration too
 
         Log.d("firebaseToken",token);
-        if(loginPrefs==null || loginPrefs.getUsername()==null || loginPrefs.getUsername().equals("") ||this.getApplicationContext()==null)
+        if(loginPrefs==null || !loginPrefs.isLoggedIn() ||this.getApplicationContext()==null)
             return;
 
         FirebaseHelper fireBaseHelper=new FirebaseHelper();

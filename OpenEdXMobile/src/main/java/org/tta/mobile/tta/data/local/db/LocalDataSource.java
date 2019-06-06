@@ -92,6 +92,11 @@ public class LocalDataSource implements ILocalDataSource {
     }
 
     @Override
+    public void deleteFeeds(String username) {
+        mAppDatabase.feedDao().deleteAll(username);
+    }
+
+    @Override
     public Category getCategoryBySourceId(long sourceId) {
         return mAppDatabase.categoryDao().getBySourceId(sourceId);
     }
@@ -162,8 +167,18 @@ public class LocalDataSource implements ILocalDataSource {
     }
 
     @Override
+    public List<Notification> getAllUncreatedNotifications(String username) {
+        return mAppDatabase.notificationDao().getAllUncreated(username);
+    }
+
+    @Override
     public List<Notification> getAllUnupdatedNotifications(String username) {
         return mAppDatabase.notificationDao().getAllUnupdated(username);
+    }
+
+    @Override
+    public Notification getNotificationById(String username, String id) {
+        return mAppDatabase.notificationDao().getById(username, id);
     }
 
     @Override

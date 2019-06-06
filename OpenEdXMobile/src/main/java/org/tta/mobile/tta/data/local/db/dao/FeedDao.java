@@ -26,4 +26,7 @@ public interface FeedDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Feed> contents);
 
+    @Query("Delete from feed where username = :username")
+    void deleteAll(String username);
+
 }
