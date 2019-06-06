@@ -35,7 +35,7 @@ public class UserInfoViewModel extends BaseViewModel {
     public List<RegistrationOption> skills;
     public List<RegistrationOption> dietCodes;
 
-    public String currentState, currentDistrict;
+    public String currentState, currentDistrict, currentProfession;
     public String classesSectionName, skillSectionName;
 
     public UserInfoViewModel(BaseVMActivity activity) {
@@ -129,12 +129,12 @@ public class UserInfoViewModel extends BaseViewModel {
                 {
                     mActivity.showLongSnack(mActivity.getString(R.string.registered_successfully));
                     mDataManager.refreshLocalDatabase();
+                    mDataManager.updateFirebaseToken();
                     ActivityUtil.gotoPage(mActivity, LandingActivity.class, Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     mActivity.finish();
 
                     mActivity.analytic.addMxAnalytics_db(null, Action.RegisterComplete, Nav.register.name(),
                             Source.Mobile, null);
-
                 }
             }
 

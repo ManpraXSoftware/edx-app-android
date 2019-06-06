@@ -1,6 +1,9 @@
 package org.tta.mobile.tta.ui.otp;
 
+import com.google.inject.Inject;
+
 import org.tta.mobile.util.BrowserUtil;
+import org.tta.mobile.util.Config;
 
 public class OTP_helper {
 

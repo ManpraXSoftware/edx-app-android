@@ -1,5 +1,6 @@
 package org.tta.mobile.tta.ui.logistration.view_model;
 
+import android.Manifest;
 import android.content.Context;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
@@ -19,6 +20,7 @@ import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.otp.OtpActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
+import org.tta.mobile.util.PermissionsUtil;
 
 public class RegisterViewModel extends BaseViewModel {
 

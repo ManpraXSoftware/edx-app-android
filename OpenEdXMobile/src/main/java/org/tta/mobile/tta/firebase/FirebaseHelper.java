@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import org.tta.mobile.util.Config;
+
 import java.util.List;
 
 import static org.tta.mobile.util.BrowserUtil.config;

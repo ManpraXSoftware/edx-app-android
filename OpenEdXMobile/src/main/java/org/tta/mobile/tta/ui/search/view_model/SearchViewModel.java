@@ -1,5 +1,6 @@
 package org.tta.mobile.tta.ui.search.view_model;
 
+import android.Manifest;
 import android.content.Context;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
@@ -50,6 +51,7 @@ import org.tta.mobile.tta.ui.connect.ConnectDashboardActivity;
 import org.tta.mobile.tta.ui.course.CourseDashboardActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.ContentSourceUtil;
+import org.tta.mobile.util.PermissionsUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -538,7 +538,6 @@ public class LoginPrefs {
         pref.put(PrefManager.Key.USER_GENERIC_FIELD_ATTRIBUTE_INFO, gson.toJson(fieldInfo));
     }
 
-
     //TTA Firebase token
     @Nullable
     public void storeFireBaseToken(@NonNull String token) {

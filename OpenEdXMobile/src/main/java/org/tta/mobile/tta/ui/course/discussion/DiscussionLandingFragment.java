@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import org.tta.mobile.R;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
+import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.course.discussion.view_model.DiscussionLandingViewModel;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;

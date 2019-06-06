@@ -1,12 +1,14 @@
 package org.tta.mobile.tta.ui.course.discussion.view_model;
 
 import android.content.Context;
+import android.databinding.ObservableField;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.maurya.mx.mxlib.core.MxInfiniteAdapter;
@@ -29,6 +31,7 @@ import org.tta.mobile.tta.ui.profile.OtherProfileActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.user.ProfileImage;
 import org.tta.mobile.util.DateUtil;
+import org.tta.mobile.view.DiscussionAddPostActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,5 +1,6 @@
 package org.tta.mobile.tta.ui.feed.view_model;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.databinding.ObservableBoolean;
 import android.databinding.ViewDataBinding;
@@ -11,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
+import android.widget.Button;
 
 import com.bumptech.glide.Glide;
 import com.maurya.mx.mxlib.core.MxFiniteAdapter;
@@ -21,6 +23,7 @@ import org.tta.mobile.R;
 import org.tta.mobile.databinding.TRowFeedBinding;
 import org.tta.mobile.databinding.TRowFeedWithUserBinding;
 import org.tta.mobile.databinding.TRowSuggestedTeacherBinding;
+import org.tta.mobile.discussion.DiscussionThread;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
@@ -46,9 +49,12 @@ import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.BadgeHelper;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.tta.utils.DataUtil;
+import org.tta.mobile.util.images.ShareUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.greenrobot.event.EventBus;
 

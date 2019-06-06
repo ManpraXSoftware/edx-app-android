@@ -1,5 +1,6 @@
 package org.tta.mobile.tta.ui.reset_password.view_model;
 
+import android.Manifest;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.otp.OtpActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
+import org.tta.mobile.util.PermissionsUtil;
 
 import static org.tta.mobile.tta.Constants.KEY_MOBILE_NUMBER;
 

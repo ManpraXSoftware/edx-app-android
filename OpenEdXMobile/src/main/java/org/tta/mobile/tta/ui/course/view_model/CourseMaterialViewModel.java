@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 
 import org.tta.mobile.R;
 import org.tta.mobile.databinding.TRowCourseMaterialFooterBinding;
@@ -27,6 +28,7 @@ import org.tta.mobile.module.storage.DownloadCompletedEvent;
 import org.tta.mobile.module.storage.DownloadedVideoDeletedEvent;
 import org.tta.mobile.services.VideoDownloadHelper;
 import org.tta.mobile.tta.Constants;
+import org.tta.mobile.tta.analytics.Analytic;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
@@ -53,6 +55,7 @@ import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.course.CourseScormViewActivity;
 import org.tta.mobile.tta.ui.interfaces.OnTaItemClickListener;
 import org.tta.mobile.tta.utils.ActivityUtil;
+import org.tta.mobile.tta.utils.JsonUtil;
 import org.tta.mobile.util.PermissionsUtil;
 
 import java.io.File;

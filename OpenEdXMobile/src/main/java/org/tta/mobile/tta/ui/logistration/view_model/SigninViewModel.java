@@ -15,6 +15,7 @@ import org.tta.mobile.exception.AuthException;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
+import org.tta.mobile.tta.data.enums.SurveyType;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
@@ -94,7 +95,8 @@ public class SigninViewModel extends BaseViewModel {
             @Override
             public void onSuccess(AuthResponse data) {
                 mActivity.hideLoading();
-                mDataManager.setCustomFieldAttributes(null);
+                performBackgroundTasks();
+
                 if (data.profile.name == null || data.profile.name.equals("") ||
                         data.profile.name.equals(data.profile.username)) {
                     ActivityUtil.gotoPage(mActivity, UserInfoActivity.class, Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -137,6 +139,13 @@ public class SigninViewModel extends BaseViewModel {
                 }
             }
         }.execute();*/
+    }
+
+    private void performBackgroundTasks(){
+        mDataManager.setCustomFieldAttributes(null);
+        mDataManager.setConnectCookies();
+        mDataManager.checkSurvey(mActivity, SurveyType.Login);
+        mDataManager.updateFirebaseToken();
     }
 
     public void changePassword(){

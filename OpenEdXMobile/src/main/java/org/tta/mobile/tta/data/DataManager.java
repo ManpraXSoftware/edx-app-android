@@ -1,5 +1,6 @@
 package org.tta.mobile.tta.data;
 
+import android.app.Activity;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.graphics.Rect;
@@ -39,10 +40,13 @@ import org.tta.mobile.services.VideoDownloadHelper;
 import org.tta.mobile.task.Task;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.Analytic;
+import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.data.enums.CertificateStatus;
+import org.tta.mobile.tta.data.enums.FeedAction;
 import org.tta.mobile.tta.data.enums.ScormStatus;
 import org.tta.mobile.tta.data.enums.SourceName;
 import org.tta.mobile.tta.data.enums.SourceType;
+import org.tta.mobile.tta.data.enums.SurveyType;
 import org.tta.mobile.tta.data.local.db.ILocalDataSource;
 import org.tta.mobile.tta.data.local.db.LocalDataSource;
 import org.tta.mobile.tta.data.local.db.TADatabase;
@@ -69,6 +73,7 @@ import org.tta.mobile.tta.data.model.content.BookmarkResponse;
 import org.tta.mobile.tta.data.model.content.CertificateStatusResponse;
 import org.tta.mobile.tta.data.model.content.MyCertificatesResponse;
 import org.tta.mobile.tta.data.model.content.TotalLikeResponse;
+import org.tta.mobile.tta.data.model.feed.FeedMetadata;
 import org.tta.mobile.tta.data.model.feed.SuggestedUser;
 import org.tta.mobile.tta.data.model.library.CollectionConfigResponse;
 import org.tta.mobile.tta.data.model.library.CollectionItemsResponse;
@@ -83,7 +88,10 @@ import org.tta.mobile.tta.data.model.search.SearchFilter;
 import org.tta.mobile.tta.data.pref.AppPref;
 import org.tta.mobile.tta.data.remote.IRemoteDataSource;
 import org.tta.mobile.tta.data.remote.RetrofitServiceUtil;
+import org.tta.mobile.tta.data.remote.api.MxCookiesAPI;
+import org.tta.mobile.tta.data.remote.api.MxSurveyAPI;
 import org.tta.mobile.tta.exception.TaException;
+import org.tta.mobile.tta.firebase.FirebaseHelper;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.scorm.ScormBlockModel;
 import org.tta.mobile.tta.scorm.ScormStartResponse;
@@ -139,6 +147,7 @@ import org.tta.mobile.tta.task.profile.SubmitFeedbackTask;
 import org.tta.mobile.tta.task.profile.UpdateMyProfileTask;
 import org.tta.mobile.tta.task.search.GetSearchFilterTask;
 import org.tta.mobile.tta.task.search.SearchTask;
+import org.tta.mobile.tta.utils.FirebaseUtil;
 import org.tta.mobile.tta.utils.RxUtil;
 import org.tta.mobile.tta.wordpress_client.model.Comment;
 import org.tta.mobile.tta.wordpress_client.model.CustomComment;
@@ -2757,13 +2766,13 @@ public class DataManager extends BaseRoboInjector {
                 protected void onSuccess(List<Notification> notifications) throws Exception {
                     super.onSuccess(notifications);
                     if (notifications != null && !notifications.isEmpty()){
-                            new Thread(){
-                                @Override
-                                public void run() {
-                                    mLocalDataSource.updateNotifications(notifications);
-                                }
-                            }.start();
-                        }
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                mLocalDataSource.updateNotifications(notifications);
+                            }
+                        }.start();
+                    }
                 }
 
                 @Override
@@ -3389,5 +3398,26 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
+    public void getCustomFieldAttributes(OnResponseCallback<FieldInfo> callback){
+        FieldInfo fieldInfo = loginPrefs.getMxGenericFieldInfo();
+        if (fieldInfo != null){
+            callback.onSuccess(fieldInfo);
+        } else {
+            setCustomFieldAttributes(callback);
+        }
+    }
+
+    public void setConnectCookies(){
+        new MxCookiesAPI().execute();
+    }
+
+    public void checkSurvey(Activity activity, SurveyType surveyType){
+        new MxSurveyAPI(context, activity, surveyType).execute();
+    }
+
+    public void updateFirebaseToken(){
+       FirebaseUtil firebaseUtil=new FirebaseUtil(context);
+        firebaseUtil.syncFirebaseToken();
+    }
 }
 

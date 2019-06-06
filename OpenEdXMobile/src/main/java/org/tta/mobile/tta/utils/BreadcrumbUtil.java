@@ -2,6 +2,7 @@ package org.tta.mobile.tta.utils;
 
 import android.util.SparseArray;
 
+import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import static org.tta.mobile.util.BrowserUtil.appPref;
 
 public class BreadcrumbUtil {

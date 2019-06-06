@@ -19,6 +19,10 @@ import org.tta.mobile.exception.AuthException;
 import org.tta.mobile.http.HttpResponseStatusException;
 import org.tta.mobile.social.SocialFactory;
 import org.tta.mobile.tta.Constants;
+import org.tta.mobile.tta.analytics.analytics_enums.Action;
+import org.tta.mobile.tta.analytics.analytics_enums.Page;
+import org.tta.mobile.tta.analytics.analytics_enums.Source;
+import org.tta.mobile.tta.data.enums.SurveyType;
 import org.tta.mobile.tta.data.model.authentication.MobileNumberVerificationResponse;
 import org.tta.mobile.tta.data.model.authentication.RegisterResponse;
 import org.tta.mobile.tta.data.model.authentication.SendOTPResponse;
@@ -499,8 +503,10 @@ public class OtpViewModel extends BaseViewModel {
             @Override
             public void onSuccess(AuthResponse data) {
                 mActivity.hideLoading();
-                mDataManager.setCustomFieldAttributes(null);
+                performBackgroundTasks();
                 ActivityUtil.gotoPage(mActivity, UserInfoActivity.class, Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                mActivity.analytic.addMxAnalytics_db("TA Registration",Action.Registration,
+                        Page.RegistrationPage.name(), Source.Mobile, number);
                 mActivity.finish();
             }
 
@@ -540,6 +546,13 @@ public class OtpViewModel extends BaseViewModel {
             }
         }.execute();*/
 
+    }
+
+    private void performBackgroundTasks(){
+        mDataManager.setCustomFieldAttributes(null);
+        mDataManager.setConnectCookies();
+        mDataManager.checkSurvey(mActivity, SurveyType.Login);
+        mDataManager.updateFirebaseToken();
     }
 
     private Bundle getRegisterMeBundle()

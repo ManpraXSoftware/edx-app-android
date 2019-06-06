@@ -29,6 +29,7 @@ import org.tta.mobile.module.prefs.LoginPrefs;
 import org.tta.mobile.module.storage.IStorage;
 import org.tta.mobile.profiles.UserProfileActivity;
 import org.tta.mobile.tta.ui.logistration.SigninRegisterActivity;
+import org.tta.mobile.tta.ui.survey.UserSurveyActivity;
 import org.tta.mobile.util.Config;
 import org.tta.mobile.util.EmailUtil;
 import org.tta.mobile.util.SecurityUtil;
@@ -373,7 +374,7 @@ public class Router {
         final String NEW_LINE = "\n";
         final String to = config.getFeedbackEmailAddress();
         StringBuilder body = new StringBuilder();
-        body.append(String.format("%s %s", activity.getString(R.string.android_os_version), android.os.Build.VERSION.RELEASE))
+        body.append(String.format("%s %s", activity.getString(R.string.android_os_version), Build.VERSION.RELEASE))
                 .append(NEW_LINE)
                 .append(String.format("%s %s", activity.getString(R.string.app_version), BuildConfig.VERSION_NAME))
                 .append(NEW_LINE)
@@ -396,5 +397,10 @@ public class Router {
         analyticsRegistry.resetIdentifyUser();
 
         delegate.unsubscribeAll();
+    }
+
+    @NonNull
+    public void getSurveyFeedbackActivity(Activity sourceActivity,String surveyurl) {
+        sourceActivity.startActivity(UserSurveyActivity.newIntent(surveyurl));
     }
 }

@@ -1,5 +1,11 @@
 package org.tta.mobile.tta.data.model;
 
+import android.provider.DocumentsContract;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;

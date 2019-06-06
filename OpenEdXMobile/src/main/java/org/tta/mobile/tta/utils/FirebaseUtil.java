@@ -13,7 +13,7 @@ import org.tta.mobile.tta.firebase.FirebaseUpdateTokenResponse;
 import static org.tta.mobile.util.BrowserUtil.loginPrefs;
 
 public class FirebaseUtil {
-    private static Context mCtx;
+    private Context mCtx;
 
     public FirebaseUtil(Context ctx)
     {
@@ -64,7 +64,7 @@ public class FirebaseUtil {
         Log.d("Mx_firebase", "token is=====>" + token);
 
         try {
-            FirebaseTokenUpdateTask firebasetokn_update_task = new FirebaseTokenUpdateTask(mCtx, parameters) {
+            FirebaseTokenUpdateTask task = new FirebaseTokenUpdateTask(mCtx, parameters) {
                 @Override
                 public void onSuccess(@NonNull FirebaseUpdateTokenResponse result) {
                     Log.d("Mx_FireBase", "firebase token update to server successfull");
@@ -75,7 +75,7 @@ public class FirebaseUtil {
                     Log.d("Mx_FireBase", "firebase token update to server fail ex=>" + ex.toString());
                 }
             };
-            firebasetokn_update_task.execute();
+            task.execute();
         } catch (Exception ex) {
             Log.d("Mx_FireBase", "firebase token update to server fail ex=>" + ex.toString());
         }

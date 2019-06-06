@@ -30,6 +30,7 @@ import org.tta.mobile.tta.ui.course.discussion.DiscussionCommentsTab;
 import org.tta.mobile.tta.ui.interfaces.DiscussionCommentClickListener;
 import org.tta.mobile.tta.ui.profile.OtherProfileActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
+import org.tta.mobile.tta.utils.JsonUtil;
 import org.tta.mobile.util.DateUtil;
 import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.view.common.PageViewStateCallback;

@@ -5,6 +5,7 @@ import android.databinding.ObservableInt;
 
 import org.tta.mobile.R;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
+import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.analytics.analytics_enums.Page;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
 import org.tta.mobile.tta.data.model.StatusResponse;

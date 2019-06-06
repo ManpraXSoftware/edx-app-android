@@ -12,8 +12,11 @@ import org.tta.mobile.tta.analytics.analytics_enums.Source;
 import org.tta.mobile.tta.data.model.SuccessResponse;
 import org.tta.mobile.tta.task.content.course.scorm.GetAllDownloadedScromCountTask;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
+import org.tta.mobile.util.Sha1Util;
 
 import java.util.ArrayList;
+
+import roboguice.RoboGuice;
 
 import static org.tta.mobile.util.BrowserUtil.environment;
 import static org.tta.mobile.util.BrowserUtil.loginPrefs;

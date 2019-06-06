@@ -6,6 +6,9 @@ import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static org.tta.mobile.util.BrowserUtil.loginAPI;
+import static org.tta.mobile.util.BrowserUtil.loginPrefs;
+
 /**
  * Created by JARVICE on 22-12-2017.
  */

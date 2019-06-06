@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.tta.mobile.R;
+import org.tta.mobile.tta.analytics.Analytic;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.data.local.db.table.Category;
@@ -17,6 +18,8 @@ import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.interfaces.SearchPageOpenedListener;
 import org.tta.mobile.tta.ui.library.view_model.LibraryTabViewModel;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
+import org.tta.mobile.tta.utils.JsonUtil;
+import org.tta.mobile.util.PermissionsUtil;
 
 public class LibraryTab extends TaBaseFragment {
     private static final int RANK = 3;

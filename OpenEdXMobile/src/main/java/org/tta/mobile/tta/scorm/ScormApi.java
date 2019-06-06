@@ -1,5 +1,7 @@
 package org.tta.mobile.tta.scorm;
 
+import android.support.annotation.NonNull;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 

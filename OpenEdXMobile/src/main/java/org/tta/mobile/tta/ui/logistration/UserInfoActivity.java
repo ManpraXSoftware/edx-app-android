@@ -3,16 +3,21 @@ package org.tta.mobile.tta.ui.logistration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
 import org.tta.mobile.R;
 import org.tta.mobile.module.registration.model.RegistrationOption;
+import org.tta.mobile.tta.data.model.authentication.FieldInfo;
+import org.tta.mobile.tta.data.model.authentication.Profession;
+import org.tta.mobile.tta.data.model.authentication.StateCustomAttribute;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.custom.FormEditText;
 import org.tta.mobile.tta.ui.custom.FormMultiSpinner;
 import org.tta.mobile.tta.ui.custom.FormSpinner;
+import org.tta.mobile.tta.ui.interfaces.OnTaItemClickListener;
 import org.tta.mobile.tta.ui.logistration.view_model.UserInfoViewModel;
 import org.tta.mobile.tta.utils.DataUtil;
 import org.tta.mobile.tta.utils.ViewUtil;
@@ -37,6 +42,8 @@ public class UserInfoActivity extends BaseVMActivity {
     private UserInfoViewModel mViewModel;
 
     private String tagLabel;
+    private FieldInfo fieldInfo;
+    private String pmisError;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,10 +55,27 @@ public class UserInfoActivity extends BaseVMActivity {
         toolbar.setNavigationOnClickListener(v -> {
             onBackPressed();
         });
+        getCustomFieldAttributes();
         mViewModel.getData();
         getBlocks();
         getClassesAndSkills();
         setupForm();
+    }
+
+    private void getCustomFieldAttributes(){
+
+        mViewModel.getDataManager().getCustomFieldAttributes(new OnResponseCallback<FieldInfo>() {
+            @Override
+            public void onSuccess(FieldInfo data) {
+                fieldInfo = data;
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+
     }
 
     private void getBlocks() {
@@ -129,7 +153,10 @@ public class UserInfoActivity extends BaseVMActivity {
         blockSpinner.setMandatory(true);
 
         professionSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Profession/व्यवसाय", mViewModel.professions, null);
+        professionSpinner.setMandatory(true);
+
         genderSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Gender/लिंग", mViewModel.genders, null);
+        genderSpinner.setMandatory(true);
 
         classTaughtSpinner = ViewUtil.addMultiOptionSpinner(userInfoLayout, "Classes Taught/पढ़ाई गई कक्षा",
                 mViewModel.classesTaught, null);
@@ -140,8 +167,10 @@ public class UserInfoActivity extends BaseVMActivity {
         skillsSpinner.setMandatory(true);
 
         etPmis = ViewUtil.addFormEditText(userInfoLayout, "PMIS Code/पी इम आइ इस कोड");
-        etPmis.setShowTv(getApplicationContext().getString(R.string.please_insert_valide_pmis_code));
+        setCustomField(mViewModel.currentState, mViewModel.currentProfession);
+
         dietSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "DIET Code/डी आइ इ टी कोड", mViewModel.dietCodes, null);
+
         btn = ViewUtil.addButton(userInfoLayout, "Sumbit");
         ViewUtil.addEmptySpace(userInfoLayout, (int) getResources().getDimension(R.dimen._50px));
 
@@ -177,7 +206,9 @@ public class UserInfoActivity extends BaseVMActivity {
             }
             parameters.putString("tag_label", builder.toString());
 
-            parameters.putString("pmis_code", etPmis.getText());
+            if (etPmis.isVisible()) {
+                parameters.putString("pmis_code", etPmis.getText());
+            }
             parameters.putString("diet_code", dietSpinner.getSelectedOption().getName());
             mViewModel.submit(parameters);
         });
@@ -185,6 +216,7 @@ public class UserInfoActivity extends BaseVMActivity {
         stateSpinner.setOnItemSelectedListener((view, item) -> {
             if (item == null){
                 mViewModel.currentState = null;
+                setCustomField(mViewModel.currentState, mViewModel.currentProfession);
                 mViewModel.districts.clear();
                 districtSpinner.setItems(mViewModel.districts, null);
                 mViewModel.dietCodes.clear();
@@ -193,6 +225,7 @@ public class UserInfoActivity extends BaseVMActivity {
             }
 
             mViewModel.currentState = item.getName();
+            setCustomField(mViewModel.currentState, mViewModel.currentProfession);
 
             mViewModel.districts.clear();
             mViewModel.districts = DataUtil.getDistrictsByStateName(mViewModel.currentState);
@@ -211,6 +244,42 @@ public class UserInfoActivity extends BaseVMActivity {
             }
             getBlocks();
         });
+
+        professionSpinner.setOnItemSelectedListener((view, item) -> {
+            if (item != null) {
+                mViewModel.currentProfession = item.getName();
+            } else {
+                mViewModel.currentProfession = null;
+            }
+            setCustomField(mViewModel.currentState, mViewModel.currentProfession);
+        });
+    }
+
+    private void setCustomField(String stateName, String professionName){
+        if (etPmis == null){
+            return;
+        }
+        if (stateName == null || stateName.equals("") ||
+                professionName == null || professionName.equals("") ||
+                fieldInfo == null){
+            etPmis.setVisibility(View.GONE);
+            return;
+        }
+
+        for (StateCustomAttribute attribute: fieldInfo.getStateCustomAttribute()){
+            if (stateName.equalsIgnoreCase(attribute.getState())){
+                for (Profession profession: attribute.getProfession()){
+                    if (professionName.equalsIgnoreCase(profession.getValue())){
+                        etPmis.setHint(attribute.getLabel());
+                        etPmis.setSubLabel(attribute.getHelptext());
+                        etPmis.setVisibility(View.VISIBLE);
+                        pmisError = attribute.getPlaceholder();
+                    }
+                }
+            }
+        }
+
+        etPmis.setVisibility(View.GONE);
     }
 
     private boolean validate(){
@@ -249,9 +318,9 @@ public class UserInfoActivity extends BaseVMActivity {
             valid = false;
             skillsSpinner.setError(getString(R.string.error_skills));
         }
-        if (!etPmis.validate()){
+        if (etPmis.isVisible() && !etPmis.validate()){
             valid = false;
-            etPmis.setError(getString(R.string.error_pmis));
+            etPmis.setError(pmisError);
         }
         if (!dietSpinner.validate()){
             valid = false;

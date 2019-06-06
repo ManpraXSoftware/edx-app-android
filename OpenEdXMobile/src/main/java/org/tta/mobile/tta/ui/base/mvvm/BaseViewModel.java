@@ -1,5 +1,6 @@
 package org.tta.mobile.tta.ui.base.mvvm;
 
+import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 
 import org.tta.mobile.tta.data.DataManager;

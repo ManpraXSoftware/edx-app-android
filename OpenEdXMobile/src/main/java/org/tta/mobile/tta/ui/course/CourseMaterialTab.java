@@ -3,19 +3,32 @@ package org.tta.mobile.tta.ui.course;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.tta.mobile.R;
+import org.tta.mobile.base.BaseFragment;
+import org.tta.mobile.course.CourseAPI;
+import org.tta.mobile.exception.CourseContentNotValidException;
+import org.tta.mobile.interfaces.RefreshListener;
+import org.tta.mobile.loader.AsyncTaskResult;
+import org.tta.mobile.loader.CourseOutlineAsyncLoader;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.model.course.CourseComponent;
+import org.tta.mobile.services.LastAccessManager;
+import org.tta.mobile.services.VideoDownloadHelper;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.course.view_model.CourseMaterialViewModel;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.util.PermissionsUtil;
+import org.tta.mobile.view.common.TaskProgressCallback;
+
+import de.greenrobot.event.EventBus;
 
 public class CourseMaterialTab extends TaBaseFragment {
     private int RANK;

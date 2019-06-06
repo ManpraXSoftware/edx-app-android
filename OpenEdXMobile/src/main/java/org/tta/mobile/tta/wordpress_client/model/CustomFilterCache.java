@@ -1,5 +1,7 @@
 package org.tta.mobile.tta.wordpress_client.model;
 
+import android.util.SparseBooleanArray;
+
 /**
  * Created by JARVICE on 04-04-2018.
  */

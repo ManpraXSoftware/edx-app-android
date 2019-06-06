@@ -2,6 +2,7 @@ package org.tta.mobile.tta.ui.agenda_items.view_model;
 
 import android.content.Context;
 import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.databinding.ViewDataBinding;
 import android.graphics.drawable.Drawable;
@@ -41,6 +42,7 @@ import org.tta.mobile.tta.ui.connect.ConnectDashboardActivity;
 import org.tta.mobile.tta.ui.course.CourseDashboardActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.ContentSourceUtil;
+import org.tta.mobile.tta.utils.JsonUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;

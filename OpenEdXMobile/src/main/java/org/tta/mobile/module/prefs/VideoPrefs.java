@@ -2,7 +2,17 @@ package org.tta.mobile.module.prefs;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import org.tta.mobile.authentication.AuthResponse;
+import org.tta.mobile.base.MainApplication;
+import org.tta.mobile.model.api.ProfileModel;
+import org.tta.mobile.module.analytics.Analytics;
+import org.tta.mobile.services.EdxCookieManager;
+import org.tta.mobile.user.ProfileImage;
 import org.tta.mobile.view.BulkDownloadFragment;
 
 import javax.inject.Inject;

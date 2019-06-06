@@ -1,7 +1,10 @@
 package org.tta.mobile.tta.wordpress_client.rest.interceptor;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import com.google.inject.Inject;
 
 import org.tta.mobile.authentication.AuthResponse;
 import org.tta.mobile.http.HttpResponseStatusException;

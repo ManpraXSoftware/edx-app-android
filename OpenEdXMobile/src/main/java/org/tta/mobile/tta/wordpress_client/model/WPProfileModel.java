@@ -1,5 +1,6 @@
 package org.tta.mobile.tta.wordpress_client.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**

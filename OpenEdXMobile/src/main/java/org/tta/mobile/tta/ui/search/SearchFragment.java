@@ -14,6 +14,7 @@ import org.tta.mobile.tta.data.local.db.table.ContentList;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.search.view_model.SearchViewModel;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
+import org.tta.mobile.util.PermissionsUtil;
 
 import java.util.List;
 

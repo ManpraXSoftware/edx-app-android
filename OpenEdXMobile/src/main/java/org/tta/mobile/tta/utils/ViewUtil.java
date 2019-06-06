@@ -7,12 +7,14 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import org.tta.mobile.R;
 import org.tta.mobile.module.registration.model.RegistrationOption;
+import org.tta.mobile.module.registration.view.RegistrationOptionSpinner;
 import org.tta.mobile.tta.ui.custom.FormEditText;
 import org.tta.mobile.tta.ui.custom.FormMultiSpinner;
 import org.tta.mobile.tta.ui.custom.FormSpinner;

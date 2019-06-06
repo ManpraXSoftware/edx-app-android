@@ -13,6 +13,8 @@ import org.tta.mobile.tta.wordpress_client.model.CustomFilterCache;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.tta.mobile.util.BrowserUtil.loginPrefs;
+
 /**
  * Created by KEPLER on 17-Sep-18.
  */

@@ -1,4 +1,5 @@
 package org.tta.mobile.tta.wordpress_client.model;
+import java.io.Serializable;
 
 /**
  * Created by JARVICE on 22-12-2017.

@@ -7,9 +7,11 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.maurya.mx.mxlib.core.MxInfiniteAdapter;
 import com.maurya.mx.mxlib.core.OnRecyclerItemClickListener;
 
+import org.tta.mobile.R;
 import org.tta.mobile.databinding.TRowAllBadgesBinding;
 import org.tta.mobile.databinding.TRowBadgeBinding;
 import org.tta.mobile.tta.data.enums.BadgeType;

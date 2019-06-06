@@ -1,7 +1,9 @@
 package org.tta.mobile.tta.ui.landing.view_model;
 
 import android.databinding.ObservableBoolean;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.view.MenuItem;
 
 import org.tta.mobile.R;
 import org.tta.mobile.event.NetworkConnectivityChangeEvent;
@@ -13,6 +15,7 @@ import org.tta.mobile.tta.ui.agenda.AgendaFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.feed.FeedFragment;
+import org.tta.mobile.tta.ui.interfaces.SearchPageOpenedListener;
 import org.tta.mobile.tta.ui.library.LibraryFragment;
 import org.tta.mobile.tta.ui.profile.ProfileFragment;
 import org.tta.mobile.tta.ui.search.SearchFragment;

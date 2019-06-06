@@ -1,5 +1,7 @@
 package org.tta.mobile.tta.wordpress_client.rest.interceptor;
 
+import android.util.Base64;
+
 import java.io.IOException;
 
 import okhttp3.Interceptor;

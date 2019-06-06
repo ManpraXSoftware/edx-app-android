@@ -1,7 +1,6 @@
 package org.tta.mobile.tta.firebase;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
@@ -24,7 +23,6 @@ public class TaFirebaseInstanceIDService extends FirebaseInstanceIdService {
         Log.d(TAG, "Refreshed token: " + refreshedToken);
 
         // TODO: Implement this method to send any registration to your app's servers.
-        Toast.makeText(getApplicationContext(),"get firebase id",Toast.LENGTH_LONG).show();
         sendRegistrationToServer(refreshedToken);
     }
     // [END refresh_token]

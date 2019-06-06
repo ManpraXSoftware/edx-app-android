@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName;
 import org.tta.mobile.tta.utils.MxHelper;
 import org.tta.mobile.tta.wordpress_client.util.Validate;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

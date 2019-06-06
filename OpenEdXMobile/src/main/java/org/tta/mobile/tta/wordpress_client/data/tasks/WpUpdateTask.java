@@ -3,6 +3,7 @@ package org.tta.mobile.tta.wordpress_client.data.tasks;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import org.tta.mobile.tta.wordpress_client.data.WordPressDatabase;
 import org.tta.mobile.tta.wordpress_client.data.tasks.callback.WpTaskCallback;

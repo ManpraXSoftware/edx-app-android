@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.tta.mobile.base.MainApplication;
+import org.tta.mobile.core.EdxEnvironment;
 import org.tta.mobile.model.api.ProfileModel;
 import org.tta.mobile.module.notification.NotificationPreference;
 

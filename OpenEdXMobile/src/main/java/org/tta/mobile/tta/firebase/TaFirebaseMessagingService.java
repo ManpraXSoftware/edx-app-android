@@ -35,13 +35,13 @@ public class TaFirebaseMessagingService extends FirebaseMessagingService {
         Log.d("onNewToken", "Refreshed token: " + s);
 
         // TODO: Implement this method to send any registration to your app's servers.
-        //Toast.makeText(getApplicationContext(),"Got firebase id",Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),"Got firebase id",Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-         Log.e("Mx_firebase","inside onMessageReceived");
+        Log.e("Manprax","Notification Message Body");
         //sendNotification(remoteMessage.getData().get("title"),remoteMessage.getData().get("body"),"","");
 
         if (remoteMessage.getData().containsKey("title") && remoteMessage.getData().containsKey("body") &&

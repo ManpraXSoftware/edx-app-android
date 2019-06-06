@@ -1,6 +1,9 @@
 package org.tta.mobile.tta.wordpress_client.rest;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.tta.mobile.tta.wordpress_client.WordPressRestInterface;
 import org.tta.mobile.tta.wordpress_client.model.Comment;
@@ -20,9 +23,11 @@ import org.tta.mobile.tta.wordpress_client.rest.interceptor.OkHttpDebugIntercept
 import org.tta.mobile.tta.wordpress_client.util.ContentUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;

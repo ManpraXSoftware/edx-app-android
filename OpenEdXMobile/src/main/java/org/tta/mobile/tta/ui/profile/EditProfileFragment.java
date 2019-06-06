@@ -19,6 +19,9 @@ import org.tta.mobile.R;
 import org.tta.mobile.model.api.ProfileModel;
 import org.tta.mobile.module.registration.model.RegistrationOption;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
+import org.tta.mobile.tta.data.model.authentication.FieldInfo;
+import org.tta.mobile.tta.data.model.authentication.Profession;
+import org.tta.mobile.tta.data.model.authentication.StateCustomAttribute;
 import org.tta.mobile.tta.data.model.search.SearchFilter;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
@@ -74,6 +77,8 @@ public class EditProfileFragment extends TaBaseFragment {
     private Button btn;
 
     private String tagLabel;
+    private FieldInfo fieldInfo;
+    private String pmisError;
 
     public static EditProfileFragment newInstance(ProfileModel profileModel, ProfileImage profileImage,
                                                   Account account, SearchFilter searchFilter){
@@ -106,12 +111,29 @@ public class EditProfileFragment extends TaBaseFragment {
             tagLabel = profileModel.getTagLabel().trim();
         }
 
+        getCustomFieldAttributes();
         viewModel.getData();
         setupForm();
         getBlocks();
         getClassesAndSkills();
 
         return view;
+    }
+
+    private void getCustomFieldAttributes(){
+
+        viewModel.getDataManager().getCustomFieldAttributes(new OnResponseCallback<FieldInfo>() {
+            @Override
+            public void onSuccess(FieldInfo data) {
+                fieldInfo = data;
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+
     }
 
     private void getBlocks() {
@@ -205,9 +227,11 @@ public class EditProfileFragment extends TaBaseFragment {
 
         professionSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Profession/व्यवसाय", viewModel.professions,
                 profileModel.title == null ? null : new RegistrationOption(profileModel.title, profileModel.title));
+        professionSpinner.setMandatory(true);
 
         genderSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Gender/लिंग", viewModel.genders,
                 profileModel.gender == null ? null : new RegistrationOption(profileModel.gender, profileModel.gender));
+        genderSpinner.setMandatory(true);
 
         classTaughtSpinner = ViewUtil.addMultiOptionSpinner(userInfoLayout, "Classes Taught/पढ़ाई गई कक्षा",
                 viewModel.classesTaught, null);
@@ -221,7 +245,7 @@ public class EditProfileFragment extends TaBaseFragment {
         if (profileModel.pmis_code != null) {
             etPmis.setText(profileModel.pmis_code);
         }
-        etPmis.setShowTv(getActivity().getString(R.string.please_insert_valide_pmis_code));
+        setCustomField(viewModel.currentState, viewModel.currentProfession);
 
         dietSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "DIET Code/डी आइ इ टी कोड", viewModel.dietCodes,
                 profileModel.diet_code == null ? null : new RegistrationOption(profileModel.diet_code, profileModel.diet_code));
@@ -261,7 +285,9 @@ public class EditProfileFragment extends TaBaseFragment {
             }
             parameters.putString("tag_label", builder.toString());
 
-            parameters.putString("pmis_code", etPmis.getText());
+            if (etPmis.isVisible()) {
+                parameters.putString("pmis_code", etPmis.getText());
+            }
             parameters.putString("diet_code", dietSpinner.getSelectedOption().getName());
             viewModel.submit(parameters);
         });
@@ -269,6 +295,7 @@ public class EditProfileFragment extends TaBaseFragment {
         stateSpinner.setOnItemSelectedListener((view, item) -> {
             if (item == null){
                 viewModel.currentState = null;
+                setCustomField(viewModel.currentState, viewModel.currentProfession);
                 viewModel.districts.clear();
                 districtSpinner.setItems(viewModel.districts, null);
                 viewModel.dietCodes.clear();
@@ -277,6 +304,7 @@ public class EditProfileFragment extends TaBaseFragment {
             }
 
             viewModel.currentState = item.getName();
+            setCustomField(viewModel.currentState, viewModel.currentProfession);
 
             viewModel.districts.clear();
             viewModel.districts = DataUtil.getDistrictsByStateName(viewModel.currentState);
@@ -297,6 +325,42 @@ public class EditProfileFragment extends TaBaseFragment {
             }
             getBlocks();
         });
+
+        professionSpinner.setOnItemSelectedListener((view, item) -> {
+            if (item != null) {
+                viewModel.currentProfession = item.getName();
+            } else {
+                viewModel.currentProfession = null;
+            }
+            setCustomField(viewModel.currentState, viewModel.currentProfession);
+        });
+    }
+
+    private void setCustomField(String stateName, String professionName){
+        if (etPmis == null){
+            return;
+        }
+        if (stateName == null || stateName.equals("") ||
+                professionName == null || professionName.equals("") ||
+                fieldInfo == null){
+            etPmis.setVisibility(View.GONE);
+            return;
+        }
+
+        for (StateCustomAttribute attribute: fieldInfo.getStateCustomAttribute()){
+            if (stateName.equalsIgnoreCase(attribute.getState())){
+                for (Profession profession: attribute.getProfession()){
+                    if (professionName.equalsIgnoreCase(profession.getValue())){
+                        etPmis.setHint(attribute.getLabel());
+                        etPmis.setSubLabel(attribute.getHelptext());
+                        etPmis.setVisibility(View.VISIBLE);
+                        pmisError = attribute.getPlaceholder();
+                    }
+                }
+            }
+        }
+
+        etPmis.setVisibility(View.GONE);
     }
 
     private boolean validate(){

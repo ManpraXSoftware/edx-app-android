@@ -2,6 +2,7 @@ package org.tta.mobile.tta.data.local.db.table;
 
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import androidx.annotation.Nullable;
