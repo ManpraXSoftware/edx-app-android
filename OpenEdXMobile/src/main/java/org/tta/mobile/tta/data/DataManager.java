@@ -147,6 +147,7 @@ import org.tta.mobile.tta.task.profile.SubmitFeedbackTask;
 import org.tta.mobile.tta.task.profile.UpdateMyProfileTask;
 import org.tta.mobile.tta.task.search.GetSearchFilterTask;
 import org.tta.mobile.tta.task.search.SearchTask;
+import org.tta.mobile.tta.ui.otp.AppSignatureHelper;
 import org.tta.mobile.tta.utils.FirebaseUtil;
 import org.tta.mobile.tta.utils.RxUtil;
 import org.tta.mobile.tta.wordpress_client.model.Comment;
@@ -3415,9 +3416,15 @@ public class DataManager extends BaseRoboInjector {
         new MxSurveyAPI(context, activity, surveyType).execute();
     }
 
-    public void updateFirebaseToken(){
-       FirebaseUtil firebaseUtil=new FirebaseUtil(context);
+    public void updateFirebaseToken(Activity activity){
+       FirebaseUtil firebaseUtil=new FirebaseUtil(activity);
         firebaseUtil.syncFirebaseToken();
+    }
+
+    public void logSMSHash()
+    {
+        AppSignatureHelper helper=new AppSignatureHelper(context);
+        helper.getAppSignatures();
     }
 }
 

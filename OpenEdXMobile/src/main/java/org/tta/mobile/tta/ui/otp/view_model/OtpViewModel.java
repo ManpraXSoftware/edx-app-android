@@ -38,6 +38,7 @@ import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.logistration.UserInfoActivity;
 import org.tta.mobile.tta.ui.otp.IncomingSms;
+import org.tta.mobile.tta.ui.otp.SmsModule;
 import org.tta.mobile.tta.ui.otp.SmsResponse;
 import org.tta.mobile.tta.ui.otp.SmsUtil;
 import org.tta.mobile.tta.ui.reset_password.ResetPasswordActivity;
@@ -286,6 +287,7 @@ public class OtpViewModel extends BaseViewModel {
         this.number = mobile_number;
         this.password = password;
         this.otpSource = otpSource;
+
 
         /*incomingSms =new IncomingSms(new IMessageReceiver() {
             @Override
@@ -552,7 +554,7 @@ public class OtpViewModel extends BaseViewModel {
         mDataManager.setCustomFieldAttributes(null);
         mDataManager.setConnectCookies();
         mDataManager.checkSurvey(mActivity, SurveyType.Login);
-        mDataManager.updateFirebaseToken();
+        mDataManager.updateFirebaseToken(getActivity());
     }
 
     private Bundle getRegisterMeBundle()

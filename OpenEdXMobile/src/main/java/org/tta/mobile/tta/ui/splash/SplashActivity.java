@@ -2,10 +2,12 @@ package org.tta.mobile.tta.ui.splash;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import org.tta.mobile.R;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
+import org.tta.mobile.tta.ui.otp.AppSignatureHelper;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 
 public class SplashActivity extends BaseVMActivity {
@@ -16,6 +18,10 @@ public class SplashActivity extends BaseVMActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AppSignatureHelper helper=new AppSignatureHelper(getApplicationContext());
+       Toast.makeText(getApplicationContext(),""+helper.getAppSignatures().get(0).toString(),Toast.LENGTH_LONG).show();
+
         viewModel = new SplashViewModel(this);
         binding(R.layout.t_activity_splash, viewModel);
         logD("TTA Nav ======> " + BreadcrumbUtil.setBreadcrumb(RANK, Nav.appopen.name()));

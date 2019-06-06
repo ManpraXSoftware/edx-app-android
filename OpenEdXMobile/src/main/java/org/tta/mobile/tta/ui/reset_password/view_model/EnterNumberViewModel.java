@@ -13,6 +13,7 @@ import org.tta.mobile.tta.task.authentication.MobileNumberVerificationTask;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.otp.OtpActivity;
+import org.tta.mobile.tta.ui.otp.SmsModule;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.util.PermissionsUtil;
 
@@ -75,6 +76,7 @@ public class EnterNumberViewModel extends BaseViewModel {
             parameters.putString("sms_key", mDataManager.getConfig().getSMSKey());
         }
 
+        SmsModule.intialiseSMSRetrieverClient(mActivity);
         new MobileNumberVerificationTask(mActivity, parameters){
             @Override
             protected void onSuccess(MobileNumberVerificationResponse mobileNumberVerificationResponse) throws Exception {
