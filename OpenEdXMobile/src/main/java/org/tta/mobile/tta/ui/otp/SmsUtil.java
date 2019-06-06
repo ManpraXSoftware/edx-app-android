@@ -14,7 +14,7 @@ public class SmsUtil {
         if(otp_arr.length<3)
             return "";
         else {
-            return otp_arr[otp_arr.length - 2];
+            return otp_arr[otp_arr.length - 3];
         }
     }
 }

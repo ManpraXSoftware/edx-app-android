@@ -63,7 +63,7 @@ public class SplashViewModel extends BaseViewModel {
             mDataManager.setConnectCookies();
         }
         mDataManager.checkSurvey(mActivity, SurveyType.Login);
-        mDataManager.updateFirebaseToken();
+        mDataManager.updateFirebaseToken(getActivity());
     }
 
 }

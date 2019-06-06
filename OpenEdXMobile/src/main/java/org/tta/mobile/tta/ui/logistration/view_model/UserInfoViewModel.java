@@ -130,7 +130,7 @@ public class UserInfoViewModel extends BaseViewModel {
                     mActivity.showLongSnack(mActivity.getString(R.string.registered_successfully));
                     mDataManager.refreshLocalDatabase();
                     mDataManager.scheduleDeleteFeeds();
-                    mDataManager.updateFirebaseToken();
+                    mDataManager.updateFirebaseToken(getActivity());
                     ActivityUtil.gotoPage(mActivity, LandingActivity.class, Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     mActivity.finish();
 
