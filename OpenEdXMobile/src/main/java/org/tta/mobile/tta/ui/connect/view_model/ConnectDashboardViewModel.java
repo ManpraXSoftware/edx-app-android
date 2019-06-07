@@ -179,6 +179,7 @@ public class ConnectDashboardViewModel extends BaseViewModel
                     }
                 });
 
+        toggleFollowBtn();
         setTabs();
     }
 

@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.tta.mobile.R;
 import org.tta.mobile.module.registration.model.RegistrationOption;
@@ -38,6 +39,7 @@ public class UserInfoActivity extends BaseVMActivity {
     private FormSpinner dietSpinner;
     private FormEditText etPmis;
     private Button btn;
+    private TextView privacyLinkText;
     private Toolbar toolbar;
     private UserInfoViewModel mViewModel;
 
@@ -172,6 +174,8 @@ public class UserInfoActivity extends BaseVMActivity {
         dietSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "DIET Code/डी आइ इ टी कोड", mViewModel.dietCodes, null);
 
         btn = ViewUtil.addButton(userInfoLayout, "Sumbit");
+        privacyLinkText = ViewUtil.addLinkText(userInfoLayout, "Privay Policy");
+        privacyLinkText.setVisibility(View.GONE);
         ViewUtil.addEmptySpace(userInfoLayout, (int) getResources().getDimension(R.dimen._50px));
 
         setListeners();
@@ -212,6 +216,12 @@ public class UserInfoActivity extends BaseVMActivity {
             parameters.putString("diet_code", dietSpinner.getSelectedOption().getName());
             mViewModel.submit(parameters);
         });
+
+        /*privacyLinkText.setOnClickListener(v -> {
+            mViewModel.getDataManager().getEdxEnvironment().getRouter().showAuthenticatedWebviewActivity(
+                    this, url, "Privacy Policy"
+            );
+        });*/
 
         stateSpinner.setOnItemSelectedListener((view, item) -> {
             if (item == null){
@@ -274,6 +284,7 @@ public class UserInfoActivity extends BaseVMActivity {
                         etPmis.setSubLabel(attribute.getHelptext());
                         etPmis.setVisibility(View.VISIBLE);
                         pmisError = attribute.getPlaceholder();
+                        return;
                     }
                 }
             }

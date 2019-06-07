@@ -1,5 +1,6 @@
 package org.tta.mobile.tta.utils;
 
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -104,6 +105,25 @@ public class ViewUtil {
         spinner.setItems(options, defaultOptions);
         parent.addView(spinner);
         return spinner;
+    }
+
+    public static TextView addLinkText(ViewGroup parent, String linkText){
+        TextView tv = new TextView(parent.getContext());
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.setMargins(
+                (int) parent.getContext().getResources().getDimension(R.dimen._40px),
+                (int) parent.getContext().getResources().getDimension(R.dimen._16px),
+                (int) parent.getContext().getResources().getDimension(R.dimen._40px),
+                0);
+        params.gravity = Gravity.CENTER_HORIZONTAL;
+        tv.setLayoutParams(params);
+        tv.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.secondary_blue));
+        tv.setTextSize(12);
+        tv.setTypeface(ResourcesCompat.getFont(parent.getContext(), R.font.hind_medium));
+        tv.setText(linkText);
+        tv.setPaintFlags(tv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        parent.addView(tv);
+        return tv;
     }
 
 }

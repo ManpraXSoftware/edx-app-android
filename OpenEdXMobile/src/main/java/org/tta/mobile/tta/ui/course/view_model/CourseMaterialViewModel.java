@@ -1,17 +1,22 @@
 package org.tta.mobile.tta.ui.course.view_model;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -43,6 +48,7 @@ import org.tta.mobile.tta.data.model.StatusResponse;
 import org.tta.mobile.tta.data.model.content.BookmarkResponse;
 import org.tta.mobile.tta.data.model.content.CertificateStatusResponse;
 import org.tta.mobile.tta.data.model.content.TotalLikeResponse;
+import org.tta.mobile.tta.data.model.profile.UpdateMyProfileResponse;
 import org.tta.mobile.tta.event.ContentBookmarkChangedEvent;
 import org.tta.mobile.tta.event.ContentStatusReceivedEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
@@ -355,29 +361,53 @@ public class CourseMaterialViewModel extends BaseViewModel {
                     break;
                 case R.id.item_btn:
                     if (footerBtnText.get().equalsIgnoreCase(mActivity.getString(R.string.generate_certificate))){
-                        mActivity.showLoading();
-
                         ScormBlockModel finalScorm = scorm;
-                        mDataManager.generateCertificate(content.getSource_identity(), new OnResponseCallback<CertificateStatusResponse>() {
-                            @Override
-                            public void onSuccess(CertificateStatusResponse data) {
-                                mActivity.hideLoading();
-                                setButtonText(data);
 
-                                mActivity.analytic.addMxAnalytics_db(
-                                        finalScorm.getInternalName(), Action.GenerateCertificate, content.getName(),
-                                        Source.Mobile, content.getSource_identity());
+                        View view = LayoutInflater.from(mActivity)
+                                .inflate(R.layout.t_dialog_change_name, null, false);
+                        TextInputEditText etName = view.findViewById(R.id.et_name);
+                        etName.setText(mDataManager.getLoginPrefs().getDisplayName());
 
-                                getContentStatus();
+                        AlertDialog dialog = new AlertDialog.Builder(mActivity)
+                                .setTitle("Name on certificate")
+                                .setView(view)
+                                .setPositiveButton("Save", null)
+                                .setNegativeButton("Cancel", null)
+                                .create();
 
-                            }
+                        dialog.setOnShowListener(dialogInterface -> {
 
-                            @Override
-                            public void onFailure(Exception e) {
-                                mActivity.hideLoading();
-                                mActivity.showLongSnack(e.getLocalizedMessage());
-                            }
+                            Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                            button.setOnClickListener(view1 -> {
+                                String name = etName.getText().toString().trim();
+                                if (name.equals("") ||
+                                        name.equals(mDataManager.getLoginPrefs().getUsername())){
+                                    etName.setError(mActivity.getString(R.string.error_name));
+                                    return;
+                                }
+
+                                dialog.dismiss();
+                                mActivity.showLoading();
+
+                                Bundle parameters = new Bundle();
+                                parameters.putString("name", name);
+                                mDataManager.updateProfile(parameters,
+                                        new OnResponseCallback<UpdateMyProfileResponse>() {
+                                            @Override
+                                            public void onSuccess(UpdateMyProfileResponse data) {
+                                                generateCertificate(finalScorm);
+                                            }
+
+                                            @Override
+                                            public void onFailure(Exception e) {
+                                                mActivity.hideLoading();
+                                                mActivity.showLongSnack(e.getLocalizedMessage());
+                                            }
+                                        });
+
+                            });
                         });
+                        dialog.show();
 
                         break;
                     } else if (footerBtnText.get().equalsIgnoreCase(mActivity.getString(R.string.certificate))){
@@ -431,6 +461,31 @@ public class CourseMaterialViewModel extends BaseViewModel {
                         }
                     }
                     break;
+            }
+        });
+
+    }
+
+    private void generateCertificate(ScormBlockModel scorm){
+
+        mDataManager.generateCertificate(content.getSource_identity(), new OnResponseCallback<CertificateStatusResponse>() {
+            @Override
+            public void onSuccess(CertificateStatusResponse data) {
+                mActivity.hideLoading();
+                setButtonText(data);
+
+                mActivity.analytic.addMxAnalytics_db(
+                        scorm.getInternalName(), Action.GenerateCertificate, content.getName(),
+                        Source.Mobile, content.getSource_identity());
+
+                getContentStatus();
+
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                mActivity.hideLoading();
+                mActivity.showLongSnack(e.getLocalizedMessage());
             }
         });
 

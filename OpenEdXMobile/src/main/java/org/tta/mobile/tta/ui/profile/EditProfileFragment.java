@@ -355,6 +355,7 @@ public class EditProfileFragment extends TaBaseFragment {
                         etPmis.setSubLabel(attribute.getHelptext());
                         etPmis.setVisibility(View.VISIBLE);
                         pmisError = attribute.getPlaceholder();
+                        return;
                     }
                 }
             }

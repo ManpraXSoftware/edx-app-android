@@ -2,7 +2,6 @@ package org.tta.mobile.tta.ui.splash;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.widget.Toast;
 
 import org.tta.mobile.R;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
@@ -19,8 +18,8 @@ public class SplashActivity extends BaseVMActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        AppSignatureHelper helper=new AppSignatureHelper(getApplicationContext());
-       Toast.makeText(getApplicationContext(),""+helper.getAppSignatures().get(0).toString(),Toast.LENGTH_LONG).show();
+//        AppSignatureHelper helper=new AppSignatureHelper(getApplicationContext());
+//        showLongToast(helper.getAppSignatures().get(0));
 
         viewModel = new SplashViewModel(this);
         binding(R.layout.t_activity_splash, viewModel);
