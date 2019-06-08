@@ -29,6 +29,7 @@ import org.tta.mobile.module.prefs.LoginPrefs;
 import org.tta.mobile.module.storage.IStorage;
 import org.tta.mobile.profiles.UserProfileActivity;
 import org.tta.mobile.tta.ui.logistration.SigninRegisterActivity;
+import org.tta.mobile.tta.ui.splash.SplashActivity;
 import org.tta.mobile.tta.ui.survey.UserSurveyActivity;
 import org.tta.mobile.util.Config;
 import org.tta.mobile.util.EmailUtil;
@@ -100,8 +101,14 @@ public class Router {
         context.startActivity(launchIntent);
     }
 
-    public void showSplashScreen(Context context) {
+    public void showLoginScreen(Context context) {
         final Intent launchIntent = new Intent(context, SigninRegisterActivity.class);
+        launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(launchIntent);
+    }
+
+    public void showSplashScreen(Context context) {
+        final Intent launchIntent = new Intent(context, SplashActivity.class);
         launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(launchIntent);
     }
@@ -281,7 +288,7 @@ public class Router {
 
         delegate.unsubscribeAll();
 
-        showSplashScreen(context);
+        showLoginScreen(context);
     }
 
     /**

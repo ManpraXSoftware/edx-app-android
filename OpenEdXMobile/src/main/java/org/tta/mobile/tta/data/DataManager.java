@@ -153,6 +153,7 @@ import org.tta.mobile.tta.utils.AlarmManagerUtil;
 import org.tta.mobile.tta.ui.otp.AppSignatureHelper;
 import org.tta.mobile.tta.utils.FirebaseUtil;
 import org.tta.mobile.tta.utils.RxUtil;
+import org.tta.mobile.tta.wordpress_client.data.db_command.DB_Commands;
 import org.tta.mobile.tta.wordpress_client.model.Comment;
 import org.tta.mobile.tta.wordpress_client.model.CustomComment;
 import org.tta.mobile.tta.wordpress_client.model.Post;
@@ -212,6 +213,7 @@ public class DataManager extends BaseRoboInjector {
     private VideoDownloadHelper downloadManager;
 
     private WpClientRetrofit wpClientRetrofit;
+    private DB_Commands db_commands;
 
     private AppPref mAppPref;
     private LoginPrefs loginPrefs;
@@ -228,6 +230,8 @@ public class DataManager extends BaseRoboInjector {
         loginPrefs = new LoginPrefs(context);
 
         dbHelper = new DbHelper(context);
+
+        db_commands = new DB_Commands(context);
     }
 
     public static DataManager getInstance(Context context) {
@@ -1037,7 +1041,7 @@ public class DataManager extends BaseRoboInjector {
                         enrolledCoursesResponse.getMode() == null ||
                         enrolledCoursesResponse.getMode().equals("")
                 ) {
-                    callback.onFailure(new TaException("Invalid Course"));
+                    callback.onFailure(e);
                 } else {
                     callback.onSuccess(enrolledCoursesResponse);
                 }
@@ -1495,22 +1499,40 @@ public class DataManager extends BaseRoboInjector {
                 @Override
                 public void onSuccess(List<Post> result) {
                     if (result == null || result.isEmpty()){
-                        callback.onFailure(new TaException("Post not found"));
+                        getLocalPostBySlug(slug, callback, new TaException("Post not found"));
                     } else {
+                        updateLocalPost(result.get(0));
                         callback.onSuccess(result.get(0));
                     }
                 }
 
                 @Override
                 public void onFailure(HttpServerErrorResponse errorResponse) {
+                    getLocalPostBySlug(slug, callback, new TaException(errorResponse.getMessage()));
                     callback.onFailure(new TaException(errorResponse.getMessage()));
                 }
             });
 
         } else {
-            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+            getLocalPostBySlug(slug, callback,
+                    new TaException(context.getString(R.string.no_connection_exception)));
         }
 
+    }
+
+    public void getLocalPostBySlug(String slug, OnResponseCallback<Post> callback, Exception e){
+
+        Post post = db_commands.getPostBySlug(slug);
+        if (post == null){
+            callback.onFailure(e);
+        } else {
+            callback.onSuccess(post);
+        }
+
+    }
+
+    public void updateLocalPost(Post post){
+        db_commands.updatePostCache(Collections.singletonList(post));
     }
 
     public void getCommentsByPost(long postId, int take, int page, OnResponseCallback<List<Comment>> callback){
@@ -3323,21 +3345,52 @@ public class DataManager extends BaseRoboInjector {
                 protected void onSuccess(Account account) throws Exception {
                     super.onSuccess(account);
                     if (account != null) {
+
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                mLocalDataSource.insertAccount(account);
+                            }
+                        }.start();
+
                         callback.onSuccess(account);
                     } else {
-                        callback.onFailure(new TaException("Invalid account"));
+                        getLocalOtherUserAccount(username, callback, new TaException("Invalid account"));
                     }
                 }
 
                 @Override
                 protected void onException(Exception ex) {
-                    callback.onFailure(ex);
+                    getLocalOtherUserAccount(username, callback, ex);
                 }
             }.execute();
 
         } else {
-            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+            getLocalOtherUserAccount(username, callback,
+                    new TaException(context.getString(R.string.no_connection_exception)));
         }
+
+    }
+
+    public void getLocalOtherUserAccount(String username, OnResponseCallback<Account> callback, Exception e){
+
+        new AsyncTask<Void, Void, Account>() {
+            @Override
+            protected Account doInBackground(Void... voids) {
+                return mLocalDataSource.getAccount(username);
+            }
+
+            @Override
+            protected void onPostExecute(Account account) {
+                super.onPostExecute(account);
+
+                if (account == null){
+                    callback.onFailure(e);
+                } else {
+                    callback.onSuccess(account);
+                }
+            }
+        }.execute();
 
     }
 

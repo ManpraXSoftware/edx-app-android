@@ -8,16 +8,14 @@
 
         <variable
             name="viewModel"
-            type="org.tta.mobile.discussion.DiscussionComment" />
+            type="org.tta.mobile.tta.wordpress_client.model.Comment" />
     </data>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_20px"
-        android:layout_marginTop="@dimen/_20px"
-        android:layout_marginEnd="@dimen/_20px"
-        android:layout_marginBottom="@dimen/_6px"
+        android:layout_marginTop="@dimen/_10px"
+        android:layout_marginBottom="@dimen/_10px"
         app:cardBackgroundColor="@color/app_background"
         android:minHeight="180dp"
         app:cardCornerRadius="4dp"
@@ -34,7 +32,7 @@
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_56px"
+                android:layout_marginStart="@dimen/_16px"
                 android:layout_marginEnd="@dimen/_16px"
                 android:paddingTop="@dimen/_16px"
                 android:minHeight="180dp">
@@ -60,6 +58,7 @@
                     android:id="@+id/reply_user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@{viewModel.authorName}"
                     android:layout_marginStart="@dimen/_8px"
                     android:fontFamily="@font/hind_medium"
                     android:textColor="@color/primary_cyan"
@@ -85,7 +84,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="60dp"
-                    android:text="@{viewModel.rawBody}"
                     android:layout_marginTop="@dimen/_16px"
                     android:layout_marginBottom="@dimen/_16px"
                     android:fontFamily="@font/hind_light"
@@ -104,7 +102,7 @@
                     android:id="@+id/reply_comment_like_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:background="?android:attr/selectableItemBackground"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal"
@@ -117,7 +115,6 @@
                         android:id="@+id/reply_comment_likes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{String.valueOf(viewModel.voteCount)}"
                         android:layout_gravity="center_vertical"
                         android:fontFamily="@font/hind_medium"
                         android:textColor="@color/gray_3"

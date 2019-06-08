@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:mx="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="viewModel"
+            type="org.tta.mobile.tta.ui.feed.view_model.FeedViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/app_background">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/_20px"
+                android:layout_marginBottom="@dimen/_8px"
+                app:srcCompat="@drawable/teacherapplogo"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                app:srcCompat="@drawable/t_icon_notification"
+                android:onClick="@{()->viewModel.showNotifications()}"/>
+
+        </RelativeLayout>
+
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/app_background"
+                app:elevation="0dp"
+                android:animateLayoutChanges="true">
+
+                <include
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:id="@+id/featured_content_slider"
+                    layout="@layout/t_row_content_slider"
+                    android:layout_marginBottom="@dimen/_20px"
+                    android:visibility="@{viewModel.featureListVisible?View.VISIBLE:View.GONE}"
+                    app:layout_scrollFlags="scroll|enterAlwaysCollapsed"/>
+
+                <com.maurya.mx.mxlib.view.MxFiniteRecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:mx_itemLayout="@layout/t_row_suggested_teacher"
+                    app:mx_itemLimit="10"
+                    app:mx_moreButtonDrawableEnd="@drawable/ic_arrow_right_cyan_24dp"
+                    app:mx_moreButtonMarginEnd="@dimen/_20px"
+                    app:mx_moreButtonText="@string/view_more"
+                    app:mx_moreButtonTextColor="@color/primary_cyan"
+                    app:mx_moreButtonTextFont="@font/hind_medium"
+                    app:mx_moreButtonTextSize="@dimen/list_view_more_size"
+                    app:mx_titleMarginStart="@dimen/_20px"
+                    app:mx_titleText="@string/suggested_teachers"
+                    app:mx_titleTextColor="@color/gray_5"
+                    app:mx_titleTextFont="@font/hind_medium"
+                    app:mx_titleTextSize="@dimen/list_title_size"
+                    app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+                    on_view_more_click_listener="@{viewModel.viewMoreListener}"
+                    finite_recycler_adapter="@{viewModel.suggestedUsersAdapter}"
+                    android:visibility="@{viewModel.suggestedUsersVisible?View.VISIBLE:View.GONE}"/>
+
+            </android.support.design.widget.AppBarLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <com.maurya.mx.mxlib.view.MxRecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    mx:infinite_recycler_adapter="@{viewModel.feedAdapter}"
+                    layout_manager="@{viewModel.layoutManager}"
+                    infinite_load_more_listener="@{viewModel.loadMoreListener}"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/_60px"
+                    android:orientation="vertical"
+                    android:visibility="@{viewModel.emptyVisible ? View.VISIBLE : View.GONE}">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        app:srcCompat="@drawable/t_icon_course_130" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/_46px"
+                        android:layout_marginStart="@dimen/_70px"
+                        android:layout_marginEnd="@dimen/_70px"
+                        android:fontFamily="@font/hind_regular"
+                        android:gravity="center"
+                        android:text="@string/empty_feed_message"
+                        android:textColor="@color/primary_cyan"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </android.support.design.widget.CoordinatorLayout>
+
+    </LinearLayout>
+
+</layout>

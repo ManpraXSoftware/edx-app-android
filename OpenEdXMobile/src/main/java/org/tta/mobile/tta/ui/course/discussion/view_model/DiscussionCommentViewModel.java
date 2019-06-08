@@ -90,10 +90,7 @@ public class DiscussionCommentViewModel extends BaseViewModel {
         page = DEFAULT_PAGE;
         allLoaded = false;
 
-        userImage.set(comment.getProfileImage() == null ?
-                (mDataManager.getLoginPrefs().getProfileImage() == null ? "" :
-                        mDataManager.getLoginPrefs().getProfileImage().getImageUrlMedium()) :
-                comment.getProfileImage().getImageUrlMedium());
+        userImage.set(comment.getProfileImage() == null ? "" : comment.getProfileImage().getImageUrlMedium());
         commentDate.set(DateUtil.getDisplayTime(comment.getUpdatedAt()));
         likeIcon.set(comment.isVoted() ? R.drawable.t_icon_like_filled : R.drawable.t_icon_like);
         likeCount.set(String.valueOf(comment.getVoteCount()));
@@ -295,10 +292,14 @@ public class DiscussionCommentViewModel extends BaseViewModel {
                 TRowDiscussionReplyBinding replyBinding = (TRowDiscussionReplyBinding) binding;
                 replyBinding.setViewModel(model);
 
-                ProfileImage profileImage = model.getProfileImage();
-                if (profileImage == null){
-                    profileImage = mDataManager.getLoginPrefs().getProfileImage();
+                String name = model.getAuthorDisplayName();
+                if (name == null){
+                    name = mActivity.getString(R.string.anonymous);
+                    model.setAuthorDisplayName(name);
                 }
+                replyBinding.replyUserName.setText(name);
+
+                ProfileImage profileImage = model.getProfileImage();
                 if (profileImage != null) {
                     Glide.with(getContext())
                             .load(profileImage.getImageUrlMedium())

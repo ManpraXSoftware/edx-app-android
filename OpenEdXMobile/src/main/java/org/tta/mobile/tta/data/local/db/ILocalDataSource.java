@@ -11,6 +11,7 @@ import org.tta.mobile.tta.data.local.db.table.UnitStatus;
 import org.tta.mobile.tta.data.local.db.table.User;
 import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.data.model.library.CollectionConfigResponse;
+import org.tta.mobile.user.Account;
 
 import java.util.List;
 
@@ -68,4 +69,7 @@ public interface ILocalDataSource {
 
     List<UnitStatus> getUnitStatusByCourse(String username, String courseId);
     void insertUnitStatuses(List<UnitStatus> statuses);
+
+    Account getAccount(String username);
+    void insertAccount(Account account);
 }

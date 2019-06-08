@@ -174,14 +174,15 @@ public class DiscussionTopicViewModel extends BaseViewModel {
                 TRowDiscussionThreadBinding threadBinding = (TRowDiscussionThreadBinding) binding;
                 threadBinding.setViewModel(model);
 
-                threadBinding.userName.setText(model.getDisplayName() == null ?
-                        mDataManager.getLoginPrefs().getDisplayName() : model.getDisplayName());
+                String name = model.getDisplayName();
+                if (name == null){
+                    name = mActivity.getString(R.string.anonymous);
+                    model.setDisplayName(name);
+                }
+                threadBinding.userName.setText(name);
                 threadBinding.date.setText(DateUtil.getDisplayTime(model.getUpdatedAt()));
 
                 ProfileImage profileImage = model.getProfileImage();
-                if (profileImage == null){
-                    profileImage = mDataManager.getLoginPrefs().getProfileImage();
-                }
                 if (profileImage != null) {
                     Glide.with(getContext())
                             .load(profileImage.getImageUrlMedium())

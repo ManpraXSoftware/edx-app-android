@@ -226,14 +226,12 @@ public class DiscussionCommentsTabViewModel extends BaseViewModel {
 
                 String name = model.getAuthorDisplayName();
                 if (name == null){
-                    name = mDataManager.getLoginPrefs().getDisplayName();
+                    name = mActivity.getString(R.string.anonymous);
+                    model.setAuthorDisplayName(name);
                 }
                 commentBinding.userName.setText(name);
 
                 ProfileImage profileImage = model.getProfileImage();
-                if (profileImage == null){
-                    profileImage = mDataManager.getLoginPrefs().getProfileImage();
-                }
                 if (profileImage != null) {
                     Glide.with(getContext())
                             .load(profileImage.getImageUrlMedium())

@@ -231,11 +231,11 @@ public class ConnectDashboardActivity extends BaseVMActivity {
         webView.getSettings().setAllowFileAccess(true);
         webView.getSettings().setAppCacheEnabled(true);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 
-        if (!NetworkUtil.isConnected(this)) {
+        /*if (!NetworkUtil.isConnected(this)) {
             webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-        }
+        }*/
 
         final CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);

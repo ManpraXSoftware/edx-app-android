@@ -183,6 +183,10 @@ public class DiscussionComment implements Serializable, IAuthorData, ProfileImag
         return authorDisplayName;
     }
 
+    public void setAuthorDisplayName(String authorDisplayName) {
+        this.authorDisplayName = authorDisplayName;
+    }
+
     @Nullable
     @Override
     public ProfileImage getProfileImage() {

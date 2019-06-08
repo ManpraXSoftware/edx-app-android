@@ -75,7 +75,7 @@ public class NotificationsViewModel extends BaseViewModel {
                 switch (NotificationType.valueOf(item.getType())){
                     case content:
                         mActivity.showLoading();
-                        mDataManager.getContent(Long.parseLong(item.getRef_id()), new OnResponseCallback<Content>() {
+                        mDataManager.getContentFromSourceIdentity(item.getRef_id(), new OnResponseCallback<Content>() {
                             @Override
                             public void onSuccess(Content data) {
                                 mActivity.hideLoading();
@@ -100,6 +100,7 @@ public class NotificationsViewModel extends BaseViewModel {
                         mActivity.showLongSnack(item.getDescription());
                 }
             } catch (IllegalArgumentException e) {
+                mActivity.hideLoading();
                 mActivity.showLongSnack(item.getDescription());
             }
 

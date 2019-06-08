@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 import org.tta.mobile.http.constants.ApiConstants;
+import org.tta.mobile.http.provider.RetrofitProvider;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.local.db.table.Content;
@@ -32,7 +33,6 @@ import java.util.Map;
 
 import okhttp3.HttpUrl;
 import retrofit2.Call;
-import retrofit2.Retrofit;
 import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -48,11 +48,11 @@ public interface TaService {
     class TaProvider implements Provider<TaService> {
 
         @Inject
-        private Retrofit retrofit;
+        private RetrofitProvider retrofit;
 
         @Override
         public TaService get() {
-            return retrofit.create(TaService.class);
+            return retrofit.getWithOfflineCache().create(TaService.class);
         }
     }
 

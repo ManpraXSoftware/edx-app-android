@@ -3,6 +3,7 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 
+import org.tta.mobile.tta.data.local.db.dao.AccountDao;
 import org.tta.mobile.tta.data.local.db.dao.CategoryDao;
 import org.tta.mobile.tta.data.local.db.dao.CertificateDao;
 import org.tta.mobile.tta.data.local.db.dao.ContentDao;
@@ -23,6 +24,7 @@ import org.tta.mobile.tta.data.local.db.table.Category;
 import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.data.local.db.table.ContentList;
 import org.tta.mobile.tta.data.local.db.table.Source;
+import org.tta.mobile.user.Account;
 
 @Database(
         entities = {
@@ -35,7 +37,8 @@ import org.tta.mobile.tta.data.local.db.table.Source;
                 Certificate.class,
                 Notification.class,
                 ContentStatus.class,
-                UnitStatus.class
+                UnitStatus.class,
+                Account.class
         },
         version = 4,
         exportSchema = false
@@ -53,4 +56,5 @@ public abstract class TADatabase extends RoomDatabase {
     public abstract NotificationDao notificationDao();
     public abstract ContentStatusDao contentStatusDao();
     public abstract UnitStatusDao unitStatusDao();
+    public abstract AccountDao accountDao();
 }

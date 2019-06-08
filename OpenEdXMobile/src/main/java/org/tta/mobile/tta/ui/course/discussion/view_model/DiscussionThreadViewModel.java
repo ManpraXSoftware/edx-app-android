@@ -110,7 +110,7 @@ public class DiscussionThreadViewModel extends BaseViewModel
         take = DEFAULT_TAKE;
         page = DEFAULT_PAGE;
 
-        userImage.set(thread.getProfileImage().getImageUrlMedium());
+        userImage.set(thread.getProfileImage() == null ? "" : thread.getProfileImage().getImageUrlMedium());
         threadDate.set(DateUtil.getDisplayTime(thread.getUpdatedAt()));
         likeIcon.set(thread.isVoted() ? R.drawable.t_icon_like_filled : R.drawable.t_icon_like);
         likeCount.set(String.valueOf(thread.getVoteCount()));

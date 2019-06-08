@@ -103,6 +103,7 @@ public class TaFirebaseMessagingService extends FirebaseMessagingService {
                 .setTitle(messageTitle)
                 .setMessage(messageBody)
                 .setContentIntent(contentIntent)
+                .setAutoCancel(true)
                 .show();
 
     }

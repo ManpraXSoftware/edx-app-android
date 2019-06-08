@@ -43,6 +43,7 @@ public class UserInfoViewModel extends BaseViewModel {
 
         blocks = new ArrayList<>();
         classesTaught = new ArrayList<>();
+        skills = new ArrayList<>();
     }
 
     public void getBlocks(OnResponseCallback<List<RegistrationOption>> callback){

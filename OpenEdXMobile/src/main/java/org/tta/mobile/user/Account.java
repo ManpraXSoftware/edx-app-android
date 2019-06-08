@@ -1,5 +1,9 @@
 package org.tta.mobile.user;
 
+import android.arch.persistence.room.Embedded;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -9,12 +13,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Entity(tableName = "account")
 public class Account {
 
     public static final String ACCOUNT_PRIVACY_SERIALIZED_NAME = "account_privacy";
     public static final String PRIVATE_SERIALIZED_NAME = "private";
     public static final String YEAR_OF_BIRTH_SERIALIZED_NAME = "year_of_birth";
 
+    @PrimaryKey
     @SerializedName("username")
     @NonNull
     private String username;
@@ -37,10 +43,12 @@ public class Account {
     @SerializedName("is_active")
     private boolean isActive;
 
+    @Embedded(prefix = "profile_image_")
     @SerializedName("profile_image")
     @NonNull
     private ProfileImage profileImage;
 
+    @Ignore
     @SerializedName(YEAR_OF_BIRTH_SERIALIZED_NAME)
     @Nullable
     private Integer yearOfBirth;
@@ -53,6 +61,7 @@ public class Account {
     @Nullable
     private String goals;
 
+    @Ignore
     @SerializedName("language_proficiencies")
     @NonNull
     private List<LanguageProficiency> languageProficiencies = new ArrayList<LanguageProficiency>();
@@ -69,10 +78,12 @@ public class Account {
     @Nullable // Nullability not specified by API
     private String email;
 
+    @Ignore
     @SerializedName("date_joined")
     @Nullable // Nullability not specified by API
     private Date dateJoined;
 
+    @Ignore
     @SerializedName(ACCOUNT_PRIVACY_SERIALIZED_NAME)
     @Nullable
     private Privacy accountPrivacy;

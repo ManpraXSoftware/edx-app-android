@@ -104,7 +104,7 @@
                     android:id="@+id/reply_comment_like_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:background="?android:attr/selectableItemBackground"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal"

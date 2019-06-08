@@ -11,6 +11,7 @@ import org.tta.mobile.tta.data.local.db.table.Source;
 import org.tta.mobile.tta.data.local.db.table.UnitStatus;
 import org.tta.mobile.tta.data.local.db.table.User;
 import org.tta.mobile.tta.data.model.library.CollectionConfigResponse;
+import org.tta.mobile.user.Account;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -229,5 +230,15 @@ public class LocalDataSource implements ILocalDataSource {
     @Override
     public void insertUnitStatuses(List<UnitStatus> statuses) {
         mAppDatabase.unitStatusDao().insert(statuses);
+    }
+
+    @Override
+    public Account getAccount(String username) {
+        return mAppDatabase.accountDao().getByUsername(username);
+    }
+
+    @Override
+    public void insertAccount(Account account) {
+        mAppDatabase.accountDao().insert(account);
     }
 }

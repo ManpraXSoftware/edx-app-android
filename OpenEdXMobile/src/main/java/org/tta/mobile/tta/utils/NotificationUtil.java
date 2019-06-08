@@ -101,6 +101,11 @@ public class NotificationUtil {
         return this;
     }
 
+    public NotificationUtil setAutoCancel(boolean autoCancel){
+        notificationBuilder.setAutoCancel(true);
+        return this;
+    }
+
     public void show(){
         notificationManager.notify(notificationId, notificationBuilder.build());
     }
