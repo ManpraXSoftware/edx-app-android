@@ -274,7 +274,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
     }
 
     public void ReceiveTinCanStatement(String statement) {
-        analytic.addTinCanAnalyticDB(statement, courseName);
+        analytic.addTinCanAnalyticDB(statement, courseName, courseId);
         // Toast.makeText(CourseScormViewActivity.this, statement, Toast.LENGTH_LONG).show();
     }
 

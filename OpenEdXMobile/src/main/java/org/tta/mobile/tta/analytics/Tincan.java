@@ -9,4 +9,6 @@ public class Tincan {
     public String analytic_id;
     public String course_id;
     public String metadata;
+    public String action_id;
+    public String nav;
 }

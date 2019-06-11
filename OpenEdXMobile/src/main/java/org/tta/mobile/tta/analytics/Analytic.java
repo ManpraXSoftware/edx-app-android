@@ -79,7 +79,7 @@ public class Analytic {
         }
     }
 
-    public void addTinCanAnalyticDB(String tincan_obj, String course_id) {
+    public void addTinCanAnalyticDB(String tincan_obj, String course_name, String course_id) {
         String username = loginPrefs.getUsername();
 
         //save Tincan analytics to  local db first
@@ -94,10 +94,10 @@ public class Analytic {
         model.action = String.valueOf(Action.TinCanObject);
         model.metadata = tincan_obj;
         //we are adding courseid to page in case of tincan
-        model.page = course_id;
+        model.page = course_name;
         model.source = String.valueOf(Source.Mobile);
         model.nav = BreadcrumbUtil.getBreadcrumb();
-        model.action_id = null;
+        model.action_id = course_id;
         model.setEvent_date();
         model.setStatus(0);
 
@@ -229,6 +229,8 @@ public class Analytic {
             tincan.analytic_id = item.analytic_id;
             tincan.course_id = item.page;
             tincan.metadata = item.metadata;
+            tincan.action_id = item.action_id;
+            tincan.nav = item.nav;
 
             tincan_item.tincanObj.add(tincan);
         }
