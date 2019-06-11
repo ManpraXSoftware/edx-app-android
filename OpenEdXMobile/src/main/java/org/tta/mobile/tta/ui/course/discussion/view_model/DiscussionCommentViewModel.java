@@ -28,6 +28,8 @@ import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.DiscussionTopicType;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
+import org.tta.mobile.tta.event.DiscussionCommentUpdateEvent;
+import org.tta.mobile.tta.event.DiscussionThreadUpdateEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
@@ -199,6 +201,8 @@ public class DiscussionCommentViewModel extends BaseViewModel {
                                 data.isVoted() ? Action.DBCommentlike : Action.DBCommentUnlike,
                                 course.getCourse().getName(),
                                 Source.Mobile, comment.getIdentifier());
+
+                        postCommentUpdated();
                     }
 
                     @Override
@@ -242,8 +246,13 @@ public class DiscussionCommentViewModel extends BaseViewModel {
 
                         adapter.add(0, data);
                         comment.incrementChildCount();
+                        thread.incrementCommentCount();
                         commentsCount.set(String.valueOf(comment.getChildCount()));
                         DiscussionCommentViewModel.this.reply.set("");
+                        toggleEmptyVisibility();
+
+                        postCommentUpdated();
+                        postThreadUpdated();
                     }
 
                     @Override
@@ -273,6 +282,14 @@ public class DiscussionCommentViewModel extends BaseViewModel {
                     }
                 });
 
+    }
+
+    private void postCommentUpdated(){
+        EventBus.getDefault().post(new DiscussionCommentUpdateEvent(comment));
+    }
+
+    private void postThreadUpdated(){
+        EventBus.getDefault().post(new DiscussionThreadUpdateEvent(thread));
     }
 
     @SuppressWarnings("unused")

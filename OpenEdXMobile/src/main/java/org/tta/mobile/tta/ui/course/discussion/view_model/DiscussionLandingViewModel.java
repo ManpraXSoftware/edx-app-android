@@ -22,10 +22,12 @@ import org.tta.mobile.discussion.DiscussionPostsSort;
 import org.tta.mobile.discussion.DiscussionRequestFields;
 import org.tta.mobile.discussion.DiscussionThread;
 import org.tta.mobile.discussion.DiscussionThreadPostedEvent;
+import org.tta.mobile.discussion.DiscussionTopic;
 import org.tta.mobile.discussion.DiscussionTopicDepth;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.local.db.table.Content;
+import org.tta.mobile.tta.event.DiscussionThreadUpdateEvent;
 import org.tta.mobile.tta.event.ShowDiscussionTopicEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
@@ -146,6 +148,17 @@ public class DiscussionLandingViewModel extends BaseViewModel {
 
     private void populateTopicsList() {
         topicsAdapter.setItems(topics);
+    }
+
+    @SuppressWarnings("unused")
+    public void onEventMainThread(DiscussionThreadUpdateEvent event){
+        DiscussionThread updatedThread = event.getThread();
+        List<DiscussionThread> threads = topicThreadsMap.get(updatedThread.getTopicId());
+        DiscussionThread thread = threads.get(threads.indexOf(updatedThread));
+        thread.setVoteCount(updatedThread.getVoteCount());
+        thread.setVoted(updatedThread.isVoted());
+        thread.setCommentCount(updatedThread.getCommentCount());
+        topicsAdapter.notifyDataSetChanged();
     }
 
     @SuppressWarnings("unused")

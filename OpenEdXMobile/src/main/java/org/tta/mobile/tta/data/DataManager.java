@@ -125,6 +125,7 @@ import org.tta.mobile.tta.task.content.course.certificate.GetMyCertificatesTask;
 import org.tta.mobile.tta.task.content.course.discussion.CreateDiscussionCommentTask;
 import org.tta.mobile.tta.task.content.course.discussion.CreateDiscussionThreadTask;
 import org.tta.mobile.tta.task.content.course.discussion.GetCommentRepliesTask;
+import org.tta.mobile.tta.task.content.course.discussion.GetDiscussionThreadTask;
 import org.tta.mobile.tta.task.content.course.discussion.GetDiscussionThreadsTask;
 import org.tta.mobile.tta.task.content.course.discussion.GetDiscussionTopicsTask;
 import org.tta.mobile.tta.task.content.course.discussion.GetThreadCommentsTask;
@@ -2436,6 +2437,33 @@ public class DataManager extends BaseRoboInjector {
                         callback.onFailure(new TaException("No discussion threads available"));
                     } else {
                         callback.onSuccess(discussionThreadPage.getResults());
+                    }
+                }
+
+                @Override
+                protected void onException(Exception ex) {
+                    callback.onFailure(ex);
+                }
+            }.execute();
+
+        } else {
+            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+        }
+
+    }
+
+    public void getDiscussionThread(String threadId, OnResponseCallback<DiscussionThread> callback){
+
+        if (NetworkUtil.isConnected(context)){
+
+            new GetDiscussionThreadTask(context, threadId){
+                @Override
+                protected void onSuccess(DiscussionThread thread) throws Exception {
+                    super.onSuccess(thread);
+                    if (thread == null){
+                        callback.onFailure(new TaException("Unable to fetch discussion thread"));
+                    } else {
+                        callback.onSuccess(thread);
                     }
                 }
 

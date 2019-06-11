@@ -72,4 +72,8 @@ public class DiscussionApi {
     public Call<DiscussionComment> likeComment(String commentId, boolean liked){
         return discussionService.setCommentVoted(commentId, new DiscussionService.VoteBody(liked));
     }
+
+    public Call<DiscussionThread> getDiscussionThread(String threadId){
+        return discussionService.getThread(threadId);
+    }
 }

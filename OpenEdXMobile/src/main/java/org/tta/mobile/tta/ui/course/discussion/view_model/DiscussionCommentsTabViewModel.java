@@ -23,6 +23,7 @@ import org.tta.mobile.discussion.DiscussionTopic;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.enums.SortType;
+import org.tta.mobile.tta.event.DiscussionCommentUpdateEvent;
 import org.tta.mobile.tta.event.LoadMoreDiscussionCommentsEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
@@ -212,6 +213,24 @@ public class DiscussionCommentsTabViewModel extends BaseViewModel {
     public void onResume() {
         super.onResume();
         layoutManager = new LinearLayoutManager(mActivity);
+    }
+
+    @SuppressWarnings("unused")
+    public void onEventMainThread(DiscussionCommentUpdateEvent event){
+        DiscussionComment updatedComment = event.getComment();
+        DiscussionComment comment = comments.get(comments.indexOf(updatedComment));
+        comment.setVoteCount(updatedComment.getVoteCount());
+        comment.setVoted(updatedComment.isVoted());
+        comment.setChildCount(updatedComment.getChildCount());
+        adapter.notifyItemChanged(adapter.getItemPosition(comment));
+    }
+
+    public void registerEventBus(){
+        EventBus.getDefault().register(this);
+    }
+
+    public void unRegisterEventBus(){
+        EventBus.getDefault().unregister(this);
     }
 
     public class DiscussionCommentsAdapter extends MxInfiniteAdapter<DiscussionComment> {

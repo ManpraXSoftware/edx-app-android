@@ -52,6 +52,7 @@ public class DiscussionCommentsTab extends TaBaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new DiscussionCommentsTabViewModel(getActivity(), this, course, topic, thread, listener, comments, sortType);
+        viewModel.registerEventBus();
     }
 
     @Nullable
@@ -89,5 +90,11 @@ public class DiscussionCommentsTab extends TaBaseFragment {
                 nav = Nav.most_relevant;
         }
         logger.debug("TTA Nav ======> " + BreadcrumbUtil.setBreadcrumb(RANK, nav.name()));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        viewModel.unRegisterEventBus();
     }
 }

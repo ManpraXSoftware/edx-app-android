@@ -23,6 +23,7 @@ import org.tta.mobile.discussion.DiscussionThreadPostedEvent;
 import org.tta.mobile.discussion.DiscussionTopicDepth;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.Constants;
+import org.tta.mobile.tta.event.DiscussionThreadUpdateEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
@@ -145,6 +146,16 @@ public class DiscussionTopicViewModel extends BaseViewModel {
 
     public void startDiscussion(){
         mDataManager.getEdxEnvironment().getRouter().showCourseDiscussionAddPost(mActivity, topicDepth.getDiscussionTopic(), course);
+    }
+
+    @SuppressWarnings("unused")
+    public void onEventMainThread(DiscussionThreadUpdateEvent event){
+        DiscussionThread updatedThread = event.getThread();
+        DiscussionThread thread = threads.get(threads.indexOf(updatedThread));
+        thread.setVoteCount(updatedThread.getVoteCount());
+        thread.setVoted(updatedThread.isVoted());
+        thread.setCommentCount(updatedThread.getCommentCount());
+        adapter.notifyItemChanged(adapter.getItemPosition(thread));
     }
 
     @SuppressWarnings("unused")

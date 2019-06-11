@@ -141,6 +141,10 @@ public class DiscussionThread implements Serializable, IAuthorData, ProfileImage
         return commentCount;
     }
 
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
+    }
+
     public int getUnreadCommentCount() {
         return unreadCommentCount;
     }
@@ -150,6 +154,10 @@ public class DiscussionThread implements Serializable, IAuthorData, ProfileImage
      */
     public int getResponseCount() {
         return responseCount;
+    }
+
+    public void setResponseCount(int responseCount) {
+        this.responseCount = responseCount;
     }
 
     /**
@@ -310,5 +318,10 @@ public class DiscussionThread implements Serializable, IAuthorData, ProfileImage
     public DiscussionThread patchObject(@NonNull DiscussionThread newObj) {
         newObj.users = users;
         return newObj;
+    }
+
+    @Override
+    public boolean equals(@androidx.annotation.Nullable Object obj) {
+        return obj instanceof DiscussionThread && (((DiscussionThread) obj).identifier.equals(identifier));
     }
 }

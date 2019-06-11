@@ -136,6 +136,10 @@ public class DiscussionComment implements Serializable, IAuthorData, ProfileImag
         return childCount;
     }
 
+    public void setChildCount(int childCount) {
+        this.childCount = childCount;
+    }
+
     public void incrementChildCount() {
         childCount++;
     }

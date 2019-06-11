@@ -20,6 +20,7 @@ import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.DiscussionTopicType;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
 import org.tta.mobile.tta.data.enums.SortType;
+import org.tta.mobile.tta.event.DiscussionThreadUpdateEvent;
 import org.tta.mobile.tta.event.LoadMoreDiscussionCommentsEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.BasePagerAdapter;
@@ -62,7 +63,7 @@ public class DiscussionThreadViewModel extends BaseViewModel
     public ObservableInt userPlaceholder = new ObservableInt(R.drawable.profile_photo_placeholder);
     public ObservableField<String> threadDate = new ObservableField<>();
     public ObservableField<String> likeCount = new ObservableField<>("0");
-    public ObservableField<String> commentsCount = new ObservableField<>("0");
+    public ObservableField<String> commentsCount = new ObservableField<>("");
     public ObservableInt likeIcon = new ObservableInt(R.drawable.t_icon_like);
     public ObservableBoolean replyingToVisible = new ObservableBoolean();
     public ObservableBoolean commentFocus = new ObservableBoolean();
@@ -116,12 +117,12 @@ public class DiscussionThreadViewModel extends BaseViewModel
         threadDate.set(DateUtil.getDisplayTime(thread.getUpdatedAt()));
         likeIcon.set(thread.isVoted() ? R.drawable.t_icon_like_filled : R.drawable.t_icon_like);
         likeCount.set(String.valueOf(thread.getVoteCount()));
-        commentsCount.set(String.valueOf(thread.getCommentCount()));
 
         adapter = new CommentsPagerAdapter(mActivity.getSupportFragmentManager());
 
         mActivity.showLoading();
         setTabs();
+        fetchThread();
         fetchComments();
     }
 
@@ -129,6 +130,23 @@ public class DiscussionThreadViewModel extends BaseViewModel
     public void onResume() {
         super.onResume();
         onEventMainThread(new NetworkConnectivityChangeEvent());
+    }
+
+    private void fetchThread(){
+
+        mDataManager.getDiscussionThread(thread.getIdentifier(), new OnResponseCallback<DiscussionThread>() {
+            @Override
+            public void onSuccess(DiscussionThread data) {
+                thread.setResponseCount(data.getResponseCount());
+                commentsCount.set(String.valueOf(thread.getResponseCount()));
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                commentsCount.set("");
+            }
+        });
+
     }
 
     private void fetchComments() {
@@ -218,6 +236,8 @@ public class DiscussionThreadViewModel extends BaseViewModel
                                 data.isVoted() ? Action.DBLike : Action.DBUnlike,
                                 course.getCourse().getName(),
                                 Source.Mobile, thread.getIdentifier());
+
+                        postThreadUpdated();
                     }
 
                     @Override
@@ -275,9 +295,10 @@ public class DiscussionThreadViewModel extends BaseViewModel
                             data.setProfileImage(loginPrefs.getProfileImage());
                         }
 
+                        thread.incrementCommentCount();
                         if (commentParentId == null){
-                            thread.incrementCommentCount();
-                            commentsCount.set(String.valueOf(thread.getCommentCount()));
+                            thread.incrementResponseCount();
+                            commentsCount.set(String.valueOf(thread.getResponseCount()));
                             //TODO: add this new comment to list
                             comments.add(0, data);
 
@@ -298,6 +319,8 @@ public class DiscussionThreadViewModel extends BaseViewModel
                         }
                         refreshComments();
                         resetReplyToComment();
+
+                        postThreadUpdated();
                     }
 
                     @Override
@@ -375,6 +398,10 @@ public class DiscussionThreadViewModel extends BaseViewModel
         tab1.refreshList();
         tab2.refreshList();
         tab3.refreshList();
+    }
+
+    private void postThreadUpdated(){
+        EventBus.getDefault().post(new DiscussionThreadUpdateEvent(thread));
     }
 
     @SuppressWarnings("unused")
