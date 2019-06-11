@@ -117,8 +117,10 @@ public class ViewUtil {
                 0);
         params.gravity = Gravity.CENTER_HORIZONTAL;
         tv.setLayoutParams(params);
+        int padding = Tools.dp2px(parent.getContext(), 8.0f);
+        tv.setPadding(padding, padding, padding, padding);
         tv.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.secondary_blue));
-        tv.setTextSize(12);
+        tv.setTextSize(14);
         tv.setTypeface(ResourcesCompat.getFont(parent.getContext(), R.font.hind_medium));
         tv.setText(linkText);
         tv.setPaintFlags(tv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);

@@ -174,8 +174,7 @@ public class UserInfoActivity extends BaseVMActivity {
         dietSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "DIET Code/डी आइ इ टी कोड", mViewModel.dietCodes, null);
 
         btn = ViewUtil.addButton(userInfoLayout, "Sumbit");
-        privacyLinkText = ViewUtil.addLinkText(userInfoLayout, "Privay Policy");
-        privacyLinkText.setVisibility(View.GONE);
+        privacyLinkText = ViewUtil.addLinkText(userInfoLayout, "Privacy Policy");
         ViewUtil.addEmptySpace(userInfoLayout, (int) getResources().getDimension(R.dimen._50px));
 
         setListeners();
@@ -217,11 +216,11 @@ public class UserInfoActivity extends BaseVMActivity {
             mViewModel.submit(parameters);
         });
 
-        /*privacyLinkText.setOnClickListener(v -> {
+        privacyLinkText.setOnClickListener(v -> {
             mViewModel.getDataManager().getEdxEnvironment().getRouter().showAuthenticatedWebviewActivity(
-                    this, url, "Privacy Policy"
+                    this, getString(R.string.privacy_policy_url), "Privacy Policy"
             );
-        });*/
+        });
 
         stateSpinner.setOnItemSelectedListener((view, item) -> {
             if (item == null){

@@ -794,6 +794,7 @@
     <string name="be_the_first_to_comment" translatable="false">Be the first to comment</string>
     <string name="be_the_first_to_reply" translatable="false">Be the first to reply</string>
     <string name="anonymous" translatable="false">Anonymous</string>
+    <string name="privacy_policy_url" translatable="false">http://theteacherapp.org/privacy</string>
 
     <string name="feed_format_content_like" translatable="false"><b>%s</b> recently liked %s</string>
     <string name="feed_format_content_like_from" translatable="false"><b>%s from %s</b> recently liked %s</string>
