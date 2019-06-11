@@ -53,6 +53,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 import static org.tta.mobile.http.constants.TimeInterval.HOUR;
@@ -691,6 +692,10 @@ public class CourseAPI {
         //FIXME = is this field missing?
         // private EncodingsModel encodings;
         return model;
+    }
+
+    public Call<ResponseBody> enrolInCourse(String courseId){
+        return courseService.enrollInACourse(new CourseService.EnrollBody(courseId, false));
     }
 
     /*public

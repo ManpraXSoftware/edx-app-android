@@ -20,6 +20,7 @@ import org.tta.mobile.authentication.AuthResponse;
 import org.tta.mobile.core.IEdxDataManager;
 import org.tta.mobile.core.IEdxEnvironment;
 import org.tta.mobile.course.CourseAPI;
+import org.tta.mobile.course.CourseService;
 import org.tta.mobile.discussion.CourseTopics;
 import org.tta.mobile.discussion.DiscussionComment;
 import org.tta.mobile.discussion.DiscussionThread;
@@ -185,6 +186,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import okhttp3.HttpUrl;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 import static org.tta.mobile.tta.Constants.TA_DATABASE;
@@ -1014,11 +1016,24 @@ public class DataManager extends BaseRoboInjector {
                 @Override
                 protected void onSuccess(EnrolledCoursesResponse enrolledCoursesResponse) throws Exception {
                     super.onSuccess(enrolledCoursesResponse);
-                    if (enrolledCoursesResponse == null ||
-                            enrolledCoursesResponse.getMode() == null ||
-                            enrolledCoursesResponse.getMode().equals("")
-                    ) {
+                    if (enrolledCoursesResponse == null) {
                         callback.onFailure(new TaException("Invalid Course"));
+                    } else if (enrolledCoursesResponse.getMode() == null ||
+                            enrolledCoursesResponse.getMode().equals("") ||
+                            enrolledCoursesResponse.getCourse() == null){
+
+                        enrolInCourse(courseId, new OnResponseCallback<ResponseBody>() {
+                            @Override
+                            public void onSuccess(ResponseBody data) {
+                                getCourse(courseId, callback);
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+                                callback.onFailure(e);
+                            }
+                        });
+
                     } else {
                         callback.onSuccess(enrolledCoursesResponse);
                     }
@@ -1055,6 +1070,30 @@ public class DataManager extends BaseRoboInjector {
                 callback.onFailure(e);
             }
         }.execute();
+    }
+
+    public void enrolInCourse(String courseId, OnResponseCallback<ResponseBody> callback){
+
+        if (!NetworkUtil.isConnected(context)) {
+            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+            return;
+        }
+
+        Call<ResponseBody> enrolCall = courseApi.enrolInCourse(courseId);
+        enrolCall.enqueue(new CourseService.EnrollCallback(context){
+            @Override
+            protected void onResponse(@NonNull ResponseBody responseBody) {
+                super.onResponse(responseBody);
+                callback.onSuccess(responseBody);
+            }
+
+            @Override
+            protected void onFailure(@NonNull Throwable error) {
+                super.onFailure(error);
+                callback.onFailure(new TaException(error.getMessage()));
+            }
+        });
+
     }
 
     public void getTotalLikes(long contentId, OnResponseCallback<TotalLikeResponse> callback) {
