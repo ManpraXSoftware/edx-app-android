@@ -59,6 +59,7 @@ public class TaBaseActivity extends RxAppCompatActivity implements RoboContext, 
     protected boolean isInForeground = false;
     protected final Logger logger = new Logger(getClass().getName());
     public Analytic analytic;
+    protected Context baseActivityContext;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -206,6 +207,7 @@ public class TaBaseActivity extends RxAppCompatActivity implements RoboContext, 
 
     @Override
     protected void attachBaseContext(Context newBase) {
+        baseActivityContext = newBase;
         super.attachBaseContext(LocaleHelper.onAttach(newBase));
     }
 

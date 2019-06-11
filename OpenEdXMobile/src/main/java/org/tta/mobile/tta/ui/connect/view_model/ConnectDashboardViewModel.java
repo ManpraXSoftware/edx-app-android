@@ -235,7 +235,6 @@ public class ConnectDashboardViewModel extends BaseViewModel
         } catch (NumberFormatException e) {
             return;
         }*/
-        mActivity.showLoading();
         mDataManager.getPostBySlug(content.getSource_identity(), new OnResponseCallback<Post>() {
             @Override
             public void onSuccess(Post data) {
@@ -446,7 +445,6 @@ public class ConnectDashboardViewModel extends BaseViewModel
         mDataManager.getCommentsByPost(post.getId(), take, page, new OnResponseCallback<List<Comment>>() {
             @Override
             public void onSuccess(List<Comment> data) {
-                mActivity.hideLoading();
                 if (data.size() < take){
                     setLoaded();
                 }
@@ -455,7 +453,6 @@ public class ConnectDashboardViewModel extends BaseViewModel
 
             @Override
             public void onFailure(Exception e) {
-                mActivity.hideLoading();
                 setLoaded();
             }
         });

@@ -1,10 +1,12 @@
 package org.tta.mobile.tta.data.local.db.table;
 
 import android.arch.persistence.room.Entity;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 @Entity(tableName = "certificate", primaryKeys = {"course_id", "username"})
-public class Certificate {
+public class Certificate implements Parcelable {
 
     @NonNull
     private String username;
@@ -27,6 +29,34 @@ public class Certificate {
     private String modified;
 
     private String image;
+
+    public Certificate() {
+    }
+
+    protected Certificate(Parcel in) {
+        username = in.readString();
+        status = in.readString();
+        regenerate = in.readByte() != 0;
+        created = in.readString();
+        grade = in.readString();
+        course_id = in.readString();
+        course_name = in.readString();
+        download_url = in.readString();
+        modified = in.readString();
+        image = in.readString();
+    }
+
+    public static final Creator<Certificate> CREATOR = new Creator<Certificate>() {
+        @Override
+        public Certificate createFromParcel(Parcel in) {
+            return new Certificate(in);
+        }
+
+        @Override
+        public Certificate[] newArray(int size) {
+            return new Certificate[size];
+        }
+    };
 
     public String getUsername() {
         return username;
@@ -106,5 +136,24 @@ public class Certificate {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(username);
+        dest.writeString(status);
+        dest.writeByte((byte) (regenerate ? 1 : 0));
+        dest.writeString(created);
+        dest.writeString(grade);
+        dest.writeString(course_id);
+        dest.writeString(course_name);
+        dest.writeString(download_url);
+        dest.writeString(modified);
+        dest.writeString(image);
     }
 }

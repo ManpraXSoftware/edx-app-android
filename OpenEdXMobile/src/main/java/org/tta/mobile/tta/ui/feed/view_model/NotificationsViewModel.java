@@ -75,7 +75,17 @@ public class NotificationsViewModel extends BaseViewModel {
                 switch (NotificationType.valueOf(item.getType())){
                     case content:
                         mActivity.showLoading();
-                        mDataManager.getContentFromSourceIdentity(item.getRef_id(), new OnResponseCallback<Content>() {
+
+                        String connect_url = mDataManager.getConfig().getConnectUrl();
+                        String sourceIdentity = item.getRef_id();
+                        if (sourceIdentity.startsWith(connect_url) ||
+                                sourceIdentity.startsWith("http://www.connect.theteacherapp.org/") ||
+                                sourceIdentity.startsWith("http://connect.theteacherapp.org/")) {
+                            String[] chunks = sourceIdentity.split("/");
+                            sourceIdentity = chunks[chunks.length-1];
+                        }
+
+                        mDataManager.getContentFromSourceIdentity(sourceIdentity, new OnResponseCallback<Content>() {
                             @Override
                             public void onSuccess(Content data) {
                                 mActivity.hideLoading();

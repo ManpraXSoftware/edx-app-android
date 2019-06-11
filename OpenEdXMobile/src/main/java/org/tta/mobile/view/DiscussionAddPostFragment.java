@@ -49,6 +49,9 @@ import retrofit2.Call;
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectView;
 
+import static org.tta.mobile.util.BrowserUtil.loginAPI;
+import static org.tta.mobile.util.BrowserUtil.loginPrefs;
+
 public class DiscussionAddPostFragment extends BaseFragment {
 
     static public String TAG = DiscussionAddPostFragment.class.getCanonicalName();
@@ -218,8 +221,17 @@ public class DiscussionAddPostFragment extends BaseFragment {
                 new ProgressViewController(addPostProgressBar),
                 new DialogErrorNotification(this)) {
             @Override
-            protected void onResponse(@NonNull final DiscussionThread courseTopics) {
-                EventBus.getDefault().post(new DiscussionThreadPostedEvent(courseTopics));
+            protected void onResponse(@NonNull final DiscussionThread thread) {
+                if (thread.isAuthorAnonymous()){
+                    thread.setAuthor(loginPrefs.getUsername());
+                }
+                if (thread.getDisplayName() == null){
+                    thread.setDisplayName(loginPrefs.getDisplayName());
+                }
+                if (thread.getProfileImage() == null){
+                    thread.setProfileImage(loginPrefs.getProfileImage());
+                }
+                EventBus.getDefault().post(new DiscussionThreadPostedEvent(thread));
                 getActivity().finish();
             }
 

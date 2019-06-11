@@ -2,6 +2,7 @@ package org.tta.mobile.tta.ui.profile.view_model;
 
 import android.content.Context;
 import android.databinding.ViewDataBinding;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,11 +15,14 @@ import com.maurya.mx.mxlib.core.OnRecyclerItemClickListener;
 
 import org.tta.mobile.R;
 import org.tta.mobile.databinding.TRowCertificateBinding;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.local.db.table.Certificate;
 import org.tta.mobile.tta.exception.TaException;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
+import org.tta.mobile.tta.ui.certificate.CertificateActivity;
+import org.tta.mobile.tta.utils.ActivityUtil;
 
 import java.util.List;
 
@@ -34,10 +38,9 @@ public class MyCertificatesViewModel extends BaseViewModel {
         layoutManager = new GridLayoutManager(mActivity, 2);
 
         adapter.setItemClickListener((view, item) -> {
-            String url = mDataManager.getConfig().getApiHostURL() + item.getDownload_url();
-            mDataManager.getEdxEnvironment().getRouter().showAuthenticatedWebviewActivity(
-                    mActivity, url, item.getCourse_name()
-            );
+            Bundle parameters = new Bundle();
+            parameters.putParcelable(Constants.KEY_CERTIFICATE, item);
+            ActivityUtil.gotoPage(mActivity, CertificateActivity.class, parameters);
         });
 
         fetchCertificates();

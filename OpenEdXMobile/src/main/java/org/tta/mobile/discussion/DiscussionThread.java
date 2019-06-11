@@ -27,6 +27,7 @@ import org.tta.mobile.user.ProfileImageProvider;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -247,15 +248,31 @@ public class DiscussionThread implements Serializable, IAuthorData, ProfileImage
     @Nullable
     @Override
     public ProfileImage getProfileImage() {
-        if (users == null || isAuthorAnonymous()) {
+        if (users == null || isAuthorAnonymous() || !users.containsKey(author)) {
             return null;
         } else {
             return users.get(author).getProfile().getImage();
         }
     }
 
+    @Override
+    public void setProfileImage(ProfileImage image) {
+        if (isAuthorAnonymous()){
+            return;
+        }
+        if (users == null){
+            users = new HashMap<>();
+        }
+        if (!users.containsKey(author)){
+            DiscussionUser user = new DiscussionUser();
+            user.setProfile(new DiscussionUser.Profile());
+            users.put(author, user);
+        }
+        users.get(author).getProfile().setImage(image);
+    }
+
     public String getDisplayName(){
-        if (users == null || isAuthorAnonymous()) {
+        if (users == null || isAuthorAnonymous() || !users.containsKey(author)) {
             return null;
         } else {
             return users.get(author).getProfile().getDisplayName();
@@ -263,11 +280,22 @@ public class DiscussionThread implements Serializable, IAuthorData, ProfileImage
     }
 
     public void setDisplayName(String name){
-        if (users == null || isAuthorAnonymous()) {
+        if (isAuthorAnonymous()){
             return;
-        } else {
-            users.get(author).getProfile().setDisplayName(name);
         }
+        if (users == null){
+            users = new HashMap<>();
+        }
+        if (!users.containsKey(author)){
+            DiscussionUser user = new DiscussionUser();
+            user.setProfile(new DiscussionUser.Profile());
+            users.put(author, user);
+        }
+        users.get(author).getProfile().setDisplayName(name);
+    }
+
+    public void setAuthor(String author){
+        this.author = author;
     }
 
     /**

@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.webkit.ConsoleMessage;
 import android.webkit.CookieManager;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -152,6 +153,7 @@ public class ConnectDashboardActivity extends BaseVMActivity {
         setupWebview();
         viewModel.registerEventBus();
 
+        showLoading();
         viewModel.fetchPost(new OnResponseCallback<Post>() {
             @Override
             public void onSuccess(Post data) {
@@ -161,6 +163,7 @@ public class ConnectDashboardActivity extends BaseVMActivity {
 
             @Override
             public void onFailure(Exception e) {
+                hideLoading();
                 showLongSnack(e.getLocalizedMessage());
             }
         });
@@ -220,18 +223,23 @@ public class ConnectDashboardActivity extends BaseVMActivity {
 
     private void setupWebview() {
 
-        webView.getSettings().setLoadsImagesAutomatically(true);
-        webView.getSettings().setJavaScriptEnabled(true);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
 
         //setting store webpage in cache
 
-        webView.getSettings().setAppCacheMaxSize(5 * 1024 * 1024); // 5MB
+        webView.getSettings().setAppCacheMaxSize(8 * 1024 * 1024); // 8MB
         webView.getSettings().setAppCachePath(getApplicationContext().getCacheDir().getAbsolutePath());
         webView.getSettings().setAllowFileAccess(true);
         webView.getSettings().setAppCacheEnabled(true);
         webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setLoadsImagesAutomatically(true);
+        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+
+        String userAgent = webView.getSettings().getUserAgentString() + "/" + "theteacherapp/4.0";
+        logD("User agent : " + userAgent);
+        webView.getSettings().setUserAgentString(userAgent);
 
         /*if (!NetworkUtil.isConnected(this)) {
             webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
@@ -243,10 +251,6 @@ public class ConnectDashboardActivity extends BaseVMActivity {
         String domain = config.getConnectDomainUrl();
         cookieManager.setCookie(domain, loginAPI.getConnectCookies() + "; Domain=" + domain);
 
-        WebSettings webSettings = webView.getSettings();
-
-        webSettings.setUserAgentString(webSettings.getUserAgentString() + "/" + "theteacherapp/3.0");
-        webSettings.setJavaScriptEnabled(true);
         webView.addJavascriptInterface(new WebAppInterfaceConnect(this, webView), "android");
 
         webView.setOnKeyListener((v, keyCode, event) -> {
@@ -276,6 +280,13 @@ public class ConnectDashboardActivity extends BaseVMActivity {
 
         webChromeClient = new VideoEnabledWebChromeClient(nonVideoLayout, videoLayout, null, webView) // See all available constructors...
         {
+
+            @Override
+            public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+                logD("Console message: " + consoleMessage.message());
+                return super.onConsoleMessage(consoleMessage);
+            }
+
             // Subscribe to standard events, such as onProgressChanged()...
             @Override
             public void onProgressChanged(WebView view, int progress) {
@@ -513,6 +524,7 @@ public class ConnectDashboardActivity extends BaseVMActivity {
             }*/
 
             super.onReceivedError(view, request, error);
+            hideLoading();
         }
 
         @Override
@@ -532,6 +544,8 @@ public class ConnectDashboardActivity extends BaseVMActivity {
                 ViewGroup.LayoutParams pagerParams = viewPager.getLayoutParams();
                 pagerParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
                 viewPager.setLayoutParams(pagerParams);
+
+                hideLoading();
 
             } catch (Exception exception) {
                 exception.printStackTrace();

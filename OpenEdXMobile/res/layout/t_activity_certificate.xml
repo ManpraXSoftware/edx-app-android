@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="org.tta.mobile.tta.ui.certificate.view_model.CertificateViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".mx_views.MxCertificateActivity">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/toolbar"
+            android:background="@color/white"
+            app:title="@{viewModel.certificate.course_name}"
+            app:navigationIcon="@drawable/back"
+            app:titleTextAppearance="@style/ta_toolbar_title_style"
+            android:gravity="start|center_vertical"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:titleMarginStart="0dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/grey_act_background">
+
+            <org.tta.mobile.view.custom.EdxWebView
+                android:id="@+id/webview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/grey_act_background" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/print_certificate_fab"
+                style="@style/ta_fab_style"
+                app:backgroundTint="@color/white"
+                app:srcCompat="@drawable/t_icon_print" />
+
+            <include layout="@layout/loading_indicator" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</layout>

@@ -229,6 +229,17 @@ public class DiscussionCommentViewModel extends BaseViewModel {
                     @Override
                     public void onSuccess(DiscussionComment data) {
                         mActivity.hideLoading();
+
+                        if (data.isAuthorAnonymous()){
+                            data.setAuthor(mDataManager.getLoginPrefs().getUsername());
+                        }
+                        if (data.getDisplayName() == null){
+                            data.setDisplayName(mDataManager.getLoginPrefs().getDisplayName());
+                        }
+                        if (data.getProfileImage() == null){
+                            data.setProfileImage(mDataManager.getLoginPrefs().getProfileImage());
+                        }
+
                         adapter.add(0, data);
                         comment.incrementChildCount();
                         commentsCount.set(String.valueOf(comment.getChildCount()));
@@ -292,10 +303,10 @@ public class DiscussionCommentViewModel extends BaseViewModel {
                 TRowDiscussionReplyBinding replyBinding = (TRowDiscussionReplyBinding) binding;
                 replyBinding.setViewModel(model);
 
-                String name = model.getAuthorDisplayName();
+                String name = model.getDisplayName();
                 if (name == null){
                     name = mActivity.getString(R.string.anonymous);
-                    model.setAuthorDisplayName(name);
+                    model.setDisplayName(name);
                 }
                 replyBinding.replyUserName.setText(name);
 

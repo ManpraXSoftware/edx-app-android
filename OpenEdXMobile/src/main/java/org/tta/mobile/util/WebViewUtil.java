@@ -1,7 +1,12 @@
 package org.tta.mobile.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintJob;
+import android.print.PrintManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -166,5 +171,14 @@ public class WebViewUtil {
                 webView.loadUrl(url);
             }
         }
+    }
+
+    //Print content of webview
+    public static void createWebPrintJob(Context context, WebView webView, String printJobName) {
+
+        PrintManager printManager = (PrintManager) context.getSystemService(Context.PRINT_SERVICE);
+        PrintDocumentAdapter printAdapter = webView.createPrintDocumentAdapter();
+        PrintJob printJob = printManager.print(printJobName, printAdapter, new PrintAttributes.Builder().build());
+
     }
 }

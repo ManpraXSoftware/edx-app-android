@@ -18,6 +18,10 @@ public class DiscussionUser implements Serializable {
         return profile;
     }
 
+    public void setProfile(@NonNull Profile profile) {
+        this.profile = profile;
+    }
+
     public static class Profile implements Serializable {
         @Nullable
         @SerializedName("image")
@@ -26,6 +30,10 @@ public class DiscussionUser implements Serializable {
         @Nullable
         public ProfileImage getImage() {
             return image;
+        }
+
+        public void setImage(@Nullable ProfileImage image) {
+            this.image = image;
         }
 
         @SerializedName("display_name")

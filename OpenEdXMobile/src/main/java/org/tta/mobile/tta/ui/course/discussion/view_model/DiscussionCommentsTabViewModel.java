@@ -168,6 +168,7 @@ public class DiscussionCommentsTabViewModel extends BaseViewModel {
     public void setLoaded(){
         allLoaded = true;
         adapter.setLoadingDone();
+        toggleEmptyVisibility();
     }
 
     public void refreshList(){
@@ -224,10 +225,10 @@ public class DiscussionCommentsTabViewModel extends BaseViewModel {
                 TRowDiscussionCommentBinding commentBinding = (TRowDiscussionCommentBinding) binding;
                 commentBinding.setViewModel(model);
 
-                String name = model.getAuthorDisplayName();
+                String name = model.getDisplayName();
                 if (name == null){
                     name = mActivity.getString(R.string.anonymous);
-                    model.setAuthorDisplayName(name);
+                    model.setDisplayName(name);
                 }
                 commentBinding.userName.setText(name);
 

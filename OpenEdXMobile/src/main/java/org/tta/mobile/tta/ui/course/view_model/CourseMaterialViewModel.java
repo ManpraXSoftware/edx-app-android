@@ -58,6 +58,7 @@ import org.tta.mobile.tta.tincan.Tincan;
 import org.tta.mobile.tta.ui.base.BaseRecyclerAdapter;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
+import org.tta.mobile.tta.ui.certificate.CertificateActivity;
 import org.tta.mobile.tta.ui.course.CourseScormViewActivity;
 import org.tta.mobile.tta.ui.interfaces.OnTaItemClickListener;
 import org.tta.mobile.tta.utils.ActivityUtil;
@@ -424,14 +425,10 @@ public class CourseMaterialViewModel extends BaseViewModel {
                             @Override
                             public void onSuccess(Certificate data) {
                                 mActivity.hideLoading();
-                                String url = mDataManager.getConfig().getApiHostURL() + data.getDownload_url();
-                                mDataManager.getEdxEnvironment().getRouter().showAuthenticatedWebviewActivity(
-                                        mActivity, url, data.getCourse_name()
-                                );
 
-                                mActivity.analytic.addMxAnalytics_db(
-                                        finalScorm.getInternalName(), Action.ViewCert, content.getName(),
-                                        Source.Mobile, finalScorm.getId());
+                                Bundle parameters = new Bundle();
+                                parameters.putParcelable(Constants.KEY_CERTIFICATE, data);
+                                ActivityUtil.gotoPage(mActivity, CertificateActivity.class, parameters);
 
                             }
 

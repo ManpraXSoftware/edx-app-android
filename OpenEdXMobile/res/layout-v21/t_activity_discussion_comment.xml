@@ -78,7 +78,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_8px"
                         android:fontFamily="@font/hind_medium"
-                        android:text="@{viewModel.comment.authorDisplayName}"
+                        android:text="@{viewModel.comment.displayName}"
                         android:textColor="@color/primary_cyan"
                         android:textSize="12sp"
                         app:layout_constraintStart_toEndOf="@id/user_image"

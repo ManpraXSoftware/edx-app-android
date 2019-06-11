@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.webkit.WebView;
 import android.widget.Toast;
 
@@ -153,6 +154,7 @@ import org.tta.mobile.tta.utils.AlarmManagerUtil;
 import org.tta.mobile.tta.ui.otp.AppSignatureHelper;
 import org.tta.mobile.tta.utils.FirebaseUtil;
 import org.tta.mobile.tta.utils.RxUtil;
+import org.tta.mobile.tta.utils.UrlUtil;
 import org.tta.mobile.tta.wordpress_client.data.db_command.DB_Commands;
 import org.tta.mobile.tta.wordpress_client.model.Comment;
 import org.tta.mobile.tta.wordpress_client.model.CustomComment;
@@ -1501,8 +1503,10 @@ public class DataManager extends BaseRoboInjector {
                     if (result == null || result.isEmpty()){
                         getLocalPostBySlug(slug, callback, new TaException("Post not found"));
                     } else {
-                        updateLocalPost(result.get(0));
-                        callback.onSuccess(result.get(0));
+                        Post post = result.get(0);
+                        post.setSlug(UrlUtil.urldecode(post.getSlug()));
+                        updateLocalPost(post);
+                        callback.onSuccess(post);
                     }
                 }
 
@@ -1523,7 +1527,7 @@ public class DataManager extends BaseRoboInjector {
     public void getLocalPostBySlug(String slug, OnResponseCallback<Post> callback, Exception e){
 
         Post post = db_commands.getPostBySlug(slug);
-        if (post == null){
+        if (post == null || post.getSlug() == null || post.getSlug().equals("")){
             callback.onFailure(e);
         } else {
             callback.onSuccess(post);

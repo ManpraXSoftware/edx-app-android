@@ -41,6 +41,8 @@ import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
+import static org.tta.mobile.util.BrowserUtil.loginPrefs;
+
 public class DiscussionThreadViewModel extends BaseViewModel
     implements DiscussionCommentClickListener {
 
@@ -262,6 +264,17 @@ public class DiscussionThreadViewModel extends BaseViewModel
                     public void onSuccess(DiscussionComment data) {
                         mActivity.hideLoading();
                         mActivity.showLongSnack("Comment added successfully");
+
+                        if (data.isAuthorAnonymous()){
+                            data.setAuthor(loginPrefs.getUsername());
+                        }
+                        if (data.getDisplayName() == null){
+                            data.setDisplayName(loginPrefs.getDisplayName());
+                        }
+                        if (data.getProfileImage() == null){
+                            data.setProfileImage(loginPrefs.getProfileImage());
+                        }
+
                         if (commentParentId == null){
                             thread.incrementCommentCount();
                             commentsCount.set(String.valueOf(thread.getCommentCount()));
@@ -324,7 +337,7 @@ public class DiscussionThreadViewModel extends BaseViewModel
 
     @Override
     public void onClickReply(DiscussionComment comment) {
-        replyingToText.set("Replying to " + comment.getAuthorDisplayName());
+        replyingToText.set("Replying to " + comment.getDisplayName());
         replyingToVisible.set(true);
         selectedComment = comment;
         commentParentId = comment.getIdentifier();

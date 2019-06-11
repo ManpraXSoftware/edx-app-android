@@ -127,6 +127,7 @@ public class ConnectCommentsTabViewModel extends BaseViewModel {
     public void setLoaded(){
         allLoaded = true;
         adapter.setLoadingDone();
+        toggleEmptyVisibility();
     }
 
     public void refreshList(){
