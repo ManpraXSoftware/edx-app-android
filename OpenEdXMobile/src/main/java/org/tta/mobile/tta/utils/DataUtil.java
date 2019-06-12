@@ -332,6 +332,29 @@ public class DataUtil {
             "          \"value\": \"Other\"\n" +
             "        }]";
 
+    private static final String organisationJson = "[\n" +
+            "        {\n" +
+            "          \"name\": \"Manprax\",\n" +
+            "          \"value\": \"primary\"\n" +
+            "        },\n" +
+            "        {\n" +
+            "          \"name\": \"Google\",\n" +
+            "          \"value\": \"middle\"\n" +
+            "        },\n" +
+            "        {\n" +
+            "          \"name\": \"Microsoft\",\n" +
+            "          \"value\": \"secondary\"\n" +
+            "        },\n" +
+            "        {\n" +
+            "          \"name\": \"Oracle\",\n" +
+            "          \"value\": \"senior_secondary\"\n" +
+            "        },\n" +
+            "        {\n" +
+            "          \"name\": \"Other\",\n" +
+            "          \"value\": \"Other\"\n" +
+            "        }]";
+
+
     private static final String dietJson = "[\n" +
             "        {\"name\":\"Andhra Pradesh\",\n" +
             "          \"value\":\"\"},\n" +
@@ -471,6 +494,14 @@ public class DataUtil {
         }
         return dietCodes;
     }
+    public static List<RegistrationOption> getAllOrganisation(){
+        List<RegistrationOption> organisation;
+        Gson gson = new Gson();
+        Type collectionType = new TypeToken<List<RegistrationOption>>(){}.getType();
+        organisation = gson.fromJson(organisationJson, collectionType);
+        return organisation;
+    }
+
 
     public static String getStateNameFromValue(String value){
         List<RegistrationOption> states = getAllStates();

@@ -50,6 +50,7 @@ public class EditProfileViewModel extends BaseViewModel  {
     public List<RegistrationOption> classesTaught;
     public List<RegistrationOption> skills;
     public List<RegistrationOption> dietCodes;
+    public List<RegistrationOption> organisation;
 
     public String currentState, currentDistrict, currentProfession;
     public String classesSectionName, skillSectionName;
@@ -72,6 +73,7 @@ public class EditProfileViewModel extends BaseViewModel  {
         classesTaught = new ArrayList<>();
         skills = new ArrayList<>();
         dietCodes = new ArrayList<>();
+        organisation = new ArrayList<>();
 
         if (profileImage == null || profileImage.getImageUrlLarge() == null){
             imageAddVisible.set(true);
@@ -209,5 +211,6 @@ public class EditProfileViewModel extends BaseViewModel  {
         professions.addAll(DataUtil.getAllProfessions());
         genders.addAll(DataUtil.getAllGenders());
         dietCodes.addAll(DataUtil.getAllDietCodesOfState(currentState));
+        organisation.addAll(DataUtil.getAllOrganisation());
     }
 }

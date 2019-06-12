@@ -73,6 +73,7 @@ public class EditProfileFragment extends TaBaseFragment {
     private FormMultiSpinner classTaughtSpinner;
     private FormMultiSpinner skillsSpinner;
     private FormSpinner dietSpinner;
+    private FormSpinner organisationSpinner;
     private FormEditText etPmis;
     private Button btn;
 
@@ -249,6 +250,9 @@ public class EditProfileFragment extends TaBaseFragment {
 
         dietSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "DIET Code/डी आइ इ टी कोड", viewModel.dietCodes,
                 profileModel.diet_code == null ? null : new RegistrationOption(profileModel.diet_code, profileModel.diet_code));
+
+        organisationSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Organisation/संगठन", viewModel.organisation,
+                profileModel.organisation == null ? null : new RegistrationOption(profileModel.organisation, profileModel.organisation));
 
         btn = ViewUtil.addButton(userInfoLayout, "Submit");
         ViewUtil.addEmptySpace(userInfoLayout, (int) getResources().getDimension(R.dimen._50px));
