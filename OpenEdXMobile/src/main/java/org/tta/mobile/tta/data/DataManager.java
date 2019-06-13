@@ -225,6 +225,8 @@ public class DataManager extends BaseRoboInjector {
 
     private DbHelper dbHelper;
 
+    private Analytic analytic;
+
     private DataManager(Context context, IRemoteDataSource remoteDataSource, ILocalDataSource localDataSource) {
         super(context);
         this.context = context;
@@ -237,6 +239,8 @@ public class DataManager extends BaseRoboInjector {
         dbHelper = new DbHelper(context);
 
         db_commands = new DB_Commands(context);
+
+        analytic =new Analytic(context);
     }
 
     public static DataManager getInstance(Context context) {
@@ -1085,12 +1089,20 @@ public class DataManager extends BaseRoboInjector {
             protected void onResponse(@NonNull ResponseBody responseBody) {
                 super.onResponse(responseBody);
                 callback.onSuccess(responseBody);
+
+                analytic.addMxAnalytics_db(courseId, Action.Enrolled,
+                        org.tta.mobile.tta.analytics.analytics_enums.Page.CourseHomePage.name(),
+                        org.tta.mobile.tta.analytics.analytics_enums.Source.Mobile, courseId);
             }
 
             @Override
             protected void onFailure(@NonNull Throwable error) {
                 super.onFailure(error);
                 callback.onFailure(new TaException(error.getMessage()));
+
+                analytic.addMxAnalytics_db(courseId, Action.EnrolFailed,
+                        org.tta.mobile.tta.analytics.analytics_enums.Page.CourseHomePage.name(),
+                        org.tta.mobile.tta.analytics.analytics_enums.Source.Mobile, courseId);
             }
         });
 
@@ -2944,7 +2956,6 @@ public class DataManager extends BaseRoboInjector {
 
         if (loginPrefs != null && loginPrefs.isLoggedIn()) {
             try {
-                Analytic analytic =new Analytic(context);
                 analytic.syncAnalytics();
             } catch (Exception e) {
                 e.printStackTrace();
