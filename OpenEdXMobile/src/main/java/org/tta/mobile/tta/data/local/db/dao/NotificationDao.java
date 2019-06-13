@@ -37,6 +37,10 @@ public interface NotificationDao {
     Notification getById(String username, long id);
 
     @Query("Select * from notification " +
+            "where username = :username and created_time = :createdTime")
+    Notification getByCreatedTime(String username, long createdTime);
+
+    @Query("Select * from notification " +
             "where username = :username and local_id = :localId")
     Notification getByLocalId(String username, long localId);
 

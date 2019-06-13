@@ -789,6 +789,7 @@
     <string name="error_teacher_id">Teacher ID cannot be empty</string>
     <string name="error_diet">Please select your DIET code</string>
     <string name="empty_notifications">No notifications available at the moment</string>
+    <string name="empty_recommended_users_message">No recommended users available</string>
 
     <string name="sign_out_message" translatable="false">Are you sure you want to Sign Out?</string>
     <string name="be_the_first_to_comment" translatable="false">Be the first to comment</string>

@@ -124,6 +124,7 @@ public class ConnectDashboardViewModel extends BaseViewModel
     public ObservableInt userImagePlaceholder = new ObservableInt(R.drawable.profile_photo_placeholder);
     public ObservableField<String> name = new ObservableField<>();
     public ObservableField<String> date = new ObservableField<>();
+    public ObservableBoolean followBtnVisible = new ObservableBoolean();
     public ObservableField<String> followBtnText = new ObservableField<>();
     public ObservableInt followBtnBackground = new ObservableInt();
     public ObservableInt followTextColor = new ObservableInt();
@@ -200,8 +201,9 @@ public class ConnectDashboardViewModel extends BaseViewModel
                 userImageUrl.set(data.getProfileImage().getImageUrlFull());
                 name.set(data.getName());
                 date.set(DateUtil.getDisplayTime(post.getDate()));
-                toggleFollowBtn();
-                fetchFollowStatus();
+                if (!username.equals(mDataManager.getLoginPrefs().getUsername())) {
+                    fetchFollowStatus();
+                }
                 userVisible.set(true);
             }
 
@@ -220,11 +222,13 @@ public class ConnectDashboardViewModel extends BaseViewModel
             public void onSuccess(FollowStatus data) {
                 followed = data.is_followed();
                 toggleFollowBtn();
+                followBtnVisible.set(true);
             }
 
             @Override
             public void onFailure(Exception e) {
-
+                toggleFollowBtn();
+                followBtnVisible.set(true);
             }
         });
 

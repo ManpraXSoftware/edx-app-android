@@ -57,6 +57,7 @@ public interface ILocalDataSource {
     List<Notification> getAllUncreatedNotifications(String username);
     List<Notification> getAllUnupdatedNotifications(String username);
     Notification getNotificationById(String username, long id);
+    Notification getNotificationByCreatedTime(String username, long createdTime);
     Notification getNotificationByLocalId(String username, long localId);
     void insertNotification(Notification notification);
     void insertNotifications(List<Notification> notifications);

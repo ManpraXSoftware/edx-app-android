@@ -168,8 +168,12 @@ public class Notification implements Parcelable {
         ref_id = notification.ref_id;
         title = notification.title;
         description = notification.description;
-        seen = notification.seen;
+        if (!seen) {
+            seen = notification.seen;
+        }
         created_time = notification.created_time;
-        updated = notification.updated;
+        if (!updated) {
+            updated = notification.updated;
+        }
     }
 }

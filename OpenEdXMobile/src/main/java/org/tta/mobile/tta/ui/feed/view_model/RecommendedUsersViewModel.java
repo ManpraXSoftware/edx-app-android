@@ -1,6 +1,7 @@
 package org.tta.mobile.tta.ui.feed.view_model;
 
 import android.content.Context;
+import android.databinding.ObservableBoolean;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -40,6 +41,8 @@ public class RecommendedUsersViewModel extends BaseViewModel {
 
     public SuggestedUsersAdapter adapter;
     public RecyclerView.LayoutManager layoutManager;
+
+    public ObservableBoolean emptyVisible = new ObservableBoolean();
 
     private List<SuggestedUser> users;
     private int take, skip;
@@ -128,6 +131,7 @@ public class RecommendedUsersViewModel extends BaseViewModel {
                 mActivity.hideLoading();
                 allLoaded = true;
                 adapter.setLoadingDone();
+                toggleEmptyVisibility();
             }
         });
 
@@ -145,6 +149,16 @@ public class RecommendedUsersViewModel extends BaseViewModel {
         }
         if (newItemsAdded) {
             adapter.notifyItemRangeInserted(users.size() - n, n);
+        }
+
+        toggleEmptyVisibility();
+    }
+
+    private void toggleEmptyVisibility(){
+        if (users == null || users.isEmpty()){
+            emptyVisible.set(true);
+        } else {
+            emptyVisible.set(false);
         }
     }
 

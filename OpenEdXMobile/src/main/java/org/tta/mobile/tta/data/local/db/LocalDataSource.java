@@ -183,6 +183,11 @@ public class LocalDataSource implements ILocalDataSource {
     }
 
     @Override
+    public Notification getNotificationByCreatedTime(String username, long createdTime) {
+        return mAppDatabase.notificationDao().getByCreatedTime(username, createdTime);
+    }
+
+    @Override
     public Notification getNotificationByLocalId(String username, long localId) {
         return mAppDatabase.notificationDao().getByLocalId(username, localId);
     }

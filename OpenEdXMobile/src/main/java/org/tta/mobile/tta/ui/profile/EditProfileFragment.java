@@ -344,6 +344,7 @@ public class EditProfileFragment extends TaBaseFragment {
                 viewModel.currentProfession = null;
             }
             setCustomField(viewModel.currentState, viewModel.currentProfession);
+            toggleDietCodeVisibility();
         });
     }
 
@@ -379,10 +380,13 @@ public class EditProfileFragment extends TaBaseFragment {
         if (dietSpinner == null){
             return;
         }
-        if (viewModel.dietCodes.size() < 2){
+        if (viewModel.currentState == null || viewModel.currentProfession == null){
             dietSpinner.setVisibility(View.GONE);
-        } else {
+        }
+        if (viewModel.currentState.equals("Chhattisgarh") && viewModel.currentProfession.equals("Teacher Trainee")){
             dietSpinner.setVisibility(View.VISIBLE);
+        } else {
+            dietSpinner.setVisibility(View.GONE);
         }
     }
 

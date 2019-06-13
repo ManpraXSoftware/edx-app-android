@@ -2819,7 +2819,8 @@ public class DataManager extends BaseRoboInjector {
                             localNotification = mLocalDataSource.getNotificationById(
                                     loginPrefs.getUsername(), notification.getId());
                         } else {
-                            addNotification(notification);
+                            localNotification = mLocalDataSource.getNotificationByCreatedTime(
+                                    loginPrefs.getUsername(), notification.getCreated_time());
                         }
                     }
 
