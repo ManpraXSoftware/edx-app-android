@@ -14,7 +14,9 @@ import org.tta.mobile.model.db.DownloadEntry;
 import org.tta.mobile.model.download.NativeDownloadModel;
 import org.tta.mobile.module.analytics.AnalyticsRegistry;
 import org.tta.mobile.module.db.DataCallback;
+import org.tta.mobile.tta.event.DownloadFailedEvent;
 
+import de.greenrobot.event.EventBus;
 import roboguice.receiver.RoboBroadcastReceiver;
 
 public class DownloadCompleteReceiver extends RoboBroadcastReceiver {
@@ -60,6 +62,13 @@ public class DownloadCompleteReceiver extends RoboBroadcastReceiver {
                             } else {
                                 environment.getDownloadManager().removeDownloads(id);
                             }
+
+                            if (nm != null) {
+                                EventBus.getDefault().post(new DownloadFailedEvent(nm.status, downloadEntry));
+                            } else {
+                                EventBus.getDefault().post(new DownloadFailedEvent(-1, downloadEntry));
+                            }
+
                             return;
                         } else {
                             logger.debug("Download successful for id : " + id);

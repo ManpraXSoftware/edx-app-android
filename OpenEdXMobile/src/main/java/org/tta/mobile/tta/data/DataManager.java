@@ -2750,7 +2750,7 @@ public class DataManager extends BaseRoboInjector {
                     super.onPostExecute(notifications);
 
                     if (notifications != null && !notifications.isEmpty()){
-                        List<String> notificationIds = new ArrayList<>();
+                        List<Long> notificationIds = new ArrayList<>();
                         for (Notification notification: notifications){
                             notificationIds.add(notification.getId());
                         }
@@ -2794,7 +2794,31 @@ public class DataManager extends BaseRoboInjector {
         new Thread(){
             @Override
             public void run() {
-                mLocalDataSource.updateNotifications(notifications);
+
+                for (Notification notification: notifications){
+                    Notification localNotification = null;
+                    if (notification.getLocal_id() != 0){
+                        localNotification = mLocalDataSource.getNotificationByLocalId(
+                                loginPrefs.getUsername(), notification.getLocal_id());
+                    }
+
+                    if (localNotification == null){
+                        if (notification.getId() != 0){
+                            localNotification = mLocalDataSource.getNotificationById(
+                                    loginPrefs.getUsername(), notification.getId());
+                        } else {
+                            addNotification(notification);
+                        }
+                    }
+
+                    if (localNotification == null){
+                        addNotification(notification);
+                    } else {
+                        localNotification.set(notification);
+                        mLocalDataSource.updateNotification(localNotification);
+                    }
+                }
+
             }
         }.start();
 

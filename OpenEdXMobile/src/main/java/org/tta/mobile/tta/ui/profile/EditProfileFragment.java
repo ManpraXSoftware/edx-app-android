@@ -249,6 +249,7 @@ public class EditProfileFragment extends TaBaseFragment {
 
         dietSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "DIET Code/डी आइ इ टी कोड", viewModel.dietCodes,
                 profileModel.diet_code == null ? null : new RegistrationOption(profileModel.diet_code, profileModel.diet_code));
+        toggleDietCodeVisibility();
 
         btn = ViewUtil.addButton(userInfoLayout, "Submit");
         ViewUtil.addEmptySpace(userInfoLayout, (int) getResources().getDimension(R.dimen._50px));
@@ -287,8 +288,16 @@ public class EditProfileFragment extends TaBaseFragment {
 
             if (etPmis.isVisible()) {
                 parameters.putString("pmis_code", etPmis.getText());
+            } else {
+                parameters.putString("pmis_code", "");
             }
-            parameters.putString("diet_code", dietSpinner.getSelectedOption().getName());
+
+            if (dietSpinner.isVisible()) {
+                parameters.putString("diet_code", dietSpinner.getSelectedOption().getName());
+            } else {
+                parameters.putString("diet_code", "");
+            }
+
             viewModel.submit(parameters);
         });
 
@@ -300,6 +309,7 @@ public class EditProfileFragment extends TaBaseFragment {
                 districtSpinner.setItems(viewModel.districts, null);
                 viewModel.dietCodes.clear();
                 dietSpinner.setItems(viewModel.dietCodes, null);
+                toggleDietCodeVisibility();
                 return;
             }
 
@@ -315,6 +325,7 @@ public class EditProfileFragment extends TaBaseFragment {
             viewModel.dietCodes = DataUtil.getAllDietCodesOfState(viewModel.currentState);
             dietSpinner.setItems(viewModel.dietCodes,
                     profileModel.diet_code == null ? null : new RegistrationOption(profileModel.diet_code, profileModel.diet_code));
+            toggleDietCodeVisibility();
         });
 
         districtSpinner.setOnItemSelectedListener((view, item) -> {
@@ -364,47 +375,60 @@ public class EditProfileFragment extends TaBaseFragment {
         etPmis.setVisibility(View.GONE);
     }
 
+    private void toggleDietCodeVisibility(){
+        if (dietSpinner == null){
+            return;
+        }
+        if (viewModel.dietCodes.size() < 2){
+            dietSpinner.setVisibility(View.GONE);
+        } else {
+            dietSpinner.setVisibility(View.VISIBLE);
+        }
+    }
+
     private boolean validate(){
         boolean valid = true;
-        if (!etFirstName.validate()){
+        if (!etFirstName.validate() ||
+                (viewModel.getDataManager().getLoginPrefs().getUsername() != null &&
+                        etFirstName.getText().trim().equals(viewModel.getDataManager().getLoginPrefs().getUsername()))){
             valid = false;
-            etFirstName.setError("Required");
+            etFirstName.setError(getString(R.string.error_name));
         }
         if (!stateSpinner.validate()){
             valid = false;
-            stateSpinner.setError("Required");
+            stateSpinner.setError(getString(R.string.error_state));
         }
         if (!districtSpinner.validate()){
             valid = false;
-            districtSpinner.setError("Required");
+            districtSpinner.setError(getString(R.string.error_district));
         }
         if (!blockSpinner.validate()){
             valid = false;
-            blockSpinner.setError("Required");
+            blockSpinner.setError(getString(R.string.error_block));
         }
         if (!professionSpinner.validate()){
             valid = false;
-            professionSpinner.setError("Required");
+            professionSpinner.setError(getString(R.string.error_profession));
         }
         if (!genderSpinner.validate()){
             valid = false;
-            genderSpinner.setError("Required");
+            genderSpinner.setError(getString(R.string.error_gender));
         }
         if (!classTaughtSpinner.validate()){
             valid = false;
-            classTaughtSpinner.setError("Required");
+            classTaughtSpinner.setError(getString(R.string.error_classes));
         }
         if (!skillsSpinner.validate()){
             valid = false;
-            skillsSpinner.setError("Required");
+            skillsSpinner.setError(getString(R.string.error_skills));
         }
-        if (!etPmis.validate()){
+        if (etPmis.isVisible() && !etPmis.validate()){
             valid = false;
-            etPmis.setError("Required");
+            etPmis.setError(pmisError);
         }
-        if (!dietSpinner.validate()){
+        if (dietSpinner.isVisible() && !dietSpinner.validate()){
             valid = false;
-            dietSpinner.setError("Required");
+            dietSpinner.setError(getString(R.string.error_diet));
         }
 
         return valid;

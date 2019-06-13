@@ -1,6 +1,7 @@
 package org.tta.mobile.tta.ui.connect.view_model;
 
 import android.Manifest;
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import org.tta.mobile.R;
 import org.tta.mobile.event.NetworkConnectivityChangeEvent;
+import org.tta.mobile.model.VideoModel;
 import org.tta.mobile.model.db.DownloadEntry;
 import org.tta.mobile.module.storage.DownloadCompletedEvent;
 import org.tta.mobile.module.storage.DownloadedVideoDeletedEvent;
@@ -35,6 +37,7 @@ import org.tta.mobile.tta.data.model.profile.FollowStatus;
 import org.tta.mobile.tta.event.CommentRepliesReceivedEvent;
 import org.tta.mobile.tta.event.ContentBookmarkChangedEvent;
 import org.tta.mobile.tta.event.ContentStatusReceivedEvent;
+import org.tta.mobile.tta.event.DownloadFailedEvent;
 import org.tta.mobile.tta.event.FetchCommentRepliesEvent;
 import org.tta.mobile.tta.event.LoadMoreConnectCommentsEvent;
 import org.tta.mobile.tta.event.RepliedOnCommentEvent;
@@ -908,6 +911,28 @@ public class ConnectDashboardViewModel extends BaseViewModel
             mActivity.analytic.addMxAnalytics_db(
                     content.getName() , Action.DeletePost, content.getSource().getName(),
                     Source.Mobile, content.getSource_identity());
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public void onEventMainThread(DownloadFailedEvent event){
+        VideoModel downloadEntry = event.getDownloadEntry();
+        if (downloadEntry != null && downloadEntry.getContent_id() == content.getId() &&
+                downloadEntry.getDownloadType() != null &&
+                downloadEntry.getDownloadType().equalsIgnoreCase(DownloadType.WP_VIDEO.name())) {
+
+            switch (event.getErrorCode()){
+                case DownloadManager.ERROR_INSUFFICIENT_SPACE:
+                    mActivity.showLongSnack("Could not download " + downloadEntry.getTitle() +
+                            ". Insufficient memory");
+                    break;
+                default:
+                    mActivity.showLongSnack("Could not download " + downloadEntry.getTitle());
+            }
+
+            allDownloadProgressVisible.set(false);
+            allDownloadIconVisible.set(true);
+            allDownloadOptionVisible.set(true);
         }
     }
 

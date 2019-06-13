@@ -12,12 +12,12 @@ import java.util.List;
 
 public class UpdateNotificationsTask extends Task<CountResponse> {
 
-    private List<String> notificationIds;
+    private List<Long> notificationIds;
 
     @Inject
     private TaAPI taAPI;
 
-    public UpdateNotificationsTask(Context context, List<String> notificationIds) {
+    public UpdateNotificationsTask(Context context, List<Long> notificationIds) {
         super(context);
         this.notificationIds = notificationIds;
     }

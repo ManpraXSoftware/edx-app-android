@@ -41,9 +41,14 @@ public class UserInfoViewModel extends BaseViewModel {
     public UserInfoViewModel(BaseVMActivity activity) {
         super(activity);
 
+        states = new ArrayList<>();
+        districts = new ArrayList<>();
         blocks = new ArrayList<>();
+        professions = new ArrayList<>();
+        genders = new ArrayList<>();
         classesTaught = new ArrayList<>();
         skills = new ArrayList<>();
+        dietCodes = new ArrayList<>();
     }
 
     public void getBlocks(OnResponseCallback<List<RegistrationOption>> callback){
@@ -150,12 +155,12 @@ public class UserInfoViewModel extends BaseViewModel {
     }
 
     public void getData() {
-        states = DataUtil.getAllStates();
+        states.addAll(DataUtil.getAllStates());
         currentState = states.get(0).getName();
-        districts = DataUtil.getDistrictsByStateName(states.get(0).getName());
+        districts.addAll(DataUtil.getDistrictsByStateName(states.get(0).getName()));
         currentDistrict = districts.get(0).getName();
-        professions = DataUtil.getAllProfessions();
-        genders = DataUtil.getAllGenders();
-        dietCodes = DataUtil.getAllDietCodesOfState(currentState);
+        professions.addAll(DataUtil.getAllProfessions());
+        genders.addAll(DataUtil.getAllGenders());
+        dietCodes.addAll(DataUtil.getAllDietCodesOfState(currentState));
     }
 }

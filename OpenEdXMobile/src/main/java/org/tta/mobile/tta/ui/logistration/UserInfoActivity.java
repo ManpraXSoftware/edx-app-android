@@ -172,6 +172,7 @@ public class UserInfoActivity extends BaseVMActivity {
         setCustomField(mViewModel.currentState, mViewModel.currentProfession);
 
         dietSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "DIET Code/डी आइ इ टी कोड", mViewModel.dietCodes, null);
+        toggleDietCodeVisibility();
 
         btn = ViewUtil.addButton(userInfoLayout, "Sumbit");
         privacyLinkText = ViewUtil.addLinkText(userInfoLayout, "Privacy Policy");
@@ -211,8 +212,16 @@ public class UserInfoActivity extends BaseVMActivity {
 
             if (etPmis.isVisible()) {
                 parameters.putString("pmis_code", etPmis.getText());
+            } else {
+                parameters.putString("pmis_code", "");
             }
-            parameters.putString("diet_code", dietSpinner.getSelectedOption().getName());
+
+            if (dietSpinner.isVisible()) {
+                parameters.putString("diet_code", dietSpinner.getSelectedOption().getName());
+            } else {
+                parameters.putString("diet_code", "");
+            }
+
             mViewModel.submit(parameters);
         });
 
@@ -230,6 +239,7 @@ public class UserInfoActivity extends BaseVMActivity {
                 districtSpinner.setItems(mViewModel.districts, null);
                 mViewModel.dietCodes.clear();
                 dietSpinner.setItems(mViewModel.dietCodes, null);
+                toggleDietCodeVisibility();
                 return;
             }
 
@@ -243,6 +253,7 @@ public class UserInfoActivity extends BaseVMActivity {
             mViewModel.dietCodes.clear();
             mViewModel.dietCodes = DataUtil.getAllDietCodesOfState(mViewModel.currentState);
             dietSpinner.setItems(mViewModel.dietCodes, null);
+            toggleDietCodeVisibility();
         });
 
         districtSpinner.setOnItemSelectedListener((view, item) -> {
@@ -292,6 +303,17 @@ public class UserInfoActivity extends BaseVMActivity {
         etPmis.setVisibility(View.GONE);
     }
 
+    private void toggleDietCodeVisibility(){
+        if (dietSpinner == null){
+            return;
+        }
+        if (mViewModel.dietCodes.size() < 2){
+            dietSpinner.setVisibility(View.GONE);
+        } else {
+            dietSpinner.setVisibility(View.VISIBLE);
+        }
+    }
+
     private boolean validate(){
         boolean valid = true;
         if (!etFirstName.validate() ||
@@ -332,7 +354,7 @@ public class UserInfoActivity extends BaseVMActivity {
             valid = false;
             etPmis.setError(pmisError);
         }
-        if (!dietSpinner.validate()){
+        if (dietSpinner.isVisible() && !dietSpinner.validate()){
             valid = false;
             dietSpinner.setError(getString(R.string.error_diet));
         }

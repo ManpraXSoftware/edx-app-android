@@ -2,6 +2,7 @@ package org.tta.mobile.tta.ui.course.view_model;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.ObservableBoolean;
@@ -25,6 +26,7 @@ import org.tta.mobile.R;
 import org.tta.mobile.databinding.TRowCourseMaterialFooterBinding;
 import org.tta.mobile.databinding.TRowCourseMaterialHeaderBinding;
 import org.tta.mobile.databinding.TRowCourseMaterialItemBinding;
+import org.tta.mobile.model.VideoModel;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.model.course.BlockType;
 import org.tta.mobile.model.course.CourseComponent;
@@ -51,6 +53,7 @@ import org.tta.mobile.tta.data.model.content.TotalLikeResponse;
 import org.tta.mobile.tta.data.model.profile.UpdateMyProfileResponse;
 import org.tta.mobile.tta.event.ContentBookmarkChangedEvent;
 import org.tta.mobile.tta.event.ContentStatusReceivedEvent;
+import org.tta.mobile.tta.event.DownloadFailedEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.scorm.PDFBlockModel;
 import org.tta.mobile.tta.scorm.ScormBlockModel;
@@ -877,6 +880,27 @@ public class CourseMaterialViewModel extends BaseViewModel {
             //analytic update for count update
             mActivity.analytic.addScromCountAnalytic_db(mActivity);
 
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public void onEventMainThread(DownloadFailedEvent event){
+        VideoModel downloadEntry = event.getDownloadEntry();
+        if (downloadEntry != null && downloadEntry.getContent_id() == content.getId() &&
+                downloadEntry.getDownloadType() != null &&
+                (downloadEntry.getDownloadType().equalsIgnoreCase(DownloadType.SCORM.name()) ||
+                        downloadEntry.getDownloadType().equalsIgnoreCase(DownloadType.PDF.name()))) {
+
+            switch (event.getErrorCode()){
+                case DownloadManager.ERROR_INSUFFICIENT_SPACE:
+                    mActivity.showLongSnack("Could not download " + downloadEntry.getTitle() +
+                            ". Insufficient memory");
+                    break;
+                default:
+                    mActivity.showLongSnack("Could not download " + downloadEntry.getTitle());
+            }
+
+            fetchCourseComponent();
         }
     }
 

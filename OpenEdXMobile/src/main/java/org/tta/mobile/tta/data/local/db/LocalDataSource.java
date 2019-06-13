@@ -178,8 +178,13 @@ public class LocalDataSource implements ILocalDataSource {
     }
 
     @Override
-    public Notification getNotificationById(String username, String id) {
+    public Notification getNotificationById(String username, long id) {
         return mAppDatabase.notificationDao().getById(username, id);
+    }
+
+    @Override
+    public Notification getNotificationByLocalId(String username, long localId) {
+        return mAppDatabase.notificationDao().getByLocalId(username, localId);
     }
 
     @Override
@@ -195,6 +200,11 @@ public class LocalDataSource implements ILocalDataSource {
     @Override
     public void updateNotifications(List<Notification> notifications) {
         mAppDatabase.notificationDao().update(notifications);
+    }
+
+    @Override
+    public void updateNotification(Notification notification) {
+        mAppDatabase.notificationDao().update(notification);
     }
 
     @Override

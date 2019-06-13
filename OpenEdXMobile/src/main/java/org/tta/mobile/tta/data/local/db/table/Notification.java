@@ -14,7 +14,7 @@ public class Notification implements Parcelable {
 
     @PrimaryKey (autoGenerate = true)
     private int local_id;
-    private String id;
+    private long id;
     private String username;
     private String type;
     private String ref_id;
@@ -29,7 +29,7 @@ public class Notification implements Parcelable {
 
     protected Notification(Parcel in) {
         local_id = in.readInt();
-        id = in.readString();
+        id = in.readLong();
         username = in.readString();
         type = in.readString();
         ref_id = in.readString();
@@ -52,11 +52,11 @@ public class Notification implements Parcelable {
         }
     };
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -145,7 +145,7 @@ public class Notification implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(local_id);
-        dest.writeString(id);
+        dest.writeLong(id);
         dest.writeString(username);
         dest.writeString(type);
         dest.writeString(ref_id);
@@ -154,5 +154,22 @@ public class Notification implements Parcelable {
         dest.writeByte((byte) (seen ? 1 : 0));
         dest.writeLong(created_time);
         dest.writeByte((byte) (updated ? 1 : 0));
+    }
+
+    public void set(Notification notification){
+        if (local_id == 0) {
+            local_id = notification.local_id;
+        }
+        if (id == 0) {
+            id = notification.id;
+        }
+        username = notification.username;
+        type = notification.type;
+        ref_id = notification.ref_id;
+        title = notification.title;
+        description = notification.description;
+        seen = notification.seen;
+        created_time = notification.created_time;
+        updated = notification.updated;
     }
 }
