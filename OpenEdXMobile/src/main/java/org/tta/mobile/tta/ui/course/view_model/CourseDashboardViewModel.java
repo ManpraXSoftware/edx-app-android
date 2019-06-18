@@ -46,6 +46,7 @@ public class CourseDashboardViewModel extends BaseViewModel {
     public ObservableBoolean offlineVisible = new ObservableBoolean();
     public ObservableInt initialPosition = new ObservableInt();
     public ObservableInt tabPosition = new ObservableInt();
+    public ObservableBoolean emptyVisible = new ObservableBoolean();
 
     private int position;
 
@@ -109,13 +110,13 @@ public class CourseDashboardViewModel extends BaseViewModel {
                                 setTabs();
                             }
                         });
+                toggleEmptyVisibility();
             }
 
             @Override
             public void onFailure(Exception e) {
                 mActivity.hideLoading();
-                mActivity.showLongSnack(e.getLocalizedMessage());
-                setTabs();
+                toggleEmptyVisibility();
             }
         });
 
@@ -182,6 +183,14 @@ public class CourseDashboardViewModel extends BaseViewModel {
         PageViewStateCallback callback = (PageViewStateCallback) fragments.get(position);
         if (callback != null){
             callback.onPageShow();
+        }
+    }
+
+    private void toggleEmptyVisibility(){
+        if (course == null || course.getCourse() == null){
+            emptyVisible.set(true);
+        } else {
+            emptyVisible.set(false);
         }
     }
 

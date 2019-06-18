@@ -166,7 +166,7 @@
                     android:layout_marginEnd="@dimen/_70px"
                     android:fontFamily="@font/hind_regular"
                     android:gravity="center"
-                    android:text="No content found for your search parameters"
+                    android:text="@string/empty_search_message"
                     android:textColor="@color/primary_cyan"
                     android:textSize="12sp" />
 

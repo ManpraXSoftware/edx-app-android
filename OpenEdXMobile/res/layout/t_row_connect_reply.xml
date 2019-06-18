@@ -118,7 +118,8 @@
                         android:layout_gravity="center_vertical"
                         android:fontFamily="@font/hind_medium"
                         android:textColor="@color/gray_3"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        android:text="@{viewModel.likes}"/>
 
                     <ImageView
                         android:id="@+id/reply_comment_like_image"
@@ -127,8 +128,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="3dp"
                         android:contentDescription="@string/like"
-                        android:paddingBottom="4dp"
-                        app:srcCompat="@drawable/t_icon_like" />
+                        android:paddingBottom="4dp" />
 
                     <TextView
                         android:layout_width="wrap_content"

@@ -147,7 +147,7 @@ public class FeedViewModel extends BaseViewModel {
                             case GenerateCertificate:
                             case Certificate:
                             case Badge:
-                                mActivity.showShortSnack(item.getMeta_data().getUser_name());
+                                showOtherUserProfile(item.getMeta_data().getUser_username());
                                 break;
 
                             case DBComment:
@@ -293,9 +293,7 @@ public class FeedViewModel extends BaseViewModel {
                     break;
 
                 default:
-                    Bundle parameters = new Bundle();
-                    parameters.putString(Constants.KEY_USERNAME, item.getUsername());
-                    ActivityUtil.gotoPage(mActivity, OtherProfileActivity.class, parameters);
+                    showOtherUserProfile(item.getUsername());
             }
         });
 
@@ -405,6 +403,12 @@ public class FeedViewModel extends BaseViewModel {
             ActivityUtil.gotoPage(mActivity, ConnectDashboardActivity.class, parameters);
         }
 
+    }
+
+    private void showOtherUserProfile(String username){
+        Bundle parameters = new Bundle();
+        parameters.putString(Constants.KEY_USERNAME, username);
+        ActivityUtil.gotoPage(mActivity, OtherProfileActivity.class, parameters);
     }
 
     public void showNotifications() {

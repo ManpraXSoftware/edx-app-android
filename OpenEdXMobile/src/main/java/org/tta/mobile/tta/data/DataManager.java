@@ -3627,10 +3627,23 @@ public class DataManager extends BaseRoboInjector {
         }.start();
     }
 
-    public void logSMSHash()
-    {
+    public void logSMSHash() {
         AppSignatureHelper helper=new AppSignatureHelper(context);
         helper.getAppSignatures();
+    }
+
+    public void likeUnlikeConnectComment(Comment comment, OnResponseCallback<Comment> callback){
+
+        if (NetworkUtil.isConnected(context)){
+
+            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+
+        } else {
+            if (callback != null){
+                callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+            }
+        }
+
     }
 }
 

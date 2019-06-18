@@ -2,11 +2,11 @@ package org.tta.mobile.tta.event;
 
 import org.tta.mobile.tta.wordpress_client.model.Comment;
 
-public class RepliedOnCommentEvent {
+public class ConnectCommentChangedEvent {
 
     private Comment comment;
 
-    public RepliedOnCommentEvent(Comment comment) {
+    public ConnectCommentChangedEvent(Comment comment) {
         this.comment = comment;
     }
 

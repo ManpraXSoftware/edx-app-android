@@ -84,7 +84,7 @@ public class LandingViewModel extends BaseViewModel {
     }
 
     public void showLibrary() {
-        ActivityUtil.replaceFragmentInActivity(
+        ActivityUtil.clearBackstackAndReplaceFragmentInActivity(
                 mActivity.getSupportFragmentManager(),
                 LibraryFragment.newInstance(() -> selectedId = R.id.action_search),
                 R.id.dashboard_fragment,
@@ -95,8 +95,7 @@ public class LandingViewModel extends BaseViewModel {
     }
 
     public void showFeed() {
-//        mActivity.showShortSnack("Coming soon");
-        ActivityUtil.replaceFragmentInActivity(
+        ActivityUtil.clearBackstackAndReplaceFragmentInActivity(
                 mActivity.getSupportFragmentManager(),
                 new FeedFragment(),
                 R.id.dashboard_fragment,
@@ -107,7 +106,7 @@ public class LandingViewModel extends BaseViewModel {
     }
 
     public void showSearch(){
-        ActivityUtil.replaceFragmentInActivity(
+        ActivityUtil.clearBackstackAndReplaceFragmentInActivity(
                 mActivity.getSupportFragmentManager(),
                 new SearchFragment(),
                 R.id.dashboard_fragment,
@@ -118,7 +117,7 @@ public class LandingViewModel extends BaseViewModel {
     }
 
     public void showAgenda() {
-        ActivityUtil.replaceFragmentInActivity(
+        ActivityUtil.clearBackstackAndReplaceFragmentInActivity(
                 mActivity.getSupportFragmentManager(),
                 new AgendaFragment(),
                 R.id.dashboard_fragment,
@@ -129,7 +128,7 @@ public class LandingViewModel extends BaseViewModel {
     }
 
     public void showProfile() {
-        ActivityUtil.replaceFragmentInActivity(
+        ActivityUtil.clearBackstackAndReplaceFragmentInActivity(
                 mActivity.getSupportFragmentManager(),
                 new ProfileFragment(),
                 R.id.dashboard_fragment,

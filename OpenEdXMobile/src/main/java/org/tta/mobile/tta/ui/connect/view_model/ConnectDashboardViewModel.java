@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Toast;
 
 import org.tta.mobile.R;
 import org.tta.mobile.event.NetworkConnectivityChangeEvent;
@@ -40,7 +39,7 @@ import org.tta.mobile.tta.event.ContentStatusReceivedEvent;
 import org.tta.mobile.tta.event.DownloadFailedEvent;
 import org.tta.mobile.tta.event.FetchCommentRepliesEvent;
 import org.tta.mobile.tta.event.LoadMoreConnectCommentsEvent;
-import org.tta.mobile.tta.event.RepliedOnCommentEvent;
+import org.tta.mobile.tta.event.ConnectCommentChangedEvent;
 import org.tta.mobile.tta.event.UserFollowingChangedEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.BasePagerAdapter;
@@ -51,7 +50,6 @@ import org.tta.mobile.tta.ui.interfaces.CommentClickListener;
 import org.tta.mobile.tta.ui.profile.OtherProfileActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
-import org.tta.mobile.tta.utils.JsonUtil;
 import org.tta.mobile.tta.wordpress_client.model.Comment;
 import org.tta.mobile.tta.wordpress_client.model.CustomFilter;
 import org.tta.mobile.tta.wordpress_client.model.Post;
@@ -570,7 +568,11 @@ public class ConnectDashboardViewModel extends BaseViewModel
                 likeIcon.set(data.getStatus() ? R.drawable.t_icon_like_filled : R.drawable.t_icon_like);
                 int n = 0;
                 if (likes.get() != null) {
-                    n = Integer.parseInt(likes.get());
+                    try {
+                        n = Integer.parseInt(likes.get());
+                    } catch (Exception e) {
+                        n = 0;
+                    }
                 }
                 if (data.getStatus()){
                     n++;
@@ -714,18 +716,17 @@ public class ConnectDashboardViewModel extends BaseViewModel
                             mActivity.showLongSnack("Commented successfully");
                             comments.add(0, data);
                             post.setTotal_comments(post.getTotal_comments() + 1);
-                            tab1.refreshList();
-                            tab2.refreshList();
-                            tab3.refreshList();
 
                             mActivity.analytic.addMxAnalytics_db(
                                     content.getName() , Action.CommentPost, content.getSource().getName(),
                                     Source.Mobile, content.getSource_identity());
+                            refreshComments();
 
                         } else {
                             mActivity.showLongSnack("Replied successfully");
                             replyingToVisible.set(false);
                             commentParentId = 0;
+                            selectedComment.incrementReplies();
 
                             mActivity.analytic.addMxAnalytics_db(
                                     content.getName() , Action.ReplyComment, content.getSource().getName(),
@@ -733,14 +734,11 @@ public class ConnectDashboardViewModel extends BaseViewModel
 
                             if (repliesMap.containsKey(selectedComment.getId())){
                                 repliesMap.get(selectedComment.getId()).add(0, data);
-                                EventBus.getDefault().post(new RepliedOnCommentEvent(selectedComment));
                             }
+                            EventBus.getDefault().post(new ConnectCommentChangedEvent(selectedComment));
 
                         }
                         ConnectDashboardViewModel.this.comment.set("");
-                        tab1.refreshList();
-                        tab2.refreshList();
-                        tab3.refreshList();
                     }
 
                     @Override
@@ -980,7 +978,28 @@ public class ConnectDashboardViewModel extends BaseViewModel
 
     @Override
     public void onClickLike(Comment comment) {
+        mActivity.showLoading();
+        mDataManager.likeUnlikeConnectComment(comment, new OnResponseCallback<Comment>() {
+            @Override
+            public void onSuccess(Comment data) {
+                mActivity.hideLoading();
+                comment.setLikes(data.getLikes());
+                comment.setLike(data.isLike());
+                if (data.getParent() == 0){
+                    EventBus.getDefault().post(data);
+                } else {
+                    Comment c = new Comment();
+                    c.setId(data.getParent());
+                    EventBus.getDefault().post(c);
+                }
+            }
 
+            @Override
+            public void onFailure(Exception e) {
+                mActivity.hideLoading();
+                mActivity.showLongSnack(e.getLocalizedMessage());
+            }
+        });
     }
 
     @Override

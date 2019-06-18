@@ -222,7 +222,7 @@ public abstract class ErrorHandlingCallback<T> implements Callback<T> {
             onResponse(response.body());
 
             // Show SnackBar if user is seeing cached content while being offline.
-            if (response.raw().networkResponse() == null && !NetworkUtil.isConnected(context)) {
+            /*if (response.raw().networkResponse() == null && !NetworkUtil.isConnected(context)) {
                 if (snackbarErrorNotification != null && refreshListener != null) {
                     snackbarErrorNotification.showError(R.string.offline_text, FontAwesomeIcons.fa_wifi,
                             R.string.lbl_reload,
@@ -236,7 +236,7 @@ public abstract class ErrorHandlingCallback<T> implements Callback<T> {
                                 }
                             });
                 }
-            }
+            }*/
             onFinish();
         }
     }

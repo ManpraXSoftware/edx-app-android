@@ -43,7 +43,6 @@ public class UserInfoActivity extends BaseVMActivity {
     private Toolbar toolbar;
     private UserInfoViewModel mViewModel;
 
-    private String tagLabel;
     private FieldInfo fieldInfo;
     private String pmisError;
 
@@ -117,17 +116,7 @@ public class UserInfoActivity extends BaseVMActivity {
         }, new OnResponseCallback<List<RegistrationOption>>() {
             @Override
             public void onSuccess(List<RegistrationOption> data) {
-                List<RegistrationOption> selectedOptions = null;
-                if (tagLabel != null && tagLabel.length() > 0){
-                    selectedOptions = new ArrayList<>();
-                    for (String chunk: tagLabel.split(" ")){
-                        String[] duet = chunk.split("_");
-                        if (duet[0].equals(mViewModel.skillSectionName)){
-                            selectedOptions.add(new RegistrationOption(duet[1], duet[1]));
-                        }
-                    }
-                }
-                skillsSpinner.setItems(data, selectedOptions);
+                skillsSpinner.setItems(data, null);
             }
 
             @Override
@@ -143,6 +132,7 @@ public class UserInfoActivity extends BaseVMActivity {
         ViewUtil.addEmptySpace(userInfoLayout, (int) getResources().getDimension(R.dimen._14dp));
 
         etFirstName = ViewUtil.addFormEditText(userInfoLayout, "Name/नाम");
+        etFirstName.setSingleLine();
         etFirstName.setMandatory(true);
 
         stateSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "State/राज्य", mViewModel.states, null);
@@ -169,12 +159,13 @@ public class UserInfoActivity extends BaseVMActivity {
         skillsSpinner.setMandatory(true);
 
         etPmis = ViewUtil.addFormEditText(userInfoLayout, "PMIS Code/पी इम आइ इस कोड");
+        etPmis.setSingleLine();
         setCustomField(mViewModel.currentState, mViewModel.currentProfession);
 
         dietSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "DIET Code/डी आइ इ टी कोड", mViewModel.dietCodes, null);
         toggleDietCodeVisibility();
 
-        btn = ViewUtil.addButton(userInfoLayout, "Sumbit");
+        btn = ViewUtil.addButton(userInfoLayout, "Submit");
         privacyLinkText = ViewUtil.addLinkText(userInfoLayout, "Privacy Policy");
         ViewUtil.addEmptySpace(userInfoLayout, (int) getResources().getDimension(R.dimen._50px));
 
@@ -237,6 +228,7 @@ public class UserInfoActivity extends BaseVMActivity {
                 setCustomField(mViewModel.currentState, mViewModel.currentProfession);
                 mViewModel.districts.clear();
                 districtSpinner.setItems(mViewModel.districts, null);
+                setProfessionItems();
                 mViewModel.dietCodes.clear();
                 dietSpinner.setItems(mViewModel.dietCodes, null);
                 toggleDietCodeVisibility();
@@ -250,6 +242,7 @@ public class UserInfoActivity extends BaseVMActivity {
             mViewModel.districts = DataUtil.getDistrictsByStateName(mViewModel.currentState);
             districtSpinner.setItems(mViewModel.districts, null);
 
+            setProfessionItems();
             mViewModel.dietCodes.clear();
             mViewModel.dietCodes = DataUtil.getAllDietCodesOfState(mViewModel.currentState);
             dietSpinner.setItems(mViewModel.dietCodes, null);
@@ -272,6 +265,7 @@ public class UserInfoActivity extends BaseVMActivity {
                 mViewModel.currentProfession = null;
             }
             setCustomField(mViewModel.currentState, mViewModel.currentProfession);
+            toggleDietCodeVisibility();
         });
     }
 
@@ -303,14 +297,46 @@ public class UserInfoActivity extends BaseVMActivity {
         etPmis.setVisibility(View.GONE);
     }
 
+    private void setProfessionItems(){
+        if (professionSpinner == null){
+            return;
+        }
+
+        mViewModel.professions.clear();
+        if (mViewModel.currentState == null || mViewModel.currentState.equals("") || fieldInfo == null){
+            mViewModel.professions.addAll(DataUtil.getAllProfessions());
+            professionSpinner.setItems(mViewModel.professions, null);
+            return;
+        }
+
+        for (StateCustomAttribute attribute: fieldInfo.getStateCustomAttribute()){
+            if (mViewModel.currentState.equalsIgnoreCase(attribute.getState())){
+                for (Profession profession: attribute.getProfession()){
+                    mViewModel.professions.add(new RegistrationOption(profession.getValue(), profession.getKey()));
+                }
+                professionSpinner.setItems(mViewModel.professions, null);
+                return;
+            }
+        }
+
+        mViewModel.professions.addAll(DataUtil.getAllProfessions());
+        professionSpinner.setItems(mViewModel.professions, null);
+
+    }
+
     private void toggleDietCodeVisibility(){
         if (dietSpinner == null){
             return;
         }
-        if (mViewModel.dietCodes.size() < 2){
+        if (mViewModel.currentState == null || mViewModel.currentState.equals("") ||
+                mViewModel.currentProfession == null || mViewModel.currentProfession.equals("")){
             dietSpinner.setVisibility(View.GONE);
-        } else {
+            return;
+        }
+        if (mViewModel.currentState.equals("Chhattisgarh") && mViewModel.currentProfession.equals("Teacher Trainee")){
             dietSpinner.setVisibility(View.VISIBLE);
+        } else {
+            dietSpinner.setVisibility(View.GONE);
         }
     }
 

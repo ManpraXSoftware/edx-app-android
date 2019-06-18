@@ -2,6 +2,7 @@ package org.tta.mobile.authentication;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -231,6 +232,8 @@ public class LoginAPI {
         for (String key : parameters.keySet()) {
             parameterMap.put(key, parameters.getString(key));
         }
+
+        Log.d("________LOG_______", "registration api hit");
         Response<ResponseBody> response = loginService.register(parameterMap).execute();
         if (!response.isSuccessful()) {
             final int errorCode = response.code();

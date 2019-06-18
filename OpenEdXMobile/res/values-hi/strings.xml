@@ -119,4 +119,6 @@
     <string name="error_teacher_id">टीचर ID रिक्त नहीं हो सकती</string>
     <string name="empty_notifications">सूचना उपलब्ध नहीं है</string>
     <string name="empty_recommended_users_message">अध्यापक उपलब्ध नहीं हैं</string>
+    <string name="empty_course_message">कोर्स उपलब्ध नहीं है</string>
+    <string name="empty_search_message">"खोज से जुड़ी विषय-वस्तु अभी  उपलब्ध नहीं  "</string>
 </resources>

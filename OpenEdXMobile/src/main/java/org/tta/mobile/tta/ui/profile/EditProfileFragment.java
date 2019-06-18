@@ -210,6 +210,7 @@ public class EditProfileFragment extends TaBaseFragment {
         ViewUtil.addEmptySpace(userInfoLayout, (int) getResources().getDimension(R.dimen._14dp));
 
         etFirstName = ViewUtil.addFormEditText(userInfoLayout, "Name/नाम");
+        etFirstName.setSingleLine();
         etFirstName.setText(profileModel.name);
         etFirstName.setMandatory(true);
 
@@ -242,6 +243,7 @@ public class EditProfileFragment extends TaBaseFragment {
         skillsSpinner.setMandatory(true);
 
         etPmis = ViewUtil.addFormEditText(userInfoLayout, "PMIS Code/पी इम आइ इस कोड");
+        etPmis.setSingleLine();
         if (profileModel.pmis_code != null) {
             etPmis.setText(profileModel.pmis_code);
         }
@@ -307,6 +309,7 @@ public class EditProfileFragment extends TaBaseFragment {
                 setCustomField(viewModel.currentState, viewModel.currentProfession);
                 viewModel.districts.clear();
                 districtSpinner.setItems(viewModel.districts, null);
+                setProfessionItems();
                 viewModel.dietCodes.clear();
                 dietSpinner.setItems(viewModel.dietCodes, null);
                 toggleDietCodeVisibility();
@@ -321,8 +324,9 @@ public class EditProfileFragment extends TaBaseFragment {
             districtSpinner.setItems(viewModel.districts,
                     profileModel.district == null ? null : new RegistrationOption(profileModel.district, profileModel.district));
 
+            setProfessionItems();
             viewModel.dietCodes.clear();
-            viewModel.dietCodes = DataUtil.getAllDietCodesOfState(viewModel.currentState);
+            viewModel.dietCodes.addAll(DataUtil.getAllDietCodesOfState(viewModel.currentState));
             dietSpinner.setItems(viewModel.dietCodes,
                     profileModel.diet_code == null ? null : new RegistrationOption(profileModel.diet_code, profileModel.diet_code));
             toggleDietCodeVisibility();
@@ -376,12 +380,44 @@ public class EditProfileFragment extends TaBaseFragment {
         etPmis.setVisibility(View.GONE);
     }
 
+    private void setProfessionItems(){
+        if (professionSpinner == null){
+            return;
+        }
+
+        viewModel.professions.clear();
+        if (viewModel.currentState == null || viewModel.currentState.equals("") || fieldInfo == null){
+            viewModel.professions.addAll(DataUtil.getAllProfessions());
+            professionSpinner.setItems(viewModel.professions,
+                    profileModel.title == null ? null : new RegistrationOption(profileModel.title, profileModel.title));
+            return;
+        }
+
+        for (StateCustomAttribute attribute: fieldInfo.getStateCustomAttribute()){
+            if (viewModel.currentState.equalsIgnoreCase(attribute.getState())){
+                for (Profession profession: attribute.getProfession()){
+                    viewModel.professions.add(new RegistrationOption(profession.getValue(), profession.getKey()));
+                }
+                professionSpinner.setItems(viewModel.professions,
+                        profileModel.title == null ? null : new RegistrationOption(profileModel.title, profileModel.title));
+                return;
+            }
+        }
+
+        viewModel.professions.addAll(DataUtil.getAllProfessions());
+        professionSpinner.setItems(viewModel.professions,
+                profileModel.title == null ? null : new RegistrationOption(profileModel.title, profileModel.title));
+
+    }
+
     private void toggleDietCodeVisibility(){
         if (dietSpinner == null){
             return;
         }
-        if (viewModel.currentState == null || viewModel.currentProfession == null){
+        if (viewModel.currentState == null || viewModel.currentState.equals("") ||
+                viewModel.currentProfession == null || viewModel.currentProfession.equals("")){
             dietSpinner.setVisibility(View.GONE);
+            return;
         }
         if (viewModel.currentState.equals("Chhattisgarh") && viewModel.currentProfession.equals("Teacher Trainee")){
             dietSpinner.setVisibility(View.VISIBLE);

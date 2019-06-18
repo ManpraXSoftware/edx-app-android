@@ -589,7 +589,11 @@ public class CourseMaterialViewModel extends BaseViewModel {
                 likeIcon.set(data.getStatus() ? R.drawable.t_icon_like_filled : R.drawable.t_icon_like);
                 int n = 0;
                 if (likes.get() != null) {
-                    n = Integer.parseInt(likes.get());
+                    try {
+                        n = Integer.parseInt(likes.get());
+                    } catch (Exception e) {
+                        n = 0;
+                    }
                 }
                 if (data.getStatus()){
                     n++;
