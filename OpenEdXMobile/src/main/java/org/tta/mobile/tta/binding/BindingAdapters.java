@@ -377,7 +377,11 @@ public class BindingAdapters {
     @BindingAdapter({"scroll_to_position"})
     public static void setScrollToPosition(MxRecyclerView view, final int pos) {
         view.getRecyclerView().post(() -> {
-            view.getRecyclerView().smoothScrollToPosition(pos);
+            try {
+                view.getRecyclerView().smoothScrollToPosition(pos);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 

@@ -4,7 +4,10 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import org.tta.mobile.tta.data.model.StatusResponse;
 import org.tta.mobile.tta.wordpress_client.WordPressRestInterface;
 import org.tta.mobile.tta.wordpress_client.model.Comment;
 import org.tta.mobile.tta.wordpress_client.model.CustomComment;
@@ -497,12 +500,12 @@ public class WpClientRetrofit {
         doRetrofitCall(mRestInterface.getCommentsByPost(postId), callback);
     }
 
-    public void getCommentsByPost(long postId, int take, int page, WordPressRestResponse<List<Comment>> callback) {
-        doRetrofitCall(mRestInterface.getCommentsByPost(postId, take, page), callback);
+    public void getCommentsByPost(long postId, int take, int page, long userId, WordPressRestResponse<List<Comment>> callback) {
+        doRetrofitCall(mRestInterface.getCommentsByPost(postId, take, page, userId), callback);
     }
 
-    public void getRepliesOnComment(long postId, long commentId, WordPressRestResponse<List<Comment>> callback) {
-        doRetrofitCall(mRestInterface.getRepliesOnComment(postId, commentId), callback);
+    public void getRepliesOnComment(long postId, long commentId, long userId, WordPressRestResponse<List<Comment>> callback) {
+        doRetrofitCall(mRestInterface.getRepliesOnComment(postId, commentId, userId), callback);
     }
 
     public void createComment(CustomComment cmt, WordPressRestResponse<Comment> callback) {
@@ -512,5 +515,9 @@ public class WpClientRetrofit {
     //like post
     public void setLike(String id,WordPressRestResponse<Like> callback) {
         doRetrofitCall(mRestInterface.setLike("wp_ulike_process",id,"likeThis"), callback);
+    }
+
+    public void likeComment(long commentId, long userId, WordPressRestResponse<StatusResponse> callback){
+        doRetrofitCall(mRestInterface.likeComment(commentId, userId), callback);
     }
 }

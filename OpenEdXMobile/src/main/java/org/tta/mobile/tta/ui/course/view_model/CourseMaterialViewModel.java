@@ -135,6 +135,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     public void loadData(){
+        if (content == null){
+            return;
+        }
 
         getContentStatus();
 
@@ -266,6 +269,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void showScorm() {
+        if (content == null){
+            return;
+        }
 
         Bundle parameters = new Bundle();
         String filePath = selectedScormForPlay.getDownloadEntry(mDataManager.getEdxEnvironment().getStorage()).getFilePath();
@@ -316,6 +322,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void enableFooter(){
+        if (content == null){
+            return;
+        }
 
         if (assessmentComponent.isContainer()) {
             CourseComponent component = (CourseComponent) assessmentComponent.getChildren().get(0);
@@ -467,6 +476,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void generateCertificate(ScormBlockModel scorm){
+        if (content == null){
+            return;
+        }
 
         mDataManager.generateCertificate(content.getSource_identity(), new OnResponseCallback<CertificateStatusResponse>() {
             @Override
@@ -492,6 +504,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void getContentStatus(){
+        if (content == null){
+            return;
+        }
 
         mDataManager.getUserContentStatus(Collections.singletonList(content.getId()),
                 new OnResponseCallback<List<ContentStatus>>() {
@@ -513,6 +528,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void getCertificateStatus(){
+        if (content == null){
+            return;
+        }
 
         mDataManager.getCertificateStatus(content.getSource_identity(), new OnResponseCallback<CertificateStatusResponse>() {
             @Override
@@ -551,6 +569,10 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void bookmark() {
+        if (content == null){
+            return;
+        }
+
         mActivity.showLoading();
         mDataManager.setBookmark(content.getId(), new OnResponseCallback<BookmarkResponse>() {
             @Override
@@ -581,6 +603,10 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void like() {
+        if (content == null){
+            return;
+        }
+
         mActivity.showLoading();
         mDataManager.setLike(content.getId(), new OnResponseCallback<StatusResponse>() {
             @Override
@@ -653,6 +679,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void downloadSingle() {
+        if (content == null){
+            return;
+        }
 
         mActivity.showLoading();
         downloadModeIsAll = false;
@@ -734,6 +763,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void downloadMany(){
+        if (content == null){
+            return;
+        }
 
         mActivity.showLoading();
         numberOfDownloadingVideos = remainingScorms.size();
@@ -818,6 +850,10 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
     @SuppressWarnings("unused")
     public void onEventMainThread(DownloadCompletedEvent e) {
+        if (content == null){
+            return;
+        }
+
         if (e.getEntry() != null && e.getEntry().content_id == content.getId() && e.getEntry().type != null &&
                 (e.getEntry().type.equalsIgnoreCase(DownloadType.SCORM.name()) ||
                 e.getEntry().type.equalsIgnoreCase(DownloadType.PDF.name()))
@@ -866,6 +902,10 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
     @SuppressWarnings("unused")
     public void onEventMainThread(DownloadedVideoDeletedEvent e) {
+        if (content == null){
+            return;
+        }
+
         if (e.getModel() != null && e.getModel().getContent_id() == content.getId() &&
                 e.getModel().getDownloadType() != null &&
                 (e.getModel().getDownloadType().equalsIgnoreCase(DownloadType.SCORM.name()) ||
@@ -889,6 +929,10 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
     @SuppressWarnings("unused")
     public void onEventMainThread(DownloadFailedEvent event){
+        if (content == null){
+            return;
+        }
+
         VideoModel downloadEntry = event.getDownloadEntry();
         if (downloadEntry != null && downloadEntry.getContent_id() == content.getId() &&
                 downloadEntry.getDownloadType() != null &&

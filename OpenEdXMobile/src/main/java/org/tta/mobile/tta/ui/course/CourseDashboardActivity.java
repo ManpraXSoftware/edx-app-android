@@ -96,7 +96,9 @@ public class CourseDashboardActivity extends BaseVMActivity {
         if (!isPush){
             super.onBackPressed();
         } else {
-            ActivityUtil.gotoPage(this, LandingActivity.class);
+            if (!LandingActivity.isAlreadyOpened) {
+                ActivityUtil.gotoPage(this, LandingActivity.class);
+            }
             finish();
         }
     }

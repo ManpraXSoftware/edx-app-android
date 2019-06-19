@@ -13,6 +13,8 @@ public class LandingActivity extends BaseVMActivity {
 
     private LandingViewModel viewModel;
 
+    public static boolean isAlreadyOpened;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +38,15 @@ public class LandingActivity extends BaseVMActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        isAlreadyOpened = true;
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         viewModel.unRegisterEventBus();
+        isAlreadyOpened = false;
     }
 }

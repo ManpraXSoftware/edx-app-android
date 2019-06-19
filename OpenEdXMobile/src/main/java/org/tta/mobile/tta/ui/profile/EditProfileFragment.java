@@ -253,7 +253,7 @@ public class EditProfileFragment extends TaBaseFragment {
                 profileModel.diet_code == null ? null : new RegistrationOption(profileModel.diet_code, profileModel.diet_code));
         toggleDietCodeVisibility();
 
-        btn = ViewUtil.addButton(userInfoLayout, "Submit");
+        btn = ViewUtil.addButton(userInfoLayout, getString(R.string.submit));
         ViewUtil.addEmptySpace(userInfoLayout, (int) getResources().getDimension(R.dimen._50px));
 
         setListeners();

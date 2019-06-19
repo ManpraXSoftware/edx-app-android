@@ -12,6 +12,7 @@ import org.tta.mobile.tta.ui.connect.ConnectDashboardActivity;
 import org.tta.mobile.tta.ui.course.CourseDashboardActivity;
 import org.tta.mobile.tta.ui.landing.LandingActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
+import org.tta.mobile.tta.utils.AppUtil;
 
 public class DeepLinkViewModel extends BaseViewModel {
 
@@ -25,22 +26,13 @@ public class DeepLinkViewModel extends BaseViewModel {
         mDataManager.getContent(contentId, new OnResponseCallback<Content>() {
             @Override
             public void onSuccess(Content data) {
-                Bundle parameters = new Bundle();
-                parameters.putParcelable(Constants.KEY_CONTENT, data);
-                parameters.putBoolean(Constants.KEY_IS_PUSH, true);
-                if (data.getSource().getType().equalsIgnoreCase(SourceType.course.name()) ||
-                        data.getSource().getType().equalsIgnoreCase(SourceType.edx.name())) {
-                    ActivityUtil.gotoPage(mActivity, CourseDashboardActivity.class, parameters);
-                } else {
-                    ActivityUtil.gotoPage(mActivity, ConnectDashboardActivity.class, parameters);
-                }
+                showContentDashboard(data);
                 mActivity.finish();
             }
 
             @Override
             public void onFailure(Exception e) {
-                ActivityUtil.gotoPage(mActivity, LandingActivity.class);
-                mActivity.finish();
+                gotoLandingPage();
             }
         });
 
@@ -51,24 +43,36 @@ public class DeepLinkViewModel extends BaseViewModel {
         mDataManager.getContentFromSourceIdentity(sourceIdentity, new OnResponseCallback<Content>() {
             @Override
             public void onSuccess(Content data) {
-                Bundle parameters = new Bundle();
-                parameters.putParcelable(Constants.KEY_CONTENT, data);
-                parameters.putBoolean(Constants.KEY_IS_PUSH, true);
-                if (data.getSource().getType().equalsIgnoreCase(SourceType.course.name()) ||
-                        data.getSource().getType().equalsIgnoreCase(SourceType.edx.name())) {
-                    ActivityUtil.gotoPage(mActivity, CourseDashboardActivity.class, parameters);
-                } else {
-                    ActivityUtil.gotoPage(mActivity, ConnectDashboardActivity.class, parameters);
-                }
+                showContentDashboard(data);
                 mActivity.finish();
             }
 
             @Override
             public void onFailure(Exception e) {
-                ActivityUtil.gotoPage(mActivity, LandingActivity.class);
-                mActivity.finish();
+                gotoLandingPage();
             }
         });
 
+    }
+
+    private void showContentDashboard(Content content){
+
+        Bundle parameters = new Bundle();
+        parameters.putParcelable(Constants.KEY_CONTENT, content);
+        parameters.putBoolean(Constants.KEY_IS_PUSH, true);
+        if (content.getSource().getType().equalsIgnoreCase(SourceType.course.name()) ||
+                content.getSource().getType().equalsIgnoreCase(SourceType.edx.name())) {
+            ActivityUtil.gotoPage(mActivity, CourseDashboardActivity.class, parameters);
+        } else {
+            ActivityUtil.gotoPage(mActivity, ConnectDashboardActivity.class, parameters);
+        }
+
+    }
+
+    public void gotoLandingPage(){
+        if (!LandingActivity.isAlreadyOpened) {
+            ActivityUtil.gotoPage(mActivity, LandingActivity.class);
+        }
+        mActivity.finish();
     }
 }

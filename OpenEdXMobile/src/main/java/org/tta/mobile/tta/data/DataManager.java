@@ -932,8 +932,14 @@ public class DataManager extends BaseRoboInjector {
         new AsyncTask<Void, Void, List<Content>>() {
             @Override
             protected List<Content> doInBackground(Void... voids) {
-                List<Long> contentIds = new GetCourseContentsOperation().execute(dbHelper.getDatabase());
                 List<Content> contents = new ArrayList<>();
+                List<Long> contentIds = null;
+                try {
+                    contentIds = new GetCourseContentsOperation().execute(dbHelper.getDatabase());
+                } catch (Exception e) {
+                    return contents;
+                }
+
                 if (contentIds != null){
                     for (long id: contentIds){
                         Content content = mLocalDataSource.getContentById(id);
@@ -963,8 +969,14 @@ public class DataManager extends BaseRoboInjector {
         new AsyncTask<Void, Void, List<Content>>() {
             @Override
             protected List<Content> doInBackground(Void... voids) {
-                List<Long> contentIds = new GetWPContentsOperation(sourceName).execute(dbHelper.getDatabase());
                 List<Content> contents = new ArrayList<>();
+                List<Long> contentIds = null;
+                try {
+                    contentIds = new GetWPContentsOperation(sourceName).execute(dbHelper.getDatabase());
+                } catch (Exception e) {
+                    return contents;
+                }
+
                 if (contentIds != null){
                     for (long id: contentIds){
                         Content content = mLocalDataSource.getContentById(id);
@@ -1248,6 +1260,37 @@ public class DataManager extends BaseRoboInjector {
 
     public void getCourseComponent(String courseId, OnResponseCallback<CourseComponent> callback) {
 
+        if (NetworkUtil.isConnected(context)) {
+
+            Call<CourseStructureV1Model> getHierarchyCall = courseApi.getCourseStructureWithoutStale(courseId);
+            getHierarchyCall.enqueue(new CourseAPI.GetCourseStructureCallback(context, courseId,
+                    null, null, null, null) {
+                @Override
+                protected void onResponse(@NonNull CourseComponent courseComponent) {
+                    courseManager.addCourseDataInAppLevelCache(courseId, courseComponent);
+                    courseComponent = courseManager.getComponentByCourseId(courseId);
+                    if (courseComponent != null) {
+                        callback.onSuccess(courseComponent);
+                    } else {
+                        getLocalCourseComponent(courseId, callback, new TaException("Empty course"));
+                    }
+                }
+
+                @Override
+                protected void onFailure(@NonNull Throwable error) {
+                    super.onFailure(error);
+                    getLocalCourseComponent(courseId, callback, new TaException(error.getLocalizedMessage()));
+                }
+            });
+
+        } else {
+            getLocalCourseComponent(courseId, callback, new TaException(context.getString(R.string.no_connection_exception)));
+        }
+
+    }
+
+    public void getLocalCourseComponent(String courseId, OnResponseCallback<CourseComponent> callback, Exception e){
+
         CourseComponent courseComponent = courseManager.getComponentByCourseId(courseId);
         if (courseComponent != null) {
             // Course data exist in app session cache
@@ -1263,45 +1306,16 @@ public class DataManager extends BaseRoboInjector {
                 if (courseComponent != null) {
                     callback.onSuccess(courseComponent);
                 } else {
-                    getCourseComponentFromServer(courseId, callback);
+                    callback.onFailure(e);
                 }
             }
 
             @Override
             protected void onException(Exception ex) {
-                getCourseComponentFromServer(courseId, callback);
+                callback.onFailure(e);
             }
         }.execute();
 
-    }
-
-    public void getCourseComponentFromServer(String courseId, OnResponseCallback<CourseComponent> callback) {
-
-        if (!NetworkUtil.isConnected(context)) {
-            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
-            return;
-        }
-
-        Call<CourseStructureV1Model> getHierarchyCall = courseApi.getCourseStructureWithoutStale(courseId);
-        getHierarchyCall.enqueue(new CourseAPI.GetCourseStructureCallback(context, courseId,
-                null, null, null, null) {
-            @Override
-            protected void onResponse(@NonNull CourseComponent courseComponent) {
-                courseManager.addCourseDataInAppLevelCache(courseId, courseComponent);
-                courseComponent = courseManager.getComponentByCourseId(courseId);
-                if (courseComponent != null) {
-                    callback.onSuccess(courseComponent);
-                } else {
-                    callback.onFailure(new TaException("Empty course."));
-                }
-            }
-
-            @Override
-            protected void onFailure(@NonNull Throwable error) {
-                super.onFailure(error);
-                callback.onFailure(new TaException(error.getLocalizedMessage()));
-            }
-        });
     }
 
     @NonNull
@@ -1595,20 +1609,21 @@ public class DataManager extends BaseRoboInjector {
 
         if (NetworkUtil.isConnected(context)){
 
-            wpClientRetrofit.getCommentsByPost(postId, take, page, new WordPressRestResponse<List<Comment>>() {
-                @Override
-                public void onSuccess(List<Comment> result) {
-                    if (result == null){
-                        result = new ArrayList<>();
-                    }
-                    callback.onSuccess(result);
-                }
+            wpClientRetrofit.getCommentsByPost(postId, take, page, loginPrefs.getWPUserId(),
+                    new WordPressRestResponse<List<Comment>>() {
+                        @Override
+                        public void onSuccess(List<Comment> result) {
+                            if (result == null){
+                                result = new ArrayList<>();
+                            }
+                            callback.onSuccess(result);
+                        }
 
-                @Override
-                public void onFailure(HttpServerErrorResponse errorResponse) {
-                    callback.onFailure(new TaException(errorResponse.getMessage()));
-                }
-            });
+                        @Override
+                        public void onFailure(HttpServerErrorResponse errorResponse) {
+                            callback.onFailure(new TaException(errorResponse.getMessage()));
+                        }
+                    });
 
         } else {
             callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
@@ -1620,20 +1635,21 @@ public class DataManager extends BaseRoboInjector {
 
         if (NetworkUtil.isConnected(context)){
 
-            wpClientRetrofit.getRepliesOnComment(postId, commentId, new WordPressRestResponse<List<Comment>>() {
-                @Override
-                public void onSuccess(List<Comment> result) {
-                    if (result == null){
-                        result = new ArrayList<>();
-                    }
-                    callback.onSuccess(result);
-                }
+            wpClientRetrofit.getRepliesOnComment(postId, commentId, loginPrefs.getWPUserId(),
+                    new WordPressRestResponse<List<Comment>>() {
+                        @Override
+                        public void onSuccess(List<Comment> result) {
+                            if (result == null){
+                                result = new ArrayList<>();
+                            }
+                            callback.onSuccess(result);
+                        }
 
-                @Override
-                public void onFailure(HttpServerErrorResponse errorResponse) {
-                    callback.onFailure(new TaException(errorResponse.getMessage()));
-                }
-            });
+                        @Override
+                        public void onFailure(HttpServerErrorResponse errorResponse) {
+                            callback.onFailure(new TaException(errorResponse.getMessage()));
+                        }
+                    });
 
         } else {
             callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
@@ -3632,11 +3648,21 @@ public class DataManager extends BaseRoboInjector {
         helper.getAppSignatures();
     }
 
-    public void likeUnlikeConnectComment(Comment comment, OnResponseCallback<Comment> callback){
+    public void likeConnectComment(long commentId, OnResponseCallback<StatusResponse> callback){
 
         if (NetworkUtil.isConnected(context)){
 
-            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+            wpClientRetrofit.likeComment(commentId, loginPrefs.getWPUserId(), new WordPressRestResponse<StatusResponse>() {
+                @Override
+                public void onSuccess(StatusResponse result) {
+                    callback.onSuccess(result);
+                }
+
+                @Override
+                public void onFailure(HttpServerErrorResponse errorResponse) {
+                    callback.onFailure(new TaException(errorResponse.getMessage()));
+                }
+            });
 
         } else {
             if (callback != null){

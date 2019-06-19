@@ -85,7 +85,7 @@
                     android:fontFamily="@font/hind_medium"
                     android:gravity="center"
                     android:onClick="@{()->viewModel.showFilters()}"
-                    android:text="Filter"
+                    android:text="@string/filter"
                     android:textColor="@color/t_selector_tab_text_color"
                     android:textSize="14sp" />
 
@@ -231,7 +231,7 @@
                     android:fontFamily="@font/hind_regular"
                     android:gravity="center"
                     android:onClick="@{()->viewModel.hideFilters()}"
-                    android:text="Apply"
+                    android:text="@string/apply"
                     android:textAllCaps="false"
                     android:textColor="@color/primary_cyan"
                     android:textSize="12sp" />
@@ -289,7 +289,7 @@
                     android:fontFamily="@font/hind_regular"
                     android:gravity="center"
                     android:onClick="@{()->viewModel.hideFilters()}"
-                    android:text="Apply"
+                    android:text="@string/apply"
                     android:textAllCaps="false"
                     android:textColor="@color/primary_cyan"
                     android:textSize="12sp" />

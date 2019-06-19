@@ -2,6 +2,7 @@ package org.tta.mobile.tta.ui.connect.view_model;
 
 import android.content.Context;
 import android.databinding.ObservableBoolean;
+import android.databinding.ObservableInt;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ import org.tta.mobile.databinding.TRowCommentsBinding;
 import org.tta.mobile.databinding.TRowConnectReplyBinding;
 import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.event.CommentRepliesReceivedEvent;
+import org.tta.mobile.tta.event.ConnectCommentAddedEvent;
 import org.tta.mobile.tta.event.FetchCommentRepliesEvent;
 import org.tta.mobile.tta.event.LoadMoreConnectCommentsEvent;
 import org.tta.mobile.tta.event.ConnectCommentChangedEvent;
@@ -48,6 +50,7 @@ public class ConnectCommentsTabViewModel extends BaseViewModel {
     private CommentClickListener commentClickListener;
 
     public ObservableBoolean emptyVisible = new ObservableBoolean();
+    public ObservableInt scrollPosition = new ObservableInt(0);
 
     private boolean allLoaded;
 
@@ -85,6 +88,7 @@ public class ConnectCommentsTabViewModel extends BaseViewModel {
 
                 case R.id.comment_reply_layout:
                     if (commentClickListener != null){
+                        scrollPosition.set(adapter.getItemPosition(item));
                         commentClickListener.onClickReply(item);
                     }
                     break;
@@ -151,6 +155,15 @@ public class ConnectCommentsTabViewModel extends BaseViewModel {
             mActivity.showLongSnack("Replies are not available on this comment");
         }
         adapter.notifyItemChanged(position);
+    }
+
+    @SuppressWarnings("unused")
+    public void onEventMainThread(ConnectCommentAddedEvent event){
+        for (int i = 0; i < adapter.expandedPositions.size(); i++){
+            adapter.expandedPositions.set(i, adapter.expandedPositions.get(i) + 1);
+        }
+        adapter.notifyItemInserted(0);
+        scrollPosition.set(0);
     }
 
     @SuppressWarnings("unused")

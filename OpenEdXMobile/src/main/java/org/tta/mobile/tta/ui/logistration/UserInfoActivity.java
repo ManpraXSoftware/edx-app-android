@@ -165,7 +165,7 @@ public class UserInfoActivity extends BaseVMActivity {
         dietSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "DIET Code/डी आइ इ टी कोड", mViewModel.dietCodes, null);
         toggleDietCodeVisibility();
 
-        btn = ViewUtil.addButton(userInfoLayout, "Submit");
+        btn = ViewUtil.addButton(userInfoLayout, getString(R.string.submit));
         privacyLinkText = ViewUtil.addLinkText(userInfoLayout, "Privacy Policy");
         ViewUtil.addEmptySpace(userInfoLayout, (int) getResources().getDimension(R.dimen._50px));
 

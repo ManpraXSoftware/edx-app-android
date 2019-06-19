@@ -1,6 +1,7 @@
 
 package org.tta.mobile.tta.wordpress_client;
 
+import org.tta.mobile.tta.data.model.StatusResponse;
 import org.tta.mobile.tta.wordpress_client.model.Comment;
 import org.tta.mobile.tta.wordpress_client.model.Like;
 import org.tta.mobile.tta.wordpress_client.model.Media;
@@ -453,11 +454,13 @@ public interface WordPressRestInterface {
     @GET("wp-json/wp/v2/comments" + "?parent=0")
     Call<List<Comment>> getCommentsByPost(@Query("post") long postId,
                                           @Query("per_page") int take,
-                                          @Query("page") int page);
+                                          @Query("page") int page,
+                                          @Query("user_id") long userId);
 
     @GET("wp-json/wp/v2/comments" + "?per_page=100")
     Call<List<Comment>> getRepliesOnComment(@Query("post") long postId,
-                                            @Query("parent") long commentId);
+                                            @Query("parent") long commentId,
+                                            @Query("user_id") long userId);
 
     @GET("wp-json/wp/v2/comments/{id}")
     Call<Comment> getComment(@Path("id") long id);
@@ -498,4 +501,9 @@ public interface WordPressRestInterface {
      */
     @GET("wp-json/wp/v2/posts/")
     Call<List<Post>> getPostBySlug(@QueryMap Map<String, String> map);
+
+    @FormUrlEncoded
+    @POST("wp-json/wp/v2/likecomment/")
+    Call<StatusResponse> likeComment(@Field("comment_id") long commentId,
+                                     @Field("user_id") long userId);
 }

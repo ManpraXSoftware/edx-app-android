@@ -389,6 +389,16 @@ public class Comment extends BaseModel {
         isLike = like;
     }
 
+    public void toggleLikes(boolean liked){
+        int l = Integer.parseInt(likes);
+        if (liked){
+            l++;
+        } else {
+            l--;
+        }
+        likes = String.valueOf(l);
+    }
+
     public Comment() {
     }
 

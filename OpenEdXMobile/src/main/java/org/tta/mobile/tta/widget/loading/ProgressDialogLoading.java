@@ -17,16 +17,28 @@ public class ProgressDialogLoading implements ILoading {
 
     @Override
     public void showLoading() {
-        mPd.show();
+        try {
+            mPd.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void hideLoading() {
-        mPd.dismiss();
+        try {
+            mPd.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void dismiss() {
-        mPd.dismiss();
+        try {
+            mPd.dismiss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
