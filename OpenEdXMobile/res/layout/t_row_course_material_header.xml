@@ -108,7 +108,9 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?android:attr/selectableItemBackground"
-                    android:padding="8dp">
+                    android:padding="8dp"
+                    tool_tip="@{viewModel.likeToolTip}"
+                    tool_tip_gravity="@{viewModel.toolTipGravity}">
 
                     <ImageView
                         android:id="@+id/course_bookmark_image"
@@ -150,7 +152,9 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?android:attr/selectableItemBackground"
-                    android:padding="8dp">
+                    android:padding="8dp"
+                    tool_tip="@{viewModel.downloadToolTip}"
+                    tool_tip_gravity="@{viewModel.toolTipGravity}">
 
                     <org.tta.mobile.view.custom.IconProgressBar
                         android:id="@+id/loading_indicator"

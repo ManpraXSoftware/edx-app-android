@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -35,6 +36,7 @@ import org.tta.mobile.tta.ui.base.BaseArrayAdapter;
 import org.tta.mobile.tta.ui.custom.FormEditText;
 import org.tta.mobile.tta.ui.custom.NonScrollListView;
 import org.tta.mobile.tta.utils.BottomNavigationViewHelper;
+import org.tta.mobile.tta.utils.ToolTipView;
 import org.tta.mobile.util.SoftKeyboardUtil;
 
 import java.lang.reflect.Constructor;
@@ -410,5 +412,12 @@ public class BindingAdapters {
                 e.printStackTrace();
             }
         });
+    }
+
+    @BindingAdapter({"tool_tip", "tool_tip_gravity"})
+    public static void showToolTip(View view, String message, int gravity){
+        if(!ToolTipView.isToolTipAdded(view))
+        if (message != null && !message.trim().equals(""))
+            ToolTipView.showToolTip(view.getContext(), message.trim(), view, gravity);
     }
 }

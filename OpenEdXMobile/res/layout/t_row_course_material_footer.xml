@@ -89,7 +89,9 @@
                         android:visibility="@{viewModel.footerTitleVisible?View.VISIBLE:View.GONE}"
                         android:textColor="@color/gray_5"
                         android:textSize="12sp"
-                        android:fontFamily="@font/hind_medium"/>
+                        android:fontFamily="@font/hind_medium"
+                        tool_tip="@{viewModel.understandToolTip}"
+                        tool_tip_gravity="@{viewModel.understandToolTipGravity}"/>
 
                     <View
                         android:layout_width="match_parent"

@@ -41,6 +41,8 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
     }
 
     private static final long ANIMATION_DURATION = 300L;
+    private static final String TOOL_TIP = "tool_tip";
+    private static final String REMOVE_TOOL_TIP = "Remove_tool_tip";
 
     private final View anchorView;
     private final int gravity;
@@ -131,6 +133,8 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
 
         popupWindow = new PopupWindow(container, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
+
+
     }
 
     /**
@@ -141,6 +145,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
     }
 
     public static void showToolTip(Context context, String msg, View view, int gravity){
+        view.setTag(view.getId(), TOOL_TIP);
         ToolTip toolTip1 = new ToolTip.Builder()
                 .withText(msg)
                 .withBackgroundColor(ContextCompat.getColor(context, R.color.white_list_clicked))
@@ -155,6 +160,8 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 .build();
         toolTipView1.show();
     }
+
+
 //    public static ToolTipView showToolTipNav(Context context, String msg, int gravity) {
 //        LayoutInflater inflate = (LayoutInflater)
 //                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -186,10 +193,14 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
      */
     @UiThread
     public void show() {
-        popupWindow.showAsDropDown(anchorView);
-        container.getViewTreeObserver().addOnPreDrawListener(this);
+            popupWindow.showAsDropDown(anchorView);
+            container.getViewTreeObserver().addOnPreDrawListener(this);
     }
 
+    public static Boolean isToolTipAdded(View view){
+        Object obj = view.getTag(view.getId());
+        return obj != null;
+    }
     /**
      * Shows the tool tip with the specified delay.
      */
@@ -204,9 +215,11 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
 
     /**
      * Removes the tool tip view from the view hierarchy.
+     * @param v
      */
     @UiThread
-    public void remove() {
+    public void remove(View v) {
+        v.setTag(v.getId(), null);
         container.setPivotX(pivotX);
         container.setPivotY(pivotY);
         container.animate().setDuration(ANIMATION_DURATION).alpha(0.0F).scaleX(0.0F).scaleY(0.0F)
@@ -326,7 +339,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
             listener.onToolTipClicked(this);
         }
 
-        remove();
+        remove(v);
     }
 
     /**

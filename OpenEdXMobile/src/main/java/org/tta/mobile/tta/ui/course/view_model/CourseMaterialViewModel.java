@@ -2,6 +2,7 @@ package org.tta.mobile.tta.ui.course.view_model;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.ObservableBoolean;
@@ -106,6 +107,11 @@ public class CourseMaterialViewModel extends BaseViewModel {
     public ObservableBoolean allDownloadProgressVisible = new ObservableBoolean(false);
     public ObservableField<String> description = new ObservableField<>("");
     public ObservableField<String> likes = new ObservableField<>("0");
+    public ObservableField<String> likeToolTip = new ObservableField<>("सामग्री को अपने लक्ष्य से \nजोड़ने के लिए बटन को दबाए");
+    public ObservableField<String> downloadToolTip = new ObservableField<>("सामग्री डाउनलोड करने \nके लिए बटन दबाए ");
+    public ObservableField<String> understandToolTip = new ObservableField<>("सभी भाग देखने पर और 60% या उससे \nअधिक पाने पर आपको सर्टिफिकेट मिलेगा ");
+    public ObservableInt toolTipGravity = new ObservableInt(Gravity.BOTTOM);
+    public ObservableInt understandToolTipGravity = new ObservableInt(Gravity.TOP);
 
     //Footer details
     public ObservableField<String> footerImageUrl = new ObservableField<>();
