@@ -70,6 +70,7 @@ public class FeedViewModel extends BaseViewModel {
     public ObservableBoolean suggestedUsersVisible = new ObservableBoolean();
     public ObservableBoolean featureListVisible = new ObservableBoolean();
     public ObservableBoolean emptyVisible = new ObservableBoolean();
+    public ObservableBoolean tooltipVisible = new ObservableBoolean();
 
     private List<Feed> feeds;
     List<SuggestedUser> users;
@@ -350,6 +351,9 @@ public class FeedViewModel extends BaseViewModel {
             }
         });
 
+    }
+    public void showTooLTip() {
+        tooltipVisible.set(true);
     }
 
     private void getSuggestedUsers() {

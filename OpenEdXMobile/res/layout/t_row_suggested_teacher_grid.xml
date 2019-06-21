@@ -44,7 +44,6 @@
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:singleLine="true"
-                android:ellipsize="marquee"
                 android:text="@{viewModel.name}"/>
 
             <Button

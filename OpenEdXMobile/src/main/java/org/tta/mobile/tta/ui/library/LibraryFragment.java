@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.interfaces.SearchPageOpenedListener;
 import org.tta.mobile.tta.ui.library.view_model.LibraryViewModel;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
+import org.tta.mobile.tta.utils.ToolTip;
+import org.tta.mobile.tta.utils.ToolTipView;
 import org.tta.mobile.view.common.PageViewStateCallback;
 
 public class LibraryFragment extends TaBaseFragment {
@@ -37,6 +40,7 @@ public class LibraryFragment extends TaBaseFragment {
         super.onCreate(savedInstanceState);
         logD("TTA Nav ======> " + BreadcrumbUtil.setBreadcrumb(RANK, Nav.library.name()));
         viewModel = new LibraryViewModel(getActivity(), this, searchPageOpenedListener);
+
     }
 
     @Nullable
@@ -49,6 +53,8 @@ public class LibraryFragment extends TaBaseFragment {
         viewPager = view.findViewById(R.id.listing_view_pager);
         viewPager.setOffscreenPageLimit(5);
         tabLayout.setupWithViewPager(viewPager);
+
+//        ToolTipView.showToolTip(getActivity(),"Library", , Gravity.TOP);
 
         return view;
     }

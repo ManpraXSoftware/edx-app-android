@@ -14,6 +14,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -63,6 +64,7 @@ import org.tta.mobile.tta.ui.course.CourseScormViewActivity;
 import org.tta.mobile.tta.ui.interfaces.OnTaItemClickListener;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.JsonUtil;
+import org.tta.mobile.tta.utils.ToolTipView;
 import org.tta.mobile.util.PermissionsUtil;
 
 import java.io.File;
@@ -289,7 +291,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void enableHeader(){
-
+        ToolTipView.showToolTip(mActivity,"सामग्री को अपने लक्ष्य से जोड़ने के लिए बटन को दबाए ",mActivity.findViewById(R.id.course_bookmark_image), Gravity.BOTTOM);
         allDownloadStatusIcon.set(R.drawable.t_icon_done);
         description.set(course == null ? null : course.getCourse().getShort_description());
 
@@ -548,6 +550,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void bookmark() {
+
         mActivity.showLoading();
         mDataManager.setBookmark(content.getId(), new OnResponseCallback<BookmarkResponse>() {
             @Override
@@ -578,6 +581,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void like() {
+
         mActivity.showLoading();
         mDataManager.setLike(content.getId(), new OnResponseCallback<StatusResponse>() {
             @Override
@@ -992,6 +996,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
                     headerBinding.descriptionWebview.loadUrl(true, aboutComponent.getChildren().get(0).getBlockUrl());
                 }*/
 
+
                 headerBinding.likeLayout.setOnClickListener(v -> {
                     if (headerClickListener != null) {
                         headerClickListener.onClick(v);
@@ -1166,6 +1171,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
                     }
                 });
             }
+
         }
 
         @Override

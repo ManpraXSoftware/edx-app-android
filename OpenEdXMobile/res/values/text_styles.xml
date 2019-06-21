@@ -253,6 +253,10 @@
         <item name="android:textColor">@color/edx_brand_gray_base</item>
     </style>
 
+    <style name="redBackgroundColor" parent="discussion_regular_text">
+        <item name="android:colorBackground">@color/secondary_red</item>
+    </style>
+
 
     <!-- TTA -->
 

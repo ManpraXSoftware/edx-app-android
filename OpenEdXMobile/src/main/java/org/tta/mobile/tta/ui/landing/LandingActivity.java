@@ -1,8 +1,13 @@
 package org.tta.mobile.tta.ui.landing;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import androidx.annotation.RequiresApi;
 
 import org.tta.mobile.R;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
@@ -13,6 +18,7 @@ public class LandingActivity extends BaseVMActivity {
 
     private LandingViewModel viewModel;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,8 +27,8 @@ public class LandingActivity extends BaseVMActivity {
 
         BottomNavigationView view = findViewById(R.id.dashboard_bottom_nav);
         view.setItemIconTintList(null);
-
         viewModel.registerEventBus();
+
     }
 
     @Override
