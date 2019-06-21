@@ -2,10 +2,12 @@ package org.tta.mobile.tta.ui.agenda.view_model;
 
 import android.content.Context;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.view.Gravity;
 
 import com.maurya.mx.mxlib.core.MxFiniteAdapter;
 import com.maurya.mx.mxlib.core.OnRecyclerItemClickListener;
@@ -30,6 +32,11 @@ public class AgendaViewModel extends BaseViewModel {
     public List<Source> sources;
 
     public ObservableField<String> regionListTitle = new ObservableField<>("Region");
+    public ObservableField<String> regionToolTip = new ObservableField<>("आपके राजय ने आपके लिए ये सामग्री चुनी है");
+    public ObservableField<String> personalToolTip = new ObservableField<>("आपके द्वारा चुनी गयी सामग्री यहाँ है");
+    public ObservableField<String> downloadToolTip = new ObservableField<>("आपके द्वारा डाउनलोड की गयी सामग्री यहाँ है ");
+    public ObservableInt toolTipGravity = new ObservableInt(Gravity.BOTTOM);
+    public ObservableInt personalToolTipGravity = new ObservableInt(Gravity.TOP);
 
     public AgendaListAdapter stateListAdapter, myListAdapter, downloadListAdapter;
 

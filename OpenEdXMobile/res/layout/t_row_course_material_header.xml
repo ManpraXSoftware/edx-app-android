@@ -154,7 +154,7 @@
                     android:background="?android:attr/selectableItemBackground"
                     android:padding="8dp"
                     tool_tip="@{viewModel.downloadToolTip}"
-                    tool_tip_gravity="@{viewModel.toolTipGravity}">
+                    tool_tip_gravity="@{viewModel.understandToolTipGravity}">
 
                     <org.tta.mobile.view.custom.IconProgressBar
                         android:id="@+id/loading_indicator"
