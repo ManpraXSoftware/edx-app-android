@@ -209,7 +209,7 @@ public class TaAPI {
         return taService.createNotifications(notifications);
     }
 
-    public Call<CountResponse> updateNotifications(List<String> notificationIds){
+    public Call<CountResponse> updateNotifications(List<Long> notificationIds){
         Map<String, Object> parameters=new HashMap<>();
         parameters.put(Constants.KEY_IDS, notificationIds);
         return taService.updateNotifications(parameters);

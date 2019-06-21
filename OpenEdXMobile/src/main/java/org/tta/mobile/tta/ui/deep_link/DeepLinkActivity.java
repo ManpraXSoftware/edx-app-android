@@ -13,8 +13,8 @@ import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.data.local.db.table.Notification;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.deep_link.view_model.DeepLinkViewModel;
-import org.tta.mobile.tta.ui.landing.LandingActivity;
 import org.tta.mobile.tta.ui.logistration.SigninRegisterActivity;
+import org.tta.mobile.tta.ui.logistration.UserInfoActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 
@@ -47,6 +47,10 @@ public class DeepLinkActivity extends BaseVMActivity {
 
         if (loginPrefs == null || !loginPrefs.isLoggedIn()) {
             ActivityUtil.gotoPage(this, SigninRegisterActivity.class);
+            this.finish();
+            return;
+        } else if (loginPrefs.getDisplayName() == null || loginPrefs.getDisplayName().equals(loginPrefs.getUsername())){
+            ActivityUtil.gotoPage(this, UserInfoActivity.class);
             this.finish();
             return;
         }
@@ -83,8 +87,7 @@ public class DeepLinkActivity extends BaseVMActivity {
                         if (!path.equals("")){
                             viewModel.fetchContent(path);
                         } else {
-                            ActivityUtil.gotoPage(this, LandingActivity.class);
-                            this.finish();
+                            viewModel.gotoLandingPage();
                         }
 
                     } else if (type.equalsIgnoreCase("connect")){
@@ -93,17 +96,14 @@ public class DeepLinkActivity extends BaseVMActivity {
                         if (slug != null && !slug.equals("")){
                             viewModel.fetchContent(slug);
                         } else {
-                            ActivityUtil.gotoPage(this, LandingActivity.class);
-                            this.finish();
+                            viewModel.gotoLandingPage();
                         }
 
                     } else {
-                        ActivityUtil.gotoPage(this, LandingActivity.class);
-                        this.finish();
+                        viewModel.gotoLandingPage();
                     }
                 } else {
-                    ActivityUtil.gotoPage(this, LandingActivity.class);
-                    this.finish();
+                    viewModel.gotoLandingPage();
                 }
             } else {
                 onClickLink();
@@ -119,8 +119,7 @@ public class DeepLinkActivity extends BaseVMActivity {
         Intent intent = getIntent();
 
         if (intent.getData() == null || intent.getData().getEncodedPath() == null) {
-            ActivityUtil.gotoPage(this, LandingActivity.class);
-            this.finish();
+            viewModel.gotoLandingPage();
         } else {
             long contentId = extractContentId(intent.getData());
             if (contentId > 0) {
@@ -152,8 +151,7 @@ public class DeepLinkActivity extends BaseVMActivity {
                         host_url.equals("http://theteacherapp.org/"))
                     type = "course";
                 else {
-                    ActivityUtil.gotoPage(this, LandingActivity.class);
-                    this.finish();
+                    viewModel.gotoLandingPage();
                     return;
                 }
 
@@ -165,13 +163,11 @@ public class DeepLinkActivity extends BaseVMActivity {
                 if (path != null && !path.equals("")){
                     viewModel.fetchContent(path);
                 } else {
-                    ActivityUtil.gotoPage(this, LandingActivity.class);
-                    this.finish();
+                    viewModel.gotoLandingPage();
                 }
 
             } else {
-                ActivityUtil.gotoPage(this, LandingActivity.class);
-                this.finish();
+                viewModel.gotoLandingPage();
             }
         }
     }

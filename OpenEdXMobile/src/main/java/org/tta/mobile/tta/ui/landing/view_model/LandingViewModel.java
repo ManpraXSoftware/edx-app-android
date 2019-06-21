@@ -103,9 +103,7 @@ public class LandingViewModel extends BaseViewModel {
 
 
     public void showLibrary() {
-
-
-        ActivityUtil.replaceFragmentInActivity(
+        ActivityUtil.clearBackstackAndReplaceFragmentInActivity(
                 mActivity.getSupportFragmentManager(),
                 LibraryFragment.newInstance(() -> selectedId = R.id.action_search),
                 R.id.dashboard_fragment,
@@ -113,12 +111,10 @@ public class LandingViewModel extends BaseViewModel {
                 false,
                 null
         );
-
     }
 
     public void showFeed() {
-//        mActivity.showShortSnack("Coming soon");
-        ActivityUtil.replaceFragmentInActivity(
+        ActivityUtil.clearBackstackAndReplaceFragmentInActivity(
                 mActivity.getSupportFragmentManager(),
                 new FeedFragment(),
                 R.id.dashboard_fragment,
@@ -128,8 +124,8 @@ public class LandingViewModel extends BaseViewModel {
         );
     }
 
-    public void showSearch() {
-        ActivityUtil.replaceFragmentInActivity(
+    public void showSearch(){
+        ActivityUtil.clearBackstackAndReplaceFragmentInActivity(
                 mActivity.getSupportFragmentManager(),
                 new SearchFragment(),
                 R.id.dashboard_fragment,
@@ -140,7 +136,7 @@ public class LandingViewModel extends BaseViewModel {
     }
 
     public void showAgenda() {
-        ActivityUtil.replaceFragmentInActivity(
+        ActivityUtil.clearBackstackAndReplaceFragmentInActivity(
                 mActivity.getSupportFragmentManager(),
                 new AgendaFragment(),
                 R.id.dashboard_fragment,
@@ -151,7 +147,7 @@ public class LandingViewModel extends BaseViewModel {
     }
 
     public void showProfile() {
-        ActivityUtil.replaceFragmentInActivity(
+        ActivityUtil.clearBackstackAndReplaceFragmentInActivity(
                 mActivity.getSupportFragmentManager(),
                 new ProfileFragment(),
                 R.id.dashboard_fragment,
@@ -161,7 +157,7 @@ public class LandingViewModel extends BaseViewModel {
         );
     }
 
-    private void onAppStart() {
+    private void onAppStart(){
         mDataManager.getMyContentStatuses(new OnResponseCallback<List<ContentStatus>>() {
             @Override
             public void onSuccess(List<ContentStatus> data) {
@@ -176,13 +172,13 @@ public class LandingViewModel extends BaseViewModel {
         });
     }
 
-    public void selectLibrary() {
+    public void selectLibrary(){
         selectedId = R.id.action_library;
     }
 
     @SuppressWarnings("unused")
-    public void onEventMainThread(NetworkConnectivityChangeEvent event) {
-        if (NetworkUtil.isConnected(mActivity)) {
+    public void onEventMainThread(NetworkConnectivityChangeEvent event){
+        if (NetworkUtil.isConnected(mActivity)){
             offlineVisible.set(false);
         } else {
             offlineVisible.set(true);
@@ -190,19 +186,19 @@ public class LandingViewModel extends BaseViewModel {
     }
 
     @SuppressWarnings("unused")
-    public void onEventMainThread(ContentStatusReceivedEvent event) {
-        if (statuses == null) {
+    public void onEventMainThread(ContentStatusReceivedEvent event){
+        if (statuses == null){
             statuses = new ArrayList<>();
         }
         statuses.remove(event.getContentStatus());
         statuses.add(event.getContentStatus());
     }
 
-    public void registerEventBus() {
+    public void registerEventBus(){
         EventBus.getDefault().register(this);
     }
 
-    public void unRegisterEventBus() {
+    public void unRegisterEventBus(){
         EventBus.getDefault().unregister(this);
     }
 }

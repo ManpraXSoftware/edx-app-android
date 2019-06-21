@@ -40,6 +40,18 @@ public class ActivityUtil {
         transaction.commit();
     }
 
+    public static void clearBackstackAndReplaceFragmentInActivity(@NonNull FragmentManager fragmentManager,
+                                                 @NonNull Fragment fragment, int frameId, String tag,
+                                                 boolean addToBackStack, String stackName) {
+        clearBackStack(fragmentManager);
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(frameId, fragment, tag);
+        if (addToBackStack){
+            transaction.addToBackStack(stackName);
+        }
+        transaction.commit();
+    }
+
     public static void gotoPage(Context context, Class<?> activityClass) {
         context.startActivity(new Intent(context, activityClass));
     }
@@ -89,5 +101,12 @@ public class ActivityUtil {
         intent.setDataAndType(Uri.parse(filePath), "video/*");
         context.startActivity(Intent.createChooser(intent, "Complete action using"));
 
+    }
+
+    private static void clearBackStack(FragmentManager fragmentManager) {
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            FragmentManager.BackStackEntry first = fragmentManager.getBackStackEntryAt(0);
+            fragmentManager.popBackStackImmediate(first.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
     }
 }

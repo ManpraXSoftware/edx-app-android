@@ -114,11 +114,13 @@ public class DownloadListActivity extends BaseFragmentActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 // If this activity was opened from notification
-                if (isTaskRoot()) {
+                /*if (isTaskRoot()) {
                     finish();
                     environment.getRouter().showSplashScreen(this);
                     return true;
-                }
+                }*/
+                onBackPressed();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -126,11 +128,11 @@ public class DownloadListActivity extends BaseFragmentActivity {
     @Override
     public void onBackPressed() {
         // If this activity was opened from notification
-        if (isTaskRoot()) {
+        /*if (isTaskRoot()) {
             finish();
             environment.getRouter().showSplashScreen(this);
             return;
-        }
+        }*/
         super.onBackPressed();
     }
 

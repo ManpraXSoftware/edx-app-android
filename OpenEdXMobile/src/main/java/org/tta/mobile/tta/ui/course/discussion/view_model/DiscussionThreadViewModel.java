@@ -34,6 +34,7 @@ import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.JsonUtil;
 import org.tta.mobile.util.DateUtil;
 import org.tta.mobile.util.NetworkUtil;
+import org.tta.mobile.util.ResourceUtil;
 import org.tta.mobile.view.common.PageViewStateCallback;
 
 import java.util.ArrayList;
@@ -360,7 +361,8 @@ public class DiscussionThreadViewModel extends BaseViewModel
 
     @Override
     public void onClickReply(DiscussionComment comment) {
-        replyingToText.set("Replying to " + comment.getDisplayName());
+        replyingToText.set(ResourceUtil.getFormattedString(mActivity.getResources(), R.string.replying_to,
+                "name", comment.getDisplayName()).toString());
         replyingToVisible.set(true);
         selectedComment = comment;
         commentParentId = comment.getIdentifier();

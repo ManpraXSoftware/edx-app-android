@@ -126,8 +126,8 @@ public class FormEditText extends LinearLayout {
         return mBinding.getRoot().isShown();
     }
 
-    public boolean isMandatory(){
-        return isMandatory;
+    public void setSingleLine(){
+        mBinding.textInputEditText.setSingleLine();
     }
 
     public boolean validate(){

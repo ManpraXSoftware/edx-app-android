@@ -78,7 +78,7 @@
                 android:fontFamily="@font/hind_medium"
                 android:gravity="center"
                 android:onClick="@{()->viewModel.send()}"
-                android:text="Send"
+                android:text="@string/send"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="14sp" />

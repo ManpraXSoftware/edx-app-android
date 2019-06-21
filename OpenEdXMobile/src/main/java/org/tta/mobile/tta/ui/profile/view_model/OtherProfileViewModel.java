@@ -1,5 +1,6 @@
 package org.tta.mobile.tta.ui.profile.view_model;
 
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 
@@ -41,6 +42,7 @@ public class OtherProfileViewModel extends BaseViewModel {
     public ObservableField<String> userImageUrl = new ObservableField<>();
     public ObservableField<String> nCertificates = new ObservableField<>("0");
     public ObservableField<String> name = new ObservableField<>();
+    public ObservableBoolean followBtnVisible = new ObservableBoolean();
     public ObservableField<String> followBtnText = new ObservableField<>();
     public ObservableInt followBtnBackground = new ObservableInt();
     public ObservableInt followTextColor = new ObservableInt();
@@ -53,7 +55,9 @@ public class OtherProfileViewModel extends BaseViewModel {
 
         this.username = username;
         toggleFollowBtn();
-        fetchFollowStatus();
+        if (!username.equals(mDataManager.getLoginPrefs().getUsername())) {
+            fetchFollowStatus();
+        }
         fetchUserAccount();
         fetchFilters();
     }
@@ -65,11 +69,13 @@ public class OtherProfileViewModel extends BaseViewModel {
             public void onSuccess(FollowStatus data) {
                 followed = data.is_followed();
                 toggleFollowBtn();
+                followBtnVisible.set(true);
             }
 
             @Override
             public void onFailure(Exception e) {
-
+                toggleFollowBtn();
+                followBtnVisible.set(true);
             }
         });
 

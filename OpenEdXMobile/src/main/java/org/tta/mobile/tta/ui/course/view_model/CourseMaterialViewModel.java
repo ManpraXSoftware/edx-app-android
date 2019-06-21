@@ -26,6 +26,7 @@ import org.tta.mobile.R;
 import org.tta.mobile.databinding.TRowCourseMaterialFooterBinding;
 import org.tta.mobile.databinding.TRowCourseMaterialHeaderBinding;
 import org.tta.mobile.databinding.TRowCourseMaterialItemBinding;
+import org.tta.mobile.model.VideoModel;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.model.course.BlockType;
 import org.tta.mobile.model.course.CourseComponent;
@@ -52,6 +53,7 @@ import org.tta.mobile.tta.data.model.content.TotalLikeResponse;
 import org.tta.mobile.tta.data.model.profile.UpdateMyProfileResponse;
 import org.tta.mobile.tta.event.ContentBookmarkChangedEvent;
 import org.tta.mobile.tta.event.ContentStatusReceivedEvent;
+import org.tta.mobile.tta.event.DownloadFailedEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.scorm.PDFBlockModel;
 import org.tta.mobile.tta.scorm.ScormBlockModel;
@@ -134,6 +136,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     public void loadData(){
+        if (content == null){
+            return;
+        }
 
         getContentStatus();
 
@@ -265,6 +270,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void showScorm() {
+        if (content == null){
+            return;
+        }
 
         Bundle parameters = new Bundle();
         String filePath = selectedScormForPlay.getDownloadEntry(mDataManager.getEdxEnvironment().getStorage()).getFilePath();
@@ -291,7 +299,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void enableHeader(){
-        ToolTipView.showToolTip(mActivity,"सामग्री को अपने लक्ष्य से जोड़ने के लिए बटन को दबाए ",mActivity.findViewById(R.id.course_bookmark_image), Gravity.BOTTOM);
+
         allDownloadStatusIcon.set(R.drawable.t_icon_done);
         description.set(course == null ? null : course.getCourse().getShort_description());
 
@@ -315,6 +323,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void enableFooter(){
+        if (content == null){
+            return;
+        }
 
         if (assessmentComponent.isContainer()) {
             CourseComponent component = (CourseComponent) assessmentComponent.getChildren().get(0);
@@ -466,6 +477,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void generateCertificate(ScormBlockModel scorm){
+        if (content == null){
+            return;
+        }
 
         mDataManager.generateCertificate(content.getSource_identity(), new OnResponseCallback<CertificateStatusResponse>() {
             @Override
@@ -491,6 +505,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void getContentStatus(){
+        if (content == null){
+            return;
+        }
 
         mDataManager.getUserContentStatus(Collections.singletonList(content.getId()),
                 new OnResponseCallback<List<ContentStatus>>() {
@@ -512,6 +529,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void getCertificateStatus(){
+        if (content == null){
+            return;
+        }
 
         mDataManager.getCertificateStatus(content.getSource_identity(), new OnResponseCallback<CertificateStatusResponse>() {
             @Override
@@ -550,6 +570,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void bookmark() {
+        if (content == null){
+            return;
+        }
 
         mActivity.showLoading();
         mDataManager.setBookmark(content.getId(), new OnResponseCallback<BookmarkResponse>() {
@@ -581,6 +604,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void like() {
+        if (content == null){
+            return;
+        }
 
         mActivity.showLoading();
         mDataManager.setLike(content.getId(), new OnResponseCallback<StatusResponse>() {
@@ -590,7 +616,11 @@ public class CourseMaterialViewModel extends BaseViewModel {
                 likeIcon.set(data.getStatus() ? R.drawable.t_icon_like_filled : R.drawable.t_icon_like);
                 int n = 0;
                 if (likes.get() != null) {
-                    n = Integer.parseInt(likes.get());
+                    try {
+                        n = Integer.parseInt(likes.get());
+                    } catch (Exception e) {
+                        n = 0;
+                    }
                 }
                 if (data.getStatus()){
                     n++;
@@ -650,6 +680,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void downloadSingle() {
+        if (content == null){
+            return;
+        }
 
         mActivity.showLoading();
         downloadModeIsAll = false;
@@ -731,6 +764,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void downloadMany(){
+        if (content == null){
+            return;
+        }
 
         mActivity.showLoading();
         numberOfDownloadingVideos = remainingScorms.size();
@@ -815,6 +851,10 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
     @SuppressWarnings("unused")
     public void onEventMainThread(DownloadCompletedEvent e) {
+        if (content == null){
+            return;
+        }
+
         if (e.getEntry() != null && e.getEntry().content_id == content.getId() && e.getEntry().type != null &&
                 (e.getEntry().type.equalsIgnoreCase(DownloadType.SCORM.name()) ||
                 e.getEntry().type.equalsIgnoreCase(DownloadType.PDF.name()))
@@ -863,6 +903,10 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
     @SuppressWarnings("unused")
     public void onEventMainThread(DownloadedVideoDeletedEvent e) {
+        if (content == null){
+            return;
+        }
+
         if (e.getModel() != null && e.getModel().getContent_id() == content.getId() &&
                 e.getModel().getDownloadType() != null &&
                 (e.getModel().getDownloadType().equalsIgnoreCase(DownloadType.SCORM.name()) ||
@@ -881,6 +925,31 @@ public class CourseMaterialViewModel extends BaseViewModel {
             //analytic update for count update
             mActivity.analytic.addScromCountAnalytic_db(mActivity);
 
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public void onEventMainThread(DownloadFailedEvent event){
+        if (content == null){
+            return;
+        }
+
+        VideoModel downloadEntry = event.getDownloadEntry();
+        if (downloadEntry != null && downloadEntry.getContent_id() == content.getId() &&
+                downloadEntry.getDownloadType() != null &&
+                (downloadEntry.getDownloadType().equalsIgnoreCase(DownloadType.SCORM.name()) ||
+                        downloadEntry.getDownloadType().equalsIgnoreCase(DownloadType.PDF.name()))) {
+
+            switch (event.getErrorCode()){
+                case DownloadManager.ERROR_INSUFFICIENT_SPACE:
+                    mActivity.showLongSnack("Could not download " + downloadEntry.getTitle() +
+                            ". Insufficient memory");
+                    break;
+                default:
+                    mActivity.showLongSnack("Could not download " + downloadEntry.getTitle());
+            }
+
+            fetchCourseComponent();
         }
     }
 
@@ -995,7 +1064,6 @@ public class CourseMaterialViewModel extends BaseViewModel {
                     headerBinding.descriptionWebview.initWebView(mActivity, false, false);
                     headerBinding.descriptionWebview.loadUrl(true, aboutComponent.getChildren().get(0).getBlockUrl());
                 }*/
-
 
                 headerBinding.likeLayout.setOnClickListener(v -> {
                     if (headerClickListener != null) {
@@ -1171,7 +1239,6 @@ public class CourseMaterialViewModel extends BaseViewModel {
                     }
                 });
             }
-
         }
 
         @Override

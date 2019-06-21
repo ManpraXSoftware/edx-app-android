@@ -380,7 +380,7 @@
                     android:minWidth="78dp"
                     android:onClick="@{()->viewModel.addReplyToComment()}"
                     android:padding="@dimen/_10px"
-                    android:text="@string/comment_en"
+                    android:text="@string/comment_btn_label"
                     android:textAllCaps="false"
                     android:textColor="@color/secondary_grey_light"
                     android:textSize="12sp" />

@@ -1,6 +1,7 @@
 package org.tta.mobile.tta.ui.connect.view_model;
 
 import android.Manifest;
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
@@ -11,10 +12,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Toast;
 
 import org.tta.mobile.R;
 import org.tta.mobile.event.NetworkConnectivityChangeEvent;
+import org.tta.mobile.model.VideoModel;
 import org.tta.mobile.model.db.DownloadEntry;
 import org.tta.mobile.module.storage.DownloadCompletedEvent;
 import org.tta.mobile.module.storage.DownloadedVideoDeletedEvent;
@@ -33,11 +34,13 @@ import org.tta.mobile.tta.data.model.content.TotalLikeResponse;
 import org.tta.mobile.tta.data.model.feed.SuggestedUser;
 import org.tta.mobile.tta.data.model.profile.FollowStatus;
 import org.tta.mobile.tta.event.CommentRepliesReceivedEvent;
+import org.tta.mobile.tta.event.ConnectCommentAddedEvent;
 import org.tta.mobile.tta.event.ContentBookmarkChangedEvent;
 import org.tta.mobile.tta.event.ContentStatusReceivedEvent;
+import org.tta.mobile.tta.event.DownloadFailedEvent;
 import org.tta.mobile.tta.event.FetchCommentRepliesEvent;
 import org.tta.mobile.tta.event.LoadMoreConnectCommentsEvent;
-import org.tta.mobile.tta.event.RepliedOnCommentEvent;
+import org.tta.mobile.tta.event.ConnectCommentChangedEvent;
 import org.tta.mobile.tta.event.UserFollowingChangedEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.BasePagerAdapter;
@@ -48,7 +51,6 @@ import org.tta.mobile.tta.ui.interfaces.CommentClickListener;
 import org.tta.mobile.tta.ui.profile.OtherProfileActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
-import org.tta.mobile.tta.utils.JsonUtil;
 import org.tta.mobile.tta.wordpress_client.model.Comment;
 import org.tta.mobile.tta.wordpress_client.model.CustomFilter;
 import org.tta.mobile.tta.wordpress_client.model.Post;
@@ -121,6 +123,7 @@ public class ConnectDashboardViewModel extends BaseViewModel
     public ObservableInt userImagePlaceholder = new ObservableInt(R.drawable.profile_photo_placeholder);
     public ObservableField<String> name = new ObservableField<>();
     public ObservableField<String> date = new ObservableField<>();
+    public ObservableBoolean followBtnVisible = new ObservableBoolean();
     public ObservableField<String> followBtnText = new ObservableField<>();
     public ObservableInt followBtnBackground = new ObservableInt();
     public ObservableInt followTextColor = new ObservableInt();
@@ -160,8 +163,12 @@ public class ConnectDashboardViewModel extends BaseViewModel
         titles = new ArrayList<>();
         take = DEFAULT_TAKE;
         page = DEFAULT_PAGE;
-
         firstDownload = true;
+
+        if (content == null){
+            return;
+        }
+
         mDataManager.getUserContentStatus(Collections.singletonList(content.getId()),
                 new OnResponseCallback<List<ContentStatus>>() {
                     @Override
@@ -197,8 +204,9 @@ public class ConnectDashboardViewModel extends BaseViewModel
                 userImageUrl.set(data.getProfileImage().getImageUrlFull());
                 name.set(data.getName());
                 date.set(DateUtil.getDisplayTime(post.getDate()));
-                toggleFollowBtn();
-                fetchFollowStatus();
+                if (!username.equals(mDataManager.getLoginPrefs().getUsername())) {
+                    fetchFollowStatus();
+                }
                 userVisible.set(true);
             }
 
@@ -217,17 +225,23 @@ public class ConnectDashboardViewModel extends BaseViewModel
             public void onSuccess(FollowStatus data) {
                 followed = data.is_followed();
                 toggleFollowBtn();
+                followBtnVisible.set(true);
             }
 
             @Override
             public void onFailure(Exception e) {
-
+                toggleFollowBtn();
+                followBtnVisible.set(true);
             }
         });
 
     }
 
     public void fetchPost(OnResponseCallback<Post> callback) {
+        if (content == null){
+            return;
+        }
+
         loadData();
         /*long postId = 0;
         try {
@@ -368,6 +382,9 @@ public class ConnectDashboardViewModel extends BaseViewModel
     }
 
     private void loadData() {
+        if (content == null){
+            return;
+        }
 
         mDataManager.getTotalLikes(content.getId(), new OnResponseCallback<TotalLikeResponse>() {
             @Override
@@ -502,6 +519,9 @@ public class ConnectDashboardViewModel extends BaseViewModel
     }
 
     private void setTabs() {
+        if (content == null){
+            return;
+        }
 
         tab1 = ConnectCommentsTab.newInstance(content, post, comments, repliesMap, Nav.all, this);
         fragments.add(tab1);
@@ -525,6 +545,10 @@ public class ConnectDashboardViewModel extends BaseViewModel
     }
 
     public void bookmark() {
+        if (content == null){
+            return;
+        }
+
         mActivity.showLoading();
         mDataManager.setBookmark(content.getId(), new OnResponseCallback<BookmarkResponse>() {
             @Override
@@ -555,6 +579,10 @@ public class ConnectDashboardViewModel extends BaseViewModel
     }
 
     public void like() {
+        if (content == null){
+            return;
+        }
+
         mActivity.showLoading();
         mDataManager.setLike(content.getId(), new OnResponseCallback<StatusResponse>() {
             @Override
@@ -563,7 +591,11 @@ public class ConnectDashboardViewModel extends BaseViewModel
                 likeIcon.set(data.getStatus() ? R.drawable.t_icon_like_filled : R.drawable.t_icon_like);
                 int n = 0;
                 if (likes.get() != null) {
-                    n = Integer.parseInt(likes.get());
+                    try {
+                        n = Integer.parseInt(likes.get());
+                    } catch (Exception e) {
+                        n = 0;
+                    }
                 }
                 if (data.getStatus()){
                     n++;
@@ -611,6 +643,9 @@ public class ConnectDashboardViewModel extends BaseViewModel
     }
 
     private void downloadPost() {
+        if (content == null){
+            return;
+        }
 
         if (allDownloadIconVisible.get()) {
             mActivity.showLoading();
@@ -681,6 +716,10 @@ public class ConnectDashboardViewModel extends BaseViewModel
     }
 
     private void deletePost(){
+        if (content == null){
+            return;
+        }
+
         mActivity.showAlertDailog("Delete",
                 "Are you sure you want to delete \"" + content.getName() + "\"?",
                 (dialog, which) -> {
@@ -690,6 +729,9 @@ public class ConnectDashboardViewModel extends BaseViewModel
     }
 
     public void comment(){
+        if (content == null){
+            return;
+        }
 
         String comment = this.comment.get();
         if (comment == null || comment.trim().equals("")){
@@ -707,18 +749,18 @@ public class ConnectDashboardViewModel extends BaseViewModel
                             mActivity.showLongSnack("Commented successfully");
                             comments.add(0, data);
                             post.setTotal_comments(post.getTotal_comments() + 1);
-                            tab1.refreshList();
-                            tab2.refreshList();
-                            tab3.refreshList();
 
                             mActivity.analytic.addMxAnalytics_db(
                                     content.getName() , Action.CommentPost, content.getSource().getName(),
                                     Source.Mobile, content.getSource_identity());
 
+                            EventBus.getDefault().post(new ConnectCommentAddedEvent(data));
+
                         } else {
                             mActivity.showLongSnack("Replied successfully");
                             replyingToVisible.set(false);
                             commentParentId = 0;
+                            selectedComment.incrementReplies();
 
                             mActivity.analytic.addMxAnalytics_db(
                                     content.getName() , Action.ReplyComment, content.getSource().getName(),
@@ -726,14 +768,11 @@ public class ConnectDashboardViewModel extends BaseViewModel
 
                             if (repliesMap.containsKey(selectedComment.getId())){
                                 repliesMap.get(selectedComment.getId()).add(0, data);
-                                EventBus.getDefault().post(new RepliedOnCommentEvent(selectedComment));
                             }
+                            EventBus.getDefault().post(new ConnectCommentChangedEvent(selectedComment));
 
                         }
                         ConnectDashboardViewModel.this.comment.set("");
-                        tab1.refreshList();
-                        tab2.refreshList();
-                        tab3.refreshList();
                     }
 
                     @Override
@@ -752,6 +791,10 @@ public class ConnectDashboardViewModel extends BaseViewModel
     }
 
     private void playVideo() {
+        if (content == null){
+            return;
+        }
+
         DownloadEntry de=  mDataManager.getDownloadedVideo(post, content.getId(),
                 String.valueOf(content.getSource().getId()), content.getSource().getName());
         if(de!=null && de.filepath!=null && !de.filepath.equals(""))
@@ -808,6 +851,10 @@ public class ConnectDashboardViewModel extends BaseViewModel
         if (post == null){
             return;
         }
+        if (content == null){
+            return;
+        }
+
         final String shareTextWithPlatformName = ResourceUtil.getFormattedString(
                 mActivity.getResources(),
                 R.string.share_wp_post_message,
@@ -882,6 +929,10 @@ public class ConnectDashboardViewModel extends BaseViewModel
 
     @SuppressWarnings("unused")
     public void onEventMainThread(DownloadCompletedEvent e) {
+        if (content == null){
+            return;
+        }
+
         if (e.getEntry() != null && e.getEntry().content_id == content.getId() &&
                 e.getEntry().type != null && e.getEntry().type.equalsIgnoreCase(DownloadType.WP_VIDEO.name())){
 
@@ -898,6 +949,10 @@ public class ConnectDashboardViewModel extends BaseViewModel
 
     @SuppressWarnings("unused")
     public void onEventMainThread(DownloadedVideoDeletedEvent e) {
+        if (content == null){
+            return;
+        }
+
         if (e.getModel() != null && e.getModel().getContent_id() == content.getId() &&
                 e.getModel().getDownloadType() != null &&
                 e.getModel().getDownloadType().equalsIgnoreCase(DownloadType.WP_VIDEO.name())) {
@@ -908,6 +963,32 @@ public class ConnectDashboardViewModel extends BaseViewModel
             mActivity.analytic.addMxAnalytics_db(
                     content.getName() , Action.DeletePost, content.getSource().getName(),
                     Source.Mobile, content.getSource_identity());
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public void onEventMainThread(DownloadFailedEvent event){
+        if (content == null){
+            return;
+        }
+
+        VideoModel downloadEntry = event.getDownloadEntry();
+        if (downloadEntry != null && downloadEntry.getContent_id() == content.getId() &&
+                downloadEntry.getDownloadType() != null &&
+                downloadEntry.getDownloadType().equalsIgnoreCase(DownloadType.WP_VIDEO.name())) {
+
+            switch (event.getErrorCode()){
+                case DownloadManager.ERROR_INSUFFICIENT_SPACE:
+                    mActivity.showLongSnack("Could not download " + downloadEntry.getTitle() +
+                            ". Insufficient memory");
+                    break;
+                default:
+                    mActivity.showLongSnack("Could not download " + downloadEntry.getTitle());
+            }
+
+            allDownloadProgressVisible.set(false);
+            allDownloadIconVisible.set(true);
+            allDownloadOptionVisible.set(true);
         }
     }
 
@@ -951,13 +1032,36 @@ public class ConnectDashboardViewModel extends BaseViewModel
 
     @Override
     public void onClickLike(Comment comment) {
+        mActivity.showLoading();
+        mDataManager.likeConnectComment(comment.getId(), new OnResponseCallback<StatusResponse>() {
+            @Override
+            public void onSuccess(StatusResponse data) {
+                mActivity.hideLoading();
+                comment.setLike(data.getStatus());
+                comment.toggleLikes(data.getStatus());
 
+                if (comment.getParent() == 0){
+                    EventBus.getDefault().post(new ConnectCommentChangedEvent(comment));
+                } else {
+                    Comment c = new Comment();
+                    c.setId(comment.getParent());
+                    EventBus.getDefault().post(new ConnectCommentChangedEvent(c));
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                mActivity.hideLoading();
+                mActivity.showLongSnack(e.getLocalizedMessage());
+            }
+        });
     }
 
     @Override
     public void onClickReply(Comment comment) {
         selectedComment = comment;
-        replyingToText.set("Replying to " + comment.getAuthorName());
+        replyingToText.set(ResourceUtil.getFormattedString(mActivity.getResources(), R.string.replying_to,
+                "name", comment.getAuthorName()).toString());
         replyingToVisible.set(true);
         commentParentId = comment.getId();
 

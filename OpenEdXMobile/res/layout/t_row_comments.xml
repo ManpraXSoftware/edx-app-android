@@ -2,6 +2,15 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="org.tta.mobile.tta.wordpress_client.model.Comment" />
+    </data>
+
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -115,7 +124,7 @@
                             android:fontFamily="@font/hind_medium"
                             android:textColor="@color/gray_3"
                             android:textSize="12sp"
-                            android:visibility="gone" />
+                            android:text="@{viewModel.likes}" />
 
                         <ImageView
                             android:id="@+id/comment_like_image"
@@ -152,7 +161,7 @@
                         android:id="@+id/comment_reply_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:background="?android:attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
                         android:orientation="horizontal"
@@ -166,7 +175,7 @@
                             android:fontFamily="@font/hind_medium"
                             android:textColor="@color/gray_3"
                             android:textSize="12sp"
-                            android:visibility="gone" />
+                            android:text="@{viewModel.replies}" />
 
                         <ImageView
                             android:id="@+id/comment_reply_image"

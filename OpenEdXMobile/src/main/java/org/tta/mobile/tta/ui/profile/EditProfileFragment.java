@@ -217,6 +217,7 @@ public class EditProfileFragment extends TaBaseFragment {
         ViewUtil.addEmptySpace(userInfoLayout, (int) getResources().getDimension(R.dimen._14dp));
 
         etFirstName = ViewUtil.addFormEditText(userInfoLayout, "Name/नाम");
+        etFirstName.setSingleLine();
         etFirstName.setText(profileModel.name);
         etFirstName.setMandatory(true);
 
@@ -249,6 +250,7 @@ public class EditProfileFragment extends TaBaseFragment {
         skillsSpinner.setMandatory(true);
 
         etPmis = ViewUtil.addFormEditText(userInfoLayout, "PMIS Code/पी इम आइ इस कोड");
+        etPmis.setSingleLine();
         if (profileModel.pmis_code != null) {
             etPmis.setText(profileModel.pmis_code);
         }
@@ -256,11 +258,9 @@ public class EditProfileFragment extends TaBaseFragment {
 
         dietSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "DIET Code/डी आइ इ टी कोड", viewModel.dietCodes,
                 profileModel.diet_code == null ? null : new RegistrationOption(profileModel.diet_code, profileModel.diet_code));
+        toggleDietCodeVisibility();
 
-        organisationSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Organisation/संगठन", viewModel.organisation,
-                profileModel.organisation == null ? null : new RegistrationOption(profileModel.organisation, profileModel.organisation));
-
-        btn = ViewUtil.addButton(userInfoLayout, "Submit");
+        btn = ViewUtil.addButton(userInfoLayout, getString(R.string.submit));
         ViewUtil.addEmptySpace(userInfoLayout, (int) getResources().getDimension(R.dimen._50px));
 
         setListeners();
@@ -297,8 +297,16 @@ public class EditProfileFragment extends TaBaseFragment {
 
             if (etPmis.isVisible()) {
                 parameters.putString("pmis_code", etPmis.getText());
+            } else {
+                parameters.putString("pmis_code", "");
             }
-            parameters.putString("diet_code", dietSpinner.getSelectedOption().getName());
+
+            if (dietSpinner.isVisible()) {
+                parameters.putString("diet_code", dietSpinner.getSelectedOption().getName());
+            } else {
+                parameters.putString("diet_code", "");
+            }
+
             viewModel.submit(parameters);
         });
 
@@ -308,8 +316,10 @@ public class EditProfileFragment extends TaBaseFragment {
                 setCustomField(viewModel.currentState, viewModel.currentProfession);
                 viewModel.districts.clear();
                 districtSpinner.setItems(viewModel.districts, null);
+                setProfessionItems();
                 viewModel.dietCodes.clear();
                 dietSpinner.setItems(viewModel.dietCodes, null);
+                toggleDietCodeVisibility();
                 return;
             }
 
@@ -321,10 +331,12 @@ public class EditProfileFragment extends TaBaseFragment {
             districtSpinner.setItems(viewModel.districts,
                     profileModel.district == null ? null : new RegistrationOption(profileModel.district, profileModel.district));
 
+            setProfessionItems();
             viewModel.dietCodes.clear();
-            viewModel.dietCodes = DataUtil.getAllDietCodesOfState(viewModel.currentState);
+            viewModel.dietCodes.addAll(DataUtil.getAllDietCodesOfState(viewModel.currentState));
             dietSpinner.setItems(viewModel.dietCodes,
                     profileModel.diet_code == null ? null : new RegistrationOption(profileModel.diet_code, profileModel.diet_code));
+            toggleDietCodeVisibility();
         });
 
         districtSpinner.setOnItemSelectedListener((view, item) -> {
@@ -343,6 +355,7 @@ public class EditProfileFragment extends TaBaseFragment {
                 viewModel.currentProfession = null;
             }
             setCustomField(viewModel.currentState, viewModel.currentProfession);
+            toggleDietCodeVisibility();
         });
     }
 
@@ -374,47 +387,95 @@ public class EditProfileFragment extends TaBaseFragment {
         etPmis.setVisibility(View.GONE);
     }
 
+    private void setProfessionItems(){
+        if (professionSpinner == null){
+            return;
+        }
+
+        viewModel.professions.clear();
+        if (viewModel.currentState == null || viewModel.currentState.equals("") || fieldInfo == null){
+            viewModel.professions.addAll(DataUtil.getAllProfessions());
+            professionSpinner.setItems(viewModel.professions,
+                    profileModel.title == null ? null : new RegistrationOption(profileModel.title, profileModel.title));
+            return;
+        }
+
+        for (StateCustomAttribute attribute: fieldInfo.getStateCustomAttribute()){
+            if (viewModel.currentState.equalsIgnoreCase(attribute.getState())){
+                for (Profession profession: attribute.getProfession()){
+                    viewModel.professions.add(new RegistrationOption(profession.getValue(), profession.getKey()));
+                }
+                professionSpinner.setItems(viewModel.professions,
+                        profileModel.title == null ? null : new RegistrationOption(profileModel.title, profileModel.title));
+                return;
+            }
+        }
+
+        viewModel.professions.addAll(DataUtil.getAllProfessions());
+        professionSpinner.setItems(viewModel.professions,
+                profileModel.title == null ? null : new RegistrationOption(profileModel.title, profileModel.title));
+
+    }
+
+    private void toggleDietCodeVisibility(){
+        if (dietSpinner == null){
+            return;
+        }
+        if (viewModel.currentState == null || viewModel.currentState.equals("") ||
+                viewModel.currentProfession == null || viewModel.currentProfession.equals("")){
+            dietSpinner.setVisibility(View.GONE);
+            return;
+        }
+        if (viewModel.currentState.equals("Chhattisgarh") && viewModel.currentProfession.equals("Teacher Trainee")){
+            dietSpinner.setVisibility(View.VISIBLE);
+        } else {
+            dietSpinner.setVisibility(View.GONE);
+        }
+    }
+
     private boolean validate(){
         boolean valid = true;
-        if (!etFirstName.validate()){
+        if (!etFirstName.validate() ||
+                (viewModel.getDataManager().getLoginPrefs().getUsername() != null &&
+                        etFirstName.getText().trim().equals(viewModel.getDataManager().getLoginPrefs().getUsername()))){
             valid = false;
-            etFirstName.setError("Required");
+            etFirstName.setError(getString(R.string.error_name));
         }
         if (!stateSpinner.validate()){
             valid = false;
-            stateSpinner.setError("Required");
+            stateSpinner.setError(getString(R.string.error_state));
         }
         if (!districtSpinner.validate()){
             valid = false;
-            districtSpinner.setError("Required");
+            districtSpinner.setError(getString(R.string.error_district));
         }
         if (!blockSpinner.validate()){
             valid = false;
-            blockSpinner.setError("Required");
+            blockSpinner.setError(getString(R.string.error_block));
         }
         if (!professionSpinner.validate()){
             valid = false;
-            professionSpinner.setError("Required");
+            professionSpinner.setError(getString(R.string.error_profession));
         }
         if (!genderSpinner.validate()){
             valid = false;
-            genderSpinner.setError("Required");
+            genderSpinner.setError(getString(R.string.error_gender));
         }
         if (!classTaughtSpinner.validate()){
             valid = false;
-            classTaughtSpinner.setError("Required");
+            classTaughtSpinner.setError(getString(R.string.error_classes));
         }
         if (!skillsSpinner.validate()){
             valid = false;
-            skillsSpinner.setError("Required");
+            skillsSpinner.setError(getString(R.string.error_skills));
         }
-        if (!etPmis.validate()){
+        if (etPmis.isVisible() && !etPmis.validate()){
             valid = false;
-            etPmis.setError("Required");
+            etPmis.setError(pmisError);
         }
-        if (!dietSpinner.validate()){
+        if (dietSpinner.isVisible() && !dietSpinner.validate()){
             valid = false;
-            dietSpinner.setError("Required");
+            dietSpinner.setError(getString(R.string.error_diet));
         }
 
         return valid;

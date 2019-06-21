@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="android.view.View" />
         <variable
             name="viewModel"
             type="org.tta.mobile.tta.ui.profile.view_model.OtherProfileViewModel" />
@@ -90,7 +90,8 @@
                         android:fontFamily="@font/hind_medium"
                         android:background="@{viewModel.followBtnBackground}"
                         android:enabled="true"
-                        android:onClick="@{()->viewModel.followUnfollow()}"/>
+                        android:onClick="@{()->viewModel.followUnfollow()}"
+                        android:visibility="@{viewModel.followBtnVisible?View.VISIBLE:View.GONE}"/>
 
                 </LinearLayout>
 
@@ -369,7 +370,7 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginEnd="@dimen/_36px"
                             android:scaleType="fitXY"
-                            android:src="@drawable/two_certificates_compressed" />
+                            android:src="@drawable/tta_cert_sample" />
 
                     </LinearLayout>
 

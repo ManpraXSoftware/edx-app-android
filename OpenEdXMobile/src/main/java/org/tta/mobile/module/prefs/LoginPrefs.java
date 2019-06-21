@@ -258,6 +258,11 @@ public class LoginPrefs {
         return null == profileModel ? null : profileModel.username;
     }
 
+    public long getWPUserId() {
+        final WPProfileModel profileModel = getWPCurrentUserProfile();
+        return null == profileModel ? 0 : profileModel.id;
+    }
+
     @Nullable
     public List<String> getWPUserRole() {
         final WPProfileModel profileModel = getWPCurrentUserProfile();

@@ -18,7 +18,8 @@ public class LandingActivity extends BaseVMActivity {
 
     private LandingViewModel viewModel;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static boolean isAlreadyOpened;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +28,8 @@ public class LandingActivity extends BaseVMActivity {
 
         BottomNavigationView view = findViewById(R.id.dashboard_bottom_nav);
         view.setItemIconTintList(null);
-        viewModel.registerEventBus();
 
+        viewModel.registerEventBus();
     }
 
     @Override
@@ -42,8 +43,15 @@ public class LandingActivity extends BaseVMActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        isAlreadyOpened = true;
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         viewModel.unRegisterEventBus();
+        isAlreadyOpened = false;
     }
 }

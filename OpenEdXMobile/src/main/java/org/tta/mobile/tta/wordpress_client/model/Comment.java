@@ -352,6 +352,53 @@ public class Comment extends BaseModel {
         return this;
     }
 
+    @SerializedName("likes")
+    private String likes;
+
+    public String getLikes() {
+        return likes;
+    }
+
+    public void setLikes(String likes) {
+        this.likes = likes;
+    }
+
+    @SerializedName("replies")
+    private String replies;
+
+    public String getReplies() {
+        return replies;
+    }
+
+    public void setReplies(String replies) {
+        this.replies = replies;
+    }
+
+    public void incrementReplies(){
+        replies = String.valueOf(Long.parseLong(replies) + 1);
+    }
+
+    @SerializedName("islike")
+    private boolean isLike;
+
+    public boolean isLike() {
+        return isLike;
+    }
+
+    public void setLike(boolean like) {
+        isLike = like;
+    }
+
+    public void toggleLikes(boolean liked){
+        int l = Integer.parseInt(likes);
+        if (liked){
+            l++;
+        } else {
+            l--;
+        }
+        likes = String.valueOf(l);
+    }
+
     public Comment() {
     }
 

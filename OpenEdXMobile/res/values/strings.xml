@@ -188,7 +188,7 @@
     <!-- Row subtitle of videos on dashboard screen -->
     <string name="videos_subtitle" translatable="false">Watch content videos</string>
     <!-- Row of Discussion on dashboard screen -->
-    <string name="discussion_title" translatable="false">Discussion</string>
+    <string name="discussion_title">Discussion</string>
     <!-- Row of Discussion on dashboard screen -->
     <!-- NOTE: TODO - not final one -->
     <string name="discussion_subtitle" translatable="false">Join the conversation</string>
@@ -235,7 +235,7 @@
     <!-- Label shown when no announcements are available for a content -->
     <string name="no_announcements_to_display" translatable="false">There are currently no announcements for this content.</string>
     <!-- Label shown when no handouts are available for a content -->
-    <string name="no_handouts_to_display" translatable="false">There are currently no handouts for this content.</string>
+    <string name="no_handouts_to_display">There are currently no handouts for this content.</string>
     <!-- Label shown when no important dates are available for a content -->
     <string name="no_course_dates_to_display" translatable="false">Course dates are not currently available.</string>
     <!-- Title of the screen where user can delete videos -->
@@ -357,23 +357,23 @@
     <string name="discussion_add_response_hint" translatable="false">@string/discussion_add_response_title</string>
 
     <!-- Title placeholder in adding a new post -->
-    <string name="discussion_post_title" translatable="false">Title</string>
+    <string name="discussion_post_title">Title</string>
     <!-- Label for selected topic when creating a post -->
-    <string name="discussion_add_post_topic_selection" translatable="false">Topic: {topic}</string>
+    <string name="discussion_add_post_topic_selection" translatable="false">{topic}</string>
     <!-- Add post button title in adding a new discussion -->
-    <string name="discussion_add_post_button_label" translatable="false">Post discussion</string>
+    <string name="discussion_add_post_button_label">Post discussion</string>
     <!-- Add post button description for accessibility in adding a new discussion -->
     <string name="discussion_add_post_button_description" translatable="false">Post discussion button</string>
     <!-- Add post button title in adding a new post -->
-    <string name="discussion_add_question_button_label" translatable="false">Post question</string>
+    <string name="discussion_add_question_button_label">Post question</string>
     <!-- Add post button content description for accessibility in adding a new post -->
     <string name="discussion_add_question_button_description" translatable="false">Post question button</string>
     <!-- Add your post placeholder in adding a new post -->
-    <string name="discussion_body_hint_discussion" translatable="false">@string/discussion_title</string>
+    <string name="discussion_body_hint_discussion">Discuss</string>
     <!-- Add your post placeholder in adding a new post -->
-    <string name="discussion_body_hint_question" translatable="false">@string/discussion_question</string>
+    <string name="discussion_body_hint_question">Ask question</string>
     <!-- Question text in adding a new post -->
-    <string name="discussion_question" translatable="false">Question</string>
+    <string name="discussion_question">Question</string>
 
     <!-- Assessment -->
     <!-- Label showing next unit in a sub-section on assessment navigation bar-->
@@ -700,7 +700,7 @@
     <string name="resend_otp">Resend OTP ?</string>
     <string name="set_password">Please set your account password.</string>
     <string name="confirm_new_password">Confirm new password</string>
-    <string name="submit" translatable="false">Submit</string>
+    <string name="submit">Submit</string>
     <string name="library">Library</string>
     <string name="feed">Feed</string>
     <string name="search">Search</string>
@@ -735,7 +735,7 @@
     <string name="assessment">Assessment</string>
     <string name="view_certificate">View Certificate</string>
     <string name="estimated_duration">Estimated duration</string>
-    <string name="add_a_comment" translatable="false">Add a comment...</string>
+    <string name="add_a_comment">Add a comment</string>
     <string name="reply">Reply</string>
     <string name="all_list">All</string>
     <string name="recently_added_list">Recently added</string>
@@ -789,32 +789,41 @@
     <string name="error_teacher_id">Teacher ID cannot be empty</string>
     <string name="error_diet">Please select your DIET code</string>
     <string name="empty_notifications">No notifications available at the moment</string>
+    <string name="empty_recommended_users_message">No recommended users available</string>
+    <string name="empty_course_message">Course not available</string>
+    <string name="empty_search_message">No content available for your search parameters</string>
+    <string name="empty_replies_message">Replies are not available on this comment</string>
+    <string name="comment_btn_label">Comment</string>
+    <string name="replying_to">Replying to {name}</string>
+    <string name="filter">Filter</string>
+    <string name="apply">Apply</string>
+    <string name="save">Save</string>
+    <string name="send">Send</string>
 
-    <string name="sign_out_message" translatable="false">Are you sure you want to Sign Out?</string>
+    <string name="sign_out_message">Are you sure you want to Sign Out?</string>
     <string name="be_the_first_to_comment" translatable="false">Be the first to comment</string>
-    <string name="be_the_first_to_reply" translatable="false">Be the first to reply</string>
     <string name="anonymous" translatable="false">Anonymous</string>
     <string name="privacy_policy_url" translatable="false">http://theteacherapp.org/privacy</string>
 
-    <string name="feed_format_content_like" translatable="false"><b>%s</b> recently liked %s</string>
-    <string name="feed_format_content_like_from" translatable="false"><b>%s from %s</b> recently liked %s</string>
-    <string name="feed_format_db_comment" translatable="false"><b>%s</b> commented on discussion</string>
-    <string name="feed_format_db_comment_from" translatable="false"><b>%s from %s</b> commented on discussion</string>
-    <string name="feed_format_comment_post" translatable="false"><b>%s</b> commented on %s</string>
-    <string name="feed_format_comment_post_from" translatable="false"><b>%s from %s</b> commented on %s</string>
-    <string name="feed_format_most_popular" translatable="false"><b>Most popular %s</b></string>
-    <string name="feed_format_most_popular_in" translatable="false"><b>Most popular %s in %s</b></string>
-    <string name="feed_format_share" translatable="false"><b>%s</b> shared %s</string>
-    <string name="feed_format_share_from" translatable="false"><b>%s from %s</b> shared %s</string>
+    <string name="feed_format_content_like"><b>%1$s</b> liked %2$s</string>
+    <string name="feed_format_content_like_from"><b>%1$s from %2$s</b> recently liked %3$s</string>
+    <string name="feed_format_db_comment"><b>%s</b> commented on discussion</string>
+    <string name="feed_format_db_comment_from"><b>%1$s from %2$s</b> commented on discussion</string>
+    <string name="feed_format_comment_post"><b>%1$s</b> commented on %2$s</string>
+    <string name="feed_format_comment_post_from"><b>%1$s from %2$s</b> commented on %3$s</string>
+    <string name="feed_format_most_popular"><b>Most popular %s</b></string>
+    <string name="feed_format_most_popular_in"><b>Most popular %1$s in %2$s</b></string>
+    <string name="feed_format_share"><b>%1$s</b> shared %2$s</string>
+    <string name="feed_format_share_from"><b>%1$s from %2$s</b> shared %3$s</string>
     <string name="feed_format_certificate"><b>%s</b> received <font fgcolor="#F75791">Certificate</font> in %s</string>
     <string name="feed_format_badge"><b>%s</b> recently received <font fgcolor="#F75791">%s badge</font></string>
     <string name="feed_format_new_post" translatable="false"><b>%s</b> posted <font fgcolor="#F75791">a new %s</font></string>
-    <string name="feed_format_advanced_like" translatable="false"><b>%s people</b> liked %s</string>
-    <string name="feed_format_advanced_like_from" translatable="false"><b>%s people from %s</b> liked %s</string>
-    <string name="feed_format_advanced_share" translatable="false"><b>%s people</b> shared %s</string>
-    <string name="feed_format_advanced_share_from" translatable="false"><b>%s people from %s</b> shared %s</string>
-    <string name="feed_format_advanced_comment" translatable="false"><b>%s people</b> commented on %s</string>
-    <string name="feed_format_advanced_comment_from" translatable="false"><b>%s people from %s</b> commented on %s</string>
+    <string name="feed_format_advanced_like"><b>%1$s people</b> liked %2$s</string>
+    <string name="feed_format_advanced_like_from"><b>%1$s people from %2$s</b> liked %3$s</string>
+    <string name="feed_format_advanced_share"><b>%1$s people</b> shared %2$s</string>
+    <string name="feed_format_advanced_share_from"><b>%1$s people from %2$s</b> shared %3$s</string>
+    <string name="feed_format_advanced_comment"><b>%1$s people</b> commented on %2$s</string>
+    <string name="feed_format_advanced_comment_from"><b>%1$s people from %2$s</b> commented on %3$s</string>
 
     <!-- WP Post Share menu title -->
     <string name="share_wp_post_popup_header" translatable="false">Share this post via&#8230;</string>
@@ -823,7 +832,6 @@
 
     <string name="no_connection_exception" translatable="false">No Internet Connection</string>
     <string name="asterisk_red" translatable="false"><font color='#f44336'>*</font></string>
-    <string name="comment_en" translatable="false">Comment</string>
 
     <!--Arjun integrated wordpress native code-->
     <!-- WP defaults -->

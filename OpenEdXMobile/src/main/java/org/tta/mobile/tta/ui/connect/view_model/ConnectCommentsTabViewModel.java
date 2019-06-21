@@ -2,6 +2,7 @@ package org.tta.mobile.tta.ui.connect.view_model;
 
 import android.content.Context;
 import android.databinding.ObservableBoolean;
+import android.databinding.ObservableInt;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,9 +21,10 @@ import org.tta.mobile.databinding.TRowCommentsBinding;
 import org.tta.mobile.databinding.TRowConnectReplyBinding;
 import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.event.CommentRepliesReceivedEvent;
+import org.tta.mobile.tta.event.ConnectCommentAddedEvent;
 import org.tta.mobile.tta.event.FetchCommentRepliesEvent;
 import org.tta.mobile.tta.event.LoadMoreConnectCommentsEvent;
-import org.tta.mobile.tta.event.RepliedOnCommentEvent;
+import org.tta.mobile.tta.event.ConnectCommentChangedEvent;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.interfaces.CommentClickListener;
@@ -30,9 +32,7 @@ import org.tta.mobile.tta.wordpress_client.model.Comment;
 import org.tta.mobile.tta.wordpress_client.model.Post;
 import org.tta.mobile.util.DateUtil;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +50,7 @@ public class ConnectCommentsTabViewModel extends BaseViewModel {
     private CommentClickListener commentClickListener;
 
     public ObservableBoolean emptyVisible = new ObservableBoolean();
+    public ObservableInt scrollPosition = new ObservableInt(0);
 
     private boolean allLoaded;
 
@@ -87,6 +88,7 @@ public class ConnectCommentsTabViewModel extends BaseViewModel {
 
                 case R.id.comment_reply_layout:
                     if (commentClickListener != null){
+                        scrollPosition.set(adapter.getItemPosition(item));
                         commentClickListener.onClickReply(item);
                     }
                     break;
@@ -156,7 +158,16 @@ public class ConnectCommentsTabViewModel extends BaseViewModel {
     }
 
     @SuppressWarnings("unused")
-    public void onEventMainThread(RepliedOnCommentEvent event){
+    public void onEventMainThread(ConnectCommentAddedEvent event){
+        for (int i = 0; i < adapter.expandedPositions.size(); i++){
+            adapter.expandedPositions.set(i, adapter.expandedPositions.get(i) + 1);
+        }
+        adapter.notifyItemInserted(0);
+        scrollPosition.set(0);
+    }
+
+    @SuppressWarnings("unused")
+    public void onEventMainThread(ConnectCommentChangedEvent event){
         adapter.notifyItemChanged(adapter.getItemPosition(event.getComment()));
     }
 
@@ -181,6 +192,7 @@ public class ConnectCommentsTabViewModel extends BaseViewModel {
         public void onBind(@NonNull ViewDataBinding binding, @NonNull Comment model, @Nullable OnRecyclerItemClickListener<Comment> listener) {
             if (binding instanceof TRowCommentsBinding){
                 TRowCommentsBinding commentsBinding = (TRowCommentsBinding) binding;
+                commentsBinding.setViewModel(model);
 
                 if (expandedPositions.contains(getItemPosition(model))){
                     commentsBinding.repliesFrame.setVisibility(View.VISIBLE);
@@ -206,15 +218,20 @@ public class ConnectCommentsTabViewModel extends BaseViewModel {
                 }
 
                 Glide.with(commentsBinding.userImage.getContext())
-                        .load(content.getIcon())
-                        .placeholder(R.drawable.placeholder_course_card_image)
+                        .load("")
+                        .placeholder(R.drawable.profile_photo_placeholder)
                         .into(commentsBinding.roundedUserImage);
 
                 commentsBinding.userName.setText(model.getAuthorName());
                 commentsBinding.date.setText(DateUtil.getDisplayTime(model.getDate()));
                 commentsBinding.comment.setText(Html.fromHtml(model.getContent().getRendered()));
-                commentsBinding.commentLikes.setText("80");
-                commentsBinding.commentReplies.setText("5");
+
+                commentsBinding.commentLikeImage.setImageResource(
+                        model.isLike() ? R.drawable.t_icon_like_filled : R.drawable.t_icon_like
+                );
+
+                commentsBinding.viewRepliesText.setVisibility(model.getReplies().equals("0") ?
+                        View.GONE : View.VISIBLE);
 
                 commentsBinding.commentLikeLayout.setOnClickListener(v -> {
                     if (listener != null){
@@ -276,9 +293,13 @@ public class ConnectCommentsTabViewModel extends BaseViewModel {
                 replyBinding.replyDate.setText(DateUtil.getDisplayTime(model.getDate()));
 
                 Glide.with(getContext())
-                        .load(content.getIcon())
-                        .placeholder(R.drawable.placeholder_course_card_image)
+                        .load("")
+                        .placeholder(R.drawable.profile_photo_placeholder)
                         .into(replyBinding.replyRoundedUserImage);
+
+                replyBinding.replyCommentLikeImage.setImageResource(
+                        model.isLike() ? R.drawable.t_icon_like_filled : R.drawable.t_icon_like
+                );
 
                 replyBinding.replyCommentLikeLayout.setOnClickListener(v -> {
                     if (listener != null){

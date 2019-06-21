@@ -124,6 +124,7 @@
                             android:background="@{viewModel.followBtnBackground}"
                             android:enabled="true"
                             android:onClick="@{()->viewModel.followUnfollow()}"
+                            android:visibility="@{viewModel.followBtnVisible?View.VISIBLE:View.GONE}"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -476,7 +477,7 @@
                         android:minWidth="78dp"
                         android:onClick="@{()->viewModel.comment()}"
                         android:padding="@dimen/_10px"
-                        android:text="@string/comment_en"
+                        android:text="@string/comment_btn_label"
                         android:textAllCaps="false"
                         android:textColor="@color/secondary_grey_light"
                         android:textSize="12sp" />

@@ -132,8 +132,12 @@ public class FormSpinner extends LinearLayout {
         }
     }
 
-    public boolean isMandatory() {
-        return isMandatory;
+    public void setVisibility(int visibility){
+        mBinding.getRoot().setVisibility(visibility);
+    }
+
+    public boolean isVisible(){
+        return mBinding.getRoot().isShown();
     }
 
     public boolean validate() {
