@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -42,6 +43,7 @@ import org.tta.mobile.tta.event.FetchCommentRepliesEvent;
 import org.tta.mobile.tta.event.LoadMoreConnectCommentsEvent;
 import org.tta.mobile.tta.event.ConnectCommentChangedEvent;
 import org.tta.mobile.tta.event.UserFollowingChangedEvent;
+import org.tta.mobile.tta.exception.TaException;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.BasePagerAdapter;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
@@ -51,6 +53,7 @@ import org.tta.mobile.tta.ui.interfaces.CommentClickListener;
 import org.tta.mobile.tta.ui.profile.OtherProfileActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
+import org.tta.mobile.tta.utils.ContentSourceUtil;
 import org.tta.mobile.tta.wordpress_client.model.Comment;
 import org.tta.mobile.tta.wordpress_client.model.CustomFilter;
 import org.tta.mobile.tta.wordpress_client.model.Post;
@@ -129,6 +132,8 @@ public class ConnectDashboardViewModel extends BaseViewModel
     public ObservableInt followTextColor = new ObservableInt();
 
     public ObservableInt initialPosition = new ObservableInt();
+    public ObservableBoolean emptyVisible = new ObservableBoolean();
+    public ObservableInt emptyImage = new ObservableInt(R.drawable.t_icon_course_130);
 
     private int take, page;
 
@@ -239,16 +244,13 @@ public class ConnectDashboardViewModel extends BaseViewModel
 
     public void fetchPost(OnResponseCallback<Post> callback) {
         if (content == null){
+            callback.onFailure(new TaException(mActivity.getString(R.string.empty_post_message)));
+            toggleEmptyVisibility();
             return;
         }
 
         loadData();
-        /*long postId = 0;
-        try {
-            postId = Long.parseLong(content.getSource_identity());
-        } catch (NumberFormatException e) {
-            return;
-        }*/
+
         mDataManager.getPostBySlug(content.getSource_identity(), new OnResponseCallback<Post>() {
             @Override
             public void onSuccess(Post data) {
@@ -291,11 +293,13 @@ public class ConnectDashboardViewModel extends BaseViewModel
                 callback.onSuccess(data);
                 getPostDownloadStatus();
                 fetchComments();
+                toggleEmptyVisibility();
             }
 
             @Override
             public void onFailure(Exception e) {
                 mActivity.hideLoading();
+                toggleEmptyVisibility();
                 callback.onFailure(e);
             }
         });
@@ -518,6 +522,16 @@ public class ConnectDashboardViewModel extends BaseViewModel
         }
     }
 
+    private void toggleEmptyVisibility(){
+        if (post == null){
+            emptyImage.set(ContentSourceUtil.getSourceDrawable_130x130(
+                    content == null ? "" : content.getSource().getName()));
+            emptyVisible.set(true);
+        } else {
+            emptyVisible.set(false);
+        }
+    }
+
     private void setTabs() {
         if (content == null){
             return;
@@ -648,6 +662,11 @@ public class ConnectDashboardViewModel extends BaseViewModel
         }
 
         if (allDownloadIconVisible.get()) {
+            if (!NetworkUtil.isConnected(mActivity)){
+                mActivity.showLongSnack(mActivity.getString(R.string.no_connection_exception));
+                return;
+            }
+
             mActivity.showLoading();
             mDataManager.downloadPost(post, content.getId(),
                     String.valueOf(content.getSource().getId()), content.getSource().getName(),

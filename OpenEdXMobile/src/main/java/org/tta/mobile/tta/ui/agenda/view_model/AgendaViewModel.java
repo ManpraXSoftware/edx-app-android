@@ -1,7 +1,6 @@
 package org.tta.mobile.tta.ui.agenda.view_model;
 
 import android.content.Context;
-import android.databinding.ObservableField;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,27 +22,26 @@ import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.ContentSourceUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AgendaViewModel extends BaseViewModel {
 
-    public List<Source> sources;
-
-    public ObservableField<String> regionListTitle = new ObservableField<>("Region");
+    private List<Source> sources;
 
     public AgendaListAdapter stateListAdapter, myListAdapter, downloadListAdapter;
 
-    public boolean regionListRecieved, myListRecieved, downloadListRecieved;
+    private boolean regionListReceived, myListReceived, downloadListReceived;
 
     public AgendaViewModel(Context context, TaBaseFragment fragment) {
         super(context, fragment);
-        stateListAdapter = new AgendaListAdapter(mActivity,mActivity.getString(R.string.state_wise_list));
-        myListAdapter = new AgendaListAdapter(mActivity,mActivity.getString(R.string.my_agenda));
-        downloadListAdapter = new AgendaListAdapter(mActivity,mActivity.getString(R.string.download));
+        stateListAdapter = new AgendaListAdapter(mActivity, mActivity.getString(R.string.state_wise_list));
+        myListAdapter = new AgendaListAdapter(mActivity, mActivity.getString(R.string.my_agenda));
+        downloadListAdapter = new AgendaListAdapter(mActivity, mActivity.getString(R.string.download));
 
     }
 
-    public void getAgenda(){
+    public void getAgenda() {
         mActivity.showLoading();
 
         mDataManager.getSources(new OnResponseCallback<List<Source>>() {
@@ -65,23 +63,24 @@ public class AgendaViewModel extends BaseViewModel {
     }
 
     private void getRegionAgenda() {
-        regionListRecieved = false;
+        regionListReceived = false;
         mDataManager.getStateAgendaCount(new OnResponseCallback<List<AgendaList>>() {
             @Override
             public void onSuccess(List<AgendaList> data) {
-                regionListRecieved = true;
+                regionListReceived = true;
                 hideLoader();
-                if (data != null && !data.isEmpty()){
+                if (data != null && !data.isEmpty()) {
 
                     AgendaList list = data.get(0);
                     stateListAdapter.setAgendaList(list);
-                    if (list == null || list.getResult() == null || list.getResult().isEmpty()){
+                    if (list == null || list.getResult() == null || list.getResult().isEmpty()) {
                         showEmptyAgendaList(stateListAdapter);
                     } else {
                         List<AgendaItem> items = list.getResult();
-                        if (items.size() != sources.size()){
+                        sortAgendaItems(items);
+                        if (items.size() != sources.size()) {
 
-                            for (Source source: sources){
+                            for (Source source : sources) {
                                 AgendaItem item = new AgendaItem();
                                 item.setSource_name(source.getName());
                                 if (!items.contains(item)) {
@@ -91,37 +90,6 @@ public class AgendaViewModel extends BaseViewModel {
                                 }
                             }
 
-                            /*AgendaItem item = new AgendaItem();
-                            item.setSource_name("course");
-                            if (!list.getResult().contains(item)){
-                                item.setSource_title("कोर्स");
-                                item.setContent_count(0);
-                                list.getResult().add(0, item);
-                            }
-
-                            item = new AgendaItem();
-                            item.setSource_name("chatshala");
-                            if (!list.getResult().contains(item)){
-                                item.setSource_title("Chatशाला");
-                                item.setContent_count(0);
-                                list.getResult().add(1, item);
-                            }
-
-                            item = new AgendaItem();
-                            item.setSource_name("toolkit");
-                            if (!list.getResult().contains(item)){
-                                item.setSource_title("शिक्षण सामग्री");
-                                item.setContent_count(0);
-                                list.getResult().add(2, item);
-                            }
-
-                            item = new AgendaItem();
-                            item.setSource_name("hois");
-                            if (!list.getResult().contains(item)){
-                                item.setSource_title("प्रेरणा स्त्रोत");
-                                item.setContent_count(0);
-                                list.getResult().add(3, item);
-                            }*/
                         }
                         stateListAdapter.setItems(list.getResult());
                     }
@@ -132,7 +100,7 @@ public class AgendaViewModel extends BaseViewModel {
 
             @Override
             public void onFailure(Exception e) {
-                regionListRecieved = true;
+                regionListReceived = true;
                 hideLoader();
                 showEmptyAgendaList(stateListAdapter);
             }
@@ -140,10 +108,10 @@ public class AgendaViewModel extends BaseViewModel {
 
     }
 
-    private void showEmptyAgendaList(AgendaListAdapter adapter){
+    private void showEmptyAgendaList(AgendaListAdapter adapter) {
         List<AgendaItem> items = new ArrayList<>();
 
-        for (Source source: sources){
+        for (Source source : sources) {
             AgendaItem item = new AgendaItem();
             item.setSource_title(source.getTitle());
             item.setSource_name(source.getName());
@@ -151,21 +119,27 @@ public class AgendaViewModel extends BaseViewModel {
             items.add(item);
         }
 
+        sortAgendaItems(items);
         adapter.setItems(items);
     }
 
+    private void sortAgendaItems(List<AgendaItem> items){
+        Collections.sort(items);
+    }
+
     private void getMyAgenda() {
-        myListRecieved = false;
+        myListReceived = false;
         mDataManager.getMyAgendaCount(new OnResponseCallback<AgendaList>() {
             @Override
             public void onSuccess(AgendaList data) {
-                myListRecieved = true;
+                myListReceived = true;
                 hideLoader();
-                if (data != null && data.getResult() != null && !data.getResult().isEmpty()){
+                if (data != null && data.getResult() != null && !data.getResult().isEmpty()) {
                     List<AgendaItem> items = data.getResult();
-                    if (items.size() != sources.size()){
+                    sortAgendaItems(items);
+                    if (items.size() != sources.size()) {
 
-                        for (Source source: sources){
+                        for (Source source : sources) {
                             AgendaItem item = new AgendaItem();
                             item.setSource_name(source.getName());
                             if (!items.contains(item)) {
@@ -175,37 +149,6 @@ public class AgendaViewModel extends BaseViewModel {
                             }
                         }
 
-                        /*AgendaItem item = new AgendaItem();
-                        item.setSource_name("course");
-                        if (!data.getResult().contains(item)){
-                            item.setSource_title("कोर्स");
-                            item.setContent_count(0);
-                            data.getResult().add(0, item);
-                        }
-
-                        item = new AgendaItem();
-                        item.setSource_name("chatshala");
-                        if (!data.getResult().contains(item)){
-                            item.setSource_title("Chatशाला");
-                            item.setContent_count(0);
-                            data.getResult().add(1, item);
-                        }
-
-                        item = new AgendaItem();
-                        item.setSource_name("toolkit");
-                        if (!data.getResult().contains(item)){
-                            item.setSource_title("शिक्षण सामग्री");
-                            item.setContent_count(0);
-                            data.getResult().add(2, item);
-                        }
-
-                        item = new AgendaItem();
-                        item.setSource_name("hois");
-                        if (!data.getResult().contains(item)){
-                            item.setSource_title("प्रेरणा स्त्रोत");
-                            item.setContent_count(0);
-                            data.getResult().add(3, item);
-                        }*/
                     }
                     myListAdapter.setItems(data.getResult());
                 } else {
@@ -215,7 +158,7 @@ public class AgendaViewModel extends BaseViewModel {
 
             @Override
             public void onFailure(Exception e) {
-                myListRecieved = true;
+                myListReceived = true;
                 hideLoader();
                 showEmptyAgendaList(myListAdapter);
             }
@@ -224,18 +167,19 @@ public class AgendaViewModel extends BaseViewModel {
 
     private void getDownloadAgenda() {
         mActivity.showLoading();
-        downloadListRecieved = false;
+        downloadListReceived = false;
 
         mDataManager.getDownloadAgendaCount(sources, new OnResponseCallback<AgendaList>() {
             @Override
             public void onSuccess(AgendaList data) {
-                downloadListRecieved = true;
+                downloadListReceived = true;
                 hideLoader();
-                if (data != null && data.getResult() != null && !data.getResult().isEmpty()){
+                if (data != null && data.getResult() != null && !data.getResult().isEmpty()) {
                     List<AgendaItem> items = data.getResult();
-                    if (items.size() != sources.size()){
+                    sortAgendaItems(items);
+                    if (items.size() != sources.size()) {
 
-                        for (Source source: sources){
+                        for (Source source : sources) {
                             AgendaItem item = new AgendaItem();
                             item.setSource_name(source.getName());
                             if (!items.contains(item)) {
@@ -245,37 +189,6 @@ public class AgendaViewModel extends BaseViewModel {
                             }
                         }
 
-                        /*AgendaItem item = new AgendaItem();
-                        item.setSource_name("course");
-                        if (!data.getResult().contains(item)){
-                            item.setSource_title("कोर्स");
-                            item.setContent_count(0);
-                            data.getResult().add(0, item);
-                        }
-
-                        item = new AgendaItem();
-                        item.setSource_name("chatshala");
-                        if (!data.getResult().contains(item)){
-                            item.setSource_title("Chatशाला");
-                            item.setContent_count(0);
-                            data.getResult().add(1, item);
-                        }
-
-                        item = new AgendaItem();
-                        item.setSource_name("toolkit");
-                        if (!data.getResult().contains(item)){
-                            item.setSource_title("शिक्षण सामग्री");
-                            item.setContent_count(0);
-                            data.getResult().add(2, item);
-                        }
-
-                        item = new AgendaItem();
-                        item.setSource_name("hois");
-                        if (!data.getResult().contains(item)){
-                            item.setSource_title("प्रेरणा स्त्रोत");
-                            item.setContent_count(0);
-                            data.getResult().add(3, item);
-                        }*/
                     }
                     downloadListAdapter.setItems(data.getResult());
                 } else {
@@ -285,15 +198,15 @@ public class AgendaViewModel extends BaseViewModel {
 
             @Override
             public void onFailure(Exception e) {
-                downloadListRecieved = true;
+                downloadListReceived = true;
                 hideLoader();
                 showEmptyAgendaList(downloadListAdapter);
             }
         });
     }
 
-    private void hideLoader(){
-        if (regionListRecieved && myListRecieved && downloadListRecieved){
+    private void hideLoader() {
+        if (regionListReceived && myListReceived && downloadListReceived) {
             mActivity.hideLoading();
         }
     }
@@ -303,14 +216,14 @@ public class AgendaViewModel extends BaseViewModel {
         private String agendaListName;
         private AgendaList agendaList;
 
-        public AgendaListAdapter(Context context, String string) {
+        AgendaListAdapter(Context context, String string) {
             super(context);
-            agendaListName =string;
+            agendaListName = string;
         }
 
         @Override
         public void onBind(@NonNull ViewDataBinding binding, @NonNull AgendaItem model, @Nullable OnRecyclerItemClickListener<AgendaItem> listener) {
-            if (binding instanceof TRowAgendaItemBinding){
+            if (binding instanceof TRowAgendaItemBinding) {
                 TRowAgendaItemBinding itemBinding = (TRowAgendaItemBinding) binding;
 
                 if (model.getContent_count() > 0) {
@@ -322,22 +235,20 @@ public class AgendaViewModel extends BaseViewModel {
                 itemBinding.agendaSource.setText(model.getSource_title());
                 itemBinding.agendaSource.setCompoundDrawablesRelativeWithIntrinsicBounds(
                         ContentSourceUtil.getSourceDrawable_15x15(model.getSource_name()),
-                        0,0,0
+                        0, 0, 0
                 );
-                itemBinding.agendaCard.setOnClickListener(v -> {
-                    ActivityUtil.replaceFragmentInActivity(
-                            mActivity.getSupportFragmentManager(),
-                            AgendaListFragment.newInstance(agendaListName, getItems(),model, agendaList),
-                            R.id.dashboard_fragment,
-                            AgendaListFragment.TAG,
-                            true,
-                            null
-                    );
-                });
+                itemBinding.agendaCard.setOnClickListener(v -> ActivityUtil.replaceFragmentInActivity(
+                        mActivity.getSupportFragmentManager(),
+                        AgendaListFragment.newInstance(agendaListName, getItems(), model, agendaList),
+                        R.id.dashboard_fragment,
+                        AgendaListFragment.TAG,
+                        true,
+                        null
+                ));
             }
         }
 
-        public void setAgendaList(AgendaList agendaList) {
+        void setAgendaList(AgendaList agendaList) {
             this.agendaList = agendaList;
         }
     }

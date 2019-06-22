@@ -2,7 +2,7 @@ package org.tta.mobile.tta.data.model.agenda;
 
 import androidx.annotation.Nullable;
 
-public class AgendaItem {
+public class AgendaItem implements Comparable<AgendaItem> {
 
     private long source_id;
 
@@ -57,5 +57,10 @@ public class AgendaItem {
     @Override
     public boolean equals(@Nullable Object obj) {
         return (obj instanceof AgendaItem) && source_name.equalsIgnoreCase(((AgendaItem) obj).source_name);
+    }
+
+    @Override
+    public int compareTo(AgendaItem o) {
+        return source_title.compareTo(o.source_title);
     }
 }

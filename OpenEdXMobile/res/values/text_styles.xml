@@ -84,14 +84,14 @@
     <style name="content_unavailable_error_text" parent="bold_text">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">@dimen/edx_margin</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:layout_centerInParent">true</item>
-        <item name="android:maxWidth">@dimen/fullscreen_message_max_width</item>
-        <item name="android:drawablePadding">@dimen/edx_margin</item>
+        <item name="android:layout_marginTop">@dimen/_42px</item>
+        <item name="android:layout_marginStart">@dimen/_70px</item>
+        <item name="android:layout_marginEnd">@dimen/_70px</item>
+        <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/edx_brand_gray_base</item>
-        <item name="android:textSize">@dimen/edx_small</item>
+        <item name="android:textColor">@color/primary_cyan</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/hind_regular</item>
         <item name="android:visibility">gone</item>
     </style>
 

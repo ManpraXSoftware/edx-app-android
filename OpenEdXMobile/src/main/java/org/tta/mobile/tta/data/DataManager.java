@@ -53,6 +53,7 @@ import org.tta.mobile.tta.data.local.db.LocalDataSource;
 import org.tta.mobile.tta.data.local.db.TADatabase;
 import org.tta.mobile.tta.data.local.db.operation.GetCourseContentsOperation;
 import org.tta.mobile.tta.data.local.db.operation.GetWPContentsOperation;
+import org.tta.mobile.tta.data.local.db.table.Bookmark;
 import org.tta.mobile.tta.data.local.db.table.Category;
 import org.tta.mobile.tta.data.local.db.table.Certificate;
 import org.tta.mobile.tta.data.local.db.table.Content;
@@ -61,6 +62,7 @@ import org.tta.mobile.tta.data.local.db.table.ContentStatus;
 import org.tta.mobile.tta.data.local.db.table.Feed;
 import org.tta.mobile.tta.data.local.db.table.Notification;
 import org.tta.mobile.tta.data.local.db.table.Source;
+import org.tta.mobile.tta.data.local.db.table.StateContent;
 import org.tta.mobile.tta.data.local.db.table.UnitStatus;
 import org.tta.mobile.tta.data.model.BaseResponse;
 import org.tta.mobile.tta.data.model.CountResponse;
@@ -541,23 +543,106 @@ public class DataManager extends BaseRoboInjector {
                 @Override
                 protected void onSuccess(List<AgendaList> agendaLists) throws Exception {
                     super.onSuccess(agendaLists);
+                    if (agendaLists != null && !agendaLists.isEmpty()){
+                        loginPrefs.setStateListId(agendaLists.get(0).getList_id());
+
+                        getSources(new OnResponseCallback<List<Source>>() {
+                            @Override
+                            public void onSuccess(List<Source> data) {
+                                for (Source source: data){
+                                    getStateAgendaContent(source.getId(), loginPrefs.getStateListId(), null);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+
+                            }
+                        });
+
+                    }
                     callback.onSuccess(agendaLists);
                 }
 
                 @Override
                 protected void onException(Exception ex) {
-                    callback.onFailure(ex);
+                    getStateAgendaCountFromLocal(callback, ex);
                 }
             }.execute();
         } else {
-            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+            getStateAgendaCountFromLocal(callback, new TaException(context.getString(R.string.no_connection_exception)));
         }
+
+    }
+
+    private void getStateAgendaCountFromLocal(OnResponseCallback<List<AgendaList>> callback, Exception e){
+
+        new Task<AgendaList>(context) {
+            @Override
+            public AgendaList call() {
+
+                List<Source> sources = mLocalDataSource.getSources();
+                if (sources == null){
+                    return null;
+                }
+
+                AgendaList agendaList = new AgendaList();
+                agendaList.setList_id(loginPrefs.getStateListId());
+                List<AgendaItem> items = new ArrayList<>();
+                for (Source source: sources){
+                    List<Content> contents = mLocalDataSource.getStateContents(source.getId());
+                    if (contents != null){
+                        AgendaItem item = new AgendaItem();
+                        item.setContent_count(contents.size());
+                        item.setSource_id(source.getId());
+                        item.setSource_name(source.getName());
+                        item.setSource_title(source.getTitle());
+                        items.add(item);
+                    }
+                }
+                agendaList.setResult(items);
+
+                return agendaList;
+
+            }
+
+            @Override
+            protected void onSuccess(AgendaList agendaList) throws Exception {
+                super.onSuccess(agendaList);
+
+                if (agendaList == null){
+                    callback.onFailure(e);
+                } else {
+                    callback.onSuccess(Collections.singletonList(agendaList));
+                }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
+            }
+        }.execute();
 
     }
 
     public void getMyAgendaCount(OnResponseCallback<AgendaList> callback) {
 
         if (NetworkUtil.isConnected(context)) {
+
+            getSources(new OnResponseCallback<List<Source>>() {
+                @Override
+                public void onSuccess(List<Source> data) {
+                    for (Source source: data){
+                        getMyAgendaContent(source.getId(), null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+
+                }
+            });
+
             new GetMyAgendaCountTask(context) {
                 @Override
                 protected void onSuccess(AgendaList agendaList) throws Exception {
@@ -567,12 +652,61 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
-                    callback.onFailure(ex);
+                    getMyAgendaCountFromLocal(callback, ex);
                 }
             }.execute();
         } else {
-            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+            getMyAgendaCountFromLocal(callback, new TaException(context.getString(R.string.no_connection_exception)));
         }
+
+    }
+
+    private void getMyAgendaCountFromLocal(OnResponseCallback<AgendaList> callback, Exception e){
+
+        new Task<AgendaList>(context) {
+            @Override
+            public AgendaList call() {
+
+                List<Source> sources = mLocalDataSource.getSources();
+                if (sources == null){
+                    return null;
+                }
+
+                AgendaList agendaList = new AgendaList();
+                List<AgendaItem> items = new ArrayList<>();
+                for (Source source: sources){
+                    List<Content> contents = mLocalDataSource.getBookmarkedContents(source.getId());
+                    if (contents != null){
+                        AgendaItem item = new AgendaItem();
+                        item.setContent_count(contents.size());
+                        item.setSource_id(source.getId());
+                        item.setSource_name(source.getName());
+                        item.setSource_title(source.getTitle());
+                        items.add(item);
+                    }
+                }
+                agendaList.setResult(items);
+
+                return agendaList;
+
+            }
+
+            @Override
+            protected void onSuccess(AgendaList agendaList) throws Exception {
+                super.onSuccess(agendaList);
+
+                if (agendaList == null){
+                    callback.onFailure(e);
+                } else {
+                    callback.onSuccess(agendaList);
+                }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
+            }
+        }.execute();
 
     }
 
@@ -908,20 +1042,66 @@ public class DataManager extends BaseRoboInjector {
                 protected void onSuccess(StatusResponse statusResponse) throws Exception {
                     super.onSuccess(statusResponse);
                     if (statusResponse == null) {
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                mLocalDataSource.deleteBookmark(new Bookmark(contentId));
+                            }
+                        }.start();
+
                         callback.onFailure(new TaException("No response for is content my agenda."));
                     } else {
+
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                if (statusResponse.getStatus()){
+                                    mLocalDataSource.insertBookmark(new Bookmark(contentId));
+                                } else {
+                                    mLocalDataSource.deleteBookmark(new Bookmark(contentId));
+                                }
+                            }
+                        }.start();
+
                         callback.onSuccess(statusResponse);
                     }
                 }
 
                 @Override
                 protected void onException(Exception ex) {
-                    callback.onFailure(ex);
+                    isLocalContentMyAgenda(contentId, callback);
                 }
             }.execute();
         } else {
-            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+            isLocalContentMyAgenda(contentId, callback);
         }
+    }
+
+    private void isLocalContentMyAgenda(long contentId, OnResponseCallback<StatusResponse> callback){
+
+        new Task<Bookmark>(context) {
+            @Override
+            public Bookmark call() {
+                return mLocalDataSource.getBookmark(contentId);
+            }
+
+            @Override
+            protected void onSuccess(Bookmark bookmark) throws Exception {
+                super.onSuccess(bookmark);
+
+                if (bookmark == null){
+                    callback.onSuccess(new StatusResponse(false));
+                } else {
+                    callback.onSuccess(new StatusResponse(true));
+                }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onSuccess(new StatusResponse(false));
+            }
+        }.execute();
+
     }
 
     public void setLike(long contentId, OnResponseCallback<StatusResponse> callback) {
@@ -977,8 +1157,20 @@ public class DataManager extends BaseRoboInjector {
                 protected void onSuccess(BookmarkResponse bookmarkResponse) throws Exception {
                     super.onSuccess(bookmarkResponse);
                     if (bookmarkResponse == null) {
-                        callback.onFailure(new TaException("Error occured. Couldn't add to My Agenda."));
+                        callback.onFailure(new TaException("Error occurred. Couldn't perform action"));
                     } else {
+
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                if (bookmarkResponse.isIs_active()){
+                                    mLocalDataSource.insertBookmark(new Bookmark(contentId));
+                                } else {
+                                    mLocalDataSource.deleteBookmark(new Bookmark(contentId));
+                                }
+                            }
+                        }.start();
+
                         callback.onSuccess(bookmarkResponse);
                     }
                 }
@@ -1130,22 +1322,74 @@ public class DataManager extends BaseRoboInjector {
                 @Override
                 protected void onSuccess(List<Content> response) throws Exception {
                     super.onSuccess(response);
-                    if (response != null && response.size() > 0) {
-                        callback.onSuccess(response);
+                    if (response != null && !response.isEmpty()) {
+
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                mLocalDataSource.insertContents(response);
+                                List<Bookmark> bookmarks = new ArrayList<>();
+                                for (Content content: response){
+                                    bookmarks.add(new Bookmark(content.getId()));
+                                }
+                                mLocalDataSource.insertBookmarks(bookmarks);
+                            }
+                        }.start();
+
+                        if (callback != null) {
+                            callback.onSuccess(response);
+                        }
                     } else {
-                        callback.onFailure(new TaException("No data found"));
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                mLocalDataSource.deleteAllBookmarks();
+                            }
+                        }.start();
                     }
 
                 }
 
                 @Override
                 protected void onException(Exception ex) {
-                    callback.onFailure(ex);
+                    if (callback != null) {
+                        getMyAgendaContentFromLocal(sourceId, callback, ex);
+                    }
                 }
             }.execute();
         } else {
-            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+            if (callback != null) {
+                getMyAgendaContentFromLocal(sourceId, callback,
+                        new TaException(context.getString(R.string.no_connection_exception)));
+            }
         }
+    }
+
+    private void getMyAgendaContentFromLocal(long sourceId, OnResponseCallback<List<Content>> callback, Exception e){
+
+        new Task<List<Content>>(context) {
+            @Override
+            public List<Content> call() {
+                return mLocalDataSource.getBookmarkedContents(sourceId);
+            }
+
+            @Override
+            protected void onSuccess(List<Content> contents) throws Exception {
+                super.onSuccess(contents);
+
+                if (contents != null && contents.size() > 0) {
+                    callback.onSuccess(contents);
+                } else {
+                    callback.onFailure(e);
+                }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
+            }
+        }.execute();
+
     }
 
     public void getStateAgendaContent(long sourceId, long list_id, OnResponseCallback<List<Content>> callback) {
@@ -1155,22 +1399,76 @@ public class DataManager extends BaseRoboInjector {
                 @Override
                 protected void onSuccess(List<Content> response) throws Exception {
                     super.onSuccess(response);
-                    if (response != null && response.size() > 0) {
-                        callback.onSuccess(response);
+                    if (response != null && !response.isEmpty()) {
+
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                mLocalDataSource.insertContents(response);
+                                List<StateContent> stateContents = new ArrayList<>();
+                                for (Content content: response){
+                                    stateContents.add(new StateContent(content.getId()));
+                                }
+                                mLocalDataSource.deleteAllStateContents();
+                                mLocalDataSource.insertStateContents(stateContents);
+                            }
+                        }.start();
+
+                        if (callback != null) {
+                            callback.onSuccess(response);
+                        }
+
                     } else {
-                        callback.onFailure(new TaException("No data found."));
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                mLocalDataSource.deleteAllStateContents();
+                            }
+                        }.start();
                     }
 
                 }
 
                 @Override
                 protected void onException(Exception ex) {
-                    callback.onFailure(ex);
+                    if (callback != null) {
+                        getStateAgendaContentFromLocal(sourceId, callback, ex);
+                    }
                 }
             }.execute();
         } else {
-            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+            if (callback != null) {
+                getStateAgendaContentFromLocal(sourceId, callback,
+                        new TaException(context.getString(R.string.no_connection_exception)));
+            }
         }
+    }
+
+    private void getStateAgendaContentFromLocal(long sourceId, OnResponseCallback<List<Content>> callback, Exception e){
+
+        new Task<List<Content>>(context) {
+            @Override
+            public List<Content> call() {
+                return mLocalDataSource.getStateContents(sourceId);
+            }
+
+            @Override
+            protected void onSuccess(List<Content> contents) throws Exception {
+                super.onSuccess(contents);
+
+                if (contents != null && contents.size() > 0) {
+                    callback.onSuccess(contents);
+                } else {
+                    callback.onFailure(e);
+                }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
+            }
+        }.execute();
+
     }
 
     public void getDownloadedContent(String sourceName, OnResponseCallback<List<Content>> callback) {
@@ -1506,21 +1804,7 @@ public class DataManager extends BaseRoboInjector {
                         new Thread() {
                             @Override
                             public void run() {
-                                try {
-                                    for (Content content : finalContents) {
-                                        if (content.getLists() == null) {
-                                            content.setLists(new ArrayList<>());
-                                        }
-
-                                        Content localContent = mLocalDataSource.getContentById(content.getId());
-                                        if (localContent != null && localContent.getLists() != null) {
-                                            content.getLists().addAll(localContent.getLists());
-                                        }
-                                        mLocalDataSource.insertContent(content);
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+                                mLocalDataSource.insertContents(finalContents);
                             }
                         }.start();
                     }
@@ -1988,10 +2272,7 @@ public class DataManager extends BaseRoboInjector {
                         new Thread() {
                             @Override
                             public void run() {
-                                Content localContent = mLocalDataSource.getContentById(content.getId());
-                                if (localContent == null) {
-                                    mLocalDataSource.insertContent(content);
-                                }
+                                mLocalDataSource.insertOrIgnoreContent(content);
                             }
                         }.start();
 
@@ -2707,10 +2988,7 @@ public class DataManager extends BaseRoboInjector {
                         new Thread() {
                             @Override
                             public void run() {
-                                Content localContent = mLocalDataSource.getContentById(content.getId());
-                                if (localContent == null) {
-                                    mLocalDataSource.insertContent(content);
-                                }
+                                mLocalDataSource.insertOrIgnoreContent(content);
                             }
                         }.start();
                         callback.onSuccess(content);

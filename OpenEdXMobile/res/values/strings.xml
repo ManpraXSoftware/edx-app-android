@@ -790,9 +790,12 @@
     <string name="error_diet">Please select your DIET code</string>
     <string name="empty_notifications">No notifications available at the moment</string>
     <string name="empty_recommended_users_message">No recommended users available</string>
-    <string name="empty_course_message">Course not available</string>
+    <string name="empty_course_message">Course is not available</string>
     <string name="empty_search_message">No content available for your search parameters</string>
     <string name="empty_replies_message">Replies are not available on this comment</string>
+    <string name="empty_comments_message">Comments are not available on this thread</string>
+    <string name="empty_post_message">Post is not available</string>
+    <string name="empty_discussion_message">Discussion not available</string>
     <string name="comment_btn_label">Comment</string>
     <string name="replying_to">Replying to {name}</string>
     <string name="filter">Filter</string>

@@ -565,4 +565,12 @@ public class LoginPrefs {
     public boolean isLoggedIn(){
         return getUsername() != null && !getUsername().equals("");
     }
+
+    public void setStateListId(long listId){
+        pref.put(PrefManager.Key.STATE_LIST_ID, listId);
+    }
+
+    public long getStateListId(){
+        return pref.getLong(PrefManager.Key.STATE_LIST_ID);
+    }
 }

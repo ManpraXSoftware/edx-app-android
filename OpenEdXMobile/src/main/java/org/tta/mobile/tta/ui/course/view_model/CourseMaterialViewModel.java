@@ -66,6 +66,7 @@ import org.tta.mobile.tta.ui.course.CourseScormViewActivity;
 import org.tta.mobile.tta.ui.interfaces.OnTaItemClickListener;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.JsonUtil;
+import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.PermissionsUtil;
 
 import java.io.File;
@@ -683,6 +684,11 @@ public class CourseMaterialViewModel extends BaseViewModel {
             return;
         }
 
+        if (!NetworkUtil.isConnected(mActivity)){
+            mActivity.showLongSnack(mActivity.getString(R.string.no_connection_exception));
+            return;
+        }
+
         mActivity.showLoading();
         downloadModeIsAll = false;
         mDataManager.downloadSingle(selectedScormForDownload, content.getId(), mActivity, new VideoDownloadHelper.DownloadManagerCallback() {
@@ -764,6 +770,11 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
     private void downloadMany(){
         if (content == null){
+            return;
+        }
+
+        if (!NetworkUtil.isConnected(mActivity)){
+            mActivity.showLongSnack(mActivity.getString(R.string.no_connection_exception));
             return;
         }
 

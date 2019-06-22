@@ -336,6 +336,9 @@ public class PrefManager {
         public static final String WP_PROFILE_JSON = "wp_profile_json";
 
         public static final String FIREBASE_TOKEN = "firebase_token";
+
+        //Mx Chirag: To store state agenda list id
+        public static final String STATE_LIST_ID = "state_list_id";
     }
 
     public static final class Value {

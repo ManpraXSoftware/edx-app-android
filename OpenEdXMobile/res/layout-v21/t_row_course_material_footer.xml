@@ -113,7 +113,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/item_delete_download"
                             android:padding="6dp"
-                            android:background="?android:attr/selectableItemBackground"
+                            android:background="?android:attr/selectableItemBackgroundBorderless"
                             android:src="@{viewModel.footerDownloadIcon}"
                             android:visibility="@{viewModel.footerDownloadIconVisible ? View.VISIBLE : View.GONE}" />
 

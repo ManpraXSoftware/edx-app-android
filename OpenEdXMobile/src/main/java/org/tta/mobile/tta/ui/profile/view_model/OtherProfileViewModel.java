@@ -5,6 +5,7 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 
 import org.tta.mobile.R;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.analytics.analytics_enums.Page;
@@ -49,9 +50,12 @@ public class OtherProfileViewModel extends BaseViewModel {
 
     private boolean accountReceived, filtersReceived;
     private String tagLabel;
+    private String delimiterTagChunks, delimiterSectionTag;
 
     public OtherProfileViewModel(BaseVMActivity activity, String username) {
         super(activity);
+        delimiterTagChunks = Constants.DELIMITER_TAG_CHUNKS;
+        delimiterSectionTag = Constants.DELIMITER_SECTION_TAG;
 
         this.username = username;
         toggleFollowBtn();
@@ -182,11 +186,11 @@ public class OtherProfileViewModel extends BaseViewModel {
         }
 
         String[] section_tag_list;
-        section_tag_list = tagLabel.split(" ");
+        section_tag_list = tagLabel.split(delimiterTagChunks);
 
         Map<String, List<String>> sectionTagsMap = new HashMap<>();
         for (String section_tag : section_tag_list) {
-            String[] duet = section_tag.split("_");
+            String[] duet = section_tag.split(delimiterSectionTag);
             if (!sectionTagsMap.containsKey(duet[0])) {
                 sectionTagsMap.put(duet[0], new ArrayList<>());
             }

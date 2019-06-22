@@ -1,5 +1,6 @@
 package org.tta.mobile.tta.data.local.db;
 
+import org.tta.mobile.tta.data.local.db.table.Bookmark;
 import org.tta.mobile.tta.data.local.db.table.Category;
 import org.tta.mobile.tta.data.local.db.table.Certificate;
 import org.tta.mobile.tta.data.local.db.table.Content;
@@ -8,6 +9,7 @@ import org.tta.mobile.tta.data.local.db.table.ContentStatus;
 import org.tta.mobile.tta.data.local.db.table.Feed;
 import org.tta.mobile.tta.data.local.db.table.Notification;
 import org.tta.mobile.tta.data.local.db.table.Source;
+import org.tta.mobile.tta.data.local.db.table.StateContent;
 import org.tta.mobile.tta.data.local.db.table.UnitStatus;
 import org.tta.mobile.tta.data.local.db.table.User;
 import org.tta.mobile.tta.data.model.library.CollectionConfigResponse;
@@ -133,6 +135,11 @@ public class LocalDataSource implements ILocalDataSource {
     }
 
     @Override
+    public void insertOrIgnoreContent(Content content) {
+        mAppDatabase.contentDao().insertOrIgnore(content);
+    }
+
+    @Override
     public Content getContentBySourceIdentity(String sourceIdentity) {
         return mAppDatabase.contentDao().getBySourceIdentity(sourceIdentity);
     }
@@ -255,5 +262,50 @@ public class LocalDataSource implements ILocalDataSource {
     @Override
     public void insertAccount(Account account) {
         mAppDatabase.accountDao().insert(account);
+    }
+
+    @Override
+    public List<Content> getBookmarkedContents(long sourceId) {
+        return mAppDatabase.bookmarkDao().getAllContents(sourceId);
+    }
+
+    @Override
+    public Bookmark getBookmark(long contentId) {
+        return mAppDatabase.bookmarkDao().getByContentId(contentId);
+    }
+
+    @Override
+    public void insertBookmark(Bookmark bookmark) {
+        mAppDatabase.bookmarkDao().insert(bookmark);
+    }
+
+    @Override
+    public void insertBookmarks(List<Bookmark> bookmarks) {
+        mAppDatabase.bookmarkDao().insert(bookmarks);
+    }
+
+    @Override
+    public void deleteBookmark(Bookmark bookmark) {
+        mAppDatabase.bookmarkDao().delete(bookmark);
+    }
+
+    @Override
+    public void deleteAllBookmarks() {
+        mAppDatabase.bookmarkDao().deleteAll();
+    }
+
+    @Override
+    public List<Content> getStateContents(long sourceId) {
+        return mAppDatabase.stateContentDao().getAllContents(sourceId);
+    }
+
+    @Override
+    public void insertStateContents(List<StateContent> stateContents) {
+        mAppDatabase.stateContentDao().insert(stateContents);
+    }
+
+    @Override
+    public void deleteAllStateContents() {
+        mAppDatabase.stateContentDao().deleteAll();
     }
 }

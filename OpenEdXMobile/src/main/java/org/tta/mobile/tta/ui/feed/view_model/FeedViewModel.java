@@ -75,6 +75,7 @@ public class FeedViewModel extends BaseViewModel {
     List<SuggestedUser> users;
     private int take, skip;
     private boolean allLoaded;
+    private String delimiterTagChunks, delimiterSectionTag;
 
     public MxInfiniteAdapter.OnLoadMoreListener loadMoreListener = page -> {
         if (allLoaded)
@@ -103,6 +104,8 @@ public class FeedViewModel extends BaseViewModel {
         take = DEFAULT_TAKE;
         skip = DEFAULT_SKIP;
         allLoaded = false;
+        delimiterTagChunks = Constants.DELIMITER_TAG_CHUNKS;
+        delimiterSectionTag = Constants.DELIMITER_SECTION_TAG;
 
         feedAdapter = new FeedAdapter(context);
         suggestedUsersAdapter = new SuggestedUsersAdapter(mActivity);
@@ -582,11 +585,11 @@ public class FeedViewModel extends BaseViewModel {
             return builder.append("N/A").toString();
         }
 
-        String[] section_tag_list = tagLabel.split(" ");
+        String[] section_tag_list = tagLabel.split(delimiterTagChunks);
         boolean classesAdded = false;
 
         for (String section_tag : section_tag_list) {
-            String[] duet = section_tag.split("_");
+            String[] duet = section_tag.split(delimiterSectionTag);
             if (duet[0].contains("कक्षा")){
                 builder.append(duet[1]).append(", ");
                 classesAdded = true;

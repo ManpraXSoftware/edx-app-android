@@ -165,7 +165,7 @@ public class DiscussionThread implements Serializable, IAuthorData, ProfileImage
      */
     public void incrementResponseCount() {
         responseCount++;
-        incrementCommentCount();
+//        incrementCommentCount();
     }
 
     public boolean isHasEndorsed() {

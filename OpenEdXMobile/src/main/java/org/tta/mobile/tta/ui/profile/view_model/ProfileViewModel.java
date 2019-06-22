@@ -6,6 +6,7 @@ import android.databinding.ObservableInt;
 
 import org.tta.mobile.R;
 import org.tta.mobile.model.api.ProfileModel;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.local.db.table.Certificate;
 import org.tta.mobile.tta.data.model.search.FilterSection;
 import org.tta.mobile.tta.data.model.search.SearchFilter;
@@ -42,9 +43,12 @@ public class ProfileViewModel extends BaseViewModel {
 
     private boolean accountReceived, filtersReceived;
     private String tagLabel;
+    private String delimiterTagChunks, delimiterSectionTag;
 
     public ProfileViewModel(Context context, TaBaseFragment fragment) {
         super(context, fragment);
+        delimiterTagChunks = Constants.DELIMITER_TAG_CHUNKS;
+        delimiterSectionTag = Constants.DELIMITER_SECTION_TAG;
 //        adapter = new BadgeListAdapter(context);
         fetchAccount();
         fetchFilters();
@@ -234,11 +238,11 @@ public class ProfileViewModel extends BaseViewModel {
             return;
         }
 
-        section_tag_list = tagLabel.split(" ");
+        section_tag_list = tagLabel.split(delimiterTagChunks);
 
         Map<String, List<String>> sectionTagsMap = new HashMap<>();
         for (String section_tag : section_tag_list) {
-            String[] duet = section_tag.split("_");
+            String[] duet = section_tag.split(delimiterSectionTag);
             if (!sectionTagsMap.containsKey(duet[0])) {
                 sectionTagsMap.put(duet[0], new ArrayList<>());
             }
