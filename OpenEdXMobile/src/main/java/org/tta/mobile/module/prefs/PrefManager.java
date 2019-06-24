@@ -306,6 +306,10 @@ public class PrefManager {
         public static final String FIRST_LAUNCH = "first_launch";
         public static final String FIRST_LOGIN = "first_login";
         public static final String CURRENT_BREADCRUMB = "current_breadcrumb";
+        public static final String ISCOURSEVISITED = "course_visited";
+        public static final String IS_PROFILE_VISITED = "profile_visited";
+        public static final String IS_AGENDA_VISITED = "agenda_visited";
+        public static final String IS_FEED_VISITED = "feed_visited";
 
         //mx:Arjun cookies and its entry time
         public static final String USER_CONNECT_LOGIN_COOKIE = "UserConnectLoginCookie";

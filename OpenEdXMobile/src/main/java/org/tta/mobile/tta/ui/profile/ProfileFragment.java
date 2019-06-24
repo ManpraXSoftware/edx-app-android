@@ -56,8 +56,6 @@ public class ProfileFragment extends TaBaseFragment {
 
         optionsBtn = view.findViewById(R.id.profile_options_btn);
 
-        ToolTipView.showToolTip(getActivity(), "विकल्प मेनू ", optionsBtn, Gravity.START);
-
 
         optionsBtn.setOnClickListener(v -> {
             if (!bottomSheetOpened){
@@ -145,6 +143,7 @@ public class ProfileFragment extends TaBaseFragment {
         });
         return view;
     }
+
 
     @Override
     public void onResume() {

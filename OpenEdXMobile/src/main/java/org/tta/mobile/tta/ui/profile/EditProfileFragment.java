@@ -111,8 +111,6 @@ public class EditProfileFragment extends TaBaseFragment {
         userImage = view.findViewById(R.id.user_image);
         userInfoLayout = view.findViewById(R.id.user_info_fields_layout);
 
-        ToolTipView.showToolTip(getActivity(), "प्रोफाइल इमेज यहाँ है", userImage, Gravity.END);
-
 
         if (profileModel != null && profileModel.getTagLabel() != null){
             tagLabel = profileModel.getTagLabel().trim();

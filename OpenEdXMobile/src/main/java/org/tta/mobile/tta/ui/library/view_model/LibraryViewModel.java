@@ -1,10 +1,12 @@
 package org.tta.mobile.tta.ui.library.view_model;
 
 import android.content.Context;
+import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 
 import org.tta.mobile.tta.data.local.db.table.Category;
 import org.tta.mobile.tta.data.model.library.CollectionConfigResponse;
@@ -31,6 +33,7 @@ public class LibraryViewModel extends BaseViewModel {
     private SearchPageOpenedListener searchPageOpenedListener;
 
     public ObservableInt initialPosition = new ObservableInt();
+
 
     public ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override

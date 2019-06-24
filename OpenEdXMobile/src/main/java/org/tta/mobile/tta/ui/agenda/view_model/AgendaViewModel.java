@@ -32,9 +32,9 @@ public class AgendaViewModel extends BaseViewModel {
     public List<Source> sources;
 
     public ObservableField<String> regionListTitle = new ObservableField<>("Region");
-    public ObservableField<String> regionToolTip = new ObservableField<>("आपके राजय ने आपके लिए ये सामग्री चुनी है");
-    public ObservableField<String> personalToolTip = new ObservableField<>("आपके द्वारा चुनी गयी सामग्री यहाँ है");
-    public ObservableField<String> downloadToolTip = new ObservableField<>("आपके द्वारा डाउनलोड की गयी सामग्री यहाँ है ");
+    public ObservableField<String> regionToolTip;
+    public ObservableField<String> personalToolTip;
+    public ObservableField<String> downloadToolTip;
     public ObservableInt toolTipGravity = new ObservableInt(Gravity.BOTTOM);
     public ObservableInt personalToolTipGravity = new ObservableInt(Gravity.TOP);
 
@@ -50,8 +50,18 @@ public class AgendaViewModel extends BaseViewModel {
 
     }
 
+    private void setToolTip(){
+        if (!mDataManager.getAppPref().isAgendaVisited()){
+            regionToolTip = new ObservableField<>("आपके राजय ने आपके लिए ये सामग्री चुनी है");
+            personalToolTip = new ObservableField<>("आपके द्वारा चुनी गयी सामग्री यहाँ है");
+            downloadToolTip = new ObservableField<>("आपके द्वारा डाउनलोड की गयी सामग्री यहाँ है ");
+            mDataManager.getAppPref().setAgendaVisited(true);
+        }
+    }
+
     public void getAgenda(){
         mActivity.showLoading();
+        setToolTip();
 
         mDataManager.getSources(new OnResponseCallback<List<Source>>() {
             @Override

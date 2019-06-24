@@ -26,6 +26,31 @@ public class AppPref {
         return prefManager.getBoolean(PrefManager.Key.FIRST_LAUNCH, true);
     }
 
+    public boolean isCourseVisited(){
+        return prefManager.getBoolean(PrefManager.Key.ISCOURSEVISITED, false);
+    }
+    public void setCourseVisited(boolean courseVisited){
+        prefManager.put(PrefManager.Key.ISCOURSEVISITED, courseVisited);
+    }
+    public boolean isProfileVisited(){
+        return prefManager.getBoolean(PrefManager.Key.IS_PROFILE_VISITED, false);
+    }
+    public void setProfileVisited(boolean profileVisited){
+        prefManager.put(PrefManager.Key.IS_PROFILE_VISITED, profileVisited);
+    }
+    public boolean isAgendaVisited(){
+        return prefManager.getBoolean(PrefManager.Key.IS_AGENDA_VISITED, false);
+    }
+    public void setAgendaVisited(boolean agendaVisited){
+        prefManager.put(PrefManager.Key.IS_AGENDA_VISITED, agendaVisited);
+    }
+ public boolean isFeedVisited(){
+        return prefManager.getBoolean(PrefManager.Key.IS_FEED_VISITED, false);
+    }
+    public void setFeedVisited(boolean feedVisited){
+        prefManager.put(PrefManager.Key.IS_FEED_VISITED, feedVisited);
+    }
+
     public boolean isFirstLogin(){
         return prefManager.getBoolean(PrefManager.Key.FIRST_LOGIN, true);
     }

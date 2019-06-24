@@ -2,6 +2,8 @@ package org.tta.mobile.tta.ui.landing.view_model;
 
 import android.content.Context;
 import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.support.design.widget.BottomNavigationView;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -43,6 +45,8 @@ public class LandingViewModel extends BaseViewModel {
     private List<ContentStatus> statuses;
     BottomNavigationView bottomNavigationView = mActivity.findViewById(R.id.dashboard_bottom_nav);
 
+    public ObservableField<String> libraryToolTip;
+    public ObservableInt toolTipGravity;
 
     public BottomNavigationView.OnNavigationItemSelectedListener itemSelectedListener = item -> {
         menuItem = item;
@@ -53,31 +57,40 @@ public class LandingViewModel extends BaseViewModel {
             case R.id.action_library:
                 showLibrary();
                 selectedId = R.id.action_library;
-                ToolTipView.showToolTip(getActivity(), "यहाँ सभी सामग्री पाए",mActivity.findViewById(R.id.action_library),Gravity.TOP);
+//                ToolTipView.showToolTip(getActivity(), "यहाँ सभी सामग्री पाए",mActivity.findViewById(R.id.action_library),Gravity.TOP);
                 return true;
             case R.id.action_feed:
                 selectedId = R.id.action_feed;
                 showFeed();
-                ToolTipView.showToolTip(getActivity(), "अन्य शिक्षको के साथ जुड़े",mActivity.findViewById(R.id.action_feed),Gravity.TOP);
+                if (mDataManager.getAppPref().isFirstLaunch()) {
+                    ToolTipView.showToolTip(getActivity(), "अन्य शिक्षको के साथ जुड़े", mActivity.findViewById(R.id.action_feed), Gravity.TOP);
+                }
                 return true;
             case R.id.action_search:
                 selectedId = R.id.action_search;
-                ToolTipView.showToolTip(getActivity(), "यहाँ अपनी रूचि के अनुसार सामग्री खोजे",mActivity.findViewById(R.id.action_search),Gravity.TOP);
+                if (mDataManager.getAppPref().isFirstLaunch()) {
+                    ToolTipView.showToolTip(getActivity(), "यहाँ अपनी रूचि के अनुसार सामग्री खोजे",mActivity.findViewById(R.id.action_search),Gravity.TOP);
+                }
                 showSearch();
                 return true;
             case R.id.action_agenda:
                 selectedId = R.id.action_agenda;
-                ToolTipView.showToolTip(getActivity(), "यहाँ अपना लक्ष्य जाने और बनाए",mActivity.findViewById(R.id.action_agenda),Gravity.TOP);
+                if (mDataManager.getAppPref().isFirstLaunch()) {
+                    ToolTipView.showToolTip(getActivity(), "यहाँ अपना लक्ष्य जाने और बनाए",mActivity.findViewById(R.id.action_agenda),Gravity.TOP);
+                }
                 showAgenda();
                 return true;
             case R.id.action_profile:
                 selectedId = R.id.action_profile;
-                ToolTipView.showToolTip(getActivity(), "रूपरेखा",mActivity.findViewById(R.id.action_profile),Gravity.TOP);
+                if (mDataManager.getAppPref().isFirstLaunch()) {
+                    ToolTipView.showToolTip(getActivity(), "रूपरेखा",mActivity.findViewById(R.id.action_profile),Gravity.TOP);
+                }
                 showProfile();
                 return true;
             default:
                 selectedId = R.id.action_library;
-                ToolTipView.showToolTip(getActivity(), "यहाँ सभी सामग्री पाए",mActivity.findViewById(R.id.action_library),Gravity.TOP);
+
+//                ToolTipView.showToolTip(getActivity(), "यहाँ सभी सामग्री पाए",mActivity.findViewById(R.id.action_library),Gravity.TOP);
                 showLibrary();
                 return true;
         }
@@ -158,6 +171,10 @@ public class LandingViewModel extends BaseViewModel {
     }
 
     private void onAppStart(){
+        if (mDataManager.getAppPref().isFirstLaunch()){
+            libraryToolTip = new ObservableField<>("यहाँ सभी सामग्री पाए");
+            toolTipGravity = new ObservableInt(Gravity.TOP);
+        }
         mDataManager.getMyContentStatuses(new OnResponseCallback<List<ContentStatus>>() {
             @Override
             public void onSuccess(List<ContentStatus> data) {

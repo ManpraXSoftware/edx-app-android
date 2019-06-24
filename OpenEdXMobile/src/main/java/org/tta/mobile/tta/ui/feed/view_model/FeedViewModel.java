@@ -1,8 +1,9 @@
 package org.tta.mobile.tta.ui.feed.view_model;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,8 +12,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 
 import com.bumptech.glide.Glide;
 import com.maurya.mx.mxlib.core.MxFiniteAdapter;
@@ -23,7 +24,6 @@ import org.tta.mobile.R;
 import org.tta.mobile.databinding.TRowFeedBinding;
 import org.tta.mobile.databinding.TRowFeedWithUserBinding;
 import org.tta.mobile.databinding.TRowSuggestedTeacherBinding;
-import org.tta.mobile.discussion.DiscussionThread;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
@@ -71,6 +71,8 @@ public class FeedViewModel extends BaseViewModel {
     public ObservableBoolean featureListVisible = new ObservableBoolean();
     public ObservableBoolean emptyVisible = new ObservableBoolean();
     public ObservableBoolean tooltipVisible = new ObservableBoolean();
+    public ObservableField<String> feedToolTip;
+    public ObservableInt toolTipGravity;
 
     private List<Feed> feeds;
     List<SuggestedUser> users;
@@ -98,7 +100,7 @@ public class FeedViewModel extends BaseViewModel {
 
     public FeedViewModel(Context context, TaBaseFragment fragment) {
         super(context, fragment);
-
+        setToolTip();
         feeds = new ArrayList<>();
         users = new ArrayList<>();
         take = DEFAULT_TAKE;
@@ -349,10 +351,11 @@ public class FeedViewModel extends BaseViewModel {
             }
         });
 
+
     }
-    public void showTooLTip() {
-        tooltipVisible.set(true);
-    }
+//    public void showTooLTip() {
+//        tooltipVisible.set(true);
+//    }
 
     private void getSuggestedUsers() {
 
@@ -424,6 +427,13 @@ public class FeedViewModel extends BaseViewModel {
                 true,
                 null
         );
+    }
+    private void setToolTip(){
+        if (!mDataManager.getAppPref().isFeedVisited()){
+            feedToolTip = new ObservableField<>("अन्य शिक्षको से जुड़ने के लिए फॉलो बटन दबाये");
+            toolTipGravity = new ObservableInt(Gravity.BOTTOM);
+//            mDataManager.getAppPref().setFeedVisited(true);
+        }
     }
 
     private void openShareMenu(Feed feed){
@@ -923,5 +933,7 @@ public class FeedViewModel extends BaseViewModel {
                 }
             }
         }
+
+
     }
 }

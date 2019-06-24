@@ -107,11 +107,11 @@ public class CourseMaterialViewModel extends BaseViewModel {
     public ObservableBoolean allDownloadProgressVisible = new ObservableBoolean(false);
     public ObservableField<String> description = new ObservableField<>("");
     public ObservableField<String> likes = new ObservableField<>("0");
-    public ObservableField<String> likeToolTip = new ObservableField<>("सामग्री को अपने लक्ष्य से \nजोड़ने के लिए बटन को दबाए");
-    public ObservableField<String> downloadToolTip = new ObservableField<>("सामग्री डाउनलोड करने \nके लिए बटन दबाए ");
-    public ObservableField<String> understandToolTip = new ObservableField<>("सभी भाग देखने पर और 60% या उससे \nअधिक पाने पर आपको सर्टिफिकेट मिलेगा ");
-    public ObservableInt toolTipGravity = new ObservableInt(Gravity.BOTTOM);
-    public ObservableInt understandToolTipGravity = new ObservableInt(Gravity.TOP);
+    public ObservableField<String> likeToolTip;
+    public ObservableField<String> downloadToolTip;
+    public ObservableField<String> understandToolTip;
+    public ObservableInt toolTipGravity;
+    public ObservableInt understandToolTipGravity;
 
     //Footer details
     public ObservableField<String> footerImageUrl = new ObservableField<>();
@@ -130,6 +130,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
     private boolean firstDownload;
     private boolean somethingIsDownloading;
 
+
+
     public CourseMaterialViewModel(Context context, TaBaseFragment fragment, Content content, EnrolledCoursesResponse course, CourseComponent rootComponent) {
         super(context, fragment);
         this.content = content;
@@ -139,6 +141,19 @@ public class CourseMaterialViewModel extends BaseViewModel {
         firstDownload = true;
         unitStatusMap = new HashMap<>();
         loadData();
+        setToolTip();
+    }
+
+    private void setToolTip(){
+        if (!mDataManager.getAppPref().isCourseVisited()){
+            likeToolTip = new ObservableField<>("सामग्री को अपने लक्ष्य से \nजोड़ने के लिए बटन को दबाए");
+            downloadToolTip = new ObservableField<>("सामग्री डाउनलोड करने \nके लिए बटन दबाए ");
+            understandToolTip = new ObservableField<>("सभी भाग देखने पर और 60% या उससे \nअधिक पाने पर आपको सर्टिफिकेट मिलेगा ");
+            toolTipGravity = new ObservableInt(Gravity.BOTTOM);
+            understandToolTipGravity = new ObservableInt(Gravity.TOP);
+            mDataManager.getAppPref().setCourseVisited(true);
+        }
+
     }
 
     public void loadData(){

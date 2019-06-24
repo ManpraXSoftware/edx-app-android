@@ -86,7 +86,7 @@ public class FeedFragment extends TaBaseFragment {
         });
         viewModel.registerEventBus();
 
-        viewModel.showTooLTip();
+//        viewModel.showTooLTip();
     }
 
     @Nullable
