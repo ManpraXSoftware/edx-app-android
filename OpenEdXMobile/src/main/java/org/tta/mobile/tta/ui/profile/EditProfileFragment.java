@@ -170,14 +170,18 @@ public class EditProfileFragment extends TaBaseFragment {
             @Override
             public void onSuccess(List<RegistrationOption> data) {
                 List<RegistrationOption> selectedOptions = null;
-                if (tagLabel != null && tagLabel.length() > 0){
-                    selectedOptions = new ArrayList<>();
-                    for (String chunk: tagLabel.split(delimiterTagChunks)){
-                        String[] duet = chunk.split(delimiterSectionTag);
-                        if (duet[0].equals(viewModel.classesSectionName)){
-                            selectedOptions.add(new RegistrationOption(duet[1], duet[1]));
+                try {
+                    if (tagLabel != null && tagLabel.length() > 0){
+                        selectedOptions = new ArrayList<>();
+                        for (String chunk: tagLabel.split(delimiterTagChunks)){
+                            String[] duet = chunk.split(delimiterSectionTag);
+                            if (duet[0].equals(viewModel.classesSectionName)){
+                                selectedOptions.add(new RegistrationOption(duet[1], duet[1]));
+                            }
                         }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 classTaughtSpinner.setItems(data, selectedOptions);
             }
@@ -190,14 +194,18 @@ public class EditProfileFragment extends TaBaseFragment {
             @Override
             public void onSuccess(List<RegistrationOption> data) {
                 List<RegistrationOption> selectedOptions = null;
-                if (tagLabel != null && tagLabel.length() > 0){
-                    selectedOptions = new ArrayList<>();
-                    for (String chunk: tagLabel.split(delimiterTagChunks)){
-                        String[] duet = chunk.split(delimiterSectionTag);
-                        if (duet[0].equals(viewModel.skillSectionName)){
-                            selectedOptions.add(new RegistrationOption(duet[1], duet[1]));
+                try {
+                    if (tagLabel != null && tagLabel.length() > 0){
+                        selectedOptions = new ArrayList<>();
+                        for (String chunk: tagLabel.split(delimiterTagChunks)){
+                            String[] duet = chunk.split(delimiterSectionTag);
+                            if (duet[0].equals(viewModel.skillSectionName)){
+                                selectedOptions.add(new RegistrationOption(duet[1], duet[1]));
+                            }
                         }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 skillsSpinner.setItems(data, selectedOptions);
             }
