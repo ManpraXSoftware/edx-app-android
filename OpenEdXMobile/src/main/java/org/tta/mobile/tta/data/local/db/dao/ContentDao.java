@@ -24,6 +24,9 @@ public interface ContentDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Content content);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insertOrIgnore(Content content);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(List<Content> contents);
 }

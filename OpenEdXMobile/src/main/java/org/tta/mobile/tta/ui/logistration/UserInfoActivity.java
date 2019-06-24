@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import org.tta.mobile.R;
 import org.tta.mobile.module.registration.model.RegistrationOption;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.model.authentication.FieldInfo;
 import org.tta.mobile.tta.data.model.authentication.Profession;
 import org.tta.mobile.tta.data.model.authentication.StateCustomAttribute;
@@ -46,11 +47,14 @@ public class UserInfoActivity extends BaseVMActivity {
 
     private FieldInfo fieldInfo;
     private String pmisError;
+    private String delimiterTagChunks, delimiterSectionTag;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewModel = new UserInfoViewModel(this);
+        delimiterTagChunks = Constants.DELIMITER_TAG_CHUNKS;
+        delimiterSectionTag = Constants.DELIMITER_SECTION_TAG;
         binding(R.layout.t_activity_user_info, mViewModel);
         userInfoLayout = findViewById(R.id.user_info_fields_layout);
         toolbar = findViewById(R.id.toolbar);
@@ -190,18 +194,25 @@ public class UserInfoActivity extends BaseVMActivity {
             StringBuilder builder = new StringBuilder();
             if (classTaughtSpinner.getSelectedOptions() != null) {
                 for (RegistrationOption option: classTaughtSpinner.getSelectedOptions()){
-                    builder.append(mViewModel.classesSectionName).append("_").append(option.getName()).append(" ");
+                    builder.append(mViewModel.classesSectionName)
+                            .append(delimiterSectionTag)
+                            .append(option.getName())
+                            .append(delimiterTagChunks);
                 }
             }
             if (skillsSpinner.getSelectedOptions() != null) {
                 for (RegistrationOption option: skillsSpinner.getSelectedOptions()){
-                    builder.append(mViewModel.skillSectionName).append("_").append(option.getName()).append(" ");
+                    builder.append(mViewModel.skillSectionName)
+                            .append(delimiterSectionTag)
+                            .append(option.getName())
+                            .append(delimiterTagChunks);
                 }
             }
+            String label = "";
             if (builder.length() > 0){
-                builder.deleteCharAt(builder.length() - 1);
+                label = builder.substring(0, builder.length() - delimiterTagChunks.length());
             }
-            parameters.putString("tag_label", builder.toString());
+            parameters.putString("tag_label", label);
 
             if (etPmis.isVisible()) {
                 parameters.putString("pmis_code", etPmis.getText());

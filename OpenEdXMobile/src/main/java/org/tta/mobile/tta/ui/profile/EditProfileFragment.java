@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import org.tta.mobile.R;
 import org.tta.mobile.model.api.ProfileModel;
 import org.tta.mobile.module.registration.model.RegistrationOption;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.data.model.authentication.FieldInfo;
 import org.tta.mobile.tta.data.model.authentication.Profession;
@@ -83,6 +84,7 @@ public class EditProfileFragment extends TaBaseFragment {
     private String tagLabel;
     private FieldInfo fieldInfo;
     private String pmisError;
+    private String delimiterTagChunks, delimiterSectionTag;
 
     public static EditProfileFragment newInstance(ProfileModel profileModel, ProfileImage profileImage,
                                                   Account account, SearchFilter searchFilter){
@@ -100,6 +102,9 @@ public class EditProfileFragment extends TaBaseFragment {
         super.onCreate(savedInstanceState);
         viewModel =  new EditProfileViewModel(getActivity(),this,
                 profileModel, profileImage, account, searchFilter);
+
+        delimiterTagChunks = Constants.DELIMITER_TAG_CHUNKS;
+        delimiterSectionTag = Constants.DELIMITER_SECTION_TAG;
     }
 
     @Nullable
@@ -172,8 +177,8 @@ public class EditProfileFragment extends TaBaseFragment {
                 List<RegistrationOption> selectedOptions = null;
                 if (tagLabel != null && tagLabel.length() > 0){
                     selectedOptions = new ArrayList<>();
-                    for (String chunk: tagLabel.split(" ")){
-                        String[] duet = chunk.split("_");
+                    for (String chunk: tagLabel.split(delimiterTagChunks)){
+                        String[] duet = chunk.split(delimiterSectionTag);
                         if (duet[0].equals(viewModel.classesSectionName)){
                             selectedOptions.add(new RegistrationOption(duet[1], duet[1]));
                         }
@@ -192,8 +197,8 @@ public class EditProfileFragment extends TaBaseFragment {
                 List<RegistrationOption> selectedOptions = null;
                 if (tagLabel != null && tagLabel.length() > 0){
                     selectedOptions = new ArrayList<>();
-                    for (String chunk: tagLabel.split(" ")){
-                        String[] duet = chunk.split("_");
+                    for (String chunk: tagLabel.split(delimiterTagChunks)){
+                        String[] duet = chunk.split(delimiterSectionTag);
                         if (duet[0].equals(viewModel.skillSectionName)){
                             selectedOptions.add(new RegistrationOption(duet[1], duet[1]));
                         }
@@ -280,18 +285,25 @@ public class EditProfileFragment extends TaBaseFragment {
             StringBuilder builder = new StringBuilder();
             if (classTaughtSpinner.getSelectedOptions() != null) {
                 for (RegistrationOption option: classTaughtSpinner.getSelectedOptions()){
-                    builder.append(viewModel.classesSectionName).append("_").append(option.getName()).append(" ");
+                    builder.append(viewModel.classesSectionName)
+                            .append(delimiterSectionTag)
+                            .append(option.getName())
+                            .append(delimiterTagChunks);
                 }
             }
             if (skillsSpinner.getSelectedOptions() != null) {
                 for (RegistrationOption option: skillsSpinner.getSelectedOptions()){
-                    builder.append(viewModel.skillSectionName).append("_").append(option.getName()).append(" ");
+                    builder.append(viewModel.skillSectionName)
+                            .append(delimiterSectionTag)
+                            .append(option.getName())
+                            .append(delimiterTagChunks);
                 }
             }
+            String label = "";
             if (builder.length() > 0){
-                builder.deleteCharAt(builder.length() - 1);
+                label = builder.substring(0, builder.length() - delimiterTagChunks.length());
             }
-            parameters.putString("tag_label", builder.toString());
+            parameters.putString("tag_label", label);
 
             if (etPmis.isVisible()) {
                 parameters.putString("pmis_code", etPmis.getText());

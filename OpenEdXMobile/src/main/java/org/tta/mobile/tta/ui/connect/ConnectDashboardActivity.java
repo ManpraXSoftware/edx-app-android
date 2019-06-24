@@ -164,6 +164,9 @@ public class ConnectDashboardActivity extends BaseVMActivity {
             @Override
             public void onFailure(Exception e) {
                 hideLoading();
+                toolbar.post(() -> {
+                    toolbar.getMenu().findItem(R.id.action_share).setVisible(false);
+                });
                 showLongSnack(e.getLocalizedMessage());
             }
         });

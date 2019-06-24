@@ -230,8 +230,9 @@ public class ConnectCommentsTabViewModel extends BaseViewModel {
                         model.isLike() ? R.drawable.t_icon_like_filled : R.drawable.t_icon_like
                 );
 
-                commentsBinding.viewRepliesText.setVisibility(model.getReplies().equals("0") ?
-                        View.GONE : View.VISIBLE);
+                commentsBinding.viewRepliesText.setVisibility(
+                        model.getReplies() == null || model.getReplies().equals("0") || model.getReplies().equals("") ?
+                                View.GONE : View.VISIBLE);
 
                 commentsBinding.commentLikeLayout.setOnClickListener(v -> {
                     if (listener != null){

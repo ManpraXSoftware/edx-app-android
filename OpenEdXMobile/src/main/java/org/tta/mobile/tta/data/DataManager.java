@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.webkit.WebView;
 import android.widget.Toast;
 
@@ -26,8 +25,8 @@ import org.tta.mobile.discussion.DiscussionComment;
 import org.tta.mobile.discussion.DiscussionThread;
 import org.tta.mobile.discussion.DiscussionTopic;
 import org.tta.mobile.discussion.DiscussionTopicDepth;
-import org.tta.mobile.model.Page;
 import org.tta.mobile.http.callback.Callback;
+import org.tta.mobile.model.Page;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.model.api.ProfileModel;
 import org.tta.mobile.model.course.CourseComponent;
@@ -45,7 +44,6 @@ import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.Analytic;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.data.enums.CertificateStatus;
-import org.tta.mobile.tta.data.enums.FeedAction;
 import org.tta.mobile.tta.data.enums.ScormStatus;
 import org.tta.mobile.tta.data.enums.SourceName;
 import org.tta.mobile.tta.data.enums.SourceType;
@@ -55,6 +53,7 @@ import org.tta.mobile.tta.data.local.db.LocalDataSource;
 import org.tta.mobile.tta.data.local.db.TADatabase;
 import org.tta.mobile.tta.data.local.db.operation.GetCourseContentsOperation;
 import org.tta.mobile.tta.data.local.db.operation.GetWPContentsOperation;
+import org.tta.mobile.tta.data.local.db.table.Bookmark;
 import org.tta.mobile.tta.data.local.db.table.Category;
 import org.tta.mobile.tta.data.local.db.table.Certificate;
 import org.tta.mobile.tta.data.local.db.table.Content;
@@ -63,11 +62,11 @@ import org.tta.mobile.tta.data.local.db.table.ContentStatus;
 import org.tta.mobile.tta.data.local.db.table.Feed;
 import org.tta.mobile.tta.data.local.db.table.Notification;
 import org.tta.mobile.tta.data.local.db.table.Source;
+import org.tta.mobile.tta.data.local.db.table.StateContent;
 import org.tta.mobile.tta.data.local.db.table.UnitStatus;
 import org.tta.mobile.tta.data.model.BaseResponse;
 import org.tta.mobile.tta.data.model.CountResponse;
 import org.tta.mobile.tta.data.model.EmptyResponse;
-import org.tta.mobile.tta.data.model.HtmlResponse;
 import org.tta.mobile.tta.data.model.StatusResponse;
 import org.tta.mobile.tta.data.model.agenda.AgendaItem;
 import org.tta.mobile.tta.data.model.agenda.AgendaList;
@@ -76,7 +75,6 @@ import org.tta.mobile.tta.data.model.content.BookmarkResponse;
 import org.tta.mobile.tta.data.model.content.CertificateStatusResponse;
 import org.tta.mobile.tta.data.model.content.MyCertificatesResponse;
 import org.tta.mobile.tta.data.model.content.TotalLikeResponse;
-import org.tta.mobile.tta.data.model.feed.FeedMetadata;
 import org.tta.mobile.tta.data.model.feed.SuggestedUser;
 import org.tta.mobile.tta.data.model.library.CollectionConfigResponse;
 import org.tta.mobile.tta.data.model.library.CollectionItemsResponse;
@@ -94,7 +92,6 @@ import org.tta.mobile.tta.data.remote.RetrofitServiceUtil;
 import org.tta.mobile.tta.data.remote.api.MxCookiesAPI;
 import org.tta.mobile.tta.data.remote.api.MxSurveyAPI;
 import org.tta.mobile.tta.exception.TaException;
-import org.tta.mobile.tta.firebase.FirebaseHelper;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.receiver.DeleteFeedsReceiver;
 import org.tta.mobile.tta.scorm.ScormBlockModel;
@@ -124,7 +121,6 @@ import org.tta.mobile.tta.task.content.course.certificate.GetCertificateStatusTa
 import org.tta.mobile.tta.task.content.course.certificate.GetCertificateTask;
 import org.tta.mobile.tta.task.content.course.certificate.GetMyCertificatesTask;
 import org.tta.mobile.tta.task.content.course.discussion.CreateDiscussionCommentTask;
-import org.tta.mobile.tta.task.content.course.discussion.CreateDiscussionThreadTask;
 import org.tta.mobile.tta.task.content.course.discussion.GetCommentRepliesTask;
 import org.tta.mobile.tta.task.content.course.discussion.GetDiscussionThreadTask;
 import org.tta.mobile.tta.task.content.course.discussion.GetDiscussionThreadsTask;
@@ -152,8 +148,8 @@ import org.tta.mobile.tta.task.profile.SubmitFeedbackTask;
 import org.tta.mobile.tta.task.profile.UpdateMyProfileTask;
 import org.tta.mobile.tta.task.search.GetSearchFilterTask;
 import org.tta.mobile.tta.task.search.SearchTask;
-import org.tta.mobile.tta.utils.AlarmManagerUtil;
 import org.tta.mobile.tta.ui.otp.AppSignatureHelper;
+import org.tta.mobile.tta.utils.AlarmManagerUtil;
 import org.tta.mobile.tta.utils.FirebaseUtil;
 import org.tta.mobile.tta.utils.RxUtil;
 import org.tta.mobile.tta.utils.UrlUtil;
@@ -185,7 +181,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import okhttp3.HttpUrl;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -240,7 +235,7 @@ public class DataManager extends BaseRoboInjector {
 
         db_commands = new DB_Commands(context);
 
-        analytic =new Analytic(context);
+        analytic = new Analytic(context);
     }
 
     public static DataManager getInstance(Context context) {
@@ -257,7 +252,7 @@ public class DataManager extends BaseRoboInjector {
         return mDataManager;
     }
 
-    public void refreshLocalDatabase(){
+    public void refreshLocalDatabase() {
         mLocalDataSource = new LocalDataSource(
                 Room.databaseBuilder(context, TADatabase.class, TA_DATABASE)
                         .fallbackToDestructiveMigration().build());
@@ -353,95 +348,6 @@ public class DataManager extends BaseRoboInjector {
 
     public void getCollectionConfig(OnResponseCallback<CollectionConfigResponse> callback) {
 
-        //Mocking start
-        /*List<Category> categories = new ArrayList<>();
-        List<ContentList> contentLists = new ArrayList<>();
-        List<Source> sources = new ArrayList<>();
-        for (int i = 0; i < 5; i++){
-            Category category = new Category();
-            category.setId(i);
-            switch (i){
-                case 0:
-                    category.setName(context.getString(R.string.all));
-                    break;
-                case 1:
-                    category.setName(context.getString(R.string.course));
-                    break;
-                case 2:
-                    category.setName(context.getString(R.string.chatshala));
-                    break;
-                case 3:
-                    category.setName(context.getString(R.string.hois));
-                    break;
-                case 4:
-                    category.setName(context.getString(R.string.toolkit));
-                    break;
-            }
-            category.setOrder(i);
-            category.setSource_id(i-1);
-            categories.add(category);
-
-            if (i == 0){
-                ContentList contentList = new ContentList();
-                contentList.setId(i);
-                contentList.setCategory_id(i);
-                contentList.setFormat_type(ContentListType.feature.toString());
-                contentList.setOrder(i);
-                contentList.setName("Featured");
-                contentLists.add(contentList);
-            }
-
-            for (int j = 1; j < 5; j++) {
-                ContentList contentList = new ContentList();
-                contentList.setId(j);
-                contentList.setCategory_id(i);
-                contentList.setFormat_type(ContentListType.normal.toString());
-                contentList.setOrder(j);
-                switch (j){
-                    case 1:
-                        contentList.setName("Must See");
-                        break;
-                    case 2:
-                        contentList.setName("Continue Watching");
-                        break;
-                    case 3:
-                        contentList.setName("Recently Added");
-                        break;
-                    case 4:
-                        contentList.setName("Favourites");
-                        break;
-                }
-                contentLists.add(contentList);
-            }
-
-            if (i < 4){
-                Source source = new Source();
-                source.setId(i);
-                switch (i){
-                    case 0:
-                        source.setName(context.getString(R.string.course));
-                        break;
-                    case 1:
-                        source.setName(context.getString(R.string.chatshala));
-                        break;
-                    case 2:
-                        source.setName(context.getString(R.string.hois));
-                        break;
-                    case 3:
-                        source.setName(context.getString(R.string.toolkit));
-                        break;
-                }
-                sources.add(source);
-            }
-        }
-        CollectionConfigResponse response = new CollectionConfigResponse();
-        response.setCategory(categories);
-        response.setContent_list(contentLists);
-        response.setSource_id(sources);
-        callback.onSuccess(response);*/
-        //Mocking end
-
-        //Actual code   **Do not delete**
         if (NetworkUtil.isConnected(context)) {
             new GetCollectionConfigTask(context) {
                 @Override
@@ -470,16 +376,17 @@ public class DataManager extends BaseRoboInjector {
     }
 
     private void getCollectionConfigFromLocal(OnResponseCallback<CollectionConfigResponse> callback, Exception ex) {
-        new AsyncTask<Void, Void, CollectionConfigResponse>() {
 
+        new Task<CollectionConfigResponse>(context) {
             @Override
-            protected CollectionConfigResponse doInBackground(Void... voids) {
+            public CollectionConfigResponse call() {
                 return mLocalDataSource.getConfiguration();
             }
 
             @Override
-            protected void onPostExecute(CollectionConfigResponse collectionConfigResponse) {
-                super.onPostExecute(collectionConfigResponse);
+            protected void onSuccess(CollectionConfigResponse collectionConfigResponse) throws Exception {
+                super.onSuccess(collectionConfigResponse);
+
                 if (collectionConfigResponse == null ||
                         collectionConfigResponse.getCategory() == null ||
                         collectionConfigResponse.getCategory().isEmpty()) {
@@ -488,18 +395,13 @@ public class DataManager extends BaseRoboInjector {
                     callback.onSuccess(collectionConfigResponse);
                 }
             }
-        }.execute();
-        /*new Thread(){
+
             @Override
-            public void run() {
-                CollectionConfigResponse response = mLocalDataSource.getConfiguration();
-                if (response == null || response.getCategory() == null || response.getCategory().isEmpty()) {
-                    callback.onFailure(ex);
-                } else {
-                    callback.onSuccess(response);
-                }
+            protected void onException(Exception ex) {
+                callback.onFailure(ex);
             }
-        }.start();*/
+        }.execute();
+
     }
 
     public void getConfigModifiedDate(OnResponseCallback<ConfigModifiedDateResponse> callback) {
@@ -524,49 +426,6 @@ public class DataManager extends BaseRoboInjector {
 
     public void getCollectionItems(Long[] listIds, int skip, int take, OnResponseCallback<List<CollectionItemsResponse>> callback) {
 
-        //Mocking start
-        /*List<Content> contents = new ArrayList<>();
-        List<Long> lists1 = new ArrayList<>();
-        List<Long> lists2 = new ArrayList<>();
-        lists1.add(0L);
-        lists1.add(2L);
-        lists1.add(3L);
-        lists2.add(1L);
-        lists2.add(3L);
-        lists2.add(4L);
-        for (int i = 0; i < 50; i++){
-            Content content = new Content();
-            content.setId(i);
-            switch (i%4){
-                case 0:
-                    content.setName("संख्या की शुरूआती समझ");
-                    break;
-                case 1:
-                    content.setName("भिन्न - एक परिचय");
-                    break;
-                case 2:
-                    content.setName("बीजगणित की सोच बनाना");
-                    break;
-                case 3:
-                    content.setName("स्थानीय मान की समझ");
-                    break;
-            }
-            if (i%10 == 0){
-                content.setLists(lists1);
-                content.setIcon("http://theteacherapp.org/asset-v1:Mathematics+M01+201706_Mat_01+type@asset+block@Math_sample2.png");
-            } else {
-                content.setLists(lists2);
-                content.setIcon("http://theteacherapp.org/asset-v1:Language+01+201706_Lan_01+type@asset+block@Emergent_Literacy_ICON_93_kb.png");
-            }
-            content.setSource_id(i%4);
-            contents.add(content);
-        }
-        CollectionItemsResponse contentResponse = new CollectionItemsResponse();
-        contentResponse.setContent(contents);
-        callback.onSuccess(contentResponse);*/
-        //Mocking end
-
-        //Actual code   **Do not delete**
         if (NetworkUtil.isConnected(context)) {
             Bundle parameters = new Bundle();
             long[] listIds_long = new long[listIds.length];
@@ -586,19 +445,19 @@ public class DataManager extends BaseRoboInjector {
                             @Override
                             public void run() {
 
-                                for (CollectionItemsResponse itemsResponse: collectionItemsList){
-                                    if (itemsResponse.getContent() != null){
-                                        for (Content content: itemsResponse.getContent()){
-                                            if (content.getLists() == null){
+                                for (CollectionItemsResponse itemsResponse : collectionItemsList) {
+                                    if (itemsResponse.getContent() != null) {
+                                        for (Content content : itemsResponse.getContent()) {
+                                            if (content.getLists() == null) {
                                                 content.setLists(new ArrayList<>());
                                             }
 
                                             Content localContent = mLocalDataSource.getContentById(content.getId());
-                                            if (localContent != null && localContent.getLists() != null){
+                                            if (localContent != null && localContent.getLists() != null) {
                                                 content.getLists().addAll(localContent.getLists());
                                             }
 
-                                            if (!content.getLists().contains(itemsResponse.getId())){
+                                            if (!content.getLists().contains(itemsResponse.getId())) {
                                                 content.getLists().add(itemsResponse.getId());
                                             }
 
@@ -624,10 +483,11 @@ public class DataManager extends BaseRoboInjector {
     }
 
     private void getCollectionItemsFromLocal(Long[] listIds, OnResponseCallback<List<CollectionItemsResponse>> callback, Exception ex) {
-        new AsyncTask<Void, Void, List<CollectionItemsResponse>>() {
 
+        new Task<List<CollectionItemsResponse>>(context) {
             @Override
-            protected List<CollectionItemsResponse> doInBackground(Void... voids) {
+            public List<CollectionItemsResponse> call() {
+
                 List<Content> contents = mLocalDataSource.getContents();
                 List<CollectionItemsResponse> responses = new ArrayList<>();
                 if (contents != null) {
@@ -654,154 +514,135 @@ public class DataManager extends BaseRoboInjector {
                     }
                 }
                 return responses;
+
             }
 
             @Override
-            protected void onPostExecute(List<CollectionItemsResponse> responses) {
-                super.onPostExecute(responses);
+            protected void onSuccess(List<CollectionItemsResponse> collectionItemsResponses) throws Exception {
+                super.onSuccess(collectionItemsResponses);
 
-                if (responses == null || responses.isEmpty()) {
+                if (collectionItemsResponses == null || collectionItemsResponses.isEmpty()) {
                     callback.onFailure(ex);
                 } else {
-                    callback.onSuccess(responses);
+                    callback.onSuccess(collectionItemsResponses);
                 }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(ex);
             }
         }.execute();
 
-        /*new Thread(){
-            @Override
-            public void run() {
-                List<Content> contents = mLocalDataSource.getContents();
-                List<CollectionItemsResponse> responses = new ArrayList<>();
-                if (contents != null){
-                    List<Long> requiredListIds = Arrays.asList(listIds);
-                    List<Long> recordedListIds = new ArrayList<>();
-                    for (Content content: contents){
-                        for (long listId: content.getLists()){
-                            if (requiredListIds.contains(listId)){
-                                if (recordedListIds.contains(listId)){
-                                    for (CollectionItemsResponse response: responses){
-                                        if (response.getId() == listId){
-                                            response.getContent().add(content);
-                                            break;
-                                        }
-                                    }
-                                } else {
-                                    recordedListIds.add(listId);
-                                    CollectionItemsResponse response = new CollectionItemsResponse();
-                                    response.setId(listId);
-                                    List<Content> temp = new ArrayList<>();
-                                    temp.add(content);
-                                    response.setContent(temp);
-                                    responses.add(response);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (responses.isEmpty()){
-                    callback.onFailure(ex);
-                } else {
-                    callback.onSuccess(responses);
-                }
-            }
-        }.start();*/
     }
 
     public void getStateAgendaCount(OnResponseCallback<List<AgendaList>> callback) {
 
-        //Mocking start
-        /*AgendaList agendaList1 = new AgendaList();
-        AgendaList agendaList2 = new AgendaList();
-        AgendaList agendaList3 = new AgendaList();
-        agendaList1.setLevel("State");
-        agendaList2.setLevel("District");
-        agendaList3.setLevel("Block");
-        List<AgendaItem> items = new ArrayList<>();
-        for (int i = 0; i < 4; i++){
-            AgendaItem item = new AgendaItem();
-            item.setContent_count(10 - i);
-            item.setSource_id(i);
-            switch (i){
-                case 0:
-                    item.setSource_name("Course");
-                    break;
-                case 1:
-                    item.setSource_name("Chatshala");
-                    break;
-                case 2:
-                    item.setSource_name("HOIS");
-                    break;
-                default:
-                    item.setSource_name("Toolkit");
-                    break;
-            }
-            items.add(item);
-        }
-        agendaList1.setResult(items);
-        agendaList2.setResult(items);
-        agendaList3.setResult(items);
-
-        List<AgendaList> agendaLists = new ArrayList<>();
-        agendaLists.add(agendaList1);
-        agendaLists.add(agendaList2);
-        agendaLists.add(agendaList3);
-        callback.onSuccess(agendaLists);*/
-        //Mocking end
-
-        //Actual code   **Do not delete**
         if (NetworkUtil.isConnected(context)) {
             new GetStateAgendaCountTask(context) {
                 @Override
                 protected void onSuccess(List<AgendaList> agendaLists) throws Exception {
                     super.onSuccess(agendaLists);
+                    if (agendaLists != null && !agendaLists.isEmpty()){
+                        loginPrefs.setStateListId(agendaLists.get(0).getList_id());
+
+                        getSources(new OnResponseCallback<List<Source>>() {
+                            @Override
+                            public void onSuccess(List<Source> data) {
+                                for (Source source: data){
+                                    getStateAgendaContent(source.getId(), loginPrefs.getStateListId(), null);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+
+                            }
+                        });
+
+                    }
                     callback.onSuccess(agendaLists);
                 }
 
                 @Override
                 protected void onException(Exception ex) {
-                    callback.onFailure(ex);
+                    getStateAgendaCountFromLocal(callback, ex);
                 }
             }.execute();
         } else {
-            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+            getStateAgendaCountFromLocal(callback, new TaException(context.getString(R.string.no_connection_exception)));
         }
+
+    }
+
+    private void getStateAgendaCountFromLocal(OnResponseCallback<List<AgendaList>> callback, Exception e){
+
+        new Task<AgendaList>(context) {
+            @Override
+            public AgendaList call() {
+
+                List<Source> sources = mLocalDataSource.getSources();
+                if (sources == null){
+                    return null;
+                }
+
+                AgendaList agendaList = new AgendaList();
+                agendaList.setList_id(loginPrefs.getStateListId());
+                List<AgendaItem> items = new ArrayList<>();
+                for (Source source: sources){
+                    List<Content> contents = mLocalDataSource.getStateContents(source.getId());
+                    if (contents != null){
+                        AgendaItem item = new AgendaItem();
+                        item.setContent_count(contents.size());
+                        item.setSource_id(source.getId());
+                        item.setSource_name(source.getName());
+                        item.setSource_title(source.getTitle());
+                        items.add(item);
+                    }
+                }
+                agendaList.setResult(items);
+
+                return agendaList;
+
+            }
+
+            @Override
+            protected void onSuccess(AgendaList agendaList) throws Exception {
+                super.onSuccess(agendaList);
+
+                if (agendaList == null){
+                    callback.onFailure(e);
+                } else {
+                    callback.onSuccess(Collections.singletonList(agendaList));
+                }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
+            }
+        }.execute();
 
     }
 
     public void getMyAgendaCount(OnResponseCallback<AgendaList> callback) {
 
-        //Mocking start
-        /*AgendaList agendaList = new AgendaList();
-        agendaList.setLevel("My");
-        List<AgendaItem> items = new ArrayList<>();
-        for (int i = 0; i < 3; i++){
-            AgendaItem item = new AgendaItem();
-            item.setContent_count(10 - i);
-            item.setSource_id(i);
-            switch (i){
-                case 0:
-                    item.setSource_title("कोर्स");
-                    item.setSource_name("course");
-                    break;
-                case 1:
-                    item.setSource_title("शिक्षण सामग्री");
-                    item.setSource_name("toolkit");
-                    break;
-                default:
-                    item.setSource_title("प्रेरणा स्त्रोत");
-                    item.setSource_name("hois");
-                    break;
-            }
-            items.add(item);
-        }
-        agendaList.setResult(items);
-        callback.onSuccess(agendaList);*/
-        //Mocking end
-
-        //Actual code   **Do not delete**
         if (NetworkUtil.isConnected(context)) {
+
+            getSources(new OnResponseCallback<List<Source>>() {
+                @Override
+                public void onSuccess(List<Source> data) {
+                    for (Source source: data){
+                        getMyAgendaContent(source.getId(), null);
+                    }
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+
+                }
+            });
+
             new GetMyAgendaCountTask(context) {
                 @Override
                 protected void onSuccess(AgendaList agendaList) throws Exception {
@@ -811,52 +652,68 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
-                    callback.onFailure(ex);
+                    getMyAgendaCountFromLocal(callback, ex);
                 }
             }.execute();
         } else {
-            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+            getMyAgendaCountFromLocal(callback, new TaException(context.getString(R.string.no_connection_exception)));
         }
+
+    }
+
+    private void getMyAgendaCountFromLocal(OnResponseCallback<AgendaList> callback, Exception e){
+
+        new Task<AgendaList>(context) {
+            @Override
+            public AgendaList call() {
+
+                List<Source> sources = mLocalDataSource.getSources();
+                if (sources == null){
+                    return null;
+                }
+
+                AgendaList agendaList = new AgendaList();
+                List<AgendaItem> items = new ArrayList<>();
+                for (Source source: sources){
+                    List<Content> contents = mLocalDataSource.getBookmarkedContents(source.getId());
+                    if (contents != null){
+                        AgendaItem item = new AgendaItem();
+                        item.setContent_count(contents.size());
+                        item.setSource_id(source.getId());
+                        item.setSource_name(source.getName());
+                        item.setSource_title(source.getTitle());
+                        items.add(item);
+                    }
+                }
+                agendaList.setResult(items);
+
+                return agendaList;
+
+            }
+
+            @Override
+            protected void onSuccess(AgendaList agendaList) throws Exception {
+                super.onSuccess(agendaList);
+
+                if (agendaList == null){
+                    callback.onFailure(e);
+                } else {
+                    callback.onSuccess(agendaList);
+                }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
+            }
+        }.execute();
 
     }
 
     public void getDownloadAgendaCount(List<Source> sources, OnResponseCallback<AgendaList> callback) {
 
-        //Mocking start
-        /*AgendaList agendaList = new AgendaList();
-        agendaList.setLevel("Download");
-        List<AgendaItem> items = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            AgendaItem item = new AgendaItem();
-            item.setContent_count(10 - i);
-            item.setSource_id(i);
-            switch (i) {
-                case 0:
-                    item.setSource_title("कोर्स");
-                    item.setSource_name("course");
-                    break;
-                case 1:
-                    item.setSource_title("Chatशाला");
-                    item.setSource_name("chatshala");
-                    break;
-                case 2:
-                    item.setSource_title("शिक्षण सामग्री");
-                    item.setSource_name("toolkit");
-                    break;
-                default:
-                    item.setSource_title("प्रेरणा स्त्रोत");
-                    item.setSource_name("hois");
-                    break;
-            }
-            items.add(item);
-        }
-        agendaList.setResult(items);
-        callback.onSuccess(agendaList);*/
-        //Mocking end
-
-        //Actual code **Do not delete**
         Map<String, Boolean> receivedSources = new HashMap<>();
-        for (Source source: sources){
+        for (Source source : sources) {
             receivedSources.put(source.getName(), false);
         }
 
@@ -864,7 +721,7 @@ public class DataManager extends BaseRoboInjector {
         agendaList.setLevel("Download");
         agendaList.setResult(new ArrayList<>());
 
-        for (Source source: sources) {
+        for (Source source : sources) {
             if (source.getType().equalsIgnoreCase(SourceType.edx.name()) ||
                     source.getType().equalsIgnoreCase(SourceType.course.name())) {
 
@@ -908,7 +765,7 @@ public class DataManager extends BaseRoboInjector {
     }
 
     private void addContentsToAgendaList(List<Content> contents, AgendaList agendaList,
-                                         String sourceName, String sourceTitle){
+                                         String sourceName, String sourceTitle) {
 
         AgendaItem item = new AgendaItem();
         item.setContent_count(contents == null ? 0 : contents.size());
@@ -919,31 +776,31 @@ public class DataManager extends BaseRoboInjector {
     }
 
     private void sendDownloadAgenda(Map<String, Boolean> receivedSources, AgendaList agendaList,
-                                    OnResponseCallback<AgendaList> callback){
+                                    OnResponseCallback<AgendaList> callback) {
 
-        if (receivedSources.values().contains(false)){
+        if (receivedSources.values().contains(false)) {
             return;
         }
         callback.onSuccess(agendaList);
     }
 
-    public void getdownloadedCourseContents(OnResponseCallback<List<Content>> callback){
+    public void getdownloadedCourseContents(OnResponseCallback<List<Content>> callback) {
 
-        new AsyncTask<Void, Void, List<Content>>() {
+        new Task<List<Content>>(context) {
             @Override
-            protected List<Content> doInBackground(Void... voids) {
+            public List<Content> call() {
                 List<Content> contents = new ArrayList<>();
-                List<Long> contentIds = null;
+                List<Long> contentIds;
                 try {
                     contentIds = new GetCourseContentsOperation().execute(dbHelper.getDatabase());
                 } catch (Exception e) {
                     return contents;
                 }
 
-                if (contentIds != null){
-                    for (long id: contentIds){
+                if (contentIds != null) {
+                    for (long id : contentIds) {
                         Content content = mLocalDataSource.getContentById(id);
-                        if (content != null){
+                        if (content != null) {
                             contents.add(content);
                         }
                     }
@@ -952,35 +809,41 @@ public class DataManager extends BaseRoboInjector {
             }
 
             @Override
-            protected void onPostExecute(List<Content> contents) {
-                super.onPostExecute(contents);
+            protected void onSuccess(List<Content> contents) throws Exception {
+                super.onSuccess(contents);
+
                 if (!contents.isEmpty()) {
                     callback.onSuccess(contents);
                 } else {
                     callback.onFailure(new TaException("No content downloaded"));
                 }
             }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(new TaException("No content downloaded"));
+            }
         }.execute();
 
     }
 
-    public void getdownloadedWPContents(String sourceName, OnResponseCallback<List<Content>> callback){
+    private void getdownloadedWPContents(String sourceName, OnResponseCallback<List<Content>> callback) {
 
-        new AsyncTask<Void, Void, List<Content>>() {
+        new Task<List<Content>>(context) {
             @Override
-            protected List<Content> doInBackground(Void... voids) {
+            public List<Content> call() {
                 List<Content> contents = new ArrayList<>();
-                List<Long> contentIds = null;
+                List<Long> contentIds;
                 try {
                     contentIds = new GetWPContentsOperation(sourceName).execute(dbHelper.getDatabase());
                 } catch (Exception e) {
                     return contents;
                 }
 
-                if (contentIds != null){
-                    for (long id: contentIds){
+                if (contentIds != null) {
+                    for (long id : contentIds) {
                         Content content = mLocalDataSource.getContentById(id);
-                        if (content != null){
+                        if (content != null) {
                             contents.add(content);
                         }
                     }
@@ -989,13 +852,19 @@ public class DataManager extends BaseRoboInjector {
             }
 
             @Override
-            protected void onPostExecute(List<Content> contents) {
-                super.onPostExecute(contents);
+            protected void onSuccess(List<Content> contents) throws Exception {
+                super.onSuccess(contents);
+
                 if (!contents.isEmpty()) {
                     callback.onSuccess(contents);
                 } else {
                     callback.onFailure(new TaException("No content downloaded"));
                 }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(new TaException("No content downloaded"));
             }
         }.execute();
 
@@ -1036,7 +905,7 @@ public class DataManager extends BaseRoboInjector {
                         callback.onFailure(new TaException("Invalid Course"));
                     } else if (enrolledCoursesResponse.getMode() == null ||
                             enrolledCoursesResponse.getMode().equals("") ||
-                            enrolledCoursesResponse.getCourse() == null){
+                            enrolledCoursesResponse.getCourse() == null) {
 
                         enrolInCourse(courseId, new OnResponseCallback<ResponseBody>() {
                             @Override
@@ -1066,7 +935,7 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getCourseFromLocal(String courseId, OnResponseCallback<EnrolledCoursesResponse> callback, Exception e) {
+    private void getCourseFromLocal(String courseId, OnResponseCallback<EnrolledCoursesResponse> callback, Exception e) {
         new UserEnrollmentCourseFromCacheTask(context, courseId) {
             @Override
             protected void onSuccess(EnrolledCoursesResponse enrolledCoursesResponse) throws Exception {
@@ -1088,7 +957,7 @@ public class DataManager extends BaseRoboInjector {
         }.execute();
     }
 
-    public void enrolInCourse(String courseId, OnResponseCallback<ResponseBody> callback){
+    private void enrolInCourse(String courseId, OnResponseCallback<ResponseBody> callback) {
 
         if (!NetworkUtil.isConnected(context)) {
             callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
@@ -1096,7 +965,7 @@ public class DataManager extends BaseRoboInjector {
         }
 
         Call<ResponseBody> enrolCall = courseApi.enrolInCourse(courseId);
-        enrolCall.enqueue(new CourseService.EnrollCallback(context){
+        enrolCall.enqueue(new CourseService.EnrollCallback(context) {
             @Override
             protected void onResponse(@NonNull ResponseBody responseBody) {
                 super.onResponse(responseBody);
@@ -1173,20 +1042,66 @@ public class DataManager extends BaseRoboInjector {
                 protected void onSuccess(StatusResponse statusResponse) throws Exception {
                     super.onSuccess(statusResponse);
                     if (statusResponse == null) {
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                mLocalDataSource.deleteBookmark(new Bookmark(contentId));
+                            }
+                        }.start();
+
                         callback.onFailure(new TaException("No response for is content my agenda."));
                     } else {
+
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                if (statusResponse.getStatus()){
+                                    mLocalDataSource.insertBookmark(new Bookmark(contentId));
+                                } else {
+                                    mLocalDataSource.deleteBookmark(new Bookmark(contentId));
+                                }
+                            }
+                        }.start();
+
                         callback.onSuccess(statusResponse);
                     }
                 }
 
                 @Override
                 protected void onException(Exception ex) {
-                    callback.onFailure(ex);
+                    isLocalContentMyAgenda(contentId, callback);
                 }
             }.execute();
         } else {
-            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+            isLocalContentMyAgenda(contentId, callback);
         }
+    }
+
+    private void isLocalContentMyAgenda(long contentId, OnResponseCallback<StatusResponse> callback){
+
+        new Task<Bookmark>(context) {
+            @Override
+            public Bookmark call() {
+                return mLocalDataSource.getBookmark(contentId);
+            }
+
+            @Override
+            protected void onSuccess(Bookmark bookmark) throws Exception {
+                super.onSuccess(bookmark);
+
+                if (bookmark == null){
+                    callback.onSuccess(new StatusResponse(false));
+                } else {
+                    callback.onSuccess(new StatusResponse(true));
+                }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onSuccess(new StatusResponse(false));
+            }
+        }.execute();
+
     }
 
     public void setLike(long contentId, OnResponseCallback<StatusResponse> callback) {
@@ -1242,8 +1157,20 @@ public class DataManager extends BaseRoboInjector {
                 protected void onSuccess(BookmarkResponse bookmarkResponse) throws Exception {
                     super.onSuccess(bookmarkResponse);
                     if (bookmarkResponse == null) {
-                        callback.onFailure(new TaException("Error occured. Couldn't add to My Agenda."));
+                        callback.onFailure(new TaException("Error occurred. Couldn't perform action"));
                     } else {
+
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                if (bookmarkResponse.isIs_active()){
+                                    mLocalDataSource.insertBookmark(new Bookmark(contentId));
+                                } else {
+                                    mLocalDataSource.deleteBookmark(new Bookmark(contentId));
+                                }
+                            }
+                        }.start();
+
                         callback.onSuccess(bookmarkResponse);
                     }
                 }
@@ -1289,7 +1216,7 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getLocalCourseComponent(String courseId, OnResponseCallback<CourseComponent> callback, Exception e){
+    private void getLocalCourseComponent(String courseId, OnResponseCallback<CourseComponent> callback, Exception e) {
 
         CourseComponent courseComponent = courseManager.getComponentByCourseId(courseId);
         if (courseComponent != null) {
@@ -1331,10 +1258,12 @@ public class DataManager extends BaseRoboInjector {
                                FragmentActivity activity,
                                VideoDownloadHelper.DownloadManagerCallback callback) {
         DownloadEntry de = scorm.getDownloadEntry(edxEnvironment.getStorage());
-        de.url = scorm.getDownloadUrl();
-        de.title = scorm.getParent().getDisplayName();
-        de.content_id = contentId;
-        downloadManager.downloadVideo(de, activity, callback);
+        if (de != null) {
+            de.url = scorm.getDownloadUrl();
+            de.title = scorm.getParent().getDisplayName();
+            de.content_id = contentId;
+            downloadManager.downloadVideo(de, activity, callback);
+        }
     }
 
     public void downloadMultiple(List<? extends HasDownloadEntry> downloadEntries,
@@ -1364,7 +1293,7 @@ public class DataManager extends BaseRoboInjector {
     }
 
     private ScormStatus getDownloadStatus(DownloadEntry entry) {
-        if (entry == null || entry.downloaded.equals(DownloadEntry.DownloadedState.ONLINE)){
+        if (entry == null || entry.downloaded.equals(DownloadEntry.DownloadedState.ONLINE)) {
             return ScormStatus.not_downloaded;
         } else if (entry.downloaded.equals(DownloadEntry.DownloadedState.DOWNLOADING)) {
             return ScormStatus.downloading;
@@ -1379,168 +1308,186 @@ public class DataManager extends BaseRoboInjector {
 
     public void deleteScorm(ScormBlockModel scormBlockModel) {
         DownloadEntry de = scormBlockModel.getDownloadEntry(edxEnvironment.getStorage());
-        de.url = scormBlockModel.getDownloadUrl();
-        de.title = scormBlockModel.getParent().getDisplayName();
-        edxEnvironment.getStorage().removeDownload(de);
-    }
-
-    public void getHtmlFromUrl(HttpUrl absoluteUrl, OnResponseCallback<String> callback) {
-        if (NetworkUtil.isConnected(context)) {
-
-            new Task<HtmlResponse>(context) {
-                @Override
-                public HtmlResponse call() throws Exception {
-                    IRemoteDataSource source = RetrofitServiceUtil.create(context, false);
-                    return source.getHtmlFromUrl(absoluteUrl).execute().body();
-                }
-
-                @Override
-                protected void onSuccess(HtmlResponse htmlResponse) throws Exception {
-                    super.onSuccess(htmlResponse);
-                    callback.onSuccess(htmlResponse.getContent());
-                }
-
-                @Override
-                protected void onException(Exception ex) {
-                    callback.onFailure(ex);
-                }
-            }.execute();
-
-            /*new GetHtmlFromUrlTask(context, absoluteUrl){
-                @Override
-                protected void onSuccess(Void s) throws Exception {
-                    super.onSuccess(s);
-                    callback.onSuccess(s.toString());
-                }
-
-                @Override
-                protected void onException(Exception ex) {
-                    callback.onFailure(ex);
-                }
-            }.execute();*/
-        } else {
-            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+        if (de != null) {
+            de.url = scormBlockModel.getDownloadUrl();
+            de.title = scormBlockModel.getParent().getDisplayName();
+            edxEnvironment.getStorage().removeDownload(de);
         }
     }
 
     public void getMyAgendaContent(long sourceId, OnResponseCallback<List<Content>> callback) {
 
-        //Mocking start
-        /*List<Content> contents = new ArrayList<>();
-        for (int i=0;i<20;i++){
-            Content content =  new Content();
-            content.setName("course");
-            content.setIcon("http://theteacherapp.org/asset-v1:Mathematics+M01+201706_Mat_01+type@asset+block@Math_sample2.png");
-            Source source =  new Source();
-            source.setType("edx");
-            source.setTitle("course");
-            source.setName("course");
-            content.setSource(source);
-            contents.add(content);
-        }
-        callback.onSuccess(contents);*/
-        //Mocking end
-
-        //Actual code   **Do not delete**
         if (NetworkUtil.isConnected(context)) {
             new GetMyAgendaContentTask(context, sourceId) {
                 @Override
                 protected void onSuccess(List<Content> response) throws Exception {
                     super.onSuccess(response);
-                    if (response != null && response.size() > 0) {
-                        callback.onSuccess(response);
+                    if (response != null && !response.isEmpty()) {
+
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                mLocalDataSource.insertContents(response);
+                                List<Bookmark> bookmarks = new ArrayList<>();
+                                for (Content content: response){
+                                    bookmarks.add(new Bookmark(content.getId()));
+                                }
+                                mLocalDataSource.insertBookmarks(bookmarks);
+                            }
+                        }.start();
+
+                        if (callback != null) {
+                            callback.onSuccess(response);
+                        }
                     } else {
-                        callback.onFailure(new TaException("No data found"));
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                mLocalDataSource.deleteAllBookmarks();
+                            }
+                        }.start();
                     }
 
                 }
 
                 @Override
                 protected void onException(Exception ex) {
-                    callback.onFailure(ex);
+                    if (callback != null) {
+                        getMyAgendaContentFromLocal(sourceId, callback, ex);
+                    }
                 }
             }.execute();
         } else {
-            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+            if (callback != null) {
+                getMyAgendaContentFromLocal(sourceId, callback,
+                        new TaException(context.getString(R.string.no_connection_exception)));
+            }
         }
+    }
+
+    private void getMyAgendaContentFromLocal(long sourceId, OnResponseCallback<List<Content>> callback, Exception e){
+
+        new Task<List<Content>>(context) {
+            @Override
+            public List<Content> call() {
+                return mLocalDataSource.getBookmarkedContents(sourceId);
+            }
+
+            @Override
+            protected void onSuccess(List<Content> contents) throws Exception {
+                super.onSuccess(contents);
+
+                if (contents != null && contents.size() > 0) {
+                    callback.onSuccess(contents);
+                } else {
+                    callback.onFailure(e);
+                }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
+            }
+        }.execute();
+
     }
 
     public void getStateAgendaContent(long sourceId, long list_id, OnResponseCallback<List<Content>> callback) {
 
-        //Mocking start
-        /*List<Content> contents = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            Content content = new Content();
-            content.setName("course");
-            content.setIcon("http://theteacherapp.org/asset-v1:Mathematics+M01+201706_Mat_01+type@asset+block@Math_sample2.png");
-            Source source = new Source();
-            source.setType("edx");
-            source.setTitle("course");
-            source.setName("course");
-            content.setSource(source);
-            contents.add(content);
-        }
-        callback.onSuccess(contents);*/
-        //Mocking end
-
-        //Actual code   **Do not delete**
         if (NetworkUtil.isConnected(context)) {
             new GetStateAgendaContentTask(context, sourceId, list_id) {
                 @Override
                 protected void onSuccess(List<Content> response) throws Exception {
                     super.onSuccess(response);
-                    if (response != null && response.size() > 0) {
-                        callback.onSuccess(response);
+                    if (response != null && !response.isEmpty()) {
+
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                mLocalDataSource.insertContents(response);
+                                List<StateContent> stateContents = new ArrayList<>();
+                                for (Content content: response){
+                                    stateContents.add(new StateContent(content.getId()));
+                                }
+                                mLocalDataSource.deleteAllStateContents();
+                                mLocalDataSource.insertStateContents(stateContents);
+                            }
+                        }.start();
+
+                        if (callback != null) {
+                            callback.onSuccess(response);
+                        }
+
                     } else {
-                        callback.onFailure(new TaException("No data found."));
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                mLocalDataSource.deleteAllStateContents();
+                            }
+                        }.start();
                     }
 
                 }
 
                 @Override
                 protected void onException(Exception ex) {
-                    callback.onFailure(ex);
+                    if (callback != null) {
+                        getStateAgendaContentFromLocal(sourceId, callback, ex);
+                    }
                 }
             }.execute();
         } else {
-            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+            if (callback != null) {
+                getStateAgendaContentFromLocal(sourceId, callback,
+                        new TaException(context.getString(R.string.no_connection_exception)));
+            }
         }
+    }
+
+    private void getStateAgendaContentFromLocal(long sourceId, OnResponseCallback<List<Content>> callback, Exception e){
+
+        new Task<List<Content>>(context) {
+            @Override
+            public List<Content> call() {
+                return mLocalDataSource.getStateContents(sourceId);
+            }
+
+            @Override
+            protected void onSuccess(List<Content> contents) throws Exception {
+                super.onSuccess(contents);
+
+                if (contents != null && contents.size() > 0) {
+                    callback.onSuccess(contents);
+                } else {
+                    callback.onFailure(e);
+                }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
+            }
+        }.execute();
+
     }
 
     public void getDownloadedContent(String sourceName, OnResponseCallback<List<Content>> callback) {
 
-        //Mocking start
-        /*List<Content> contents = new ArrayList<>();
-        for (int i=0;i<20;i++){
-            Content content =  new Content();
-            content.setName("course");
-            content.setIcon("http://theteacherapp.org/asset-v1:Mathematics+M01+201706_Mat_01+type@asset+block@Math_sample2.png");
-            Source source =  new Source();
-            source.setType("edx");
-            source.setTitle("course");
-            source.setName("course");
-            content.setSource(source);
-            contents.add(content);
-        }
-        callback.onSuccess(contents);*/
-        //Mocking end
-
-        //Actual code   **Do not delete**
-        if (sourceName.equalsIgnoreCase(SourceName.course.name())){
+        if (sourceName.equalsIgnoreCase(SourceName.course.name())) {
             getdownloadedCourseContents(callback);
         } else {
             getdownloadedWPContents(sourceName, callback);
         }
     }
 
-    public void getPostById(long postId, OnResponseCallback<Post> callback){
+    public void getPostById(long postId, OnResponseCallback<Post> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
             wpClientRetrofit.getPost(postId, new WordPressRestResponse<Post>() {
                 @Override
                 public void onSuccess(Post result) {
-                    if (result != null){
+                    if (result != null) {
                         callback.onSuccess(result);
                     } else {
                         callback.onFailure(new TaException("Invalid post"));
@@ -1559,14 +1506,14 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getPostBySlug(String slug, OnResponseCallback<Post> callback){
+    public void getPostBySlug(String slug, OnResponseCallback<Post> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
             wpClientRetrofit.getPostBySlug(slug, new WordPressRestResponse<List<Post>>() {
                 @Override
                 public void onSuccess(List<Post> result) {
-                    if (result == null || result.isEmpty()){
+                    if (result == null || result.isEmpty()) {
                         getLocalPostBySlug(slug, callback, new TaException("Post not found"));
                     } else {
                         Post post = result.get(0);
@@ -1590,10 +1537,10 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getLocalPostBySlug(String slug, OnResponseCallback<Post> callback, Exception e){
+    private void getLocalPostBySlug(String slug, OnResponseCallback<Post> callback, Exception e) {
 
         Post post = db_commands.getPostBySlug(slug);
-        if (post == null || post.getSlug() == null || post.getSlug().equals("")){
+        if (post == null || post.getSlug() == null || post.getSlug().equals("")) {
             callback.onFailure(e);
         } else {
             callback.onSuccess(post);
@@ -1601,19 +1548,19 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void updateLocalPost(Post post){
+    private void updateLocalPost(Post post) {
         db_commands.updatePostCache(Collections.singletonList(post));
     }
 
-    public void getCommentsByPost(long postId, int take, int page, OnResponseCallback<List<Comment>> callback){
+    public void getCommentsByPost(long postId, int take, int page, OnResponseCallback<List<Comment>> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
             wpClientRetrofit.getCommentsByPost(postId, take, page, loginPrefs.getWPUserId(),
                     new WordPressRestResponse<List<Comment>>() {
                         @Override
                         public void onSuccess(List<Comment> result) {
-                            if (result == null){
+                            if (result == null) {
                                 result = new ArrayList<>();
                             }
                             callback.onSuccess(result);
@@ -1631,15 +1578,15 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getRepliesOnComment(long postId, long commentId, OnResponseCallback<List<Comment>> callback){
+    public void getRepliesOnComment(long postId, long commentId, OnResponseCallback<List<Comment>> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
             wpClientRetrofit.getRepliesOnComment(postId, commentId, loginPrefs.getWPUserId(),
                     new WordPressRestResponse<List<Comment>>() {
                         @Override
                         public void onSuccess(List<Comment> result) {
-                            if (result == null){
+                            if (result == null) {
                                 result = new ArrayList<>();
                             }
                             callback.onSuccess(result);
@@ -1657,17 +1604,17 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void downloadPost(Post post, long contentId, String category_id,String category_name,
+    public void downloadPost(Post post, long contentId, String category_id, String category_name,
                              FragmentActivity activity,
-                             VideoDownloadHelper.DownloadManagerCallback callback){
+                             VideoDownloadHelper.DownloadManagerCallback callback) {
 
-        DownloadEntry videoData=new DownloadEntry();
-        videoData.setDownloadEntryForPost(contentId, category_id,category_name,post);
+        DownloadEntry videoData = new DownloadEntry();
+        videoData.setDownloadEntryForPost(contentId, category_id, category_name, post);
         downloadManager.downloadVideo(videoData, activity, callback);
 
     }
 
-    public void deletePost(Post post){
+    public void deletePost(Post post) {
 
         DownloadEntry entry = edxEnvironment.getStorage().getPostVideo(String.valueOf(post.getId()));
         if (entry != null)
@@ -1675,7 +1622,7 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public ScormStatus getPostDownloadStatus(Post post){
+    public ScormStatus getPostDownloadStatus(Post post) {
 
         DownloadEntry entry = edxEnvironment.getStorage().getPostVideo(String.valueOf(post.getId()));
         return getDownloadStatus(entry);
@@ -1683,33 +1630,33 @@ public class DataManager extends BaseRoboInjector {
     }
 
     public void addComment(String comment, int commentParentId, long postId, OnResponseCallback<Comment> callback) {
-        if(loginPrefs.getWPCurrentUserProfile()==null||loginPrefs.getWPCurrentUserProfile().id==null) {
+        if (loginPrefs.getWPCurrentUserProfile() == null || loginPrefs.getWPCurrentUserProfile().id == null) {
             callback.onFailure(new TaException("Not authenticated to comment."));
             return;
         }
 
-        String ua=new WebView(context).getSettings().getUserAgentString();
-        CustomComment obj=new CustomComment();
-        obj.author=loginPrefs.getWPCurrentUserProfile().id;
+        String ua = new WebView(context).getSettings().getUserAgentString();
+        CustomComment obj = new CustomComment();
+        obj.author = loginPrefs.getWPCurrentUserProfile().id;
         //obj.author_ip=ip;
-        obj.author_url ="";
-        obj.author_user_agent=ua;
-        obj.content=comment;
-        obj.date= DateUtil.getCurrentDateForServerLocal();
-        obj.date_gmt=DateUtil.getCurrentDateForServerGMT();
-        obj.parent=commentParentId;
-        obj.post=postId;
+        obj.author_url = "";
+        obj.author_user_agent = ua;
+        obj.content = comment;
+        obj.date = DateUtil.getCurrentDateForServerLocal();
+        obj.date_gmt = DateUtil.getCurrentDateForServerGMT();
+        obj.parent = commentParentId;
+        obj.post = postId;
 
         addComment(obj, callback);
     }
 
-    private void addComment(CustomComment comment, OnResponseCallback<Comment> callback)
-    {
+    private void addComment(CustomComment comment, OnResponseCallback<Comment> callback) {
         wpClientRetrofit.createComment(comment, new WordPressRestResponse<Comment>() {
             @Override
             public void onSuccess(Comment result) {
                 callback.onSuccess(result);
             }
+
             @Override
             public void onFailure(HttpServerErrorResponse errorResponse) {
                 callback.onFailure(new TaException(errorResponse.getMessage()));
@@ -1717,8 +1664,7 @@ public class DataManager extends BaseRoboInjector {
         });
     }
 
-    public void setWpProfileCache()
-    {
+    public void setWpProfileCache() {
         wpClientRetrofit.getUserMe(new WordPressRestResponse<User>() {
             @Override
             public void onSuccess(User result) {
@@ -1733,9 +1679,8 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             public void onFailure(HttpServerErrorResponse errorResponse) {
-                if(config.isWordpressAuthentication() &&
-                        !NetworkUtil.isLimitedAcess(errorResponse) && NetworkUtil.isUnauthorize(errorResponse))
-                {
+                if (config.isWordpressAuthentication() &&
+                        !NetworkUtil.isLimitedAcess(errorResponse) && NetworkUtil.isUnauthorize(errorResponse)) {
                     logout();
                     Toast.makeText(context, "Session expire", Toast.LENGTH_LONG).show();
                 }
@@ -1743,52 +1688,31 @@ public class DataManager extends BaseRoboInjector {
         });
     }
 
-    public DownloadEntry getDownloadedVideo(Post post, long contentId, String categoryId, String categoryName)
-    {
-        DownloadEntry videoData=new DownloadEntry();
-        videoData.setDownloadEntryForPost(contentId, categoryId,categoryName,post);
+    public DownloadEntry getDownloadedVideo(Post post, long contentId, String categoryId, String categoryName) {
+        DownloadEntry videoData = new DownloadEntry();
+        videoData.setDownloadEntryForPost(contentId, categoryId, categoryName, post);
 
-        return edxEnvironment.getStorage().getPostVideo(videoData.videoId,videoData.url);
+        return edxEnvironment.getStorage().getPostVideo(videoData.videoId, videoData.url);
 
     }
 
-    public void getSearchFilter(OnResponseCallback<SearchFilter> callback){
+    public void getSearchFilter(OnResponseCallback<SearchFilter> callback) {
 
-        //Mocking start
-        /*SearchFilter searchFilter = new SearchFilter();
-        List<FilterSection> sections = new ArrayList<>();
-        for (int i = 0; i < 5; i++){
-            FilterSection section = new FilterSection();
-            section.setName("Section " + (i+1));
-            List<FilterTag> tags = new ArrayList<>();
-            for (int j = 0; j < 5; j++){
-                FilterTag tag = new FilterTag();
-                tag.setDisplay_name("Tag " + (i+1) + (j+1));
-                tags.add(tag);
-            }
-            section.setTags(tags);
-            sections.add(section);
-        }
-        searchFilter.setResult(sections);
-        callback.onSuccess(searchFilter);*/
-        //Mocking start
-
-        //Actual code   **Do not delete**
-        if (NetworkUtil.isConnected(context)){
-            new GetSearchFilterTask(context){
+        if (NetworkUtil.isConnected(context)) {
+            new GetSearchFilterTask(context) {
                 @Override
                 protected void onSuccess(SearchFilter searchFilter) throws Exception {
                     super.onSuccess(searchFilter);
-                    if (searchFilter == null){
+                    if (searchFilter == null) {
                         callback.onFailure(new TaException("Cannot fetch filters"));
                     } else {
                         List<FilterSection> tempSections = new ArrayList<>();
-                        for (FilterSection section: searchFilter.getResult()){
-                            if (section.getTags() == null || section.getTags().isEmpty()){
+                        for (FilterSection section : searchFilter.getResult()) {
+                            if (section.getTags() == null || section.getTags().isEmpty()) {
                                 tempSections.add(section);
                             }
                         }
-                        for (FilterSection section: tempSections){
+                        for (FilterSection section : tempSections) {
                             searchFilter.getResult().remove(section);
                         }
                         Collections.sort(searchFilter.getResult());
@@ -1807,82 +1731,80 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getCategoryFromLocal(long sourceId, OnResponseCallback<Category> callback){
+    public void getCategoryFromLocal(long sourceId, OnResponseCallback<Category> callback) {
 
-        new AsyncTask<Void, Void, Category>() {
+        new Task<Category>(context) {
             @Override
-            protected Category doInBackground(Void... voids) {
+            public Category call() {
                 return mLocalDataSource.getCategoryBySourceId(sourceId);
             }
 
             @Override
-            protected void onPostExecute(Category category) {
-                super.onPostExecute(category);
-                if (category == null){
+            protected void onSuccess(Category category) throws Exception {
+                super.onSuccess(category);
+
+                if (category == null) {
                     callback.onFailure(new TaException("Category not found."));
                 } else {
                     callback.onSuccess(category);
                 }
             }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(new TaException("Category not found."));
+            }
         }.execute();
 
     }
 
-    public void getContentListsFromLocal(long categoryId, String mode, OnResponseCallback<List<ContentList>> callback){
+    public void getContentListsFromLocal(long categoryId, String mode, OnResponseCallback<List<ContentList>> callback) {
 
-        new AsyncTask<Void, Void, List<ContentList>>() {
+        new Task<List<ContentList>>(context) {
             @Override
-            protected List<ContentList> doInBackground(Void... voids) {
+            public List<ContentList> call() {
                 return mLocalDataSource.getContentListsByCategoryIdAndMode(categoryId, mode);
             }
 
             @Override
-            protected void onPostExecute(List<ContentList> contentLists) {
-                super.onPostExecute(contentLists);
-                if (contentLists == null || contentLists.isEmpty()){
+            protected void onSuccess(List<ContentList> contentLists) throws Exception {
+                super.onSuccess(contentLists);
+
+                if (contentLists == null || contentLists.isEmpty()) {
                     callback.onFailure(new TaException("Content lists not found."));
                 } else {
                     Collections.sort(contentLists);
                     callback.onSuccess(contentLists);
                 }
             }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(new TaException("Content lists not found."));
+            }
         }.execute();
 
     }
 
     public void search(int take, int skip, boolean isPriority, long listId, String searchText, List<FilterSection> sections,
-                       OnResponseCallback<List<Content>> callback){
+                       OnResponseCallback<List<Content>> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new SearchTask(context, take, skip, isPriority, listId, searchText, sections){
+            new SearchTask(context, take, skip, isPriority, listId, searchText, sections) {
                 @Override
                 protected void onSuccess(List<Content> contents) throws Exception {
                     super.onSuccess(contents);
-                    if (contents == null){
+                    if (contents == null) {
                         contents = new ArrayList<>();
                     }
 
-                    if (!contents.isEmpty()){
+                    if (!contents.isEmpty()) {
                         List<Content> finalContents = contents;
-                        new Thread(){
+                        new Thread() {
                             @Override
                             public void run() {
-                                try {
-                                    for (Content content : finalContents) {
-                                        if (content.getLists() == null) {
-                                            content.setLists(new ArrayList<>());
-                                        }
-
-                                        Content localContent = mLocalDataSource.getContentById(content.getId());
-                                        if (localContent != null && localContent.getLists() != null) {
-                                            content.getLists().addAll(localContent.getLists());
-                                        }
-                                        mLocalDataSource.insertContent(content);
-                                    }
-                                }catch (Exception e){
-                                    e.printStackTrace();
-                                }
+                                mLocalDataSource.insertContents(finalContents);
                             }
                         }.start();
                     }
@@ -1902,17 +1824,17 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void submitFeedback(String msg, OnResponseCallback<FeedbackResponse> callback){
+    public void submitFeedback(String msg, OnResponseCallback<FeedbackResponse> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
             Bundle parameters = new Bundle();
             parameters.putString(Constants.KEY_USERNAME, loginPrefs.getUsername());
             parameters.putString(Constants.KEY_FEEDBACK, msg);
             parameters.putString(Constants.KEY_DEVICE_INFO,
-                    "API Level:"+ Build.VERSION.RELEASE+"  Device:"+Build.DEVICE+"  Model no:"+Build.MODEL+"  Product:"+Build.PRODUCT);
+                    "API Level:" + Build.VERSION.RELEASE + "  Device:" + Build.DEVICE + "  Model no:" + Build.MODEL + "  Product:" + Build.PRODUCT);
 
-            new SubmitFeedbackTask(context, parameters){
+            new SubmitFeedbackTask(context, parameters) {
                 @Override
                 protected void onSuccess(FeedbackResponse feedbackResponse) throws Exception {
                     super.onSuccess(feedbackResponse);
@@ -1931,16 +1853,16 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void changePassword(String oldPass, String newPass, OnResponseCallback<ChangePasswordResponse> callback){
+    public void changePassword(String oldPass, String newPass, OnResponseCallback<ChangePasswordResponse> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
             Bundle parameters = new Bundle();
             parameters.putString(Constants.KEY_OLD_PASSWORD, oldPass);
             parameters.putString(Constants.KEY_NEW_PASSWORD, newPass);
             parameters.putString(Constants.KEY_USERNAME, loginPrefs.getUsername());
 
-            new ChangePasswordTask(context, parameters){
+            new ChangePasswordTask(context, parameters) {
                 @Override
                 protected void onSuccess(ChangePasswordResponse changePasswordResponse) throws Exception {
                     super.onSuccess(changePasswordResponse);
@@ -1979,11 +1901,11 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getAccount(OnResponseCallback<Account> callback){
+    public void getAccount(OnResponseCallback<Account> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new GetAccountTask(context, loginPrefs.getUsername()){
+            new GetAccountTask(context, loginPrefs.getUsername()) {
                 @Override
                 protected void onSuccess(Account account) throws Exception {
                     super.onSuccess(account);
@@ -2020,16 +1942,16 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void updateProfile(Bundle parameters, OnResponseCallback<UpdateMyProfileResponse> callback){
+    public void updateProfile(Bundle parameters, OnResponseCallback<UpdateMyProfileResponse> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new UpdateMyProfileTask(context, parameters, loginPrefs.getUsername()){
+            new UpdateMyProfileTask(context, parameters, loginPrefs.getUsername()) {
                 @Override
                 protected void onSuccess(UpdateMyProfileResponse updateMyProfileResponse) throws Exception {
                     super.onSuccess(updateMyProfileResponse);
 
-                    if (updateMyProfileResponse == null){
+                    if (updateMyProfileResponse == null) {
                         callback.onFailure(new TaException("Your action could not be completed"));
                         return;
                     }
@@ -2038,15 +1960,15 @@ public class DataManager extends BaseRoboInjector {
                     ProfileModel profileModel = new ProfileModel();
                     profileModel.name = updateMyProfileResponse.getName();
                     profileModel.email = updateMyProfileResponse.getEmail();
-                    profileModel.gender=updateMyProfileResponse.getGender();
+                    profileModel.gender = updateMyProfileResponse.getGender();
 
-                    profileModel.title=updateMyProfileResponse.getTitle();
-                    profileModel.classes_taught=updateMyProfileResponse.getClasses_taught();
-                    profileModel.state=updateMyProfileResponse.getState();
-                    profileModel.district=updateMyProfileResponse.getDistrict();
-                    profileModel.block=updateMyProfileResponse.getBlock();
-                    profileModel.pmis_code=updateMyProfileResponse.getPMIS_code();
-                    profileModel.diet_code=updateMyProfileResponse.getDIETCode();
+                    profileModel.title = updateMyProfileResponse.getTitle();
+                    profileModel.classes_taught = updateMyProfileResponse.getClasses_taught();
+                    profileModel.state = updateMyProfileResponse.getState();
+                    profileModel.district = updateMyProfileResponse.getDistrict();
+                    profileModel.block = updateMyProfileResponse.getBlock();
+                    profileModel.pmis_code = updateMyProfileResponse.getPMIS_code();
+                    profileModel.diet_code = updateMyProfileResponse.getDIETCode();
                     profileModel.setTagLabel(updateMyProfileResponse.getTagLabel());
                     profileModel.setFollowers(updateMyProfileResponse.getFollowers());
                     profileModel.setFollowing(updateMyProfileResponse.getFollowing());
@@ -2070,11 +1992,11 @@ public class DataManager extends BaseRoboInjector {
     }
 
     public void updateProfileImage(@NonNull Uri uri, @NonNull Rect cropRect,
-                                   OnResponseCallback<ProfileImage> callback){
+                                   OnResponseCallback<ProfileImage> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new SetAccountImageTask(context, loginPrefs.getUsername(), uri, cropRect){
+            new SetAccountImageTask(context, loginPrefs.getUsername(), uri, cropRect) {
                 @Override
                 protected void onSuccess(Void response) throws Exception {
                     super.onSuccess(response);
@@ -2105,11 +2027,11 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getProfile(OnResponseCallback<ProfileModel> callback){
+    public void getProfile(OnResponseCallback<ProfileModel> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new GetProfileTask(context){
+            new GetProfileTask(context) {
                 @Override
                 protected void onSuccess(ProfileModel profileModel) throws Exception {
                     super.onSuccess(profileModel);
@@ -2123,21 +2045,21 @@ public class DataManager extends BaseRoboInjector {
             }.execute();
 
         } else {
-            getProfileFromLocal(new TaException(context.getString(R.string.no_connection_exception)),callback);
+            getProfileFromLocal(new TaException(context.getString(R.string.no_connection_exception)), callback);
         }
 
     }
 
-    public void getProfileFromLocal(Exception e, OnResponseCallback<ProfileModel> callback){
+    private void getProfileFromLocal(Exception e, OnResponseCallback<ProfileModel> callback) {
         ProfileModel model = loginPrefs.getCurrentUserProfile();
-        if (model != null){
+        if (model != null) {
             callback.onSuccess(model);
         } else {
             callback.onFailure(e);
         }
     }
 
-    public void getCertificateStatus(String courseId, OnResponseCallback<CertificateStatusResponse> callback){
+    public void getCertificateStatus(String courseId, OnResponseCallback<CertificateStatusResponse> callback) {
 
         getCertificateFromLocal(courseId, new OnResponseCallback<Certificate>() {
             @Override
@@ -2150,13 +2072,13 @@ public class DataManager extends BaseRoboInjector {
             @Override
             public void onFailure(Exception e) {
 
-                if (NetworkUtil.isConnected(context)){
+                if (NetworkUtil.isConnected(context)) {
 
-                    new GetCertificateStatusTask(context, courseId){
+                    new GetCertificateStatusTask(context, courseId) {
                         @Override
                         protected void onSuccess(CertificateStatusResponse certificateStatusResponse) throws Exception {
                             super.onSuccess(certificateStatusResponse);
-                            if (certificateStatusResponse != null){
+                            if (certificateStatusResponse != null) {
                                 callback.onSuccess(certificateStatusResponse);
                             } else {
                                 callback.onFailure(new TaException("Status of certificate could not be fetched"));
@@ -2217,21 +2139,28 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getCertificateFromLocal(String courseId, OnResponseCallback<Certificate> callback, Exception e) {
+    private void getCertificateFromLocal(String courseId, OnResponseCallback<Certificate> callback, Exception e) {
 
-        new AsyncTask<Void, Void, Certificate>() {
+        new Task<Certificate>(context) {
             @Override
-            protected Certificate doInBackground(Void... voids) {
+            public Certificate call() {
                 return mLocalDataSource.getCertificate(courseId, loginPrefs.getUsername());
             }
 
             @Override
-            protected void onPostExecute(Certificate certificate) {
+            protected void onSuccess(Certificate certificate) throws Exception {
+                super.onSuccess(certificate);
+
                 if (certificate != null) {
                     callback.onSuccess(certificate);
                 } else {
                     callback.onFailure(e);
                 }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
             }
         }.execute();
 
@@ -2279,19 +2208,26 @@ public class DataManager extends BaseRoboInjector {
 
     public void getMyCertificatesFromLocal(OnResponseCallback<List<Certificate>> callback, Exception e) {
 
-        new AsyncTask<Void, Void, List<Certificate>>() {
+        new Task<List<Certificate>>(context) {
             @Override
-            protected List<Certificate> doInBackground(Void... voids) {
+            public List<Certificate> call() {
                 return mLocalDataSource.getAllCertificates(loginPrefs.getUsername());
             }
 
             @Override
-            protected void onPostExecute(List<Certificate> certificates) {
+            protected void onSuccess(List<Certificate> certificates) throws Exception {
+                super.onSuccess(certificates);
+
                 if (certificates != null) {
                     callback.onSuccess(certificates);
                 } else {
                     callback.onFailure(e);
                 }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
             }
         }.execute();
 
@@ -2336,10 +2272,7 @@ public class DataManager extends BaseRoboInjector {
                         new Thread() {
                             @Override
                             public void run() {
-                                Content localContent = mLocalDataSource.getContentById(content.getId());
-                                if (localContent == null){
-                                    mLocalDataSource.insertContent(content);
-                                }
+                                mLocalDataSource.insertOrIgnoreContent(content);
                             }
                         }.start();
 
@@ -2361,22 +2294,28 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getContentFromLocal(long contentId, OnResponseCallback<Content> callback, Exception e) {
+    private void getContentFromLocal(long contentId, OnResponseCallback<Content> callback, Exception e) {
 
-        new AsyncTask<Void, Void, Content>() {
+        new Task<Content>(context) {
             @Override
-            protected Content doInBackground(Void... voids) {
+            public Content call() {
                 return mLocalDataSource.getContentById(contentId);
             }
 
             @Override
-            protected void onPostExecute(Content content) {
-                super.onPostExecute(content);
+            protected void onSuccess(Content content) throws Exception {
+                super.onSuccess(content);
+
                 if (content != null) {
                     callback.onSuccess(content);
                 } else {
                     callback.onFailure(e);
                 }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
             }
         }.execute();
 
@@ -2430,7 +2369,7 @@ public class DataManager extends BaseRoboInjector {
                 @Override
                 protected void onSuccess(StatusResponse statusResponse) throws Exception {
                     super.onSuccess(statusResponse);
-                    if (statusResponse == null){
+                    if (statusResponse == null) {
                         callback.onFailure(new TaException("Error occured while following"));
                     } else {
                         callback.onSuccess(statusResponse);
@@ -2449,16 +2388,16 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getDiscussionTopics(String courseId, OnResponseCallback<List<DiscussionTopicDepth>> callback){
+    public void getDiscussionTopics(String courseId, OnResponseCallback<List<DiscussionTopicDepth>> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new GetDiscussionTopicsTask(context, courseId){
+            new GetDiscussionTopicsTask(context, courseId) {
                 @Override
                 protected void onSuccess(CourseTopics courseTopics) throws Exception {
                     super.onSuccess(courseTopics);
                     if (courseTopics == null ||
-                            (courseTopics.getCoursewareTopics() == null && courseTopics.getNonCoursewareTopics() == null)){
+                            (courseTopics.getCoursewareTopics() == null && courseTopics.getNonCoursewareTopics() == null)) {
                         callback.onFailure(new TaException("No discussion topics available"));
                     } else {
                         List<DiscussionTopic> allTopics = new ArrayList<>();
@@ -2492,15 +2431,15 @@ public class DataManager extends BaseRoboInjector {
 
     public void getDiscussionThreads(String courseId, List<String> topicIds, String view,
                                      String orderBy, int take, int page, List<String> requestedFields,
-                                     OnResponseCallback<List<DiscussionThread>> callback){
+                                     OnResponseCallback<List<DiscussionThread>> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new GetDiscussionThreadsTask(context, courseId, topicIds, view, orderBy, take, page, requestedFields){
+            new GetDiscussionThreadsTask(context, courseId, topicIds, view, orderBy, take, page, requestedFields) {
                 @Override
                 protected void onSuccess(Page<DiscussionThread> discussionThreadPage) throws Exception {
                     super.onSuccess(discussionThreadPage);
-                    if (discussionThreadPage == null || discussionThreadPage.getResults().isEmpty()){
+                    if (discussionThreadPage == null || discussionThreadPage.getResults().isEmpty()) {
                         callback.onFailure(new TaException("No discussion threads available"));
                     } else {
                         callback.onSuccess(discussionThreadPage.getResults());
@@ -2519,15 +2458,15 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getDiscussionThread(String threadId, OnResponseCallback<DiscussionThread> callback){
+    public void getDiscussionThread(String threadId, OnResponseCallback<DiscussionThread> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new GetDiscussionThreadTask(context, threadId){
+            new GetDiscussionThreadTask(context, threadId) {
                 @Override
                 protected void onSuccess(DiscussionThread thread) throws Exception {
                     super.onSuccess(thread);
-                    if (thread == null){
+                    if (thread == null) {
                         callback.onFailure(new TaException("Unable to fetch discussion thread"));
                     } else {
                         callback.onSuccess(thread);
@@ -2547,15 +2486,15 @@ public class DataManager extends BaseRoboInjector {
     }
 
     public void getThreadComments(String threadId, int take, int page, List<String> requestedFields, boolean isQuestionType,
-                                  OnResponseCallback<List<DiscussionComment>> callback){
+                                  OnResponseCallback<List<DiscussionComment>> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new GetThreadCommentsTask(context, threadId, take, page, requestedFields, isQuestionType){
+            new GetThreadCommentsTask(context, threadId, take, page, requestedFields, isQuestionType) {
                 @Override
                 protected void onSuccess(Page<DiscussionComment> discussionCommentPage) throws Exception {
                     super.onSuccess(discussionCommentPage);
-                    if (discussionCommentPage == null || discussionCommentPage.getResults().isEmpty()){
+                    if (discussionCommentPage == null || discussionCommentPage.getResults().isEmpty()) {
                         callback.onFailure(new TaException("No comments available"));
                     } else {
                         callback.onSuccess(discussionCommentPage.getResults());
@@ -2575,15 +2514,15 @@ public class DataManager extends BaseRoboInjector {
     }
 
     public void getCommentReplies(String commentId, int take, int page, List<String> requestedFields,
-                                  OnResponseCallback<List<DiscussionComment>> callback){
+                                  OnResponseCallback<List<DiscussionComment>> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new GetCommentRepliesTask(context, commentId, take, page, requestedFields){
+            new GetCommentRepliesTask(context, commentId, take, page, requestedFields) {
                 @Override
                 protected void onSuccess(Page<DiscussionComment> discussionCommentPage) throws Exception {
                     super.onSuccess(discussionCommentPage);
-                    if (discussionCommentPage == null || discussionCommentPage.getResults().isEmpty()){
+                    if (discussionCommentPage == null || discussionCommentPage.getResults().isEmpty()) {
                         callback.onFailure(new TaException("No replies available"));
                     } else {
                         callback.onSuccess(discussionCommentPage.getResults());
@@ -2602,45 +2541,16 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void createDiscussionThread(String courseId, String title, String body,
-                                       String topicId, DiscussionThread.ThreadType type,
-                                       OnResponseCallback<DiscussionThread> callback){
-
-        if (NetworkUtil.isConnected(context)){
-
-            new CreateDiscussionThreadTask(context, courseId, title, body, topicId, type){
-                @Override
-                protected void onSuccess(DiscussionThread thread) throws Exception {
-                    super.onSuccess(thread);
-                    if (thread != null){
-                        callback.onSuccess(thread);
-                    } else {
-                        callback.onFailure(new TaException("Unable to create discussion thread"));
-                    }
-                }
-
-                @Override
-                protected void onException(Exception ex) {
-                    callback.onFailure(ex);
-                }
-            }.execute();
-
-        } else {
-            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
-        }
-
-    }
-
     public void createDiscussionComment(String threadId, String comment, String parentCommentId,
-                                        OnResponseCallback<DiscussionComment> callback){
+                                        OnResponseCallback<DiscussionComment> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new CreateDiscussionCommentTask(context, threadId, comment, parentCommentId){
+            new CreateDiscussionCommentTask(context, threadId, comment, parentCommentId) {
                 @Override
                 protected void onSuccess(DiscussionComment comment) throws Exception {
                     super.onSuccess(comment);
-                    if (comment != null){
+                    if (comment != null) {
                         callback.onSuccess(comment);
                     } else {
                         callback.onFailure(new TaException("Unable to comment"));
@@ -2659,15 +2569,15 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void likeDiscussionThread(String threadId, boolean liked, OnResponseCallback<DiscussionThread> callback){
+    public void likeDiscussionThread(String threadId, boolean liked, OnResponseCallback<DiscussionThread> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new LikeDiscussionThreadTask(context, threadId, liked){
+            new LikeDiscussionThreadTask(context, threadId, liked) {
                 @Override
                 protected void onSuccess(DiscussionThread thread) throws Exception {
                     super.onSuccess(thread);
-                    if (thread != null){
+                    if (thread != null) {
                         callback.onSuccess(thread);
                     } else {
                         callback.onFailure(new TaException("Unable to like discussion thread"));
@@ -2686,15 +2596,15 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void likeDiscussionComment(String commentId, boolean liked, OnResponseCallback<DiscussionComment> callback){
+    public void likeDiscussionComment(String commentId, boolean liked, OnResponseCallback<DiscussionComment> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new LikeDiscussionCommentTask(context, commentId, liked){
+            new LikeDiscussionCommentTask(context, commentId, liked) {
                 @Override
                 protected void onSuccess(DiscussionComment comment) throws Exception {
                     super.onSuccess(comment);
-                    if (comment != null){
+                    if (comment != null) {
                         callback.onSuccess(comment);
                     } else {
                         callback.onFailure(new TaException("Unable to like comment"));
@@ -2712,6 +2622,7 @@ public class DataManager extends BaseRoboInjector {
         }
 
     }
+
     public void findContentForAssistant(String searchText, List<String> tags, OnResponseCallback<List<Content>> callback) {
         if (NetworkUtil.isConnected(context)) {
 
@@ -2736,102 +2647,104 @@ public class DataManager extends BaseRoboInjector {
         }
     }
 
-    public void getSources(OnResponseCallback<List<Source>> callback){
+    public void getSources(OnResponseCallback<List<Source>> callback) {
 
-        new AsyncTask<Void, Void, List<Source>>() {
+        new Task<List<Source>>(context) {
             @Override
-            protected List<Source> doInBackground(Void... voids) {
+            public List<Source> call() {
                 return mLocalDataSource.getSources();
             }
 
             @Override
-            protected void onPostExecute(List<Source> sources) {
-                if (sources == null || sources.isEmpty()){
+            protected void onSuccess(List<Source> sources) throws Exception {
+                super.onSuccess(sources);
+
+                if (sources == null || sources.isEmpty()) {
                     callback.onFailure(new TaException("No sources available"));
                 } else {
                     callback.onSuccess(sources);
                 }
             }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(new TaException("No sources available"));
+            }
         }.execute();
 
     }
 
-    public void syncNotifications(){
+    private void syncNotifications() {
         if (loginPrefs != null && loginPrefs.isLoggedIn()) {
             createNotifications();
-            updateNotifications(null);
+            updateNotifications();
         }
     }
 
-    public void updateNotifications(OnResponseCallback<CountResponse> callback){
+    private void updateNotifications() {
 
         if (NetworkUtil.isConnected(context)) {
 
-            new AsyncTask<Void, Void, List<Notification>>() {
+            new Task<List<Notification>>(context) {
                 @Override
-                protected List<Notification> doInBackground(Void... voids) {
+                public List<Notification> call() {
                     return mLocalDataSource.getAllUnupdatedNotifications(loginPrefs.getUsername());
                 }
 
                 @Override
-                protected void onPostExecute(List<Notification> notifications) {
-                    super.onPostExecute(notifications);
+                protected void onSuccess(List<Notification> notifications) throws Exception {
+                    super.onSuccess(notifications);
 
-                    if (notifications != null && !notifications.isEmpty()){
+                    if (notifications != null && !notifications.isEmpty()) {
                         List<Long> notificationIds = new ArrayList<>();
-                        for (Notification notification: notifications){
+                        for (Notification notification : notifications) {
                             notificationIds.add(notification.getId());
                         }
 
-                        new UpdateNotificationsTask(context, notificationIds){
+                        new UpdateNotificationsTask(context, notificationIds) {
                             @Override
                             protected void onSuccess(CountResponse countResponse) throws Exception {
                                 super.onSuccess(countResponse);
 
-                                for (Notification notification: notifications){
+                                for (Notification notification : notifications) {
                                     notification.setUpdated(true);
                                 }
                                 updateNotificationsInLocal(notifications);
-
-                                if (callback != null){
-                                    callback.onSuccess(countResponse);
-                                }
                             }
 
                             @Override
                             protected void onException(Exception ex) {
-                                if (callback != null){
-                                    callback.onFailure(ex);
-                                }
+
                             }
                         }.execute();
                     }
                 }
+
+                @Override
+                protected void onException(Exception ex) {
+
+                }
             }.execute();
 
-        } else {
-            if (callback != null) {
-                callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
-            }
         }
 
     }
 
-    public void updateNotificationsInLocal(List<Notification> notifications){
+    public void updateNotificationsInLocal(List<Notification> notifications) {
 
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
 
-                for (Notification notification: notifications){
+                for (Notification notification : notifications) {
                     Notification localNotification = null;
-                    if (notification.getLocal_id() != 0){
+                    if (notification.getLocal_id() != 0) {
                         localNotification = mLocalDataSource.getNotificationByLocalId(
                                 loginPrefs.getUsername(), notification.getLocal_id());
                     }
 
-                    if (localNotification == null){
-                        if (notification.getId() != 0){
+                    if (localNotification == null) {
+                        if (notification.getId() != 0) {
                             localNotification = mLocalDataSource.getNotificationById(
                                     loginPrefs.getUsername(), notification.getId());
                         } else {
@@ -2840,7 +2753,7 @@ public class DataManager extends BaseRoboInjector {
                         }
                     }
 
-                    if (localNotification == null){
+                    if (localNotification == null) {
                         addNotification(notification);
                     } else {
                         localNotification.set(notification);
@@ -2853,11 +2766,11 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getNotifications(int take, int skip, OnResponseCallback<List<Notification>> callback){
+    public void getNotifications(int take, int skip, OnResponseCallback<List<Notification>> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new GetNotificationsTask(context, take, skip){
+            new GetNotificationsTask(context, take, skip) {
                 @Override
                 protected void onSuccess(List<Notification> notifications) throws Exception {
                     super.onSuccess(notifications);
@@ -2895,48 +2808,54 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getNotificationsFromLocal(int take, int skip, OnResponseCallback<List<Notification>> callback, Exception e){
+    private void getNotificationsFromLocal(int take, int skip, OnResponseCallback<List<Notification>> callback, Exception e) {
 
-        new AsyncTask<Void, Void, List<Notification>>() {
+        new Task<List<Notification>>(context) {
             @Override
-            protected List<Notification> doInBackground(Void... voids) {
+            public List<Notification> call() {
                 return mLocalDataSource.getAllNotificationsInPage(loginPrefs.getUsername(), take, skip);
             }
 
             @Override
-            protected void onPostExecute(List<Notification> notifications) {
-                super.onPostExecute(notifications);
-                if (notifications == null || notifications.isEmpty()){
+            protected void onSuccess(List<Notification> notifications) throws Exception {
+                super.onSuccess(notifications);
+
+                if (notifications == null || notifications.isEmpty()) {
                     callback.onFailure(e);
                 } else {
                     callback.onSuccess(notifications);
                 }
             }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
+            }
         }.execute();
 
     }
 
-    public void createNotifications(){
+    private void createNotifications() {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new AsyncTask<Void, Void, List<Notification>>() {
+            new Task<List<Notification>>(context) {
                 @Override
-                protected List<Notification> doInBackground(Void... voids) {
+                public List<Notification> call() {
                     return mLocalDataSource.getAllUncreatedNotifications(loginPrefs.getUsername());
                 }
 
                 @Override
-                protected void onPostExecute(List<Notification> notifications) {
-                    super.onPostExecute(notifications);
+                protected void onSuccess(List<Notification> notifications) throws Exception {
+                    super.onSuccess(notifications);
 
-                    if (notifications != null && !notifications.isEmpty()){
+                    if (notifications != null && !notifications.isEmpty()) {
 
-                        new CreateNotificationsTask(context, notifications){
+                        new CreateNotificationsTask(context, notifications) {
                             @Override
                             protected void onSuccess(List<Notification> notifications) throws Exception {
                                 super.onSuccess(notifications);
-                                if (notifications != null && !notifications.isEmpty()){
+                                if (notifications != null && !notifications.isEmpty()) {
                                     updateNotificationsInLocal(notifications);
                                 }
                             }
@@ -2949,6 +2868,11 @@ public class DataManager extends BaseRoboInjector {
 
                     }
                 }
+
+                @Override
+                protected void onException(Exception ex) {
+
+                }
             }.execute();
 
         }
@@ -2956,7 +2880,7 @@ public class DataManager extends BaseRoboInjector {
     }
 
     public void addNotification(Notification n) {
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
                 mLocalDataSource.insertNotification(n);
@@ -2964,12 +2888,12 @@ public class DataManager extends BaseRoboInjector {
         }.start();
     }
 
-    public void onAppStart(){
+    public void onAppStart() {
         syncAnalytics();
         syncNotifications();
     }
 
-    public void syncAnalytics(){
+    private void syncAnalytics() {
 
         if (loginPrefs != null && loginPrefs.isLoggedIn()) {
             try {
@@ -2981,61 +2905,21 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getFeeds(int take, int skip, OnResponseCallback<List<Feed>> callback){
+    public void getFeeds(int take, int skip, OnResponseCallback<List<Feed>> callback) {
 
-        //Mocking start
-        /*if (skip > 5){
-            callback.onFailure(new TaException("No feeds available"));
-            return;
-        }
+        if (NetworkUtil.isConnected(context)) {
 
-        List<Feed> feeds = new ArrayList<>();
-        for (int i = 0; i < take; i++){
-            Feed feed = new Feed();
-            feed.setId(String.valueOf(take*skip + i));
-            feed.setAction_by("Chirag");
-            feed.setAction_on("1556014771");
-            feed.setAction(Action.CourseLike.name());
-
-            FeedMetadata metadata = new FeedMetadata();
-            metadata.setIcon("http://theteacherapp.org/asset-v1:Pedagogy+01+2017_Ped_01+type@asset+block@Question_Logo.png");
-            metadata.setComment_count("5");
-            metadata.setLike_count("80");
-            metadata.setId("course-v1:Pedagogy+01+2017_Ped_01");
-            metadata.setSource("कोर्स");
-            metadata.setText("सवाल पूछने के कौशल");
-
-            feed.setMeta_data(metadata);
-
-            if (i%2 == 0){
-                metadata.setUser_name("Hermione Granger");
-                metadata.setUser_icon("https://cdn.vox-cdn.com/thumbor/aiU71J02TAxm0F0h5HP-ELtk0To=/0x0:1024x768/920x613/filters:focal(408x210:570x372):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/51000509/harry-potter-top-10-hermione-granger-moments-hermione-granger-358045.0.jpg");
-                metadata.setTag_label("कक्षा_1st कक्षा_2nd कौशल_हिंदी कौशल_English भाषा_हिंदी भाषा_English");
-            }
-
-            if (i%3 == 0){
-                metadata.setLiked(true);
-            }
-
-            feeds.add(feed);
-        }
-        callback.onSuccess(feeds);*/
-        //Mocking end
-
-        //Actual code    **DO NOT DELETE**
-        if (NetworkUtil.isConnected(context)){
-
-            new GetFeedsTask(context, take, skip){
+            new GetFeedsTask(context, take, skip) {
                 @Override
                 protected void onSuccess(List<Feed> feeds) throws Exception {
                     super.onSuccess(feeds);
 
-                    if (feeds != null && !feeds.isEmpty()){
+                    if (feeds != null && !feeds.isEmpty()) {
 
-                        new Thread(){
+                        new Thread() {
                             @Override
                             public void run() {
-                                for (Feed feed: feeds){
+                                for (Feed feed : feeds) {
                                     feed.setUsername(loginPrefs.getUsername());
                                 }
                                 mLocalDataSource.insertFeeds(feeds);
@@ -3061,47 +2945,50 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getFeedsFromLocal(int take, int skip, OnResponseCallback<List<Feed>> callback, Exception e) {
+    private void getFeedsFromLocal(int take, int skip, OnResponseCallback<List<Feed>> callback, Exception e) {
 
-        new AsyncTask<Void, Void, List<Feed>>() {
+        new Task<List<Feed>>(context) {
             @Override
-            protected List<Feed> doInBackground(Void... voids) {
+            public List<Feed> call() {
                 return mLocalDataSource.getFeeds(loginPrefs.getUsername(), take, skip);
             }
 
             @Override
-            protected void onPostExecute(List<Feed> feeds) {
-                super.onPostExecute(feeds);
-                if (feeds != null && !feeds.isEmpty()){
+            protected void onSuccess(List<Feed> feeds) throws Exception {
+                super.onSuccess(feeds);
+
+                if (feeds != null && !feeds.isEmpty()) {
                     callback.onSuccess(feeds);
                 } else {
                     callback.onFailure(e);
                 }
             }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
+            }
         }.execute();
 
     }
 
-    public void getContentFromSourceIdentity(String sourceIdentity, OnResponseCallback<Content> callback){
+    public void getContentFromSourceIdentity(String sourceIdentity, OnResponseCallback<Content> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new GetContentFromSourceIdentityTask(context, sourceIdentity){
+            new GetContentFromSourceIdentityTask(context, sourceIdentity) {
                 @Override
                 protected void onSuccess(Content content) throws Exception {
                     super.onSuccess(content);
 
-                    if (content == null || content.getId() == 0){
+                    if (content == null || content.getId() == 0) {
                         getLocalContentFromSourceIdentity(sourceIdentity, callback,
                                 new TaException("Content not found"));
                     } else {
-                        new Thread(){
+                        new Thread() {
                             @Override
                             public void run() {
-                                Content localContent = mLocalDataSource.getContentById(content.getId());
-                                if (localContent == null){
-                                    mLocalDataSource.insertContent(content);
-                                }
+                                mLocalDataSource.insertOrIgnoreContent(content);
                             }
                         }.start();
                         callback.onSuccess(content);
@@ -3121,23 +3008,28 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getLocalContentFromSourceIdentity(String sourceIdentity, OnResponseCallback<Content> callback, Exception e){
+    private void getLocalContentFromSourceIdentity(String sourceIdentity, OnResponseCallback<Content> callback, Exception e) {
 
-        new AsyncTask<Void, Void, Content>() {
+        new Task<Content>(context) {
             @Override
-            protected Content doInBackground(Void... voids) {
+            public Content call() {
                 return mLocalDataSource.getContentBySourceIdentity(sourceIdentity);
             }
 
             @Override
-            protected void onPostExecute(Content content) {
-                super.onPostExecute(content);
+            protected void onSuccess(Content content) throws Exception {
+                super.onSuccess(content);
 
-                if (content == null){
-                    callback.onFailure(e);
-                } else {
+                if (content != null) {
                     callback.onSuccess(content);
+                } else {
+                    callback.onFailure(e);
                 }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
             }
         }.execute();
 
@@ -3145,13 +3037,13 @@ public class DataManager extends BaseRoboInjector {
 
     public void getFeedFeatureList(OnResponseCallback<List<Content>> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new AsyncTask<Void, Void, ContentList>() {
+            new Task<ContentList>(context) {
                 @Override
-                protected ContentList doInBackground(Void... voids) {
+                public ContentList call() {
                     List<ContentList> contentLists = mLocalDataSource.getContentListsByRootCategory("feed");
-                    if (contentLists == null || contentLists.isEmpty()){
+                    if (contentLists == null || contentLists.isEmpty()) {
                         return null;
                     } else {
                         return contentLists.get(0);
@@ -3159,8 +3051,8 @@ public class DataManager extends BaseRoboInjector {
                 }
 
                 @Override
-                protected void onPostExecute(ContentList contentList) {
-                    super.onPostExecute(contentList);
+                protected void onSuccess(ContentList contentList) throws Exception {
+                    super.onSuccess(contentList);
 
                     if (contentList != null) {
                         getCollectionItems(new Long[]{contentList.getId()}, 0, 5,
@@ -3170,7 +3062,7 @@ public class DataManager extends BaseRoboInjector {
                                         if (data == null || data.isEmpty() ||
                                                 data.get(0).getContent() == null ||
                                                 data.get(0).getContent().isEmpty()
-                                        ){
+                                        ) {
                                             callback.onFailure(new TaException("Featured contents not available"));
                                         } else {
                                             callback.onSuccess(data.get(0).getContent());
@@ -3186,6 +3078,11 @@ public class DataManager extends BaseRoboInjector {
                         callback.onFailure(new TaException("Feature list not available"));
                     }
                 }
+
+                @Override
+                protected void onException(Exception ex) {
+                    callback.onFailure(new TaException("Feature list not available"));
+                }
             }.execute();
 
         } else {
@@ -3194,26 +3091,26 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void setUserContent(List<ContentStatus> statuses, OnResponseCallback<List<ContentStatus>> callback){
+    public void setUserContent(List<ContentStatus> statuses, OnResponseCallback<List<ContentStatus>> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new SetUserContentTask(context, statuses){
+            new SetUserContentTask(context, statuses) {
                 @Override
                 protected void onSuccess(List<ContentStatus> contentStatuses) throws Exception {
                     super.onSuccess(contentStatuses);
 
-                    if (contentStatuses != null && contentStatuses.size() == statuses.size()){
+                    if (contentStatuses != null && contentStatuses.size() == statuses.size()) {
 
                         List<ContentStatus> finalStatuses = new ArrayList<>();
-                        for (ContentStatus status: contentStatuses){
-                            if (status.getError() == null){
+                        for (ContentStatus status : contentStatuses) {
+                            if (status.getError() == null) {
                                 status.setUsername(loginPrefs.getUsername());
                                 finalStatuses.add(status);
                             }
                         }
 
-                        new Thread(){
+                        new Thread() {
                             @Override
                             public void run() {
                                 mLocalDataSource.insertContentStatuses(finalStatuses);
@@ -3239,24 +3136,24 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getMyContentStatuses(OnResponseCallback<List<ContentStatus>> callback){
+    public void getMyContentStatuses(OnResponseCallback<List<ContentStatus>> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new GetMyContentStatusTask(context){
+            new GetMyContentStatusTask(context) {
                 @Override
                 protected void onSuccess(List<ContentStatus> statuses) throws Exception {
                     super.onSuccess(statuses);
 
-                    if (statuses == null){
+                    if (statuses == null) {
                         getMyContentStatusesFromLocal(callback, new TaException("Could not fetch status of contents"));
                     } else {
 
-                        for (ContentStatus status: statuses){
+                        for (ContentStatus status : statuses) {
                             status.setUsername(loginPrefs.getUsername());
                         }
 
-                        new Thread(){
+                        new Thread() {
                             @Override
                             public void run() {
                                 mLocalDataSource.insertContentStatuses(statuses);
@@ -3280,38 +3177,43 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getMyContentStatusesFromLocal(OnResponseCallback<List<ContentStatus>> callback, Exception e){
+    private void getMyContentStatusesFromLocal(OnResponseCallback<List<ContentStatus>> callback, Exception e) {
 
-        new AsyncTask<Void, Void, List<ContentStatus>>() {
+        new Task<List<ContentStatus>>(context) {
             @Override
-            protected List<ContentStatus> doInBackground(Void... voids) {
+            public List<ContentStatus> call() {
                 return mLocalDataSource.getMyContentStatuses(loginPrefs.getUsername());
             }
 
             @Override
-            protected void onPostExecute(List<ContentStatus> statuses) {
-                super.onPostExecute(statuses);
+            protected void onSuccess(List<ContentStatus> contentStatuses) throws Exception {
+                super.onSuccess(contentStatuses);
 
-                if (statuses != null){
-                    callback.onSuccess(statuses);
+                if (contentStatuses != null) {
+                    callback.onSuccess(contentStatuses);
                 } else {
                     callback.onFailure(e);
                 }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
             }
         }.execute();
 
     }
 
-    public void getUserContentStatus(List<Long> contentIds, OnResponseCallback<List<ContentStatus>> callback){
+    public void getUserContentStatus(List<Long> contentIds, OnResponseCallback<List<ContentStatus>> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new GetUserContentStatusTask(context, contentIds){
+            new GetUserContentStatusTask(context, contentIds) {
                 @Override
                 protected void onSuccess(List<ContentStatus> statuses) throws Exception {
                     super.onSuccess(statuses);
 
-                    if (statuses == null){
+                    if (statuses == null) {
                         getUserContentStatusFromLocal(contentIds, callback, new TaException("Could not fetch status of contents"));
                     } else {
 
@@ -3346,43 +3248,48 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getUserContentStatusFromLocal(List<Long> contentIds, OnResponseCallback<List<ContentStatus>> callback,
-                                              Exception e){
+    private void getUserContentStatusFromLocal(List<Long> contentIds, OnResponseCallback<List<ContentStatus>> callback,
+                                               Exception e) {
 
-        new AsyncTask<Void, Void, List<ContentStatus>>() {
+        new Task<List<ContentStatus>>(context) {
             @Override
-            protected List<ContentStatus> doInBackground(Void... voids) {
+            public List<ContentStatus> call() {
                 return mLocalDataSource.getContentStatusesByContentIds(contentIds, loginPrefs.getUsername());
             }
 
             @Override
-            protected void onPostExecute(List<ContentStatus> statuses) {
-                super.onPostExecute(statuses);
+            protected void onSuccess(List<ContentStatus> contentStatuses) throws Exception {
+                super.onSuccess(contentStatuses);
 
-                if (statuses != null){
-                    callback.onSuccess(statuses);
+                if (contentStatuses != null) {
+                    callback.onSuccess(contentStatuses);
                 } else {
                     callback.onFailure(e);
                 }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
             }
         }.execute();
 
     }
 
-    public void getUnitStatus(String courseId, OnResponseCallback<List<UnitStatus>> callback){
+    public void getUnitStatus(String courseId, OnResponseCallback<List<UnitStatus>> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new GetUnitStatusTask(context, courseId){
+            new GetUnitStatusTask(context, courseId) {
                 @Override
                 protected void onSuccess(List<UnitStatus> statuses) throws Exception {
                     super.onSuccess(statuses);
-                    if (statuses != null){
+                    if (statuses != null) {
 
-                        new Thread(){
+                        new Thread() {
                             @Override
                             public void run() {
-                                for (UnitStatus status : statuses){
+                                for (UnitStatus status : statuses) {
                                     status.setCourse_id(courseId);
                                     status.setUsername(loginPrefs.getUsername());
                                 }
@@ -3408,44 +3315,49 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getUnitStatusFromLocal(String courseId, OnResponseCallback<List<UnitStatus>> callback, Exception e){
+    private void getUnitStatusFromLocal(String courseId, OnResponseCallback<List<UnitStatus>> callback, Exception e) {
 
-        new AsyncTask<Void, Void, List<UnitStatus>>() {
+        new Task<List<UnitStatus>>(context) {
             @Override
-            protected List<UnitStatus> doInBackground(Void... voids) {
+            public List<UnitStatus> call() {
                 return mLocalDataSource.getUnitStatusByCourse(loginPrefs.getUsername(), courseId);
             }
 
             @Override
-            protected void onPostExecute(List<UnitStatus> statuses) {
-                super.onPostExecute(statuses);
+            protected void onSuccess(List<UnitStatus> unitStatuses) throws Exception {
+                super.onSuccess(unitStatuses);
 
-                if (statuses != null){
-                    callback.onSuccess(statuses);
+                if (unitStatuses != null) {
+                    callback.onSuccess(unitStatuses);
                 } else {
                     callback.onFailure(e);
                 }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
             }
         }.execute();
 
     }
 
-    public void startScorm(String courseId, String blockId, OnResponseCallback<ScormStartResponse> callback){
+    public void startScorm(String courseId, String blockId, OnResponseCallback<ScormStartResponse> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new StartScormTask(context, courseId, blockId){
+            new StartScormTask(context, courseId, blockId) {
                 @Override
                 protected void onSuccess(ScormStartResponse scormStartResponse) throws Exception {
                     super.onSuccess(scormStartResponse);
-                    if (callback != null){
+                    if (callback != null) {
                         callback.onSuccess(scormStartResponse);
                     }
                 }
 
                 @Override
                 protected void onException(Exception ex) {
-                    if (callback != null){
+                    if (callback != null) {
                         callback.onFailure(ex);
                     }
                 }
@@ -3459,17 +3371,17 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getOtherUserAccount(String username, OnResponseCallback<Account> callback){
+    public void getOtherUserAccount(String username, OnResponseCallback<Account> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new GetAccountTask(context, username){
+            new GetAccountTask(context, username) {
                 @Override
                 protected void onSuccess(Account account) throws Exception {
                     super.onSuccess(account);
                     if (account != null) {
 
-                        new Thread(){
+                        new Thread() {
                             @Override
                             public void run() {
                                 mLocalDataSource.insertAccount(account);
@@ -3495,38 +3407,43 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getLocalOtherUserAccount(String username, OnResponseCallback<Account> callback, Exception e){
+    private void getLocalOtherUserAccount(String username, OnResponseCallback<Account> callback, Exception e) {
 
-        new AsyncTask<Void, Void, Account>() {
+        new Task<Account>(context) {
             @Override
-            protected Account doInBackground(Void... voids) {
+            public Account call() {
                 return mLocalDataSource.getAccount(username);
             }
 
             @Override
-            protected void onPostExecute(Account account) {
-                super.onPostExecute(account);
+            protected void onSuccess(Account account) throws Exception {
+                super.onSuccess(account);
 
-                if (account == null){
+                if (account == null) {
                     callback.onFailure(e);
                 } else {
                     callback.onSuccess(account);
                 }
             }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
+            }
         }.execute();
 
     }
 
-    public void getFollowStatus(String username, OnResponseCallback<FollowStatus> callback){
+    public void getFollowStatus(String username, OnResponseCallback<FollowStatus> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new GetFollowStatusTask(context, username){
+            new GetFollowStatusTask(context, username) {
                 @Override
                 protected void onSuccess(FollowStatus followStatus) throws Exception {
                     super.onSuccess(followStatus);
 
-                    if (followStatus == null){
+                    if (followStatus == null) {
                         callback.onFailure(new TaException("Follow status could not be fetched"));
                     } else {
                         callback.onSuccess(followStatus);
@@ -3545,14 +3462,14 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getWpUser(long userId, OnResponseCallback<User> callback){
+    public void getWpUser(long userId, OnResponseCallback<User> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
             wpClientRetrofit.getUser(userId, new WordPressRestResponse<User>() {
                 @Override
                 public void onSuccess(User result) {
-                    if (result == null || result.getUsername() == null){
+                    if (result == null || result.getUsername() == null) {
                         callback.onFailure(new TaException("User could not be fetched"));
                     } else {
                         callback.onSuccess(result);
@@ -3571,71 +3488,70 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void setCustomFieldAttributes(OnResponseCallback<FieldInfo> callback){
+    public void setCustomFieldAttributes(OnResponseCallback<FieldInfo> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
-            new GetGenericUserFieldInfoTask(context)
-            {
+            new GetGenericUserFieldInfoTask(context) {
                 @Override
                 protected void onSuccess(FieldInfo fieldInfo) {
                     loginPrefs.setMxGenericFieldInfo(fieldInfo);
-                    if (callback != null){
+                    if (callback != null) {
                         callback.onSuccess(fieldInfo);
                     }
                 }
 
                 @Override
                 protected void onException(Exception ex) {
-                    if (callback != null){
+                    if (callback != null) {
                         callback.onFailure(ex);
                     }
                 }
             }.execute();
 
         } else {
-            if (callback != null){
+            if (callback != null) {
                 callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
             }
         }
 
     }
 
-    public void getCustomFieldAttributes(OnResponseCallback<FieldInfo> callback){
+    public void getCustomFieldAttributes(OnResponseCallback<FieldInfo> callback) {
         FieldInfo fieldInfo = loginPrefs.getMxGenericFieldInfo();
-        if (fieldInfo != null){
+        if (fieldInfo != null) {
             callback.onSuccess(fieldInfo);
         } else {
             setCustomFieldAttributes(callback);
         }
     }
 
-    public void setConnectCookies(){
+    public void setConnectCookies() {
         new MxCookiesAPI().execute();
     }
 
-    public void checkSurvey(Activity activity, SurveyType surveyType){
+    public void checkSurvey(Activity activity, SurveyType surveyType) {
         new MxSurveyAPI(context, activity, surveyType).execute();
     }
 
-    public void updateFirebaseToken(Activity activity){
-       FirebaseUtil firebaseUtil=new FirebaseUtil(activity);
+    public void updateFirebaseToken(Activity activity) {
+        FirebaseUtil firebaseUtil = new FirebaseUtil(activity);
         firebaseUtil.syncFirebaseToken();
     }
 
-    public void scheduleDeleteFeeds(){
+    public void scheduleDeleteFeeds() {
         Intent intent = new Intent(context, DeleteFeedsReceiver.class);
         new AlarmManagerUtil(context).scheduleRepeatingAlarm(intent, Constants.REQUEST_CODE_DELETE_FEEDS,
                 DateUtil.getEndOfDay(new Date()).getTime(), Constants.INTERVAL_DELETE_FEEDS);
     }
 
-    public void unscheduleDeleteFeeds(){
+    private void unscheduleDeleteFeeds() {
         Intent intent = new Intent(context, DeleteFeedsReceiver.class);
         new AlarmManagerUtil(context).cancelAlarm(intent, Constants.REQUEST_CODE_DELETE_FEEDS);
     }
 
-    public void deleteAllFeeds(){
-        new Thread(){
+    public void deleteAllFeeds() {
+        new Thread() {
             @Override
             public void run() {
                 mLocalDataSource.deleteFeeds(loginPrefs.getUsername());
@@ -3644,13 +3560,13 @@ public class DataManager extends BaseRoboInjector {
     }
 
     public void logSMSHash() {
-        AppSignatureHelper helper=new AppSignatureHelper(context);
+        AppSignatureHelper helper = new AppSignatureHelper(context);
         helper.getAppSignatures();
     }
 
-    public void likeConnectComment(long commentId, OnResponseCallback<StatusResponse> callback){
+    public void likeConnectComment(long commentId, OnResponseCallback<StatusResponse> callback) {
 
-        if (NetworkUtil.isConnected(context)){
+        if (NetworkUtil.isConnected(context)) {
 
             wpClientRetrofit.likeComment(commentId, loginPrefs.getWPUserId(), new WordPressRestResponse<StatusResponse>() {
                 @Override
@@ -3665,7 +3581,7 @@ public class DataManager extends BaseRoboInjector {
             });
 
         } else {
-            if (callback != null){
+            if (callback != null) {
                 callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
             }
         }

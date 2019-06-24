@@ -1,5 +1,6 @@
 package org.tta.mobile.tta.data.local.db;
 
+import org.tta.mobile.tta.data.local.db.table.Bookmark;
 import org.tta.mobile.tta.data.local.db.table.Category;
 import org.tta.mobile.tta.data.local.db.table.Certificate;
 import org.tta.mobile.tta.data.local.db.table.ContentList;
@@ -7,6 +8,7 @@ import org.tta.mobile.tta.data.local.db.table.ContentStatus;
 import org.tta.mobile.tta.data.local.db.table.Feed;
 import org.tta.mobile.tta.data.local.db.table.Notification;
 import org.tta.mobile.tta.data.local.db.table.Source;
+import org.tta.mobile.tta.data.local.db.table.StateContent;
 import org.tta.mobile.tta.data.local.db.table.UnitStatus;
 import org.tta.mobile.tta.data.local.db.table.User;
 import org.tta.mobile.tta.data.local.db.table.Content;
@@ -33,6 +35,7 @@ public interface ILocalDataSource {
     void insertContents(List<Content> contents);
     Content getContentById(long id);
     void insertContent(Content content);
+    void insertOrIgnoreContent(Content content);
     Content getContentBySourceIdentity(String sourceIdentity);
 
     List<Feed> getFeeds(String username, int take, int skip);
@@ -75,4 +78,15 @@ public interface ILocalDataSource {
 
     Account getAccount(String username);
     void insertAccount(Account account);
+
+    List<Content> getBookmarkedContents(long sourceId);
+    Bookmark getBookmark(long contentId);
+    void insertBookmark(Bookmark bookmark);
+    void insertBookmarks(List<Bookmark> bookmarks);
+    void deleteBookmark(Bookmark bookmark);
+    void deleteAllBookmarks();
+
+    List<Content> getStateContents(long sourceId);
+    void insertStateContents(List<StateContent> stateContents);
+    void deleteAllStateContents();
 }

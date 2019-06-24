@@ -63,7 +63,7 @@ public class DiscussionThreadViewModel extends BaseViewModel
     public ObservableField<String> userImage = new ObservableField<>();
     public ObservableInt userPlaceholder = new ObservableInt(R.drawable.profile_photo_placeholder);
     public ObservableField<String> threadDate = new ObservableField<>();
-    public ObservableField<String> likeCount = new ObservableField<>("0");
+    public ObservableField<String> likeCount = new ObservableField<>("");
     public ObservableField<String> commentsCount = new ObservableField<>("");
     public ObservableInt likeIcon = new ObservableInt(R.drawable.t_icon_like);
     public ObservableBoolean replyingToVisible = new ObservableBoolean();
@@ -117,7 +117,6 @@ public class DiscussionThreadViewModel extends BaseViewModel
         userImage.set(thread.getProfileImage() == null ? "" : thread.getProfileImage().getImageUrlMedium());
         threadDate.set(DateUtil.getDisplayTime(thread.getUpdatedAt()));
         likeIcon.set(thread.isVoted() ? R.drawable.t_icon_like_filled : R.drawable.t_icon_like);
-        likeCount.set(String.valueOf(thread.getVoteCount()));
 
         adapter = new CommentsPagerAdapter(mActivity.getSupportFragmentManager());
 
@@ -139,7 +138,9 @@ public class DiscussionThreadViewModel extends BaseViewModel
             @Override
             public void onSuccess(DiscussionThread data) {
                 thread.setResponseCount(data.getResponseCount());
+                thread.setVoteCount(data.getVoteCount());
                 commentsCount.set(String.valueOf(thread.getResponseCount()));
+                likeCount.set(String.valueOf(thread.getVoteCount()));
             }
 
             @Override

@@ -45,7 +45,7 @@
                 android:layout_marginEnd="@dimen/_70px"
                 android:fontFamily="@font/hind_regular"
                 android:gravity="center"
-                android:text="@string/be_the_first_to_comment"
+                android:text="@string/empty_comments_message"
                 android:textColor="@color/primary_cyan"
                 android:textSize="12sp" />
 

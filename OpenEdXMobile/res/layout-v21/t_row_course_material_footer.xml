@@ -89,9 +89,7 @@
                         android:visibility="@{viewModel.footerTitleVisible?View.VISIBLE:View.GONE}"
                         android:textColor="@color/gray_5"
                         android:textSize="12sp"
-                        android:fontFamily="@font/hind_medium"
-                        tool_tip="@{viewModel.understandToolTip}"
-                        tool_tip_gravity="@{viewModel.understandToolTipGravity}"/>
+                        android:fontFamily="@font/hind_medium"/>
 
                     <View
                         android:layout_width="match_parent"
@@ -115,7 +113,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/item_delete_download"
                             android:padding="6dp"
-                            android:background="?android:attr/selectableItemBackground"
+                            android:background="?android:attr/selectableItemBackgroundBorderless"
                             android:src="@{viewModel.footerDownloadIcon}"
                             android:visibility="@{viewModel.footerDownloadIconVisible ? View.VISIBLE : View.GONE}" />
 

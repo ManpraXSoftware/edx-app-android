@@ -103,24 +103,7 @@ public class AgendaItemViewModel extends BaseViewModel {
                     toolBarData, agendaItem.getSource_title()));
         }
 
-        try {
-            switch (SourceName.valueOf(agendaItem.getSource_name())){
-                case course:
-                    emptyImage.set(R.drawable.t_icon_course_130);
-                    break;
-                case chatshala:
-                    emptyImage.set(R.drawable.t_icon_chatshala_130);
-                    break;
-                case toolkit:
-                    emptyImage.set(R.drawable.t_icon_toolkit_130);
-                    break;
-                default:
-                    emptyImage.set(R.drawable.t_icon_course_130);
-                    break;
-            }
-        } catch (IllegalArgumentException e) {
-            emptyImage.set(R.drawable.t_icon_course_130);
-        }
+        emptyImage.set(ContentSourceUtil.getSourceDrawable_130x130(agendaItem.getSource_name()));
 
     }
 
@@ -164,7 +147,6 @@ public class AgendaItemViewModel extends BaseViewModel {
                     public void onFailure(Exception e) {
                         mActivity.hideLoading();
                         toggleEmptyVisibility();
-                        //                    mActivity.showLongSnack(e.getLocalizedMessage());
                     }
                 });
             } else {

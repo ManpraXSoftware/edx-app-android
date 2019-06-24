@@ -57,6 +57,7 @@ public class DiscussionLandingViewModel extends BaseViewModel {
     public RecyclerView.LayoutManager topicsLayoutManager;
 
     public ObservableBoolean progressVisible = new ObservableBoolean();
+    public ObservableBoolean emptyVisible = new ObservableBoolean();
 
     public DiscussionLandingViewModel(Context context, TaBaseFragment fragment, EnrolledCoursesResponse course) {
         super(context, fragment);
@@ -140,14 +141,26 @@ public class DiscussionLandingViewModel extends BaseViewModel {
                 public void onFailure(Exception e) {
                     progressVisible.set(false);
                     mActivity.showLongSnack(e.getLocalizedMessage());
+                    toggleEmptyVisibility();
                 }
             });
+        } else {
+            toggleEmptyVisibility();
         }
 
     }
 
     private void populateTopicsList() {
         topicsAdapter.setItems(topics);
+        toggleEmptyVisibility();
+    }
+
+    private void toggleEmptyVisibility() {
+        if (topics == null || topics.isEmpty()) {
+            emptyVisible.set(true);
+        } else {
+            emptyVisible.set(false);
+        }
     }
 
     @SuppressWarnings("unused")

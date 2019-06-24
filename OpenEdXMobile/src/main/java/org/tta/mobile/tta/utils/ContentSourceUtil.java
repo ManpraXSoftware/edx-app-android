@@ -47,4 +47,21 @@ public class ContentSourceUtil {
         }
     }
 
+    public static int getSourceDrawable_130x130(String sourceName){
+        try {
+            switch (SourceName.valueOf(sourceName)){
+                case course:
+                    return R.drawable.t_icon_course_130;
+                case chatshala:
+                    return R.drawable.t_icon_chatshala_130;
+                case toolkit:
+                    return R.drawable.t_icon_toolkit_130;
+                default:
+                    return R.drawable.t_icon_course_130;
+            }
+        } catch (IllegalArgumentException e) {
+            return R.drawable.t_icon_course_130;
+        }
+    }
+
 }

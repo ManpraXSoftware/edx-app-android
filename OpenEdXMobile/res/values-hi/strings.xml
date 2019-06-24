@@ -157,4 +157,7 @@
     <string name="feed_format_comment_post_from">%2$s से %1$s ने इस %3$s पर टिपण्णी की</string>
     <string name="feed_format_db_comment" translatable="false">%s ने चर्चा पर टिपण्णी की</string>
     <string name="feed_format_db_comment_from">%2$s से %1$s ने चर्चा पर टिपण्णी की</string>
+    <string name="empty_post_message">पोस्ट उपलब्ध नहीं है</string>
+    <string name="empty_discussion_message">चर्चा मौजूद नहीं</string>
+    <string name="empty_comments_message">इस चर्चा पर कोई टिप्पणी शामिल नहीं है</string>
 </resources>

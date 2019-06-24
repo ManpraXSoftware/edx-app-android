@@ -84,7 +84,7 @@ public class DiscussionCommentsTabViewModel extends BaseViewModel {
         if (this.comments == null){
             this.comments = new ArrayList<>();
         }
-        sortComments();
+//        sortComments();
         take = DEFAULT_TAKE;
         page = DEFAULT_PAGE;
         allLoaded = false;
@@ -173,7 +173,7 @@ public class DiscussionCommentsTabViewModel extends BaseViewModel {
     }
 
     public void refreshList(){
-        sortComments();
+//        sortComments();
         adapter.notifyDataSetChanged();
         adapter.setLoadingDone();
         toggleEmptyVisibility();

@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 import org.tta.mobile.R;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
 import org.tta.mobile.tta.data.enums.SourceName;
@@ -47,6 +48,7 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
 
     private ShareUtils.ShareMenuItemListener listener;
     private Feed feed;
+    private String delimiterTagChunks, delimiterSectionTag;
 
     public static FeedShareBottomSheet newInstance(ShareUtils.ShareMenuItemListener listener, Feed feed){
         FeedShareBottomSheet fragment = new FeedShareBottomSheet();
@@ -75,6 +77,8 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
     @Override
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
+        delimiterTagChunks = Constants.DELIMITER_TAG_CHUNKS;
+        delimiterSectionTag = Constants.DELIMITER_SECTION_TAG;
 
         int layoutId;
         try {
@@ -229,6 +233,10 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
             }
             imageView.setImageDrawable(d);
             imageView.setOnClickListener(v -> {
+                if (!AppUtil.appInstalledOrNot("com.facebook.katana", getActivity().getPackageManager())){
+                    Toast.makeText(getActivity(), "App is not installed", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 if (listener != null){
                     listener.onMenuItemClick(null, ShareUtils.ShareType.FACEBOOK);
                 }
@@ -249,6 +257,10 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
             }
             imageView.setImageDrawable(d);
             imageView.setOnClickListener(v -> {
+                if (!AppUtil.appInstalledOrNot("com.facebook.lite", getActivity().getPackageManager())){
+                    Toast.makeText(getActivity(), "App is not installed", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 if (listener != null){
                     listener.onMenuItemClick(null, ShareUtils.ShareType.FACEBOOK);
                 }
@@ -273,6 +285,10 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
             }
             imageView.setImageDrawable(d);
             imageView.setOnClickListener(v -> {
+                if (!AppUtil.appInstalledOrNot("com.whatsapp", getActivity().getPackageManager())){
+                    Toast.makeText(getActivity(), "App is not installed", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 if (listener != null){
                     listener.onMenuItemClick(null, ShareUtils.ShareType.WHATSAPP);
                 }
@@ -320,11 +336,11 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
             return builder.append("N/A").toString();
         }
 
-        String[] section_tag_list = tagLabel.split(" ");
+        String[] section_tag_list = tagLabel.split(delimiterTagChunks);
         boolean classesAdded = false;
 
         for (String section_tag : section_tag_list) {
-            String[] duet = section_tag.split("_");
+            String[] duet = section_tag.split(delimiterSectionTag);
             if (duet[0].contains("कक्षा")){
                 builder.append(duet[1]).append(", ");
                 classesAdded = true;

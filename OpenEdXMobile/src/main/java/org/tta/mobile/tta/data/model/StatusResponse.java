@@ -4,6 +4,13 @@ public class StatusResponse {
 
     private boolean status;
 
+    public StatusResponse() {
+    }
+
+    public StatusResponse(boolean status) {
+        this.status = status;
+    }
+
     public boolean getStatus() {
         return status;
     }
