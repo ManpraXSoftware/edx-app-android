@@ -184,8 +184,6 @@
                     android:id="@+id/feed_share_options_layout"
                     android:orientation="horizontal">
 
-
-
                 </LinearLayout>
 
             </LinearLayout>

@@ -103,6 +103,7 @@ public class LandingViewModel extends BaseViewModel {
         selectedId = R.id.action_library;
         showLibrary();
         onAppStart();
+        setToolTip();
 
     }
 
@@ -171,10 +172,7 @@ public class LandingViewModel extends BaseViewModel {
     }
 
     private void onAppStart(){
-        if (mDataManager.getAppPref().isFirstLaunch()){
-            libraryToolTip = new ObservableField<>("यहाँ सभी सामग्री पाए");
-            toolTipGravity = new ObservableInt(Gravity.TOP);
-        }
+
         mDataManager.getMyContentStatuses(new OnResponseCallback<List<ContentStatus>>() {
             @Override
             public void onSuccess(List<ContentStatus> data) {
@@ -187,6 +185,13 @@ public class LandingViewModel extends BaseViewModel {
 
             }
         });
+    }
+
+    private void setToolTip(){
+        if (!mDataManager.getAppPref().isFirstLaunch()){
+            libraryToolTip = new ObservableField<>("यहाँ सभी सामग्री पाए");
+            toolTipGravity = new ObservableInt(Gravity.TOP);
+        }
     }
 
     public void selectLibrary(){

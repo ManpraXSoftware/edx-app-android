@@ -310,6 +310,7 @@ public class PrefManager {
         public static final String IS_PROFILE_VISITED = "profile_visited";
         public static final String IS_AGENDA_VISITED = "agenda_visited";
         public static final String IS_FEED_VISITED = "feed_visited";
+        public static final String IS_SEARCH_VISITED = "search_visited";
 
         //mx:Arjun cookies and its entry time
         public static final String USER_CONNECT_LOGIN_COOKIE = "UserConnectLoginCookie";

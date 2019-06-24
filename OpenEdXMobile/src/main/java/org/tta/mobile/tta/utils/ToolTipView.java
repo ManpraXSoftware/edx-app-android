@@ -160,6 +160,22 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 .build();
         toolTipView1.show();
     }
+    public static void showToolTipPosition(Context context, String msg, View view, int gravity){
+//        view.setTag(view.getId(), TOOL_TIP);
+        ToolTip toolTip1 = new ToolTip.Builder()
+                .withText(msg)
+                .withBackgroundColor(ContextCompat.getColor(context, R.color.white_list_clicked))
+                .withPadding(15,15,15,15)
+                .withTextSize(55.0f)
+                .withTextColor(ContextCompat.getColor(context, R.color.primary_cyan))
+                .build();
+        ToolTipView toolTipView1 = new ToolTipView.Builder(context)
+                .withAnchor(view)
+                .withToolTip(toolTip1)
+                .withGravity(gravity)
+                .build();
+        toolTipView1.show();
+    }
 
 
 //    public static ToolTipView showToolTipNav(Context context, String msg, int gravity) {

@@ -2,6 +2,7 @@ package org.tta.mobile.tta.data.pref;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+
 import org.tta.mobile.module.prefs.PrefManager;
 
 import javax.inject.Inject;
@@ -18,48 +19,62 @@ public class AppPref {
         prefManager = new PrefManager(context, PrefManager.Pref.APP_INFO);
     }
 
-    public void setFirstLaunch(boolean firstLaunch){
+    public void setFirstLaunch(boolean firstLaunch) {
         prefManager.put(PrefManager.Key.FIRST_LAUNCH, firstLaunch);
     }
 
-    public boolean isFirstLaunch(){
+    public boolean isFirstLaunch() {
         return prefManager.getBoolean(PrefManager.Key.FIRST_LAUNCH, true);
     }
 
-    public boolean isCourseVisited(){
+    public boolean isCourseVisited() {
         return prefManager.getBoolean(PrefManager.Key.ISCOURSEVISITED, false);
     }
-    public void setCourseVisited(boolean courseVisited){
+
+    public void setCourseVisited(boolean courseVisited) {
         prefManager.put(PrefManager.Key.ISCOURSEVISITED, courseVisited);
     }
-    public boolean isProfileVisited(){
+
+    public boolean isProfileVisited() {
         return prefManager.getBoolean(PrefManager.Key.IS_PROFILE_VISITED, false);
     }
-    public void setProfileVisited(boolean profileVisited){
+
+    public void setProfileVisited(boolean profileVisited) {
         prefManager.put(PrefManager.Key.IS_PROFILE_VISITED, profileVisited);
     }
-    public boolean isAgendaVisited(){
+
+    public boolean isAgendaVisited() {
         return prefManager.getBoolean(PrefManager.Key.IS_AGENDA_VISITED, false);
     }
-    public void setAgendaVisited(boolean agendaVisited){
+
+    public void setAgendaVisited(boolean agendaVisited) {
         prefManager.put(PrefManager.Key.IS_AGENDA_VISITED, agendaVisited);
     }
- public boolean isFeedVisited(){
+
+    public boolean isFeedVisited() {
         return prefManager.getBoolean(PrefManager.Key.IS_FEED_VISITED, false);
     }
-    public void setFeedVisited(boolean feedVisited){
+
+    public void setFeedVisited(boolean feedVisited) {
         prefManager.put(PrefManager.Key.IS_FEED_VISITED, feedVisited);
     }
+    public boolean isSearchVisited() {
+        return prefManager.getBoolean(PrefManager.Key.IS_SEARCH_VISITED, false);
+    }
 
-    public boolean isFirstLogin(){
+    public void setSearchVisited(boolean searchVisited) {
+        prefManager.put(PrefManager.Key.IS_SEARCH_VISITED, searchVisited);
+    }
+
+    public boolean isFirstLogin() {
         return prefManager.getBoolean(PrefManager.Key.FIRST_LOGIN, true);
     }
 
-    public void setCurrentBreadcrumb(String breadcrumb){
+    public void setCurrentBreadcrumb(String breadcrumb) {
         prefManager.put(PrefManager.Key.CURRENT_BREADCRUMB, breadcrumb);
     }
 
-    public String getCurrentBreadcrumb(){
+    public String getCurrentBreadcrumb() {
         String breadcrumb = prefManager.getString(PrefManager.Key.CURRENT_BREADCRUMB);
         return breadcrumb == null ? "" : breadcrumb;
     }

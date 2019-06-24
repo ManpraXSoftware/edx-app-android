@@ -49,12 +49,10 @@ import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.BadgeHelper;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.tta.utils.DataUtil;
-import org.tta.mobile.util.images.ShareUtils;
+import org.tta.mobile.tta.utils.ToolTipView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.greenrobot.event.EventBus;
 
@@ -72,6 +70,8 @@ public class FeedViewModel extends BaseViewModel {
     public ObservableBoolean emptyVisible = new ObservableBoolean();
     public ObservableBoolean tooltipVisible = new ObservableBoolean();
     public ObservableField<String> feedToolTip;
+    public ObservableField<String> shareToolTip;
+    public ObservableInt sharetoolTipGravity;
     public ObservableInt toolTipGravity;
 
     private List<Feed> feeds;
@@ -101,7 +101,7 @@ public class FeedViewModel extends BaseViewModel {
 
     public FeedViewModel(Context context, TaBaseFragment fragment) {
         super(context, fragment);
-        setToolTip();
+//        setToolTip();
         feeds = new ArrayList<>();
         users = new ArrayList<>();
         take = DEFAULT_TAKE;
@@ -113,10 +113,11 @@ public class FeedViewModel extends BaseViewModel {
         feedAdapter = new FeedAdapter(context);
         suggestedUsersAdapter = new SuggestedUsersAdapter(mActivity);
 
+
         feedAdapter.setItems(feeds);
         feedAdapter.setItemClickListener((view, item) -> {
 
-            switch (view.getId()){
+            switch (view.getId()) {
                 case R.id.meta_user_layout:
                     mActivity.showShortSnack(item.getMeta_data().getUser_name());
                     break;
@@ -124,7 +125,7 @@ public class FeedViewModel extends BaseViewModel {
                     openShareMenu(item);
                     break;
                 case R.id.feed_comment_layout:
-                    if (item.getMeta_data().getSource_name().equalsIgnoreCase(SourceName.course.name())){
+                    if (item.getMeta_data().getSource_name().equalsIgnoreCase(SourceName.course.name())) {
                         mActivity.showLoading();
                         mDataManager.getContentFromSourceIdentity(item.getMeta_data().getId(),
                                 new OnResponseCallback<Content>() {
@@ -148,7 +149,7 @@ public class FeedViewModel extends BaseViewModel {
                     }
                 default:
                     try {
-                        switch (Action.valueOf(item.getAction())){
+                        switch (Action.valueOf(item.getAction())) {
                             case CertificateGenerate:
                             case GenerateCertificate:
                             case Certificate:
@@ -281,7 +282,7 @@ public class FeedViewModel extends BaseViewModel {
                             item.setFollowed(data.getStatus());
                             suggestedUsersAdapter.notifyItemChanged(suggestedUsersAdapter.getItemPosition(item));
 
-                            if (data.getStatus()){
+                            if (data.getStatus()) {
                                 mActivity.analytic.addMxAnalytics_db(item.getUsername(), Action.FollowUser,
                                         Nav.feed.name(), Source.Mobile, item.getUsername());
                             } else {
@@ -354,7 +355,6 @@ public class FeedViewModel extends BaseViewModel {
             }
         });
 
-
     }
 //    public void showTooLTip() {
 //        tooltipVisible.set(true);
@@ -394,15 +394,15 @@ public class FeedViewModel extends BaseViewModel {
         toggleEmptyVisibility();
     }
 
-    private void toggleEmptyVisibility(){
-        if (feeds == null || feeds.isEmpty()){
+    private void toggleEmptyVisibility() {
+        if (feeds == null || feeds.isEmpty()) {
             emptyVisible.set(true);
         } else {
             emptyVisible.set(false);
         }
     }
 
-    public void showContentDashboard(Content selectedContent){
+    public void showContentDashboard(Content selectedContent) {
 
         Bundle parameters = new Bundle();
         parameters.putParcelable(Constants.KEY_CONTENT, selectedContent);
@@ -415,7 +415,7 @@ public class FeedViewModel extends BaseViewModel {
 
     }
 
-    private void showOtherUserProfile(String username){
+    private void showOtherUserProfile(String username) {
         Bundle parameters = new Bundle();
         parameters.putString(Constants.KEY_USERNAME, username);
         ActivityUtil.gotoPage(mActivity, OtherProfileActivity.class, parameters);
@@ -431,15 +431,19 @@ public class FeedViewModel extends BaseViewModel {
                 null
         );
     }
-    private void setToolTip(){
-        if (!mDataManager.getAppPref().isFeedVisited()){
+
+
+    private void setToolTip() {
+        if (!mDataManager.getAppPref().isFeedVisited()) {
             feedToolTip = new ObservableField<>("अन्य शिक्षको से जुड़ने के लिए फॉलो बटन दबाये");
+            shareToolTip = new ObservableField<>("सभी के साथ यहाँ सामग्री साझा करने के लिए यहाँ बटन दबाएं");
             toolTipGravity = new ObservableInt(Gravity.BOTTOM);
+            sharetoolTipGravity = new ObservableInt(Gravity.BOTTOM);
 //            mDataManager.getAppPref().setFeedVisited(true);
         }
     }
 
-    private void openShareMenu(Feed feed){
+    private void openShareMenu(Feed feed) {
 
         FeedShareBottomSheet bottomSheet = FeedShareBottomSheet.newInstance(
                 (componentName, shareType) -> {
@@ -454,10 +458,10 @@ public class FeedViewModel extends BaseViewModel {
 
     }
 
-    private String getFeedTitle(Feed feed){
+    private String getFeedTitle(Feed feed) {
 
         try {
-            switch (Action.valueOf(feed.getAction())){
+            switch (Action.valueOf(feed.getAction())) {
                 case CourseLike:
                 case LikePost:
                     if (feed.getState() == null) {
@@ -592,7 +596,7 @@ public class FeedViewModel extends BaseViewModel {
 
     }
 
-    private String getUserClasses(String tagLabel){
+    private String getUserClasses(String tagLabel) {
         StringBuilder builder = new StringBuilder("कक्षाएँ - ");
 
         if (tagLabel == null || tagLabel.length() == 0) {
@@ -604,13 +608,13 @@ public class FeedViewModel extends BaseViewModel {
 
         for (String section_tag : section_tag_list) {
             String[] duet = section_tag.split(delimiterSectionTag);
-            if (duet[0].contains("कक्षा")){
+            if (duet[0].contains("कक्षा")) {
                 builder.append(duet[1]).append(", ");
                 classesAdded = true;
             }
         }
 
-        if (classesAdded){
+        if (classesAdded) {
             return builder.substring(0, builder.length() - 2);
         } else {
             return builder.append("N/A").toString();
@@ -619,19 +623,19 @@ public class FeedViewModel extends BaseViewModel {
     }
 
     @SuppressWarnings("unused")
-    public void onEventMainThread(UserFollowingChangedEvent event){
-        if (users.contains(event.getUser())){
+    public void onEventMainThread(UserFollowingChangedEvent event) {
+        if (users.contains(event.getUser())) {
             int position = users.indexOf(event.getUser());
             users.get(position).setFollowed(event.getUser().isFollowed());
             suggestedUsersAdapter.notifyItemChanged(position);
         }
     }
 
-    public void registerEventBus(){
+    public void registerEventBus() {
         EventBus.getDefault().registerSticky(this);
     }
 
-    public void unRegisterEventBus(){
+    public void unRegisterEventBus() {
         EventBus.getDefault().unregister(this);
     }
 
@@ -651,10 +655,19 @@ public class FeedViewModel extends BaseViewModel {
             if (binding instanceof TRowSuggestedTeacherBinding) {
                 TRowSuggestedTeacherBinding teacherBinding = (TRowSuggestedTeacherBinding) binding;
                 teacherBinding.userName.setText(model.getName());
+                setToolTip();
                 Glide.with(getContext())
                         .load(model.getProfileImage().getImageUrlLarge())
                         .placeholder(R.drawable.profile_photo_placeholder)
                         .into(teacherBinding.userImage);
+
+                if (getItemPosition(model) == 0) {
+                    if (mDataManager.getAppPref().isFeedVisited()) {
+                        ToolTipView.showToolTipPosition(mActivity, "अन्य शिक्षको से जुड़ने के लिए फॉलो बटन दबाये", teacherBinding.followBtn, Gravity.BOTTOM);
+                        mDataManager.getAppPref().setFeedVisited(true);
+                    }
+                }
+
 
                 if (model.isFollowed()) {
                     teacherBinding.followBtn.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.btn_selector_filled));
@@ -678,6 +691,7 @@ public class FeedViewModel extends BaseViewModel {
                         listener.onItemClick(v, model);
                     }
                 });
+
             }
         }
     }
@@ -701,8 +715,16 @@ public class FeedViewModel extends BaseViewModel {
 
                 feedBinding.feedTitle.setText(Html.fromHtml(getFeedTitle(model)));
 
+                if (getItemPosition(model) == 0) {
+                    if (mDataManager.getAppPref().isFeedVisited()) {
+                        ToolTipView.showToolTipPosition(mActivity, " सभी के साथ यहाँ सामग्री साझा \nकरने के लिए यहाँ बटन दबाएं", feedBinding.feedShare, Gravity.TOP);
+                        mDataManager.getAppPref().setFeedVisited(true);
+                    }
+                }
+
+
                 try {
-                    switch (Action.valueOf(model.getAction())){
+                    switch (Action.valueOf(model.getAction())) {
                         case LikePost:
                         case CourseLike:
                         case MostPopular:
@@ -789,7 +811,7 @@ public class FeedViewModel extends BaseViewModel {
                 if (model.getMeta_data().getShare_url() != null) {
                     feedBinding.feedShare.setVisibility(View.VISIBLE);
                     feedBinding.feedShare.setOnClickListener(v -> {
-                        if (listener != null){
+                        if (listener != null) {
                             listener.onItemClick(v, model);
                         }
                     });
@@ -798,7 +820,7 @@ public class FeedViewModel extends BaseViewModel {
                 }
 
                 feedBinding.getRoot().setOnClickListener(v -> {
-                    if (listener != null){
+                    if (listener != null) {
                         listener.onItemClick(v, model);
                     }
                 });
@@ -816,7 +838,7 @@ public class FeedViewModel extends BaseViewModel {
                 });*/
 
                 feedBinding.feedCommentLayout.setOnClickListener(v -> {
-                    if (listener != null){
+                    if (listener != null) {
                         listener.onItemClick(v, model);
                     }
                 });
@@ -862,7 +884,7 @@ public class FeedViewModel extends BaseViewModel {
                 }
 
                 feedWithUserBinding.metaUserLayout.setOnClickListener(v -> {
-                    if (listener != null){
+                    if (listener != null) {
                         listener.onItemClick(v, model);
                     }
                 });
@@ -870,7 +892,7 @@ public class FeedViewModel extends BaseViewModel {
                 if (model.getMeta_data().getShare_url() != null) {
                     feedWithUserBinding.feedShare.setVisibility(View.VISIBLE);
                     feedWithUserBinding.feedShare.setOnClickListener(v -> {
-                        if (listener != null){
+                        if (listener != null) {
                             listener.onItemClick(v, model);
                         }
                     });
@@ -879,7 +901,7 @@ public class FeedViewModel extends BaseViewModel {
                 }
 
                 feedWithUserBinding.getRoot().setOnClickListener(v -> {
-                    if (listener != null){
+                    if (listener != null) {
                         listener.onItemClick(v, model);
                     }
                 });
@@ -907,11 +929,12 @@ public class FeedViewModel extends BaseViewModel {
 
         @Override
         public int getItemLayout(int position) {
+
             if (isLoadMoreDisplayable() && position == getItemCount() - 1) {
                 return getLoadingMoreLayout();
             } else {
                 try {
-                    switch (Action.valueOf(getItem(position).getAction())){
+                    switch (Action.valueOf(getItem(position).getAction())) {
 
                         case LikePost:
                         case MostPopular:
