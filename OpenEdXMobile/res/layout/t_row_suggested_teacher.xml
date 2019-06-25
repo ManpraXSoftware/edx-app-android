@@ -39,7 +39,6 @@
                 android:textColor="@color/gray_5"
                 android:layout_marginTop="15dp"
                 android:gravity="center"
-                android:background="@color/secondary_red"
                 android:fontFamily="@font/hind_medium"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"

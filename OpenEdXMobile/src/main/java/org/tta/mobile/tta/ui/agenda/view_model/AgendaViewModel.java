@@ -54,8 +54,8 @@ public class AgendaViewModel extends BaseViewModel {
 
     private void setToolTip(){
         if (!mDataManager.getAppPref().isAgendaVisited()){
-            regionToolTip = new ObservableField<>("आपके राजय ने आपके \nलिए ये सामग्री चुनी है");
-            personalToolTip = new ObservableField<>("आपके द्वारा चुनी गयी सामग्री यहाँ है");
+            regionToolTip = new ObservableField<>("आपके राजय ने आपके \nलिए ये सामग्री चुनी है ");
+            personalToolTip = new ObservableField<>("आपके द्वारा चुनी गयी सामग्री यहाँ है ");
             downloadToolTip = new ObservableField<>("आपके द्वारा डाउनलोड की गयी सामग्री यहाँ है ");
             mDataManager.getAppPref().setAgendaVisited(true);
         }

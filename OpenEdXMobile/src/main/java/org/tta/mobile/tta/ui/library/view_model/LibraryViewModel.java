@@ -33,6 +33,9 @@ public class LibraryViewModel extends BaseViewModel {
     private SearchPageOpenedListener searchPageOpenedListener;
 
     public ObservableInt initialPosition = new ObservableInt();
+    public ObservableInt toolTipPosition;
+    public ObservableInt toolTipGravity;
+    public ObservableField<String> toolTiptext;
 
 
     public ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
@@ -45,7 +48,7 @@ public class LibraryViewModel extends BaseViewModel {
         public void onPageSelected(int i) {
             initialPosition.set(i);
             PageViewStateCallback callback = (PageViewStateCallback) fragments.get(i);
-            if (callback != null){
+            if (callback != null) {
                 callback.onPageShow();
             }
         }
@@ -67,10 +70,11 @@ public class LibraryViewModel extends BaseViewModel {
         adapter = new ListingPagerAdapter(mFragment.getChildFragmentManager());
 
         getData();
+        setToolTip();
 
     }
 
-    private void getData(){
+    private void getData() {
         mActivity.showLoading();
 
         mDataManager.getCollectionConfig(new OnResponseCallback<CollectionConfigResponse>() {
@@ -98,10 +102,10 @@ public class LibraryViewModel extends BaseViewModel {
 
     }
 
-    private void populateTabs(){
+    private void populateTabs() {
         fragments.clear();
         titles.clear();
-        for (Category category: categories){
+        for (Category category : categories) {
             fragments.add(LibraryTab.newInstance(cr, category, searchPageOpenedListener));
             titles.add(category.getName());
         }
@@ -113,18 +117,29 @@ public class LibraryViewModel extends BaseViewModel {
         }
         initialPosition.set(0);
 
-        if (!categories.isEmpty()){
+        if (!categories.isEmpty()) {
             PageViewStateCallback callback = (PageViewStateCallback) fragments.get(0);
-            if (callback != null){
+            if (callback != null) {
                 callback.onPageShow();
             }
         }
+
+//        toolTipPosition.set(0);
 
     }
 
     public class ListingPagerAdapter extends BasePagerAdapter {
         public ListingPagerAdapter(FragmentManager fm) {
             super(fm);
+        }
+    }
+
+    public void setToolTip() {
+        if (!mDataManager.getAppPref().isProfileVisited()) {
+            toolTipPosition = new ObservableInt(0);
+            toolTipGravity = new ObservableInt(Gravity.BOTTOM);
+            toolTiptext = new ObservableField<>("प्रत्येक बटन पर क्लिक करके विशिस्ट सामग्री पाएं ");
+//            mDataManager.getAppPref().setProfileVisited(true);
         }
     }
 }

@@ -11,6 +11,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.print.PrintAttributes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
@@ -56,9 +57,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
 
     private float pivotX;
     private float pivotY;
-    private ToolTip toolTip;
-    static ToolTipView toolTipView1;
-    ArrayList<View> views = new ArrayList<>();
+
 
     @Nullable
     private OnToolTipClickedListener listener;
@@ -152,13 +151,14 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
         view.setTag(view.getId(), TOOL_TIP);
         ToolTip toolTip1 = new ToolTip.Builder()
                 .withText(msg)
-                .withBackgroundColor(ContextCompat.getColor(context, R.color.white_list_clicked))
+                .withTypefaceStyle(R.font.hind_semibold)
+                .withBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light))
                 .withPadding(15,15,15,15)
-                .withTextSize(55.0f)
+                .withTextSize(25)
                 .withTextColor(ContextCompat.getColor(context, R.color.primary_cyan))
                 .build();
 
-        toolTipView1 = new Builder(context)
+        ToolTipView toolTipView1 = new Builder(context)
                 .withAnchor(view)
                 .withToolTip(toolTip1)
                 .withGravity(gravity)
@@ -250,7 +250,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                     @Override
                     public void onAnimationEnd(Animator animation) {
 //                        popupWindow.dismiss();
-                        toolTipView1.popupWindow.setOutsideTouchable(true);
+//                        toolTipView1.popupWindow.setOutsideTouchable(true);
                         popupWindow.dismiss();
                     }
                 });

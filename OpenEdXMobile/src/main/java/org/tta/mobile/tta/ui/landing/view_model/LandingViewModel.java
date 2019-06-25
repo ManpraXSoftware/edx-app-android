@@ -49,6 +49,8 @@ public class LandingViewModel extends BaseViewModel {
     public ObservableField<String> libraryToolTip;
     public ObservableInt toolTipGravity;
 
+
+
     public BottomNavigationView.OnNavigationItemSelectedListener itemSelectedListener = item -> {
         menuItem = item;
         if (item.getItemId() == selectedId) {
@@ -64,20 +66,20 @@ public class LandingViewModel extends BaseViewModel {
                 selectedId = R.id.action_feed;
                 showFeed();
                 if (!mDataManager.getAppPref().isFeedVisited()) {
-                    ToolTipView.showToolTip(getActivity(), "अन्य शिक्षको के साथ जुड़े", mActivity.findViewById(R.id.action_feed), Gravity.TOP);
+                    ToolTipView.showToolTip(getActivity(), "यहाँ अन्य शिक्षको के साथ जुड़े ", mActivity.findViewById(R.id.action_feed), Gravity.TOP);
                 }
                 return true;
             case R.id.action_search:
                 selectedId = R.id.action_search;
                 if (!mDataManager.getAppPref().isSearchVisited()) {
-                    ToolTipView.showToolTip(getActivity(), "यहाँ अपनी रूचि के अनुसार सामग्री खोजे",mActivity.findViewById(R.id.action_search),Gravity.TOP);
+                    ToolTipView.showToolTip(getActivity(), "यहाँ अपनी रूचि के अनुसार सामग्री खोजे ",mActivity.findViewById(R.id.action_search),Gravity.TOP);
                 }
                 showSearch();
                 return true;
             case R.id.action_agenda:
                 selectedId = R.id.action_agenda;
                 if (!mDataManager.getAppPref().isAgendaVisited()) {
-                    ToolTipView.showToolTip(getActivity(), "यहाँ अपना लक्ष्य जाने और बनाए",mActivity.findViewById(R.id.action_agenda),Gravity.TOP);
+                    ToolTipView.showToolTip(getActivity(), "यहाँ अपना लक्ष्य जाने और बनायें ",mActivity.findViewById(R.id.action_agenda),Gravity.TOP);
 
                 }
                 showAgenda();
@@ -105,7 +107,7 @@ public class LandingViewModel extends BaseViewModel {
         selectedId = R.id.action_library;
         showLibrary();
         onAppStart();
-        setToolTip();
+
 
     }
 
@@ -128,6 +130,7 @@ public class LandingViewModel extends BaseViewModel {
                 false,
                 null
         );
+//        setToolTip();
     }
 
     public void showFeed() {
@@ -191,8 +194,12 @@ public class LandingViewModel extends BaseViewModel {
     }
 
     private void setToolTip(){
+//        ToolTipView.showToolTip(getActivity(), "यहाँ सभी सामग्री पाए",mActivity.findViewById(R.id.action_library),Gravity.TOP);
+//        bottomNavigationView.post(() -> {
+//            ToolTipView.showToolTip(this, "यहाँ सभी सामग्री पाए",mActivity.findViewById(R.id.action_library), Gravity.TOP);
+//        });
         if (!mDataManager.getAppPref().isFeedVisited()){
-            libraryToolTip = new ObservableField<>("यहाँ सभी सामग्री पाए");
+            libraryToolTip = new ObservableField<>("यहाँ सभी सामग्री पाएं ");
             toolTipGravity = new ObservableInt(Gravity.TOP);
         }
     }

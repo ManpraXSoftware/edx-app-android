@@ -54,7 +54,13 @@ public class LibraryFragment extends TaBaseFragment {
         viewPager.setOffscreenPageLimit(5);
         tabLayout.setupWithViewPager(viewPager);
 
-//        ToolTipView.showToolTip(getActivity(),"Library", , Gravity.TOP);
+//        tabLayout.post(() -> {
+////            if (!mAppPref.isProfileVisited()) {
+//                ToolTipView.showToolTip(getActivity(), "यहाँ सभी सामग्री पाए", tabLayout.getChildAt(0), Gravity.TOP);
+////                mAppPref.setProfileVisited(true);
+////            }
+//        });
+
 
         return view;
     }

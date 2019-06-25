@@ -420,4 +420,14 @@ public class BindingAdapters {
         if (message != null && !message.trim().equals(""))
             ToolTipView.showToolTip(view.getContext(), message.trim(), view, gravity);
     }
+
+    @BindingAdapter({"tool_tip", "tool_tip_gravity", "tool_tip_position"})
+    public static void showToolTipPos(TabLayout view, String message, int gravity, int position){
+        view.post(() -> {
+            View v = view.getChildAt(position);
+            if(v != null && !ToolTipView.isToolTipAdded(v))
+                if (message != null && !message.trim().equals(""))
+                    ToolTipView.showToolTip(v.getContext(), message.trim(), v, gravity);
+        });
+    }
 }
