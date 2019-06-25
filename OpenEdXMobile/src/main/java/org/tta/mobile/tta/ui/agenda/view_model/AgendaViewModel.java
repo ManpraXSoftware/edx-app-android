@@ -23,6 +23,7 @@ import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.ContentSourceUtil;
+import org.tta.mobile.tta.utils.ToolTipView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,7 +54,7 @@ public class AgendaViewModel extends BaseViewModel {
 
     private void setToolTip(){
         if (!mDataManager.getAppPref().isAgendaVisited()){
-            regionToolTip = new ObservableField<>("आपके राजय ने आपके लिए ये सामग्री चुनी है");
+            regionToolTip = new ObservableField<>("आपके राजय ने आपके \nलिए ये सामग्री चुनी है");
             personalToolTip = new ObservableField<>("आपके द्वारा चुनी गयी सामग्री यहाँ है");
             downloadToolTip = new ObservableField<>("आपके द्वारा डाउनलोड की गयी सामग्री यहाँ है ");
             mDataManager.getAppPref().setAgendaVisited(true);
@@ -250,6 +251,10 @@ public class AgendaViewModel extends BaseViewModel {
                 } else {
                     itemBinding.agendaCard.setCardBackgroundColor(ContextCompat.getColor(mActivity, R.color.secondary_grey_light));
                 }
+//                if (getItemPosition(model)==0){
+//                    ToolTipView.showToolTip(mActivity,"आपके द्वारा डाउनलोड की गयी सामग्री यहाँ है",itemBinding.agendaCard,Gravity.BOTTOM);
+//                }
+
                 itemBinding.agendaItemCount.setText(String.valueOf(model.getContent_count()));
                 itemBinding.agendaSource.setText(model.getSource_title());
                 itemBinding.agendaSource.setCompoundDrawablesRelativeWithIntrinsicBounds(

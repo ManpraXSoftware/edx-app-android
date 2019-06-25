@@ -35,6 +35,8 @@ import android.widget.Toast;
 
 import org.tta.mobile.R;
 
+import java.util.ArrayList;
+
 public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnClickListener {
     public interface OnToolTipClickedListener {
         void onToolTipClicked(ToolTipView toolTipView);
@@ -55,6 +57,8 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
     private float pivotX;
     private float pivotY;
     private ToolTip toolTip;
+    static ToolTipView toolTipView1;
+    ArrayList<View> views = new ArrayList<>();
 
     @Nullable
     private OnToolTipClickedListener listener;
@@ -153,12 +157,14 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 .withTextSize(55.0f)
                 .withTextColor(ContextCompat.getColor(context, R.color.primary_cyan))
                 .build();
-        ToolTipView toolTipView1 = new ToolTipView.Builder(context)
+
+        toolTipView1 = new Builder(context)
                 .withAnchor(view)
                 .withToolTip(toolTip1)
                 .withGravity(gravity)
                 .build();
         toolTipView1.show();
+
     }
     public static void showToolTipPosition(Context context, String msg, View view, int gravity){
 //        view.setTag(view.getId(), TOOL_TIP);
@@ -210,6 +216,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
     @UiThread
     public void show() {
             popupWindow.showAsDropDown(anchorView);
+//            views.add(anchorView.getId(), anchorView);
             container.getViewTreeObserver().addOnPreDrawListener(this);
     }
 
@@ -242,9 +249,26 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
+//                        popupWindow.dismiss();
+                        toolTipView1.popupWindow.setOutsideTouchable(true);
                         popupWindow.dismiss();
                     }
                 });
+    }
+
+    public void removeAll(View view){
+
+
+//        container.setPivotX(pivotX);
+//        container.setPivotY(pivotY);
+//        container.animate().setDuration(ANIMATION_DURATION).alpha(0.0F).scaleX(0.0F).scaleY(0.0F)
+//                .setListener(new AnimatorListenerAdapter() {
+//                    @Override
+//                    public void onAnimationEnd(Animator animation) {
+//                        popupWindow.dismiss();
+//                    }
+//                });
+
     }
 
     @Override
@@ -354,7 +378,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
         if (listener != null) {
             listener.onToolTipClicked(this);
         }
-
+//        removeAll(v);
         remove(v);
     }
 

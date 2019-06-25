@@ -92,7 +92,7 @@
                 app:mx_titleTextFont="@font/hind_semibold"
                 app:mx_titleTextSize="@dimen/list_title_size"
                 tool_tip="@{viewModel.personalToolTip}"
-                tool_tip_gravity="@{viewModel.personalToolTipGravity}"/>
+                tool_tip_gravity="@{viewModel.toolTipGravity}"/>
 
             <com.maurya.mx.mxlib.view.MxFiniteRecyclerView
                 android:id="@+id/download_agenda_list"
@@ -106,7 +106,7 @@
                 app:mx_titleTextFont="@font/hind_semibold"
                 app:mx_titleTextSize="@dimen/list_title_size"
                 tool_tip="@{viewModel.downloadToolTip}"
-                tool_tip_gravity="@{viewModel.personalToolTipGravity}"/>
+                tool_tip_gravity="@{viewModel.toolTipGravity}"/>
 
         </LinearLayout>
 

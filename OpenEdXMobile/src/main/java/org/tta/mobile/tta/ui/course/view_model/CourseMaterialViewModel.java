@@ -66,8 +66,7 @@ import org.tta.mobile.tta.ui.certificate.CertificateActivity;
 import org.tta.mobile.tta.ui.course.CourseScormViewActivity;
 import org.tta.mobile.tta.ui.interfaces.OnTaItemClickListener;
 import org.tta.mobile.tta.utils.ActivityUtil;
-import org.tta.mobile.tta.utils.JsonUtil;
-import org.tta.mobile.tta.utils.ToolTipView;
+
 import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.PermissionsUtil;
 
@@ -146,7 +145,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void setToolTip(){
-        if (!mDataManager.getAppPref().isCourseVisited()){
+        if (mDataManager.getAppPref().isCourseVisited()){
             likeToolTip = new ObservableField<>("सामग्री को अपने लक्ष्य से \nजोड़ने के लिए बटन को दबाए");
             downloadToolTip = new ObservableField<>("सामग्री डाउनलोड करने \nके लिए बटन दबाए ");
             understandToolTip = new ObservableField<>("सभी भाग देखने पर और 60% या उससे \nअधिक पाने पर आपको सर्टिफिकेट मिलेगा ");
@@ -367,6 +366,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
         getCertificateStatus();
 
         adapter.setFooterLayout(R.layout.t_row_course_material_footer);
+
         adapter.setFooterClickListener(v -> {
 
             ScormBlockModel scorm = null;

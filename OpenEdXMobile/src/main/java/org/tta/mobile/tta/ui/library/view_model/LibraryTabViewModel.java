@@ -9,6 +9,7 @@ import android.support.v4.view.PagerAdapter;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -242,6 +243,8 @@ public class LibraryTabViewModel extends BaseViewModel {
                                 .placeholder(R.drawable.placeholder_course_card_image)
                                 .into(imageView);
                         container.addView(view);
+
+
                         view.setOnClickListener(v -> {
 //                            Toast.makeText(mActivity, contentListMap.get(model.getId()).get(position).getName(), Toast.LENGTH_SHORT).show();
                             selectedContent = contentListMap.get(model.getId()).get(position);

@@ -662,8 +662,8 @@ public class FeedViewModel extends BaseViewModel {
                         .into(teacherBinding.userImage);
 
                 if (getItemPosition(model) == 0) {
-                    if (mDataManager.getAppPref().isFeedVisited()) {
-                        ToolTipView.showToolTipPosition(mActivity, "अन्य शिक्षको से जुड़ने के लिए फॉलो बटन दबाये", teacherBinding.followBtn, Gravity.BOTTOM);
+                    if (!mDataManager.getAppPref().isFeedVisited()) {
+                        ToolTipView.showToolTip(mActivity, "अन्य शिक्षको से जुड़ने के लिए फॉलो बटन दबाये", teacherBinding.followBtn, Gravity.BOTTOM);
                         mDataManager.getAppPref().setFeedVisited(true);
                     }
                 }
@@ -717,7 +717,8 @@ public class FeedViewModel extends BaseViewModel {
 
                 if (getItemPosition(model) == 0) {
                     if (mDataManager.getAppPref().isFeedVisited()) {
-                        ToolTipView.showToolTipPosition(mActivity, " सभी के साथ यहाँ सामग्री साझा \nकरने के लिए यहाँ बटन दबाएं", feedBinding.feedShare, Gravity.TOP);
+                        ToolTipView.showToolTip(mActivity, " सभी के साथ यहाँ सामग्री साझा \nकरने के लिए यहाँ बटन दबाएं",
+                                feedBinding.feedShare, Gravity.TOP);
                         mDataManager.getAppPref().setFeedVisited(true);
                     }
                 }

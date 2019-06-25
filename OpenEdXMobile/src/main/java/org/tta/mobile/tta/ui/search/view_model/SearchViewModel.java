@@ -219,7 +219,7 @@ public class SearchViewModel extends BaseViewModel {
         loadDefaultCategory();
     }
 
-    public void setToolTip(){
+    private void setToolTip(){
         if (!mDataManager.getAppPref().isSearchVisited()){
             searchToolTip = new ObservableField<>("विशिष्ट सामग्री चुनने के\n लिए यहाँ दबाये");
             selectedToolTip = new ObservableField<>("चुनिंदा कर्म में देखे");
@@ -228,6 +228,7 @@ public class SearchViewModel extends BaseViewModel {
             mDataManager.getAppPref().setSearchVisited(true);
         }
     }
+
 
     @Override
     public void onResume() {
