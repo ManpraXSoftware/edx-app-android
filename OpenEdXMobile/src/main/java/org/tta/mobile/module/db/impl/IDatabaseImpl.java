@@ -1002,4 +1002,14 @@ public class IDatabaseImpl extends IDatabaseBaseImpl implements IDatabase {
                 new String[]{loginPrefs.getUsername(),course_id,unit_id},null);
         return enqueue(op);
     }
+
+    @Override
+    public int getAnalyticsCount(DataCallback<Integer> callback) {
+        DbOperationGetCount op = new DbOperationGetCount(false, DbStructure.Table.ANALYTIC,
+                new String[]{DbStructure.Column.ANALYTIC_TB_ID},
+                DbStructure.Column.USER_ID +"=?",
+                new String[]{loginPrefs.getUsername()},null);
+        op.setCallback(callback);
+        return enqueue(op);
+    }
 }

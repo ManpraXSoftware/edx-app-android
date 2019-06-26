@@ -185,4 +185,6 @@ public interface IStorage {
     Integer updateResumePayload(Resume resume);
     Integer deleteResumePayload(String course_id, String unit_id);
     Resume getResumeInfo(String course_id, String unit_id);
+
+    int getAnalyticsCount();
 }

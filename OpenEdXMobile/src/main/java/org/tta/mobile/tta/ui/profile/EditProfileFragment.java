@@ -2,6 +2,7 @@ package org.tta.mobile.tta.ui.profile;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import com.bumptech.glide.Glide;
 import org.tta.mobile.R;
 import org.tta.mobile.model.api.ProfileModel;
 import org.tta.mobile.module.registration.model.RegistrationOption;
+import org.tta.mobile.third_party.crop.CropUtil;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.data.model.authentication.FieldInfo;
@@ -40,6 +42,8 @@ import org.tta.mobile.util.images.ImageCaptureHelper;
 import org.tta.mobile.util.images.ImageUtils;
 import org.tta.mobile.view.CropImageActivity;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,6 +85,7 @@ public class EditProfileFragment extends TaBaseFragment {
     private FieldInfo fieldInfo;
     private String pmisError;
     private String delimiterTagChunks, delimiterSectionTag;
+    private File cropped;
 
     public static EditProfileFragment newInstance(ProfileModel profileModel, ProfileImage profileImage,
                                                   Account account, SearchFilter searchFilter){
@@ -227,31 +232,31 @@ public class EditProfileFragment extends TaBaseFragment {
         etFirstName.setText(profileModel.name);
         etFirstName.setMandatory(true);
 
-        stateSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "State/राज्य", viewModel.states,
+        stateSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "State/राज्य*", viewModel.states,
                 profileModel.state == null ? null : new RegistrationOption(profileModel.state, profileModel.state));
         stateSpinner.setMandatory(true);
 
-        districtSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "District/" + "जिला", viewModel.districts,
+        districtSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "District/जिला*", viewModel.districts,
                 profileModel.district == null ? null : new RegistrationOption(profileModel.district, profileModel.district));
         districtSpinner.setMandatory(true);
 
-        blockSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Block/तहसील", viewModel.blocks,
+        blockSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Block/तहसील*", viewModel.blocks,
                 profileModel.block == null ? null : new RegistrationOption(profileModel.block, profileModel.block));
         blockSpinner.setMandatory(true);
 
-        professionSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Profession/व्यवसाय", viewModel.professions,
+        professionSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Profession/व्यवसाय*", viewModel.professions,
                 profileModel.title == null ? null : new RegistrationOption(profileModel.title, profileModel.title));
         professionSpinner.setMandatory(true);
 
-        genderSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Gender/लिंग", viewModel.genders,
+        genderSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Gender/लिंग*", viewModel.genders,
                 profileModel.gender == null ? null : new RegistrationOption(profileModel.gender, profileModel.gender));
         genderSpinner.setMandatory(true);
 
-        classTaughtSpinner = ViewUtil.addMultiOptionSpinner(userInfoLayout, "Classes Taught/पढ़ाई गई कक्षा",
+        classTaughtSpinner = ViewUtil.addMultiOptionSpinner(userInfoLayout, "Classes Taught/पढ़ाई गई कक्षा*",
                 viewModel.classesTaught, null);
         classTaughtSpinner.setMandatory(true);
 
-        skillsSpinner = ViewUtil.addMultiOptionSpinner(userInfoLayout, "Skills/कौशल",
+        skillsSpinner = ViewUtil.addMultiOptionSpinner(userInfoLayout, "Skills/कौशल*",
                 viewModel.skills, null);
         skillsSpinner.setMandatory(true);
 
@@ -546,10 +551,20 @@ public class EditProfileFragment extends TaBaseFragment {
                 break;
             }
             case CROP_PHOTO_REQUEST: {
-                viewModel.setImageUri(CropImageActivity.getImageUriFromResult(data));
-                viewModel.setCropRect(CropImageActivity.getCropRectFromResult(data));
+                Uri uri = CropImageActivity.getImageUriFromResult(data);
+                Rect rect = CropImageActivity.getCropRectFromResult(data);
+                viewModel.setImageUri(uri);
+                viewModel.setCropRect(rect);
+
+                cropped = new File(getActivity().getExternalCacheDir(),
+                        "cropped-image-view" + System.currentTimeMillis() + ".jpg");
+                try {
+                    CropUtil.crop(getActivity(), uri, rect, 500, 500, cropped);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 Glide.with(getActivity())
-                        .load(CropImageActivity.getImageUriFromResult(data))
+                        .load(cropped)
                         .placeholder(R.drawable.profile_photo_placeholder)
                         .into(userImage);
                 break;
@@ -561,5 +576,13 @@ public class EditProfileFragment extends TaBaseFragment {
     public void onResume() {
         super.onResume();
         logD("TTA Nav ======> " + BreadcrumbUtil.setBreadcrumb(RANK, Nav.edit.name()));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (cropped != null && cropped.exists()){
+            boolean b = cropped.delete();
+        }
     }
 }

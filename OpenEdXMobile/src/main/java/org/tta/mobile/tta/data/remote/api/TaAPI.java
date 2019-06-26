@@ -246,4 +246,8 @@ public class TaAPI {
     public Call<FollowStatus> getFollowStatus(String username){
         return taService.getFollowStatus(username);
     }
+
+    public Call<List<SuggestedUser>> getFollowersOrFollowing(boolean follower, int take, int skip){
+        return taService.getFollowersOrFollowing(follower, take, skip);
+    }
 }

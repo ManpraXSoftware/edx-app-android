@@ -796,12 +796,18 @@
     <string name="empty_comments_message">Comments are not available on this thread</string>
     <string name="empty_post_message">Post is not available</string>
     <string name="empty_discussion_message">Discussion not available</string>
+    <string name="empty_certificates_message">You have not earned any certificate yet</string>
+    <string name="empty_list_message">List is empty</string>
+    <string name="not_available_message">%s not available</string>
     <string name="comment_btn_label">Comment</string>
     <string name="replying_to">Replying to {name}</string>
     <string name="filter">Filter</string>
     <string name="apply">Apply</string>
     <string name="save">Save</string>
     <string name="send">Send</string>
+    <string name="search_only_hindi">Search(only in hindi)</string>
+    <string name="delete">Delete</string>
+    <string name="delete_question">Are you sure you want to delete “%s”</string>
 
     <string name="sign_out_message">Are you sure you want to Sign Out?</string>
     <string name="be_the_first_to_comment" translatable="false">Be the first to comment</string>

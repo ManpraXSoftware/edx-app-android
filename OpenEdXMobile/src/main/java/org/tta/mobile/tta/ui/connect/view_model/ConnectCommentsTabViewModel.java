@@ -88,8 +88,8 @@ public class ConnectCommentsTabViewModel extends BaseViewModel {
 
                 case R.id.comment_reply_layout:
                     if (commentClickListener != null){
-                        scrollPosition.set(adapter.getItemPosition(item));
                         commentClickListener.onClickReply(item);
+                        scrollPosition.set(adapter.getItemPosition(item));
                     }
                     break;
 

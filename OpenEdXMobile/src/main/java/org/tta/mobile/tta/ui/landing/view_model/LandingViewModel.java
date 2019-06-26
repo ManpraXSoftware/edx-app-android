@@ -171,8 +171,19 @@ public class LandingViewModel extends BaseViewModel {
         if (statuses == null){
             statuses = new ArrayList<>();
         }
+        ContentStatus contentStatus = event.getContentStatus();
+        if (statuses.contains(contentStatus)){
+            ContentStatus prev = statuses.get(statuses.indexOf(contentStatus));
+            if (prev.getCompleted() == null && contentStatus.getCompleted() != null){
+                prev.setCompleted(contentStatus.getCompleted());
+            }
+            if (prev.getStarted() == null && contentStatus.getStarted() != null){
+                prev.setStarted(contentStatus.getStarted());
+            }
+        } else {
+            statuses.add(contentStatus);
+        }
         statuses.remove(event.getContentStatus());
-        statuses.add(event.getContentStatus());
     }
 
     public void registerEventBus(){

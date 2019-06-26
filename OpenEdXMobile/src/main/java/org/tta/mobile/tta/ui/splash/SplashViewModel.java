@@ -23,7 +23,7 @@ public class SplashViewModel extends BaseViewModel {
 
     public SplashViewModel(BaseVMActivity activity) {
         super(activity);
-        mDataManager.onAppStart();
+        mDataManager.onAppStartOrClose();
     }
 
     public void startRouting(Activity activity){

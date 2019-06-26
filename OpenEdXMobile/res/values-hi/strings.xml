@@ -159,4 +159,10 @@
     <string name="empty_post_message">पोस्ट उपलब्ध नहीं है</string>
     <string name="empty_discussion_message">चर्चा मौजूद नहीं</string>
     <string name="empty_comments_message">इस चर्चा पर कोई टिप्पणी शामिल नहीं है</string>
+    <string name="empty_certificates_message">सर्टिफिकेट उपलब्ध नहीं है</string>
+    <string name="not_available_message">%s उपलब्ध नहीं है</string>
+    <string name="empty_list_message">सूची खाली है</string>
+    <string name="search_only_hindi">खोज(केवल हिंदी)</string>
+    <string name="delete">हटाएँ</string>
+    <string name="delete_question">क्या आप “%s” हटाना चाहते हैं</string>
 </resources>

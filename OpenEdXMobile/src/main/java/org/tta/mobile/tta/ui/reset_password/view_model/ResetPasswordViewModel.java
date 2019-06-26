@@ -16,6 +16,7 @@ import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.logistration.SigninRegisterActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
+import org.tta.mobile.util.NetworkUtil;
 
 public class ResetPasswordViewModel extends BaseViewModel {
 
@@ -91,6 +92,10 @@ public class ResetPasswordViewModel extends BaseViewModel {
     }
 
     public void submit(){
+        if (!NetworkUtil.isConnected(mActivity)){
+            mActivity.showLongSnack(mActivity.getString(R.string.no_connection_exception));
+            return;
+        }
         mActivity.showLoading();
 
         Bundle parameters = new Bundle();

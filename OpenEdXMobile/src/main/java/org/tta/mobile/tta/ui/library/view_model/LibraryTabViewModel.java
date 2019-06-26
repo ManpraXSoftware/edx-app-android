@@ -2,6 +2,9 @@ package org.tta.mobile.tta.ui.library.view_model;
 
 import android.Manifest;
 import android.content.Context;
+import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.databinding.ViewDataBinding;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -12,6 +15,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +39,7 @@ import org.tta.mobile.tta.data.enums.ContentListType;
 import org.tta.mobile.tta.data.enums.SourceType;
 import org.tta.mobile.tta.data.local.db.table.Category;
 import org.tta.mobile.tta.data.local.db.table.ContentStatus;
+import org.tta.mobile.tta.data.local.db.table.Source;
 import org.tta.mobile.tta.data.model.library.CollectionConfigResponse;
 import org.tta.mobile.tta.data.model.library.CollectionItemsResponse;
 import org.tta.mobile.tta.event.ContentStatusReceivedEvent;
@@ -68,12 +73,17 @@ public class LibraryTabViewModel extends BaseViewModel {
     private List<ContentList> contentLists;
     private Content selectedContent;
     private SearchPageOpenedListener searchPageOpenedListener;
+    private Source source;
 
     private Map<Long, List<Content>> contentListMap;
     private Map<Long, ContentStatus> contentStatusMap;
 
     public ListingRecyclerAdapter adapter;
     public RecyclerView.LayoutManager layoutManager;
+
+    public ObservableBoolean emptyVisible = new ObservableBoolean();
+    public ObservableInt emptyImage = new ObservableInt(R.drawable.t_icon_course_130);
+    public ObservableField<String> emptyMessage = new ObservableField<>();
 
     public LibraryTabViewModel(Context context, TaBaseFragment fragment, CollectionConfigResponse cr, Category category,
                                SearchPageOpenedListener searchPageOpenedListener) {
@@ -91,10 +101,23 @@ public class LibraryTabViewModel extends BaseViewModel {
                     contentLists.add(list);
                 }
             }
+
+            for (Source source: cr.getSource()){
+                if (source.getId() == category.getSource_id()){
+                    this.source = source;
+                    break;
+                }
+            }
         }
 
         Collections.sort(contentLists);
+        setEmptyView();
         getContents();
+    }
+
+    private void setEmptyView() {
+        emptyMessage.set(String.format(mActivity.getString(R.string.not_available_message), category.getName()));
+        emptyImage.set(ContentSourceUtil.getSourceDrawable_130x130(source == null ? "" : source.getName()));
     }
 
     @Override
@@ -122,6 +145,7 @@ public class LibraryTabViewModel extends BaseViewModel {
                     public void onFailure(Exception e) {
                         mActivity.hideLoading();
                         mActivity.showShortSnack(e.getLocalizedMessage());
+                        toggleEmptyVisibility();
                     }
                 });
 
@@ -153,6 +177,15 @@ public class LibraryTabViewModel extends BaseViewModel {
         }
 
         adapter.setItems(contentLists);
+        toggleEmptyVisibility();
+    }
+
+    private void toggleEmptyVisibility() {
+        if (contentLists == null || contentLists.isEmpty()) {
+            emptyVisible.set(true);
+        } else {
+            emptyVisible.set(false);
+        }
     }
 
     private List<ContentList> getAutoLists(){
@@ -195,8 +228,25 @@ public class LibraryTabViewModel extends BaseViewModel {
 
     @SuppressWarnings("unused")
     public void onEventMainThread(ContentStatusReceivedEvent event){
-        contentStatusMap.put(event.getContentStatus().getContent_id(), event.getContentStatus());
-        adapter.notifyDataSetChanged();
+        boolean statusChanged = false;
+        ContentStatus contentStatus = event.getContentStatus();
+        if (contentStatusMap.containsKey(contentStatus.getContent_id())){
+            ContentStatus prev = contentStatusMap.get(contentStatus.getContent_id());
+            if (prev.getCompleted() == null && contentStatus.getCompleted() != null){
+                statusChanged = true;
+                prev.setCompleted(contentStatus.getCompleted());
+            }
+            if (prev.getStarted() == null && contentStatus.getStarted() != null){
+                statusChanged = true;
+                prev.setStarted(contentStatus.getStarted());
+            }
+        } else {
+            statusChanged = true;
+            contentStatusMap.put(contentStatus.getContent_id(), contentStatus);
+        }
+        if (statusChanged) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     public void registerEventBus(){

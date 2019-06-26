@@ -2,6 +2,7 @@ package org.tta.mobile.tta.ui.course.discussion.view_model;
 
 import android.content.Context;
 import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -51,6 +52,8 @@ public class DiscussionTopicViewModel extends BaseViewModel {
 
     public DiscussionThreadsAdapter adapter;
     public RecyclerView.LayoutManager layoutManager;
+
+    public ObservableInt scrollPosition = new ObservableInt(0);
 
     private int take, page;
     private boolean allLoaded;
@@ -162,7 +165,9 @@ public class DiscussionTopicViewModel extends BaseViewModel {
     public void onEventMainThread(DiscussionThreadPostedEvent event) {
         DiscussionThread newThread = event.getDiscussionThread();
         if (topicDepth.getDiscussionTopic().getIdentifier().equals(newThread.getTopicId())) {
-            adapter.add(0, newThread);
+            threads.add(0, newThread);
+            adapter.notifyItemInserted(0);
+            scrollPosition.set(0);
         }
     }
 

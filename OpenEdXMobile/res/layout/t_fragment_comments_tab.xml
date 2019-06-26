@@ -27,8 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/_60px"
+            android:layout_gravity="center"
             android:visibility="@{viewModel.emptyVisible ? View.VISIBLE : View.GONE}">
 
             <ImageView

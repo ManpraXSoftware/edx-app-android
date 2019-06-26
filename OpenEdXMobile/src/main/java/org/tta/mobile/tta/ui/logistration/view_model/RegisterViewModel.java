@@ -21,6 +21,7 @@ import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.otp.OtpActivity;
 import org.tta.mobile.tta.ui.otp.SmsModule;
 import org.tta.mobile.tta.utils.ActivityUtil;
+import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.PermissionsUtil;
 
 public class RegisterViewModel extends BaseViewModel {
@@ -163,6 +164,10 @@ public class RegisterViewModel extends BaseViewModel {
     }
 
     public void generateOTP(){
+        if (!NetworkUtil.isConnected(mActivity)){
+            mActivity.showLongSnack(mActivity.getString(R.string.no_connection_exception));
+            return;
+        }
         mActivity.showLoading();
 
         Bundle parameters = new Bundle();

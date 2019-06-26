@@ -6,42 +6,43 @@
         <import type="android.view.View" />
         <variable
             name="viewModel"
-            type="org.tta.mobile.tta.ui.profile.view_model.MyCertificatesViewModel" />
+            type="org.tta.mobile.tta.ui.profile.view_model.FollowingViewModel" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/app_background"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/app_background">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/white"
+            android:id="@+id/toolbar"
+            android:background="@color/app_background"
+            app:title="@string/following"
+            app:navigationIcon="@drawable/back"
+            app:titleTextAppearance="@style/ta_toolbar_title_style"
             android:gravity="start|center_vertical"
             app:contentInsetLeft="0dp"
             app:contentInsetStart="0dp"
             app:contentInsetStartWithNavigation="0dp"
-            app:navigationIcon="@drawable/back"
-            app:title="@string/my_certificates"
-            app:titleMarginStart="0dp"
-            app:titleTextAppearance="@style/ta_toolbar_title_style" />
+            app:titleMarginStart="0dp" />
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <com.maurya.mx.mxlib.view.MxRecyclerView
-                infinite_recycler_adapter="@{viewModel.adapter}"
-                layout_manager="@{viewModel.layoutManager}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_horizontal"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
-                app:mx_itemLayout="@layout/t_row_certificate" />
+                app:mx_itemLayout="@layout/t_row_suggested_teacher_grid"
+                infinite_recycler_adapter="@{viewModel.adapter}"
+                layout_manager="@{viewModel.layoutManager}"
+                infinite_load_more_listener="@{viewModel.loadMoreListener}"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -65,7 +66,7 @@
                     android:layout_marginEnd="@dimen/_70px"
                     android:fontFamily="@font/hind_regular"
                     android:gravity="center"
-                    android:text="@string/empty_certificates_message"
+                    android:text="@string/empty_list_message"
                     android:textColor="@color/primary_cyan"
                     android:textSize="12sp" />
 

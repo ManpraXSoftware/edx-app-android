@@ -66,6 +66,7 @@ public class DiscussionCommentViewModel extends BaseViewModel {
     public ObservableBoolean commentFocus = new ObservableBoolean();
     public ObservableBoolean emptyVisible = new ObservableBoolean();
     public ObservableBoolean offlineVisible = new ObservableBoolean();
+    public ObservableInt scrollPosition = new ObservableInt(0);
 
     public DiscussionRepliesAdapter adapter;
     public RecyclerView.LayoutManager layoutManager;
@@ -245,6 +246,7 @@ public class DiscussionCommentViewModel extends BaseViewModel {
                         }
 
                         adapter.add(0, data);
+                        scrollPosition.set(0);
                         comment.incrementChildCount();
                         thread.incrementCommentCount();
                         commentsCount.set(String.valueOf(comment.getChildCount()));

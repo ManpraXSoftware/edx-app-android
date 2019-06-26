@@ -760,4 +760,9 @@ public class Storage implements IStorage {
     public Resume getResumeInfo(String course_id, String unit_id) {
         return  db.getResumeInfo(course_id,unit_id);
     }
+
+    @Override
+    public int getAnalyticsCount() {
+        return db.getAnalyticsCount(null);
+    }
 }

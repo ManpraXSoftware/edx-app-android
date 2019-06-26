@@ -166,7 +166,7 @@ public interface TaService {
 
     @GET(ApiConstants.URL_MX_GET_FEEDS)
     Call<List<Feed>> getFeeds(@Query(Constants.KEY_TAKE) int take,
-                                      @Query(Constants.KEY_SKIP) int skip);
+                              @Query(Constants.KEY_SKIP) int skip);
 
     @GET(ApiConstants.URL_MX_GET_CONTENT)
     Call<Content> getContentFromSourceIdentity(@Query(Constants.KEY_SOURCE_IDENTITY) String sourceIdentity);
@@ -185,4 +185,9 @@ public interface TaService {
 
     @GET(ApiConstants.URL_MX_GET_FOLLOW_STATUS)
     Call<FollowStatus> getFollowStatus(@Query(Constants.KEY_USERNAME) String username);
+
+    @GET(ApiConstants.URL_MX_GET_FOLLOWERS)
+    Call<List<SuggestedUser>> getFollowersOrFollowing(@Query(Constants.KEY_FOLLOWER) boolean follower,
+                                                      @Query(Constants.KEY_TAKE) int take,
+                                                      @Query(Constants.KEY_SKIP) int skip);
 }

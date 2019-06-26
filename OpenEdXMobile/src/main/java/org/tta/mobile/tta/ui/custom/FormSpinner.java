@@ -127,9 +127,9 @@ public class FormSpinner extends LinearLayout {
 
     public void setMandatory(boolean isMandatory) {
         this.isMandatory = isMandatory;
-        if (isMandatory && label != null) {
+        /*if (isMandatory && label != null) {
             mBinding.spinnerLabel.append(getResources().getString(R.string.asterisk_red));
-        }
+        }*/
     }
 
     public void setVisibility(int visibility){

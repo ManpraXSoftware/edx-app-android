@@ -48,5 +48,6 @@ public class LandingActivity extends BaseVMActivity {
         super.onDestroy();
         viewModel.unRegisterEventBus();
         isAlreadyOpened = false;
+        viewModel.getDataManager().onAppStartOrClose();
     }
 }
