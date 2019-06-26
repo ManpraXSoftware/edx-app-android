@@ -417,8 +417,14 @@ public class BindingAdapters {
     @BindingAdapter({"tool_tip", "tool_tip_gravity"})
     public static void showToolTip(View view, String message, int gravity){
         if(!ToolTipView.isToolTipAdded(view))
-        if (message != null && !message.trim().equals(""))
-            ToolTipView.showToolTip(view.getContext(), message.trim(), view, gravity);
+        if (message != null && !message.trim().equals("")) {
+            if (view instanceof MxFiniteRecyclerView){
+                MxFiniteRecyclerView mxView= (MxFiniteRecyclerView) view;
+                ToolTipView.showToolTip(mxView.getContext(), message.trim(), mxView.getTitleTextView(), gravity);
+            }else {
+                ToolTipView.showToolTip(view.getContext(), message.trim(), view, gravity);
+            }
+        }
     }
 
     @BindingAdapter({"tool_tip", "tool_tip_gravity", "tool_tip_position"})

@@ -36,7 +36,9 @@ import android.widget.Toast;
 
 import org.tta.mobile.R;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnClickListener {
     public interface OnToolTipClickedListener {
@@ -46,7 +48,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
     private static final long ANIMATION_DURATION = 300L;
     private static final String TOOL_TIP = "tool_tip";
     private static final String REMOVE_TOOL_TIP = "Remove_tool_tip";
-
+    private static List<WeakReference<ToolTipView>> viewsList= new ArrayList<>();
     private final View anchorView;
     private final int gravity;
 
@@ -111,12 +113,12 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
             case Gravity.LEFT:
                 container.setOrientation(LinearLayout.HORIZONTAL);
                 container.addView(text, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_arrow_forward_cyan_24dp));
+                arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_arrow_back_black_24dp));
                 container.addView(arrow, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 break;
             case Gravity.RIGHT:
                 container.setOrientation(LinearLayout.HORIZONTAL);
-                arrow.setBackground(ContextCompat.getDrawable(context,R.drawable.ic_arrow_right_cyan_24dp));
+                arrow.setBackground(ContextCompat.getDrawable(context,R.drawable.ic_subdirectory_arrow_right_black_24dp));
                 container.addView(arrow, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 container.addView(text, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 break;
@@ -128,7 +130,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 break;
             case Gravity.BOTTOM:
                 container.setOrientation(LinearLayout.VERTICAL);
-                arrow.setBackground(ContextCompat.getDrawable(context,R.drawable.t_icon_download));
+                arrow.setBackground(ContextCompat.getDrawable(context,R.drawable.ic_arrow_downward_black_24dp));
                 container.addView(arrow, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 container.addView(text, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 break;
@@ -136,7 +138,6 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
 
         popupWindow = new PopupWindow(container, ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
-
 
     }
 
@@ -163,6 +164,13 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 .withToolTip(toolTip1)
                 .withGravity(gravity)
                 .build();
+        viewsList.add(new WeakReference<>(toolTipView1));
+        toolTipView1.setOnToolTipClickedListener(new OnToolTipClickedListener() {
+            @Override
+            public void onToolTipClicked(ToolTipView toolTipView) {
+                removeAll();
+            }
+        });
         toolTipView1.show();
 
     }
@@ -255,19 +263,14 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                     }
                 });
     }
-
-    public void removeAll(View view){
-
-
-//        container.setPivotX(pivotX);
-//        container.setPivotY(pivotY);
-//        container.animate().setDuration(ANIMATION_DURATION).alpha(0.0F).scaleX(0.0F).scaleY(0.0F)
-//                .setListener(new AnimatorListenerAdapter() {
-//                    @Override
-//                    public void onAnimationEnd(Animator animation) {
-//                        popupWindow.dismiss();
-//                    }
-//                });
+    @UiThread
+    public static void removeAll(){
+        for (WeakReference<ToolTipView> view:viewsList){
+            if (view!=null&&view.get()!=null){
+                view.get().remove(view.get().anchorView);
+            }
+        }
+        viewsList.clear();
 
     }
 

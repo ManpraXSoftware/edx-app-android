@@ -22,6 +22,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.maurya.mx.mxlib.R;
 import com.maurya.mx.mxlib.core.MxFiniteAdapter;
@@ -188,6 +189,9 @@ public class MxFiniteRecyclerView extends LinearLayout {
         this.mMoreButtonListener = listener;
         mBinding.mxViewMoreButton.setOnClickListener(mMoreButtonListener);
 
+    }
+    public TextView getTitleTextView(){
+        return mBinding.mxTitleText;
     }
 
     private void setTitle(){

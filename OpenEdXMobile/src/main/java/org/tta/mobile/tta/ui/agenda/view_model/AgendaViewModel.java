@@ -245,14 +245,13 @@ public class AgendaViewModel extends BaseViewModel {
         public void onBind(@NonNull ViewDataBinding binding, @NonNull AgendaItem model, @Nullable OnRecyclerItemClickListener<AgendaItem> listener) {
             if (binding instanceof TRowAgendaItemBinding) {
                 TRowAgendaItemBinding itemBinding = (TRowAgendaItemBinding) binding;
-
                 if (model.getContent_count() > 0) {
                     itemBinding.agendaCard.setCardBackgroundColor(ContextCompat.getColor(mActivity, ContentSourceUtil.getSourceColor(model.getSource_name())));
                 } else {
                     itemBinding.agendaCard.setCardBackgroundColor(ContextCompat.getColor(mActivity, R.color.secondary_grey_light));
                 }
 //                if (getItemPosition(model)==0){
-//                    ToolTipView.showToolTip(mActivity,"आपके द्वारा डाउनलोड की गयी सामग्री यहाँ है",itemBinding.agendaCard,Gravity.BOTTOM);
+//                    ToolTipView.showToolTip(mActivity,"आपके द्वारा डाउनलोड की गयी सामग्री यहाँ है", itemBinding.agendaCard, Gravity.TOP);
 //                }
 
                 itemBinding.agendaItemCount.setText(String.valueOf(model.getContent_count()));
