@@ -24,10 +24,6 @@
     <!-- Sticky broadcast passing a message from one screen and display on another -->
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
 
-    <!-- To read OTP -->
-    <!--<uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.READ_SMS" />-->
-
     <!-- TTA To download without notification -->
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     <!--required into assistant search-->
