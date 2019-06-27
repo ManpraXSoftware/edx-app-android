@@ -285,7 +285,7 @@ public class DiscussionThreadViewModel extends BaseViewModel
                     @Override
                     public void onSuccess(DiscussionComment data) {
                         mActivity.hideLoading();
-                        mActivity.showLongSnack("Comment added successfully");
+                        mActivity.showLongSnack(mActivity.getString(R.string.comment_added_successfully));
 
                         if (data.isAuthorAnonymous()){
                             data.setAuthor(loginPrefs.getUsername());
