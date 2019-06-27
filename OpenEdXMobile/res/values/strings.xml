@@ -808,9 +808,11 @@
     <string name="search_only_hindi">Search(only in hindi)</string>
     <string name="delete">Delete</string>
     <string name="delete_question">Are you sure you want to delete “%s”</string>
+    <string name="comment_added_successfully">Comment added successfully</string>
+    <string name="question">question</string>
 
     <string name="sign_out_message">Are you sure you want to Sign Out?</string>
-    <string name="be_the_first_to_comment" translatable="false">Be the first to comment</string>
+    <string name="be_the_first_to_comment">Be the first to comment</string>
     <string name="anonymous" translatable="false">Anonymous</string>
     <string name="privacy_policy_url" translatable="false">http://theteacherapp.org/privacy</string>
 
