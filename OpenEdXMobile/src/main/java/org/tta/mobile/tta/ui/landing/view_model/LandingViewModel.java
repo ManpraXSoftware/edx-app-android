@@ -3,6 +3,7 @@ package org.tta.mobile.tta.ui.landing.view_model;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
+import android.os.Handler;
 import android.support.design.widget.BottomNavigationView;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -186,13 +187,12 @@ public class LandingViewModel extends BaseViewModel {
     }
 
     public void setToolTip() {
-
-//        if (!mDataManager.getAppPref().isFeedVisited()){
+        if (!mDataManager.getAppPref().isProfileVisited()) {
             libraryToolTip.set("यहाँ सभी सामग्री पाएँ ");
             toolTipGravity.set(Gravity.TOP);
             toolTipPosition.set(0);
-
-//        }
+//            mDataManager.getAppPref().setProfileVisited(true);
+        }
     }
 
     public void selectLibrary() {

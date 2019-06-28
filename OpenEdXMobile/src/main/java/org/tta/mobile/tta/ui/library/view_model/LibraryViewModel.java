@@ -3,7 +3,6 @@ package org.tta.mobile.tta.ui.library.view_model;
 import android.content.Context;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -18,7 +17,6 @@ import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.interfaces.SearchPageOpenedListener;
 import org.tta.mobile.tta.ui.library.LibraryTab;
-import org.tta.mobile.tta.utils.ToolTipView;
 import org.tta.mobile.view.common.PageViewStateCallback;
 
 import java.util.ArrayList;
@@ -36,12 +34,9 @@ public class LibraryViewModel extends BaseViewModel {
     private SearchPageOpenedListener searchPageOpenedListener;
 
     public ObservableInt initialPosition = new ObservableInt();
-    public ObservableInt toolTipPosition= new ObservableInt();
-    public ObservableInt toolTipGravity= new ObservableInt(Gravity.BOTTOM);
-    public ObservableField<String> toolTiptext= new ObservableField<>("प्रत्येक बटन पर क्लिक करके \nविशिष्ट सामग्री पाएँ ");
-
-
-
+    public ObservableInt toolTipPosition = new ObservableInt();
+    public ObservableInt toolTipGravity = new ObservableInt();
+    public ObservableField<String> toolTiptext = new ObservableField<>();
 
 
     public ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
@@ -131,7 +126,6 @@ public class LibraryViewModel extends BaseViewModel {
                 callback.onPageShow();
             }
         }
-        setToolTip();
 
 
 //        toolTipPosition.set(0);
@@ -146,13 +140,11 @@ public class LibraryViewModel extends BaseViewModel {
 
     public void setToolTip() {
         if (!mDataManager.getAppPref().isProfileVisited()) {
-//            ToolTipView.showToolTip(mActivity, "प्रत्येक बटन पर क्लिक करके विशिष्ट सामग्री पाएँ ",
-//                    tabLayout.getChildAt(0),Gravity.BOTTOM);
-
             toolTipGravity.set(Gravity.BOTTOM);
             toolTiptext.set("प्रत्येक बटन पर क्लिक करके \nविशिष्ट सामग्री पाएँ ");
             toolTipPosition.set(initialPosition.get());
 //            mDataManager.getAppPref().setProfileVisited(true);
+
         }
     }
 }

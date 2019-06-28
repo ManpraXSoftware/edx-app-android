@@ -58,14 +58,14 @@ public class LibraryFragment extends TaBaseFragment {
         mAppPref = new AppPref(view.getContext());
 //        viewModel.setToolTip();
 
-//        tabLayout.post(() -> {
-//            if (!mAppPref.isProfileVisited()) {
-////                viewModel.setToolTip();
-//                ToolTipView.showToolTip(getActivity(), "प्रत्येक बटन पर क्लिक करके विशिष्ट सामग्री पाएँ ",
-//                        tabLayout.getChildAt(0), Gravity.TOP);
-////                mAppPref.setProfileVisited(true);
-//            }
-//        });
+        tabLayout.post(() -> {
+            if (!mAppPref.isProfileVisited()) {
+//                viewModel.setToolTip();
+                ToolTipView.showToolTip(getActivity(), "प्रत्येक बटन पर क्लिक करके विशिष्ट सामग्री पाएँ ",
+                        tabLayout, Gravity.BOTTOM);
+                mAppPref.setProfileVisited(true);
+            }
+        });
 
 
         return view;

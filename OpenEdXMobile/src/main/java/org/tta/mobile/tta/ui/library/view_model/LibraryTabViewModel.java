@@ -1,6 +1,9 @@
 package org.tta.mobile.tta.ui.library.view_model;
 
 import android.content.Context;
+import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
