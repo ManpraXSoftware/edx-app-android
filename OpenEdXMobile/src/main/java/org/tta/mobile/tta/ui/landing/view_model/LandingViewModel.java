@@ -73,6 +73,7 @@ public class LandingViewModel extends BaseViewModel {
         mDataManager.setWpProfileCache();
         navShiftMode.set(false);
         selectedId = R.id.action_library;
+        statuses = new ArrayList<>();
         showLibrary();
         onAppStart();
     }
@@ -142,8 +143,8 @@ public class LandingViewModel extends BaseViewModel {
         mDataManager.getMyContentStatuses(new OnResponseCallback<List<ContentStatus>>() {
             @Override
             public void onSuccess(List<ContentStatus> data) {
-                statuses = data;
-                EventBus.getDefault().postSticky(new ContentStatusesReceivedEvent(data));
+                statuses.addAll(data);
+                EventBus.getDefault().postSticky(new ContentStatusesReceivedEvent(statuses));
             }
 
             @Override
@@ -168,9 +169,6 @@ public class LandingViewModel extends BaseViewModel {
 
     @SuppressWarnings("unused")
     public void onEventMainThread(ContentStatusReceivedEvent event){
-        if (statuses == null){
-            statuses = new ArrayList<>();
-        }
         ContentStatus contentStatus = event.getContentStatus();
         if (statuses.contains(contentStatus)){
             ContentStatus prev = statuses.get(statuses.indexOf(contentStatus));
@@ -183,7 +181,6 @@ public class LandingViewModel extends BaseViewModel {
         } else {
             statuses.add(contentStatus);
         }
-        statuses.remove(event.getContentStatus());
     }
 
     public void registerEventBus(){

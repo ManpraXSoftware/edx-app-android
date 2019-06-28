@@ -147,7 +147,7 @@ public class Source implements Parcelable
     @Override
     public String toString()
     {
-        return "Source [created_by = "+created_by+", id = "+id+", icon = "+icon+", title = "+title+", modified_by = "+modified_by+", name = "+name+", created_at = "+created_at+", type = "+type+", modified_at = "+modified_at+"]";
+        return title;
     }
 
     @Override

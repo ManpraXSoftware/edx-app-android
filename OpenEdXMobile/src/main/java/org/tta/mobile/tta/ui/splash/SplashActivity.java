@@ -24,6 +24,6 @@ public class SplashActivity extends BaseVMActivity {
         viewModel = new SplashViewModel(this);
         binding(R.layout.t_activity_splash, viewModel);
         logD("TTA Nav ======> " + BreadcrumbUtil.setBreadcrumb(RANK, Nav.appopen.name()));
-        viewModel.startRouting(this);
+        viewModel.startRouting();
     }
 }

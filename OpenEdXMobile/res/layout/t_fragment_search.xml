@@ -100,16 +100,13 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    selected="@{viewModel.contentListSelected.get()}"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:drawableEnd="@drawable/t_icon_dropdown_selector"
                     android:drawablePadding="4dp"
                     android:fontFamily="@font/hind_medium"
                     android:gravity="center"
-                    android:onClick="@{()->viewModel.showContentLists()}"
                     android:text="@{viewModel.contentListText}"
-                    android:textColor="@color/t_selector_tab_text_color"
+                    android:textColor="@color/gray_5"
                     android:textSize="14sp" />
 
             </LinearLayout>
@@ -204,7 +201,90 @@
                 android:background="@color/white"
                 android:orientation="vertical">
 
-                <com.maurya.mx.mxlib.view.MxRecyclerView
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:scrollbarAlwaysDrawVerticalTrack="true"
+                    android:scrollbars="vertical"
+                    android:fadeScrollbars="false">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/primary_navy"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/hind_medium"
+                            android:layout_marginStart="@dimen/_30px"
+                            android:layout_marginTop="@dimen/_20px"
+                            android:layout_marginBottom="@dimen/_20px"
+                            android:text="@string/product"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/gray_1"
+                            android:layout_marginStart="@dimen/_26px"
+                            android:layout_marginEnd="@dimen/_26px"/>
+
+                        <org.tta.mobile.tta.ui.custom.NonScrollListView
+                            array_adapter="@{viewModel.sourcesAdapter}"
+                            item_click_listener="@{viewModel.sourceClickListener}"
+                            selected_position="@{viewModel.selectedSourcePosition}"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:choiceMode="singleChoice"
+                            android:paddingStart="@dimen/_26px"
+                            android:paddingEnd="@dimen/_26px"
+                            android:scrollbars="none" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/primary_navy"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/hind_medium"
+                            android:layout_marginStart="@dimen/_30px"
+                            android:layout_marginTop="@dimen/_20px"
+                            android:layout_marginBottom="@dimen/_20px"
+                            android:text="@string/class_label"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/gray_1"
+                            android:layout_marginStart="@dimen/_26px"
+                            android:layout_marginEnd="@dimen/_26px"/>
+
+                        <org.tta.mobile.tta.ui.custom.NonScrollListView
+                            array_adapter="@{viewModel.classesAdapter}"
+                            item_click_listener="@{viewModel.classClickListener}"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:choiceMode="multipleChoice"
+                            android:paddingStart="@dimen/_26px"
+                            android:paddingEnd="@dimen/_26px"
+                            android:scrollbars="none" />
+
+                        <org.tta.mobile.tta.ui.custom.NonScrollRecyclerView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_26px"
+                            android:layout_marginEnd="@dimen/_26px"
+                            android:nestedScrollingEnabled="false"
+                            recycler_adapter="@{viewModel.filterAdapter}"
+                            layout_manager="@{viewModel.filterLayoutManager}" />
+
+                    </LinearLayout>
+
+                </ScrollView>
+
+                <!--<com.maurya.mx.mxlib.view.MxRecyclerView
                     infinite_recycler_adapter="@{viewModel.filterAdapter}"
                     layout_manager="@{viewModel.filterLayoutManager}"
                     android:layout_width="match_parent"
@@ -215,7 +295,7 @@
                     android:fadeScrollbars="false"
                     android:scrollbarAlwaysDrawVerticalTrack="true"
                     android:scrollbars="vertical"
-                    app:mx_itemLayout="@layout/t_row_filter_section" />
+                    app:mx_itemLayout="@layout/t_row_filter_section" />-->
 
                 <View
                     android:layout_width="match_parent"

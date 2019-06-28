@@ -136,7 +136,8 @@ public class TaAPI {
         return taService.getSearchFilter();
     }
 
-    public Call<List<Content>> search(int take, int skip, boolean isPriority, long listId, String searchText, List<FilterSection> filterSections) {
+    public Call<List<Content>> search(int take, int skip, boolean isPriority, long listId,
+                                      String searchText, List<FilterSection> filterSections, long sourceId) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put(Constants.KEY_TAKE, take);
         parameters.put(Constants.KEY_SKIP, skip);
@@ -144,6 +145,7 @@ public class TaAPI {
         parameters.put(Constants.KEY_LIST_ID, listId);
         parameters.put(Constants.KEY_SEARCH_TEXT, searchText);
         parameters.put(Constants.KEY_FILTER_DATA, filterSections);
+        parameters.put(Constants.KEY_SOURCE_ID, sourceId);
 
         return taService.search(parameters);
     }

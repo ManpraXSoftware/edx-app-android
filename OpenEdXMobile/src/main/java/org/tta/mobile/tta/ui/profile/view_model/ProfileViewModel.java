@@ -10,6 +10,7 @@ import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.local.db.table.Certificate;
 import org.tta.mobile.tta.data.model.search.FilterSection;
 import org.tta.mobile.tta.data.model.search.SearchFilter;
+import org.tta.mobile.tta.event.UserFollowingChangedEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
@@ -25,6 +26,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import de.greenrobot.event.EventBus;
 
 import static org.tta.mobile.util.BrowserUtil.loginPrefs;
 
@@ -319,6 +322,21 @@ public class ProfileViewModel extends BaseViewModel {
         if (accountReceived && filtersReceived) {
             mActivity.hideLoading();
         }
+    }
+
+    @SuppressWarnings("unused")
+    public void onEventMainThread(UserFollowingChangedEvent event) {
+        profileModel.toggleFollowing(event.getUser().isFollowed());
+        mDataManager.getLoginPrefs().setCurrentUserProfileInCache(profileModel);
+        refreshFromLocal();
+    }
+
+    public void registerEventBus() {
+        EventBus.getDefault().register(this);
+    }
+
+    public void unRegisterEventBus() {
+        EventBus.getDefault().unregister(this);
     }
 
     /*public class BadgeListAdapter extends MxFiniteAdapter<Badge> {

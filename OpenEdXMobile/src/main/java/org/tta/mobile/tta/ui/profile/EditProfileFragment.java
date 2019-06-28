@@ -34,6 +34,7 @@ import org.tta.mobile.tta.ui.custom.FormSpinner;
 import org.tta.mobile.tta.ui.profile.view_model.EditProfileViewModel;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.tta.utils.DataUtil;
+import org.tta.mobile.tta.utils.UrlUtil;
 import org.tta.mobile.tta.utils.ViewUtil;
 import org.tta.mobile.user.Account;
 import org.tta.mobile.user.ProfileImage;
@@ -556,8 +557,10 @@ public class EditProfileFragment extends TaBaseFragment {
                 viewModel.setImageUri(uri);
                 viewModel.setCropRect(rect);
 
+                String filePath = UrlUtil.getPath(getActivity(), uri);
                 cropped = new File(getActivity().getExternalCacheDir(),
-                        "cropped-image-view" + System.currentTimeMillis() + ".jpg");
+                        "cropped-image-view" + System.currentTimeMillis() +
+                                filePath.substring(filePath.lastIndexOf(".")));
                 try {
                     CropUtil.crop(getActivity(), uri, rect, 500, 500, cropped);
                 } catch (IOException e) {

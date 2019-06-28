@@ -74,6 +74,7 @@ public class LibraryTabViewModel extends BaseViewModel {
     private Content selectedContent;
     private SearchPageOpenedListener searchPageOpenedListener;
     private Source source;
+    private CollectionConfigResponse cr;
 
     private Map<Long, List<Content>> contentListMap;
     private Map<Long, ContentStatus> contentStatusMap;
@@ -96,6 +97,7 @@ public class LibraryTabViewModel extends BaseViewModel {
         adapter = new ListingRecyclerAdapter(mActivity);
 
         if (cr != null) {
+            this.cr = cr;
             for (ContentList list: cr.getContent_list()){
                 if (list.getCategory_id() == category.getId()){
                     contentLists.add(list);
@@ -228,25 +230,19 @@ public class LibraryTabViewModel extends BaseViewModel {
 
     @SuppressWarnings("unused")
     public void onEventMainThread(ContentStatusReceivedEvent event){
-        boolean statusChanged = false;
         ContentStatus contentStatus = event.getContentStatus();
         if (contentStatusMap.containsKey(contentStatus.getContent_id())){
             ContentStatus prev = contentStatusMap.get(contentStatus.getContent_id());
             if (prev.getCompleted() == null && contentStatus.getCompleted() != null){
-                statusChanged = true;
                 prev.setCompleted(contentStatus.getCompleted());
             }
             if (prev.getStarted() == null && contentStatus.getStarted() != null){
-                statusChanged = true;
                 prev.setStarted(contentStatus.getStarted());
             }
         } else {
-            statusChanged = true;
             contentStatusMap.put(contentStatus.getContent_id(), contentStatus);
         }
-        if (statusChanged) {
-            adapter.notifyDataSetChanged();
-        }
+        adapter.notifyDataSetChanged();
     }
 
     public void registerEventBus(){
@@ -331,7 +327,7 @@ public class LibraryTabViewModel extends BaseViewModel {
 
                     ActivityUtil.replaceFragmentInActivity(
                             mActivity.getSupportFragmentManager(),
-                            SearchFragment.newInstance(category, getAutoLists(), model),
+                            SearchFragment.newInstance(category, getAutoLists(), model, source, cr),
                             R.id.dashboard_fragment,
                             SearchFragment.TAG,
                             true,

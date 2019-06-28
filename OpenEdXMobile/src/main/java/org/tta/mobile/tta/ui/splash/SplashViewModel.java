@@ -26,16 +26,16 @@ public class SplashViewModel extends BaseViewModel {
         mDataManager.onAppStartOrClose();
     }
 
-    public void startRouting(Activity activity){
+    public void startRouting(){
 
         new Handler().postDelayed(() -> {
-            activity.finish();
+            mActivity.finish();
             if (mDataManager.getAppPref().isFirstLaunch()){
-                ActivityUtil.gotoPage(activity, SwipeLaunchActivity.class);
+                ActivityUtil.gotoPage(mActivity, SwipeLaunchActivity.class);
                 mDataManager.getAppPref().setFirstLaunch(false);
             } else {
                 if (mDataManager.getLoginPrefs().getCurrentUserProfile() == null) {
-                    ActivityUtil.gotoPage(activity, SigninRegisterActivity.class);
+                    ActivityUtil.gotoPage(mActivity, SigninRegisterActivity.class);
                 } else {
                     performBackgroundTasks();
                     if (mDataManager.getLoginPrefs().getCurrentUserProfile().name == null ||
@@ -44,7 +44,7 @@ public class SplashViewModel extends BaseViewModel {
                     ) {
                         ActivityUtil.gotoPage(mActivity, UserInfoActivity.class, Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     } else {
-                        ActivityUtil.gotoPage(activity, LandingActivity.class);
+                        ActivityUtil.gotoPage(mActivity, LandingActivity.class);
                     }
 
                     mActivity.analytic.addMxAnalytics_db("TA App open", Action.AppOpen,

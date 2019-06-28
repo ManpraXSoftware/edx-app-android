@@ -197,8 +197,7 @@ public class FollowingViewModel extends BaseViewModel {
                         .placeholder(R.drawable.profile_photo_placeholder)
                         .into(teacherBinding.userImage);
 
-                teacherBinding.followBtn.setVisibility(View.GONE);
-                /*if (model.isFollowed()) {
+                if (model.isFollowed()) {
                     teacherBinding.followBtn.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.btn_selector_filled));
                     teacherBinding.followBtn.setTextColor(ContextCompat.getColor(mActivity, R.color.white));
                     teacherBinding.followBtn.setText(mActivity.getString(R.string.following));
@@ -212,7 +211,7 @@ public class FollowingViewModel extends BaseViewModel {
                     if (listener != null) {
                         listener.onItemClick(v, model);
                     }
-                });*/
+                });
 
                 teacherBinding.getRoot().setOnClickListener(v -> {
                     if (listener != null) {

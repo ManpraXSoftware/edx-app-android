@@ -42,6 +42,7 @@ public class ProfileFragment extends TaBaseFragment {
         logD("TTA Nav ======> " + BreadcrumbUtil.setBreadcrumb(RANK, Nav.profile.name()));
 
         analytic.addMxAnalytics_db(null, Action.ViewProfile, Nav.profile.name(), Source.Mobile, null);
+        viewModel.registerEventBus();
     }
 
     @Nullable
@@ -142,5 +143,11 @@ public class ProfileFragment extends TaBaseFragment {
     public void onResume() {
         super.onResume();
         logD("TTA Nav ======> " + BreadcrumbUtil.setBreadcrumb(RANK, Nav.profile.name()));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        viewModel.unRegisterEventBus();
     }
 }

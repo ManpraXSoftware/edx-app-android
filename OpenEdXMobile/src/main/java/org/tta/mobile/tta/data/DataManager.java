@@ -1790,12 +1790,12 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void search(int take, int skip, boolean isPriority, long listId, String searchText, List<FilterSection> sections,
-                       OnResponseCallback<List<Content>> callback) {
+    public void search(int take, int skip, boolean isPriority, long listId, String searchText,
+                       List<FilterSection> sections, long sourceId, OnResponseCallback<List<Content>> callback) {
 
         if (NetworkUtil.isConnected(context)) {
 
-            new SearchTask(context, take, skip, isPriority, listId, searchText, sections) {
+            new SearchTask(context, take, skip, isPriority, listId, searchText, sourceId, sections) {
                 @Override
                 protected void onSuccess(List<Content> contents) throws Exception {
                     super.onSuccess(contents);

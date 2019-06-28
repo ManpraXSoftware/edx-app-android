@@ -52,6 +52,14 @@ public class ProfileModel implements Serializable {
         this.following = following;
     }
 
+    public void toggleFollowing(boolean following){
+        if (following){
+            this.following++;
+        } else {
+            this.following--;
+        }
+    }
+
     public long getFollowers() {
         return followers;
     }

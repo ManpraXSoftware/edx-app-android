@@ -11,6 +11,8 @@ import org.tta.mobile.R;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.data.local.db.table.Category;
 import org.tta.mobile.tta.data.local.db.table.ContentList;
+import org.tta.mobile.tta.data.local.db.table.Source;
+import org.tta.mobile.tta.data.model.library.CollectionConfigResponse;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.search.view_model.SearchViewModel;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
@@ -28,12 +30,17 @@ public class SearchFragment extends TaBaseFragment {
     private Category category;
     private List<ContentList> contentLists;
     private ContentList selectedContentList;
+    private Source source;
+    private CollectionConfigResponse cr;
 
-    public static SearchFragment newInstance(Category category, List<ContentList> contentLists, ContentList selectedContentList){
+    public static SearchFragment newInstance(Category category, List<ContentList> contentLists,
+                                             ContentList selectedContentList, Source source, CollectionConfigResponse cr){
         SearchFragment fragment = new SearchFragment();
         fragment.category = category;
         fragment.contentLists = contentLists;
         fragment.selectedContentList = selectedContentList;
+        fragment.source = source;
+        fragment.cr = cr;
         fragment.RANK = BreadcrumbUtil.getCurrentRank() + 1;
         return fragment;
     }
@@ -41,7 +48,7 @@ public class SearchFragment extends TaBaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new SearchViewModel(getActivity(), this, category, contentLists, selectedContentList);
+        viewModel = new SearchViewModel(getActivity(), this, category, contentLists, selectedContentList, source, cr);
         viewModel.registerEventBus();
     }
 

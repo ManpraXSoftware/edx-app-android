@@ -18,11 +18,12 @@ public class SearchTask extends Task<List<Content>> {
     private long listId;
     private String searchText;
     private List<FilterSection> filterSections;
+    private long sourceId;
 
     @Inject
     private TaAPI taAPI;
 
-    public SearchTask(Context context, int take, int skip, boolean isPriority, long listId, String searchText, List<FilterSection> filterSections) {
+    public SearchTask(Context context, int take, int skip, boolean isPriority, long listId, String searchText, long sourceId, List<FilterSection> filterSections) {
         super(context);
 
         this.take = take;
@@ -31,10 +32,11 @@ public class SearchTask extends Task<List<Content>> {
         this.listId = listId;
         this.searchText = searchText;
         this.filterSections = filterSections;
+        this.sourceId = sourceId;
     }
 
     @Override
     public List<Content> call() throws Exception {
-        return taAPI.search(take, skip, isPriority, listId, searchText, filterSections).execute().body();
+        return taAPI.search(take, skip, isPriority, listId, searchText, filterSections, sourceId).execute().body();
     }
 }

@@ -10,6 +10,7 @@ import com.google.inject.Inject;
 import org.tta.mobile.event.ProfilePhotoUpdatedEvent;
 import org.tta.mobile.task.Task;
 import org.tta.mobile.third_party.crop.CropUtil;
+import org.tta.mobile.tta.utils.UrlUtil;
 
 import java.io.File;
 
@@ -39,7 +40,9 @@ public class SetAccountImageTask extends
 
 
     public Void call() throws Exception {
-        final File cropped = new File(context.getExternalCacheDir(), "cropped-image" + System.currentTimeMillis() + ".jpg");
+        String filePath = UrlUtil.getPath(context, uri);
+        final File cropped = new File(context.getExternalCacheDir(), "cropped-image" + System.currentTimeMillis() +
+                filePath.substring(filePath.lastIndexOf(".")));
         CropUtil.crop(getContext(), uri, cropRect, 500, 500, cropped);
         userAPI.setProfileImage(username, cropped).execute();
         uri = Uri.fromFile(cropped);

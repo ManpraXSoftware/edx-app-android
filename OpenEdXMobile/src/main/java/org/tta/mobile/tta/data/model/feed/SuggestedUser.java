@@ -18,6 +18,7 @@ public class SuggestedUser {
     @NonNull
     private ProfileImage profileImage;
 
+    @SerializedName("is_following")
     private boolean followed;
 
     public String getUsername() {

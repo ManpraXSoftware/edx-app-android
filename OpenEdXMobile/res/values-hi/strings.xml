@@ -167,4 +167,6 @@
     <string name="delete_question">क्या आप “%s” हटाना चाहते हैं</string>
     <string name="comment_added_successfully">टिप्पणी सफलतापूर्वक जुड़ गई</string>
     <string name="be_the_first_to_comment">इस पर कोई टिप्पणी शामिल नहीं है</string>
+    <string name="product">उत्पाद</string>
+    <string name="class_label">कक्षा</string>
 </resources>

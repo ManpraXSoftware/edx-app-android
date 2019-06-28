@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import org.tta.mobile.task.Task;
+import org.tta.mobile.tta.utils.UrlUtil;
 import org.tta.mobile.util.IOUtils;
 
 import java.io.File;
@@ -39,8 +40,10 @@ public abstract class SaveUriToFileTask extends
             }
         }
 
+        String filePath = UrlUtil.getPath(context, uri);
         // URI does not point to a file; Download/copy it to a temporary file.
-        final File outputFile = new File(context.getExternalCacheDir(), "cropped-image" + System.currentTimeMillis() + ".jpg");
+        final File outputFile = new File(context.getExternalCacheDir(), "cropped-image" + System.currentTimeMillis() +
+                filePath.substring(filePath.lastIndexOf(".")));
         final InputStream inputStream = context.getContentResolver().openInputStream(uri);
         try {
             final FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
