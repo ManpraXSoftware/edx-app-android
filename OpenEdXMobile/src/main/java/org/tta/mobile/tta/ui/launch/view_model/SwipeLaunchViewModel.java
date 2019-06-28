@@ -1,5 +1,6 @@
 package org.tta.mobile.tta.ui.launch.view_model;
 
+import android.content.Intent;
 import android.databinding.ObservableField;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,11 +8,18 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import org.tta.mobile.R;
+import org.tta.mobile.tta.analytics.analytics_enums.Action;
+import org.tta.mobile.tta.analytics.analytics_enums.Page;
+import org.tta.mobile.tta.analytics.analytics_enums.Source;
+import org.tta.mobile.tta.data.enums.SurveyType;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
+import org.tta.mobile.tta.ui.landing.LandingActivity;
 import org.tta.mobile.tta.ui.launch.LaunchFragment;
 import org.tta.mobile.tta.ui.logistration.SigninRegisterActivity;
+import org.tta.mobile.tta.ui.logistration.UserInfoActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
+import org.tta.mobile.tta.wordpress_client.util.ConnectCookieHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +64,33 @@ public class SwipeLaunchViewModel extends BaseViewModel {
 
     public void next() {
         mActivity.finish();
-        ActivityUtil.gotoPage(mActivity, SigninRegisterActivity.class);
+        if (mDataManager.getLoginPrefs().getCurrentUserProfile() == null) {
+            ActivityUtil.gotoPage(mActivity, SigninRegisterActivity.class);
+        } else {
+            performBackgroundTasks();
+            if (mDataManager.getLoginPrefs().getCurrentUserProfile().name == null ||
+                    mDataManager.getLoginPrefs().getCurrentUserProfile().name.equals("") ||
+                    mDataManager.getLoginPrefs().getCurrentUserProfile().name.equals(mDataManager.getLoginPrefs().getUsername())
+            ) {
+                ActivityUtil.gotoPage(mActivity, UserInfoActivity.class, Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            } else {
+                ActivityUtil.gotoPage(mActivity, LandingActivity.class);
+            }
+
+            mActivity.analytic.addMxAnalytics_db("TA App open", Action.AppOpen,
+                    Page.LoginPage.name(), Source.Mobile, null);
+
+        }
+    }
+
+    private void performBackgroundTasks(){
+        mDataManager.setCustomFieldAttributes(null);
+        ConnectCookieHelper cHelper=new ConnectCookieHelper();
+        if (cHelper.isCookieExpire()) {
+            mDataManager.setConnectCookies();
+        }
+        mDataManager.checkSurvey(mActivity, SurveyType.Login);
+        mDataManager.updateFirebaseToken(getActivity());
     }
 
     public class SectionsPagerAdapter extends FragmentStatePagerAdapter {

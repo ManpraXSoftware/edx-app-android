@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 
+import org.tta.mobile.R;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.model.authentication.MobileNumberVerificationResponse;
 import org.tta.mobile.tta.task.authentication.MobileNumberVerificationTask;
@@ -15,6 +16,7 @@ import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.otp.OtpActivity;
 import org.tta.mobile.tta.ui.otp.SmsModule;
 import org.tta.mobile.tta.utils.ActivityUtil;
+import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.PermissionsUtil;
 
 import static org.tta.mobile.tta.Constants.KEY_MOBILE_NUMBER;
@@ -65,6 +67,10 @@ public class EnterNumberViewModel extends BaseViewModel {
     }
 
     public void generateOTP(){
+        if (!NetworkUtil.isConnected(mActivity)){
+            mActivity.showLongSnack(mActivity.getString(R.string.no_connection_exception));
+            return;
+        }
         mActivity.showLoading();
 
         Bundle parameters = new Bundle();

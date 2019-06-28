@@ -12,13 +12,12 @@ import org.tta.mobile.tta.ui.connect.ConnectDashboardActivity;
 import org.tta.mobile.tta.ui.course.CourseDashboardActivity;
 import org.tta.mobile.tta.ui.landing.LandingActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
-import org.tta.mobile.tta.utils.AppUtil;
 
 public class DeepLinkViewModel extends BaseViewModel {
 
     public DeepLinkViewModel(BaseVMActivity activity) {
         super(activity);
-        mDataManager.onAppStart();
+        mDataManager.onAppStartOrClose();
     }
 
     public void fetchContent(long contentId){

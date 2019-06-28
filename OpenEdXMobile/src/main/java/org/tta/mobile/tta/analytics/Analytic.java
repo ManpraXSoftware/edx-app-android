@@ -12,6 +12,7 @@ import org.tta.mobile.tta.analytics.analytics_enums.Source;
 import org.tta.mobile.tta.data.model.SuccessResponse;
 import org.tta.mobile.tta.task.content.course.scorm.GetAllDownloadedScromCountTask;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
+import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.Sha1Util;
 
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ import static org.tta.mobile.util.BrowserUtil.loginPrefs;
  */
 
 public class Analytic {
+
+    private static final int ANALYTICS_COUNT_FOR_SYNC = 50;
 
     private Context ctx;
     private int analyticBatchCount = 100;
@@ -54,6 +57,10 @@ public class Analytic {
             model.setStatus(0);
 
             environment.getStorage().addAnalytic(model);
+
+            if (getAnalyticsCount() >= ANALYTICS_COUNT_FOR_SYNC){
+                syncAnalytics();
+            }
         }
     }
 
@@ -76,6 +83,10 @@ public class Analytic {
             model.setStatus(0);
 
             environment.getStorage().addAnalytic(model);
+
+            if (getAnalyticsCount() >= ANALYTICS_COUNT_FOR_SYNC){
+                syncAnalytics();
+            }
         }
     }
 
@@ -102,6 +113,10 @@ public class Analytic {
         model.setStatus(0);
 
         environment.getStorage().addAnalytic(model);
+
+        if (getAnalyticsCount() >= ANALYTICS_COUNT_FOR_SYNC){
+            syncAnalytics();
+        }
     }
 
     public void deleteAnalytics(ArrayList<AnalyticModel> analyticModelList) {
@@ -155,8 +170,10 @@ public class Analytic {
     }
 
     public void syncAnalytics() {
-        syncMXAnalytics();
-        syncTinCanAnalytics();
+        if (NetworkUtil.isConnected(ctx)) {
+            syncMXAnalytics();
+            syncTinCanAnalytics();
+        }
     }
 
     private String[] getIds(ArrayList<AnalyticModel> analyticModelList) {
@@ -188,6 +205,14 @@ public class Analytic {
             Log.d("TincanAnaltics", "Dbfetch fail");
         }
         return list;
+    }
+
+    private int getAnalyticsCount(){
+        try{
+            return environment.getStorage().getAnalyticsCount();
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     private void syncMXAnalytics() {

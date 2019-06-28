@@ -106,7 +106,6 @@ public class AgendaViewModel extends BaseViewModel {
                         showEmptyAgendaList(stateListAdapter);
                     } else {
                         List<AgendaItem> items = list.getResult();
-                        sortAgendaItems(items);
                         if (items.size() != sources.size()) {
 
                             for (Source source : sources) {
@@ -120,6 +119,7 @@ public class AgendaViewModel extends BaseViewModel {
                             }
 
                         }
+                        sortAgendaItems(items);
                         stateListAdapter.setItems(list.getResult());
                     }
                 } else {
@@ -165,7 +165,6 @@ public class AgendaViewModel extends BaseViewModel {
                 hideLoader();
                 if (data != null && data.getResult() != null && !data.getResult().isEmpty()) {
                     List<AgendaItem> items = data.getResult();
-                    sortAgendaItems(items);
                     if (items.size() != sources.size()) {
 
                         for (Source source : sources) {
@@ -179,6 +178,7 @@ public class AgendaViewModel extends BaseViewModel {
                         }
 
                     }
+                    sortAgendaItems(items);
                     myListAdapter.setItems(data.getResult());
                 } else {
                     showEmptyAgendaList(myListAdapter);
@@ -205,7 +205,6 @@ public class AgendaViewModel extends BaseViewModel {
                 hideLoader();
                 if (data != null && data.getResult() != null && !data.getResult().isEmpty()) {
                     List<AgendaItem> items = data.getResult();
-                    sortAgendaItems(items);
                     if (items.size() != sources.size()) {
 
                         for (Source source : sources) {
@@ -219,6 +218,7 @@ public class AgendaViewModel extends BaseViewModel {
                         }
 
                     }
+                    sortAgendaItems(items);
                     downloadListAdapter.setItems(data.getResult());
                 } else {
                     showEmptyAgendaList(downloadListAdapter);

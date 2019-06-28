@@ -3,6 +3,8 @@ package org.tta.mobile.tta.ui.logistration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -56,16 +58,35 @@ public class UserInfoActivity extends BaseVMActivity {
         delimiterTagChunks = Constants.DELIMITER_TAG_CHUNKS;
         delimiterSectionTag = Constants.DELIMITER_SECTION_TAG;
         binding(R.layout.t_activity_user_info, mViewModel);
+
         userInfoLayout = findViewById(R.id.user_info_fields_layout);
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationOnClickListener(v -> {
-            onBackPressed();
-        });
+        setSupportActionBar(toolbar);
+
         getCustomFieldAttributes();
         mViewModel.getData();
         getBlocks();
         getClassesAndSkills();
         setupForm();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.signout_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_signout:
+                mViewModel.getDataManager().logout();
+                return true;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void getCustomFieldAttributes(){
@@ -140,26 +161,26 @@ public class UserInfoActivity extends BaseVMActivity {
         etFirstName.setSingleLine();
         etFirstName.setMandatory(true);
 
-        stateSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "State/राज्य", mViewModel.states, null);
+        stateSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "State/राज्य*", mViewModel.states, null);
         stateSpinner.setMandatory(true);
 
-        districtSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "District/जिला", mViewModel.districts, null);
+        districtSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "District/जिला*", mViewModel.districts, null);
         districtSpinner.setMandatory(true);
 
-        blockSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Block/तहसील", mViewModel.blocks, null);
+        blockSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Block/तहसील*", mViewModel.blocks, null);
         blockSpinner.setMandatory(true);
 
-        professionSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Profession/व्यवसाय", mViewModel.professions, null);
+        professionSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Profession/व्यवसाय*", mViewModel.professions, null);
         professionSpinner.setMandatory(true);
 
-        genderSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Gender/लिंग", mViewModel.genders, null);
+        genderSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Gender/लिंग*", mViewModel.genders, null);
         genderSpinner.setMandatory(true);
 
-        classTaughtSpinner = ViewUtil.addMultiOptionSpinner(userInfoLayout, "Classes Taught/पढ़ाई गई कक्षा",
+        classTaughtSpinner = ViewUtil.addMultiOptionSpinner(userInfoLayout, "Classes Taught/पढ़ाई गई कक्षा*",
                 mViewModel.classesTaught, null);
         classTaughtSpinner.setMandatory(true);
 
-        skillsSpinner = ViewUtil.addMultiOptionSpinner(userInfoLayout, "Skills/कौशल",
+        skillsSpinner = ViewUtil.addMultiOptionSpinner(userInfoLayout, "Skills/कौशल*",
                 mViewModel.skills, null);
         skillsSpinner.setMandatory(true);
 

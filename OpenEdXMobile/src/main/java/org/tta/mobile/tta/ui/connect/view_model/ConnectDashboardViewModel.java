@@ -182,6 +182,25 @@ public class ConnectDashboardViewModel extends BaseViewModel
                             firstDownload = false;
                             contentStatus = data.get(0);
                             EventBus.getDefault().post(new ContentStatusReceivedEvent(contentStatus));
+                        } else {
+                            contentStatus = new ContentStatus();
+                            contentStatus.setContent_id(content.getId());
+                            contentStatus.setStarted(String.valueOf(System.currentTimeMillis()));
+                            mDataManager.setUserContent(Collections.singletonList(contentStatus),
+                                    new OnResponseCallback<List<ContentStatus>>() {
+                                        @Override
+                                        public void onSuccess(List<ContentStatus> data) {
+                                            if (data.size() > 0){
+                                                contentStatus = data.get(0);
+                                                EventBus.getDefault().post(new ContentStatusReceivedEvent(contentStatus));
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Exception e) {
+
+                                        }
+                                    });
                         }
                     }
 
@@ -265,10 +284,9 @@ public class ConnectDashboardViewModel extends BaseViewModel
                 if (downloadUrl == null || downloadUrl.equals("")){
                     downloadPlayOptionVisible.set(false);
 
-                    if (contentStatus == null){
+                    if (contentStatus == null || contentStatus.getCompleted() == null){
                         contentStatus = new ContentStatus();
                         contentStatus.setContent_id(content.getId());
-                        contentStatus.setStarted(String.valueOf(System.currentTimeMillis()));
                         contentStatus.setCompleted(String.valueOf(System.currentTimeMillis()));
                         mDataManager.setUserContent(Collections.singletonList(contentStatus),
                                 new OnResponseCallback<List<ContentStatus>>() {
@@ -678,12 +696,10 @@ public class ConnectDashboardViewModel extends BaseViewModel
                             allDownloadIconVisible.set(false);
                             allDownloadProgressVisible.set(true);
 
-                            if (contentStatus == null && firstDownload){
-                                firstDownload = false;
-                                ContentStatus status = new ContentStatus();
-                                status.setContent_id(content.getId());
-                                status.setStarted(String.valueOf(System.currentTimeMillis()));
-                                mDataManager.setUserContent(Collections.singletonList(status),
+                            if (contentStatus.getCompleted() == null){
+                                contentStatus.setContent_id(content.getId());
+                                contentStatus.setCompleted(String.valueOf(System.currentTimeMillis()));
+                                mDataManager.setUserContent(Collections.singletonList(contentStatus),
                                         new OnResponseCallback<List<ContentStatus>>() {
                                             @Override
                                             public void onSuccess(List<ContentStatus> data) {
@@ -843,7 +859,7 @@ public class ConnectDashboardViewModel extends BaseViewModel
             if (contentStatus == null){
                 contentStatus = new ContentStatus();
             }
-            if (contentStatus.getCompleted() == null){
+            /*if (contentStatus.getCompleted() == null){
                 contentStatus.setContent_id(content.getId());
                 contentStatus.setCompleted(String.valueOf(System.currentTimeMillis()));
                 mDataManager.setUserContent(Collections.singletonList(contentStatus),
@@ -861,7 +877,7 @@ public class ConnectDashboardViewModel extends BaseViewModel
 
                             }
                         });
-            }
+            }*/
         }
     }
 

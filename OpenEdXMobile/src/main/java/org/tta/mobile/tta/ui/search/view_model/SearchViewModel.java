@@ -537,8 +537,25 @@ public class SearchViewModel extends BaseViewModel {
 
     @SuppressWarnings("unused")
     public void onEventMainThread(ContentStatusReceivedEvent event){
-        contentStatusMap.put(event.getContentStatus().getContent_id(), event.getContentStatus());
-        contentsAdapter.notifyDataSetChanged();
+        boolean statusChanged = false;
+        ContentStatus contentStatus = event.getContentStatus();
+        if (contentStatusMap.containsKey(contentStatus.getContent_id())){
+            ContentStatus prev = contentStatusMap.get(contentStatus.getContent_id());
+            if (prev.getCompleted() == null && contentStatus.getCompleted() != null){
+                statusChanged = true;
+                prev.setCompleted(contentStatus.getCompleted());
+            }
+            if (prev.getStarted() == null && contentStatus.getStarted() != null){
+                statusChanged = true;
+                prev.setStarted(contentStatus.getStarted());
+            }
+        } else {
+            statusChanged = true;
+            contentStatusMap.put(contentStatus.getContent_id(), contentStatus);
+        }
+        if (statusChanged) {
+            contentsAdapter.notifyDataSetChanged();
+        }
     }
 
     public void registerEventBus(){

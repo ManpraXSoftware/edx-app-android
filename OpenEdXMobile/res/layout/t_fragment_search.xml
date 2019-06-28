@@ -33,7 +33,7 @@
                 android:layout_weight="1"
                 android:textSize="14sp"
                 app:closeIcon="@drawable/t_icon_close_16"
-                app:defaultQueryHint="@string/search"
+                app:defaultQueryHint="@string/search_only_hindi"
                 app:iconifiedByDefault="false"
                 app:searchIcon="@drawable/t_icon_search_blue" />
 
@@ -53,7 +53,8 @@
                 android:layout_marginEnd="@dimen/_20dp"
                 android:contentDescription="assistant button"
                 android:onClick="@{()->viewModel.openAssistant()}"
-                android:src="@drawable/ic_mic_cyan_600_24dp" />
+                android:src="@drawable/ic_mic_cyan_600_24dp"
+                android:visibility="gone"/>
 
         </LinearLayout>
 

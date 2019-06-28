@@ -55,6 +55,7 @@ public class Constants {
     public static final String KEY_COURSE_KEY = "course_key";
     public static final String KEY_TAB_POSITION = "tab_position";
     public static final String KEY_CERTIFICATE = "certificate";
+    public static final String KEY_FOLLOWER = "follower";
 
     public static final String OTP_SOURCE_REGISTER = "register";
     public static final String OTP_SOURCE_RESET_PASSWORD = "reset_password";
@@ -63,5 +64,5 @@ public class Constants {
     public static final long INTERVAL_DELETE_FEEDS = 24*60*60*1000;
     public static final String EXTRA_NOTIFICATION = "notification";
     public static final String DELIMITER_TAG_CHUNKS = "   ";
-    public static final String DELIMITER_SECTION_TAG = "#_#";
+    public static final String DELIMITER_SECTION_TAG = "___";
 }

@@ -43,6 +43,7 @@ import org.tta.mobile.tta.ui.otp.SmsResponse;
 import org.tta.mobile.tta.ui.otp.SmsUtil;
 import org.tta.mobile.tta.ui.reset_password.ResetPasswordActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
+import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.images.ErrorUtils;
 
 import de.greenrobot.event.EventBus;
@@ -339,6 +340,10 @@ public class OtpViewModel extends BaseViewModel {
     }
 
     public void resendOtp(){
+        if (!NetworkUtil.isConnected(mActivity)){
+            mActivity.showLongSnack(mActivity.getString(R.string.no_connection_exception));
+            return;
+        }
         mActivity.showLoading();
 
         Bundle parameters = new Bundle();
@@ -419,6 +424,10 @@ public class OtpViewModel extends BaseViewModel {
     }
 
     public void verify(){
+        if (!NetworkUtil.isConnected(mActivity)){
+            mActivity.showLongSnack(mActivity.getString(R.string.no_connection_exception));
+            return;
+        }
         mActivity.showLoading();
 
         if (otpSource.equals(Constants.OTP_SOURCE_RESET_PASSWORD)) {

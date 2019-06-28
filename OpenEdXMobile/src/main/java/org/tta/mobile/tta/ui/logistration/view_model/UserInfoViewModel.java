@@ -20,6 +20,7 @@ import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.landing.LandingActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.DataUtil;
+import org.tta.mobile.util.NetworkUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +96,10 @@ public class UserInfoViewModel extends BaseViewModel {
     }
 
     public void submit(Bundle parameters){
+        if (!NetworkUtil.isConnected(mActivity)){
+            mActivity.showLongSnack(mActivity.getString(R.string.no_connection_exception));
+            return;
+        }
         mActivity.showLoading();
 
         new UpdateMyProfileTask(mActivity, parameters,mDataManager.getLoginPrefs().getUsername())

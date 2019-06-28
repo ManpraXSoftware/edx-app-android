@@ -13,10 +13,13 @@ import org.tta.mobile.tta.data.model.search.SearchFilter;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
+import org.tta.mobile.tta.ui.profile.FollowersFragment;
+import org.tta.mobile.tta.ui.profile.FollowingFragment;
 import org.tta.mobile.tta.ui.profile.MyCertificatesFragment;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.user.Account;
 import org.tta.mobile.user.ProfileImage;
+import org.tta.mobile.util.NetworkUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -216,12 +219,44 @@ public class ProfileViewModel extends BaseViewModel {
     }
 
     public void showCertificates() {
-        ActivityUtil.replaceFragmentInActivity(mActivity.getSupportFragmentManager(),
-                new MyCertificatesFragment(),
-                R.id.dashboard_fragment,
-                MyCertificatesFragment.TAG,
-                true,
-                null);
+        if (nCertificates.get() != null && !nCertificates.get().equals("") && !nCertificates.get().equals("0")) {
+            ActivityUtil.replaceFragmentInActivity(mActivity.getSupportFragmentManager(),
+                    new MyCertificatesFragment(),
+                    R.id.dashboard_fragment,
+                    MyCertificatesFragment.TAG,
+                    true,
+                    null);
+        }
+    }
+
+    public void showFollowers(){
+        if (!NetworkUtil.isConnected(mActivity)){
+            mActivity.showLongSnack(mActivity.getString(R.string.no_connection_exception));
+            return;
+        }
+        if (followers.get() != null && !followers.get().equals("") && !followers.get().equals("0")) {
+            ActivityUtil.replaceFragmentInActivity(mActivity.getSupportFragmentManager(),
+                    new FollowersFragment(),
+                    R.id.dashboard_fragment,
+                    FollowersFragment.TAG,
+                    true,
+                    null);
+        }
+    }
+
+    public void showFollowing(){
+        if (!NetworkUtil.isConnected(mActivity)){
+            mActivity.showLongSnack(mActivity.getString(R.string.no_connection_exception));
+            return;
+        }
+        if (following.get() != null && !following.get().equals("") && !following.get().equals("0")) {
+            ActivityUtil.replaceFragmentInActivity(mActivity.getSupportFragmentManager(),
+                    new FollowingFragment(),
+                    R.id.dashboard_fragment,
+                    FollowingFragment.TAG,
+                    true,
+                    null);
+        }
     }
 
     private void setDetails() {
@@ -238,36 +273,40 @@ public class ProfileViewModel extends BaseViewModel {
             return;
         }
 
-        section_tag_list = tagLabel.split(delimiterTagChunks);
+        try {
+            section_tag_list = tagLabel.split(delimiterTagChunks);
 
-        Map<String, List<String>> sectionTagsMap = new HashMap<>();
-        for (String section_tag : section_tag_list) {
-            String[] duet = section_tag.split(delimiterSectionTag);
-            if (!sectionTagsMap.containsKey(duet[0])) {
-                sectionTagsMap.put(duet[0], new ArrayList<>());
+            Map<String, List<String>> sectionTagsMap = new HashMap<>();
+            for (String section_tag : section_tag_list) {
+                String[] duet = section_tag.split(delimiterSectionTag);
+                if (!sectionTagsMap.containsKey(duet[0])) {
+                    sectionTagsMap.put(duet[0], new ArrayList<>());
+                }
+                sectionTagsMap.get(duet[0]).add(duet[1]);
             }
-            sectionTagsMap.get(duet[0]).add(duet[1]);
-        }
 
-        for (FilterSection section : searchFilter.getResult()) {
-            if (section.isIn_profile()) {
-                if (sectionTagsMap.containsKey(section.getName())) {
-                    StringBuilder builder = new StringBuilder();
-                    for (String tag : sectionTagsMap.get(section.getName())) {
-                        builder.append(tag + ", ");
-                    }
-                    if (builder.length() > 0) {
-                        builder.deleteCharAt(builder.length() - 1);
-                        builder.deleteCharAt(builder.length() - 1);
-                    }
+            for (FilterSection section : searchFilter.getResult()) {
+                if (section.isIn_profile()) {
+                    if (sectionTagsMap.containsKey(section.getName())) {
+                        StringBuilder builder = new StringBuilder();
+                        for (String tag : sectionTagsMap.get(section.getName())) {
+                            builder.append(tag + ", ");
+                        }
+                        if (builder.length() > 0) {
+                            builder.deleteCharAt(builder.length() - 1);
+                            builder.deleteCharAt(builder.length() - 1);
+                        }
 
-                    if (section.getName().contains("कक्षा")) {
-                        classes.set(builder.toString());
-                    } else if (section.getName().contains("कौशल")) {
-                        skills.set(builder.toString());
+                        if (section.getName().contains("कक्षा")) {
+                            classes.set(builder.toString());
+                        } else if (section.getName().contains("कौशल")) {
+                            skills.set(builder.toString());
+                        }
                     }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }

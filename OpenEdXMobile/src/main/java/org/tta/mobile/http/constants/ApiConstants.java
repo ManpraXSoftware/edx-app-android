@@ -155,6 +155,8 @@ public class ApiConstants {
 
     public static final String URL_MX_GET_FOLLOW_STATUS = "api/mx_feed/v1/getfollowstatus/";
 
+    public static final String URL_MX_GET_FOLLOWERS = "api/mx_feed/v1/getfollowership/";
+
     //TTA end
 
     public static final String TOKEN_TYPE_ACCESS = "access_token";

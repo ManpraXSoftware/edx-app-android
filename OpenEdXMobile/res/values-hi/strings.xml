@@ -124,12 +124,12 @@
     <string name="empty_search_message">"खोज से जुड़ी विषय-वस्तु अभी  उपलब्ध नहीं  "</string>
     <string name="question">प्रश्न</string>
     <string name="discussion_post_title">"चर्चा का विषय "</string>
-    <string name="discussion_title" translatable="false">चर्चा</string>
-    <string name="discussion_question" translatable="false">"प्रश्न "</string>
-    <string name="discussion_body_hint_discussion" translatable="false">"चर्चा करें "</string>
-    <string name="discussion_body_hint_question" translatable="false">"प्रश्न करें "</string>
+    <string name="discussion_title" >चर्चा</string>
+    <string name="discussion_question" >"प्रश्न "</string>
+    <string name="discussion_body_hint_discussion" >"चर्चा करें "</string>
+    <string name="discussion_body_hint_question" >"प्रश्न करें "</string>
     <string name="discussion_add_question_button_label">"आगे बढें "</string>
-    <string name="discussion_add_post_button_label" translatable="false">"आगे बढें "</string>
+    <string name="discussion_add_post_button_label" >"आगे बढें "</string>
     <string name="add_a_comment">"टिप्पणी करें "</string>
     <string name="no_handouts_to_display">"सामग्री मौजूद नहीं  "</string>
     <string name="comment_btn_label">"आगे बढें "</string>
@@ -139,8 +139,8 @@
     <string name="apply">"आगे बढें "</string>
     <string name="feed_format_most_popular_in">%2$s में सबसे लोकप्रिय %1$s</string>
     <string name="feed_format_most_popular">सबसे लोकप्रिय %s</string>
-    <string name="feed_format_advanced_comment_from" translatable="false">%2$s से %1$s शिक्षकों ने इस %3$s पर टिप्पणी की</string>
-    <string name="feed_format_advanced_comment" translatable="false">%1$s शिक्षकों ने इस %2$s पर टिप्पणी की</string>
+    <string name="feed_format_advanced_comment_from" >%2$s से %1$s शिक्षकों ने इस %3$s पर टिप्पणी की</string>
+    <string name="feed_format_advanced_comment" >%1$s शिक्षकों ने इस %2$s पर टिप्पणी की</string>
     <string name="sign_out_message">क्या आप साइन आउट करना चाहते हैं?</string>
     <string name="submit">दर्ज़ करें</string>
     <string name="save">"आगे बढें "</string>
@@ -148,16 +148,24 @@
     <string name="feed_format_share">"%1$s ने इस %2$s को साझा किया "</string>
     <string name="feed_format_share_from">%2$s से %1$s ने इस %3$s को साझा किया</string>
     <string name="feed_format_content_like">%1$s ने इस %2$s को पसंद किया</string>
-    <string name="feed_format_content_like_from" translatable="false">%2$s से %1$s ने इस %3$s को पसंद किया</string>
-    <string name="feed_format_advanced_like_from" translatable="false">%2$s के %1$s शिक्षकों ने इस %3$s को पसंद किया है</string>
+    <string name="feed_format_content_like_from" >%2$s से %1$s ने इस %3$s को पसंद किया</string>
+    <string name="feed_format_advanced_like_from" >%2$s के %1$s शिक्षकों ने इस %3$s को पसंद किया है</string>
     <string name="feed_format_advanced_like">%1$s शिक्षकों ने इस %2$s को पसंद किया है</string>
-    <string name="feed_format_advanced_share" translatable="false">%1$s शिक्षकों ने इस %2$s को साझा किया है</string>
+    <string name="feed_format_advanced_share" >%1$s शिक्षकों ने इस %2$s को साझा किया है</string>
     <string name="feed_format_advanced_share_from">%2$s के %1$s शिक्षकों ने इस %3$s को साझा किया है</string>
-    <string name="feed_format_comment_post" translatable="false">%1$s ने इस %2$s पर टिपण्णी की</string>
+    <string name="feed_format_comment_post" >%1$s ने इस %2$s पर टिपण्णी की</string>
     <string name="feed_format_comment_post_from">%2$s से %1$s ने इस %3$s पर टिपण्णी की</string>
-    <string name="feed_format_db_comment" translatable="false">%s ने चर्चा पर टिपण्णी की</string>
+    <string name="feed_format_db_comment" >%s ने चर्चा पर टिपण्णी की</string>
     <string name="feed_format_db_comment_from">%2$s से %1$s ने चर्चा पर टिपण्णी की</string>
     <string name="empty_post_message">पोस्ट उपलब्ध नहीं है</string>
     <string name="empty_discussion_message">चर्चा मौजूद नहीं</string>
     <string name="empty_comments_message">इस चर्चा पर कोई टिप्पणी शामिल नहीं है</string>
+    <string name="empty_certificates_message">सर्टिफिकेट उपलब्ध नहीं है</string>
+    <string name="not_available_message">%s उपलब्ध नहीं है</string>
+    <string name="empty_list_message">सूची खाली है</string>
+    <string name="search_only_hindi">खोज (केवल हिंदी)</string>
+    <string name="delete">डिलीट</string>
+    <string name="delete_question">क्या आप “%s” हटाना चाहते हैं</string>
+    <string name="comment_added_successfully">टिप्पणी सफलतापूर्वक जुड़ गई</string>
+    <string name="be_the_first_to_comment">इस पर कोई टिप्पणी शामिल नहीं है</string>
 </resources>

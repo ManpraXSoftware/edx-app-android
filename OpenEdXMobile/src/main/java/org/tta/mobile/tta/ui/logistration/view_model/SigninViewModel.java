@@ -7,6 +7,7 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 
 import org.tta.mobile.R;
@@ -117,6 +118,10 @@ public class SigninViewModel extends BaseViewModel {
                 if (e instanceof AuthException){
                     mFragment.showErrorDialog(mActivity.getString(R.string.login_error),
                             mActivity.getString(R.string.login_failed));
+                } else if (TextUtils.isEmpty(e.getLocalizedMessage())){
+                    mActivity.showLongSnack("Error occurred. Couldn't sign-in");
+                } else {
+                    mActivity.showLongSnack(e.getLocalizedMessage());
                 }
             }
         });

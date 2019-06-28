@@ -1,6 +1,7 @@
 package org.tta.mobile.tta.ui.profile.view_model;
 
 import android.content.Context;
+import android.databinding.ObservableBoolean;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -31,6 +32,10 @@ public class MyCertificatesViewModel extends BaseViewModel {
     public CertificatesAdapter adapter;
     public RecyclerView.LayoutManager layoutManager;
 
+    List<Certificate> certificates;
+
+    public ObservableBoolean emptyVisible = new ObservableBoolean();
+
     public MyCertificatesViewModel(Context context, TaBaseFragment fragment) {
         super(context, fragment);
 
@@ -52,16 +57,27 @@ public class MyCertificatesViewModel extends BaseViewModel {
             @Override
             public void onSuccess(List<Certificate> data) {
                 mActivity.hideLoading();
+                certificates = data;
                 adapter.setItems(data);
+                toggleEmptyVisibility();
             }
 
             @Override
             public void onFailure(Exception e) {
                 mActivity.hideLoading();
                 mActivity.showLongSnack(e.getLocalizedMessage());
+                toggleEmptyVisibility();
             }
         }, new TaException("Certificates not available"));
 
+    }
+
+    private void toggleEmptyVisibility(){
+        if (certificates == null || certificates.isEmpty()){
+            emptyVisible.set(true);
+        } else {
+            emptyVisible.set(false);
+        }
     }
 
     public class CertificatesAdapter extends MxInfiniteAdapter<Certificate> {

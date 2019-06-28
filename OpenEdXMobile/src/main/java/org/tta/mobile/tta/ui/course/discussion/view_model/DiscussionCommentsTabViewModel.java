@@ -2,6 +2,7 @@ package org.tta.mobile.tta.ui.course.discussion.view_model;
 
 import android.content.Context;
 import android.databinding.ObservableBoolean;
+import android.databinding.ObservableInt;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -57,6 +58,7 @@ public class DiscussionCommentsTabViewModel extends BaseViewModel {
     private SortType sortType;
 
     public ObservableBoolean emptyVisible = new ObservableBoolean();
+    public ObservableInt scrollPosition = new ObservableInt(0);
 
     private int take, page;
     private boolean allLoaded;
@@ -102,6 +104,7 @@ public class DiscussionCommentsTabViewModel extends BaseViewModel {
                 case R.id.comment_reply_layout:
                     if (commentClickListener != null){
                         commentClickListener.onClickReply(item);
+                        scrollPosition.set(adapter.getItemPosition(item));
                     }
                     break;
 

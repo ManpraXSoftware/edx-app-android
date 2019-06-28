@@ -10,11 +10,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.tta.mobile.R;
+import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
 import org.tta.mobile.tta.data.local.db.table.Content;
+import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.BasePagerAdapter;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.course.view_model.CourseDashboardViewModel;
@@ -72,6 +74,20 @@ public class CourseDashboardActivity extends BaseVMActivity {
 
         analytic.addMxAnalytics_db(content.getName(), Action.CourseView, content.getName(),
                 Source.Mobile, content.getSource_identity());
+
+        viewModel.loadCourseData(new OnResponseCallback<EnrolledCoursesResponse>() {
+            @Override
+            public void onSuccess(EnrolledCoursesResponse data) {
+
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                toolbar.post(() -> {
+                    toolbar.getMenu().findItem(R.id.action_share).setVisible(false);
+                });
+            }
+        });
     }
 
     private void getExtras() {

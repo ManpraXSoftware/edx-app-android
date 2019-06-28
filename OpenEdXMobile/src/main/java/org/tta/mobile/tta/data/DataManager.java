@@ -142,6 +142,7 @@ import org.tta.mobile.tta.task.notification.UpdateNotificationsTask;
 import org.tta.mobile.tta.task.profile.ChangePasswordTask;
 import org.tta.mobile.tta.task.profile.GetAccountTask;
 import org.tta.mobile.tta.task.profile.GetFollowStatusTask;
+import org.tta.mobile.tta.task.profile.GetFollowersOrFollowingTask;
 import org.tta.mobile.tta.task.profile.GetProfileTask;
 import org.tta.mobile.tta.task.profile.GetUserAddressTask;
 import org.tta.mobile.tta.task.profile.SubmitFeedbackTask;
@@ -289,6 +290,9 @@ public class DataManager extends BaseRoboInjector {
     }
 
     public void login(String username, String password, OnResponseCallback<AuthResponse> callback) {
+        if (!NetworkUtil.isConnected(context)){
+            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+        }
 
         wpClientRetrofit.getAccessToken(username, password, new WordPressRestResponse<WpAuthResponse>() {
             @Override
@@ -1885,7 +1889,7 @@ public class DataManager extends BaseRoboInjector {
                             }
                         });
                     } else {
-                        callback.onFailure(new TaException("Error in changing password"));
+                        callback.onFailure(new TaException("Please enter correct old password"));
                     }
                 }
 
@@ -2888,7 +2892,7 @@ public class DataManager extends BaseRoboInjector {
         }.start();
     }
 
-    public void onAppStart() {
+    public void onAppStartOrClose() {
         syncAnalytics();
         syncNotifications();
     }
@@ -3586,6 +3590,33 @@ public class DataManager extends BaseRoboInjector {
             }
         }
 
+    }
+
+    public void getFollowersOrFollowing(boolean follower, int take, int skip, OnResponseCallback<List<SuggestedUser>> callback) {
+        if (NetworkUtil.isConnected(context)) {
+
+            new GetFollowersOrFollowingTask(context, follower, take, skip){
+                @Override
+                protected void onSuccess(List<SuggestedUser> suggestedUsers) throws Exception {
+                    super.onSuccess(suggestedUsers);
+                    if (suggestedUsers == null){
+                        callback.onFailure(new TaException(
+                                follower ? "No followers found" : "No following found"
+                        ));
+                    } else {
+                        callback.onSuccess(suggestedUsers);
+                    }
+                }
+
+                @Override
+                protected void onException(Exception ex) {
+                    callback.onFailure(ex);
+                }
+            }.execute();
+
+        } else {
+            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+        }
     }
 }
 

@@ -80,7 +80,6 @@ public class CourseDashboardViewModel extends BaseViewModel {
         adapter = new CourseDashboardPagerAdapter(mActivity.getSupportFragmentManager());
         fragments = new ArrayList<>();
         titles = new ArrayList<>();
-        loadCourseData();
     }
 
     @Override
@@ -89,7 +88,7 @@ public class CourseDashboardViewModel extends BaseViewModel {
         onEventMainThread(new NetworkConnectivityChangeEvent());
     }
 
-    private void loadCourseData(){
+    public void loadCourseData(OnResponseCallback<EnrolledCoursesResponse> callback){
         mActivity.showLoading();
 
         mDataManager.getCourse(content.getSource_identity(), new OnResponseCallback<EnrolledCoursesResponse>() {
@@ -113,12 +112,14 @@ public class CourseDashboardViewModel extends BaseViewModel {
                             }
                         });
                 toggleEmptyVisibility();
+                callback.onSuccess(data);
             }
 
             @Override
             public void onFailure(Exception e) {
                 mActivity.hideLoading();
                 toggleEmptyVisibility();
+                callback.onFailure(e);
             }
         });
 

@@ -5,11 +5,13 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.FileProvider;
 import android.widget.Toast;
 
 import org.tta.mobile.tta.ui.logistration.SigninRegisterActivity;
@@ -81,10 +83,17 @@ public class ActivityUtil {
         /** PDF reader code */
         // File file = new File(Environment.getExternalStorageDirectory() + "/" + "abc.pdf");
 
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            uri = FileProvider.getUriForFile(ctx,
+                    ctx.getApplicationContext().getPackageName() + ".provider", filePath);
+        } else {
+            uri = Uri.fromFile(filePath);
+        }
+
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(filePath),"application/pdf");
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setData(uri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         try
         {
             ctx.startActivity(intent);

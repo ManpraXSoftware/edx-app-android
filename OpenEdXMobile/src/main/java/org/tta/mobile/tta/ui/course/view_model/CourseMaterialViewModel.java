@@ -286,11 +286,10 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
     private void deleteScorm() {
 
-        mActivity.showAlertDailog("Delete",
-                "Are you sure you want to delete \"" + selectedScormForDelete.getParent().getDisplayName() + "\"?",
-                (dialog, which) -> {
-                    mDataManager.deleteScorm(selectedScormForDelete);
-                },
+        mActivity.showAlertDailog(mActivity.getString(R.string.delete),
+                String.format(mActivity.getString(R.string.delete_question),
+                        selectedScormForDelete.getParent().getDisplayName()),
+                (dialog, which) -> mDataManager.deleteScorm(selectedScormForDelete),
                 null);
 
     }
