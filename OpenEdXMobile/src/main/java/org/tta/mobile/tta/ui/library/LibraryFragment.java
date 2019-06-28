@@ -5,17 +5,21 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.tta.mobile.R;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
+import org.tta.mobile.tta.data.pref.AppPref;
 import org.tta.mobile.tta.ui.base.BasePagerAdapter;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.interfaces.SearchPageOpenedListener;
 import org.tta.mobile.tta.ui.library.view_model.LibraryViewModel;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
+import org.tta.mobile.tta.utils.ToolTip;
+import org.tta.mobile.tta.utils.ToolTipView;
 import org.tta.mobile.view.common.PageViewStateCallback;
 
 public class LibraryFragment extends TaBaseFragment {
@@ -25,6 +29,7 @@ public class LibraryFragment extends TaBaseFragment {
 
     private SearchPageOpenedListener searchPageOpenedListener;
     private ViewPager viewPager;
+    private AppPref mAppPref;
 
     public static LibraryFragment newInstance(SearchPageOpenedListener searchPageOpenedListener){
         LibraryFragment fragment = new LibraryFragment();
@@ -37,6 +42,7 @@ public class LibraryFragment extends TaBaseFragment {
         super.onCreate(savedInstanceState);
         logD("TTA Nav ======> " + BreadcrumbUtil.setBreadcrumb(RANK, Nav.library.name()));
         viewModel = new LibraryViewModel(getActivity(), this, searchPageOpenedListener);
+
     }
 
     @Nullable
@@ -49,6 +55,18 @@ public class LibraryFragment extends TaBaseFragment {
         viewPager = view.findViewById(R.id.listing_view_pager);
         viewPager.setOffscreenPageLimit(5);
         tabLayout.setupWithViewPager(viewPager);
+        mAppPref = new AppPref(view.getContext());
+//        viewModel.setToolTip();
+
+        tabLayout.post(() -> {
+            if (!mAppPref.isProfileVisited()) {
+//                viewModel.setToolTip();
+                ToolTipView.showToolTip(getActivity(), "प्रत्येक बटन पर क्लिक करके विशिष्ट सामग्री पाएँ ",
+                        tabLayout, Gravity.BOTTOM);
+                mAppPref.setProfileVisited(true);
+            }
+        });
+
 
         return view;
     }

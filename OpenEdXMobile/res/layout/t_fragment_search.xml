@@ -75,7 +75,9 @@
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                tool_tip="@{viewModel.searchToolTip}"
+                tool_tip_gravity="@{viewModel.toolTipGravity}">
 
                 <TextView
                     selected="@{viewModel.filterSelected.get()}"
@@ -97,7 +99,9 @@
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                tool_tip="@{viewModel.selectedToolTip}"
+                tool_tip_gravity="@{viewModel.selectedToolTipGravity}">
 
                 <TextView
                     android:layout_width="wrap_content"

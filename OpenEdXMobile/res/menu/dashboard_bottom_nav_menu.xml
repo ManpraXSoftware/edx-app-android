@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/action_library"
         android:title="@string/library"
-        android:icon="@drawable/library"/>
+        android:icon="@drawable/library"
+        app:actionViewClass="android.widget.ImageButton" />
 
     <item android:id="@+id/action_feed"
         android:title="@string/feed"
-        android:icon="@drawable/feed"/>
+        android:icon="@drawable/feed"
+        app:actionViewClass="android.widget.ImageButton"/>
 
     <item android:id="@+id/action_search"
         android:title="@string/search"

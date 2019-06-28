@@ -78,6 +78,7 @@
     <!--  TTA color palette start  -->
     <color name="primary_navy">#3A495F</color>
     <color name="primary_cyan">#63D0C5</color>
+    <color name="cyan_light">#E8FCFC</color>
     <color name="primary_white">#FFFFFF</color>
 
     <color name="secondary_blue_light">#86D2F2</color>

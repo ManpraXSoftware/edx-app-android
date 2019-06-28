@@ -52,7 +52,9 @@
                 app:mx_titleTextColor="@color/gray_6"
                 app:mx_titleTextFont="@font/hind_semibold"
                 app:mx_titleTextSize="@dimen/list_title_size"
-                android:layout_marginTop="12dp"/>
+                android:layout_marginTop="12dp"
+                tool_tip="@{viewModel.regionToolTip}"
+                tool_tip_gravity="@{viewModel.toolTipGravity}"/>
 
             <com.maurya.mx.mxlib.view.MxFiniteRecyclerView
                 android:id="@+id/district_agenda_list"
@@ -88,7 +90,9 @@
                 app:mx_titleText="@string/my_agenda"
                 app:mx_titleTextColor="@color/gray_6"
                 app:mx_titleTextFont="@font/hind_semibold"
-                app:mx_titleTextSize="@dimen/list_title_size"/>
+                app:mx_titleTextSize="@dimen/list_title_size"
+                tool_tip="@{viewModel.personalToolTip}"
+                tool_tip_gravity="@{viewModel.toolTipGravity}"/>
 
             <com.maurya.mx.mxlib.view.MxFiniteRecyclerView
                 android:id="@+id/download_agenda_list"
@@ -100,7 +104,9 @@
                 app:mx_titleText="@string/download"
                 app:mx_titleTextColor="@color/gray_6"
                 app:mx_titleTextFont="@font/hind_semibold"
-                app:mx_titleTextSize="@dimen/list_title_size" />
+                app:mx_titleTextSize="@dimen/list_title_size"
+                tool_tip="@{viewModel.downloadToolTip}"
+                tool_tip_gravity="@{viewModel.personalToolTipGravity}"/>
 
         </LinearLayout>
 

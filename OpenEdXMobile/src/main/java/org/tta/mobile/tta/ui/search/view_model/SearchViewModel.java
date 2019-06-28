@@ -12,6 +12,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -93,6 +94,13 @@ public class SearchViewModel extends BaseViewModel {
     public ObservableBoolean tagsLayoutVisible = new ObservableBoolean();
     public ObservableInt selectedContentListPosition = new ObservableInt(0);
     public ObservableBoolean emptyVisible = new ObservableBoolean();
+
+
+    public ObservableField<String> searchToolTip;
+    public ObservableInt toolTipGravity;
+
+    public ObservableField<String> selectedToolTip;
+    public ObservableInt selectedToolTipGravity;
 
     public SearchedContentsAdapter contentsAdapter;
     public RecyclerView.LayoutManager contentsLayoutManager;
@@ -288,6 +296,17 @@ public class SearchViewModel extends BaseViewModel {
         loadSources();
     }
 
+    private void setToolTip(){
+        if (!mDataManager.getAppPref().isSearchVisited()){
+            searchToolTip = new ObservableField<>("विशिष्ट सामग्री चुनने के\n लिए यहाँ दबाये");
+            selectedToolTip = new ObservableField<>("चुनिंदा कर्म में देखे");
+            toolTipGravity = new ObservableInt(Gravity.BOTTOM);
+            selectedToolTipGravity = new ObservableInt(Gravity.BOTTOM);
+            mDataManager.getAppPref().setSearchVisited(true);
+        }
+    }
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -458,6 +477,7 @@ public class SearchViewModel extends BaseViewModel {
 
     private void loadFilters() {
         mActivity.showLoading();
+        setToolTip();
         mDataManager.getSearchFilter(new OnResponseCallback<SearchFilter>() {
             @Override
             public void onSuccess(SearchFilter data) {

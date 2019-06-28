@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,8 @@ import org.tta.mobile.tta.ui.custom.FormSpinner;
 import org.tta.mobile.tta.ui.profile.view_model.EditProfileViewModel;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.tta.utils.DataUtil;
+import org.tta.mobile.tta.utils.ToolTip;
+import org.tta.mobile.tta.utils.ToolTipView;
 import org.tta.mobile.tta.utils.UrlUtil;
 import org.tta.mobile.tta.utils.ViewUtil;
 import org.tta.mobile.user.Account;
@@ -79,6 +82,7 @@ public class EditProfileFragment extends TaBaseFragment {
     private FormMultiSpinner classTaughtSpinner;
     private FormMultiSpinner skillsSpinner;
     private FormSpinner dietSpinner;
+    private FormSpinner organisationSpinner;
     private FormEditText etPmis;
     private Button btn;
 

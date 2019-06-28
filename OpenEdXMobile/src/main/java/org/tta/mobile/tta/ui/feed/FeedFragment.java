@@ -85,6 +85,8 @@ public class FeedFragment extends TaBaseFragment {
             }
         });
         viewModel.registerEventBus();
+
+//        viewModel.showTooLTip();
     }
 
     @Nullable
@@ -98,6 +100,7 @@ public class FeedFragment extends TaBaseFragment {
             feedBinding.featuredContentSlider.contentTabLayout.setupWithViewPager(
                     feedBinding.featuredContentSlider.contentViewPager);
         }
+
 
         return binding.getRoot();
     }

@@ -35,6 +35,7 @@ public class UserInfoViewModel extends BaseViewModel {
     public List<RegistrationOption> classesTaught;
     public List<RegistrationOption> skills;
     public List<RegistrationOption> dietCodes;
+    public List<RegistrationOption> organisation;
 
     public String currentState, currentDistrict, currentProfession;
     public String classesSectionName, skillSectionName;
@@ -167,5 +168,9 @@ public class UserInfoViewModel extends BaseViewModel {
         professions.addAll(DataUtil.getAllProfessions());
         genders.addAll(DataUtil.getAllGenders());
         dietCodes.addAll(DataUtil.getAllDietCodesOfState(currentState));
+        professions = DataUtil.getAllProfessions();
+        genders = DataUtil.getAllGenders();
+        dietCodes = DataUtil.getAllDietCodesOfState(currentState);
+        organisation = DataUtil.getAllOrganisation();
     }
 }

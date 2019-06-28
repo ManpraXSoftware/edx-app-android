@@ -200,4 +200,22 @@ public class DatabaseModelFactory {
 
         return resume;
     }
+
+/*    *//**
+     * Returns new instance of {//@link Mx_CertificateModel} initialized with given cursor.
+     *
+     * @param c
+     * @return mx_certificateModel
+     *//*
+    public static Mx_CertificateModel getCertificateModel(Cursor c) {
+        Mx_CertificateModel certificate = new Mx_CertificateModel();
+
+        certificate.setCourse_name(c.getString(c.getColumnIndex(DbStructure.Column.COURSE_NAME)));
+        certificate.setDownload_url(c.getString(c.getColumnIndex(DbStructure.Column.DOWNLOAD_URL)));
+        certificate.setCourse_id(c.getString(c.getColumnIndex(DbStructure.Column.COURSE_ID)));
+        certificate.setImage(c.getString(c.getColumnIndex(DbStructure.Column.IMAGE)));
+        certificate.setUsername(c.getString(c.getColumnIndex(DbStructure.Column.USERNAME)));
+
+        return certificate;
+    }*/
 }

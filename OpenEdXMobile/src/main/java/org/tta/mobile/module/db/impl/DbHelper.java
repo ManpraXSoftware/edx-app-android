@@ -71,7 +71,7 @@ public class DbHelper extends SQLiteOpenHelper {
         //Mx Chirag: create table for analytics
         createAnalyticTable(db);
 
-        logger.debug("Database created");
+        logger.debug("Analytics Database created");
     }
 
     private void createAssessmentTable(SQLiteDatabase db){
@@ -107,6 +107,20 @@ public class DbHelper extends SQLiteOpenHelper {
 
         String upgradeToV7 = "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
                         + DbStructure.Column.URL_HLS + " TEXT ";
+
+        //for new design
+        String[] upgradeToV11 = new String[]{
+                "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
+                        + DbStructure.Column.CONTENT_ID + " TEXT ",
+                "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
+                        + DbStructure.Column.URL_HLS + " TEXT ",
+
+                "ALTER TABLE " + DbStructure.Table.ANALYTIC + " ADD COLUMN "
+                        + DbStructure.Column.ACTION_ID + " TEXT ",
+
+                "ALTER TABLE " + DbStructure.Table.ANALYTIC + " ADD COLUMN "
+                        + DbStructure.Column.NAV + " TEXT "};
+
 
         if (oldVersion == 1) {
             // upgrade from 1 to 2
@@ -220,6 +234,16 @@ public class DbHelper extends SQLiteOpenHelper {
                     new String[]{String.valueOf(DownloadEntry.DownloadedState.ONLINE.ordinal())});
         }
 
+
+        if(oldVersion<11)
+        {
+            // upgrade from 10 to 11
+            for (String query : upgradeToV11) {
+                db.execSQL(query);
+            }
+
+            logger.debug("Migration 10_11 done.s");
+        }
     }
 
     /**

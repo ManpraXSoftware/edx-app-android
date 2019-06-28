@@ -195,6 +195,7 @@ public class RecommendedUsersViewModel extends BaseViewModel {
                         .placeholder(R.drawable.profile_photo_placeholder)
                         .into(teacherBinding.userImage);
 
+
                 if (model.isFollowed()) {
                     teacherBinding.followBtn.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.btn_selector_filled));
                     teacherBinding.followBtn.setTextColor(ContextCompat.getColor(mActivity, R.color.white));
@@ -216,6 +217,7 @@ public class RecommendedUsersViewModel extends BaseViewModel {
                         listener.onItemClick(v, model);
                     }
                 });
+
             }
         }
     }

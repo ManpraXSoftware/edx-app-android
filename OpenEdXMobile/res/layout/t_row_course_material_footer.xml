@@ -24,7 +24,7 @@
             android:fontFamily="@font/hind_medium"
             android:layout_marginTop="@dimen/_6px"
             android:layout_marginStart="@dimen/_20px"
-            android:layout_marginEnd="@dimen/_20px"/>
+            android:layout_marginEnd="@dimen/_20px" />
 
         <View
             android:layout_width="match_parent"

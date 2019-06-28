@@ -20,6 +20,7 @@ public class ProfileModel implements Serializable {
     public String district;
     public String block;
     public String pmis_code;
+    public String organisation;
 
     //TTA Chirag
     @SerializedName("tag_label")

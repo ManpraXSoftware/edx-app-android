@@ -12,7 +12,18 @@ public final class DbStructure {
     // Updated to Version 5 to create a new table to record learning history for assessment
     // Updated to Version 6 to swap every occurrence of username field to its SHA1 hash
     // Updated to Version 7 to add a new field for HLS url encodings
-    public static final int VERSION = 7;
+
+    //Updated to Version 7 to add flag to indicate type of content i.e Scrom/Edx video/Connect video.
+    //Updated to Version 9 to add tincan table.
+    //Updated to version 10 to add certificate
+
+
+    //Updated to version 11 to migrate all tables below
+           //analytics add nav and action_id fields
+           //certificate table and fields.
+           //add content_id to download table
+
+    public static final int VERSION = 11;
 
     public static final class Table {
         public static final String DOWNLOADS = "downloads";
@@ -22,6 +33,9 @@ public final class DbStructure {
         public static final String ANALYTIC = "analytic";
         //added by Arjun to store all scrom resume state data //16-10-18
         public static final String TINCAN = "tincan";
+
+        //added by Chirag to store certificates
+        public static final String CERTIFICATE = "certificate";
     }
 
     public static final class Column {
@@ -77,5 +91,10 @@ public final class DbStructure {
         public static final String COURSE_ID="course_id";
         public static final String RESUME_PAYLOAD="resume_payload";
         public static final String UNIT_ID = "unit_id";
+
+        //table for certificate
+        public static final String COURSE_NAME = "course_name";
+        public static final String IMAGE = "image";
+        public static final String DOWNLOAD_URL = "download_url";
     }
 }

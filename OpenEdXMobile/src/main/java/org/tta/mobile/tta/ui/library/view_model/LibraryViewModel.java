@@ -1,10 +1,13 @@
 package org.tta.mobile.tta.ui.library.view_model;
 
 import android.content.Context;
+import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.Gravity;
 
 import org.tta.mobile.tta.data.local.db.table.Category;
 import org.tta.mobile.tta.data.model.library.CollectionConfigResponse;
@@ -31,6 +34,10 @@ public class LibraryViewModel extends BaseViewModel {
     private SearchPageOpenedListener searchPageOpenedListener;
 
     public ObservableInt initialPosition = new ObservableInt();
+    public ObservableInt toolTipPosition = new ObservableInt();
+    public ObservableInt toolTipGravity = new ObservableInt();
+    public ObservableField<String> toolTiptext = new ObservableField<>();
+
 
     public ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -42,7 +49,7 @@ public class LibraryViewModel extends BaseViewModel {
         public void onPageSelected(int i) {
             initialPosition.set(i);
             PageViewStateCallback callback = (PageViewStateCallback) fragments.get(i);
-            if (callback != null){
+            if (callback != null) {
                 callback.onPageShow();
             }
         }
@@ -64,10 +71,11 @@ public class LibraryViewModel extends BaseViewModel {
         adapter = new ListingPagerAdapter(mFragment.getChildFragmentManager());
 
         getData();
+//        setToolTip();
 
     }
 
-    private void getData(){
+    private void getData() {
         mActivity.showLoading();
 
         mDataManager.getCollectionConfig(new OnResponseCallback<CollectionConfigResponse>() {
@@ -83,6 +91,7 @@ public class LibraryViewModel extends BaseViewModel {
                 }
 
                 populateTabs();
+//                setToolTip();
 
             }
 
@@ -95,12 +104,13 @@ public class LibraryViewModel extends BaseViewModel {
 
     }
 
-    private void populateTabs(){
+    private void populateTabs() {
         fragments.clear();
         titles.clear();
-        for (Category category: categories){
+        for (Category category : categories) {
             fragments.add(LibraryTab.newInstance(cr, category, searchPageOpenedListener));
             titles.add(category.getName());
+            Log.d(">>>>>...Tabs: ", category.getName());
         }
 
         try {
@@ -110,18 +120,31 @@ public class LibraryViewModel extends BaseViewModel {
         }
         initialPosition.set(0);
 
-        if (!categories.isEmpty()){
+        if (!categories.isEmpty()) {
             PageViewStateCallback callback = (PageViewStateCallback) fragments.get(0);
-            if (callback != null){
+            if (callback != null) {
                 callback.onPageShow();
             }
         }
+
+
+//        toolTipPosition.set(0);
 
     }
 
     public class ListingPagerAdapter extends BasePagerAdapter {
         public ListingPagerAdapter(FragmentManager fm) {
             super(fm);
+        }
+    }
+
+    public void setToolTip() {
+        if (!mDataManager.getAppPref().isProfileVisited()) {
+            toolTipGravity.set(Gravity.BOTTOM);
+            toolTiptext.set("प्रत्येक बटन पर क्लिक करके \nविशिष्ट सामग्री पाएँ ");
+            toolTipPosition.set(initialPosition.get());
+//            mDataManager.getAppPref().setProfileVisited(true);
+
         }
     }
 }

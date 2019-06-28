@@ -40,6 +40,7 @@ public class UserInfoActivity extends BaseVMActivity {
     private FormMultiSpinner classTaughtSpinner;
     private FormMultiSpinner skillsSpinner;
     private FormSpinner dietSpinner;
+    private FormSpinner organisationSpinner;
     private FormEditText etPmis;
     private Button btn;
     private TextView privacyLinkText;
@@ -188,6 +189,7 @@ public class UserInfoActivity extends BaseVMActivity {
         setCustomField(mViewModel.currentState, mViewModel.currentProfession);
 
         dietSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "DIET Code/डी आइ इ टी कोड", mViewModel.dietCodes, null);
+         organisationSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Organisation/संगठन", mViewModel.organisation, null);
         toggleDietCodeVisibility();
 
         btn = ViewUtil.addButton(userInfoLayout, getString(R.string.submit));

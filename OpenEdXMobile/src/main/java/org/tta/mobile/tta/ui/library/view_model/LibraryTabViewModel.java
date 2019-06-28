@@ -1,12 +1,10 @@
 package org.tta.mobile.tta.ui.library.view_model;
 
-import android.Manifest;
 import android.content.Context;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.databinding.ViewDataBinding;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,12 +13,12 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.maurya.mx.mxlib.core.MxBaseAdapter;
@@ -56,8 +54,8 @@ import org.tta.mobile.tta.ui.search.SearchFragment;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.tta.utils.ContentSourceUtil;
-import org.tta.mobile.tta.utils.JsonUtil;
-import org.tta.mobile.util.PermissionsUtil;
+import org.tta.mobile.tta.utils.ToolTipView;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -293,6 +291,9 @@ public class LibraryTabViewModel extends BaseViewModel {
                                 .placeholder(R.drawable.placeholder_course_card_image)
                                 .into(imageView);
                         container.addView(view);
+
+                        ToolTipView.showToolTip(mActivity, "fsjfjdsbfjds",imageView,Gravity.BOTTOM);
+
                         view.setOnClickListener(v -> {
 //                            Toast.makeText(mActivity, contentListMap.get(model.getId()).get(position).getName(), Toast.LENGTH_SHORT).show();
                             selectedContent = contentListMap.get(model.getId()).get(position);
