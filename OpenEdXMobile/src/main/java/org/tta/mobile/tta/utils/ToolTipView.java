@@ -11,20 +11,14 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.print.PrintAttributes;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
-import android.support.design.widget.BaseTransientBottomBar;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -32,7 +26,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.tta.mobile.R;
 
@@ -48,7 +41,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
     private static final long ANIMATION_DURATION = 300L;
     private static final String TOOL_TIP = "tool_tip";
     private static final String REMOVE_TOOL_TIP = "Remove_tool_tip";
-    private static List<WeakReference<ToolTipView>> viewsList= new ArrayList<>();
+    private static List<WeakReference<ToolTipView>> viewsList = new ArrayList<>();
     private final View anchorView;
     private final int gravity;
 
@@ -100,8 +93,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
 
             //noinspection
             text.setBackgroundDrawable(drawable);
-        }
-        else {
+        } else {
             text.setBackgroundColor(backgroundColor);
         }
 
@@ -112,27 +104,45 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
         switch (gravity) {
             case Gravity.LEFT:
                 container.setOrientation(LinearLayout.HORIZONTAL);
+                text.setBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light));
                 container.addView(text, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_arrow_back_black_24dp));
                 container.addView(arrow, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 break;
             case Gravity.RIGHT:
                 container.setOrientation(LinearLayout.HORIZONTAL);
-                arrow.setBackground(ContextCompat.getDrawable(context,R.drawable.ic_subdirectory_arrow_right_black_24dp));
+                text.setBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light));
+                arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_arrow_forward_cyan_24dp));
                 container.addView(arrow, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 container.addView(text, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 break;
             case Gravity.TOP:
                 container.setOrientation(LinearLayout.VERTICAL);
+//                text.setBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light));
                 container.addView(text, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                arrow.setBackground(ContextCompat.getDrawable(context,R.drawable.ic_arrow_upward_black_24dp));
+                arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.down_arrow));
+                arrow.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.arrow_background_tint));
                 container.addView(arrow, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 break;
+//            case Gravity.BOTTOM:
+//                container.setOrientation(LinearLayout.VERTICAL);
+//                arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_arrow_downward_black_24dp));
+//                container.addView(arrow, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+//                container.addView(text, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+//                break;
+
             case Gravity.BOTTOM:
                 container.setOrientation(LinearLayout.VERTICAL);
-                arrow.setBackground(ContextCompat.getDrawable(context,R.drawable.ic_arrow_downward_black_24dp));
-                container.addView(arrow, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                container.addView(text, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+//                arrow.setVisibility(View.GONE);
+//                text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_subdirectory_arrow_right_black_24dp, 0, 0, 0);
+                text.setGravity(Gravity.BOTTOM);
+//                text.setBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light));
+                arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.up_arrow));
+                arrow.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.arrow_background_tint));
+                LinearLayout.LayoutParams layoutParams =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                layoutParams.setMargins(0,20,0,0);
+                container.addView(arrow, layoutParams);
+                container.addView(text, new LinearLayout.LayoutParams(layoutParams));
                 break;
         }
 
@@ -148,13 +158,14 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
         this.listener = listener;
     }
 
-    public static void showToolTip(Context context, String msg, View view, int gravity){
+    public static void showToolTip(Context context, String msg, View view, int gravity) {
         view.setTag(view.getId(), TOOL_TIP);
         ToolTip toolTip1 = new ToolTip.Builder()
                 .withText(msg)
                 .withTypefaceStyle(R.font.hind_semibold)
+                .withCornerRadius(8.0f)
                 .withBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light))
-                .withPadding(15,15,15,15)
+                .withPadding(15, 15, 15, 15)
                 .withTextSize(25)
                 .withTextColor(ContextCompat.getColor(context, R.color.primary_cyan))
                 .build();
@@ -174,12 +185,13 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
         toolTipView1.show();
 
     }
-    public static void showToolTipPosition(Context context, String msg, View view, int gravity){
+
+    public static void showToolTipPosition(Context context, String msg, View view, int gravity) {
 //        view.setTag(view.getId(), TOOL_TIP);
         ToolTip toolTip1 = new ToolTip.Builder()
                 .withText(msg)
                 .withBackgroundColor(ContextCompat.getColor(context, R.color.white_list_clicked))
-                .withPadding(15,15,15,15)
+                .withPadding(15, 15, 15, 15)
                 .withTextSize(55.0f)
                 .withTextColor(ContextCompat.getColor(context, R.color.primary_cyan))
                 .build();
@@ -223,15 +235,16 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
      */
     @UiThread
     public void show() {
-            popupWindow.showAsDropDown(anchorView);
+        popupWindow.showAsDropDown(anchorView);
 //            views.add(anchorView.getId(), anchorView);
-            container.getViewTreeObserver().addOnPreDrawListener(this);
+        container.getViewTreeObserver().addOnPreDrawListener(this);
     }
 
-    public static Boolean isToolTipAdded(View view){
+    public static Boolean isToolTipAdded(View view) {
         Object obj = view.getTag(view.getId());
         return obj != null;
     }
+
     /**
      * Shows the tool tip with the specified delay.
      */
@@ -246,6 +259,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
 
     /**
      * Removes the tool tip view from the view hierarchy.
+     *
      * @param v
      */
     @UiThread
@@ -263,16 +277,18 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                     }
                 });
     }
+
     @UiThread
-    public static void removeAll(){
-        for (WeakReference<ToolTipView> view:viewsList){
-            if (view!=null&&view.get()!=null){
+    public static void removeAll() {
+        for (WeakReference<ToolTipView> view : viewsList) {
+            if (view != null && view.get() != null) {
                 view.get().remove(view.get().anchorView);
             }
         }
         viewsList.clear();
 
     }
+
 
     @Override
     public boolean onPreDraw() {
@@ -381,7 +397,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
         if (listener != null) {
             listener.onToolTipClicked(this);
         }
-//        removeAll(v);
+//        removeAll();
         remove(v);
     }
 

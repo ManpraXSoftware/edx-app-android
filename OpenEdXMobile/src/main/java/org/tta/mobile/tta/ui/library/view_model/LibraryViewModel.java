@@ -3,9 +3,11 @@ package org.tta.mobile.tta.ui.library.view_model;
 import android.content.Context;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
 
 import org.tta.mobile.tta.data.local.db.table.Category;
@@ -16,6 +18,7 @@ import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.interfaces.SearchPageOpenedListener;
 import org.tta.mobile.tta.ui.library.LibraryTab;
+import org.tta.mobile.tta.utils.ToolTipView;
 import org.tta.mobile.view.common.PageViewStateCallback;
 
 import java.util.ArrayList;
@@ -33,9 +36,12 @@ public class LibraryViewModel extends BaseViewModel {
     private SearchPageOpenedListener searchPageOpenedListener;
 
     public ObservableInt initialPosition = new ObservableInt();
-    public ObservableInt toolTipPosition;
-    public ObservableInt toolTipGravity;
-    public ObservableField<String> toolTiptext;
+    public ObservableInt toolTipPosition= new ObservableInt();
+    public ObservableInt toolTipGravity= new ObservableInt(Gravity.BOTTOM);
+    public ObservableField<String> toolTiptext= new ObservableField<>("प्रत्येक बटन पर क्लिक करके \nविशिष्ट सामग्री पाएँ ");
+
+
+
 
 
     public ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
@@ -70,7 +76,7 @@ public class LibraryViewModel extends BaseViewModel {
         adapter = new ListingPagerAdapter(mFragment.getChildFragmentManager());
 
         getData();
-        setToolTip();
+//        setToolTip();
 
     }
 
@@ -90,6 +96,7 @@ public class LibraryViewModel extends BaseViewModel {
                 }
 
                 populateTabs();
+//                setToolTip();
 
             }
 
@@ -108,6 +115,7 @@ public class LibraryViewModel extends BaseViewModel {
         for (Category category : categories) {
             fragments.add(LibraryTab.newInstance(cr, category, searchPageOpenedListener));
             titles.add(category.getName());
+            Log.d(">>>>>...Tabs: ", category.getName());
         }
 
         try {
@@ -123,6 +131,8 @@ public class LibraryViewModel extends BaseViewModel {
                 callback.onPageShow();
             }
         }
+        setToolTip();
+
 
 //        toolTipPosition.set(0);
 
@@ -136,9 +146,12 @@ public class LibraryViewModel extends BaseViewModel {
 
     public void setToolTip() {
         if (!mDataManager.getAppPref().isProfileVisited()) {
-            toolTipPosition = new ObservableInt(0);
-            toolTipGravity = new ObservableInt(Gravity.BOTTOM);
-            toolTiptext = new ObservableField<>("प्रत्येक बटन पर क्लिक करके विशिस्ट सामग्री पाएं ");
+//            ToolTipView.showToolTip(mActivity, "प्रत्येक बटन पर क्लिक करके विशिष्ट सामग्री पाएँ ",
+//                    tabLayout.getChildAt(0),Gravity.BOTTOM);
+
+            toolTipGravity.set(Gravity.BOTTOM);
+            toolTiptext.set("प्रत्येक बटन पर क्लिक करके \nविशिष्ट सामग्री पाएँ ");
+            toolTipPosition.set(initialPosition.get());
 //            mDataManager.getAppPref().setProfileVisited(true);
         }
     }

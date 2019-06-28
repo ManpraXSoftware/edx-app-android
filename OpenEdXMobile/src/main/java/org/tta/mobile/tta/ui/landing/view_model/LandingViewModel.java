@@ -1,16 +1,11 @@
 package org.tta.mobile.tta.ui.landing.view_model;
 
-import android.content.Context;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.widget.TooltipCompat;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
 import org.tta.mobile.R;
 import org.tta.mobile.event.NetworkConnectivityChangeEvent;
@@ -26,9 +21,9 @@ import org.tta.mobile.tta.ui.library.LibraryFragment;
 import org.tta.mobile.tta.ui.profile.ProfileFragment;
 import org.tta.mobile.tta.ui.search.SearchFragment;
 import org.tta.mobile.tta.utils.ActivityUtil;
-import org.tta.mobile.tta.utils.ToolTip;
 import org.tta.mobile.tta.utils.ToolTipView;
 import org.tta.mobile.util.NetworkUtil;
+import org.tta.mobile.util.observer.Observable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +39,10 @@ public class LandingViewModel extends BaseViewModel {
     public ObservableBoolean offlineVisible = new ObservableBoolean();
 
     private List<ContentStatus> statuses;
-    BottomNavigationView bottomNavigationView = mActivity.findViewById(R.id.dashboard_bottom_nav);
 
-    public ObservableField<String> libraryToolTip;
-    public ObservableInt toolTipGravity;
-
+    public ObservableField<String> libraryToolTip = new ObservableField<>();
+    public ObservableInt toolTipGravity = new ObservableInt();
+    public ObservableInt toolTipPosition = new ObservableInt();
 
 
     public BottomNavigationView.OnNavigationItemSelectedListener itemSelectedListener = item -> {
@@ -72,15 +66,14 @@ public class LandingViewModel extends BaseViewModel {
             case R.id.action_search:
                 selectedId = R.id.action_search;
                 if (!mDataManager.getAppPref().isSearchVisited()) {
-                    ToolTipView.showToolTip(getActivity(), "यहाँ अपनी रूचि के अनुसार सामग्री खोजे ",mActivity.findViewById(R.id.action_search),Gravity.TOP);
+                    ToolTipView.showToolTip(getActivity(), "यहाँ अपनी रूचि के अनुसार सामग्री खोजे ", mActivity.findViewById(R.id.action_search), Gravity.TOP);
                 }
                 showSearch();
                 return true;
             case R.id.action_agenda:
                 selectedId = R.id.action_agenda;
                 if (!mDataManager.getAppPref().isAgendaVisited()) {
-                    ToolTipView.showToolTip(getActivity(), "यहाँ अपना लक्ष्य जाने और बनायें ",mActivity.findViewById(R.id.action_agenda),Gravity.TOP);
-
+                    ToolTipView.showToolTip(getActivity(), "यहाँ अपना लक्ष्य जाने और बनायें ", mActivity.findViewById(R.id.action_agenda), Gravity.TOP);
                 }
                 showAgenda();
                 return true;
@@ -107,6 +100,7 @@ public class LandingViewModel extends BaseViewModel {
         selectedId = R.id.action_library;
         showLibrary();
         onAppStart();
+//        setToolTip();
 
 
     }
@@ -119,8 +113,6 @@ public class LandingViewModel extends BaseViewModel {
     }
 
 
-
-
     public void showLibrary() {
         ActivityUtil.clearBackstackAndReplaceFragmentInActivity(
                 mActivity.getSupportFragmentManager(),
@@ -130,7 +122,7 @@ public class LandingViewModel extends BaseViewModel {
                 false,
                 null
         );
-//        setToolTip();
+        setToolTip();
     }
 
     public void showFeed() {
@@ -144,7 +136,7 @@ public class LandingViewModel extends BaseViewModel {
         );
     }
 
-    public void showSearch(){
+    public void showSearch() {
         ActivityUtil.clearBackstackAndReplaceFragmentInActivity(
                 mActivity.getSupportFragmentManager(),
                 new SearchFragment(),
@@ -177,7 +169,7 @@ public class LandingViewModel extends BaseViewModel {
         );
     }
 
-    private void onAppStart(){
+    private void onAppStart() {
 
         mDataManager.getMyContentStatuses(new OnResponseCallback<List<ContentStatus>>() {
             @Override
@@ -193,24 +185,23 @@ public class LandingViewModel extends BaseViewModel {
         });
     }
 
-    private void setToolTip(){
-//        ToolTipView.showToolTip(getActivity(), "यहाँ सभी सामग्री पाए",mActivity.findViewById(R.id.action_library),Gravity.TOP);
-//        bottomNavigationView.post(() -> {
-//            ToolTipView.showToolTip(this, "यहाँ सभी सामग्री पाए",mActivity.findViewById(R.id.action_library), Gravity.TOP);
-//        });
-        if (!mDataManager.getAppPref().isFeedVisited()){
-            libraryToolTip = new ObservableField<>("यहाँ सभी सामग्री पाएं ");
-            toolTipGravity = new ObservableInt(Gravity.TOP);
-        }
+    public void setToolTip() {
+
+//        if (!mDataManager.getAppPref().isFeedVisited()){
+            libraryToolTip.set("यहाँ सभी सामग्री पाएँ ");
+            toolTipGravity.set(Gravity.TOP);
+            toolTipPosition.set(0);
+
+//        }
     }
 
-    public void selectLibrary(){
+    public void selectLibrary() {
         selectedId = R.id.action_library;
     }
 
     @SuppressWarnings("unused")
-    public void onEventMainThread(NetworkConnectivityChangeEvent event){
-        if (NetworkUtil.isConnected(mActivity)){
+    public void onEventMainThread(NetworkConnectivityChangeEvent event) {
+        if (NetworkUtil.isConnected(mActivity)) {
             offlineVisible.set(false);
         } else {
             offlineVisible.set(true);
@@ -218,19 +209,19 @@ public class LandingViewModel extends BaseViewModel {
     }
 
     @SuppressWarnings("unused")
-    public void onEventMainThread(ContentStatusReceivedEvent event){
-        if (statuses == null){
+    public void onEventMainThread(ContentStatusReceivedEvent event) {
+        if (statuses == null) {
             statuses = new ArrayList<>();
         }
         statuses.remove(event.getContentStatus());
         statuses.add(event.getContentStatus());
     }
 
-    public void registerEventBus(){
+    public void registerEventBus() {
         EventBus.getDefault().register(this);
     }
 
-    public void unRegisterEventBus(){
+    public void unRegisterEventBus() {
         EventBus.getDefault().unregister(this);
     }
 }

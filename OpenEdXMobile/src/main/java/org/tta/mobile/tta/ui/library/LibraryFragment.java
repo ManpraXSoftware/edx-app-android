@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import org.tta.mobile.R;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
+import org.tta.mobile.tta.data.pref.AppPref;
 import org.tta.mobile.tta.ui.base.BasePagerAdapter;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.interfaces.SearchPageOpenedListener;
@@ -28,6 +29,7 @@ public class LibraryFragment extends TaBaseFragment {
 
     private SearchPageOpenedListener searchPageOpenedListener;
     private ViewPager viewPager;
+    private AppPref mAppPref;
 
     public static LibraryFragment newInstance(SearchPageOpenedListener searchPageOpenedListener){
         LibraryFragment fragment = new LibraryFragment();
@@ -53,12 +55,16 @@ public class LibraryFragment extends TaBaseFragment {
         viewPager = view.findViewById(R.id.listing_view_pager);
         viewPager.setOffscreenPageLimit(5);
         tabLayout.setupWithViewPager(viewPager);
+        mAppPref = new AppPref(view.getContext());
+//        viewModel.setToolTip();
 
 //        tabLayout.post(() -> {
-////            if (!mAppPref.isProfileVisited()) {
-//                ToolTipView.showToolTip(getActivity(), "यहाँ सभी सामग्री पाए", tabLayout.getChildAt(0), Gravity.TOP);
+//            if (!mAppPref.isProfileVisited()) {
+////                viewModel.setToolTip();
+//                ToolTipView.showToolTip(getActivity(), "प्रत्येक बटन पर क्लिक करके विशिष्ट सामग्री पाएँ ",
+//                        tabLayout.getChildAt(0), Gravity.TOP);
 ////                mAppPref.setProfileVisited(true);
-////            }
+//            }
 //        });
 
 

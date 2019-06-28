@@ -435,8 +435,8 @@ public class FeedViewModel extends BaseViewModel {
 
     private void setToolTip() {
         if (!mDataManager.getAppPref().isFeedVisited()) {
-            feedToolTip = new ObservableField<>("अन्य शिक्षको से जुड़ने के लिए फॉलो बटन दबाये");
-            shareToolTip = new ObservableField<>("सभी के साथ यहाँ सामग्री साझा करने के लिए यहाँ बटन दबाएं");
+            feedToolTip = new ObservableField<>("अन्य शिक्षको से जुड़ने के लिए फॉलो बटन दबाएँ");
+            shareToolTip = new ObservableField<>("सभी के साथ यहाँ सामग्री साझा करने के लिए यहाँ बटन दबाएँ");
             toolTipGravity = new ObservableInt(Gravity.BOTTOM);
             sharetoolTipGravity = new ObservableInt(Gravity.BOTTOM);
 //            mDataManager.getAppPref().setFeedVisited(true);
@@ -663,7 +663,7 @@ public class FeedViewModel extends BaseViewModel {
 
                 if (getItemPosition(model) == 0) {
                     if (!mDataManager.getAppPref().isFeedVisited()) {
-                        ToolTipView.showToolTip(mActivity, "अन्य शिक्षको से जुड़ने के लिए फॉलो बटन दबाएं ", teacherBinding.followBtn, Gravity.BOTTOM);
+                        ToolTipView.showToolTip(mActivity, "अन्य शिक्षको से जुड़ने के लिए फॉलो बटन दबाएँ ", teacherBinding.followBtn, Gravity.BOTTOM);
                         mDataManager.getAppPref().setFeedVisited(true);
                     }
                 }
@@ -717,7 +717,7 @@ public class FeedViewModel extends BaseViewModel {
 
                 if (getItemPosition(model) == 0) {
                     if (mDataManager.getAppPref().isFeedVisited()) {
-                        ToolTipView.showToolTip(mActivity, " सभी के साथ यहाँ सामग्री साझा \nकरने के लिए यहाँ बटन दबाएं ",
+                        ToolTipView.showToolTip(mActivity, " सभी के साथ यहाँ सामग्री साझा \nकरने के लिए यहाँ बटन दबाएँ ",
                                 feedBinding.feedShare, Gravity.TOP);
                         mDataManager.getAppPref().setFeedVisited(true);
                     }

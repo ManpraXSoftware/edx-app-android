@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.View;
 
 import org.tta.mobile.R;
@@ -21,6 +22,7 @@ import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.course.CourseMaterialTab;
 import org.tta.mobile.tta.ui.course.discussion.CourseDiscussionTab;
+import org.tta.mobile.tta.utils.ToolTipView;
 import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.images.ShareUtils;
 import org.tta.mobile.view.AuthenticatedWebViewFragment;
@@ -179,12 +181,19 @@ public class CourseDashboardViewModel extends BaseViewModel {
             e.printStackTrace();
         }
         this.tabPosition.set(position);
-
+//         showToolTipAt(position);
         PageViewStateCallback callback = (PageViewStateCallback) fragments.get(position);
         if (callback != null){
             callback.onPageShow();
         }
     }
+
+//    private void showToolTipAt(int position) {
+//        if (position==0){
+//            ToolTipView.showToolTip(getActivity(), "fdsbf", , Gravity.BOTTOM);
+//
+//        }
+//    }
 
     private void toggleEmptyVisibility(){
         if (course == null || course.getCourse() == null){

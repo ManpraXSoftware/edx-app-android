@@ -49,21 +49,30 @@ public class AgendaViewModel extends BaseViewModel {
         stateListAdapter = new AgendaListAdapter(mActivity, mActivity.getString(R.string.state_wise_list));
         myListAdapter = new AgendaListAdapter(mActivity, mActivity.getString(R.string.my_agenda));
         downloadListAdapter = new AgendaListAdapter(mActivity, mActivity.getString(R.string.download));
+//        setToolTip();
 
     }
 
-    private void setToolTip(){
+    public void setToolTip(){
         if (!mDataManager.getAppPref().isAgendaVisited()){
             regionToolTip = new ObservableField<>("आपके राजय ने आपके \nलिए ये सामग्री चुनी है ");
             personalToolTip = new ObservableField<>("आपके द्वारा चुनी गयी सामग्री यहाँ है ");
             downloadToolTip = new ObservableField<>("आपके द्वारा डाउनलोड की गयी सामग्री यहाँ है ");
             mDataManager.getAppPref().setAgendaVisited(true);
+        }else {
+            if (regionToolTip!=null)
+            regionToolTip.set("");
+            if (personalToolTip!=null)
+            personalToolTip.set("");
+            if (downloadToolTip!=null)
+            downloadToolTip.set("");
         }
+
     }
 
     public void getAgenda() {
         mActivity.showLoading();
-        setToolTip();
+
         mDataManager.getSources(new OnResponseCallback<List<Source>>() {
             @Override
             public void onSuccess(List<Source> data) {

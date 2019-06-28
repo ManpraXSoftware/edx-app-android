@@ -146,15 +146,26 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
     private void setToolTip(){
         if (!mDataManager.getAppPref().isCourseVisited()){
-            likeToolTip = new ObservableField<>("सामग्री को अपने लक्ष्य से \nजोड़ने के लिए बटन को दबाए ");
-            downloadToolTip = new ObservableField<>("सामग्री डाउनलोड करने \nके लिए बटन दबाए ");
-            understandToolTip = new ObservableField<>("सभी भाग देखने पर और 60% या उससे \nअधिक पाने पर आपको सर्टिफिकेट मिलेगा ");
+            likeToolTip = new ObservableField<>("सामग्री को अपने लक्ष्य से \nजोड़ने के लिए बटन को दबाएँ ");
+            downloadToolTip = new ObservableField<>("सामग्री डाउनलोड करने \nके लिए बटन दबाएँ ");
+//            understandToolTip = new ObservableField<>("सभी भाग देखने पर और 60% या उससे \nअधिक पाने पर आपको सर्टिफिकेट मिलेगा ");
             toolTipGravity = new ObservableInt(Gravity.BOTTOM);
             understandToolTipGravity = new ObservableInt(Gravity.TOP);
             mDataManager.getAppPref().setCourseVisited(true);
+        }else {
+            if (likeToolTip!=null)
+                likeToolTip.set("");
+
+            if (downloadToolTip!=null)
+                downloadToolTip.set("");
+
+            if (understandToolTip!=null)
+                understandToolTip.set("");
         }
 
     }
+
+
 
     public void loadData(){
         if (content == null){
@@ -266,6 +277,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void deleteScorm(ScormBlockModel scorm) {
+        setToolTip();
         selectedScormForDelete = scorm;
         actionMode = ACTION_DELETE;
         mFragment.askForPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -359,6 +371,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
         } else {
             footerImageUrl.set(content.getIcon());
         }
+
 
         footerTitle.set(assessmentComponent.getDisplayName());
         footerDownloadIcon.set(R.drawable.t_icon_download);
@@ -694,6 +707,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void downloadSingle(ScormBlockModel scorm){
+        setToolTip();
         downloadModeIsAll = false;
         selectedScormForDownload = scorm;
         actionMode = ACTION_DOWNLOAD;
@@ -784,6 +798,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void downloadAllRemaining(){
+        setToolTip();
         downloadModeIsAll = true;
         actionMode = ACTION_DOWNLOAD;
         mFragment.askForPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},

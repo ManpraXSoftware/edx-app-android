@@ -109,8 +109,7 @@
                     android:focusable="true"
                     android:background="?android:attr/selectableItemBackground"
                     android:padding="8dp"
-                    tool_tip="@{viewModel.likeToolTip}"
-                    tool_tip_gravity="@{viewModel.toolTipGravity}">
+                    >
 
                     <ImageView
                         android:id="@+id/course_bookmark_image"
@@ -131,7 +130,9 @@
                         android:gravity="bottom"
                         android:text="@string/add_to_my_agenda"
                         android:textColor="@color/gray_4"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        tool_tip="@{viewModel.likeToolTip}"
+                        tool_tip_gravity="@{viewModel.toolTipGravity}"/>
 
                 </LinearLayout>
 
@@ -153,8 +154,7 @@
                     android:focusable="true"
                     android:background="?android:attr/selectableItemBackground"
                     android:padding="8dp"
-                    tool_tip="@{viewModel.downloadToolTip}"
-                    tool_tip_gravity="@{viewModel.understandToolTipGravity}">
+                    >
 
                     <org.tta.mobile.view.custom.IconProgressBar
                         android:id="@+id/loading_indicator"
@@ -183,7 +183,9 @@
                         android:gravity="bottom"
                         android:text="@string/download_all"
                         android:textColor="@color/gray_4"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        tool_tip="@{viewModel.downloadToolTip}"
+                        tool_tip_gravity="@{viewModel.understandToolTipGravity}"/>
 
                 </LinearLayout>
 

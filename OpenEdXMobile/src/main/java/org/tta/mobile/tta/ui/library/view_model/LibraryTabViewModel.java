@@ -48,6 +48,7 @@ import org.tta.mobile.tta.ui.search.SearchFragment;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.tta.utils.ContentSourceUtil;
+import org.tta.mobile.tta.utils.ToolTipView;
 
 
 import java.util.ArrayList;
@@ -244,6 +245,7 @@ public class LibraryTabViewModel extends BaseViewModel {
                                 .into(imageView);
                         container.addView(view);
 
+                        ToolTipView.showToolTip(mActivity, "fsjfjdsbfjds",imageView,Gravity.BOTTOM);
 
                         view.setOnClickListener(v -> {
 //                            Toast.makeText(mActivity, contentListMap.get(model.getId()).get(position).getName(), Toast.LENGTH_SHORT).show();

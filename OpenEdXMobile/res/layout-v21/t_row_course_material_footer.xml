@@ -24,9 +24,7 @@
             android:fontFamily="@font/hind_medium"
             android:layout_marginTop="@dimen/_6px"
             android:layout_marginStart="@dimen/_20px"
-            android:layout_marginEnd="@dimen/_20px"
-            tool_tip="@{viewModel.understandToolTip}"
-            tool_tip_gravity="@{viewModel.understandToolTipGravity}"/>
+            android:layout_marginEnd="@dimen/_20px" />
 
         <View
             android:layout_width="match_parent"
@@ -93,8 +91,7 @@
                         android:visibility="@{viewModel.footerTitleVisible?View.VISIBLE:View.GONE}"
                         android:textColor="@color/gray_5"
                         android:textSize="12sp"
-                        android:fontFamily="@font/hind_medium"
-                        />
+                        android:fontFamily="@font/hind_medium" />
 
                     <View
                         android:layout_width="match_parent"
@@ -136,7 +133,8 @@
                             android:visibility="@{viewModel.footerBtnVisible?View.VISIBLE:View.GONE}"
                             android:textSize="12sp"
                             android:textColor="@color/primary_cyan"
-                            android:fontFamily="@font/hind_regular"/>
+                            android:fontFamily="@font/hind_regular"
+                           />
 
                     </LinearLayout>
 

@@ -1,15 +1,11 @@
 package org.tta.mobile.tta.ui.landing;
 
-import android.databinding.ObservableInt;
-import android.os.Build;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 
-import androidx.annotation.RequiresApi;
 
 import org.tta.mobile.R;
 import org.tta.mobile.tta.data.pref.AppPref;
@@ -35,13 +31,17 @@ public class LandingActivity extends BaseVMActivity {
         BottomNavigationView view = findViewById(R.id.dashboard_bottom_nav);
         view.setItemIconTintList(null);
 
-        view.post(() -> {
-            if (!mAppPref.isProfileVisited()) {
-                ToolTipView.showToolTip(this, "यहाँ सभी सामग्री पाए", findViewById(R.id.action_library), Gravity.TOP);
-                mAppPref.setProfileVisited(true);
-            }
-        });
         viewModel.registerEventBus();
+
+
+
+//        view.post(() -> {
+//            if (!mAppPref.isProfileVisited()) {
+//                ToolTipView.showToolTip(this, "यहाँ सभी सामग्री पाएँ ", view.getChildAt(0), Gravity.TOP);
+//                mAppPref.setProfileVisited(true);
+//            }
+//        });
+
     }
 
     @Override

@@ -2,7 +2,6 @@ package org.tta.mobile.tta.binding;
 
 import android.content.Context;
 import android.databinding.BindingAdapter;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.design.widget.BottomNavigationView;
@@ -12,10 +11,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ import com.maurya.mx.mxlib.core.MxInfiniteAdapter;
 import com.maurya.mx.mxlib.view.MxFiniteRecyclerView;
 import com.maurya.mx.mxlib.view.MxRecyclerView;
 
+import org.tta.mobile.R;
 import org.tta.mobile.tta.ui.base.BaseArrayAdapter;
 import org.tta.mobile.tta.ui.custom.FormEditText;
 import org.tta.mobile.tta.ui.custom.NonScrollListView;
@@ -387,13 +389,21 @@ public class BindingAdapters {
         });
     }
 
+    @BindingAdapter({"on_scroll_to_end"})
+    public static void setOnScrollToEnd(RecyclerView view, final String message) {
+        Log.d("setOnScrollToEnd", "setOnScrollToEnd:");
+        view.post(() -> {
+
+        });
+    }
+
     @BindingAdapter({"android:text"})
-    public static void setText(TextView view, SpannableString string){
+    public static void setText(TextView view, SpannableString string) {
         view.setText(string);
     }
 
     @BindingAdapter({"on_view_more_click_listener"})
-    public static void setOnViewMoreClickListener(MxFiniteRecyclerView view, View.OnClickListener listener){
+    public static void setOnViewMoreClickListener(MxFiniteRecyclerView view, View.OnClickListener listener) {
         view.setOnMoreButtonClickListener(listener);
     }
 
@@ -404,34 +414,43 @@ public class BindingAdapters {
     }
 
     @BindingAdapter({"tab_position"})
-    public static void setTabPosition(TabLayout view, int position){
+    public static void setTabPosition(TabLayout view, int position) {
         view.post(() -> {
             try {
                 view.getTabAt(position).select();
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
     }
 
     @BindingAdapter({"tool_tip", "tool_tip_gravity"})
-    public static void showToolTip(View view, String message, int gravity){
-        if(!ToolTipView.isToolTipAdded(view))
-        if (message != null && !message.trim().equals("")) {
-            if (view instanceof MxFiniteRecyclerView){
-                MxFiniteRecyclerView mxView= (MxFiniteRecyclerView) view;
-                ToolTipView.showToolTip(mxView.getContext(), message.trim(), mxView.getTitleTextView(), gravity);
-            }else {
-                ToolTipView.showToolTip(view.getContext(), message.trim(), view, gravity);
+    public static void showToolTip(View view, String message, int gravity) {
+        if (!ToolTipView.isToolTipAdded(view))
+            if (message != null && !message.trim().equals("")) {
+                if (view instanceof MxFiniteRecyclerView) {
+                    MxFiniteRecyclerView mxView = (MxFiniteRecyclerView) view;
+                    ToolTipView.showToolTip(mxView.getContext(), message.trim(), mxView.getTitleTextView(), gravity);
+                } else {
+                    ToolTipView.showToolTip(view.getContext(), message.trim(), view, gravity);
+                }
             }
-        }
     }
 
     @BindingAdapter({"tool_tip", "tool_tip_gravity", "tool_tip_position"})
-    public static void showToolTipPos(TabLayout view, String message, int gravity, int position){
+    public static void showToolTipPos(TabLayout view, String message, int gravity, int position) {
         view.post(() -> {
             View v = view.getChildAt(position);
-            if(v != null && !ToolTipView.isToolTipAdded(v))
+            if (v != null && !ToolTipView.isToolTipAdded(v))
+                if (message != null && !message.trim().equals(""))
+                    ToolTipView.showToolTip(v.getContext(), message.trim(), v, gravity);
+        });
+    }
+    @BindingAdapter({"tool_tip", "tool_tip_gravity", "tool_tip_position"})
+    public static void showToolTipPos(BottomNavigationView view, String message, int gravity, int position) {
+        view.post(() -> {
+            View v = view.findViewById(R.id.action_library);
+            if (v != null && !ToolTipView.isToolTipAdded(v))
                 if (message != null && !message.trim().equals(""))
                     ToolTipView.showToolTip(v.getContext(), message.trim(), v, gravity);
         });

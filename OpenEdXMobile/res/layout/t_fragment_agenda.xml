@@ -106,7 +106,7 @@
                 app:mx_titleTextFont="@font/hind_semibold"
                 app:mx_titleTextSize="@dimen/list_title_size"
                 tool_tip="@{viewModel.downloadToolTip}"
-                tool_tip_gravity="@{viewModel.toolTipGravity}"/>
+                tool_tip_gravity="@{viewModel.personalToolTipGravity}"/>
 
         </LinearLayout>
 

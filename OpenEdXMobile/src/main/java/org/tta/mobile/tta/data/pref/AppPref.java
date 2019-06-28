@@ -34,7 +34,12 @@ public class AppPref {
     public void setCourseVisited(boolean courseVisited) {
         prefManager.put(PrefManager.Key.ISCOURSEVISITED, courseVisited);
     }
-
+    public boolean isCourseBottom() {
+        return prefManager.getBoolean(PrefManager.Key.ISCOURSEBOTTOM, false);
+    }
+    public void setCourseBottom(boolean courseVisited) {
+        prefManager.put(PrefManager.Key.ISCOURSEBOTTOM, courseVisited);
+    }
     public boolean isProfileVisited() {
         return prefManager.getBoolean(PrefManager.Key.IS_PROFILE_VISITED, false);
     }

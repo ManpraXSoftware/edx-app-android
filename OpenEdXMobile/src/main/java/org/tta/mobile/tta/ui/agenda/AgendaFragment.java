@@ -41,6 +41,7 @@ public class AgendaFragment extends TaBaseFragment {
         View view = binding(inflater, container, R.layout.t_fragment_agenda, viewModel)
                 .getRoot();
         viewModel.getAgenda();
+        viewModel.setToolTip();
 //       if ( mBinding instanceof TFragmentAgendaBinding){
 //           TFragmentAgendaBinding binding= (TFragmentAgendaBinding) mBinding;
 //           ToolTipView.showToolTip(getActivity(), "fbdskj",binding.stateAgendaList.getTitleTextView(),

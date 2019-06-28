@@ -84,15 +84,18 @@ public class TaBaseActivity extends RxAppCompatActivity implements RoboContext, 
     }
 
     public void showLoading() {
+        if (mLoading!=null)
         mLoading.showLoading();
     }
 
     public void hideLoading() {
+        if (mLoading!=null)
         mLoading.hideLoading();
     }
 
     @Override
     public void dismiss() {
+        if (mLoading!=null)
         mLoading.dismiss();
     }
 
