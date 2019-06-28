@@ -386,8 +386,9 @@ public interface IDatabase {
     Integer updateDownloadCompleteInfoByDmId(long dmId, VideoModel de,
                                              DataCallback<Integer> callback);
 
-    Integer updateInfoByVideoId(String videoId, VideoModel de,
-                                             DataCallback<Integer> callback);
+    Integer updateInfoByVideoId(String videoId,
+                                       VideoModel model,
+                                       DataCallback<Integer> callback);
 
     /**
      * Returns list of all videos from the database.
@@ -532,6 +533,9 @@ public interface IDatabase {
 
     int getAnalyticsCount(DataCallback<Integer> callback);
 
-    List<VideoModel> getLegacyWPDownloads();
-    List<VideoModel> getLegacyEdxDownloads();
+    //get all downloaded scrom
+    ArrayList<VideoModel> getDownloadedScorm();
+
+    //get all downloaded scrom
+    ArrayList<VideoModel> getDownloadedConnect();
 }

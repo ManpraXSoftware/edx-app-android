@@ -767,17 +767,17 @@ public class Storage implements IStorage {
     }
 
     @Override
-    public List<VideoModel> getLegacyWPDownloads() {
-        return db.getLegacyWPDownloads();
+    public ArrayList<VideoModel> getDownloadedScorm() {
+        return db.getDownloadedScorm();
     }
 
     @Override
-    public List<VideoModel> getLegacyEdxDownloads() {
-        return db.getLegacyEdxDownloads();
+    public ArrayList<VideoModel> getDownloadedConnect() {
+        return db.getDownloadedScorm();
     }
 
     @Override
-    public Integer updateInfoByVideoId(String videoId, VideoModel de, DataCallback<Integer> callback) {
-        return db.updateInfoByVideoId(videoId, de, callback);
+    public Integer updateInfoByVideoId(String videoId, VideoModel model,DataCallback<Integer> callback) {
+        return db.updateInfoByVideoId(videoId,model,callback);
     }
 }

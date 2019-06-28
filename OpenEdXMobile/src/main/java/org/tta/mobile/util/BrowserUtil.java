@@ -2,6 +2,7 @@ package org.tta.mobile.util;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
@@ -13,6 +14,7 @@ import org.tta.mobile.logger.Logger;
 import org.tta.mobile.module.analytics.AnalyticsRegistry;
 import org.tta.mobile.module.prefs.LoginPrefs;
 import org.tta.mobile.tta.data.pref.AppPref;
+import org.tta.mobile.tta.scorm.ScormManager;
 import org.tta.mobile.view.dialog.IDialogCallback;
 
 public class BrowserUtil {
@@ -39,6 +41,10 @@ public class BrowserUtil {
 
     @Inject
     public static LoginAPI loginAPI;
+
+    @Inject
+    @NonNull
+    public static ScormManager scormManager;
 
     /**
      * Opens given URL in native browser.
