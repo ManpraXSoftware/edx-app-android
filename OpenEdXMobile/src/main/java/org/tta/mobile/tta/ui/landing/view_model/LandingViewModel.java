@@ -11,6 +11,7 @@ import org.tta.mobile.tta.data.local.db.table.ContentStatus;
 import org.tta.mobile.tta.event.ContentStatusReceivedEvent;
 import org.tta.mobile.tta.event.ContentStatusesReceivedEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
+import org.tta.mobile.tta.scorm.ScromMigration280719;
 import org.tta.mobile.tta.ui.agenda.AgendaFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
@@ -151,6 +152,10 @@ public class LandingViewModel extends BaseViewModel {
 
             }
         });
+
+
+        //ScromMigration280719 spt=new ScromMigration280719(getActivity());
+        //spt.MigrateConnectVideos();
     }
 
     public void selectLibrary(){

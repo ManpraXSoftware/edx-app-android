@@ -765,4 +765,19 @@ public class Storage implements IStorage {
     public int getAnalyticsCount() {
         return db.getAnalyticsCount(null);
     }
+
+    @Override
+    public ArrayList<VideoModel> getDownloadedScorm() {
+        return db.getDownloadedScorm();
+    }
+
+    @Override
+    public ArrayList<VideoModel> getDownloadedConnect() {
+        return db.getDownloadedScorm();
+    }
+
+    @Override
+    public Integer updateInfoByVideoId(String videoId, VideoModel model,DataCallback<Integer> callback) {
+        return db.updateInfoByVideoId(videoId,model,callback);
+    }
 }

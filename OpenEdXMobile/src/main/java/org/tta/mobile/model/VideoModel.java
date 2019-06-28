@@ -25,6 +25,7 @@ public interface VideoModel {
     long getDuration();
 
     String getFilePath();
+    void  setFilePath(String file_path);
 
     String getVideoUrl();
 

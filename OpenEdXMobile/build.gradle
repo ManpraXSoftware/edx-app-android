@@ -131,6 +131,9 @@ dependencies {
     // with module updates.
     implementation project (':android-iconify-fontawesome')
 
+    //Arjun:Added for directory i/o operations
+    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+
     // Mx module for listing
     implementation project (':mxlib')
 

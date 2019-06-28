@@ -43,6 +43,7 @@ public class DownloadEntry implements SectionItemInterface, VideoModel {
     public String url_youtube;
     public long dmId = -1;
 
+
     public String type;
     public long content_id;
 
@@ -81,7 +82,12 @@ public class DownloadEntry implements SectionItemInterface, VideoModel {
         // video model is never a section
         return false;
     }
-    
+
+    @Override
+    public void setFilePath(String file_path) {
+        filepath=file_path;
+    }
+
     @Override
     public boolean isCourse() {
         return false;
