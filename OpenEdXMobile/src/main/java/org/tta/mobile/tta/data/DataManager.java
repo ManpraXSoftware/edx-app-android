@@ -27,6 +27,7 @@ import org.tta.mobile.discussion.DiscussionTopic;
 import org.tta.mobile.discussion.DiscussionTopicDepth;
 import org.tta.mobile.http.callback.Callback;
 import org.tta.mobile.model.Page;
+import org.tta.mobile.model.VideoModel;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.model.api.ProfileModel;
 import org.tta.mobile.model.course.CourseComponent;
@@ -3618,5 +3619,71 @@ public class DataManager extends BaseRoboInjector {
             callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
         }
     }
+
+    public void setContentIdForLegacyDownloads(){
+
+        if (NetworkUtil.isConnected(context)) {
+
+            List<VideoModel> wpDownloads = edxEnvironment.getStorage().getLegacyWPDownloads();
+            List<VideoModel> edxDownloads = edxEnvironment.getStorage().getLegacyEdxDownloads();
+
+            if (wpDownloads != null){
+
+                for (VideoModel model: wpDownloads){
+                    try {
+                        getPostById(Long.parseLong(model.getVideoId()), new OnResponseCallback<Post>() {
+                            @Override
+                            public void onSuccess(Post data) {
+                                getContentFromSourceIdentity(data.getSlug(), new OnResponseCallback<Content>() {
+                                    @Override
+                                    public void onSuccess(Content data) {
+                                        model.setContent_id(data.getId());
+                                        edxEnvironment.getStorage().updateInfoByVideoId(model.getVideoId(),
+                                                model, null);
+                                    }
+
+                                    @Override
+                                    public void onFailure(Exception e) {
+
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+
+                            }
+                        });
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+            if (edxDownloads != null){
+
+                for (VideoModel model: edxDownloads){
+                    getContentFromSourceIdentity(model.getEnrollmentId(), new OnResponseCallback<Content>() {
+                        @Override
+                        public void onSuccess(Content data) {
+                            model.setContent_id(data.getId());
+                            edxEnvironment.getStorage().updateInfoByVideoId(model.getVideoId(),
+                                    model, null);
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+
+                        }
+                    });
+                }
+
+            }
+
+        }
+
+    }
+
 }
 

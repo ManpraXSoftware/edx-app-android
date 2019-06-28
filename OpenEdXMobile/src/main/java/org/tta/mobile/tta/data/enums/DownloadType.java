@@ -3,6 +3,6 @@ package org.tta.mobile.tta.data.enums;
 public enum DownloadType {
     SCORM,
     PDF,
-    WP_VIDEO,
+    CONNECTVIDEO,
     EDX_VIDEO
 }

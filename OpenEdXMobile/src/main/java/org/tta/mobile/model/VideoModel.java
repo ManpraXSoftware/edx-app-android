@@ -86,4 +86,5 @@ public interface VideoModel {
     String getDownloadType();
 
     long getContent_id();
+    void setContent_id(long content_id);
 }

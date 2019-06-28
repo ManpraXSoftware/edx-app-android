@@ -765,4 +765,19 @@ public class Storage implements IStorage {
     public int getAnalyticsCount() {
         return db.getAnalyticsCount(null);
     }
+
+    @Override
+    public List<VideoModel> getLegacyWPDownloads() {
+        return db.getLegacyWPDownloads();
+    }
+
+    @Override
+    public List<VideoModel> getLegacyEdxDownloads() {
+        return db.getLegacyEdxDownloads();
+    }
+
+    @Override
+    public Integer updateInfoByVideoId(String videoId, VideoModel de, DataCallback<Integer> callback) {
+        return db.updateInfoByVideoId(videoId, de, callback);
+    }
 }

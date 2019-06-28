@@ -21,6 +21,8 @@ import org.tta.mobile.tta.analytics.AnalyticModel;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.db_operations.DbOperationGetAnalytic;
 import org.tta.mobile.tta.data.local.db.operation.DbOperationGetTinCanPayload;
+import org.tta.mobile.tta.data.local.db.operation.GetLegacyEdxDownloadsOperation;
+import org.tta.mobile.tta.data.local.db.operation.GetLegacyWPDownloadsOperation;
 import org.tta.mobile.tta.tincan.model.Resume;
 import org.tta.mobile.util.Sha1Util;
 import org.tta.mobile.util.TextUtils;
@@ -645,6 +647,26 @@ public class IDatabaseImpl extends IDatabaseBaseImpl implements IDatabase {
     }
 
     @Override
+    public Integer updateInfoByVideoId(String videoId, VideoModel de, DataCallback<Integer> callback) {
+        ContentValues values = new ContentValues();
+        values.put(DbStructure.Column.SIZE, de.getSize());
+        values.put(DbStructure.Column.DURATION, de.getDuration());
+        values.put(DbStructure.Column.FILEPATH, de.getFilePath());
+        values.put(DbStructure.Column.URL, de.getVideoUrl());
+        values.put(DbStructure.Column.URL_HLS, de.getHLSVideoUrl());
+        values.put(DbStructure.Column.URL_HIGH_QUALITY, de.getHighQualityVideoUrl());
+        values.put(DbStructure.Column.URL_LOW_QUALITY, de.getLowQualityVideoUrl());
+        values.put(DbStructure.Column.URL_YOUTUBE, de.getYoutubeVideoUrl());
+        values.put(DbStructure.Column.DOWNLOADED, de.getDownloadedStateOrdinal());
+        values.put(DbStructure.Column.DOWNLOADED_ON, de.getDownloadedOn());
+
+        DbOperationUpdate op = new DbOperationUpdate(DbStructure.Table.DOWNLOADS, values,
+                DbStructure.Column.VIDEO_ID + "=?", new String[]{videoId});
+        op.setCallback(callback);
+        return enqueue(op);
+    }
+
+    @Override
     public List<VideoModel> getAllVideos(String username,
                                          final DataCallback<List<VideoModel>> callback) {
         DbOperationGetVideos op = new DbOperationGetVideos(false, DbStructure.Table.DOWNLOADS, null,
@@ -1010,6 +1032,18 @@ public class IDatabaseImpl extends IDatabaseBaseImpl implements IDatabase {
                 DbStructure.Column.USER_ID +"=?",
                 new String[]{loginPrefs.getUsername()},null);
         op.setCallback(callback);
+        return enqueue(op);
+    }
+
+    @Override
+    public List<VideoModel> getLegacyWPDownloads() {
+        GetLegacyWPDownloadsOperation op = new GetLegacyWPDownloadsOperation();
+        return enqueue(op);
+    }
+
+    @Override
+    public List<VideoModel> getLegacyEdxDownloads() {
+        GetLegacyEdxDownloadsOperation op = new GetLegacyEdxDownloadsOperation();
         return enqueue(op);
     }
 }

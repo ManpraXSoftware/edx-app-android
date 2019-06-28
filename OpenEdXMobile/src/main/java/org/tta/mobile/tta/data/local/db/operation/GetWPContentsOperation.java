@@ -22,7 +22,7 @@ public class GetWPContentsOperation extends DbOperationSelect<List<Long>> {
                 + DbStructure.Column.CHAPTER + "=? AND "
                 + DbStructure.Column.DOWNLOADED + "=?",
                 new String[]{Sha1Util.SHA1(loginPrefs.getUsername()),
-                        DownloadType.WP_VIDEO.name(), sourceName,
+                        DownloadType.CONNECTVIDEO.name(), sourceName,
                         String.valueOf(DownloadEntry.DownloadedState.DOWNLOADED.ordinal())
                 },
                 null);

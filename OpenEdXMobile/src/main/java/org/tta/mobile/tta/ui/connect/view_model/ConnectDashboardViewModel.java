@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -969,7 +968,7 @@ public class ConnectDashboardViewModel extends BaseViewModel
         }
 
         if (e.getEntry() != null && e.getEntry().content_id == content.getId() &&
-                e.getEntry().type != null && e.getEntry().type.equalsIgnoreCase(DownloadType.WP_VIDEO.name())){
+                e.getEntry().type != null && e.getEntry().type.equalsIgnoreCase(DownloadType.CONNECTVIDEO.name())){
 
             allDownloadProgressVisible.set(false);
             allDownloadIconVisible.set(true);
@@ -990,7 +989,7 @@ public class ConnectDashboardViewModel extends BaseViewModel
 
         if (e.getModel() != null && e.getModel().getContent_id() == content.getId() &&
                 e.getModel().getDownloadType() != null &&
-                e.getModel().getDownloadType().equalsIgnoreCase(DownloadType.WP_VIDEO.name())) {
+                e.getModel().getDownloadType().equalsIgnoreCase(DownloadType.CONNECTVIDEO.name())) {
             allDownloadProgressVisible.set(false);
             allDownloadIconVisible.set(true);
             allDownloadOptionVisible.set(true);
@@ -1010,7 +1009,7 @@ public class ConnectDashboardViewModel extends BaseViewModel
         VideoModel downloadEntry = event.getDownloadEntry();
         if (downloadEntry != null && downloadEntry.getContent_id() == content.getId() &&
                 downloadEntry.getDownloadType() != null &&
-                downloadEntry.getDownloadType().equalsIgnoreCase(DownloadType.WP_VIDEO.name())) {
+                downloadEntry.getDownloadType().equalsIgnoreCase(DownloadType.CONNECTVIDEO.name())) {
 
             switch (event.getErrorCode()){
                 case DownloadManager.ERROR_INSUFFICIENT_SPACE:

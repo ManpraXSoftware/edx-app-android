@@ -187,4 +187,9 @@ public interface IStorage {
     Resume getResumeInfo(String course_id, String unit_id);
 
     int getAnalyticsCount();
+
+    List<VideoModel> getLegacyWPDownloads();
+    List<VideoModel> getLegacyEdxDownloads();
+
+    Integer updateInfoByVideoId(String videoId, VideoModel de, DataCallback<Integer> callback);
 }

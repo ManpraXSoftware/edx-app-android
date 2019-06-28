@@ -183,6 +183,8 @@ public class LandingViewModel extends BaseViewModel {
 
             }
         });
+
+        mDataManager.setContentIdForLegacyDownloads();
     }
 
     public void setToolTip() {

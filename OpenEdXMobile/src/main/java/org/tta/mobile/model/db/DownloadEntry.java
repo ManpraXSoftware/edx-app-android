@@ -142,7 +142,7 @@ public class DownloadEntry implements SectionItemInterface, VideoModel {
     public boolean getattachType() {
         return type != null && (type.equalsIgnoreCase(DownloadType.SCORM.name()) ||
                 type.equalsIgnoreCase(DownloadType.PDF.name()) ||
-                type.equalsIgnoreCase(DownloadType.WP_VIDEO.name()));
+                type.equalsIgnoreCase(DownloadType.CONNECTVIDEO.name()));
     }
 
     public long getContent_id() {
@@ -395,7 +395,7 @@ public class DownloadEntry implements SectionItemInterface, VideoModel {
         this.chapter=category_name;
 
         //it will be content type
-        this.type= DownloadType.WP_VIDEO.name();
+        this.type= DownloadType.CONNECTVIDEO.name();
 
         this.content_id = contentId;
 
