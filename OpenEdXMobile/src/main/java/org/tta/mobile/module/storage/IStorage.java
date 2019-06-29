@@ -186,10 +186,13 @@ public interface IStorage {
     Integer deleteResumePayload(String course_id, String unit_id);
     Resume getResumeInfo(String course_id, String unit_id);
 
+    //get all downloaded scrom
+    ArrayList<VideoModel> getDownloadedScorm();
+
+    //get all downloaded scrom
+    ArrayList<VideoModel> getDownloadedConnect();
+
     int getAnalyticsCount();
 
-    List<VideoModel> getLegacyWPDownloads();
-    List<VideoModel> getLegacyEdxDownloads();
-
-    Integer updateInfoByVideoId(String videoId, VideoModel de, DataCallback<Integer> callback);
+    Integer updateInfoByVideoId(String videoId, VideoModel model,DataCallback<Integer> callback);
 }

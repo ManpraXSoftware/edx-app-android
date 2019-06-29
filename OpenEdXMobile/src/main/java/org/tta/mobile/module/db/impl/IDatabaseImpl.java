@@ -21,8 +21,7 @@ import org.tta.mobile.tta.analytics.AnalyticModel;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.db_operations.DbOperationGetAnalytic;
 import org.tta.mobile.tta.data.local.db.operation.DbOperationGetTinCanPayload;
-import org.tta.mobile.tta.data.local.db.operation.GetLegacyEdxDownloadsOperation;
-import org.tta.mobile.tta.data.local.db.operation.GetLegacyWPDownloadsOperation;
+import org.tta.mobile.tta.scorm.ContentType;
 import org.tta.mobile.tta.tincan.model.Resume;
 import org.tta.mobile.util.Sha1Util;
 import org.tta.mobile.util.TextUtils;
@@ -647,21 +646,24 @@ public class IDatabaseImpl extends IDatabaseBaseImpl implements IDatabase {
     }
 
     @Override
-    public Integer updateInfoByVideoId(String videoId, VideoModel de, DataCallback<Integer> callback) {
+    public Integer updateInfoByVideoId(String videoId,
+                                       VideoModel model,
+                                       DataCallback<Integer> callback) {
         ContentValues values = new ContentValues();
-        values.put(DbStructure.Column.SIZE, de.getSize());
-        values.put(DbStructure.Column.DURATION, de.getDuration());
-        values.put(DbStructure.Column.FILEPATH, de.getFilePath());
-        values.put(DbStructure.Column.URL, de.getVideoUrl());
-        values.put(DbStructure.Column.URL_HLS, de.getHLSVideoUrl());
-        values.put(DbStructure.Column.URL_HIGH_QUALITY, de.getHighQualityVideoUrl());
-        values.put(DbStructure.Column.URL_LOW_QUALITY, de.getLowQualityVideoUrl());
-        values.put(DbStructure.Column.URL_YOUTUBE, de.getYoutubeVideoUrl());
-        values.put(DbStructure.Column.DOWNLOADED, de.getDownloadedStateOrdinal());
-        values.put(DbStructure.Column.DOWNLOADED_ON, de.getDownloadedOn());
+        values.put(DbStructure.Column.SIZE, model.getSize());
+        values.put(DbStructure.Column.DURATION, model.getDuration());
+        values.put(DbStructure.Column.FILEPATH, model.getFilePath());
+        values.put(DbStructure.Column.URL, model.getVideoUrl());
+        values.put(DbStructure.Column.URL_HLS, model.getHLSVideoUrl());
+        values.put(DbStructure.Column.URL_HIGH_QUALITY, model.getHighQualityVideoUrl());
+        values.put(DbStructure.Column.URL_LOW_QUALITY, model.getLowQualityVideoUrl());
+        values.put(DbStructure.Column.URL_YOUTUBE, model.getYoutubeVideoUrl());
+        values.put(DbStructure.Column.DOWNLOADED, model.getDownloadedStateOrdinal());
+        values.put(DbStructure.Column.DOWNLOADED_ON, model.getDownloadedOn());
 
         DbOperationUpdate op = new DbOperationUpdate(DbStructure.Table.DOWNLOADS, values,
-                DbStructure.Column.VIDEO_ID + "=?", new String[]{videoId});
+                DbStructure.Column.VIDEO_ID + "=?",
+                new String[]{videoId});
         op.setCallback(callback);
         return enqueue(op);
     }
@@ -1036,14 +1038,18 @@ public class IDatabaseImpl extends IDatabaseBaseImpl implements IDatabase {
     }
 
     @Override
-    public List<VideoModel> getLegacyWPDownloads() {
-        GetLegacyWPDownloadsOperation op = new GetLegacyWPDownloadsOperation();
-        return enqueue(op);
+    public ArrayList<VideoModel> getDownloadedScorm() {
+        DbOperationGetVideos op = new DbOperationGetVideos(false, DbStructure.Table.DOWNLOADS, null,
+                DbStructure.Column.DOWNLOADED + "=? AND " + DbStructure.Column.TYPE + "=? OR "+ DbStructure.Column.FILEPATH + "=?",
+                new String[]{String.valueOf(DownloadedState.DOWNLOADED.ordinal()),String.valueOf(ContentType.Scrom),String.valueOf(ContentType.Scrom)},null);
+        return (ArrayList<VideoModel>) enqueue(op);
     }
 
     @Override
-    public List<VideoModel> getLegacyEdxDownloads() {
-        GetLegacyEdxDownloadsOperation op = new GetLegacyEdxDownloadsOperation();
-        return enqueue(op);
+    public ArrayList<VideoModel> getDownloadedConnect() {
+        DbOperationGetVideos op = new DbOperationGetVideos(false, DbStructure.Table.DOWNLOADS, null,
+                DbStructure.Column.DOWNLOADED + "=? AND " + DbStructure.Column.TYPE + " ",
+                new String[]{String.valueOf(DownloadedState.DOWNLOADED.ordinal()), String.valueOf(ContentType.CONNECTVIDEO)},null);
+        return (ArrayList<VideoModel>) enqueue(op);
     }
 }
