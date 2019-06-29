@@ -94,6 +94,7 @@ public enum Action {
     UnfollowUser,
     Comment,
     Enrolled,
-    EnrolFailed
+    EnrolFailed,
+    TTAFeed
 
 }

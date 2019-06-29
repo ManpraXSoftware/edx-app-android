@@ -62,6 +62,7 @@ public class Constants {
     public static final String INTENT_DELETE_FEEDS = "delete_feeds";
     public static final int REQUEST_CODE_DELETE_FEEDS = 1243;
     public static final long INTERVAL_DELETE_FEEDS = 24*60*60*1000;
+    public static final long INTERVAL_SYNC_ANALYTICS_JOB = 5*60*1000;
     public static final String EXTRA_NOTIFICATION = "notification";
     public static final String DELIMITER_TAG_CHUNKS = "   ";
     public static final String DELIMITER_SECTION_TAG = "___";

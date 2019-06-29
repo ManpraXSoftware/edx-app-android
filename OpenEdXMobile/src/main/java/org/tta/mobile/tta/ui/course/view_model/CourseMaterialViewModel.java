@@ -123,6 +123,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
     public ObservableField<String> footerBtnText = new ObservableField<>("");
     public ObservableBoolean footerBtnVisible = new ObservableBoolean(false);
 
+    public ObservableBoolean emptyVisible = new ObservableBoolean();
+
     private int numberOfDownloadingVideos;
     private int numberOfDownloadedVideos;
     private boolean downloadModeIsAll;
@@ -137,6 +139,12 @@ public class CourseMaterialViewModel extends BaseViewModel {
         this.content = content;
         this.course = course;
         this.rootComponent = rootComponent;
+
+        toggleEmptyVisibility();
+        if (rootComponent == null){
+            return;
+        }
+
         adapter = new CourseMaterialAdapter();
         firstDownload = true;
         unitStatusMap = new HashMap<>();
@@ -1037,6 +1045,14 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
         adapter.setData(rootComponent);
 
+    }
+
+    private void toggleEmptyVisibility() {
+        if (rootComponent == null) {
+            emptyVisible.set(true);
+        } else {
+            emptyVisible.set(false);
+        }
     }
 
     public class CourseMaterialAdapter extends BaseRecyclerAdapter<CourseComponent> {

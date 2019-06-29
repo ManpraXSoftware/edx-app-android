@@ -3,16 +3,51 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View" />
         <variable
             name="viewModel"
             type="org.tta.mobile.tta.ui.course.view_model.CourseMaterialViewModel" />
     </data>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/course_recycler"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        recycler_adapter="@{viewModel.adapter}"
-        layout_manager="@{viewModel.layoutManager}"/>
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/course_recycler"
+            layout_manager="@{viewModel.layoutManager}"
+            recycler_adapter="@{viewModel.adapter}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:visibility="@{viewModel.emptyVisible ? View.VISIBLE : View.GONE}">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                app:srcCompat="@drawable/t_icon_alert"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_42px"
+                android:layout_marginStart="@dimen/_70px"
+                android:layout_marginEnd="@dimen/_70px"
+                android:fontFamily="@font/hind_regular"
+                android:gravity="center"
+                android:text="@string/empty_course_material_message"
+                android:textColor="@color/primary_cyan"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
 
 </layout>

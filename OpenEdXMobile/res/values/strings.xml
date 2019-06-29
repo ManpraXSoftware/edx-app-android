@@ -798,6 +798,7 @@
     <string name="empty_discussion_message">Discussion not available</string>
     <string name="empty_certificates_message">You have not earned any certificate yet</string>
     <string name="empty_list_message">List is empty</string>
+    <string name="empty_course_material_message">Course material is not available</string>
     <string name="not_available_message">%s not available</string>
     <string name="comment_btn_label">Comment</string>
     <string name="replying_to">Replying to {name}</string>

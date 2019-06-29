@@ -21,6 +21,8 @@ import org.tta.mobile.tta.analytics.AnalyticModel;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.db_operations.DbOperationGetAnalytic;
 import org.tta.mobile.tta.data.local.db.operation.DbOperationGetTinCanPayload;
+import org.tta.mobile.tta.data.local.db.operation.GetLegacyEdxDownloadsOperation;
+import org.tta.mobile.tta.data.local.db.operation.GetLegacyWPDownloadsOperation;
 import org.tta.mobile.tta.scorm.ContentType;
 import org.tta.mobile.tta.tincan.model.Resume;
 import org.tta.mobile.util.Sha1Util;
@@ -660,6 +662,7 @@ public class IDatabaseImpl extends IDatabaseBaseImpl implements IDatabase {
         values.put(DbStructure.Column.URL_YOUTUBE, model.getYoutubeVideoUrl());
         values.put(DbStructure.Column.DOWNLOADED, model.getDownloadedStateOrdinal());
         values.put(DbStructure.Column.DOWNLOADED_ON, model.getDownloadedOn());
+        values.put(DbStructure.Column.CONTENT_ID, model.getContent_id());
 
         DbOperationUpdate op = new DbOperationUpdate(DbStructure.Table.DOWNLOADS, values,
                 DbStructure.Column.VIDEO_ID + "=?",
@@ -1051,5 +1054,17 @@ public class IDatabaseImpl extends IDatabaseBaseImpl implements IDatabase {
                 DbStructure.Column.DOWNLOADED + "=? AND " + DbStructure.Column.TYPE + " ",
                 new String[]{String.valueOf(DownloadedState.DOWNLOADED.ordinal()), String.valueOf(ContentType.CONNECTVIDEO)},null);
         return (ArrayList<VideoModel>) enqueue(op);
+    }
+
+    @Override
+    public List<VideoModel> getLegacyWPDownloads() {
+        GetLegacyWPDownloadsOperation op = new GetLegacyWPDownloadsOperation();
+        return enqueue(op);
+    }
+
+    @Override
+    public List<VideoModel> getLegacyEdxDownloads() {
+        GetLegacyEdxDownloadsOperation op = new GetLegacyEdxDownloadsOperation();
+        return enqueue(op);
     }
 }

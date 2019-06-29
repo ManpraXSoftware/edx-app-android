@@ -185,37 +185,41 @@ public class OtherProfileViewModel extends BaseViewModel {
             return;
         }
 
-        String[] section_tag_list;
-        section_tag_list = tagLabel.split(delimiterTagChunks);
+        try {
+            String[] section_tag_list;
+            section_tag_list = tagLabel.split(delimiterTagChunks);
 
-        Map<String, List<String>> sectionTagsMap = new HashMap<>();
-        for (String section_tag : section_tag_list) {
-            String[] duet = section_tag.split(delimiterSectionTag);
-            if (!sectionTagsMap.containsKey(duet[0])) {
-                sectionTagsMap.put(duet[0], new ArrayList<>());
+            Map<String, List<String>> sectionTagsMap = new HashMap<>();
+            for (String section_tag : section_tag_list) {
+                String[] duet = section_tag.split(delimiterSectionTag);
+                if (!sectionTagsMap.containsKey(duet[0])) {
+                    sectionTagsMap.put(duet[0], new ArrayList<>());
+                }
+                sectionTagsMap.get(duet[0]).add(duet[1]);
             }
-            sectionTagsMap.get(duet[0]).add(duet[1]);
-        }
 
-        for (FilterSection section : searchFilter.getResult()) {
-            if (section.isIn_profile()) {
-                if (sectionTagsMap.containsKey(section.getName())) {
-                    StringBuilder builder = new StringBuilder();
-                    for (String tag : sectionTagsMap.get(section.getName())) {
-                        builder.append(tag + ", ");
-                    }
-                    if (builder.length() > 0) {
-                        builder.deleteCharAt(builder.length() - 1);
-                        builder.deleteCharAt(builder.length() - 1);
-                    }
+            for (FilterSection section : searchFilter.getResult()) {
+                if (section.isIn_profile()) {
+                    if (sectionTagsMap.containsKey(section.getName())) {
+                        StringBuilder builder = new StringBuilder();
+                        for (String tag : sectionTagsMap.get(section.getName())) {
+                            builder.append(tag + ", ");
+                        }
+                        if (builder.length() > 0) {
+                            builder.deleteCharAt(builder.length() - 1);
+                            builder.deleteCharAt(builder.length() - 1);
+                        }
 
-                    if (section.getName().contains("कक्षा")) {
-                        classes.set(builder.toString());
-                    } else if (section.getName().contains("कौशल")) {
-                        skills.set(builder.toString());
+                        if (section.getName().contains("कक्षा")) {
+                            classes.set(builder.toString());
+                        } else if (section.getName().contains("कौशल")) {
+                            skills.set(builder.toString());
+                        }
                     }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }

@@ -195,4 +195,7 @@ public interface IStorage {
     int getAnalyticsCount();
 
     Integer updateInfoByVideoId(String videoId, VideoModel model,DataCallback<Integer> callback);
+
+    List<VideoModel> getLegacyWPDownloads();
+    List<VideoModel> getLegacyEdxDownloads();
 }

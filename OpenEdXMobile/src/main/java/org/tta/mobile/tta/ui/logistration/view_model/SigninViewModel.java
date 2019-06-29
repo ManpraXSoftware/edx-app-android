@@ -151,6 +151,7 @@ public class SigninViewModel extends BaseViewModel {
         mDataManager.setConnectCookies();
         mDataManager.checkSurvey(mActivity, SurveyType.Login);
         mDataManager.updateFirebaseToken(getActivity());
+        mDataManager.scheduleSyncAnalyticsJob();
     }
 
     public void changePassword(){

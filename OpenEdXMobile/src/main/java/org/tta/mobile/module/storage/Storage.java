@@ -780,4 +780,14 @@ public class Storage implements IStorage {
     public Integer updateInfoByVideoId(String videoId, VideoModel model,DataCallback<Integer> callback) {
         return db.updateInfoByVideoId(videoId,model,callback);
     }
+
+    @Override
+    public List<VideoModel> getLegacyWPDownloads() {
+        return null;
+    }
+
+    @Override
+    public List<VideoModel> getLegacyEdxDownloads() {
+        return null;
+    }
 }

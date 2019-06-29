@@ -140,9 +140,7 @@ public class UserInfoViewModel extends BaseViewModel {
                 else
                 {
                     mActivity.showLongSnack(mActivity.getString(R.string.registered_successfully));
-                    mDataManager.refreshLocalDatabase();
-                    mDataManager.scheduleDeleteFeeds();
-                    mDataManager.updateFirebaseToken(getActivity());
+                    performBackgroundTasks();
                     ActivityUtil.gotoPage(mActivity, LandingActivity.class, Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     mActivity.finish();
 
@@ -158,6 +156,13 @@ public class UserInfoViewModel extends BaseViewModel {
             }
         }.execute();
 
+    }
+
+    private void performBackgroundTasks(){
+        mDataManager.refreshLocalDatabase();
+        mDataManager.scheduleDeleteFeeds();
+        mDataManager.updateFirebaseToken(getActivity());
+        mDataManager.scheduleSyncAnalyticsJob();
     }
 
     public void getData() {

@@ -587,6 +587,9 @@ public class FeedViewModel extends BaseViewModel {
                         );
                     }
 
+                case TTAFeed:
+                    return feed.getTitle();
+
                 default:
                     return feed.getMeta_data().getSource_title();
             }
@@ -947,6 +950,7 @@ public class FeedViewModel extends BaseViewModel {
                         case DBLike:
                         case Like:
                         case Comment:
+                        case TTAFeed:
                             if (getItem(position).getMeta_data().getUser_name() != null) {
                                 return R.layout.t_row_feed_with_user;
                             }

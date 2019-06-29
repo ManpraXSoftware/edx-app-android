@@ -1,7 +1,10 @@
 package org.tta.mobile.tta.data;
 
 import android.app.Activity;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.arch.persistence.room.Room;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -11,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.webkit.WebView;
 import android.widget.Toast;
 
@@ -43,6 +47,7 @@ import org.tta.mobile.services.VideoDownloadHelper;
 import org.tta.mobile.task.Task;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.Analytic;
+import org.tta.mobile.tta.analytics.SyncAnalyticsJob;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.data.enums.CertificateStatus;
 import org.tta.mobile.tta.data.enums.ScormStatus;
@@ -186,6 +191,7 @@ import io.reactivex.Observable;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
+import static android.content.Context.JOB_SCHEDULER_SERVICE;
 import static org.tta.mobile.tta.Constants.TA_DATABASE;
 
 /**
@@ -3682,6 +3688,25 @@ public class DataManager extends BaseRoboInjector {
             }
 
         }
+
+    }
+
+    public void scheduleSyncAnalyticsJob(){
+
+        /*if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            ComponentName componentName = new ComponentName(context, SyncAnalyticsJob.class);
+            JobInfo jobInfo = new JobInfo.Builder(12, componentName)
+                    .setPeriodic(Constants.INTERVAL_SYNC_ANALYTICS_JOB)
+                    .build();
+
+            JobScheduler jobScheduler = (JobScheduler)context.getSystemService(JOB_SCHEDULER_SERVICE);
+            int resultCode = jobScheduler.schedule(jobInfo);
+            if (resultCode == JobScheduler.RESULT_SUCCESS) {
+                Log.d("_____TAG_____", "Sync analytics job scheduled!");
+            } else {
+                Log.d("_____TAG_____", "Sync analytics job not scheduled");
+            }
+        }*/
 
     }
 
