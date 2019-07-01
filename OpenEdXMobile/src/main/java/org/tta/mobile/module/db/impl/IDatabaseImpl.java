@@ -663,6 +663,8 @@ public class IDatabaseImpl extends IDatabaseBaseImpl implements IDatabase {
         values.put(DbStructure.Column.DOWNLOADED, model.getDownloadedStateOrdinal());
         values.put(DbStructure.Column.DOWNLOADED_ON, model.getDownloadedOn());
         values.put(DbStructure.Column.CONTENT_ID, model.getContent_id());
+        values.put(DbStructure.Column.USERNAME, model.getUsername());
+        values.put(DbStructure.Column.CHAPTER, model.getChapterName());
 
         DbOperationUpdate op = new DbOperationUpdate(DbStructure.Table.DOWNLOADS, values,
                 DbStructure.Column.VIDEO_ID + "=?",
@@ -1051,7 +1053,7 @@ public class IDatabaseImpl extends IDatabaseBaseImpl implements IDatabase {
     @Override
     public ArrayList<VideoModel> getDownloadedConnect() {
         DbOperationGetVideos op = new DbOperationGetVideos(false, DbStructure.Table.DOWNLOADS, null,
-                DbStructure.Column.DOWNLOADED + "=? AND " + DbStructure.Column.TYPE + " ",
+                DbStructure.Column.DOWNLOADED + "=? AND " + DbStructure.Column.TYPE + "=? ",
                 new String[]{String.valueOf(DownloadedState.DOWNLOADED.ordinal()), String.valueOf(ContentType.CONNECTVIDEO)},null);
         return (ArrayList<VideoModel>) enqueue(op);
     }

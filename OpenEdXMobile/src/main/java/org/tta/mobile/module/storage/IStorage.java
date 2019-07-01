@@ -189,7 +189,7 @@ public interface IStorage {
     //get all downloaded scrom
     ArrayList<VideoModel> getDownloadedScorm();
 
-    //get all downloaded scrom
+    //get all downloaded connect
     ArrayList<VideoModel> getDownloadedConnect();
 
     int getAnalyticsCount();

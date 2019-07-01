@@ -104,7 +104,7 @@ public interface Analytics {
     void trackVideoSeek(String videoId, Double oldTime, Double newTime,
                         String courseId, String unitUrl, Boolean skipSeek);
 
-    /* Events not mentioned in PDF */
+    /* Events not mentioned in Pdf */
 
     /**
      * This function is used to track Video Download completed

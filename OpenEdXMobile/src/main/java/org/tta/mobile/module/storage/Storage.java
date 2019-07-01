@@ -74,12 +74,12 @@ public class Storage implements IStorage {
 
     public long addDownload(VideoModel model) {
         if((model.getVideoUrl()==null||model.getVideoUrl().length()<=0) && model.getFilePath()!=null &&
-                (!model.getFilePath().equalsIgnoreCase(String.valueOf(DownloadType.SCORM)) ||
-                        !model.getFilePath().equalsIgnoreCase(String.valueOf(DownloadType.PDF)) )){
+                (!model.getFilePath().equalsIgnoreCase(String.valueOf(DownloadType.Scrom)) ||
+                        !model.getFilePath().equalsIgnoreCase(String.valueOf(DownloadType.Pdf)) )){
             return -1;
         }
-        else if(model!=null && model.getFilePath()!=null &&(model.getFilePath().equalsIgnoreCase(String.valueOf(DownloadType.SCORM)) ||
-                model.getFilePath().equalsIgnoreCase(String.valueOf(DownloadType.PDF))))
+        else if(model!=null && model.getFilePath()!=null &&(model.getFilePath().equalsIgnoreCase(String.valueOf(DownloadType.Scrom)) ||
+                model.getFilePath().equalsIgnoreCase(String.valueOf(DownloadType.Pdf))))
         {
             model.setDownloadedStateForScrom(DownloadEntry.DownloadedState.DOWNLOADED);
 
@@ -773,7 +773,7 @@ public class Storage implements IStorage {
 
     @Override
     public ArrayList<VideoModel> getDownloadedConnect() {
-        return db.getDownloadedScorm();
+        return db.getDownloadedConnect();
     }
 
     @Override
@@ -783,11 +783,11 @@ public class Storage implements IStorage {
 
     @Override
     public List<VideoModel> getLegacyWPDownloads() {
-        return null;
+        return db.getLegacyWPDownloads();
     }
 
     @Override
     public List<VideoModel> getLegacyEdxDownloads() {
-        return null;
+        return db.getLegacyEdxDownloads();
     }
 }

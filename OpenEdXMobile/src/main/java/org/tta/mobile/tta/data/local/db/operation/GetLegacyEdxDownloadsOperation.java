@@ -18,7 +18,7 @@ public class GetLegacyEdxDownloadsOperation extends DbOperationSelect<List<Video
         super(false, DbStructure.Table.DOWNLOADS, null,
                 DbStructure.Column.CONTENT_ID + "=0 AND (" +
                         DbStructure.Column.TYPE + "=? OR " + DbStructure.Column.TYPE + "=?)",
-                new String[]{DownloadType.SCORM.name(), DownloadType.PDF.name()},
+                new String[]{DownloadType.Scrom.name(), DownloadType.Pdf.name()},
                 null);
     }
 

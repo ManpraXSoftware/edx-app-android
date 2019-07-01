@@ -122,6 +122,11 @@ public class DownloadEntry implements SectionItemInterface, VideoModel {
     }
 
     @Override
+    public void setUsername(String u_name) {
+        username=u_name;
+    }
+
+    @Override
     public String getTitle() {
         if (title == null || title.trim().length() == 0) {
             return "(Untitled)";
@@ -146,8 +151,8 @@ public class DownloadEntry implements SectionItemInterface, VideoModel {
 
     @Override
     public boolean getattachType() {
-        return type != null && (type.equalsIgnoreCase(DownloadType.SCORM.name()) ||
-                type.equalsIgnoreCase(DownloadType.PDF.name()) ||
+        return type != null && (type.equalsIgnoreCase(DownloadType.Scrom.name()) ||
+                type.equalsIgnoreCase(DownloadType.Pdf.name()) ||
                 type.equalsIgnoreCase(DownloadType.CONNECTVIDEO.name()));
     }
 
@@ -212,6 +217,11 @@ public class DownloadEntry implements SectionItemInterface, VideoModel {
     @Override
     public String getChapterName() {
         return chapter;
+    }
+
+    @Override
+    public void setChapterName(String chapterName) {
+        this.chapter = chapterName;
     }
 
     @Override

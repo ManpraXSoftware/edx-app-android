@@ -213,7 +213,7 @@ public class ScormManager {
 
         File file = new File(userSpecificFolder, hash);
 
-        //Diversion for PDF type xblock
+        //Diversion for Pdf type xblock
         //put pdf type unit inside unit id hash folder with same unit id name
         if(download instanceof PDFBlockModel)
         {
