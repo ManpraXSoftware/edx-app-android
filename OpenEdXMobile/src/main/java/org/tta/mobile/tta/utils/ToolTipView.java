@@ -111,6 +111,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 break;
             case Gravity.RIGHT:
                 container.setOrientation(LinearLayout.HORIZONTAL);
+                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                 text.setBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light));
                 arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_arrow_forward_cyan_24dp));
                 container.addView(arrow, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -119,6 +120,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
             case Gravity.TOP:
                 container.setOrientation(LinearLayout.VERTICAL);
 //                text.setBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light));
+                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                 container.addView(text, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.down_arrow));
                 arrow.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.arrow_background_tint));
@@ -136,6 +138,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
 //                arrow.setVisibility(View.GONE);
 //                text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_subdirectory_arrow_right_black_24dp, 0, 0, 0);
                 text.setGravity(Gravity.BOTTOM);
+                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
 //                text.setBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light));
                 arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.up_arrow));
                 arrow.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.arrow_background_tint));
@@ -166,9 +169,9 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 .withCornerRadius(8.0f)
                 .withBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light))
                 .withPadding(15, 15, 15, 15)
-                .withTextSize(25)
                 .withTextColor(ContextCompat.getColor(context, R.color.primary_cyan))
                 .build();
+
 
         ToolTipView toolTipView1 = new Builder(context)
                 .withAnchor(view)
@@ -192,7 +195,6 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 .withText(msg)
                 .withBackgroundColor(ContextCompat.getColor(context, R.color.white_list_clicked))
                 .withPadding(15, 15, 15, 15)
-                .withTextSize(55.0f)
                 .withTextColor(ContextCompat.getColor(context, R.color.primary_cyan))
                 .build();
         ToolTipView toolTipView1 = new ToolTipView.Builder(context)
