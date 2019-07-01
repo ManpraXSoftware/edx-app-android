@@ -15,6 +15,7 @@ import org.tta.mobile.R;
 import org.tta.mobile.databinding.TFragmentCourseMaterialBinding;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.model.course.CourseComponent;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.data.pref.AppPref;
@@ -94,9 +95,15 @@ public class CourseMaterialTab extends TaBaseFragment {
                                             if (!appPref.isCourseBottom()) {
                                                 int lastVisiblePosition = ((LinearLayoutManager) layoutManager).findLastCompletelyVisibleItemPosition();
                                                 if (lastVisiblePosition == lastVisibleItemPosition) {
-                                                    ToolTipView.showToolTip(recyclerView.getContext(),
-                                                            "सभी भाग देखने पर और 60% या उससे \nअधिक पाने पर आपको सर्टिफिकेट मिलेगा ",
-                                                            holder.itemView.findViewById(R.id.item_btn), Gravity.TOP);
+                                                    if (!Constants.IsCertificateExits) {
+                                                        ToolTipView.showToolTip(recyclerView.getContext(),
+                                                                "सभी भाग देखने पर और 60% या उससे \nअधिक पाने पर आपको सर्टिफिकेट मिलेगा ",
+                                                                holder.itemView.findViewById(R.id.item_btn), Gravity.TOP);
+                                                    }else {
+                                                        ToolTipView.showToolTip(recyclerView.getContext(),
+                                                                "सभी सर्टिफिकेट्स यहाँ उपलब्ध हैं  ",
+                                                                holder.itemView.findViewById(R.id.item_btn), Gravity.TOP);
+                                                    }
                                                     appPref.setCourseBottom(true);
                                                     isShown = true;
                                                 }

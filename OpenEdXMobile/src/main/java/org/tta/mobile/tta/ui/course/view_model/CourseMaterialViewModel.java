@@ -463,6 +463,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
                             });
                         });
+
                         dialog.show();
 
                         break;
@@ -608,6 +609,10 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
             case GENERATED:
                 footerBtnText.set(mActivity.getString(R.string.view_certificate));
+                if (footerBtnText.get().equals(mActivity.getResources().getString(R.string.view_certificate))){
+                    Constants.IsCertificateExits = true;
+                }
+                break;
         }
     }
 

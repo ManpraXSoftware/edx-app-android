@@ -299,7 +299,7 @@ public class SearchViewModel extends BaseViewModel {
     private void setToolTip(){
         if (!mDataManager.getAppPref().isSearchVisited()){
             searchToolTip = new ObservableField<>("विशिष्ट सामग्री चुनने के\n लिए यहाँ दबाये");
-            selectedToolTip = new ObservableField<>("चुनिंदा कर्म में देखे");
+            selectedToolTip = new ObservableField<>("चुनिंदा क्रम में देखे");
             toolTipGravity = new ObservableInt(Gravity.BOTTOM);
             selectedToolTipGravity = new ObservableInt(Gravity.BOTTOM);
             mDataManager.getAppPref().setSearchVisited(true);

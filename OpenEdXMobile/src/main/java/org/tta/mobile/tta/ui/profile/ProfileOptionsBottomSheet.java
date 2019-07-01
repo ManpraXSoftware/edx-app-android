@@ -112,7 +112,6 @@ public class ProfileOptionsBottomSheet extends BottomSheetDialogFragment {
                 dismiss();
             }
         });
-
         dialog.setContentView(contentView);
 
         //Set the coordinator layout behavior
