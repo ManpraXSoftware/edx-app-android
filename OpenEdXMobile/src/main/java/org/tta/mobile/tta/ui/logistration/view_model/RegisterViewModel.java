@@ -116,6 +116,13 @@ public class RegisterViewModel extends BaseViewModel {
         super(context, fragment);
     }
 
+    public void showPrivacyPolicy(){
+        mDataManager.getEdxEnvironment().getRouter().showAuthenticatedWebviewActivity(
+                mActivity, mActivity.getString(R.string.privacy_policy_url),
+                mActivity.getString(R.string.privacy_policy)
+        );
+    }
+
     public void register() {
         //check here for message read and receive for otp feature
         /*if (PermissionsUtil.checkPermissions(Manifest.permission.READ_SMS, mActivity) &&

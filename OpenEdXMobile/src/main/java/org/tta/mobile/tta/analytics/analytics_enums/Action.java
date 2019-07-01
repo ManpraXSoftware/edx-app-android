@@ -95,6 +95,7 @@ public enum Action {
     Comment,
     Enrolled,
     EnrolFailed,
-    TTAFeed
+    TTAFeed,
+    AppUpdate
 
 }

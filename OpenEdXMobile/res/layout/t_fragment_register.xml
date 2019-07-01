@@ -132,6 +132,22 @@
                 android:enabled="@{viewModel.cellValid &amp;&amp; viewModel.passValid &amp;&amp; viewModel.confirmPassValid}"
                 android:onClick="@{()->viewModel.register()}"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/privacy_policy"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:layout_marginStart="@dimen/_40px"
+                android:layout_marginEnd="@dimen/_40px"
+                android:layout_marginTop="@dimen/_34px"
+                android:textColor="@color/gray_6"
+                android:textSize="16sp"
+                android:fontFamily="@font/hind_medium"
+                android:textColorLink="@color/secondary_blue"
+                android:clickable="true"
+                android:focusable="true" />
+
             <View
                 android:layout_width="240dp"
                 android:layout_height="1dp"

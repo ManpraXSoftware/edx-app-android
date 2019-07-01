@@ -171,4 +171,8 @@
     <string name="product">उत्पाद</string>
     <string name="class_label">कक्षा</string>
     <string name="empty_course_material_message">कोर्स सामग्री उपलब्ध नहीं है</string>
+    <string name="app_update_message">कृपया TheTeacherApp को अपडेट करें</string>
+    <string name="app_update_title">अपडेट उपलब्ध है</string>
+    <string name="privacy_policy">गोपनीयता नीति</string>
+    <string name="privacy_policy_message">रजिस्टर पर क्लिक करके आप हमारी {privacy_policy} से सहमत हो गए हैं</string>
 </resources>

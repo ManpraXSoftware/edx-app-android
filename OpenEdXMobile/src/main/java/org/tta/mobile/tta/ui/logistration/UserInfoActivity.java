@@ -194,6 +194,7 @@ public class UserInfoActivity extends BaseVMActivity {
 
         btn = ViewUtil.addButton(userInfoLayout, getString(R.string.submit));
         privacyLinkText = ViewUtil.addLinkText(userInfoLayout, "Privacy Policy");
+        privacyLinkText.setVisibility(View.GONE);
         ViewUtil.addEmptySpace(userInfoLayout, (int) getResources().getDimension(R.dimen._50px));
 
         setListeners();

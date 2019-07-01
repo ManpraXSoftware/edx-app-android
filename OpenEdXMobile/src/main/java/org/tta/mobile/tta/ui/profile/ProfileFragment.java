@@ -137,6 +137,12 @@ public class ProfileFragment extends TaBaseFragment {
                     );
                     break;
 
+                case R.id.privacy_policy_layout:
+                    bottomSheet.dismiss();
+                    bottomSheetOpened = false;
+                    viewModel.showPrivacyPolicy();
+                    break;
+
                 case R.id.btn_yes:
                     viewModel.logout();
                     break;

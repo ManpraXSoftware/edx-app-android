@@ -74,6 +74,13 @@ public class ProfileOptionsBottomSheet extends BottomSheetDialogFragment {
                 }
             }
         });
+        contentView.findViewById(R.id.privacy_policy_layout).setOnClickListener(v -> {
+            if (profileOptionsLayout.getVisibility() == View.VISIBLE) {
+                if (listener != null){
+                    listener.onClick(v);
+                }
+            }
+        });
         contentView.findViewById(R.id.sign_out_layout).setOnClickListener(v -> {
             if (profileOptionsLayout.getVisibility() == View.VISIBLE) {
                 profileOptionsLayout.setVisibility(View.INVISIBLE);

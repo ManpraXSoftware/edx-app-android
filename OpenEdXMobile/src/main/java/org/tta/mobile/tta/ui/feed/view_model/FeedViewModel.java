@@ -46,6 +46,7 @@ import org.tta.mobile.tta.ui.feed.NotificationsFragment;
 import org.tta.mobile.tta.ui.feed.RecommendedUsersFragment;
 import org.tta.mobile.tta.ui.profile.OtherProfileActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
+import org.tta.mobile.tta.utils.AppUtil;
 import org.tta.mobile.tta.utils.BadgeHelper;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.tta.utils.DataUtil;
@@ -180,6 +181,10 @@ public class FeedViewModel extends BaseViewModel {
                                             });
                                     break;
                                 }
+
+                            case AppUpdate:
+                                AppUtil.openAppOnPlayStore(mActivity, mActivity.getPackageName());
+                                break;
 
                             default:
                                 if (item.getMeta_data().getId() != null) {
@@ -590,6 +595,9 @@ public class FeedViewModel extends BaseViewModel {
                 case TTAFeed:
                     return feed.getTitle();
 
+                case AppUpdate:
+                    return mActivity.getString(R.string.app_update_title);
+
                 default:
                     return feed.getMeta_data().getSource_title();
             }
@@ -794,6 +802,14 @@ public class FeedViewModel extends BaseViewModel {
                                     .placeholder(R.drawable.placeholder_course_card_image)
                                     .into(feedBinding.feedContentImage);
                             feedBinding.feedMetaText.setText(model.getMeta_data().getText());
+
+                        case AppUpdate:
+
+                            Glide.with(getContext())
+                                    .load(R.drawable.tta_launcher_foreground)
+                                    .into(feedBinding.feedContentImage);
+
+                            feedBinding.feedMetaText.setText(mActivity.getString(R.string.app_update_message));
 
                             break;
 

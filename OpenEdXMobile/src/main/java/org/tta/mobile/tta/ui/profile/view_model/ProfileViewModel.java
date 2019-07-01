@@ -262,6 +262,13 @@ public class ProfileViewModel extends BaseViewModel {
         }
     }
 
+    public void showPrivacyPolicy(){
+        mDataManager.getEdxEnvironment().getRouter().showAuthenticatedWebviewActivity(
+                mActivity, mActivity.getString(R.string.privacy_policy_url),
+                mActivity.getString(R.string.privacy_policy)
+        );
+    }
+
     private void setDetails() {
         classes.set("");
         skills.set("");

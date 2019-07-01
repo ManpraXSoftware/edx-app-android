@@ -99,7 +99,7 @@
     <!-- Label for Terms of Service and Honor Code -->
     <string name="tos_and_honor_code" translatable="false">{platform_name} Terms of Service and Honor Code</string>
     <!-- Label for Privacy Policy -->
-    <string name="privacy_policy" translatable="false">Privacy Policy</string>
+    <string name="privacy_policy">Privacy Policy</string>
 
     <string name="login_title" translatable="false">Sign In</string>
     <!-- Accessible content description of close button on Sign in and Sign up screen -->
@@ -813,6 +813,9 @@
     <string name="question">question</string>
     <string name="product">Product</string>
     <string name="class_label">Class</string>
+    <string name="app_update_title">App update available</string>
+    <string name="app_update_message">Please update TheTeacherApp</string>
+    <string name="privacy_policy_message">By creating an account, you acknowledge our {privacy_policy}</string>
 
     <string name="sign_out_message">Are you sure you want to Sign Out?</string>
     <string name="be_the_first_to_comment">Be the first to comment</string>
