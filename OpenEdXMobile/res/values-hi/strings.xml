@@ -171,4 +171,5 @@
     <string name="product">उत्पाद</string>
     <string name="class_label">कक्षा</string>
     <string name="empty_course_material_message">कोर्स सामग्री उपलब्ध नहीं है</string>
+    <string name="help">हेल्प </string>
 </resources>

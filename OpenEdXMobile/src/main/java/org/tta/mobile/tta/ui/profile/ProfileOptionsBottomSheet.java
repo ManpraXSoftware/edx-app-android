@@ -10,8 +10,12 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import org.tta.mobile.R;
+import org.tta.mobile.tta.data.pref.AppPref;
+
+import java.util.Objects;
 
 public class ProfileOptionsBottomSheet extends BottomSheetDialogFragment {
     public static final String TAG = ProfileOptionsBottomSheet.class.getCanonicalName();
@@ -19,6 +23,7 @@ public class ProfileOptionsBottomSheet extends BottomSheetDialogFragment {
     private View.OnClickListener listener;
 
     private LinearLayout profileOptionsLayout, signOutOptionsLayout;
+    private AppPref mAppPref;
 
     public static ProfileOptionsBottomSheet newInstance(View.OnClickListener listener){
         ProfileOptionsBottomSheet fragment = new ProfileOptionsBottomSheet();
@@ -51,6 +56,7 @@ public class ProfileOptionsBottomSheet extends BottomSheetDialogFragment {
 
         profileOptionsLayout = contentView.findViewById(R.id.profile_options_layout);
         signOutOptionsLayout = contentView.findViewById(R.id.sign_out_options_layout);
+        mAppPref = new AppPref(Objects.requireNonNull(getActivity()));
 
         contentView.findViewById(R.id.ivClose).setOnClickListener(listener);
         contentView.findViewById(R.id.edit_profile_layout).setOnClickListener(v -> {
@@ -92,6 +98,18 @@ public class ProfileOptionsBottomSheet extends BottomSheetDialogFragment {
             if (signOutOptionsLayout.getVisibility() == View.VISIBLE) {
                 signOutOptionsLayout.setVisibility(View.INVISIBLE);
                 profileOptionsLayout.setVisibility(View.VISIBLE);
+            }
+        });
+        contentView.findViewById(R.id.help_layout).setOnClickListener(v -> {
+            if (mAppPref.isProfileVisited()){
+                mAppPref.setProfileVisited(false);
+                mAppPref.setFeedVisited(false);
+                mAppPref.setCourseBottom(false);
+                mAppPref.setAgendaVisited(false);
+                mAppPref.setSearchVisited(false);
+                mAppPref.setCourseVisited(false);
+                Toast.makeText(getActivity(), "अप्प टुटोरिअल सक्षम कर दिए गए हैं ", Toast.LENGTH_LONG).show();
+                dismiss();
             }
         });
 

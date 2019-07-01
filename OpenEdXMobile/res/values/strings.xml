@@ -950,6 +950,7 @@
     <string name="empty_feed_message">No feeds available at the moment</string>
 
     <string name="com.crashlytics.android.build_id" translatable="false">RANDOM_UUID</string>
+    <string name="help">help</string>
 
     <!-- TTA strings end -->
 
