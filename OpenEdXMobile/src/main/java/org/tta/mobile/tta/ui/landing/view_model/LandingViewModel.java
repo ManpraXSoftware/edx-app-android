@@ -183,9 +183,11 @@ public class LandingViewModel extends BaseViewModel {
         });
 
 
-        //ScromMigration280719 spt=new ScromMigration280719(getActivity());
-        //spt.MigrateConnectVideos();
-//        mDataManager.setContentIdForLegacyDownloads();
+        ScromMigration280719 spt=new ScromMigration280719(getActivity());
+        spt.MigrateScromPackages();
+        spt.MigrateConnectVideos();
+
+        mDataManager.setContentIdForLegacyDownloads();
     }
 
     public void setToolTip() {

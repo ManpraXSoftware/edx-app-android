@@ -42,7 +42,7 @@ public abstract class ScormDownloader implements Runnable {
             if(strFile.equals(response)){
 
                 //unpackZip(response)
-                //to handel both PDF and scrom xblock
+                //to handel both Pdf and scrom xblock
                 if(response.indexOf(".pdf") != -1 ||  unpackZip(response)){
                     onDownloadComplete(response);
                 }else {
