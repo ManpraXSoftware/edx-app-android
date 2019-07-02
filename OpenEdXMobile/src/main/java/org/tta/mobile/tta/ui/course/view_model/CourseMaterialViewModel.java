@@ -151,8 +151,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
     private void setToolTip(){
         if (!mDataManager.getAppPref().isCourseVisited()){
-            likeToolTip = new ObservableField<>("सामग्री को अपने लक्ष्य से \nजोड़ने के लिए बटन को दबाएँ ");
-            downloadToolTip = new ObservableField<>("सामग्री डाउनलोड करने \nके लिए बटन दबाएँ ");
+            likeToolTip = new ObservableField<>(mActivity.getResources().getString(R.string.course_button));
+            downloadToolTip = new ObservableField<>(mActivity.getResources().getString(R.string.course_download_button));
 //            understandToolTip = new ObservableField<>("सभी भाग देखने पर और 60% या उससे \nअधिक पाने पर आपको सर्टिफिकेट मिलेगा ");
             toolTipGravity = new ObservableInt(Gravity.BOTTOM);
             understandToolTipGravity = new ObservableInt(Gravity.TOP);

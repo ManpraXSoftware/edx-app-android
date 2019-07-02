@@ -120,7 +120,7 @@ public class ToolTip {
         private CharSequence text;
         private int textGravity = Gravity.NO_GRAVITY;
         private int textColor = R.color.primary_cyan;
-        private int textSize = 80;
+        private int textSize = 12;
         private int unit = TypedValue.COMPLEX_UNIT_SP;
         private Typeface typeface = Typeface.SANS_SERIF;
         private int typefaceStyle = Typeface.NORMAL;

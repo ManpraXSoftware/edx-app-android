@@ -97,11 +97,11 @@ public class CourseMaterialTab extends TaBaseFragment {
                                                 if (lastVisiblePosition == lastVisibleItemPosition) {
                                                     if (!Constants.IsCertificateExits) {
                                                         ToolTipView.showToolTip(recyclerView.getContext(),
-                                                                "सभी भाग देखने पर और 60% या उससे \nअधिक पाने पर आपको सर्टिफिकेट मिलेगा ",
+                                                                getResources().getString(R.string.samjhe_parkhe_btn),
                                                                 holder.itemView.findViewById(R.id.item_btn), Gravity.TOP);
                                                     }else {
                                                         ToolTipView.showToolTip(recyclerView.getContext(),
-                                                                "सभी सर्टिफिकेट्स यहाँ उपलब्ध हैं  ",
+                                                                getResources().getString(R.string.certificate_btn),
                                                                 holder.itemView.findViewById(R.id.item_btn), Gravity.TOP);
                                                     }
                                                     appPref.setCourseBottom(true);

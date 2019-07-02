@@ -124,7 +124,8 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 container.addView(text, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.down_arrow));
                 arrow.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.arrow_background_tint));
-                container.addView(arrow, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                container.addView(arrow, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
                 break;
 //            case Gravity.BOTTOM:
 //                container.setOrientation(LinearLayout.VERTICAL);
@@ -179,12 +180,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 .withGravity(gravity)
                 .build();
         viewsList.add(new WeakReference<>(toolTipView1));
-        toolTipView1.setOnToolTipClickedListener(new OnToolTipClickedListener() {
-            @Override
-            public void onToolTipClicked(ToolTipView toolTipView) {
-                removeAll();
-            }
-        });
+        toolTipView1.setOnToolTipClickedListener(toolTipView -> removeAll());
         toolTipView1.show();
 
     }
@@ -197,6 +193,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 .withPadding(15, 15, 15, 15)
                 .withTextColor(ContextCompat.getColor(context, R.color.primary_cyan))
                 .build();
+
         ToolTipView toolTipView1 = new ToolTipView.Builder(context)
                 .withAnchor(view)
                 .withToolTip(toolTip1)
@@ -205,32 +202,6 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
         toolTipView1.show();
     }
 
-
-//    public static ToolTipView showToolTipNav(Context context, String msg, int gravity) {
-//        LayoutInflater inflate = (LayoutInflater)
-//                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View v = inflate.inflate(R.layout.tooltip_tut_bar, null);
-//        TextView tv = v.findViewById(R.id.tv_tooltip);
-//        tv.setText(msg);
-//        ToolTip toolTip1 = new ToolTip.Builder()
-//                .withText(msg)
-//                .withBackgroundColor(ContextCompat.getColor(context, R.color.white_list_clicked))
-//                .withPadding(15,15,15,15)
-//                .withTextSize(55.0f)
-//                .withTextColor(ContextCompat.getColor(context, R.color.primary_cyan))
-//                .build();
-//
-//        ToolTipView result = new ToolTipView(context,v, gravity, toolTip1);
-//
-//        ToolTipView toolTipView1 = new ToolTipView.Builder(context)
-//                .withAnchor(v)
-//                .withToolTip(toolTip1)
-//                .withGravity(gravity)
-//                .build();
-//        toolTipView1.show();
-//        result.text.setText(msg);
-//        return result;
-//    }
 
     /**
      * Shows the tool tip.

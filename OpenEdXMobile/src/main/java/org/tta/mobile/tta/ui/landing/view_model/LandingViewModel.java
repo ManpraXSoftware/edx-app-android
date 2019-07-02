@@ -5,8 +5,11 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.os.Handler;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.widget.TooltipCompat;
 import android.view.Gravity;
 import android.view.MenuItem;
+
+import com.facebook.login.widget.ToolTipPopup;
 
 import org.tta.mobile.R;
 import org.tta.mobile.event.NetworkConnectivityChangeEvent;
@@ -53,30 +56,34 @@ public class LandingViewModel extends BaseViewModel {
         if (item.getItemId() == selectedId) {
             return true;
         }
+
         switch (item.getItemId()) {
             case R.id.action_library:
                 showLibrary();
                 selectedId = R.id.action_library;
 //                ToolTipView.showToolTip(getActivity(), "यहाँ सभी सामग्री पाए",mActivity.findViewById(R.id.action_library),Gravity.TOP);
+                if (!mDataManager.getAppPref().isProfileVisited()) {
+                    ToolTipView.showToolTip(getActivity(), getActivity().getResources().getString(R.string.library_tab), mActivity.findViewById(R.id.action_library), Gravity.TOP);
+                }
                 return true;
             case R.id.action_feed:
                 selectedId = R.id.action_feed;
                 showFeed();
                 if (!mDataManager.getAppPref().isFeedVisited()) {
-                    ToolTipView.showToolTip(getActivity(), "यहाँ अन्य शिक्षको के साथ जुड़े ", mActivity.findViewById(R.id.action_feed), Gravity.TOP);
+                    ToolTipView.showToolTip(getActivity(), getActivity().getResources().getString(R.string.feed_tab), mActivity.findViewById(R.id.action_feed), Gravity.TOP);
                 }
                 return true;
             case R.id.action_search:
                 selectedId = R.id.action_search;
                 if (!mDataManager.getAppPref().isSearchVisited()) {
-                    ToolTipView.showToolTip(getActivity(), "यहाँ अपनी रूचि के अनुसार सामग्री खोजे ", mActivity.findViewById(R.id.action_search), Gravity.TOP);
+                    ToolTipView.showToolTip(getActivity(),getActivity().getResources().getString(R.string.search_tab) , mActivity.findViewById(R.id.action_search), Gravity.TOP);
                 }
                 showSearch();
                 return true;
             case R.id.action_agenda:
                 selectedId = R.id.action_agenda;
                 if (!mDataManager.getAppPref().isAgendaVisited()) {
-                    ToolTipView.showToolTip(getActivity(), "यहाँ अपना लक्ष्य जाने और बनायें ", mActivity.findViewById(R.id.action_agenda), Gravity.TOP);
+                    ToolTipView.showToolTip(getActivity(), getActivity().getResources().getString(R.string.agenda_tab), mActivity.findViewById(R.id.action_agenda), Gravity.TOP);
                 }
                 showAgenda();
                 return true;
@@ -192,7 +199,7 @@ public class LandingViewModel extends BaseViewModel {
 
     public void setToolTip() {
         if (!mDataManager.getAppPref().isProfileVisited()) {
-            libraryToolTip.set("यहाँ सभी सामग्री पाएँ ");
+            libraryToolTip.set(getActivity().getResources().getString(R.string.library_tab));
             toolTipGravity.set(Gravity.TOP);
             toolTipPosition.set(0);
 //            mDataManager.getAppPref().setProfileVisited(true);

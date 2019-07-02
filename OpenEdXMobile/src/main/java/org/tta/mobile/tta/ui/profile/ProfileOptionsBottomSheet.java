@@ -108,7 +108,10 @@ public class ProfileOptionsBottomSheet extends BottomSheetDialogFragment {
                 mAppPref.setAgendaVisited(false);
                 mAppPref.setSearchVisited(false);
                 mAppPref.setCourseVisited(false);
-                Toast.makeText(getActivity(), "अप्प टुटोरिअल सक्षम कर दिए गए हैं ", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getResources().getString(R.string.app_tuts_activate), Toast.LENGTH_SHORT).show();
+                dismiss();
+            }else {
+                Toast.makeText(getActivity(), getResources().getString(R.string.app_tuts_already), Toast.LENGTH_SHORT).show();
                 dismiss();
             }
         });

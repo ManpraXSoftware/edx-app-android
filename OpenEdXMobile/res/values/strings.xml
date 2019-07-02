@@ -951,6 +951,23 @@
 
     <string name="com.crashlytics.android.build_id" translatable="false">RANDOM_UUID</string>
     <string name="help">help</string>
+    <string name="search_tool_tip">Click here for Library </string>
+    <string name="selected_tool_tip">View in selected sequence </string>
+    <string name="library_tabs_top">Click to perform different operations </string>
+    <string name="library_tab">Get complete data from here </string>
+    <string name="agenda_tab">create and view your agenda here</string>
+    <string name="search_tab">Search here according to your desire </string>
+    <string name="feed_tab">Join with other teachers by \nclicking here </string>
+    <string name="feed_follow">Click here to follow \nother teachers </string>
+    <string name="feed_share">Click here to share data </string>
+    <string name="samjhe_parkhe_btn">After viewing all parts and getting 60% \nyou will get a certificate</string>
+    <string name="certificate_btn">All certificates are available here</string>
+    <string name="app_tuts_activate">App tutorial activated</string>
+    <string name="app_tuts_already">App tutorial already activated</string>
+    <string name="course_button">To add data into agenda click this button</string>
+    <string name="course_download_button">To download the data click this button</string>
+    <string name="region_btn_agenda">Data defined by your state</string>
+    <string name="download_btn_agenda">Data downloaded by you</string>
 
     <!-- TTA strings end -->
 

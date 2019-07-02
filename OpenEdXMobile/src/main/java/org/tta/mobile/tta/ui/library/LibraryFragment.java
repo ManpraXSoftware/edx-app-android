@@ -61,7 +61,7 @@ public class LibraryFragment extends TaBaseFragment {
         tabLayout.post(() -> {
             if (!mAppPref.isProfileVisited()) {
 //                viewModel.setToolTip();
-                ToolTipView.showToolTip(getActivity(), "प्रत्येक बटन पर क्लिक करके विशिष्ट सामग्री पाएँ ",
+                ToolTipView.showToolTip(getActivity(), getResources().getString(R.string.library_tabs_top),
                         tabLayout, Gravity.BOTTOM);
                 mAppPref.setProfileVisited(true);
             }

@@ -435,8 +435,8 @@ public class FeedViewModel extends BaseViewModel {
 
     private void setToolTip() {
         if (!mDataManager.getAppPref().isFeedVisited()) {
-            feedToolTip = new ObservableField<>("अन्य शिक्षको से जुड़ने के लिए फॉलो बटन दबाएँ");
-            shareToolTip = new ObservableField<>("सभी के साथ यहाँ सामग्री साझा करने के लिए यहाँ बटन दबाएँ");
+            feedToolTip = new ObservableField<>(mActivity.getResources().getString(R.string.feed_follow));
+            shareToolTip = new ObservableField<>(mActivity.getResources().getString(R.string.feed_share));
             toolTipGravity = new ObservableInt(Gravity.BOTTOM);
             sharetoolTipGravity = new ObservableInt(Gravity.BOTTOM);
 //            mDataManager.getAppPref().setFeedVisited(true);
