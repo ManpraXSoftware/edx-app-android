@@ -562,7 +562,7 @@ public class CourseAPI {
             }
         }
 
-        //Arjun: for binding PDF entries if they exist on android storage add them too.
+        //Arjun: for binding Pdf entries if they exist on android storage add them too.
 
         for(PDFBlockModel pdfItem : courseComponent.getPDFs()) {
             if (scormManager.has(pdfItem.getId())) {
@@ -660,7 +660,7 @@ public class CourseAPI {
         return model;
     }
 
-    //for PDF Xblock:Arjun
+    //for Pdf Xblock:Arjun
     public static VideoResponseModel mappingVideoResponseModelFrom(PDFBlockModel pdfBlockModel){
         VideoResponseModel model = new VideoResponseModel();
         model.setCourseId(pdfBlockModel.getCourseId());

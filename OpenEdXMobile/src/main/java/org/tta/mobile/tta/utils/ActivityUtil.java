@@ -80,7 +80,7 @@ public class ActivityUtil {
 
     public static void viewPDF(Context ctx, File filePath)
     {
-        /** PDF reader code */
+        /** Pdf reader code */
         // File file = new File(Environment.getExternalStorageDirectory() + "/" + "abc.pdf");
 
         Uri uri;

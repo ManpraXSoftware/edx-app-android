@@ -3644,6 +3644,7 @@ public class DataManager extends BaseRoboInjector {
                                     @Override
                                     public void onSuccess(Content data) {
                                         model.setContent_id(data.getId());
+                                        model.setChapterName(data.getSource().getName());
                                         edxEnvironment.getStorage().updateInfoByVideoId(model.getVideoId(),
                                                 model, null);
                                     }

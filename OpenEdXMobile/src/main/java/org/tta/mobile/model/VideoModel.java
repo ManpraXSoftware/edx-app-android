@@ -16,6 +16,8 @@ public interface VideoModel {
 
     String getUsername();
 
+    void setUsername(String u_name);
+
     String getTitle();
 
     String getVideoId();
@@ -46,6 +48,7 @@ public interface VideoModel {
     String getEnrollmentId();
 
     String getChapterName();
+    void setChapterName(String chapterName);
 
     String getSectionName();
 

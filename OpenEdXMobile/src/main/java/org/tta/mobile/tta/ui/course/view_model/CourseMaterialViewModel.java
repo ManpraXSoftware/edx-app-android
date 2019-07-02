@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
@@ -21,7 +20,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 
 import org.tta.mobile.R;
 import org.tta.mobile.databinding.TRowCourseMaterialFooterBinding;
@@ -36,7 +34,6 @@ import org.tta.mobile.module.storage.DownloadCompletedEvent;
 import org.tta.mobile.module.storage.DownloadedVideoDeletedEvent;
 import org.tta.mobile.services.VideoDownloadHelper;
 import org.tta.mobile.tta.Constants;
-import org.tta.mobile.tta.analytics.Analytic;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
@@ -910,8 +907,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
         }
 
         if (e.getEntry() != null && e.getEntry().content_id == content.getId() && e.getEntry().type != null &&
-                (e.getEntry().type.equalsIgnoreCase(DownloadType.SCORM.name()) ||
-                e.getEntry().type.equalsIgnoreCase(DownloadType.PDF.name()))
+                (e.getEntry().type.equalsIgnoreCase(DownloadType.Scrom.name()) ||
+                e.getEntry().type.equalsIgnoreCase(DownloadType.Pdf.name()))
         ) {
             if (downloadModeIsAll) {
                 numberOfDownloadedVideos++;
@@ -963,8 +960,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
         if (e.getModel() != null && e.getModel().getContent_id() == content.getId() &&
                 e.getModel().getDownloadType() != null &&
-                (e.getModel().getDownloadType().equalsIgnoreCase(DownloadType.SCORM.name()) ||
-                        e.getModel().getDownloadType().equalsIgnoreCase(DownloadType.PDF.name()))) {
+                (e.getModel().getDownloadType().equalsIgnoreCase(DownloadType.Scrom.name()) ||
+                        e.getModel().getDownloadType().equalsIgnoreCase(DownloadType.Pdf.name()))) {
             fetchCourseComponent();
             allDownloadStatusIcon.set(R.drawable.t_icon_download);
 
@@ -991,8 +988,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
         VideoModel downloadEntry = event.getDownloadEntry();
         if (downloadEntry != null && downloadEntry.getContent_id() == content.getId() &&
                 downloadEntry.getDownloadType() != null &&
-                (downloadEntry.getDownloadType().equalsIgnoreCase(DownloadType.SCORM.name()) ||
-                        downloadEntry.getDownloadType().equalsIgnoreCase(DownloadType.PDF.name()))) {
+                (downloadEntry.getDownloadType().equalsIgnoreCase(DownloadType.Scrom.name()) ||
+                        downloadEntry.getDownloadType().equalsIgnoreCase(DownloadType.Pdf.name()))) {
 
             switch (event.getErrorCode()){
                 case DownloadManager.ERROR_INSUFFICIENT_SPACE:

@@ -120,7 +120,7 @@ public class DatabaseModelFactory {
         e.transcript = vrm.transcripts;
         e.lmsUrl = block.getBlockUrl();
         e.isVideoForWebOnly = vrm.onlyOnWeb;
-        e.type = DownloadType.EDX_VIDEO.name();
+        e.type = DownloadType.EDXVIDEO.name();
         return e;
     }
 
@@ -148,9 +148,9 @@ public class DatabaseModelFactory {
         e.lmsUrl = block.getBlockUrl();
 //        e.isVideoForWebOnly = scormData.onlyOnWeb;
         if (block.getType().equals(BlockType.SCORM)) {
-            e.type = DownloadType.SCORM.name();
+            e.type = DownloadType.Scrom.name();
         } else if (block.getType().equals(BlockType.PDF)) {
-            e.type = DownloadType.PDF.name();
+            e.type = DownloadType.Pdf.name();
         }
         return e;
     }

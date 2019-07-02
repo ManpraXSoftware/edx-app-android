@@ -1,8 +1,8 @@
 package org.tta.mobile.tta.data.enums;
 
 public enum DownloadType {
-    SCORM,
-    PDF,
+    Scrom,
+    Pdf,
     CONNECTVIDEO,
-    EDX_VIDEO
+    EDXVIDEO
 }
