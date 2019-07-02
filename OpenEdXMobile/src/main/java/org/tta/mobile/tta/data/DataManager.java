@@ -297,7 +297,7 @@ public class DataManager extends BaseRoboInjector {
     }
 
     public void login(String username, String password, OnResponseCallback<AuthResponse> callback) {
-        if (!NetworkUtil.isConnected(context)){
+        if (!NetworkUtil.isConnected(context)) {
             callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
         }
 
@@ -554,13 +554,13 @@ public class DataManager extends BaseRoboInjector {
                 @Override
                 protected void onSuccess(List<AgendaList> agendaLists) throws Exception {
                     super.onSuccess(agendaLists);
-                    if (agendaLists != null && !agendaLists.isEmpty()){
+                    if (agendaLists != null && !agendaLists.isEmpty()) {
                         loginPrefs.setStateListId(agendaLists.get(0).getList_id());
 
                         getSources(new OnResponseCallback<List<Source>>() {
                             @Override
                             public void onSuccess(List<Source> data) {
-                                for (Source source: data){
+                                for (Source source : data) {
                                     getStateAgendaContent(source.getId(), loginPrefs.getStateListId(), null);
                                 }
                             }
@@ -586,23 +586,23 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    private void getStateAgendaCountFromLocal(OnResponseCallback<List<AgendaList>> callback, Exception e){
+    private void getStateAgendaCountFromLocal(OnResponseCallback<List<AgendaList>> callback, Exception e) {
 
         new Task<AgendaList>(context) {
             @Override
             public AgendaList call() {
 
                 List<Source> sources = mLocalDataSource.getSources();
-                if (sources == null){
+                if (sources == null) {
                     return null;
                 }
 
                 AgendaList agendaList = new AgendaList();
                 agendaList.setList_id(loginPrefs.getStateListId());
                 List<AgendaItem> items = new ArrayList<>();
-                for (Source source: sources){
+                for (Source source : sources) {
                     List<Content> contents = mLocalDataSource.getStateContents(source.getId());
-                    if (contents != null){
+                    if (contents != null) {
                         AgendaItem item = new AgendaItem();
                         item.setContent_count(contents.size());
                         item.setSource_id(source.getId());
@@ -621,7 +621,7 @@ public class DataManager extends BaseRoboInjector {
             protected void onSuccess(AgendaList agendaList) throws Exception {
                 super.onSuccess(agendaList);
 
-                if (agendaList == null){
+                if (agendaList == null) {
                     callback.onFailure(e);
                 } else {
                     callback.onSuccess(Collections.singletonList(agendaList));
@@ -643,7 +643,7 @@ public class DataManager extends BaseRoboInjector {
             getSources(new OnResponseCallback<List<Source>>() {
                 @Override
                 public void onSuccess(List<Source> data) {
-                    for (Source source: data){
+                    for (Source source : data) {
                         getMyAgendaContent(source.getId(), null);
                     }
                 }
@@ -672,22 +672,22 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    private void getMyAgendaCountFromLocal(OnResponseCallback<AgendaList> callback, Exception e){
+    private void getMyAgendaCountFromLocal(OnResponseCallback<AgendaList> callback, Exception e) {
 
         new Task<AgendaList>(context) {
             @Override
             public AgendaList call() {
 
                 List<Source> sources = mLocalDataSource.getSources();
-                if (sources == null){
+                if (sources == null) {
                     return null;
                 }
 
                 AgendaList agendaList = new AgendaList();
                 List<AgendaItem> items = new ArrayList<>();
-                for (Source source: sources){
+                for (Source source : sources) {
                     List<Content> contents = mLocalDataSource.getBookmarkedContents(source.getId());
-                    if (contents != null){
+                    if (contents != null) {
                         AgendaItem item = new AgendaItem();
                         item.setContent_count(contents.size());
                         item.setSource_id(source.getId());
@@ -706,7 +706,7 @@ public class DataManager extends BaseRoboInjector {
             protected void onSuccess(AgendaList agendaList) throws Exception {
                 super.onSuccess(agendaList);
 
-                if (agendaList == null){
+                if (agendaList == null) {
                     callback.onFailure(e);
                 } else {
                     callback.onSuccess(agendaList);
@@ -1053,7 +1053,7 @@ public class DataManager extends BaseRoboInjector {
                 protected void onSuccess(StatusResponse statusResponse) throws Exception {
                     super.onSuccess(statusResponse);
                     if (statusResponse == null) {
-                        new Thread(){
+                        new Thread() {
                             @Override
                             public void run() {
                                 mLocalDataSource.deleteBookmark(new Bookmark(contentId));
@@ -1063,10 +1063,10 @@ public class DataManager extends BaseRoboInjector {
                         callback.onFailure(new TaException("No response for is content my agenda."));
                     } else {
 
-                        new Thread(){
+                        new Thread() {
                             @Override
                             public void run() {
-                                if (statusResponse.getStatus()){
+                                if (statusResponse.getStatus()) {
                                     mLocalDataSource.insertBookmark(new Bookmark(contentId));
                                 } else {
                                     mLocalDataSource.deleteBookmark(new Bookmark(contentId));
@@ -1088,7 +1088,7 @@ public class DataManager extends BaseRoboInjector {
         }
     }
 
-    private void isLocalContentMyAgenda(long contentId, OnResponseCallback<StatusResponse> callback){
+    private void isLocalContentMyAgenda(long contentId, OnResponseCallback<StatusResponse> callback) {
 
         new Task<Bookmark>(context) {
             @Override
@@ -1100,7 +1100,7 @@ public class DataManager extends BaseRoboInjector {
             protected void onSuccess(Bookmark bookmark) throws Exception {
                 super.onSuccess(bookmark);
 
-                if (bookmark == null){
+                if (bookmark == null) {
                     callback.onSuccess(new StatusResponse(false));
                 } else {
                     callback.onSuccess(new StatusResponse(true));
@@ -1171,10 +1171,10 @@ public class DataManager extends BaseRoboInjector {
                         callback.onFailure(new TaException("Error occurred. Couldn't perform action"));
                     } else {
 
-                        new Thread(){
+                        new Thread() {
                             @Override
                             public void run() {
-                                if (bookmarkResponse.isIs_active()){
+                                if (bookmarkResponse.isIs_active()) {
                                     mLocalDataSource.insertBookmark(new Bookmark(contentId));
                                 } else {
                                     mLocalDataSource.deleteBookmark(new Bookmark(contentId));
@@ -1335,12 +1335,12 @@ public class DataManager extends BaseRoboInjector {
                     super.onSuccess(response);
                     if (response != null && !response.isEmpty()) {
 
-                        new Thread(){
+                        new Thread() {
                             @Override
                             public void run() {
                                 mLocalDataSource.insertContents(response);
                                 List<Bookmark> bookmarks = new ArrayList<>();
-                                for (Content content: response){
+                                for (Content content : response) {
                                     bookmarks.add(new Bookmark(content.getId()));
                                 }
                                 mLocalDataSource.insertBookmarks(bookmarks);
@@ -1351,7 +1351,7 @@ public class DataManager extends BaseRoboInjector {
                             callback.onSuccess(response);
                         }
                     } else {
-                        new Thread(){
+                        new Thread() {
                             @Override
                             public void run() {
                                 mLocalDataSource.deleteAllBookmarks();
@@ -1376,7 +1376,7 @@ public class DataManager extends BaseRoboInjector {
         }
     }
 
-    private void getMyAgendaContentFromLocal(long sourceId, OnResponseCallback<List<Content>> callback, Exception e){
+    private void getMyAgendaContentFromLocal(long sourceId, OnResponseCallback<List<Content>> callback, Exception e) {
 
         new Task<List<Content>>(context) {
             @Override
@@ -1412,12 +1412,12 @@ public class DataManager extends BaseRoboInjector {
                     super.onSuccess(response);
                     if (response != null && !response.isEmpty()) {
 
-                        new Thread(){
+                        new Thread() {
                             @Override
                             public void run() {
                                 mLocalDataSource.insertContents(response);
                                 List<StateContent> stateContents = new ArrayList<>();
-                                for (Content content: response){
+                                for (Content content : response) {
                                     stateContents.add(new StateContent(content.getId()));
                                 }
                                 mLocalDataSource.deleteAllStateContents();
@@ -1430,7 +1430,7 @@ public class DataManager extends BaseRoboInjector {
                         }
 
                     } else {
-                        new Thread(){
+                        new Thread() {
                             @Override
                             public void run() {
                                 mLocalDataSource.deleteAllStateContents();
@@ -1455,7 +1455,7 @@ public class DataManager extends BaseRoboInjector {
         }
     }
 
-    private void getStateAgendaContentFromLocal(long sourceId, OnResponseCallback<List<Content>> callback, Exception e){
+    private void getStateAgendaContentFromLocal(long sourceId, OnResponseCallback<List<Content>> callback, Exception e) {
 
         new Task<List<Content>>(context) {
             @Override
@@ -3602,11 +3602,11 @@ public class DataManager extends BaseRoboInjector {
     public void getFollowersOrFollowing(boolean follower, int take, int skip, OnResponseCallback<List<SuggestedUser>> callback) {
         if (NetworkUtil.isConnected(context)) {
 
-            new GetFollowersOrFollowingTask(context, follower, take, skip){
+            new GetFollowersOrFollowingTask(context, follower, take, skip) {
                 @Override
                 protected void onSuccess(List<SuggestedUser> suggestedUsers) throws Exception {
                     super.onSuccess(suggestedUsers);
-                    if (suggestedUsers == null){
+                    if (suggestedUsers == null) {
                         callback.onFailure(new TaException(
                                 follower ? "No followers found" : "No following found"
                         ));
@@ -3626,16 +3626,16 @@ public class DataManager extends BaseRoboInjector {
         }
     }
 
-    public void setContentIdForLegacyDownloads(){
+    public void setContentIdForLegacyDownloads() {
 
         if (NetworkUtil.isConnected(context)) {
 
             List<VideoModel> wpDownloads = edxEnvironment.getStorage().getLegacyWPDownloads();
             List<VideoModel> edxDownloads = edxEnvironment.getStorage().getLegacyEdxDownloads();
 
-            if (wpDownloads != null){
+            if (wpDownloads != null) {
 
-                for (VideoModel model: wpDownloads){
+                for (VideoModel model : wpDownloads) {
                     try {
                         getPostById(Long.parseLong(model.getVideoId()), new OnResponseCallback<Post>() {
                             @Override
@@ -3665,12 +3665,11 @@ public class DataManager extends BaseRoboInjector {
                         e.printStackTrace();
                     }
                 }
-
             }
 
-            if (edxDownloads != null){
+            if (edxDownloads != null) {
 
-                for (VideoModel model: edxDownloads){
+                for (VideoModel model : edxDownloads) {
                     getContentFromSourceIdentity(model.getEnrollmentId(), new OnResponseCallback<Content>() {
                         @Override
                         public void onSuccess(Content data) {
@@ -3685,14 +3684,11 @@ public class DataManager extends BaseRoboInjector {
                         }
                     });
                 }
-
             }
-
         }
-
     }
 
-    public void scheduleSyncAnalyticsJob(){
+    public void scheduleSyncAnalyticsJob() {
 
         /*if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             ComponentName componentName = new ComponentName(context, SyncAnalyticsJob.class);
@@ -3708,8 +3704,6 @@ public class DataManager extends BaseRoboInjector {
                 Log.d("_____TAG_____", "Sync analytics job not scheduled");
             }
         }*/
-
     }
-
 }
 

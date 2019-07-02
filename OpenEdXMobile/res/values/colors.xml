@@ -51,9 +51,19 @@
     <color name="toolbar_controls_color">@color/edx_brand_primary_base</color>
 
     <!--  Colors defined by edX Pattern Library at http://ux.edx.org/design_elements/colors/ -->
-    <color name="edx_brand_primary_dark">#065683</color>
+
+    <color name="edx_brand_primary_dark">#19a99e</color>
+
+    <color name="edx_brand_primary_base">#21d2c5</color>
+
+    <color name="edx_brand_primary_light">#53A4D1</color>
+    <color name="edx_brand_primary_x_light">#A6CFE6</color>
+    <color name="edx_brand_primary_accent">#0EA6EC</color>
+    <color name="edx_brand_primary_x_accent">#00ABFA</color>
+
+<!--    <color name="edx_brand_primary_dark">#065683</color>
     <color name="edx_brand_primary_base">#0075B4</color>
-    <color name="edx_brand_primary_accent">#2991C3</color>
+    <color name="edx_brand_primary_accent">#2991C3</color>-->
     <color name="edx_brand_primary_back">#CCE3F0</color>
     <color name="edx_brand_primary_x_back">#F2F8FB</color>
     <color name="edx_brand_secondary_dark">#982C62</color>
