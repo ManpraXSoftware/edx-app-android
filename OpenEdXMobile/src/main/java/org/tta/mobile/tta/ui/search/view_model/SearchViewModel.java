@@ -8,6 +8,7 @@ import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,16 +27,19 @@ import org.tta.mobile.R;
 import org.tta.mobile.databinding.TRowAgendaContentBinding;
 import org.tta.mobile.databinding.TRowFilterSectionBinding;
 import org.tta.mobile.databinding.TRowFilterTagBinding;
+import org.tta.mobile.databinding.TRowSuggestedTeacherGridBinding;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.data.enums.ContentListMode;
+import org.tta.mobile.tta.data.enums.SearchType;
 import org.tta.mobile.tta.data.enums.SourceType;
 import org.tta.mobile.tta.data.local.db.table.Category;
 import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.data.local.db.table.ContentList;
 import org.tta.mobile.tta.data.local.db.table.ContentStatus;
 import org.tta.mobile.tta.data.local.db.table.Source;
+import org.tta.mobile.tta.data.model.feed.SuggestedUser;
 import org.tta.mobile.tta.data.model.library.CollectionConfigResponse;
 import org.tta.mobile.tta.data.model.search.FilterSection;
 import org.tta.mobile.tta.data.model.search.FilterTag;
@@ -50,6 +54,7 @@ import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.connect.ConnectDashboardActivity;
 import org.tta.mobile.tta.ui.course.CourseDashboardActivity;
+import org.tta.mobile.tta.ui.custom.DropDownFilterView;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.ContentSourceUtil;
 
@@ -88,6 +93,7 @@ public class SearchViewModel extends BaseViewModel {
     private Map<Long, ContentStatus> contentStatusMap;
 
     public ObservableField<String> searchText = new ObservableField<>("");
+    public ObservableField<String> searchHint = new ObservableField<>("");
     public ObservableField<String> contentListText = new ObservableField<>();
     public ObservableBoolean filterSelected = new ObservableBoolean();
     public ObservableBoolean contentListSelected = new ObservableBoolean();
@@ -124,6 +130,16 @@ public class SearchViewModel extends BaseViewModel {
     private List<FilterSection> currentSections;
 
     private CollectionConfigResponse cr;
+
+    public List<DropDownFilterView.FilterItem> searchTypeFilters;
+    private SearchType searchType;
+    public DropDownFilterView.OnFilterClickListener searchTypeListener = (v, item, position) -> {
+        searchType = (SearchType) item.getItem();
+        changesMade = true;
+        search();
+    };
+
+    public List<DropDownFilterView.FilterItem> sourceFilters;
 
     public AdapterView.OnItemClickListener contentListClickListener = (parent, view, position, id) -> {
         selectedContentListPosition.set(position);
@@ -290,10 +306,22 @@ public class SearchViewModel extends BaseViewModel {
             }
         });
 
+        setSearchTypes();
+
         loadFilters();
         loadDefaultCategory();
 
         loadSources();
+    }
+
+    private void setSearchTypes(){
+        searchTypeFilters = new ArrayList<>();
+        searchTypeFilters.add(new DropDownFilterView.FilterItem(
+                mActivity.getString(R.string.content), SearchType.content, true,
+                R.color.white, R.drawable.btn_selector_filled));
+        searchTypeFilters.add(new DropDownFilterView.FilterItem(
+                mActivity.getString(R.string.people), SearchType.people, false,
+                R.color.white, R.drawable.btn_selector_filled));
     }
 
     private void setToolTip(){
@@ -954,6 +982,47 @@ public class SearchViewModel extends BaseViewModel {
     public class ClassesAdapter extends BaseArrayAdapter<String> {
         public ClassesAdapter(@androidx.annotation.NonNull Context context, int resource) {
             super(context, resource);
+        }
+    }
+
+    public class UsersAdapter extends MxInfiniteAdapter<SuggestedUser> {
+
+        public UsersAdapter(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void onBind(@NonNull ViewDataBinding binding, @NonNull SuggestedUser model, @Nullable OnRecyclerItemClickListener<SuggestedUser> listener) {
+            if (binding instanceof TRowSuggestedTeacherGridBinding) {
+                TRowSuggestedTeacherGridBinding teacherBinding = (TRowSuggestedTeacherGridBinding) binding;
+                teacherBinding.setViewModel(model);
+                Glide.with(getContext())
+                        .load(model.getProfileImage().getImageUrlLarge())
+                        .placeholder(R.drawable.profile_photo_placeholder)
+                        .into(teacherBinding.userImage);
+
+                if (model.isFollowed()) {
+                    teacherBinding.followBtn.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.btn_selector_filled));
+                    teacherBinding.followBtn.setTextColor(ContextCompat.getColor(mActivity, R.color.white));
+                    teacherBinding.followBtn.setText(mActivity.getString(R.string.following));
+                } else {
+                    teacherBinding.followBtn.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.btn_selector_hollow));
+                    teacherBinding.followBtn.setTextColor(ContextCompat.getColor(mActivity, R.color.primary_cyan));
+                    teacherBinding.followBtn.setText(mActivity.getString(R.string.follow));
+                }
+
+                teacherBinding.followBtn.setOnClickListener(v -> {
+                    if (listener != null) {
+                        listener.onItemClick(v, model);
+                    }
+                });
+
+                teacherBinding.getRoot().setOnClickListener(v -> {
+                    if (listener != null) {
+                        listener.onItemClick(v, model);
+                    }
+                });
+            }
         }
     }
 

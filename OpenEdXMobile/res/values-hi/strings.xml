@@ -121,7 +121,7 @@
     <string name="option_menu">विकल्प मेनू</string>
     <string name="empty_recommended_users_message">अध्यापक उपलब्ध नहीं हैं</string>
     <string name="empty_course_message">कोर्स उपलब्ध नहीं है</string>
-    <string name="empty_search_message">"खोज से जुड़ी विषय-वस्तु अभी  उपलब्ध नहीं  "</string>
+    <string name="empty_search_message">खोज से जुड़ी विषय-वस्तु अभी उपलब्ध नहीं</string>
     <string name="question">प्रश्न</string>
     <string name="discussion_post_title">"चर्चा का विषय "</string>
     <string name="discussion_title" >चर्चा</string>
@@ -175,4 +175,6 @@
     <string name="app_update_title">अपडेट उपलब्ध है</string>
     <string name="privacy_policy">गोपनीयता नीति</string>
     <string name="privacy_policy_message">रजिस्टर पर क्लिक करके आप हमारी {privacy_policy} से सहमत हो गए हैं</string>
+    <string name="people">जन</string>
+    <string name="content">सामग्री</string>
 </resources>

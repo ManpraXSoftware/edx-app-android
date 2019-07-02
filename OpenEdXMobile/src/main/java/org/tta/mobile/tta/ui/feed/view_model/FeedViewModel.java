@@ -77,7 +77,8 @@ public class FeedViewModel extends BaseViewModel {
 
     private List<Feed> feeds;
     List<SuggestedUser> users;
-    private int take, skip;
+//    private int take, skip;
+    private int skip;
     private boolean allLoaded;
     private String delimiterTagChunks, delimiterSectionTag;
 
@@ -105,7 +106,7 @@ public class FeedViewModel extends BaseViewModel {
 //        setToolTip();
         feeds = new ArrayList<>();
         users = new ArrayList<>();
-        take = DEFAULT_TAKE;
+//        take = DEFAULT_TAKE;
         skip = DEFAULT_SKIP;
         allLoaded = false;
         delimiterTagChunks = Constants.DELIMITER_TAG_CHUNKS;
@@ -340,11 +341,11 @@ public class FeedViewModel extends BaseViewModel {
 
     private void getFeeds() {
 
-        mDataManager.getFeeds(take, skip, new OnResponseCallback<List<Feed>>() {
+        mDataManager.getFeeds(skip, new OnResponseCallback<List<Feed>>() {
             @Override
             public void onSuccess(List<Feed> data) {
                 mActivity.hideLoading();
-                if (data.size() < take) {
+                if (data.size() < 1) {
                     allLoaded = true;
                 }
                 populateFeeds(data);
@@ -802,6 +803,14 @@ public class FeedViewModel extends BaseViewModel {
                                     .placeholder(R.drawable.placeholder_course_card_image)
                                     .into(feedBinding.feedContentImage);
                             feedBinding.feedMetaText.setText(model.getMeta_data().getText());
+
+                        case TTAFeed:
+
+                            Glide.with(getContext())
+                                    .load(model.getMeta_data().getIcon())
+                                    .placeholder(R.drawable.placeholder_course_card_image)
+                                    .into(feedBinding.feedContentImage);
+                            feedBinding.feedMetaText.setText(model.getMessage());
 
                         case AppUpdate:
 

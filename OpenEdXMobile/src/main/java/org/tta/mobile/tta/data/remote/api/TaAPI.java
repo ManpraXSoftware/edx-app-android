@@ -221,8 +221,8 @@ public class TaAPI {
         return taService.getNotifications(take, skip);
     }
 
-    public Call<List<Feed>> getFeeds(int take, int skip){
-        return taService.getFeeds(take, skip);
+    public Call<List<Feed>> getFeeds(int skip){
+        return taService.getFeeds(skip);
     }
 
     public Call<Content> getContentFromSourceIdentity(String sourceIdentity){

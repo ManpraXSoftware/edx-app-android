@@ -816,6 +816,8 @@
     <string name="app_update_title">App update available</string>
     <string name="app_update_message">Please update TheTeacherApp</string>
     <string name="privacy_policy_message">By creating an account, you acknowledge our {privacy_policy}</string>
+    <string name="people">People</string>
+    <string name="content">Content</string>
 
     <string name="sign_out_message">Are you sure you want to Sign Out?</string>
     <string name="be_the_first_to_comment">Be the first to comment</string>

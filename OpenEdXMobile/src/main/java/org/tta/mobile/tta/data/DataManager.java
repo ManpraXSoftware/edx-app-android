@@ -2916,11 +2916,11 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getFeeds(int take, int skip, OnResponseCallback<List<Feed>> callback) {
+    public void getFeeds(int skip, OnResponseCallback<List<Feed>> callback) {
 
         if (NetworkUtil.isConnected(context)) {
 
-            new GetFeedsTask(context, take, skip) {
+            new GetFeedsTask(context, skip) {
                 @Override
                 protected void onSuccess(List<Feed> feeds) throws Exception {
                     super.onSuccess(feeds);
@@ -2946,12 +2946,12 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
-                    getFeedsFromLocal(take, skip, callback, ex);
+                    getFeedsFromLocal(10, skip, callback, ex);
                 }
             }.execute();
 
         } else {
-            getFeedsFromLocal(take, skip, callback, new TaException(context.getString(R.string.no_connection_exception)));
+            getFeedsFromLocal(10, skip, callback, new TaException(context.getString(R.string.no_connection_exception)));
         }
 
     }

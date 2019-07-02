@@ -35,6 +35,7 @@ import com.maurya.mx.mxlib.view.MxRecyclerView;
 
 import org.tta.mobile.R;
 import org.tta.mobile.tta.ui.base.BaseArrayAdapter;
+import org.tta.mobile.tta.ui.custom.DropDownFilterView;
 import org.tta.mobile.tta.ui.custom.FormEditText;
 import org.tta.mobile.tta.ui.custom.NonScrollListView;
 import org.tta.mobile.tta.utils.BottomNavigationViewHelper;
@@ -42,6 +43,7 @@ import org.tta.mobile.tta.utils.ToolTipView;
 import org.tta.mobile.util.SoftKeyboardUtil;
 
 import java.lang.reflect.Constructor;
+import java.util.List;
 
 
 /**
@@ -446,6 +448,7 @@ public class BindingAdapters {
                     ToolTipView.showToolTip(v.getContext(), message.trim(), v, gravity);
         });
     }
+
     @BindingAdapter({"tool_tip", "tool_tip_gravity", "tool_tip_position"})
     public static void showToolTipPos(BottomNavigationView view, String message, int gravity, int position) {
         view.post(() -> {
@@ -454,5 +457,15 @@ public class BindingAdapters {
                 if (message != null && !message.trim().equals(""))
                     ToolTipView.showToolTip(v.getContext(), message.trim(), v, gravity);
         });
+    }
+
+    @BindingAdapter({"drop_down_items"})
+    public static void setDropDownItems(DropDownFilterView view, List<DropDownFilterView.FilterItem> items){
+        view.setFilterItems(items);
+    }
+
+    @BindingAdapter({"drop_down_listener"})
+    public static void setDropDownItems(DropDownFilterView view, DropDownFilterView.OnFilterClickListener listener){
+        view.setOnFilterItemListener(listener);
     }
 }

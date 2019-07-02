@@ -165,8 +165,7 @@ public interface TaService {
                                               @Query(Constants.KEY_SKIP) int skip);
 
     @GET(ApiConstants.URL_MX_GET_FEEDS)
-    Call<List<Feed>> getFeeds(@Query(Constants.KEY_TAKE) int take,
-                              @Query(Constants.KEY_SKIP) int skip);
+    Call<List<Feed>> getFeeds(@Query(Constants.KEY_SKIP) int skip);
 
     @GET(ApiConstants.URL_MX_GET_CONTENT)
     Call<Content> getContentFromSourceIdentity(@Query(Constants.KEY_SOURCE_IDENTITY) String sourceIdentity);

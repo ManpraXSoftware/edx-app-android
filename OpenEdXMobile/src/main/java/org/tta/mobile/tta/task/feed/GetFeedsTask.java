@@ -17,14 +17,14 @@ public class GetFeedsTask extends Task<List<Feed>> {
     @Inject
     private TaAPI taAPI;
 
-    public GetFeedsTask(Context context, int take, int skip) {
+    public GetFeedsTask(Context context, int skip) {
         super(context);
-        this.take = take;
+//        this.take = take;
         this.skip = skip;
     }
 
     @Override
     public List<Feed> call() throws Exception {
-        return taAPI.getFeeds(take, skip).execute().body();
+        return taAPI.getFeeds(skip).execute().body();
     }
 }
