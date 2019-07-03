@@ -3,7 +3,6 @@ package org.tta.mobile.tta.ui.landing.view_model;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.os.Handler;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.widget.TooltipCompat;
 import android.view.Gravity;
@@ -17,19 +16,17 @@ import org.tta.mobile.tta.data.local.db.table.ContentStatus;
 import org.tta.mobile.tta.event.ContentStatusReceivedEvent;
 import org.tta.mobile.tta.event.ContentStatusesReceivedEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
-import org.tta.mobile.tta.scorm.ScromMigration280719;
+import org.tta.mobile.tta.scorm.Migration280719;
 import org.tta.mobile.tta.ui.agenda.AgendaFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.feed.FeedFragment;
-import org.tta.mobile.tta.ui.interfaces.SearchPageOpenedListener;
 import org.tta.mobile.tta.ui.library.LibraryFragment;
 import org.tta.mobile.tta.ui.profile.ProfileFragment;
 import org.tta.mobile.tta.ui.search.SearchFragment;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.ToolTipView;
 import org.tta.mobile.util.NetworkUtil;
-import org.tta.mobile.util.observer.Observable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -190,7 +187,7 @@ public class LandingViewModel extends BaseViewModel {
         });
 
 
-        ScromMigration280719 spt=new ScromMigration280719(getActivity());
+        Migration280719 spt=new Migration280719(getActivity());
         spt.MigrateScromPackages();
         spt.MigrateConnectVideos();
 

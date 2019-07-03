@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
-import org.apache.commons.io.FileUtils;
 import org.tta.mobile.model.VideoModel;
 import org.tta.mobile.util.Sha1Util;
 
@@ -16,17 +15,15 @@ import static org.apache.commons.io.FileUtils.moveDirectory;
 import static org.apache.commons.io.FileUtils.moveFileToDirectory;
 import static org.tta.mobile.util.BrowserUtil.environment;
 
-public class ScromMigration280719 {
+public class Migration280719 {
 
-    private Context context;
     private File oldFolderPath;
     private File newFolderPath;
     private File packDir;
     private File downloadsDir;
 
 
-    public ScromMigration280719(Context context) {
-        this.context = context;
+    public Migration280719(Context context) {
         File android = new File(Environment.getExternalStorageDirectory(), "Android");
         downloadsDir = new File(android, "data");
         packDir = new File(downloadsDir, context.getPackageName());
@@ -83,6 +80,8 @@ public class ScromMigration280719 {
 
                         //update download entry path in db
                         updateLagacyDownload(vm, nFile.getAbsolutePath());
+
+                        Log.e("MX_Scorm_Migration", "Scorm migration --------> fail ");
                     }
                 }
             }
@@ -131,6 +130,8 @@ public class ScromMigration280719 {
 
                     //update download entry path in db
                     updateLagacyDownload(vm, userSHA1_dir.getAbsolutePath()+"/"+lagacyFileName);
+
+                    Log.e("MX_Connect_Migration","Connect migration --------> Done ");
                 }
             }
         }
@@ -175,7 +176,6 @@ public class ScromMigration280719 {
     }
 
     private String getSHA1(String user_name) {
-        String hash = "";
         return Sha1Util.SHA1(user_name);
     }
 
