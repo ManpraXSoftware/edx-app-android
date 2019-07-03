@@ -8,12 +8,15 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.tta.mobile.R;
 import org.tta.mobile.tta.data.pref.AppPref;
+import org.tta.mobile.tta.ui.base.TaBaseFragment;
+import org.tta.mobile.tta.ui.profile.view_model.ProfileViewModel;
 
 import java.util.Objects;
 
@@ -23,7 +26,8 @@ public class ProfileOptionsBottomSheet extends BottomSheetDialogFragment {
     private View.OnClickListener listener;
 
     private LinearLayout profileOptionsLayout, signOutOptionsLayout;
-    private AppPref mAppPref;
+
+    ProfileViewModel profileViewModel;
 
     public static ProfileOptionsBottomSheet newInstance(View.OnClickListener listener){
         ProfileOptionsBottomSheet fragment = new ProfileOptionsBottomSheet();
@@ -56,7 +60,6 @@ public class ProfileOptionsBottomSheet extends BottomSheetDialogFragment {
 
         profileOptionsLayout = contentView.findViewById(R.id.profile_options_layout);
         signOutOptionsLayout = contentView.findViewById(R.id.sign_out_options_layout);
-        mAppPref = new AppPref(Objects.requireNonNull(getActivity()));
 
         contentView.findViewById(R.id.ivClose).setOnClickListener(listener);
         contentView.findViewById(R.id.edit_profile_layout).setOnClickListener(v -> {
@@ -101,18 +104,10 @@ public class ProfileOptionsBottomSheet extends BottomSheetDialogFragment {
             }
         });
         contentView.findViewById(R.id.help_layout).setOnClickListener(v -> {
-            if (mAppPref.isProfileVisited()){
-                mAppPref.setProfileVisited(false);
-                mAppPref.setFeedVisited(false);
-                mAppPref.setCourseBottom(false);
-                mAppPref.setAgendaVisited(false);
-                mAppPref.setSearchVisited(false);
-                mAppPref.setCourseVisited(false);
-                Toast.makeText(getActivity(), getResources().getString(R.string.app_tuts_activate), Toast.LENGTH_SHORT).show();
-                dismiss();
-            }else {
-                Toast.makeText(getActivity(), getResources().getString(R.string.app_tuts_already), Toast.LENGTH_SHORT).show();
-                dismiss();
+            if (profileOptionsLayout.getVisibility() == View.VISIBLE) {
+                if (listener != null){
+                    listener.onClick(v);
+                }
             }
         });
         dialog.setContentView(contentView);

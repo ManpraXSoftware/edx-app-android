@@ -18,11 +18,11 @@ import org.tta.mobile.R;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
+import org.tta.mobile.tta.data.pref.AppPref;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.profile.view_model.ProfileViewModel;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
-import org.tta.mobile.tta.utils.ToolTip;
 import org.tta.mobile.tta.utils.ToolTipView;
 
 public class ProfileFragment extends TaBaseFragment {
@@ -36,6 +36,7 @@ public class ProfileFragment extends TaBaseFragment {
     private LinearLayout llPoints;
     private ProgressBar progressBar;
     private LinearLayout llPadaav;
+    private AppPref appPref;
 
     private boolean bottomSheetOpened;
 
@@ -57,9 +58,16 @@ public class ProfileFragment extends TaBaseFragment {
 
         optionsBtn = view.findViewById(R.id.profile_options_btn);
 
+        appPref = new AppPref(view.getContext());
+
+//        if (!appPref.isSettingVisited()) {
+//            ToolTipView.showToolTip(view.getContext(), "सेटिंग्स ऑप्शन के लिए यह बटन दबायें ", optionsBtn, Gravity.BOTTOM);
+//            appPref.setSettingsVisited(true);
+//        }
+
 
         optionsBtn.setOnClickListener(v -> {
-            if (!bottomSheetOpened){
+            if (!bottomSheetOpened) {
                 bottomSheet.show(getActivity().getSupportFragmentManager(), ProfileOptionsBottomSheet.TAG);
                 bottomSheetOpened = true;
             }
@@ -86,12 +94,12 @@ public class ProfileFragment extends TaBaseFragment {
         });*/
 
         bottomSheet = ProfileOptionsBottomSheet.newInstance(v -> {
-            if (v == null){
+            if (v == null) {
                 bottomSheetOpened = false;
                 return;
             }
 
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.ivClose:
                     bottomSheet.dismiss();
                     bottomSheetOpened = false;
@@ -140,6 +148,30 @@ public class ProfileFragment extends TaBaseFragment {
                 case R.id.btn_yes:
                     viewModel.logout();
                     break;
+
+                case R.id.help_layout:
+                    if (appPref.isProfileVisited()) {
+                        appPref.setProfileVisited(false);
+                        appPref.setFeedVisited(false);
+                        appPref.setCourseBottom(false);
+                        appPref.setAgendaVisited(false);
+                        appPref.setSearchVisited(false);
+                        appPref.setCourseVisited(false);
+                        appPref.setSettingsVisited(false);
+                        if (!appPref.isSettingVisited()) {
+                            ToolTipView.showToolTip(view.getContext(), "सेटिंग्स ऑप्शन के लिए यह बटन दबायें ", optionsBtn, Gravity.BOTTOM);
+                            appPref.setSettingsVisited(true);
+                        }
+//                        viewModel.showToolTip();
+//                        Toast.makeText(getActivity(), getResources().getString(R.string.app_tuts_activate), Toast.LENGTH_SHORT).show();
+                        bottomSheet.dismiss();
+
+
+                    } else {
+                        Toast.makeText(getActivity(), getResources().getString(R.string.app_tuts_already), Toast.LENGTH_SHORT).show();
+                        bottomSheet.dismiss();
+                    }
+                    break;
             }
         });
         return view;
@@ -149,6 +181,10 @@ public class ProfileFragment extends TaBaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+//        if (!appPref.isSettingVisited()) {
+//            ToolTipView.showToolTip(getActivity(), "सेटिंग्स ऑप्शन के लिए यह बटन दबायें ", optionsBtn, Gravity.BOTTOM);
+//            appPref.setSettingsVisited(true);
+//        }
         logD("TTA Nav ======> " + BreadcrumbUtil.setBreadcrumb(RANK, Nav.profile.name()));
     }
 
@@ -157,4 +193,6 @@ public class ProfileFragment extends TaBaseFragment {
         super.onDestroy();
         viewModel.unRegisterEventBus();
     }
+
+
 }

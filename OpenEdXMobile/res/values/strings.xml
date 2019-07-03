@@ -968,6 +968,7 @@
     <string name="course_download_button">To download the data click this button</string>
     <string name="region_btn_agenda">Data defined by your state</string>
     <string name="download_btn_agenda">Data downloaded by you</string>
+    <string name="personal_btn_agenda">Agenda choosed by you is here</string>
 
     <!-- TTA strings end -->
 

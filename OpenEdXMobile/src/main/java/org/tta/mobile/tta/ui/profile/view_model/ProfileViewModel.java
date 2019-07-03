@@ -3,6 +3,7 @@ package org.tta.mobile.tta.ui.profile.view_model;
 import android.content.Context;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
+import android.view.Gravity;
 
 import org.tta.mobile.R;
 import org.tta.mobile.model.api.ProfileModel;
@@ -18,6 +19,7 @@ import org.tta.mobile.tta.ui.profile.FollowersFragment;
 import org.tta.mobile.tta.ui.profile.FollowingFragment;
 import org.tta.mobile.tta.ui.profile.MyCertificatesFragment;
 import org.tta.mobile.tta.utils.ActivityUtil;
+import org.tta.mobile.tta.utils.ToolTipView;
 import org.tta.mobile.user.Account;
 import org.tta.mobile.user.ProfileImage;
 import org.tta.mobile.util.NetworkUtil;
@@ -46,6 +48,8 @@ public class ProfileViewModel extends BaseViewModel {
     public ObservableField<String> followers = new ObservableField<>();
     public ObservableField<String> userImageUrl = new ObservableField<>();
     public ObservableField<String> nCertificates = new ObservableField<>("0");
+    public ObservableField<String> profiletoolTip = new ObservableField<>("");
+    public ObservableInt profiletoolTipGravity = new ObservableInt(0);
 
     private boolean accountReceived, filtersReceived;
     private String tagLabel;
@@ -59,6 +63,7 @@ public class ProfileViewModel extends BaseViewModel {
         fetchAccount();
         fetchFilters();
         fetchCertificates();
+        showToolTip();
 //        adapter.setItems(setbadge());
 
     }
@@ -68,6 +73,7 @@ public class ProfileViewModel extends BaseViewModel {
         super.onResume();
         refreshFromLocal();
         setDetails();
+        showToolTip();
     }
 
     /*private List<Badge> setbadge(){
@@ -219,6 +225,15 @@ public class ProfileViewModel extends BaseViewModel {
             }
         });
 
+    }
+
+    public void showToolTip(){
+        if (!mDataManager.getAppPref().isSettingVisited()) {
+//            ToolTipView.showToolTip(view.getContext(), "सेटिंग्स ऑप्शन के लिए यह बटन दबायें ", optionsBtn, Gravity.BOTTOM);
+            profiletoolTip.set("सेटिंग्स ऑप्शन के लिए यह बटन दबायें ");
+            profiletoolTipGravity.set(Gravity.BOTTOM);
+            mDataManager.getAppPref().setSettingsVisited(true);
+        }
     }
 
     public void showCertificates() {

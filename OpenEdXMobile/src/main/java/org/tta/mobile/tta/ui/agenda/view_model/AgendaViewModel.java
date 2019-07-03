@@ -55,8 +55,8 @@ public class AgendaViewModel extends BaseViewModel {
 
     public void setToolTip(){
         if (!mDataManager.getAppPref().isAgendaVisited()){
-            regionToolTip = new ObservableField<>(" ");
-            personalToolTip = new ObservableField<>(mActivity.getResources().getString(R.string.region_btn_agenda));
+            regionToolTip = new ObservableField<>(mActivity.getResources().getString(R.string.region_btn_agenda));
+            personalToolTip = new ObservableField<>(mActivity.getResources().getString(R.string.personal_btn_agenda));
             downloadToolTip = new ObservableField<>(mActivity.getResources().getString(R.string.download_btn_agenda));
             mDataManager.getAppPref().setAgendaVisited(true);
         }else {

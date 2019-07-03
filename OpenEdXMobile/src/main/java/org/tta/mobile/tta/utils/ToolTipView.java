@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
@@ -53,6 +54,11 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
     private float pivotX;
     private float pivotY;
 
+    private int screenSize;
+    private Boolean isNormalSize = false;
+    private Boolean isSmallSize = false;
+    private Boolean isLargeSize = false;
+
 
     @Nullable
     private OnToolTipClickedListener listener;
@@ -66,12 +72,15 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
         container.setOnClickListener(this);
 
         text = new TextView(context);
-        text.setPadding(toolTip.getLeftPadding(), toolTip.getTopPadding(),
-                toolTip.getRightPadding(), toolTip.getBottomPadding());
+//        text.setPadding(toolTip.getLeftPadding(), toolTip.getTopPadding(),
+//                toolTip.getRightPadding(), toolTip.getBottomPadding());
         text.setGravity(toolTip.getTextGravity());
         text.setTextColor(toolTip.getTextColor());
         text.setTextSize(TypedValue.COMPLEX_UNIT_PX, toolTip.getTextSize());
         text.setTypeface(toolTip.getTypeface(), toolTip.getTypefaceStyle());
+
+        screenSize = context.getResources().getConfiguration().screenLayout &
+                Configuration.SCREENLAYOUT_SIZE_MASK;
 
         final int lines = toolTip.getLines();
         if (lines > 0) {
@@ -100,6 +109,21 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
         arrow = new ImageView(context);
         arrow.setColorFilter(new PorterDuffColorFilter(backgroundColor, PorterDuff.Mode.MULTIPLY));
 
+
+//        switch(screenSize) {
+//            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+//                isLargeSize = true;
+//                break;
+//            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+//                isNormalSize = true;
+//                break;
+//            case Configuration.SCREENLAYOUT_SIZE_SMALL:
+//                isSmallSize = true;
+//                break;
+//            default:
+//        }
+
+        // TODO supports Gravity.NO_GRAVITY
         switch (gravity) {
             case Gravity.LEFT:
                 container.setOrientation(LinearLayout.HORIZONTAL);
@@ -120,7 +144,8 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 container.setOrientation(LinearLayout.VERTICAL);
 //                text.setBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light));
                 text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-                container.addView(text, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                container.addView(text, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
                 arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.down_arrow));
                 arrow.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.arrow_background_tint));
                 container.addView(arrow, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -142,7 +167,8 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
 //                text.setBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light));
                 arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.up_arrow));
                 arrow.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.arrow_background_tint));
-                LinearLayout.LayoutParams layoutParams =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams layoutParams =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
 //                layoutParams.setMargins(0,20,0,0);
                 container.addView(arrow, layoutParams);
                 container.addView(text, new LinearLayout.LayoutParams(layoutParams));
@@ -168,7 +194,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 .withTypefaceStyle(R.font.hind_semibold)
                 .withCornerRadius(8.0f)
                 .withBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light))
-                .withPadding(15, 15, 15, 15)
+//                .withPadding(15, 15, 15, 15)
                 .withTextColor(ContextCompat.getColor(context, R.color.primary_cyan))
                 .build();
 
@@ -291,75 +317,76 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
         final int arrowWidth = arrow.getWidth();
         final int arrowHeight = arrow.getHeight();
 
-        if (gravity == Gravity.TOP || gravity == Gravity.BOTTOM) {
-            final int width = Math.max(textWidth, arrowWidth);
-            final int height = textHeight + arrowHeight;
+            if (gravity == Gravity.TOP || gravity == Gravity.BOTTOM) {
+                final int width = Math.max(textWidth, arrowWidth);
+                final int height = textHeight + arrowHeight;
 
-            final int leftPadding;
-            final int topPadding;
+                final int leftPadding;
+                final int topPadding;
 
-            if (gravity == Gravity.TOP) {
-                topPadding = anchorTop - height;
+                if (gravity == Gravity.TOP) {
+                    topPadding = anchorTop - height;
+                } else {
+                    // gravity == Gravity.BOTTOM
+                    topPadding = anchorTop + anchorHeight;
+                }
+
+                final int anchorHorizontalCenter = anchorLeft + anchorWidth / 2;
+                final int left = anchorHorizontalCenter - width / 2;
+                final int right = left + width;
+                leftPadding = Math.max(0, right > displayWidth ? displayWidth - width : left);
+
+                container.setPadding(leftPadding, topPadding, 0, 0);
+
+                final ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) arrow.getLayoutParams();
+                layoutParams.leftMargin = anchorHorizontalCenter - leftPadding - arrowWidth / 2;
+                arrow.setLayoutParams(layoutParams);
+
+                pivotX = anchorHorizontalCenter;
+                pivotY = gravity == Gravity.TOP ? anchorTop : topPadding;
             } else {
-                // gravity == Gravity.BOTTOM
-                topPadding = anchorTop + anchorHeight;
+                // gravity == Gravity.LEFT || gravity == Gravity.RIGHT
+
+                final int width = textWidth + arrowWidth;
+                final int height = Math.max(textHeight, arrowHeight);
+
+                final int leftPadding;
+                final int topPadding;
+                final int rightPadding;
+
+                if (gravity == Gravity.LEFT) {
+                    leftPadding = Math.max(0, anchorLeft - width);
+                    rightPadding = displayWidth - anchorLeft;
+                    text.setMaxWidth(displayWidth - rightPadding - leftPadding - arrowWidth);
+                } else {
+                    // gravity == Gravity.RIGHT
+
+                    leftPadding = anchorLeft + anchorWidth;
+                    rightPadding = 0;
+                }
+
+                final int anchorVerticalCenter = anchorTop + anchorHeight / 2;
+                final int top = anchorVerticalCenter - height / 2;
+                final int bottom = top + height;
+                topPadding = Math.max(0, bottom > displayHeight ? displayHeight - height : top);
+
+                container.setPadding(leftPadding, topPadding, rightPadding, 0);
+
+                final ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) arrow.getLayoutParams();
+                layoutParams.topMargin = anchorVerticalCenter - topPadding - arrowHeight / 2;
+                arrow.setLayoutParams(layoutParams);
+
+                pivotX = gravity == Gravity.LEFT ? anchorLeft : leftPadding;
+                pivotY = anchorVerticalCenter;
             }
 
-            final int anchorHorizontalCenter = anchorLeft + anchorWidth / 2;
-            final int left = anchorHorizontalCenter - width / 2;
-            final int right = left + width;
-            leftPadding = Math.max(0, right > displayWidth ? displayWidth - width : left);
-
-            container.setPadding(leftPadding, topPadding, 0, 0);
-
-            final ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) arrow.getLayoutParams();
-            layoutParams.leftMargin = anchorHorizontalCenter - leftPadding - arrowWidth / 2;
-            arrow.setLayoutParams(layoutParams);
-
-            pivotX = anchorHorizontalCenter;
-            pivotY = gravity == Gravity.TOP ? anchorTop : topPadding;
-        } else {
-            // gravity == Gravity.LEFT || gravity == Gravity.RIGHT
-
-            final int width = textWidth + arrowWidth;
-            final int height = Math.max(textHeight, arrowHeight);
-
-            final int leftPadding;
-            final int topPadding;
-            final int rightPadding;
-
-            if (gravity == Gravity.LEFT) {
-                leftPadding = Math.max(0, anchorLeft - width);
-                rightPadding = displayWidth - anchorLeft;
-                text.setMaxWidth(displayWidth - rightPadding - leftPadding - arrowWidth);
-            } else {
-                // gravity == Gravity.RIGHT
-
-                leftPadding = anchorLeft + anchorWidth;
-                rightPadding = 0;
-            }
-
-            final int anchorVerticalCenter = anchorTop + anchorHeight / 2;
-            final int top = anchorVerticalCenter - height / 2;
-            final int bottom = top + height;
-            topPadding = Math.max(0, bottom > displayHeight ? displayHeight - height : top);
-
-            container.setPadding(leftPadding, topPadding, rightPadding, 0);
-
-            final ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) arrow.getLayoutParams();
-            layoutParams.topMargin = anchorVerticalCenter - topPadding - arrowHeight / 2;
-            arrow.setLayoutParams(layoutParams);
-
-            pivotX = gravity == Gravity.LEFT ? anchorLeft : leftPadding;
-            pivotY = anchorVerticalCenter;
-        }
-
-        container.setAlpha(0.0F);
-        container.setPivotX(pivotX);
-        container.setPivotY(pivotY);
-        container.setScaleX(0.0F);
-        container.setScaleY(0.0F);
-        container.animate().setDuration(ANIMATION_DURATION).alpha(1.0F).scaleX(1.0F).scaleY(1.0F);
+            container.setAlpha(0.0F);
+            container.setPivotX(pivotX);
+            container.setPivotY(pivotY);
+            container.setScaleX(0.0F);
+            container.setScaleY(0.0F);
+            container.animate()
+                    .setDuration(ANIMATION_DURATION).alpha(1.0F).scaleX(1.0F).scaleY(1.0F);
 
         return false;
     }
@@ -438,7 +465,8 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
             }
 
             if (gravity == Gravity.START || gravity == Gravity.END) {
-                if (anchorView.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1
+                        && anchorView.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
                     gravity = gravity == Gravity.START ? Gravity.RIGHT : Gravity.LEFT;
                 } else {
                     gravity &= Gravity.HORIZONTAL_GRAVITY_MASK;
