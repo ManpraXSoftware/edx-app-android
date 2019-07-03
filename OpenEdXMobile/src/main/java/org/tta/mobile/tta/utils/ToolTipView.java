@@ -100,7 +100,6 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
         arrow = new ImageView(context);
         arrow.setColorFilter(new PorterDuffColorFilter(backgroundColor, PorterDuff.Mode.MULTIPLY));
 
-        // TODO supports Gravity.NO_GRAVITY
         switch (gravity) {
             case Gravity.LEFT:
                 container.setOrientation(LinearLayout.HORIZONTAL);
@@ -439,8 +438,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
             }
 
             if (gravity == Gravity.START || gravity == Gravity.END) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1
-                        && anchorView.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+                if (anchorView.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
                     gravity = gravity == Gravity.START ? Gravity.RIGHT : Gravity.LEFT;
                 } else {
                     gravity &= Gravity.HORIZONTAL_GRAVITY_MASK;

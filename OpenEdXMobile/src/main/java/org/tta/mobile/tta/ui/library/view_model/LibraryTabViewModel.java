@@ -292,7 +292,6 @@ public class LibraryTabViewModel extends BaseViewModel {
                                 .into(imageView);
                         container.addView(view);
 
-                        ToolTipView.showToolTip(mActivity, "fsjfjdsbfjds",imageView,Gravity.BOTTOM);
 
                         view.setOnClickListener(v -> {
 //                            Toast.makeText(mActivity, contentListMap.get(model.getId()).get(position).getName(), Toast.LENGTH_SHORT).show();
