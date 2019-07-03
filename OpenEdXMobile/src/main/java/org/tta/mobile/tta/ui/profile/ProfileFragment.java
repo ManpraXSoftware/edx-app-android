@@ -159,7 +159,7 @@ public class ProfileFragment extends TaBaseFragment {
                         appPref.setCourseVisited(false);
                         appPref.setSettingsVisited(false);
                         if (!appPref.isSettingVisited()) {
-                            ToolTipView.showToolTip(view.getContext(), "सेटिंग्स ऑप्शन के लिए यह बटन दबायें ", optionsBtn, Gravity.BOTTOM);
+                            ToolTipView.showToolTip(view.getContext(), "  सेटिंग्स ऑप्शन के लिए यह बटन दबायें  ", optionsBtn, Gravity.BOTTOM);
                             appPref.setSettingsVisited(true);
                         }
 //                        viewModel.showToolTip();

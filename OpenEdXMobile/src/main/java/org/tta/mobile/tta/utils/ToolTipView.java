@@ -142,8 +142,10 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 break;
             case Gravity.TOP:
                 container.setOrientation(LinearLayout.VERTICAL);
+                container.setPadding(10,10,10,10);
 //                text.setBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light));
                 text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                text.setPadding(10,10,10,10);
                 container.addView(text, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT));
                 arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.down_arrow));
@@ -151,20 +153,16 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 container.addView(arrow, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT));
                 break;
-//            case Gravity.BOTTOM:
-//                container.setOrientation(LinearLayout.VERTICAL);
-//                arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_arrow_downward_black_24dp));
-//                container.addView(arrow, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-//                container.addView(text, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-//                break;
 
             case Gravity.BOTTOM:
                 container.setOrientation(LinearLayout.VERTICAL);
 //                arrow.setVisibility(View.GONE);
 //                text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_subdirectory_arrow_right_black_24dp, 0, 0, 0);
                 text.setGravity(Gravity.BOTTOM);
+                container.setPadding(10,10,10,10);
                 text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
 //                text.setBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light));
+                text.setPadding(10,10,10,10);
                 arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.up_arrow));
                 arrow.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.arrow_background_tint));
                 LinearLayout.LayoutParams layoutParams =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -194,7 +192,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 .withTypefaceStyle(R.font.hind_semibold)
                 .withCornerRadius(8.0f)
                 .withBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light))
-//                .withPadding(15, 15, 15, 15)
+                .withPadding(15, 15, 15, 15)
                 .withTextColor(ContextCompat.getColor(context, R.color.primary_cyan))
                 .build();
 

@@ -63,7 +63,7 @@ public class LandingViewModel extends BaseViewModel {
                 selectedId = R.id.action_library;
 //                ToolTipView.showToolTip(getActivity(), "यहाँ सभी सामग्री पाए",mActivity.findViewById(R.id.action_library),Gravity.TOP);
                 if (!mDataManager.getAppPref().isProfileVisited()) {
-                    ToolTipView.showToolTip(getActivity(), getActivity().getResources().getString(R.string.library_tab), mActivity.findViewById(R.id.action_library), Gravity.TOP);
+                    ToolTipView.showToolTip(getActivity(), "  यहाँ सभी सामग्री पाएँ  "  , mActivity.findViewById(R.id.action_library), Gravity.TOP);
                 }
                 return true;
             case R.id.action_feed:
@@ -199,7 +199,7 @@ public class LandingViewModel extends BaseViewModel {
 
     public void setToolTip() {
         if (!mDataManager.getAppPref().isProfileVisited()) {
-            libraryToolTip.set(getActivity().getResources().getString(R.string.library_tab));
+            libraryToolTip.set("  यहाँ सभी सामग्री पाएँ  ");
             toolTipGravity.set(Gravity.TOP);
             toolTipPosition.set(0);
 //            mDataManager.getAppPref().setProfileVisited(true);
