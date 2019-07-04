@@ -429,7 +429,7 @@ public class BindingAdapters {
 
     @BindingAdapter({"tool_tip", "tool_tip_gravity"})
     public static void showToolTip(View view, String message, int gravity) {
-        if (!ToolTipView.isToolTipAdded(view))
+        if (!MxTooltip.isToolTipAdded(view))
             if (message != null && !message.trim().equals("")) {
                 if (view instanceof MxFiniteRecyclerView) {
                     MxFiniteRecyclerView mxView = (MxFiniteRecyclerView) view;
@@ -486,7 +486,7 @@ public class BindingAdapters {
     public static void showToolTipPos(TabLayout view, String message, int gravity, int position) {
         view.post(() -> {
             View v = view.getChildAt(position);
-            if (v != null && !ToolTipView.isToolTipAdded(v))
+            if (v != null && !MxTooltip.isToolTipAdded(v))
                 if (message != null && !message.trim().equals(""))
 //                    ToolTipView.showToolTip(v.getContext(), message.trim(), v, gravity);
                     if (gravity == Gravity.TOP) {
@@ -517,7 +517,7 @@ public class BindingAdapters {
     public static void showToolTipPos(BottomNavigationView view, String message, int gravity, int position) {
         view.post(() -> {
             View v = view.findViewById(R.id.action_library);
-            if (v != null && !ToolTipView.isToolTipAdded(v))
+            if (v != null && !MxTooltip.isToolTipAdded(v))
                 if (message != null && !message.trim().equals(""))
 //                    ToolTipView.showToolTip(v.getContext(), message.trim(), v, gravity);
                     if (gravity == Gravity.TOP) {

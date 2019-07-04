@@ -159,16 +159,16 @@ public class CourseMaterialViewModel extends BaseViewModel {
             understandToolTipGravity = new ObservableInt(Gravity.TOP);
             mDataManager.getAppPref().setCourseVisited(true);
         }
-//        else {
-//            if (likeToolTip!=null)
-//                likeToolTip.set("");
-//
-//            if (downloadToolTip!=null)
-//                downloadToolTip.set("");
-//
+        else {
+            if (likeToolTip!=null)
+                likeToolTip.set("");
+
+            if (downloadToolTip!=null)
+                downloadToolTip.set("");
+
 //            if (understandToolTip!=null)
 //                understandToolTip.set("");
-//        }
+        }
 
     }
 
@@ -300,6 +300,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
                     public void onSuccess(ScormStartResponse data) {
                         if (data != null && data.isSuccess()) {
                             getUnitStatus();
+                            getContentStatus();
                         }
                     }
 
@@ -312,7 +313,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void deleteScorm(ScormBlockModel scorm) {
-//        setToolTip();
+        setToolTip();
         selectedScormForDelete = scorm;
         actionMode = ACTION_DELETE;
         mFragment.askForPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -330,6 +331,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void showScorm(ScormBlockModel scorm) {
+        setToolTip();
         selectedScormForPlay = scorm;
         actionMode = ACTION_PLAY;
         mFragment.askForPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -747,7 +749,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void downloadSingle(ScormBlockModel scorm){
-//        setToolTip();
+        setToolTip();
         downloadModeIsAll = false;
         selectedScormForDownload = scorm;
         actionMode = ACTION_DOWNLOAD;
@@ -840,7 +842,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void downloadAllRemaining(){
-//        setToolTip();
+        setToolTip();
         downloadModeIsAll = true;
         actionMode = ACTION_DOWNLOAD;
         mFragment.askForPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -1291,25 +1293,30 @@ public class CourseMaterialViewModel extends BaseViewModel {
                                 .into(itemBinding.itemImage);
 
                         if (unitStatusMap.containsKey(scorm.getId())){
-                            switch (UnitStatusType.valueOf(unitStatusMap.get(scorm.getId()).getStatus())){
-                                case InProgress:
-                                    itemBinding.itemStatus.setText(mActivity.getString(R.string.viewing));
-                                    itemBinding.itemStatus.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                                            R.drawable.t_icon_refresh, 0, 0, 0
-                                    );
-                                    itemBinding.itemStatus.setVisibility(View.VISIBLE);
-                                    break;
+                            try {
+                                switch (UnitStatusType.valueOf(unitStatusMap.get(scorm.getId()).getStatus())){
+                                    case InProgress:
+                                        itemBinding.itemStatus.setText(mActivity.getString(R.string.viewing));
+                                        itemBinding.itemStatus.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                                R.drawable.t_icon_refresh, 0, 0, 0
+                                        );
+                                        itemBinding.itemStatus.setVisibility(View.VISIBLE);
+                                        break;
 
-                                case Completed:
-                                    itemBinding.itemStatus.setText(mActivity.getString(R.string.viewed));
-                                    itemBinding.itemStatus.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                                            R.drawable.t_icon_done, 0, 0, 0
-                                    );
-                                    itemBinding.itemStatus.setVisibility(View.VISIBLE);
-                                    break;
+                                    case Completed:
+                                        itemBinding.itemStatus.setText(mActivity.getString(R.string.viewed));
+                                        itemBinding.itemStatus.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                                R.drawable.t_icon_done, 0, 0, 0
+                                        );
+                                        itemBinding.itemStatus.setVisibility(View.VISIBLE);
+                                        break;
 
-                                default:
-                                    itemBinding.itemStatus.setVisibility(View.GONE);
+                                    default:
+                                        itemBinding.itemStatus.setVisibility(View.GONE);
+                                }
+                            } catch (IllegalArgumentException e) {
+                                e.printStackTrace();
+                                itemBinding.itemStatus.setVisibility(View.GONE);
                             }
                         } else {
                             itemBinding.itemStatus.setVisibility(View.GONE);

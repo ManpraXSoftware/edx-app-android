@@ -990,7 +990,7 @@
 
     <string name="com.crashlytics.android.build_id" translatable="false">RANDOM_UUID</string>
     <string name="help">help</string>
-    <string name="search_tool_tip">Click here for Library </string>
+    <string name="search_tool_tip">Please choose your options.</string>
     <string name="selected_tool_tip">View in selected sequence </string>
     <string name="library_tabs_top">Click to perform different operations </string>
     <string name="library_tab">Get complete data from here </string>

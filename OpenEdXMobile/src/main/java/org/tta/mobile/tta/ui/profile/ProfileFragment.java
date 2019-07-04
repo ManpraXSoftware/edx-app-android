@@ -180,12 +180,12 @@ public class ProfileFragment extends TaBaseFragment {
                             appPref.setSettingsVisited(true);
                         }
 //                        viewModel.showToolTip();
-                        Toast.makeText(getActivity(), getResources().getString(R.string.app_tuts_activate), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), getResources().getString(R.string.app_tuts_activate), Toast.LENGTH_SHORT).show();
                         bottomSheet.dismiss();
 
 
                     } else {
-                        Toast.makeText(getActivity(), getResources().getString(R.string.app_tuts_already), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), getResources().getString(R.string.app_tuts_already), Toast.LENGTH_SHORT).show();
                         bottomSheet.dismiss();
                     }
                     break;

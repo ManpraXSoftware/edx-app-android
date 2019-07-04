@@ -68,7 +68,9 @@
             android:background="@color/white"
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
-            android:scrollbars="none">
+            android:scrollbars="none"
+            tool_tip="@{viewModel.searchToolTip}"
+            tool_tip_gravity="@{viewModel.toolTipGravity}">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -150,9 +152,7 @@
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="horizontal"
-                tool_tip="@{viewModel.searchToolTip}"
-                tool_tip_gravity="@{viewModel.toolTipGravity}">
+                android:orientation="horizontal">
 
                 <TextView
                     selected="@{viewModel.filterSelected.get()}"
@@ -174,9 +174,7 @@
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="horizontal"
-                tool_tip="@{viewModel.selectedToolTip}"
-                tool_tip_gravity="@{viewModel.selectedToolTipGravity}">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
