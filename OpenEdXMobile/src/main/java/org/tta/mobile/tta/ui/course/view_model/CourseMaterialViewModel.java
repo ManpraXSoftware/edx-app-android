@@ -105,8 +105,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
     public ObservableBoolean allDownloadProgressVisible = new ObservableBoolean(false);
     public ObservableField<String> description = new ObservableField<>("");
     public ObservableField<String> likes = new ObservableField<>("0");
-    public ObservableField<String> likeToolTip;
-    public ObservableField<String> downloadToolTip;
+    public ObservableField<String> likeToolTip = new ObservableField<>();
+    public ObservableField<String> downloadToolTip = new ObservableField<>();
     public ObservableField<String> understandToolTip;
     public ObservableInt toolTipGravity;
     public ObservableInt understandToolTipGravity;
@@ -147,27 +147,28 @@ public class CourseMaterialViewModel extends BaseViewModel {
         firstDownload = true;
         unitStatusMap = new HashMap<>();
         loadData();
-        setToolTip();
+//        setToolTip();
     }
 
     private void setToolTip(){
         if (!mDataManager.getAppPref().isCourseVisited()){
-            likeToolTip = new ObservableField<>("सामग्री को अपने लक्ष्य से \nजोड़ने के लिए बटन को दबाएँ ");
-            downloadToolTip = new ObservableField<>("सामग्री डाउनलोड करने \nके लिए बटन दबाएँ ");
+            likeToolTip.set(mActivity.getResources().getString(R.string.course_button));
+            downloadToolTip.set(mActivity.getResources().getString(R.string.course_download_button));
 //            understandToolTip = new ObservableField<>("सभी भाग देखने पर और 60% या उससे \nअधिक पाने पर आपको सर्टिफिकेट मिलेगा ");
             toolTipGravity = new ObservableInt(Gravity.BOTTOM);
             understandToolTipGravity = new ObservableInt(Gravity.TOP);
             mDataManager.getAppPref().setCourseVisited(true);
-        }else {
-            if (likeToolTip!=null)
-                likeToolTip.set("");
-
-            if (downloadToolTip!=null)
-                downloadToolTip.set("");
-
-            if (understandToolTip!=null)
-                understandToolTip.set("");
         }
+//        else {
+//            if (likeToolTip!=null)
+//                likeToolTip.set("");
+//
+//            if (downloadToolTip!=null)
+//                downloadToolTip.set("");
+//
+//            if (understandToolTip!=null)
+//                understandToolTip.set("");
+//        }
 
     }
 
@@ -179,6 +180,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
         }
 
         getContentStatus();
+        setToolTip();
 
         mDataManager.getTotalLikes(content.getId(), new OnResponseCallback<TotalLikeResponse>() {
             @Override
@@ -310,7 +312,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void deleteScorm(ScormBlockModel scorm) {
-        setToolTip();
+//        setToolTip();
         selectedScormForDelete = scorm;
         actionMode = ACTION_DELETE;
         mFragment.askForPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -489,6 +491,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
                             });
                         });
+
                         dialog.show();
 
                         break;
@@ -634,6 +637,10 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
             case GENERATED:
                 footerBtnText.set(mActivity.getString(R.string.view_certificate));
+                if (footerBtnText.get().equals(mActivity.getResources().getString(R.string.view_certificate))){
+                    Constants.IsCertificateExits = true;
+                }
+                break;
         }
     }
 
@@ -740,7 +747,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void downloadSingle(ScormBlockModel scorm){
-        setToolTip();
+//        setToolTip();
         downloadModeIsAll = false;
         selectedScormForDownload = scorm;
         actionMode = ACTION_DOWNLOAD;
@@ -833,7 +840,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void downloadAllRemaining(){
-        setToolTip();
+//        setToolTip();
         downloadModeIsAll = true;
         actionMode = ACTION_DOWNLOAD;
         mFragment.askForPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},

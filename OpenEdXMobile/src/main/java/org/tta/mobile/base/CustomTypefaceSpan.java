@@ -53,7 +53,7 @@ public class CustomTypefaceSpan extends MetricAffectingSpan {
         tp.setFlags(tp.getFlags() | Paint.SUBPIXEL_TEXT_FLAG);
     }
 
-    public Typeface getTypeface() {
+    public Typeface getmTypeface() {
         return mTypeface;
     }
 }

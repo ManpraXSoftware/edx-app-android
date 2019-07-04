@@ -5,7 +5,9 @@ import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.Size;
 import android.support.annotation.StringRes;
+import android.util.TypedValue;
 import android.view.Gravity;
 
 import org.tta.mobile.R;
@@ -118,7 +120,8 @@ public class ToolTip {
         private CharSequence text;
         private int textGravity = Gravity.NO_GRAVITY;
         private int textColor = R.color.primary_cyan;
-        private float textSize = 80.0F;
+        private int textSize = 12;
+        private int unit = TypedValue.COMPLEX_UNIT_SP;
         private Typeface typeface = Typeface.SANS_SERIF;
         private int typefaceStyle = Typeface.NORMAL;
         private int lines = 0;
@@ -173,7 +176,7 @@ public class ToolTip {
         /**
          * Sets the text size in pixel for the tool tip. The default size is 13.
          */
-        public Builder withTextSize(float textSize) {
+        public Builder withTextSize(int textSize) {
             this.textSize = textSize;
             return this;
         }

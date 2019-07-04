@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
@@ -53,6 +54,11 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
     private float pivotX;
     private float pivotY;
 
+    private int screenSize;
+    private Boolean isNormalSize = false;
+    private Boolean isSmallSize = false;
+    private Boolean isLargeSize = false;
+
 
     @Nullable
     private OnToolTipClickedListener listener;
@@ -66,12 +72,15 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
         container.setOnClickListener(this);
 
         text = new TextView(context);
-        text.setPadding(toolTip.getLeftPadding(), toolTip.getTopPadding(),
-                toolTip.getRightPadding(), toolTip.getBottomPadding());
+//        text.setPadding(toolTip.getLeftPadding(), toolTip.getTopPadding(),
+//                toolTip.getRightPadding(), toolTip.getBottomPadding());
         text.setGravity(toolTip.getTextGravity());
         text.setTextColor(toolTip.getTextColor());
         text.setTextSize(TypedValue.COMPLEX_UNIT_PX, toolTip.getTextSize());
         text.setTypeface(toolTip.getTypeface(), toolTip.getTypefaceStyle());
+
+        screenSize = context.getResources().getConfiguration().screenLayout &
+                Configuration.SCREENLAYOUT_SIZE_MASK;
 
         final int lines = toolTip.getLines();
         if (lines > 0) {
@@ -92,13 +101,15 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
             drawable.setCornerRadius(radius);
 
             //noinspection
-            text.setBackgroundDrawable(drawable);
+            text.setBackground(drawable);
+//            text.setBackgroundDrawable(drawable);
         } else {
             text.setBackgroundColor(backgroundColor);
         }
 
         arrow = new ImageView(context);
         arrow.setColorFilter(new PorterDuffColorFilter(backgroundColor, PorterDuff.Mode.MULTIPLY));
+
 
         // TODO supports Gravity.NO_GRAVITY
         switch (gravity) {
@@ -111,6 +122,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 break;
             case Gravity.RIGHT:
                 container.setOrientation(LinearLayout.HORIZONTAL);
+                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                 text.setBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light));
                 arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_arrow_forward_cyan_24dp));
                 container.addView(arrow, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -118,32 +130,36 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 break;
             case Gravity.TOP:
                 container.setOrientation(LinearLayout.VERTICAL);
+                container.setPadding(10,10,0,0);
 //                text.setBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light));
-                container.addView(text, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                text.setPadding(10,0,10,0);
+                container.addView(text, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
                 arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.down_arrow));
                 arrow.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.arrow_background_tint));
-                container.addView(arrow, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                container.addView(arrow, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
                 break;
-//            case Gravity.BOTTOM:
-//                container.setOrientation(LinearLayout.VERTICAL);
-//                arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.ic_arrow_downward_black_24dp));
-//                container.addView(arrow, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-//                container.addView(text, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-//                break;
 
             case Gravity.BOTTOM:
                 container.setOrientation(LinearLayout.VERTICAL);
 //                arrow.setVisibility(View.GONE);
 //                text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_subdirectory_arrow_right_black_24dp, 0, 0, 0);
                 text.setGravity(Gravity.BOTTOM);
+                container.setPadding(10,0,10,0);
+                text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
 //                text.setBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light));
+                text.setPadding(10,0,10,0);
                 arrow.setBackground(ContextCompat.getDrawable(context, R.drawable.up_arrow));
                 arrow.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.arrow_background_tint));
-                LinearLayout.LayoutParams layoutParams =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams layoutParams =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
 //                layoutParams.setMargins(0,20,0,0);
                 container.addView(arrow, layoutParams);
                 container.addView(text, new LinearLayout.LayoutParams(layoutParams));
                 break;
+
         }
 
         popupWindow = new PopupWindow(container, ViewGroup.LayoutParams.MATCH_PARENT,
@@ -165,9 +181,8 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 .withTypefaceStyle(R.font.hind_semibold)
                 .withCornerRadius(8.0f)
                 .withBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light))
-                .withPadding(15, 15, 15, 15)
-                .withTextSize(25)
-                .withTextColor(ContextCompat.getColor(context, R.color.primary_cyan))
+                .withTextColor(ContextCompat
+                        .getColor(context, R.color.primary_cyan))
                 .build();
 
         ToolTipView toolTipView1 = new Builder(context)
@@ -176,12 +191,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 .withGravity(gravity)
                 .build();
         viewsList.add(new WeakReference<>(toolTipView1));
-        toolTipView1.setOnToolTipClickedListener(new OnToolTipClickedListener() {
-            @Override
-            public void onToolTipClicked(ToolTipView toolTipView) {
-                removeAll();
-            }
-        });
+        toolTipView1.setOnToolTipClickedListener(toolTipView -> removeAll());
         toolTipView1.show();
 
     }
@@ -192,9 +202,9 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 .withText(msg)
                 .withBackgroundColor(ContextCompat.getColor(context, R.color.white_list_clicked))
                 .withPadding(15, 15, 15, 15)
-                .withTextSize(55.0f)
                 .withTextColor(ContextCompat.getColor(context, R.color.primary_cyan))
                 .build();
+
         ToolTipView toolTipView1 = new ToolTipView.Builder(context)
                 .withAnchor(view)
                 .withToolTip(toolTip1)
@@ -203,36 +213,10 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
         toolTipView1.show();
     }
 
-
-//    public static ToolTipView showToolTipNav(Context context, String msg, int gravity) {
-//        LayoutInflater inflate = (LayoutInflater)
-//                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View v = inflate.inflate(R.layout.tooltip_tut_bar, null);
-//        TextView tv = v.findViewById(R.id.tv_tooltip);
-//        tv.setText(msg);
-//        ToolTip toolTip1 = new ToolTip.Builder()
-//                .withText(msg)
-//                .withBackgroundColor(ContextCompat.getColor(context, R.color.white_list_clicked))
-//                .withPadding(15,15,15,15)
-//                .withTextSize(55.0f)
-//                .withTextColor(ContextCompat.getColor(context, R.color.primary_cyan))
-//                .build();
-//
-//        ToolTipView result = new ToolTipView(context,v, gravity, toolTip1);
-//
-//        ToolTipView toolTipView1 = new ToolTipView.Builder(context)
-//                .withAnchor(v)
-//                .withToolTip(toolTip1)
-//                .withGravity(gravity)
-//                .build();
-//        toolTipView1.show();
-//        result.text.setText(msg);
-//        return result;
-//    }
-
     /**
      * Shows the tool tip.
      */
+
     @UiThread
     public void show() {
         popupWindow.showAsDropDown(anchorView);
@@ -279,7 +263,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
     }
 
     @UiThread
-    public static void removeAll() {
+    private static void removeAll() {
         for (WeakReference<ToolTipView> view : viewsList) {
             if (view != null && view.get() != null) {
                 view.get().remove(view.get().anchorView);
@@ -315,79 +299,135 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
         final int anchorHeight = anchorView.getHeight();
 
         final int textWidth = text.getWidth();
-        final int textHeight = text.getHeight();
+        int textHeight = text.getHeight();
         final int arrowWidth = arrow.getWidth();
-        final int arrowHeight = arrow.getHeight();
+        int arrowHeight = arrow.getHeight();
 
-        if (gravity == Gravity.TOP || gravity == Gravity.BOTTOM) {
-            final int width = Math.max(textWidth, arrowWidth);
-            final int height = textHeight + arrowHeight;
+       /* if(textHeight==0)
+            textHeight=77;
 
-            final int leftPadding;
-            final int topPadding;
+        if(arrowHeight==0)
+            arrowHeight=78;*/
 
-            if (gravity == Gravity.TOP) {
-                topPadding = anchorTop - height;
-            } else {
-                // gravity == Gravity.BOTTOM
-                topPadding = anchorTop + anchorHeight;
-            }
+       if (arrowHeight == 0 && textHeight == 0){
+           if (gravity == Gravity.TOP || gravity == Gravity.BOTTOM){
+               final int width = Math.max(textWidth, arrowWidth);
+               final int height = textHeight + arrowHeight;
 
-            final int anchorHorizontalCenter = anchorLeft + anchorWidth / 2;
-            final int left = anchorHorizontalCenter - width / 2;
-            final int right = left + width;
-            leftPadding = Math.max(0, right > displayWidth ? displayWidth - width : left);
+               final int leftPadding;
+               final int topPadding;
 
-            container.setPadding(leftPadding, topPadding, 0, 0);
+               if (gravity == Gravity.TOP) {
+                   topPadding = anchorTop - height;
+               } else {
+                   // gravity == Gravity.BOTTOM
+                   topPadding = anchorTop + anchorHeight;
+               }
 
-            final ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) arrow.getLayoutParams();
-            layoutParams.leftMargin = anchorHorizontalCenter - leftPadding - arrowWidth / 2;
-            arrow.setLayoutParams(layoutParams);
+               final int anchorHorizontalCenter = anchorLeft + anchorWidth / 2;
+               final int left = anchorHorizontalCenter - width / 2;
+               final int right = left + width;
+               leftPadding = Math.max(0, right > displayWidth ? displayWidth - width : left);
 
-            pivotX = anchorHorizontalCenter;
-            pivotY = gravity == Gravity.TOP ? anchorTop : topPadding;
-        } else {
-            // gravity == Gravity.LEFT || gravity == Gravity.RIGHT
+               container.setPadding(leftPadding, 0, 0, 0);
 
-            final int width = textWidth + arrowWidth;
-            final int height = Math.max(textHeight, arrowHeight);
+               final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) arrow.getLayoutParams();
+               layoutParams.leftMargin = anchorHorizontalCenter - leftPadding - arrowWidth / 2;
+               arrow.setLayoutParams(layoutParams);
 
-            final int leftPadding;
-            final int topPadding;
-            final int rightPadding;
+               pivotX = anchorHorizontalCenter;
+               pivotY = gravity;
+               container.setAlpha(0.0F);
+               container.setPivotX(pivotX);
+               container.setPivotY(pivotY);
+               container.setScaleX(0.0F);
+               container.setScaleY(0.0F);
+               container.animate()
+                       .setDuration(ANIMATION_DURATION)
+                       .alpha(1.0F)
+                       .scaleX(1.0F)
+                       .scaleY(1.0F);
 
-            if (gravity == Gravity.LEFT) {
-                leftPadding = Math.max(0, anchorLeft - width);
-                rightPadding = displayWidth - anchorLeft;
-                text.setMaxWidth(displayWidth - rightPadding - leftPadding - arrowWidth);
-            } else {
-                // gravity == Gravity.RIGHT
+           }
+       }else {
 
-                leftPadding = anchorLeft + anchorWidth;
-                rightPadding = 0;
-            }
+           if (gravity == Gravity.TOP || gravity == Gravity.BOTTOM) {
+               final int width = Math.max(textWidth, arrowWidth);
+               final int height = textHeight + arrowHeight;
 
-            final int anchorVerticalCenter = anchorTop + anchorHeight / 2;
-            final int top = anchorVerticalCenter - height / 2;
-            final int bottom = top + height;
-            topPadding = Math.max(0, bottom > displayHeight ? displayHeight - height : top);
+               final int leftPadding;
+               final int topPadding;
 
-            container.setPadding(leftPadding, topPadding, rightPadding, 0);
+               if (gravity == Gravity.TOP) {
+                   topPadding = anchorTop - height;
+               } else {
+                   // gravity == Gravity.BOTTOM
+                   topPadding = anchorTop + anchorHeight;
+               }
 
-            final ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) arrow.getLayoutParams();
-            layoutParams.topMargin = anchorVerticalCenter - topPadding - arrowHeight / 2;
-            arrow.setLayoutParams(layoutParams);
+               final int anchorHorizontalCenter = anchorLeft + anchorWidth / 2;
+               final int left = anchorHorizontalCenter - width / 2;
+               final int right = left + width;
+               leftPadding = Math.max(0, right > displayWidth ? displayWidth - width : left);
 
-            pivotX = gravity == Gravity.LEFT ? anchorLeft : leftPadding;
-            pivotY = anchorVerticalCenter;
-        }
+               container.setPadding(leftPadding, topPadding, 0, 0);
 
-        container.setAlpha(0.0F);
-        container.setPivotX(pivotX);
-        container.setPivotY(pivotY);
-        container.setScaleX(0.0F);
-        container.setScaleY(0.0F);
-        container.animate().setDuration(ANIMATION_DURATION).alpha(1.0F).scaleX(1.0F).scaleY(1.0F);
+               final ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) arrow.getLayoutParams();
+               layoutParams.leftMargin = anchorHorizontalCenter - leftPadding - arrowWidth / 2;
+               arrow.setLayoutParams(layoutParams);
+
+               pivotX = anchorHorizontalCenter;
+               pivotY = gravity == Gravity.TOP ? anchorTop : topPadding;
+
+           } else {
+               // gravity == Gravity.LEFT || gravity == Gravity.RIGHT
+
+               final int width = textWidth + arrowWidth;
+               final int height = Math.max(textHeight, arrowHeight);
+
+               final int leftPadding;
+               final int topPadding;
+               final int rightPadding;
+
+               if (gravity == Gravity.LEFT) {
+                   leftPadding = Math.max(0, anchorLeft - width);
+                   rightPadding = displayWidth - anchorLeft;
+                   text.setMaxWidth(displayWidth - rightPadding - leftPadding - arrowWidth);
+               } else {
+                   // gravity == Gravity.RIGHT
+
+                   leftPadding = anchorLeft + anchorWidth;
+                   rightPadding = 0;
+               }
+
+               final int anchorVerticalCenter = anchorTop + anchorHeight / 2;
+               final int top = anchorVerticalCenter - height / 2;
+               final int bottom = top + height;
+               topPadding = Math.max(0, bottom > displayHeight ? displayHeight - height : top);
+
+               container.setPadding(leftPadding, topPadding, rightPadding, 0);
+
+               final ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) arrow.getLayoutParams();
+               layoutParams.topMargin = anchorVerticalCenter - topPadding - arrowHeight / 2;
+               arrow.setLayoutParams(layoutParams);
+
+               pivotX = gravity == Gravity.LEFT ? anchorLeft : leftPadding;
+               pivotY = anchorVerticalCenter;
+
+               container.setAlpha(0.0F);
+               container.setPivotX(pivotX);
+               container.setPivotY(pivotY);
+               container.setScaleX(0.0F);
+               container.setScaleY(0.0F);
+               container.animate()
+                       .setDuration(ANIMATION_DURATION)
+                       .alpha(1.0F)
+                       .scaleX(1.0F)
+                       .scaleY(1.0F);
+
+           }
+       }
+
 
         return false;
     }

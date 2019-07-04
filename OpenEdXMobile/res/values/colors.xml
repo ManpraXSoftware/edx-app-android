@@ -112,4 +112,10 @@
 
     <color name="transparent">#00FFFFFF</color>
     <!--  TTA color palette end  -->
+
+    <!--Added for mx_tooltip start-->
+    <color name="mx_tooltip_background">@color/cyan_light</color>
+    <color name="mx_tooltip_text">#51c6f0</color>
+    <color name="mx_tooltip_arrow">@color/colorAccent</color>
+    <!--Added for mx_tooltip end-->
 </resources>

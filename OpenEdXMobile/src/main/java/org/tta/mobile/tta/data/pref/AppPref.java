@@ -48,6 +48,15 @@ public class AppPref {
         prefManager.put(PrefManager.Key.IS_PROFILE_VISITED, profileVisited);
     }
 
+    public boolean isSettingVisited() {
+        return prefManager.getBoolean(PrefManager.Key.IS_Setting_VISITED, false);
+    }
+    public void setSettingsVisited(boolean settingsVisited) {
+        prefManager.put(PrefManager.Key.IS_Setting_VISITED, settingsVisited);
+    }
+
+
+
     public boolean isAgendaVisited() {
         return prefManager.getBoolean(PrefManager.Key.IS_AGENDA_VISITED, false);
     }

@@ -4,6 +4,7 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.MenuItem;
 
@@ -14,6 +15,7 @@ import org.tta.mobile.tta.event.ContentStatusReceivedEvent;
 import org.tta.mobile.tta.event.ContentStatusesReceivedEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.scorm.Migration280719;
+import org.tta.mobile.tta.tutorials.MxTooltip;
 import org.tta.mobile.tta.ui.agenda.AgendaFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
@@ -29,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
-
 public class LandingViewModel extends BaseViewModel {
 
     private int selectedId = R.id.action_library;
@@ -50,37 +51,79 @@ public class LandingViewModel extends BaseViewModel {
         if (item.getItemId() == selectedId) {
             return true;
         }
+
         switch (item.getItemId()) {
             case R.id.action_library:
                 showLibrary();
                 selectedId = R.id.action_library;
 //                ToolTipView.showToolTip(getActivity(), "यहाँ सभी सामग्री पाए",mActivity.findViewById(R.id.action_library),Gravity.TOP);
+                if (!mDataManager.getAppPref().isProfileVisited()) {
+                    new MxTooltip.Builder(mActivity)
+                            .anchorView(mActivity.findViewById(R.id.action_library))
+                            .text("यहाँ सभी सामग्री पाएँ")
+                            .gravity(Gravity.TOP)
+                            .animated(true)
+                            .transparentOverlay(true)
+                            .arrowDrawable(R.drawable.down_arrow)
+                            .build()
+                            .show();
+//                    ToolTipView.showToolTip(getActivity(), "  यहाँ सभी सामग्री पाएँ  "  , mActivity.findViewById(R.id.action_library), Gravity.TOP);
+                }
                 return true;
             case R.id.action_feed:
                 selectedId = R.id.action_feed;
                 showFeed();
                 if (!mDataManager.getAppPref().isFeedVisited()) {
-                    ToolTipView.showToolTip(getActivity(), "यहाँ अन्य शिक्षको के साथ जुड़े ", mActivity.findViewById(R.id.action_feed), Gravity.TOP);
+                    new MxTooltip.Builder(mActivity)
+                            .anchorView(mActivity.findViewById(R.id.action_feed))
+                            .text(getActivity().getResources().getString(R.string.feed_tab))
+                            .gravity(Gravity.TOP)
+                            .animated(true)
+                            .transparentOverlay(true)
+                            .arrowDrawable(R.drawable.down_arrow)
+                            .build()
+                            .show();
+//                    ToolTipView.showToolTip(getActivity(), getActivity().getResources().getString(R.string.feed_tab), mActivity.findViewById(R.id.action_feed), Gravity.TOP);
                 }
+
+
                 return true;
             case R.id.action_search:
                 selectedId = R.id.action_search;
                 if (!mDataManager.getAppPref().isSearchVisited()) {
-                    ToolTipView.showToolTip(getActivity(), "यहाँ अपनी रूचि के अनुसार सामग्री खोजे ", mActivity.findViewById(R.id.action_search), Gravity.TOP);
+                    new MxTooltip.Builder(mActivity)
+                            .anchorView(mActivity.findViewById(R.id.action_search))
+                            .text(getActivity().getResources().getString(R.string.search_tab))
+                            .gravity(Gravity.TOP)
+                            .animated(true)
+                            .transparentOverlay(true)
+                            .arrowDrawable(R.drawable.down_arrow)
+                            .build()
+                            .show();
+//                    ToolTipView.showToolTip(getActivity(),getActivity().getResources().getString(R.string.search_tab) , mActivity.findViewById(R.id.action_search), Gravity.TOP);
                 }
                 showSearch();
                 return true;
             case R.id.action_agenda:
                 selectedId = R.id.action_agenda;
                 if (!mDataManager.getAppPref().isAgendaVisited()) {
-                    ToolTipView.showToolTip(getActivity(), "यहाँ अपना लक्ष्य जाने और बनायें ", mActivity.findViewById(R.id.action_agenda), Gravity.TOP);
+                    new MxTooltip.Builder(mActivity)
+                            .anchorView(mActivity.findViewById(R.id.action_agenda))
+                            .text(getActivity().getResources().getString(R.string.agenda_tab))
+                            .gravity(Gravity.TOP)
+                            .animated(true)
+                            .transparentOverlay(true)
+                            .arrowDrawable(R.drawable.down_arrow)
+                            .build()
+                            .show();
+//                    ToolTipView.showToolTip(getActivity(), getActivity().getResources().getString(R.string.agenda_tab), mActivity.findViewById(R.id.action_agenda), Gravity.TOP);
                 }
                 showAgenda();
                 return true;
             case R.id.action_profile:
                 selectedId = R.id.action_profile;
 //                if (!mDataManager.getAppPref().isProfileVisited()) {
-//                    ToolTipView.showToolTip(getActivity(), "रूपरेखा",mActivity.findViewById(R.id.action_profile),Gravity.TOP);
+////                    ToolTipView.showToolTip(getActivity(), "रूपरेखा",mActivity.findViewById(R.id.action_profile),Gravity.TOP);
 //                }
                 showProfile();
                 return true;
@@ -189,7 +232,7 @@ public class LandingViewModel extends BaseViewModel {
 
     public void setToolTip() {
         if (!mDataManager.getAppPref().isProfileVisited()) {
-            libraryToolTip.set("यहाँ सभी सामग्री पाएँ ");
+            libraryToolTip.set("  यहाँ सभी सामग्री पाएँ  ");
             toolTipGravity.set(Gravity.TOP);
             toolTipPosition.set(0);
 //            mDataManager.getAppPref().setProfileVisited(true);

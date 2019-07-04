@@ -34,6 +34,7 @@ import com.maurya.mx.mxlib.view.MxFiniteRecyclerView;
 import com.maurya.mx.mxlib.view.MxRecyclerView;
 
 import org.tta.mobile.R;
+import org.tta.mobile.tta.tutorials.MxTooltip;
 import org.tta.mobile.tta.ui.base.BaseArrayAdapter;
 import org.tta.mobile.tta.ui.custom.DropDownFilterView;
 import org.tta.mobile.tta.ui.custom.FormEditText;
@@ -432,9 +433,51 @@ public class BindingAdapters {
             if (message != null && !message.trim().equals("")) {
                 if (view instanceof MxFiniteRecyclerView) {
                     MxFiniteRecyclerView mxView = (MxFiniteRecyclerView) view;
-                    ToolTipView.showToolTip(mxView.getContext(), message.trim(), mxView.getTitleTextView(), gravity);
+                    if (gravity == Gravity.TOP) {
+                        new MxTooltip.Builder(mxView.getContext())
+                                .anchorView(mxView.getTitleTextView())
+                                .text(message.trim())
+                                .gravity(gravity)
+                                .animated(true)
+                                .transparentOverlay(true)
+                                .arrowDrawable(R.drawable.down_arrow)
+                                .build()
+                                .show();
+                    }else {
+                        new MxTooltip.Builder(mxView.getContext())
+                                .anchorView(mxView.getTitleTextView())
+                                .text(message.trim())
+                                .gravity(gravity)
+                                .animated(true)
+                                .transparentOverlay(true)
+                                .arrowDrawable(R.drawable.up_arrow)
+                                .build()
+                                .show();
+                    }
+//                    ToolTipView.showToolTip(mxView.getContext(), message.trim(), mxView.getTitleTextView(), gravity);
                 } else {
-                    ToolTipView.showToolTip(view.getContext(), message.trim(), view, gravity);
+                    if (gravity == Gravity.TOP) {
+                        new MxTooltip.Builder(view.getContext())
+                                .anchorView(view)
+                                .text(message.trim())
+                                .gravity(gravity)
+                                .animated(true)
+                                .transparentOverlay(true)
+                                .arrowDrawable(R.drawable.down_arrow)
+                                .build()
+                                .show();
+                    }else {
+                        new MxTooltip.Builder(view.getContext())
+                                .anchorView(view)
+                                .text(message.trim())
+                                .gravity(gravity)
+                                .animated(true)
+                                .transparentOverlay(true)
+                                .arrowDrawable(R.drawable.up_arrow)
+                                .build()
+                                .show();
+                    }
+//                    ToolTipView.showToolTip(view.getContext(), message.trim(), view, gravity);
                 }
             }
     }
@@ -445,7 +488,28 @@ public class BindingAdapters {
             View v = view.getChildAt(position);
             if (v != null && !ToolTipView.isToolTipAdded(v))
                 if (message != null && !message.trim().equals(""))
-                    ToolTipView.showToolTip(v.getContext(), message.trim(), v, gravity);
+//                    ToolTipView.showToolTip(v.getContext(), message.trim(), v, gravity);
+                    if (gravity == Gravity.TOP) {
+                        new MxTooltip.Builder(v.getContext())
+                                .anchorView(v)
+                                .text(message.trim())
+                                .gravity(gravity)
+                                .animated(true)
+                                .transparentOverlay(true)
+                                .arrowDrawable(R.drawable.down_arrow)
+                                .build()
+                                .show();
+                    }else {
+                        new MxTooltip.Builder(v.getContext())
+                                .anchorView(v)
+                                .text(message.trim())
+                                .gravity(gravity)
+                                .animated(true)
+                                .transparentOverlay(true)
+                                .arrowDrawable(R.drawable.up_arrow)
+                                .build()
+                                .show();
+                    }
         });
     }
 
@@ -455,7 +519,28 @@ public class BindingAdapters {
             View v = view.findViewById(R.id.action_library);
             if (v != null && !ToolTipView.isToolTipAdded(v))
                 if (message != null && !message.trim().equals(""))
-                    ToolTipView.showToolTip(v.getContext(), message.trim(), v, gravity);
+//                    ToolTipView.showToolTip(v.getContext(), message.trim(), v, gravity);
+                    if (gravity == Gravity.TOP) {
+                        new MxTooltip.Builder(v.getContext())
+                                .anchorView(v)
+                                .text(message.trim())
+                                .gravity(gravity)
+                                .animated(true)
+                                .transparentOverlay(true)
+                                .arrowDrawable(R.drawable.down_arrow)
+                                .build()
+                                .show();
+                    }else {
+                        new MxTooltip.Builder(v.getContext())
+                                .anchorView(v)
+                                .text(message.trim())
+                                .gravity(gravity)
+                                .animated(true)
+                                .transparentOverlay(true)
+                                .arrowDrawable(R.drawable.up_arrow)
+                                .build()
+                                .show();
+                    }
         });
     }
 
