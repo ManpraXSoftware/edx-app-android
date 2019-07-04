@@ -101,7 +101,8 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
             drawable.setCornerRadius(radius);
 
             //noinspection
-            text.setBackgroundDrawable(drawable);
+            text.setBackground(drawable);
+//            text.setBackgroundDrawable(drawable);
         } else {
             text.setBackgroundColor(backgroundColor);
         }
@@ -109,19 +110,6 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
         arrow = new ImageView(context);
         arrow.setColorFilter(new PorterDuffColorFilter(backgroundColor, PorterDuff.Mode.MULTIPLY));
 
-
-//        switch(screenSize) {
-//            case Configuration.SCREENLAYOUT_SIZE_LARGE:
-//                isLargeSize = true;
-//                break;
-//            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
-//                isNormalSize = true;
-//                break;
-//            case Configuration.SCREENLAYOUT_SIZE_SMALL:
-//                isSmallSize = true;
-//                break;
-//            default:
-//        }
 
         // TODO supports Gravity.NO_GRAVITY
         switch (gravity) {
@@ -171,6 +159,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 container.addView(arrow, layoutParams);
                 container.addView(text, new LinearLayout.LayoutParams(layoutParams));
                 break;
+
         }
 
         popupWindow = new PopupWindow(container, ViewGroup.LayoutParams.MATCH_PARENT,
@@ -193,9 +182,9 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
                 .withCornerRadius(8.0f)
                 .withBackgroundColor(ContextCompat.getColor(context, R.color.cyan_light))
                 .withPadding(15, 15, 15, 15)
-                .withTextColor(ContextCompat.getColor(context, R.color.primary_cyan))
+                .withTextColor(ContextCompat
+                        .getColor(context, R.color.primary_cyan))
                 .build();
-
 
         ToolTipView toolTipView1 = new Builder(context)
                 .withAnchor(view)
@@ -225,10 +214,10 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
         toolTipView1.show();
     }
 
-
     /**
      * Shows the tool tip.
      */
+
     @UiThread
     public void show() {
         popupWindow.showAsDropDown(anchorView);
@@ -275,7 +264,7 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
     }
 
     @UiThread
-    public static void removeAll() {
+    private static void removeAll() {
         for (WeakReference<ToolTipView> view : viewsList) {
             if (view != null && view.get() != null) {
                 view.get().remove(view.get().anchorView);
@@ -384,7 +373,10 @@ public class ToolTipView implements ViewTreeObserver.OnPreDrawListener, View.OnC
             container.setScaleX(0.0F);
             container.setScaleY(0.0F);
             container.animate()
-                    .setDuration(ANIMATION_DURATION).alpha(1.0F).scaleX(1.0F).scaleY(1.0F);
+                    .setDuration(ANIMATION_DURATION)
+                    .alpha(1.0F)
+                    .scaleX(1.0F)
+                    .scaleY(1.0F);
 
         return false;
     }

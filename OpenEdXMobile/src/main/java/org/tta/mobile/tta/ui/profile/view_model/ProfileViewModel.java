@@ -63,7 +63,7 @@ public class ProfileViewModel extends BaseViewModel {
         fetchAccount();
         fetchFilters();
         fetchCertificates();
-        showToolTip();
+//        showToolTip();
 //        adapter.setItems(setbadge());
 
     }
@@ -73,7 +73,7 @@ public class ProfileViewModel extends BaseViewModel {
         super.onResume();
         refreshFromLocal();
         setDetails();
-        showToolTip();
+//        showToolTip();
     }
 
     /*private List<Badge> setbadge(){
