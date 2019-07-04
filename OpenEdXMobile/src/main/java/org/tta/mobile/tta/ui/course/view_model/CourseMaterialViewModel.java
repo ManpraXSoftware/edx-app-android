@@ -55,6 +55,7 @@ import org.tta.mobile.tta.event.DownloadFailedEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.scorm.PDFBlockModel;
 import org.tta.mobile.tta.scorm.ScormBlockModel;
+import org.tta.mobile.tta.scorm.ScormStartResponse;
 import org.tta.mobile.tta.tincan.Tincan;
 import org.tta.mobile.tta.ui.base.BaseRecyclerAdapter;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
@@ -215,20 +216,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
             }
         });
 
-        mDataManager.getUnitStatus(content.getSource_identity(), new OnResponseCallback<List<UnitStatus>>() {
-            @Override
-            public void onSuccess(List<UnitStatus> data) {
-                for (UnitStatus status: data){
-                    unitStatusMap.put(status.getUnit_id(), status);
-                }
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-
-            }
-        });
+        getUnitStatus();
 
         fetchCourseComponent();
 
@@ -283,6 +271,44 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
     }
 
+    private void getUnitStatus(){
+
+        mDataManager.getUnitStatus(content.getSource_identity(), new OnResponseCallback<List<UnitStatus>>() {
+            @Override
+            public void onSuccess(List<UnitStatus> data) {
+                for (UnitStatus status: data){
+                    unitStatusMap.put(status.getUnit_id(), status);
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+
+    }
+
+    private void startScorm(String blockId){
+
+        mDataManager.startScorm(content.getSource_identity(), blockId,
+                new OnResponseCallback<ScormStartResponse>() {
+                    @Override
+                    public void onSuccess(ScormStartResponse data) {
+                        if (data != null && data.isSuccess()) {
+                            getUnitStatus();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
+
+    }
+
     private void deleteScorm(ScormBlockModel scorm) {
         setToolTip();
         selectedScormForDelete = scorm;
@@ -325,7 +351,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
             parameters.putString(Constants.KEY_UNIT_ID, selectedScormForPlay.getId());
             ActivityUtil.gotoPage(mActivity, CourseScormViewActivity.class, parameters);
 
-            mDataManager.startScorm(content.getSource_identity(), selectedScormForPlay.getId(), null);
+            startScorm(selectedScormForPlay.getId());
 
         } else if (selectedScormForPlay.getType().equals(BlockType.PDF)) {
             ActivityUtil.viewPDF(mActivity, new File(filePath));
@@ -748,7 +774,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
                     adapter.notifyDataSetChanged();
                 }
 
-                if (contentStatus == null && firstDownload){
+                /*if (contentStatus == null && firstDownload){
                     firstDownload = false;
                     ContentStatus status = new ContentStatus();
                     status.setContent_id(content.getId());
@@ -768,7 +794,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
                                 }
                             });
-                }
+                }*/
+
+                startScorm(selectedScormForDownload.getId());
 
                 mActivity.analytic.addMxAnalytics_db(
                         selectedScormForDownload.getInternalName(), Action.StartScormDownload, content.getName(),
@@ -863,6 +891,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
                         }
 
                         for (ScormBlockModel model: remainingScorms){
+
+                            startScorm(model.getId());
 
                             mActivity.analytic.addMxAnalytics_db(
                                     model.getInternalName(), Action.StartScormDownload, content.getName(),
