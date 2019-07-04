@@ -19,6 +19,7 @@ import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
 import org.tta.mobile.tta.data.pref.AppPref;
+import org.tta.mobile.tta.tutorials.MxTooltip;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.profile.view_model.ProfileViewModel;
 import org.tta.mobile.tta.utils.ActivityUtil;
@@ -159,8 +160,17 @@ public class ProfileFragment extends TaBaseFragment {
                         appPref.setCourseVisited(false);
                         appPref.setSettingsVisited(false);
                         if (!appPref.isSettingVisited()) {
-                            ToolTipView.showToolTip(view.getContext(), "  सेटिंग्स ऑप्शन के लिए यह बटन दबायें  ",
-                                    optionsBtn, Gravity.BOTTOM);
+                            new MxTooltip.Builder(v.getContext())
+                                    .anchorView(optionsBtn)
+                                    .text("सेटिंग्स ऑप्शन के लिए यह बटन दबायें")
+                                    .gravity(Gravity.BOTTOM)
+                                    .animated(true)
+                                    .transparentOverlay(true)
+                                    .arrowDrawable(R.drawable.up_arrow)
+                                    .build()
+                                    .show();
+//                            ToolTipView.showToolTip(view.getContext(), "  सेटिंग्स ऑप्शन के लिए यह बटन दबायें  ",
+//                                    optionsBtn, Gravity.BOTTOM);
                             appPref.setSettingsVisited(true);
                         }
 //                        viewModel.showToolTip();

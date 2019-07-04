@@ -19,6 +19,7 @@ import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.data.pref.AppPref;
+import org.tta.mobile.tta.tutorials.MxTooltip;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.course.view_model.CourseMaterialViewModel;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
@@ -96,13 +97,31 @@ public class CourseMaterialTab extends TaBaseFragment {
                                                 int lastVisiblePosition = ((LinearLayoutManager) layoutManager).findLastCompletelyVisibleItemPosition();
                                                 if (lastVisiblePosition == lastVisibleItemPosition) {
                                                     if (!Constants.IsCertificateExits) {
-                                                        ToolTipView.showToolTip(recyclerView.getContext(),
-                                                                getResources().getString(R.string.samjhe_parkhe_btn),
-                                                                holder.itemView.findViewById(R.id.item_btn), Gravity.TOP);
+                                                        new MxTooltip.Builder(recyclerView.getContext())
+                                                                .anchorView(holder.itemView.findViewById(R.id.item_btn))
+                                                                .text(getResources().getString(R.string.samjhe_parkhe_btn))
+                                                                .gravity(Gravity.TOP)
+                                                                .animated(true)
+                                                                .transparentOverlay(true)
+                                                                .arrowDrawable(R.drawable.down_arrow)
+                                                                .build()
+                                                                .show();
+//                                                        ToolTipView.showToolTip(recyclerView.getContext(),
+//                                                                getResources().getString(R.string.samjhe_parkhe_btn),
+//                                                                holder.itemView.findViewById(R.id.item_btn), Gravity.TOP);
                                                     }else {
-                                                        ToolTipView.showToolTip(recyclerView.getContext(),
-                                                                getResources().getString(R.string.certificate_btn),
-                                                                holder.itemView.findViewById(R.id.item_btn), Gravity.TOP);
+                                                        new MxTooltip.Builder(recyclerView.getContext())
+                                                                .anchorView(holder.itemView.findViewById(R.id.item_btn))
+                                                                .text(getResources().getString(R.string.certificate_btn))
+                                                                .gravity(Gravity.TOP)
+                                                                .animated(true)
+                                                                .transparentOverlay(true)
+                                                                .arrowDrawable(R.drawable.down_arrow)
+                                                                .build()
+                                                                .show();
+//                                                        ToolTipView.showToolTip(recyclerView.getContext(),
+//                                                                getResources().getString(R.string.certificate_btn),
+//                                                                holder.itemView.findViewById(R.id.item_btn), Gravity.TOP);
                                                     }
                                                     appPref.setCourseBottom(true);
                                                     isShown = true;

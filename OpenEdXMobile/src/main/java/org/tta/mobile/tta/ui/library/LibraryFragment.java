@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import org.tta.mobile.R;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.data.pref.AppPref;
+import org.tta.mobile.tta.tutorials.MxTooltip;
 import org.tta.mobile.tta.ui.base.BasePagerAdapter;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.interfaces.SearchPageOpenedListener;
@@ -61,8 +62,17 @@ public class LibraryFragment extends TaBaseFragment {
         tabLayout.post(() -> {
             if (!mAppPref.isProfileVisited()) {
 //                viewModel.setToolTip();
-                ToolTipView.showToolTip(getActivity(), getResources().getString(R.string.library_tabs_top),
-                        tabLayout, Gravity.BOTTOM);
+//                ToolTipView.showToolTip(getActivity(), getResources().getString(R.string.library_tabs_top),
+//                        tabLayout, Gravity.BOTTOM);
+                new MxTooltip.Builder(getActivity())
+                        .anchorView(tabLayout)
+                        .text(getResources().getString(R.string.library_tabs_top))
+                        .gravity(Gravity.BOTTOM)
+                        .animated(true)
+                        .transparentOverlay(true)
+                        .arrowDrawable(R.drawable.up_arrow)
+                        .build()
+                        .show();
                 mAppPref.setProfileVisited(true);
             }
         });

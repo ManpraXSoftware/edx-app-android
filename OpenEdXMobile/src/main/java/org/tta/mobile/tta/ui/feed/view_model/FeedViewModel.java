@@ -37,6 +37,7 @@ import org.tta.mobile.tta.data.model.StatusResponse;
 import org.tta.mobile.tta.data.model.feed.SuggestedUser;
 import org.tta.mobile.tta.event.UserFollowingChangedEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
+import org.tta.mobile.tta.tutorials.MxTooltip;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.connect.ConnectDashboardActivity;
@@ -666,7 +667,16 @@ public class FeedViewModel extends BaseViewModel {
 
                 if (getItemPosition(model) == 0) {
                     if (!mDataManager.getAppPref().isFeedVisited()) {
-                        ToolTipView.showToolTip(mActivity, "अन्य शिक्षको से जुड़ने के लिए फॉलो बटन दबाएँ ", teacherBinding.followBtn, Gravity.BOTTOM);
+                        new MxTooltip.Builder(mActivity)
+                                .anchorView(teacherBinding.followBtn)
+                                .text("अन्य शिक्षको से जुड़ने के लिए फॉलो बटन दबाएँ ")
+                                .gravity(Gravity.BOTTOM)
+                                .animated(true)
+                                .transparentOverlay(true)
+                                .arrowDrawable(R.drawable.up_arrow)
+                                .build()
+                                .show();
+//                        ToolTipView.showToolTip(mActivity, "अन्य शिक्षको से जुड़ने के लिए फॉलो बटन दबाएँ ", teacherBinding.followBtn, Gravity.BOTTOM);
                         mDataManager.getAppPref().setFeedVisited(true);
                     }
                 }
