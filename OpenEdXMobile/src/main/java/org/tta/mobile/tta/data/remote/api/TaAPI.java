@@ -150,6 +150,15 @@ public class TaAPI {
         return taService.search(parameters);
     }
 
+    public Call<List<SuggestedUser>> searchPeople(int take, int skip, String searchText) {
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put(Constants.KEY_TAKE, take);
+        parameters.put(Constants.KEY_SKIP, skip);
+        parameters.put(Constants.KEY_SEARCH_TEXT, searchText);
+
+        return taService.searchPeople(parameters);
+    }
+
     public Call<FeedbackResponse> submitFeedback(Bundle parameters){
         final Map<String, String> parameterMap = new HashMap<>();
         for (String key : parameters.keySet()) {

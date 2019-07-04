@@ -150,7 +150,7 @@ public class ProfileViewModel extends BaseViewModel {
                 if (accountReceived) {
                     setDetails();
                 }
-                mActivity.showLongSnack(e.getLocalizedMessage());
+//                mActivity.showLongSnack(e.getLocalizedMessage());
             }
         });
 

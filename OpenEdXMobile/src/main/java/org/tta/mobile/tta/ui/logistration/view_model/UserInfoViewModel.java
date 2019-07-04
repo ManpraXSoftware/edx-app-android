@@ -53,6 +53,10 @@ public class UserInfoViewModel extends BaseViewModel {
         dietCodes = new ArrayList<>();
     }
 
+    public void logout(){
+        mDataManager.logout();
+    }
+
     public void getBlocks(OnResponseCallback<List<RegistrationOption>> callback){
         Bundle parameters = new Bundle();
 
@@ -152,7 +156,7 @@ public class UserInfoViewModel extends BaseViewModel {
             @Override
             protected void onException(Exception ex) {
                 mActivity.hideLoading();
-                mActivity.showErrorDialog(null,"Your action could not be completed");
+                mActivity.showErrorDialog(null,mActivity.getString(R.string.action_not_completed));
             }
         }.execute();
 

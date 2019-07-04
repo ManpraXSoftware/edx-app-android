@@ -40,7 +40,6 @@ public class UserInfoActivity extends BaseVMActivity {
     private FormMultiSpinner classTaughtSpinner;
     private FormMultiSpinner skillsSpinner;
     private FormSpinner dietSpinner;
-    private FormSpinner organisationSpinner;
     private FormEditText etPmis;
     private Button btn;
     private TextView privacyLinkText;
@@ -71,17 +70,8 @@ public class UserInfoActivity extends BaseVMActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.signout_menu, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.action_signout:
-                mViewModel.getDataManager().logout();
-                return true;
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -167,7 +157,7 @@ public class UserInfoActivity extends BaseVMActivity {
         districtSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "District/जिला*", mViewModel.districts, null);
         districtSpinner.setMandatory(true);
 
-        blockSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Block/तहसील*", mViewModel.blocks, null);
+        blockSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Block/खंड*", mViewModel.blocks, null);
         blockSpinner.setMandatory(true);
 
         professionSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Profession/व्यवसाय*", mViewModel.professions, null);
@@ -189,7 +179,6 @@ public class UserInfoActivity extends BaseVMActivity {
         setCustomField(mViewModel.currentState, mViewModel.currentProfession);
 
         dietSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "DIET Code/डी आइ इ टी कोड", mViewModel.dietCodes, null);
-         organisationSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Organisation/संगठन", mViewModel.organisation, null);
         toggleDietCodeVisibility();
 
         btn = ViewUtil.addButton(userInfoLayout, getString(R.string.submit));

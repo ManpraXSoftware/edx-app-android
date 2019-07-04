@@ -207,7 +207,7 @@ public class DiscussionThreadViewModel extends BaseViewModel
         try {
             adapter.setFragments(fragments, titles);
         } catch (Exception e) {
-            mActivity.showLongSnack(e.getLocalizedMessage());
+            e.printStackTrace();
         }
 
         initialPosition.set(0);

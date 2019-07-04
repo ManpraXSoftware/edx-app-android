@@ -465,7 +465,24 @@ public class BindingAdapters {
     }
 
     @BindingAdapter({"drop_down_listener"})
-    public static void setDropDownItems(DropDownFilterView view, DropDownFilterView.OnFilterClickListener listener){
+    public static void setDropDownListener(DropDownFilterView view, DropDownFilterView.OnFilterClickListener listener){
         view.setOnFilterItemListener(listener);
+    }
+
+    @BindingAdapter({"drop_down_selection"})
+    public static void setDropDownSelection(DropDownFilterView view, int position){
+        view.setSelection(position);
+    }
+
+    @BindingAdapter({"drop_down_notify"})
+    public static void notifyDropDown(DropDownFilterView view, boolean notify){
+        if (notify) {
+            view.notifyDataSetChanged();
+        }
+    }
+
+    @BindingAdapter({"search_view_hint"})
+    public static void setSearchViewHint(SearchView view, String hint){
+        view.setQueryHint(hint);
     }
 }

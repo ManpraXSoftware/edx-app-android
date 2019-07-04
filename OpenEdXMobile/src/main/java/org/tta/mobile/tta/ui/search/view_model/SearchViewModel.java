@@ -16,7 +16,6 @@ import android.support.v7.widget.SearchView;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 
 import com.bumptech.glide.Glide;
 import com.maurya.mx.mxlib.core.MxFiniteAdapter;
@@ -25,7 +24,7 @@ import com.maurya.mx.mxlib.core.OnRecyclerItemClickListener;
 
 import org.tta.mobile.R;
 import org.tta.mobile.databinding.TRowAgendaContentBinding;
-import org.tta.mobile.databinding.TRowFilterSectionBinding;
+import org.tta.mobile.databinding.TRowFilterDropDownBinding;
 import org.tta.mobile.databinding.TRowFilterTagBinding;
 import org.tta.mobile.databinding.TRowSuggestedTeacherGridBinding;
 import org.tta.mobile.tta.Constants;
@@ -39,6 +38,7 @@ import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.data.local.db.table.ContentList;
 import org.tta.mobile.tta.data.local.db.table.ContentStatus;
 import org.tta.mobile.tta.data.local.db.table.Source;
+import org.tta.mobile.tta.data.model.StatusResponse;
 import org.tta.mobile.tta.data.model.feed.SuggestedUser;
 import org.tta.mobile.tta.data.model.library.CollectionConfigResponse;
 import org.tta.mobile.tta.data.model.search.FilterSection;
@@ -47,6 +47,7 @@ import org.tta.mobile.tta.data.model.search.SearchFilter;
 import org.tta.mobile.tta.data.model.search.TagSourceCount;
 import org.tta.mobile.tta.event.ContentStatusReceivedEvent;
 import org.tta.mobile.tta.event.ContentStatusesReceivedEvent;
+import org.tta.mobile.tta.event.UserFollowingChangedEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.assistant.AssistantFragment;
 import org.tta.mobile.tta.ui.base.BaseArrayAdapter;
@@ -55,6 +56,7 @@ import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.connect.ConnectDashboardActivity;
 import org.tta.mobile.tta.ui.course.CourseDashboardActivity;
 import org.tta.mobile.tta.ui.custom.DropDownFilterView;
+import org.tta.mobile.tta.ui.profile.OtherProfileActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.ContentSourceUtil;
 
@@ -100,7 +102,13 @@ public class SearchViewModel extends BaseViewModel {
     public ObservableBoolean tagsLayoutVisible = new ObservableBoolean();
     public ObservableInt selectedContentListPosition = new ObservableInt(0);
     public ObservableBoolean emptyVisible = new ObservableBoolean();
-
+    public ObservableField<String> emptyMessage = new ObservableField<>("");
+    public ObservableBoolean contentsVisible = new ObservableBoolean(true);
+    public ObservableBoolean sourcesVisible = new ObservableBoolean(true);
+    public ObservableBoolean contentListVisible = new ObservableBoolean();
+    public ObservableBoolean classesVisible = new ObservableBoolean(true);
+    public ObservableBoolean filtersVisible = new ObservableBoolean(true);
+    public ObservableBoolean notifySources = new ObservableBoolean();
 
     public ObservableField<String> searchToolTip;
     public ObservableInt toolTipGravity;
@@ -117,7 +125,8 @@ public class SearchViewModel extends BaseViewModel {
     private boolean isAllLoaded=false;
 
     public SourcesAdapter sourcesAdapter;
-    public ObservableInt selectedSourcePosition = new ObservableInt(-1);
+//    public ObservableInt selectedSourcePosition = new ObservableInt(-1);
+    public ObservableInt selectedSourcePosition = new ObservableInt(0);
     private Source selectedSource;
     private List<Source> sources;
     private FilterTag sourceTag;
@@ -133,13 +142,72 @@ public class SearchViewModel extends BaseViewModel {
 
     public List<DropDownFilterView.FilterItem> searchTypeFilters;
     private SearchType searchType;
-    public DropDownFilterView.OnFilterClickListener searchTypeListener = (v, item, position) -> {
+    public DropDownFilterView.OnFilterClickListener searchTypeListener = (v, item, position, prev) -> {
         searchType = (SearchType) item.getItem();
+        switch (searchType){
+            case content:
+                contentsVisible.set(true);
+                sourcesVisible.set(true);
+                if (selectedContentList == null) {
+                    contentListVisible.set(false);
+                } else {
+                    contentListVisible.set(true);
+                }
+                classesVisible.set(true);
+                filtersVisible.set(true);
+                searchHint.set(mActivity.getString(R.string.search_only_hindi));
+                emptyMessage.set(mActivity.getString(R.string.empty_search_message));
+                break;
+            case people:
+                contentsVisible.set(false);
+                sourcesVisible.set(false);
+                contentListVisible.set(false);
+                classesVisible.set(false);
+                filtersVisible.set(false);
+                searchHint.set(mActivity.getString(R.string.search));
+                emptyMessage.set(mActivity.getString(R.string.empty_user_search_message));
+                break;
+        }
         changesMade = true;
+        isAllLoaded = false;
+        mActivity.showLoading();
         search();
     };
 
     public List<DropDownFilterView.FilterItem> sourceFilters;
+    public DropDownFilterView.OnFilterClickListener sourceListener = (v, item, position, prev) -> {
+        if (item.getItem() != null) {
+            selectedSource = (Source) item.getItem();
+            selectedSourcePosition.set(position);
+        } else {
+            selectedSource = null;
+            selectedSourcePosition.set(0);
+        }
+        setSelectedContentList();
+        populateFilters();
+        changesMade = true;
+        isAllLoaded = false;
+        mActivity.showLoading();
+        search();
+    };
+
+    public List<DropDownFilterView.FilterItem> classFilters;
+    private List<FilterTag> selectedClasses;
+    public DropDownFilterView.OnFilterClickListener classListener = (v, item, position, prev) -> {
+        if (item.getItem() != null) {
+            selectedClasses = (List<FilterTag>) item.getItem();
+        } else {
+            selectedClasses = null;
+        }
+        changesMade = true;
+        isAllLoaded = false;
+        mActivity.showLoading();
+        search();
+    };
+
+    private List<SuggestedUser> users;
+    public UsersAdapter usersAdapter;
+    public RecyclerView.LayoutManager usersLayoutManager;
 
     public AdapterView.OnItemClickListener contentListClickListener = (parent, view, position, id) -> {
         selectedContentListPosition.set(position);
@@ -222,14 +290,20 @@ public class SearchViewModel extends BaseViewModel {
         this.selectedContentList = selectedContentList;
         if (selectedContentList != null){
             contentListText.set(selectedContentList.getName());
+            contentListVisible.set(true);
         } else {
             contentListText.set("");
+            contentListVisible.set(false);
         }
         selectedSource = source;
         this.cr = cr;
         contentStatusMap = new HashMap<>();
 
         classTagsMap = new LinkedHashMap<>();
+        classFilters = new ArrayList<>();
+        classFilters.add(new DropDownFilterView.FilterItem(
+                "कक्षा", null, false, R.color.gray_5, R.drawable.t_background_tag_hollow
+        ));
         setClassTags();
         selectedClassRanges = new ArrayList<>();
 
@@ -254,12 +328,50 @@ public class SearchViewModel extends BaseViewModel {
             showContentDashboard();
         });
 
-        sourceTag = new FilterTag();
+        usersAdapter = new UsersAdapter(mActivity);
+        usersAdapter.setItemClickListener((view, item) -> {
+            switch (view.getId()) {
+                case R.id.follow_btn:
+                    mActivity.showLoading();
+
+                    mDataManager.followUnfollowUser(item.getUsername(), new OnResponseCallback<StatusResponse>() {
+                        @Override
+                        public void onSuccess(StatusResponse data) {
+                            mActivity.hideLoading();
+                            item.setFollowed(data.getStatus());
+                            usersAdapter.notifyItemChanged(usersAdapter.getItemPosition(item));
+                            EventBus.getDefault().post(new UserFollowingChangedEvent(item));
+
+                            if (data.getStatus()) {
+                                mActivity.analytic.addMxAnalytics_db(item.getUsername(), Action.FollowUser,
+                                        Nav.feed.name(), org.tta.mobile.tta.analytics.analytics_enums.Source.Mobile, item.getUsername());
+                            } else {
+                                mActivity.analytic.addMxAnalytics_db(item.getUsername(), Action.UnfollowUser,
+                                        Nav.feed.name(), org.tta.mobile.tta.analytics.analytics_enums.Source.Mobile, item.getUsername());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            mActivity.hideLoading();
+                            mActivity.showLongSnack(e.getLocalizedMessage());
+                        }
+                    });
+                    break;
+
+                default:
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_USERNAME, item.getUsername());
+                    ActivityUtil.gotoPage(mActivity, OtherProfileActivity.class, parameters);
+            }
+        });
+
+        /*sourceTag = new FilterTag();
         sourceTag.setValue(TAG_VALUE_SOURCE);
         if (selectedSource != null){
             sourceTag.setDisplay_name(selectedSource.getTitle());
             tags.add(sourceTag);
-        }
+        }*/
 
         tagsAdapter.setItems(tags);
         populateTags();
@@ -306,22 +418,30 @@ public class SearchViewModel extends BaseViewModel {
             }
         });
 
+        searchHint.set(mActivity.getString(R.string.search_only_hindi));
+        emptyMessage.set(mActivity.getString(R.string.empty_search_message));
+        searchType = SearchType.content;
+        searchTypeFilters = new ArrayList<>();
         setSearchTypes();
+
+        sourceFilters = new ArrayList<>();
+        sourceFilters.add(new DropDownFilterView.FilterItem(
+                mActivity.getString(R.string.product), null, true,
+                R.color.gray_5, R.drawable.t_background_tag_hollow
+        ));
+        loadSources();
 
         loadFilters();
         loadDefaultCategory();
-
-        loadSources();
     }
 
     private void setSearchTypes(){
-        searchTypeFilters = new ArrayList<>();
         searchTypeFilters.add(new DropDownFilterView.FilterItem(
                 mActivity.getString(R.string.content), SearchType.content, true,
-                R.color.white, R.drawable.btn_selector_filled));
+                R.color.white, R.drawable.t_background_tag_filled));
         searchTypeFilters.add(new DropDownFilterView.FilterItem(
                 mActivity.getString(R.string.people), SearchType.people, false,
-                R.color.white, R.drawable.btn_selector_filled));
+                R.color.white, R.drawable.t_background_tag_filled));
     }
 
     private void setToolTip(){
@@ -340,7 +460,8 @@ public class SearchViewModel extends BaseViewModel {
         super.onResume();
 
         contentsLayoutManager = new GridLayoutManager(mActivity, 2);
-        filterLayoutManager = new LinearLayoutManager(mActivity);
+        usersLayoutManager = new GridLayoutManager(mActivity, 2);
+        filterLayoutManager = new LinearLayoutManager(mActivity, LinearLayoutManager.HORIZONTAL, false);
     }
 
     private void setClassTags() {
@@ -363,6 +484,10 @@ public class SearchViewModel extends BaseViewModel {
         tags.add(tag);
         classTagsMap.put("KG-3", tags);
 
+        classFilters.add(new DropDownFilterView.FilterItem(
+                "KG-3", tags, false, R.color.white, R.drawable.t_background_tag_filled
+        ));
+
         tags = new ArrayList<>();
         tag = new FilterTag();
         tag.setDisplay_name("4");
@@ -377,6 +502,10 @@ public class SearchViewModel extends BaseViewModel {
         tag.setValue("6");
         tags.add(tag);
         classTagsMap.put("4-6", tags);
+
+        classFilters.add(new DropDownFilterView.FilterItem(
+                "4-6", tags, false, R.color.white, R.drawable.t_background_tag_filled
+        ));
 
         tags = new ArrayList<>();
         tag = new FilterTag();
@@ -393,6 +522,10 @@ public class SearchViewModel extends BaseViewModel {
         tags.add(tag);
         classTagsMap.put("7-9", tags);
 
+        classFilters.add(new DropDownFilterView.FilterItem(
+                "7-9", tags, false, R.color.white, R.drawable.t_background_tag_filled
+        ));
+
         tags = new ArrayList<>();
         tag = new FilterTag();
         tag.setDisplay_name("10");
@@ -408,6 +541,10 @@ public class SearchViewModel extends BaseViewModel {
         tags.add(tag);
         classTagsMap.put("10-12", tags);
 
+        classFilters.add(new DropDownFilterView.FilterItem(
+                "10-12", tags, false, R.color.white, R.drawable.t_background_tag_filled
+        ));
+
     }
 
     private void loadSources() {
@@ -416,20 +553,34 @@ public class SearchViewModel extends BaseViewModel {
             @Override
             public void onSuccess(List<Source> data) {
                 sources = data;
+                for (Source source: sources){
+                    sourceFilters.add(new DropDownFilterView.FilterItem(
+                            source.getTitle(), source, false,
+                            R.color.white, R.drawable.t_background_tag_filled
+                    ));
+                }
+                notifySources();
                 sourcesAdapter.setItems(sources);
                 if (selectedSource == null) {
-                    selectedSourcePosition.set(-1);
+//                    selectedSourcePosition.set(-1);
+                    selectedSourcePosition.set(0);
                 } else {
-                    selectedSourcePosition.set(sources.indexOf(selectedSource));
+                    selectedSourcePosition.set(sources.indexOf(selectedSource) + 1);
+
                 }
             }
 
             @Override
             public void onFailure(Exception e) {
-
+                sourcesVisible.set(false);
             }
         });
 
+    }
+
+    private void notifySources(){
+        notifySources.set(false);
+        notifySources.set(true);
     }
 
     private void loadDefaultCategory() {
@@ -495,6 +646,7 @@ public class SearchViewModel extends BaseViewModel {
                     if (i == cr.getContent_list().size()){
                         selectedContentList = null;
                         contentListText.set("");
+                        contentListVisible.set(false);
                     }
                     break;
                 }
@@ -512,11 +664,12 @@ public class SearchViewModel extends BaseViewModel {
 
                 List<FilterSection> removables = new ArrayList<>();
                 for (FilterSection section: data.getResult()){
-                    if (section.isIn_profile()){
+                    /*if (section.isIn_profile()){
                         removables.add(section);
-                    }
+                    }*/
                     if (classSection == null && section.getName().contains("कक्षा")){
                         classSection = section;
+                        removables.add(section);
                     }
                 }
                 for (FilterSection section: removables){
@@ -537,7 +690,7 @@ public class SearchViewModel extends BaseViewModel {
             @Override
             public void onFailure(Exception e) {
                 mActivity.hideLoading();
-                mActivity.showLongSnack(e.getLocalizedMessage());
+//                mActivity.showLongSnack(e.getLocalizedMessage());
             }
         });
 
@@ -605,7 +758,6 @@ public class SearchViewModel extends BaseViewModel {
                 currentSections.add(s);
             }
         }
-        filterAdapter.setItems(currentSections);
 
         List<FilterTag> removableTags = new ArrayList<>();
         for (FilterTag tag: tags){
@@ -618,8 +770,8 @@ public class SearchViewModel extends BaseViewModel {
             tags.remove(tag);
         }
 
-        populateTags();
-        filterAdapter.notifyDataSetChanged();
+//        populateTags();
+        filterAdapter.setItems(currentSections);
 
     }
 
@@ -674,11 +826,9 @@ public class SearchViewModel extends BaseViewModel {
             }
         }
 
-        if (!selectedClassRanges.isEmpty()){
-            classSection.getTags().clear();
-            for (String range: selectedClassRanges){
-                classSection.getTags().addAll(classTagsMap.get(range));
-            }
+        classSection.getTags().clear();
+        if (selectedClasses != null && !selectedClasses.isEmpty()){
+            classSection.getTags().addAll(selectedClasses);
             filterSections.add(classSection);
         }
 
@@ -703,6 +853,7 @@ public class SearchViewModel extends BaseViewModel {
             skip = 0;
             isPriority = true;
             contentsAdapter.reset(true);
+            usersAdapter.reset(true);
 
             setFilterSections();
 
@@ -724,8 +875,13 @@ public class SearchViewModel extends BaseViewModel {
                 builder.delete(builder.length() - 2, builder.length());
             }
 
-            mActivity.analytic.addMxAnalytics_db(builder.toString(), Action.Search, Nav.search.name(),
-                    org.tta.mobile.tta.analytics.analytics_enums.Source.Mobile, null);
+            if (searchType.equals(SearchType.content)) {
+                mActivity.analytic.addMxAnalytics_db(builder.toString(), Action.Search, Nav.search.name(),
+                        org.tta.mobile.tta.analytics.analytics_enums.Source.Mobile, null);
+            } else {
+                mActivity.analytic.addMxAnalytics_db(builder.toString(), Action.SearchPeople, Nav.search.name(),
+                        org.tta.mobile.tta.analytics.analytics_enums.Source.Mobile, null);
+            }
 
         }
 
@@ -735,61 +891,89 @@ public class SearchViewModel extends BaseViewModel {
 
     private void getSearchedContents() {
 
-        mDataManager.search(take, skip, isPriority,
-                selectedContentList != null ? selectedContentList.getId() : 0,
-                searchText.get(), filterSections,
-                selectedSource != null ? selectedSource.getId() : 0,
-                new OnResponseCallback<List<Content>>() {
-                    @Override
-                    public void onSuccess(List<Content> data) {
-                        if (selectedContentList == null ||
-                                selectedContentList.getMode().equalsIgnoreCase(ContentListMode.auto.name())) {
-                            mActivity.hideLoading();
-                            if (data.size() < take){
-                                isAllLoaded = true;
-                            }
-                            populateContents(data);
-                            contentsAdapter.setLoadingDone();
-                        } else {
-                            if (isPriority){
-                                if (data.size() >= take){
-                                    mActivity.hideLoading();
-                                    populateContents(data);
-                                    contentsAdapter.setLoadingDone();
-                                } else {
-                                    switchedPriority = true;
-                                    tempContents.clear();
-                                    tempContents.addAll(data);
-                                    isPriority = false;
-                                    skip = 0;
-                                    getSearchedContents();
-                                }
-                            } else {
+        if (searchType.equals(SearchType.content)) {
+
+            mDataManager.search(take, skip, isPriority,
+                    selectedContentList != null ? selectedContentList.getId() : 0,
+                    searchText.get(), filterSections,
+                    selectedSource != null ? selectedSource.getId() : 0,
+                    new OnResponseCallback<List<Content>>() {
+                        @Override
+                        public void onSuccess(List<Content> data) {
+                            if (selectedContentList == null ||
+                                    selectedContentList.getMode().equalsIgnoreCase(ContentListMode.auto.name())) {
                                 mActivity.hideLoading();
                                 if (data.size() < take){
-                                    isAllLoaded=true;
+                                    isAllLoaded = true;
                                 }
-                                if (switchedPriority){
-                                    switchedPriority = false;
-                                    tempContents.addAll(data);
-                                    populateContents(tempContents);
-                                } else {
-                                    populateContents(data);
-                                }
+                                populateContents(data);
                                 contentsAdapter.setLoadingDone();
+                            } else {
+                                if (isPriority){
+                                    if (data.size() >= take){
+                                        mActivity.hideLoading();
+                                        populateContents(data);
+                                        contentsAdapter.setLoadingDone();
+                                    } else {
+                                        switchedPriority = true;
+                                        tempContents.clear();
+                                        tempContents.addAll(data);
+                                        isPriority = false;
+                                        skip = 0;
+                                        getSearchedContents();
+                                    }
+                                } else {
+                                    mActivity.hideLoading();
+                                    if (data.size() < take){
+                                        isAllLoaded=true;
+                                    }
+                                    if (switchedPriority){
+                                        switchedPriority = false;
+                                        tempContents.addAll(data);
+                                        populateContents(tempContents);
+                                    } else {
+                                        populateContents(data);
+                                    }
+                                    contentsAdapter.setLoadingDone();
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Exception e) {
-                        mActivity.hideLoading();
-                        isAllLoaded = true;
-                        contentsAdapter.setLoadingDone();
-                        mActivity.showLongSnack(e.getLocalizedMessage());
-                        toggleEmptyVisibility();
-                    }
-                });
+                        @Override
+                        public void onFailure(Exception e) {
+                            mActivity.hideLoading();
+                            isAllLoaded = true;
+                            contentsAdapter.setLoadingDone();
+//                            mActivity.showLongSnack(e.getLocalizedMessage());
+                            toggleEmptyVisibility();
+                        }
+                    });
+
+        } else {
+
+            mDataManager.searchPeople(take, skip, searchText.get(),
+                    new OnResponseCallback<List<SuggestedUser>>() {
+                        @Override
+                        public void onSuccess(List<SuggestedUser> data) {
+                            mActivity.hideLoading();
+                            if (data.size() < take) {
+                                isAllLoaded = true;
+                            }
+                            populateUsers(data);
+                            usersAdapter.setLoadingDone();
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            mActivity.hideLoading();
+                            isAllLoaded = true;
+                            usersAdapter.setLoadingDone();
+//                            mActivity.showLongSnack(e.getLocalizedMessage());
+                            toggleEmptyVisibility();
+                        }
+                    });
+
+        }
 
     }
 
@@ -809,8 +993,27 @@ public class SearchViewModel extends BaseViewModel {
         toggleEmptyVisibility();
     }
 
+    private void populateUsers(List<SuggestedUser> users){
+
+        if (changesMade){
+            this.users = users;
+            changesMade = false;
+        } else {
+            for (SuggestedUser user: users){
+                if (!this.users.contains(user)) {
+                    this.users.add(user);
+                }
+            }
+        }
+        usersAdapter.setItems(this.users);
+        toggleEmptyVisibility();
+
+    }
+
     private void toggleEmptyVisibility(){
-        if (contents == null || contents.isEmpty()){
+        if (searchType.equals(SearchType.content) && (contents == null || contents.isEmpty())){
+            emptyVisible.set(true);
+        } else if (searchType.equals(SearchType.people) && (users == null || users.isEmpty())){
             emptyVisible.set(true);
         } else {
             emptyVisible.set(false);
@@ -933,9 +1136,38 @@ public class SearchViewModel extends BaseViewModel {
 
         @Override
         public void onBind(@NonNull ViewDataBinding binding, @NonNull FilterSection model, @Nullable OnRecyclerItemClickListener<FilterSection> listener) {
-            if (binding instanceof TRowFilterSectionBinding){
-                TRowFilterSectionBinding sectionBinding = (TRowFilterSectionBinding) binding;
-                sectionBinding.setViewModel(model);
+            if (binding instanceof TRowFilterDropDownBinding){
+                TRowFilterDropDownBinding dropDownBinding = (TRowFilterDropDownBinding) binding;
+
+                List<DropDownFilterView.FilterItem> items = new ArrayList<>();
+                items.add(new DropDownFilterView.FilterItem(
+                        model.getName(), null, true,
+                        R.color.gray_5, R.drawable.t_background_tag_hollow
+                ));
+
+                for (FilterTag tag: model.getTags()){
+                    items.add(new DropDownFilterView.FilterItem(
+                            tag.toString(), tag, tags.contains(tag),
+                            R.color.white, R.drawable.t_background_tag_filled
+                    ));
+                }
+
+                dropDownBinding.filterDropDown.setFilterItems(items);
+                dropDownBinding.filterDropDown.setOnFilterItemListener((v, item, position, prev) -> {
+                    if (prev != null && prev.getItem() != null){
+                        tags.remove((FilterTag) prev.getItem());
+                    }
+                    if (item.getItem() != null){
+                        tags.add((FilterTag) item.getItem());
+                    }
+
+                    changesMade = true;
+                    isAllLoaded = false;
+                    mActivity.showLoading();
+                    search();
+                });
+
+                /*sectionBinding.setViewModel(model);
                 sectionBinding.tagsMultiChoiceList.setAdapter(new ArrayAdapter<>(
                         mActivity, R.layout.t_row_multi_choice_item, model.getTags()
                 ));
@@ -956,14 +1188,14 @@ public class SearchViewModel extends BaseViewModel {
                         tags.add(0, tag);
                     }
                     populateTags();
-                });
+                });*/
             }
 
         }
 
         @Override
         public int getItemLayout() {
-            return R.layout.t_row_filter_section;
+            return R.layout.t_row_filter_drop_down;
         }
     }
 

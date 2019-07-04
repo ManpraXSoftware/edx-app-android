@@ -121,7 +121,7 @@ public class FeedViewModel extends BaseViewModel {
 
             switch (view.getId()) {
                 case R.id.meta_user_layout:
-                    mActivity.showShortSnack(item.getMeta_data().getUser_name());
+                    showOtherUserProfile(item.getMeta_data().getUser_username());
                     break;
                 case R.id.feed_share:
                     openShareMenu(item);

@@ -217,17 +217,17 @@ public class RegisterViewModel extends BaseViewModel {
                 String errorMsg = "";
                 try {
                     if (((HttpResponseStatusException) ex).getStatusCode() == 409) {
-                        errorMsg = "An account with this number already exists. Please try again";
+                        errorMsg = mActivity.getString(R.string.account_already_exist);
                     } else if (((HttpResponseStatusException) ex).getStatusCode() == 404) {
-                        errorMsg = "Please enter a valid mobile number";
+                        errorMsg = mActivity.getString(R.string.enter_valid_number);
                     } else {
-                        errorMsg = "Please try again after sometime,Server not responding";
+                        errorMsg = mActivity.getString(R.string.server_not_responding);
                     }
                 } catch (Exception exp) {
-                    errorMsg = "Please try again after sometime,Server not responding";
+                    errorMsg = mActivity.getString(R.string.server_not_responding);
                 }
 
-                mFragment.showErrorDialog("Registration failure", errorMsg);
+                mActivity.showErrorDialog(mActivity.getString(R.string.registration_failure), errorMsg);
             }
         }.execute();
     }

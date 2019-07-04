@@ -14,17 +14,42 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/white"
-            android:gravity="start|center_vertical"
-            app:contentInsetStartWithNavigation="0dp"
-            app:navigationIcon="@drawable/back"
-            app:title="@string/your_information"
-            app:titleMarginStart="0dp"
-            app:titleTextAppearance="@style/ta_toolbar_title_style" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/white">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:gravity="start|center_vertical"
+                app:contentInsetStartWithNavigation="0dp"
+                app:navigationIcon="@drawable/back"
+                app:title="@string/your_information"
+                app:titleMarginStart="0dp"
+                app:titleTextAppearance="@style/ta_toolbar_title_style" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="100dp"
+                android:minHeight="30dp"
+                android:background="@drawable/btn_selector_filled"
+                android:fontFamily="@font/hind_medium"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="10dp"
+                android:onClick="@{()->viewModel.logout()}"
+                android:text="@string/sign_out"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+        </LinearLayout>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -36,9 +61,9 @@
                 android:id="@+id/user_info_fields_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:animateLayoutChanges="true"
                 android:orientation="vertical"
-                android:animateLayoutChanges="true">
+                android:visibility="visible">
 
             </LinearLayout>
 

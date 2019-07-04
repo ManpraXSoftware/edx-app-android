@@ -6,6 +6,7 @@ import android.databinding.ObservableField;
 import android.text.Editable;
 import android.text.TextWatcher;
 
+import org.tta.mobile.R;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
@@ -56,7 +57,7 @@ public class ContactUsViewModel extends BaseViewModel {
             @Override
             public void onSuccess(FeedbackResponse data) {
                 mActivity.hideLoading();
-                mActivity.showLongSnack("Message sent successfully");
+                mActivity.showLongSnack(mActivity.getString(R.string.message_sent_successfully));
 
                 mActivity.analytic.addMxAnalytics_db(null, Action.PostFeedback, Nav.profile.name(),
                         Source.Mobile, null);

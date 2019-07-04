@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 
+import org.tta.mobile.R;
 import org.tta.mobile.model.api.ProfileModel;
 import org.tta.mobile.module.registration.model.RegistrationOption;
 import org.tta.mobile.tta.data.model.profile.UpdateMyProfileResponse;
@@ -160,7 +161,7 @@ public class EditProfileViewModel extends BaseViewModel  {
 
     private void goBack(){
         if (profileSuccessful && imageSuccessful){
-            mActivity.showLongSnack("Profile updated successfully");
+            mActivity.showLongSnack(mActivity.getString(R.string.profile_edit_success));
             mActivity.onBackPressed();
         }
     }

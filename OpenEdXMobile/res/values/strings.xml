@@ -87,7 +87,7 @@
     <!-- Generic error during log in -->
     <string name="error_heading" translatable="false">The following error occurred while logging you in</string>
     <!-- Error during log in. -->
-    <string name="login_failed" translatable="false">Please make sure that your user name or e-mail address and password are correct and try again.</string>
+    <string name="login_failed">Please make sure that your user name or e-mail address and password are correct and try again.</string>
 
     <!-- License Agreement related string on Login and Regiser screens -->
     <!-- Create account agreement. Followed by list of agreement names like "End User License Agreement" -->
@@ -426,7 +426,7 @@
     <!-- Message to indicate the it is not available for mobile app  -->
     <string name="video_only_on_web_short" translatable="false">This video isn’t yet available on mobile.</string>
     <!-- Alert dialog title when login fails -->
-    <string name="login_error" translatable="false">Sign-in Error</string>
+    <string name="login_error">Sign-in Error</string>
     <!-- Alert dialog title when login fails due to lack of Internet -->
     <string name="no_connectivity" translatable="false">Connection Error</string>
 
@@ -691,10 +691,10 @@
     <string name="launch_text_1">Creative, constructive, audio-visual content for development of teachers</string>
     <string name="launch_text_2">Opportunities to get accredited by state and fellow teachers</string>
     <string name="launch_text_3">Opportunities to connect with various teachers across the nation and express personal views</string>
-    <string name="reset_password" translatable="false">Reset Password</string>
+    <string name="reset_password">Reset Password</string>
     <string name="reset_password_msg">Enter phone number below to reset your password. You will receive a verification OTP via SMS.</string>
     <string name="verify" translatable="false">Verify</string>
-    <string name="otp_verification" translatable="false">OTP Verification</string>
+    <string name="otp_verification">OTP Verification</string>
     <string name="otp_verification_msg">Your phone will receive an SMS. Verification code provided in the SMS will be automatically filled below.</string>
     <string name="verify_otp" translatable="false">Verify OTP</string>
     <string name="resend_otp">Resend OTP ?</string>
@@ -715,7 +715,7 @@
     <string name="region_agenda" translatable="false">Region wise Agenda</string>
     <string name="my_agenda">My Agenda</string>
     <string name="download">Download</string>
-    <string name="registered_successfully" translatable="false">Registered successfully.</string>
+    <string name="registered_successfully">Registered successfully.</string>
     <string name="block_wise_list" translatable="false">Block wise list</string>
     <string name="district_wise_list" translatable="false">District wise list</string>
     <string name="state_wise_list">State wise list</string>
@@ -792,6 +792,7 @@
     <string name="empty_recommended_users_message">No recommended users available</string>
     <string name="empty_course_message">Course is not available</string>
     <string name="empty_search_message">No content available for your search parameters</string>
+    <string name="empty_user_search_message">No users available for your search parameters</string>
     <string name="empty_replies_message">Replies are not available on this comment</string>
     <string name="empty_comments_message">Comments are not available on this thread</string>
     <string name="empty_post_message">Post is not available</string>
@@ -818,9 +819,42 @@
     <string name="privacy_policy_message">By creating an account, you acknowledge our {privacy_policy}</string>
     <string name="people">People</string>
     <string name="content">Content</string>
-
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="profile_edit_success">Profile updated successfully</string>
+    <string name="comment_successful">Commented successfully</string>
+    <string name="empty_comment_message">Comment cannot be empty</string>
+    <string name="reply_successful">Replied successfully</string>
+    <string name="post_share_successful">Post shared successfully on TheTeacherApp</string>
     <string name="sign_out_message">Are you sure you want to Sign Out?</string>
     <string name="be_the_first_to_comment">Be the first to comment</string>
+    <string name="name_on_certificate">Name on certificate</string>
+    <string name="user_not_exist">User not exist</string>
+    <string name="user_not_exist_message">User with this mobile number doesn\'t exist.</string>
+    <string name="message_sent_successfully">Message sent successfully</string>
+    <string name="otp_sent_successfully">OTP sent successfully</string>
+    <string name="reset_password_failure">Reset password failure</string>
+    <string name="unable_resend_otp">Unable to resend OTP</string>
+    <string name="registration_failure">Registration failure</string>
+    <string name="account_already_exist">An account with this number already exists. Please try again</string>
+    <string name="enter_valid_number">Please enter a valid mobile number</string>
+    <string name="server_not_responding">Please try again after sometime</string>
+    <string name="otp_verify_failure">OTP Verification failure</string>
+    <string name="otp_verify_failure_message">Unable to verify OTP</string>
+    <string name="registration_failure_message">Unable to register, try again later.</string>
+    <string name="otp_fetch_failure">Unable to fetch OTP. Please retry.</string>
+    <string name="reset_password_successful">Password successfully updated. Please login to continue</string>
+    <string name="try_later">Please try again later.</string>
+    <string name="content_not_found">Content not found</string>
+    <string name="user_not_available">User is not available</string>
+    <string name="not_authenticated_to_comment">Not authenticated to comment.</string>
+    <string name="certificate_not_available">Certificate not available</string>
+    <string name="certificate_not_generated">Certificate could not be generated</string>
+    <string name="password_changed_successfully">Password changed successfully</string>
+    <string name="correct_old_password">Please enter correct old password</string>
+    <string name="password_changed_login">Password changed successfully. Please login to continue</string>
+    <string name="unable_to_get_account">Unable to get account details</string>
+
     <string name="anonymous" translatable="false">Anonymous</string>
     <string name="privacy_policy_url" translatable="false">http://theteacherapp.org/privacy</string>
 
@@ -849,7 +883,7 @@
     <!-- WP Share Post -->
     <string name="share_wp_post_message">Please watch! {course_name} :</string>
 
-    <string name="no_connection_exception" translatable="false">No Internet Connection</string>
+    <string name="no_connection_exception">No Internet Connection</string>
     <string name="asterisk_red" translatable="false"><font color='#f44336'>*</font></string>
 
     <!--Arjun integrated wordpress native code-->

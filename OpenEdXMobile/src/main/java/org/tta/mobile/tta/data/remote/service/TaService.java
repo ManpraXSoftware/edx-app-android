@@ -119,6 +119,9 @@ public interface TaService {
     @POST(ApiConstants.URL_MX_SEARCH)
     Call<List<Content>> search(@Body Map<String, Object> parameters);
 
+    @POST(ApiConstants.URL_MX_SEARCH_PEOPLE)
+    Call<List<SuggestedUser>> searchPeople(@Body Map<String, Object> parameters);
+
     @FormUrlEncoded
     @POST(ApiConstants.URL_MX_SUBMIT_FEEDBACK)
     Call<FeedbackResponse> submitFeedback(@FieldMap Map<String, String> parameters);

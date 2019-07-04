@@ -142,9 +142,9 @@
                 android:layout_marginEnd="@dimen/_40px"
                 android:layout_marginTop="@dimen/_34px"
                 android:textColor="@color/gray_6"
-                android:textSize="16sp"
+                android:textSize="12sp"
                 android:fontFamily="@font/hind_medium"
-                android:textColorLink="@color/secondary_blue"
+                android:textColorLink="@color/primary_cyan"
                 android:clickable="true"
                 android:focusable="true" />
 

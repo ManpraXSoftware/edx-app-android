@@ -154,6 +154,7 @@ import org.tta.mobile.tta.task.profile.GetUserAddressTask;
 import org.tta.mobile.tta.task.profile.SubmitFeedbackTask;
 import org.tta.mobile.tta.task.profile.UpdateMyProfileTask;
 import org.tta.mobile.tta.task.search.GetSearchFilterTask;
+import org.tta.mobile.tta.task.search.SearchPeopleTask;
 import org.tta.mobile.tta.task.search.SearchTask;
 import org.tta.mobile.tta.ui.otp.AppSignatureHelper;
 import org.tta.mobile.tta.utils.AlarmManagerUtil;
@@ -1122,7 +1123,7 @@ public class DataManager extends BaseRoboInjector {
                 protected void onSuccess(StatusResponse statusResponse) throws Exception {
                     super.onSuccess(statusResponse);
                     if (statusResponse == null) {
-                        callback.onFailure(new TaException("Error occured. Couldn't like."));
+                        callback.onFailure(new TaException(context.getString(R.string.action_not_completed)));
                     } else {
                         callback.onSuccess(statusResponse);
                     }
@@ -1168,7 +1169,7 @@ public class DataManager extends BaseRoboInjector {
                 protected void onSuccess(BookmarkResponse bookmarkResponse) throws Exception {
                     super.onSuccess(bookmarkResponse);
                     if (bookmarkResponse == null) {
-                        callback.onFailure(new TaException("Error occurred. Couldn't perform action"));
+                        callback.onFailure(new TaException(context.getString(R.string.action_not_completed)));
                     } else {
 
                         new Thread(){
@@ -1525,7 +1526,7 @@ public class DataManager extends BaseRoboInjector {
                 @Override
                 public void onSuccess(List<Post> result) {
                     if (result == null || result.isEmpty()) {
-                        getLocalPostBySlug(slug, callback, new TaException("Post not found"));
+                        getLocalPostBySlug(slug, callback, new TaException(context.getString(R.string.empty_post_message)));
                     } else {
                         Post post = result.get(0);
                         post.setSlug(UrlUtil.urldecode(post.getSlug()));
@@ -1642,7 +1643,7 @@ public class DataManager extends BaseRoboInjector {
 
     public void addComment(String comment, int commentParentId, long postId, OnResponseCallback<Comment> callback) {
         if (loginPrefs.getWPCurrentUserProfile() == null || loginPrefs.getWPCurrentUserProfile().id == null) {
-            callback.onFailure(new TaException("Not authenticated to comment."));
+            callback.onFailure(new TaException(context.getString(R.string.not_authenticated_to_comment)));
             return;
         }
 
@@ -1835,6 +1836,33 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
+    public void searchPeople(int take, int skip, String searchText, OnResponseCallback<List<SuggestedUser>> callback) {
+
+        if (NetworkUtil.isConnected(context)) {
+
+            new SearchPeopleTask(context, take, skip, searchText) {
+                @Override
+                protected void onSuccess(List<SuggestedUser> users) throws Exception {
+                    super.onSuccess(users);
+                    if (users == null) {
+                        users = new ArrayList<>();
+                    }
+
+                    callback.onSuccess(users);
+                }
+
+                @Override
+                protected void onException(Exception ex) {
+                    callback.onFailure(ex);
+                }
+            }.execute();
+
+        } else {
+            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+        }
+
+    }
+
     public void submitFeedback(String msg, OnResponseCallback<FeedbackResponse> callback) {
 
         if (NetworkUtil.isConnected(context)) {
@@ -1890,13 +1918,13 @@ public class DataManager extends BaseRoboInjector {
                             @Override
                             public void onFailure(Exception e) {
                                 Toast.makeText(context,
-                                        "Password changed successfully. Please login to continue",
+                                        context.getString(R.string.password_changed_login),
                                         Toast.LENGTH_LONG).show();
                                 logout();
                             }
                         });
                     } else {
-                        callback.onFailure(new TaException("Please enter correct old password"));
+                        callback.onFailure(new TaException(context.getString(R.string.correct_old_password)));
                     }
                 }
 
@@ -1937,7 +1965,7 @@ public class DataManager extends BaseRoboInjector {
                         });
 
                     } else {
-                        callback.onFailure(new TaException("Invalid account"));
+                        callback.onFailure(new TaException(context.getString(R.string.unable_to_get_account)));
                     }
                 }
 
@@ -1963,7 +1991,7 @@ public class DataManager extends BaseRoboInjector {
                     super.onSuccess(updateMyProfileResponse);
 
                     if (updateMyProfileResponse == null) {
-                        callback.onFailure(new TaException("Your action could not be completed"));
+                        callback.onFailure(new TaException(context.getString(R.string.action_not_completed)));
                         return;
                     }
 
@@ -2121,7 +2149,7 @@ public class DataManager extends BaseRoboInjector {
                     super.onSuccess(myCertificatesResponse);
                     if (myCertificatesResponse == null || myCertificatesResponse.getCertificates() == null ||
                             myCertificatesResponse.getCertificates().isEmpty()) {
-                        getCertificateFromLocal(courseId, callback, new TaException("Certificate not available"));
+                        getCertificateFromLocal(courseId, callback, new TaException(context.getString(R.string.certificate_not_available)));
                     } else {
                         new Thread() {
                             @Override
@@ -2255,7 +2283,7 @@ public class DataManager extends BaseRoboInjector {
                     if (certificateStatusResponse != null) {
                         callback.onSuccess(certificateStatusResponse);
                     } else {
-                        callback.onFailure(new TaException("Certificate could not be generated"));
+                        callback.onFailure(new TaException(context.getString(R.string.certificate_not_generated)));
                     }
                 }
 
@@ -2381,7 +2409,7 @@ public class DataManager extends BaseRoboInjector {
                 protected void onSuccess(StatusResponse statusResponse) throws Exception {
                     super.onSuccess(statusResponse);
                     if (statusResponse == null) {
-                        callback.onFailure(new TaException("Error occured while following"));
+                        callback.onFailure(new TaException(context.getString(R.string.action_not_completed)));
                     } else {
                         callback.onSuccess(statusResponse);
                     }
@@ -2564,7 +2592,7 @@ public class DataManager extends BaseRoboInjector {
                     if (comment != null) {
                         callback.onSuccess(comment);
                     } else {
-                        callback.onFailure(new TaException("Unable to comment"));
+                        callback.onFailure(new TaException(context.getString(R.string.action_not_completed)));
                     }
                 }
 
@@ -2591,7 +2619,7 @@ public class DataManager extends BaseRoboInjector {
                     if (thread != null) {
                         callback.onSuccess(thread);
                     } else {
-                        callback.onFailure(new TaException("Unable to like discussion thread"));
+                        callback.onFailure(new TaException(context.getString(R.string.action_not_completed)));
                     }
                 }
 
@@ -2618,7 +2646,7 @@ public class DataManager extends BaseRoboInjector {
                     if (comment != null) {
                         callback.onSuccess(comment);
                     } else {
-                        callback.onFailure(new TaException("Unable to like comment"));
+                        callback.onFailure(new TaException(context.getString(R.string.action_not_completed)));
                     }
                 }
 
@@ -2994,7 +3022,7 @@ public class DataManager extends BaseRoboInjector {
 
                     if (content == null || content.getId() == 0) {
                         getLocalContentFromSourceIdentity(sourceIdentity, callback,
-                                new TaException("Content not found"));
+                                new TaException(context.getString(R.string.content_not_found)));
                     } else {
                         new Thread() {
                             @Override
@@ -3481,7 +3509,7 @@ public class DataManager extends BaseRoboInjector {
                 @Override
                 public void onSuccess(User result) {
                     if (result == null || result.getUsername() == null) {
-                        callback.onFailure(new TaException("User could not be fetched"));
+                        callback.onFailure(new TaException(context.getString(R.string.user_not_available)));
                     } else {
                         callback.onSuccess(result);
                     }
@@ -3694,11 +3722,15 @@ public class DataManager extends BaseRoboInjector {
 
     public void scheduleSyncAnalyticsJob(){
 
-        /*if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             ComponentName componentName = new ComponentName(context, SyncAnalyticsJob.class);
-            JobInfo jobInfo = new JobInfo.Builder(12, componentName)
-                    .setPeriodic(Constants.INTERVAL_SYNC_ANALYTICS_JOB)
-                    .build();
+            JobInfo.Builder builder = new JobInfo.Builder(12, componentName);
+            if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                builder.setPeriodic(Constants.INTERVAL_SYNC_ANALYTICS_JOB);
+            } else {
+                builder.setMinimumLatency(Constants.INTERVAL_SYNC_ANALYTICS_JOB);
+            }
+            JobInfo jobInfo = builder.build();
 
             JobScheduler jobScheduler = (JobScheduler)context.getSystemService(JOB_SCHEDULER_SERVICE);
             int resultCode = jobScheduler.schedule(jobInfo);
@@ -3707,7 +3739,7 @@ public class DataManager extends BaseRoboInjector {
             } else {
                 Log.d("_____TAG_____", "Sync analytics job not scheduled");
             }
-        }*/
+        }
 
     }
 

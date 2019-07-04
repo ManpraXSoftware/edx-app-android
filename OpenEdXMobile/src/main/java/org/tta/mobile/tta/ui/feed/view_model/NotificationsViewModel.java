@@ -108,17 +108,17 @@ public class NotificationsViewModel extends BaseViewModel {
                         }
                         break;
                     case system:
-                        mActivity.showLongSnack(item.getDescription());
+//                        mActivity.showLongSnack(item.getDescription());
                         break;
                     case profile:
-                        mActivity.showLongSnack(item.getDescription());
+//                        mActivity.showLongSnack(item.getDescription());
                         break;
                     default:
-                        mActivity.showLongSnack(item.getDescription());
+//                        mActivity.showLongSnack(item.getDescription());
                 }
             } catch (IllegalArgumentException e) {
                 mActivity.hideLoading();
-                mActivity.showLongSnack(item.getDescription());
+//                mActivity.showLongSnack(item.getDescription());
             }
 
         });

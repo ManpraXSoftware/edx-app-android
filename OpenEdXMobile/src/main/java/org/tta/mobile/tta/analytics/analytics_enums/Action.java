@@ -81,6 +81,7 @@ public enum Action {
     ViewCert,
     FollowUser,
     Search,
+    SearchPeople,
     ViewProfile,
     ViewPoints,
     ViewBadges,

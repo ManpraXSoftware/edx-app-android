@@ -1,10 +1,17 @@
 package org.tta.mobile.tta.analytics;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.inject.Inject;
 
+import org.tta.mobile.authentication.LoginAPI;
+import org.tta.mobile.http.HttpResponseStatusException;
+import org.tta.mobile.http.HttpStatus;
+import org.tta.mobile.model.api.FormFieldMessageBody;
 import org.tta.mobile.model.db.DownloadEntry;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Page;
@@ -15,9 +22,12 @@ import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.Sha1Util;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import retrofit2.Response;
 import roboguice.RoboGuice;
+import roboguice.util.RoboContext;
 
 import static org.tta.mobile.util.BrowserUtil.environment;
 import static org.tta.mobile.util.BrowserUtil.loginPrefs;
@@ -32,6 +42,9 @@ public class Analytic {
 
     private Context ctx;
     private int analyticBatchCount = 100;
+
+    @Inject
+    private MxAnalyticsAPI mxAnalyticsAPI;
 
     @Inject
     public Analytic(Context mctx) {
@@ -236,6 +249,64 @@ public class Analytic {
             }
         };
         task.execute();
+        /*if (ctx instanceof RoboContext) {
+            final MXAnalyticsTask task = new MXAnalyticsTask(ctx, finalList) {
+                @Override
+                protected void onSuccess(SuccessResponse mx_AnalyticsResponse) throws Exception {
+                    super.onSuccess(mx_AnalyticsResponse);
+                    deleteAnalytics(finalList);
+                    Log.d("MXAnaltics", "successfully updated mx Normal analytics");
+                }
+
+                @Override
+                protected void onException(Exception ex) {
+                    Log.d("MXAnaltics", "fail to update mx analytics");
+                }
+            };
+            task.execute();
+        } else {
+            new AsyncTask<Void, Void, SuccessResponse>() {
+                @Override
+                protected SuccessResponse doInBackground(Void... voids) {
+                    try {
+                        Response<SuccessResponse> response = mxAnalyticsAPI.postMxAnalytics(finalList).execute();
+                        Gson gson=new Gson();
+
+                        if (!response.isSuccessful()) {
+                            final int errorCode = response.code();
+                            final String errorBody = response.errorBody().string();
+                            if ((errorCode == HttpStatus.BAD_REQUEST || errorCode == HttpStatus.CONFLICT) && !android.text.TextUtils.isEmpty(errorBody)) {
+                                try {
+                                    final FormFieldMessageBody body = gson.fromJson(errorBody, FormFieldMessageBody.class);
+                                    if (body != null && body.size() > 0) {
+                                        return null;
+                                    }
+                                } catch (JsonSyntaxException ex) {
+                                    // Looks like the response does not contain form validation errors.
+                                }
+                            }
+                            return null;
+                        }
+                        return response.body();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+
+                @Override
+                protected void onPostExecute(SuccessResponse successResponse) {
+                    super.onPostExecute(successResponse);
+
+                    if (successResponse == null){
+                        Log.d("MXAnaltics", "fail to update mx analytics");
+                    } else {
+                        deleteAnalytics(finalList);
+                        Log.d("MXAnaltics", "successfully updated mx Normal analytics");
+                    }
+                }
+            }.execute();
+        }*/
     }
 
     private void syncTinCanAnalytics() {
@@ -275,5 +346,63 @@ public class Analytic {
             }
         };
         task.execute();
+        /*if (ctx instanceof RoboContext) {
+            final TinCanAnalyticTask task = new TinCanAnalyticTask(ctx, tincan_item) {
+                @Override
+                protected void onSuccess(SuccessResponse mx_AnalyticsResponse) throws Exception {
+                    super.onSuccess(mx_AnalyticsResponse);
+                    deleteAnalytics(finalList);
+                    Log.d("MXAnaltics", "successfully updated mx TinCanAnalytics");
+                }
+
+                @Override
+                protected void onException(Exception ex) {
+                    Log.d("MXAnaltics", "fail to update tincan analytics");
+                }
+            };
+            task.execute();
+        } else {
+            new AsyncTask<Void, Void, SuccessResponse>() {
+                @Override
+                protected SuccessResponse doInBackground(Void... voids) {
+                    try {
+                        Response<SuccessResponse> response = mxAnalyticsAPI.postTincanAnalytics(tincan_item).execute();
+                        Gson gson=new Gson();
+
+                        if (!response.isSuccessful()) {
+                            final int errorCode = response.code();
+                            final String errorBody = response.errorBody().string();
+                            if ((errorCode == HttpStatus.BAD_REQUEST || errorCode == HttpStatus.CONFLICT) && !android.text.TextUtils.isEmpty(errorBody)) {
+                                try {
+                                    final FormFieldMessageBody body = gson.fromJson(errorBody, FormFieldMessageBody.class);
+                                    if (body != null && body.size() > 0) {
+                                        return null;
+                                    }
+                                } catch (JsonSyntaxException ex) {
+                                    // Looks like the response does not contain form validation errors.
+                                }
+                            }
+                            return null;
+                        }
+                        return response.body();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+
+                @Override
+                protected void onPostExecute(SuccessResponse successResponse) {
+                    super.onPostExecute(successResponse);
+
+                    if (successResponse == null){
+                        Log.d("MXAnaltics", "fail to update tincan analytics");
+                    } else {
+                        deleteAnalytics(finalList);
+                        Log.d("MXAnaltics", "successfully updated mx TinCanAnalytics");
+                    }
+                }
+            }.execute();
+        }*/
     }
 }

@@ -235,7 +235,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
         adapter.setItemClickListener((view, item) -> {
             switch (view.getId()) {
                 case R.id.item_delete_download:
-                    if (item.isContainer()){
+                    if (item.isContainer() && item.getChildren() != null &&
+                            !item.getChildren().isEmpty()){
                         CourseComponent component = (CourseComponent) item.getChildren().get(0);
                         if (component instanceof PDFBlockModel || component instanceof ScormBlockModel){
                             ScormBlockModel scorm = (ScormBlockModel) component;
@@ -256,7 +257,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
                     }
                     break;
                 default:
-                    if (item.isContainer()){
+                    if (item.isContainer() && item.getChildren() != null &&
+                            !item.getChildren().isEmpty()){
                         CourseComponent component = (CourseComponent) item.getChildren().get(0);
                         if (component instanceof PDFBlockModel || component instanceof ScormBlockModel){
                             ScormBlockModel scorm = (ScormBlockModel) component;
@@ -378,6 +380,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
 
         footerTitle.set(assessmentComponent.getDisplayName());
+        footerTitleVisible.set(true);
         footerDownloadIcon.set(R.drawable.t_icon_download);
 
         getCertificateStatus();
@@ -422,10 +425,10 @@ public class CourseMaterialViewModel extends BaseViewModel {
                         etName.setText(mDataManager.getLoginPrefs().getDisplayName());
 
                         AlertDialog dialog = new AlertDialog.Builder(mActivity)
-                                .setTitle("Name on certificate")
+                                .setTitle(mActivity.getString(R.string.name_on_certificate))
                                 .setView(view)
-                                .setPositiveButton("Save", null)
-                                .setNegativeButton("Cancel", null)
+                                .setPositiveButton(mActivity.getString(R.string.save), null)
+                                .setNegativeButton(mActivity.getString(R.string.cancel), null)
                                 .create();
 
                         dialog.setOnShowListener(dialogInterface -> {
@@ -1081,13 +1084,17 @@ public class CourseMaterialViewModel extends BaseViewModel {
                         for (IBlock childBlock : comp.getChildren()) {
                             CourseComponent child = (CourseComponent) childBlock;
                             if (child.getDisplayName().contains("अपनी समझ")){
-                                assessmentComponent = child;
-                                enableFooter();
+                                if (child.isContainer() && child.getChildren() != null &&
+                                        !child.getChildren().isEmpty()) {
+                                    assessmentComponent = child;
+                                    enableFooter();
+                                }
                             } else if (!child.getDisplayName().contains("कोर्स के बारे में")){
                                 components.add(child);
                             }
 
-                            if (child.isContainer()){
+                            if (child.isContainer() && child.getChildren() != null &&
+                                    !child.getChildren().isEmpty()){
                                 CourseComponent childComp = (CourseComponent) child.getChildren().get(0);
                                 if (childComp instanceof PDFBlockModel || childComp instanceof ScormBlockModel){
                                     if (mDataManager.scormNotDownloaded((ScormBlockModel) childComp)){
@@ -1100,8 +1107,11 @@ public class CourseMaterialViewModel extends BaseViewModel {
                         }
                     }else {
                         if (comp.getDisplayName().contains("अपनी समझ")){
-                            assessmentComponent = comp;
-                            enableFooter();
+                            if (comp.isContainer() && comp.getChildren() != null &&
+                                    !comp.getChildren().isEmpty()) {
+                                assessmentComponent = comp;
+                                enableFooter();
+                            }
                         } else if (!comp.getDisplayName().contains("कोर्स के बारे में")){
                             components.add(comp);
                         }
@@ -1203,7 +1213,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
                 TRowCourseMaterialItemBinding itemBinding = (TRowCourseMaterialItemBinding) binding;
                 itemBinding.loadingIndicator.setVisibility(View.GONE);
                 itemBinding.itemStatus.setVisibility(View.GONE);
-                if (item.isContainer()){
+                if (item.isContainer() && item.getChildren() != null &&
+                        !item.getChildren().isEmpty()){
                     CourseComponent component = (CourseComponent) item.getChildren().get(0);
                     if (component instanceof PDFBlockModel || component instanceof ScormBlockModel){
                         ScormBlockModel scorm = (ScormBlockModel) component;
