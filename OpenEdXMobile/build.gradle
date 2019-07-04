@@ -134,6 +134,9 @@ dependencies {
     //Arjun:Added for directory i/o operations
     implementation group: 'commons-io', name: 'commons-io', version: '2.6'
 
+    //Arjun: in-app updates on Android
+    implementation 'com.google.android.play:core:1.5.0'
+
     // Mx module for listing
     implementation project (':mxlib')
 
@@ -502,7 +505,7 @@ android {
             signingConfig signingConfigs.releasekey
             applicationVariants.all { variant ->
                 variant.outputs.all { output ->
-                    project.ext { appName = 'edx' }
+                    project.ext { appName = 'tta' }
                     outputFileName  = "${project.ext.appName}-${variant.buildType.name}-${versionName}.apk"
                 }
             }
