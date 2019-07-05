@@ -7,6 +7,7 @@ import android.content.IntentSender;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.InstallStateUpdatedListener;
 import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.tasks.Task;
@@ -59,5 +60,36 @@ private // Returns an intent object that you use to check for an update.
         }
     }
 
+
+
+
+    //use this inside activity where you want to  attache and recive the callback
+   /* @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MY_REQUEST_CODE) {
+            if (resultCode != RESULT_OK) {
+                log("Update flow failed! Result code: " + resultCode);
+                // If the update is cancelled or fails,
+                // you can request to start the update again.
+            }
+        }
+    }*/
+
+
+   private void flexibleUpdate()
+   {
+       // Create a listener to track request state updates.
+       InstallStateUpdatedListener listener = state -> {
+           // Show module progress, log state, or install the update.
+       };
+
+// Before starting an update, register a listener for updates.
+       appUpdateManager.registerListener(listener);
+
+// Start an update.
+
+// When status updates are no longer needed, unregister the listener.
+       appUpdateManager.unregisterListener(listener);
+   }
 
 }

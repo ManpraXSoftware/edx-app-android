@@ -17,7 +17,6 @@ import org.tta.mobile.event.NetworkConnectivityChangeEvent;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
-import org.tta.mobile.tta.analytics.analytics_enums.DiscussionTopicType;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
 import org.tta.mobile.tta.data.enums.SortType;
 import org.tta.mobile.tta.event.DiscussionThreadUpdateEvent;
@@ -31,7 +30,6 @@ import org.tta.mobile.tta.ui.course.discussion.DiscussionCommentsTab;
 import org.tta.mobile.tta.ui.interfaces.DiscussionCommentClickListener;
 import org.tta.mobile.tta.ui.profile.OtherProfileActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
-import org.tta.mobile.tta.utils.JsonUtil;
 import org.tta.mobile.util.DateUtil;
 import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.ResourceUtil;
@@ -233,8 +231,8 @@ public class DiscussionThreadViewModel extends BaseViewModel
 
                         mActivity.analytic.addMxAnalytics_db(
                                 topic.getName().contains("लेखक") ?
-                                        DiscussionTopicType.Postname_AD.name() :
-                                        DiscussionTopicType.Postname_CD.name(),
+                                        Action.Postname_AD.name() :
+                                        Action.Postname_CD.name(),
                                 data.isVoted() ? Action.DBLike : Action.DBUnlike,
                                 course.getCourse().getName(),
                                 Source.Mobile, thread.getIdentifier());
@@ -306,8 +304,8 @@ public class DiscussionThreadViewModel extends BaseViewModel
 
                             mActivity.analytic.addMxAnalytics_db(
                                     topic.getName().contains("लेखक") ?
-                                            DiscussionTopicType.Postname_AD.name() :
-                                            DiscussionTopicType.Postname_CD.name(),
+                                            Action.Postname_AD.name() :
+                                            Action.Postname_CD.name(),
                                     Action.DBComment, course.getCourse().getName(),
                                     Source.Mobile, thread.getIdentifier());
 

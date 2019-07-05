@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.maurya.mx.mxlib.core.MxInfiniteAdapter;
@@ -26,7 +25,6 @@ import org.tta.mobile.event.NetworkConnectivityChangeEvent;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
-import org.tta.mobile.tta.analytics.analytics_enums.DiscussionTopicType;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
 import org.tta.mobile.tta.event.DiscussionCommentUpdateEvent;
 import org.tta.mobile.tta.event.DiscussionThreadUpdateEvent;
