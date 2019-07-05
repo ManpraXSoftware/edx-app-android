@@ -4,19 +4,20 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.IntentSender;
 
-import com.google.android.play.core.appupdate.AppUpdateInfo;
+/*import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
 import com.google.android.play.core.install.InstallStateUpdatedListener;
 import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.UpdateAvailability;
-import com.google.android.play.core.tasks.Task;
+import com.google.android.play.core.tasks.Task;*/
 
 import org.tta.mobile.tta.ui.landing.LandingActivity;
 import org.tta.mobile.user.Account;
 
 public class InAppUpdateManager {
 
+/*
 private Context ctx;
 private Activity activity;
 private AppUpdateManager appUpdateManager;
@@ -64,7 +65,8 @@ private // Returns an intent object that you use to check for an update.
 
 
     //use this inside activity where you want to  attache and recive the callback
-   /* @Override
+   */
+/* @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == MY_REQUEST_CODE) {
             if (resultCode != RESULT_OK) {
@@ -73,23 +75,28 @@ private // Returns an intent object that you use to check for an update.
                 // you can request to start the update again.
             }
         }
-    }*/
+    }*//*
+
 
 
    private void flexibleUpdate()
    {
-       // Create a listener to track request state updates.
+       */
+/*//*
+/ Create a listener to track request state updates.
        InstallStateUpdatedListener listener = state -> {
            // Show module progress, log state, or install the update.
-       };
+       };*//*
+
 
 // Before starting an update, register a listener for updates.
-       appUpdateManager.registerListener(listener);
+       //appUpdateManager.registerListener(null);
 
 // Start an update.
 
 // When status updates are no longer needed, unregister the listener.
-       appUpdateManager.unregisterListener(listener);
+       //appUpdateManager.unregisterListener(null);
    }
+*/
 
 }
