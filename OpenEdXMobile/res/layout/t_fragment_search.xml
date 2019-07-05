@@ -36,7 +36,8 @@
                 app:closeIcon="@drawable/t_icon_close_16"
                 search_view_hint="@{viewModel.searchHint}"
                 app:iconifiedByDefault="false"
-                app:searchIcon="@drawable/t_icon_search_blue" />
+                app:searchIcon="@drawable/t_icon_search_blue"
+                request_focus="@{viewModel.searchFocus}"/>
 
             <!--<EditText
                 android:layout_width="match_parent"

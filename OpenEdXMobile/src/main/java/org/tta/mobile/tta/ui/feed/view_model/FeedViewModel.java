@@ -737,11 +737,20 @@ public class FeedViewModel extends BaseViewModel {
 
                 feedBinding.feedTitle.setText(Html.fromHtml(getFeedTitle(model)));
 
-                if (getItemPosition(model) == 0) {
-                    if (mDataManager.getAppPref().isFeedVisited()) {
-                        ToolTipView.showToolTip(mActivity, " सभी के साथ यहाँ सामग्री साझा \nकरने के लिए यहाँ बटन दबाएँ ",
-                                feedBinding.feedShare, Gravity.TOP);
-                        mDataManager.getAppPref().setFeedVisited(true);
+                if (feedBinding.feedShare.getVisibility() == View.VISIBLE) {
+                    if (getItemPosition(model) == 0) {
+                        if (!mDataManager.getAppPref().isFeedVisited()) {
+                            new MxTooltip.Builder(mActivity)
+                                    .anchorView(feedBinding.feedShare)
+                                    .text(" सभी के साथ यह सामग्री साझा करने के लिए यहाँ दबायें ")
+                                    .gravity(Gravity.BOTTOM)
+                                    .animated(true)
+                                    .transparentOverlay(true)
+                                    .arrowDrawable(R.drawable.up_arrow)
+                                    .build()
+                                    .show();
+                            mDataManager.getAppPref().setFeedVisited(true);
+                        }
                     }
                 }
 
