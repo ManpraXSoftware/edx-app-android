@@ -145,6 +145,16 @@ public class LocalDataSource implements ILocalDataSource {
     }
 
     @Override
+    public List<Content> getContentsBySourceId(long sourceId, int take, int skip) {
+        return mAppDatabase.contentDao().getAllBySourceId(sourceId, take, skip);
+    }
+
+    @Override
+    public List<Content> getContents(int take, int skip) {
+        return mAppDatabase.contentDao().getAll(take, skip);
+    }
+
+    @Override
     public List<Certificate> getAllCertificates(String username) {
         return mAppDatabase.certificateDao().getAll(username);
     }
