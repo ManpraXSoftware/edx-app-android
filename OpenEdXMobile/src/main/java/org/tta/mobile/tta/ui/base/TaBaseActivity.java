@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.google.inject.Key;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
+import org.tta.mobile.R;
 import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.analytics.Analytic;
 import org.tta.mobile.tta.utils.LocaleHelper;
@@ -137,9 +138,9 @@ public class TaBaseActivity extends RxAppCompatActivity implements RoboContext, 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(title)
                 .setMessage(msg)
-                .setPositiveButton("OK", positiveListener);
+                .setPositiveButton(getString(R.string.ok), positiveListener);
         if (negativeListener != null){
-            builder.setNegativeButton("Cancel", negativeListener);
+            builder.setNegativeButton(getString(R.string.cancel), negativeListener);
         }
         builder.create().show();
     }

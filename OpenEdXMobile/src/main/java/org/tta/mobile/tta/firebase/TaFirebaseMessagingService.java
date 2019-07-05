@@ -3,6 +3,7 @@ package org.tta.mobile.tta.firebase;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -10,6 +11,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import org.tta.mobile.tta.Constants;
+import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.data.DataManager;
 import org.tta.mobile.tta.data.enums.NotificationType;
 import org.tta.mobile.tta.data.local.db.table.Notification;
@@ -64,12 +66,21 @@ public class TaFirebaseMessagingService extends FirebaseMessagingService {
 
         //get Intent for notification landing page
         //remove this for generlisation && path!=null && !path.equals("")
-        if(type!=null && !type.equals(""))
-        {
+        if (path.equalsIgnoreCase(Action.AppUpdate.name())){
+
+            String my_package_name = getApplicationContext().getPackageName();
+            String url = "";
+            try {
+                url = "market://details?id=" + my_package_name;
+            } catch ( final Exception e ) {
+                url = "https://play.google.com/store/apps/details?id=" + my_package_name;
+            }
+            notificationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        } else if(type!=null && !type.equals("")) {
             notificationIntent=getNavigationIntent(type,path);
-        }
-        else
-        {
+        } else {
             notificationIntent = new Intent(getApplicationContext(), SplashActivity.class);
         }
 
@@ -79,7 +90,8 @@ public class TaFirebaseMessagingService extends FirebaseMessagingService {
             notification.setDescription(messageBody);
             notification.setTitle(messageTitle);
             notification.setUsername(loginPrefs.getUsername());
-            notification.setType(NotificationType.content.name());
+            notification.setType(path.equalsIgnoreCase(Action.AppUpdate.name()) ?
+                    NotificationType.app.name() : NotificationType.content.name());
             notification.setRef_id(path);
 
             DataManager dataManager = DataManager.getInstance(this);

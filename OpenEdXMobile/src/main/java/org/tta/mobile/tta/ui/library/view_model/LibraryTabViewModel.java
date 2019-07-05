@@ -139,7 +139,7 @@ public class LibraryTabViewModel extends BaseViewModel {
                     @Override
                     public void onFailure(Exception e) {
                         mActivity.hideLoading();
-                        mActivity.showShortSnack(e.getLocalizedMessage());
+//                        mActivity.showShortSnack(e.getLocalizedMessage());
                         toggleEmptyVisibility();
                     }
                 });

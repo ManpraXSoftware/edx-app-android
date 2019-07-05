@@ -98,6 +98,9 @@ public class ApiConstants {
     public static final String URL_MX_GET_SEARCH_FILTER = "api/mx_catalog/v1/getfilters/";
 
     public static final String URL_MX_SEARCH = "api/mx_catalog/v3/search/";
+
+    public static final String URL_MX_SEARCH_PEOPLE = "api/mx_catalog/v1/searchpeople/";
+
     //assistant search
     public static final String URL_MX_ASSISTANT_SEARCH = "api/mx_catalog/v1/gasearch/";
 

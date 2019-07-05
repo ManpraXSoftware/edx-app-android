@@ -152,7 +152,7 @@ public class ConnectCommentsTabViewModel extends BaseViewModel {
         int position = adapter.getItemPosition(comment);
         if (!repliesMap.containsKey(comment.getId())){
             adapter.expandedPositions.remove(Integer.valueOf(position));
-            mActivity.showLongSnack("Replies are not available on this comment");
+            mActivity.showLongSnack(mActivity.getString(R.string.empty_replies_message));
         }
         adapter.notifyItemChanged(position);
     }

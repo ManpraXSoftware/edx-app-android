@@ -8,6 +8,8 @@ import android.util.AttributeSet;
 import android.widget.ArrayAdapter;
 import android.widget.SpinnerAdapter;
 
+import org.tta.mobile.R;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -70,12 +72,12 @@ public class MultiSelectionSpinner extends android.support.v7.widget.AppCompatSp
         builder.setTitle(title);
         builder.setMultiChoiceItems(_items, mSelection, this);
         _itemsAtStart = getSelectedItemsAsString();
-        builder.setPositiveButton("Submit", (dialog, which) -> {
+        builder.setPositiveButton(getContext().getString(R.string.submit), (dialog, which) -> {
             System.arraycopy(mSelection, 0, mSelectionAtStart, 0, mSelection.length);
             listener.selectedIndices(getSelectedIndices());
             listener.selectedStrings(getSelectedStrings());
         });
-        builder.setNegativeButton("Cancel", (dialog, which) -> {
+        builder.setNegativeButton(getContext().getString(R.string.cancel), (dialog, which) -> {
             simple_adapter.clear();
             simple_adapter.add(_itemsAtStart);
             System.arraycopy(mSelectionAtStart, 0, mSelection, 0, mSelectionAtStart.length);

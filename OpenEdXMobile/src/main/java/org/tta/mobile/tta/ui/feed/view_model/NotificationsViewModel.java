@@ -16,6 +16,7 @@ import com.maurya.mx.mxlib.core.OnRecyclerItemClickListener;
 import org.tta.mobile.R;
 import org.tta.mobile.databinding.TRowNotificationBinding;
 import org.tta.mobile.tta.Constants;
+import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.data.enums.NotificationType;
 import org.tta.mobile.tta.data.enums.SourceType;
 import org.tta.mobile.tta.data.local.db.table.Content;
@@ -26,6 +27,7 @@ import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.connect.ConnectDashboardActivity;
 import org.tta.mobile.tta.ui.course.CourseDashboardActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
+import org.tta.mobile.tta.utils.AppUtil;
 import org.tta.mobile.util.DateUtil;
 
 import java.util.ArrayList;
@@ -100,18 +102,23 @@ public class NotificationsViewModel extends BaseViewModel {
                         });
 
                         break;
+                    case app:
+                        if (item.getRef_id().equalsIgnoreCase(Action.AppUpdate.name())){
+                            AppUtil.openAppOnPlayStore(mActivity, mActivity.getPackageName());
+                        }
+                        break;
                     case system:
-                        mActivity.showLongSnack(item.getDescription());
+//                        mActivity.showLongSnack(item.getDescription());
                         break;
                     case profile:
-                        mActivity.showLongSnack(item.getDescription());
+//                        mActivity.showLongSnack(item.getDescription());
                         break;
                     default:
-                        mActivity.showLongSnack(item.getDescription());
+//                        mActivity.showLongSnack(item.getDescription());
                 }
             } catch (IllegalArgumentException e) {
                 mActivity.hideLoading();
-                mActivity.showLongSnack(item.getDescription());
+//                mActivity.showLongSnack(item.getDescription());
             }
 
         });

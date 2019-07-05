@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="400dp"
+    android:layout_height="500dp"
     android:orientation="vertical"
     android:padding="15dp">
 
@@ -187,6 +187,37 @@
                     android:layout_marginStart="30dp"
                     android:fontFamily="@font/hind_regular"
                     android:text="@string/contact_us"
+                    android:textColor="@color/primary_cyan"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:background="@color/gray_1" />
+
+            <LinearLayout
+                android:id="@+id/privacy_policy_layout"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="60dp"
+                    app:srcCompat="@drawable/t_icon_lock" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="30dp"
+                    android:fontFamily="@font/hind_regular"
+                    android:text="@string/privacy_policy"
                     android:textColor="@color/primary_cyan"
                     android:textSize="14sp" />
             </LinearLayout>

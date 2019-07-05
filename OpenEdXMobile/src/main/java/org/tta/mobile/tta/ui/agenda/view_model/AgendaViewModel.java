@@ -84,7 +84,7 @@ public class AgendaViewModel extends BaseViewModel {
             @Override
             public void onFailure(Exception e) {
                 mActivity.hideLoading();
-                mActivity.showLongSnack(e.getLocalizedMessage());
+//                mActivity.showLongSnack(e.getLocalizedMessage());
             }
         });
 

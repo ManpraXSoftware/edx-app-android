@@ -35,12 +35,14 @@ import com.maurya.mx.mxlib.view.MxRecyclerView;
 import org.tta.mobile.R;
 import org.tta.mobile.tta.tutorials.MxTooltip;
 import org.tta.mobile.tta.ui.base.BaseArrayAdapter;
+import org.tta.mobile.tta.ui.custom.DropDownFilterView;
 import org.tta.mobile.tta.ui.custom.FormEditText;
 import org.tta.mobile.tta.ui.custom.NonScrollListView;
 import org.tta.mobile.tta.utils.BottomNavigationViewHelper;
 import org.tta.mobile.util.SoftKeyboardUtil;
 
 import java.lang.reflect.Constructor;
+import java.util.List;
 
 
 /**
@@ -425,6 +427,7 @@ public class BindingAdapters {
 
     @BindingAdapter({"tool_tip", "tool_tip_gravity"})
     public static void showToolTip(View view, String message, int gravity) {
+        if (!MxTooltip.isToolTipAdded(view))
             if (message != null && !message.trim().equals("")) {
                 if (view instanceof MxFiniteRecyclerView) {
                     MxFiniteRecyclerView mxView = (MxFiniteRecyclerView) view;
@@ -449,6 +452,7 @@ public class BindingAdapters {
                                 .build()
                                 .show();
                     }
+//                    ToolTipView.showToolTip(mxView.getContext(), message.trim(), mxView.getTitleTextView(), gravity);
                 } else {
                     if (gravity == Gravity.TOP) {
                         new MxTooltip.Builder(view.getContext())
@@ -471,6 +475,7 @@ public class BindingAdapters {
                                 .build()
                                 .show();
                     }
+//                    ToolTipView.showToolTip(view.getContext(), message.trim(), view, gravity);
                 }
             }
     }
@@ -479,8 +484,9 @@ public class BindingAdapters {
     public static void showToolTipPos(TabLayout view, String message, int gravity, int position) {
         view.post(() -> {
             View v = view.getChildAt(position);
-            if (v != null)
+            if (v != null && !MxTooltip.isToolTipAdded(v))
                 if (message != null && !message.trim().equals(""))
+//                    ToolTipView.showToolTip(v.getContext(), message.trim(), v, gravity);
                     if (gravity == Gravity.TOP) {
                         new MxTooltip.Builder(v.getContext())
                                 .anchorView(v)
@@ -504,12 +510,14 @@ public class BindingAdapters {
                     }
         });
     }
+
     @BindingAdapter({"tool_tip", "tool_tip_gravity", "tool_tip_position"})
     public static void showToolTipPos(BottomNavigationView view, String message, int gravity, int position) {
         view.post(() -> {
             View v = view.findViewById(R.id.action_library);
-            if (v != null)
+            if (v != null && !MxTooltip.isToolTipAdded(v))
                 if (message != null && !message.trim().equals(""))
+//                    ToolTipView.showToolTip(v.getContext(), message.trim(), v, gravity);
                     if (gravity == Gravity.TOP) {
                         new MxTooltip.Builder(v.getContext())
                                 .anchorView(v)
@@ -532,5 +540,32 @@ public class BindingAdapters {
                                 .show();
                     }
         });
+    }
+
+    @BindingAdapter({"drop_down_items"})
+    public static void setDropDownItems(DropDownFilterView view, List<DropDownFilterView.FilterItem> items){
+        view.setFilterItems(items);
+    }
+
+    @BindingAdapter({"drop_down_listener"})
+    public static void setDropDownListener(DropDownFilterView view, DropDownFilterView.OnFilterClickListener listener){
+        view.setOnFilterItemListener(listener);
+    }
+
+    @BindingAdapter({"drop_down_selection"})
+    public static void setDropDownSelection(DropDownFilterView view, int position){
+        view.setSelection(position);
+    }
+
+    @BindingAdapter({"drop_down_notify"})
+    public static void notifyDropDown(DropDownFilterView view, boolean notify){
+        if (notify) {
+            view.notifyDataSetChanged();
+        }
+    }
+
+    @BindingAdapter({"search_view_hint"})
+    public static void setSearchViewHint(SearchView view, String hint){
+        view.setQueryHint(hint);
     }
 }

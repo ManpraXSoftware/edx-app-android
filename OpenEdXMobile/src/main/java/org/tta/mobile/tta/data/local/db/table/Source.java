@@ -5,6 +5,8 @@ import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.Nullable;
+
 @Entity(tableName = "source")
 public class Source implements Parcelable
 {
@@ -166,5 +168,10 @@ public class Source implements Parcelable
         dest.writeString(created_at);
         dest.writeString(type);
         dest.writeString(modified_at);
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return obj instanceof Source && (((Source) obj).id == id);
     }
 }

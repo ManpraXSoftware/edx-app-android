@@ -145,6 +145,12 @@ public class ProfileFragment extends TaBaseFragment {
                     );
                     break;
 
+                case R.id.privacy_policy_layout:
+                    bottomSheet.dismiss();
+                    bottomSheetOpened = false;
+                    viewModel.showPrivacyPolicy();
+                    break;
+
                 case R.id.btn_yes:
                     viewModel.logout();
                     break;
@@ -173,12 +179,12 @@ public class ProfileFragment extends TaBaseFragment {
                             appPref.setSettingsVisited(true);
                         }
 //                        viewModel.showToolTip();
-                        Toast.makeText(getActivity(), getResources().getString(R.string.app_tuts_activate), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), getResources().getString(R.string.app_tuts_activate), Toast.LENGTH_SHORT).show();
                         bottomSheet.dismiss();
 
 
                     } else {
-                        Toast.makeText(getActivity(), getResources().getString(R.string.app_tuts_already), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), getResources().getString(R.string.app_tuts_already), Toast.LENGTH_SHORT).show();
                         bottomSheet.dismiss();
                     }
                     break;

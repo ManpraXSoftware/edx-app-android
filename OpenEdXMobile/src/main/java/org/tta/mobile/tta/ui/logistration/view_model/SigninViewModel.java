@@ -119,7 +119,7 @@ public class SigninViewModel extends BaseViewModel {
                     mFragment.showErrorDialog(mActivity.getString(R.string.login_error),
                             mActivity.getString(R.string.login_failed));
                 } else if (TextUtils.isEmpty(e.getLocalizedMessage())){
-                    mActivity.showLongSnack("Error occurred. Couldn't sign-in");
+                    mActivity.showLongSnack(mActivity.getString(R.string.login_error));
                 } else {
                     mActivity.showLongSnack(e.getLocalizedMessage());
                 }

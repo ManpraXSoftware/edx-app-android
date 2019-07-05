@@ -373,16 +373,18 @@ public class OtpViewModel extends BaseViewModel {
 
                 if (mobileNumberVerificationResponse.mobile_number() != null && !mobileNumberVerificationResponse.mobile_number().equals("")){
 //                    registerMessageListner();
-                    mActivity.showShortSnack("OTP sent successfully");
+                    mActivity.showShortSnack(mActivity.getString(R.string.otp_sent_successfully));
                 } else {
-                    mActivity.showErrorDialog("Reset password failure", "Unable to resend OTP");
+                    mActivity.showErrorDialog(mActivity.getString(R.string.reset_password_failure),
+                            mActivity.getString(R.string.unable_resend_otp));
                 }
             }
 
             @Override
             protected void onException(Exception ex) {
                 mActivity.hideLoading();
-                mActivity.showErrorDialog("User not exist", "User with this mobile number doesn't exist.");
+                mActivity.showErrorDialog(mActivity.getString(R.string.user_not_exist),
+                        mActivity.getString(R.string.user_not_exist_message));
             }
         }.execute();
     }
@@ -396,9 +398,10 @@ public class OtpViewModel extends BaseViewModel {
 
                 if (sendOTPResponse.mobile_number().equals(number)){
 //                    registerMessageListner();
-                    mActivity.showShortSnack("OTP sent successfully");
+                    mActivity.showShortSnack(mActivity.getString(R.string.otp_sent_successfully));
                 } else {
-                    mActivity.showErrorDialog("Registration failure", "Unable to resend OTP");
+                    mActivity.showErrorDialog(mActivity.getString(R.string.registration_failure),
+                            mActivity.getString(R.string.unable_resend_otp));
                 }
             }
 
@@ -408,17 +411,17 @@ public class OtpViewModel extends BaseViewModel {
                 String errorMsg = "";
                 try {
                     if (((HttpResponseStatusException) ex).getStatusCode() == 409) {
-                        errorMsg = "An account with this number already exists. Please try again";
+                        errorMsg = mActivity.getString(R.string.account_already_exist);
                     } else if (((HttpResponseStatusException) ex).getStatusCode() == 404) {
-                        errorMsg = "Please enter a valid mobile number";
+                        errorMsg = mActivity.getString(R.string.enter_valid_number);
                     } else {
-                        errorMsg = "Please try again after sometime,Server not responding";
+                        errorMsg = mActivity.getString(R.string.server_not_responding);
                     }
                 } catch (Exception exp) {
-                    errorMsg = "Please try again after sometime,Server not responding";
+                    errorMsg = mActivity.getString(R.string.server_not_responding);
                 }
 
-                mActivity.showErrorDialog("Registration failure", errorMsg);
+                mActivity.showErrorDialog(mActivity.getString(R.string.registration_failure), errorMsg);
             }
         }.execute();
     }
@@ -464,7 +467,8 @@ public class OtpViewModel extends BaseViewModel {
             @Override
             protected void onException(Exception ex) {
                 mActivity.hideLoading();
-                mActivity.showErrorDialog("OTP Verification failure", "Error occured during OTP verification");
+                mActivity.showErrorDialog(mActivity.getString(R.string.otp_verify_failure),
+                        mActivity.getString(R.string.otp_verify_failure_message));
             }
         }.execute();
     }
@@ -484,7 +488,8 @@ public class OtpViewModel extends BaseViewModel {
             @Override
             protected void onException(Exception ex) {
                 mActivity.hideLoading();
-                mActivity.showErrorDialog("OTP Verification failure", "Please enter a valid otp or try again.");
+                mActivity.showErrorDialog(mActivity.getString(R.string.otp_verify_failure),
+                        mActivity.getString(R.string.otp_verify_failure_message));
             }
         }.execute();
     }
@@ -503,7 +508,8 @@ public class OtpViewModel extends BaseViewModel {
             @Override
             protected void onException(Exception ex) {
                 mActivity.hideLoading();
-                mActivity.showErrorDialog("Registration failure", "Unable to register, try again later.");
+                mActivity.showErrorDialog(mActivity.getString(R.string.registration_failure),
+                        mActivity.getString(R.string.registration_failure_message));
             }
         }.execute();
     }
@@ -632,7 +638,7 @@ public class OtpViewModel extends BaseViewModel {
 
                 break;
             case CommonStatusCodes.TIMEOUT:
-                mActivity.showLongSnack("Unable to fetch OTP. Please retry.");
+                mActivity.showLongSnack(mActivity.getString(R.string.otp_fetch_failure));
                 break;
         }
     }

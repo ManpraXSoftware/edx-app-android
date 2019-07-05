@@ -123,7 +123,7 @@ public class OtherProfileViewModel extends BaseViewModel {
                 filtersReceived = true;
                 hideLoading();
                 setDetails();
-                mActivity.showLongSnack(e.getLocalizedMessage());
+//                mActivity.showLongSnack(e.getLocalizedMessage());
             }
         });
 

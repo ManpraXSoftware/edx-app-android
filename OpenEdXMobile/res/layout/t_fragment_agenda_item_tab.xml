@@ -13,11 +13,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.maurya.mx.mxlib.view.MxRecyclerView
+            infinite_recycler_adapter="@{viewModel.adapter}"
+            layout_manager="@{viewModel.layoutManager}"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            app:mx_itemLayout="@layout/t_row_agenda_content" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/_66px"
+            android:layout_gravity="center"
             android:orientation="vertical"
             android:visibility="@{viewModel.emptyVisible ? View.VISIBLE : View.GONE}">
 
@@ -41,17 +51,6 @@
                 android:textSize="12sp" />
 
         </LinearLayout>
-
-        <com.maurya.mx.mxlib.view.MxRecyclerView
-            infinite_recycler_adapter="@{viewModel.adapter}"
-            layout_manager="@{viewModel.layoutManager}"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center_horizontal"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            app:mx_itemLayout="@layout/t_row_agenda_content" />
 
     </FrameLayout>
 

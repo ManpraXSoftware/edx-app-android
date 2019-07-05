@@ -55,6 +55,7 @@ import org.tta.mobile.tta.event.DownloadFailedEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.scorm.PDFBlockModel;
 import org.tta.mobile.tta.scorm.ScormBlockModel;
+import org.tta.mobile.tta.scorm.ScormStartResponse;
 import org.tta.mobile.tta.tincan.Tincan;
 import org.tta.mobile.tta.ui.base.BaseRecyclerAdapter;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
@@ -158,16 +159,16 @@ public class CourseMaterialViewModel extends BaseViewModel {
             understandToolTipGravity = new ObservableInt(Gravity.TOP);
             mDataManager.getAppPref().setCourseVisited(true);
         }
-//        else {
-//            if (likeToolTip!=null)
-//                likeToolTip.set("");
-//
-//            if (downloadToolTip!=null)
-//                downloadToolTip.set("");
-//
+        else {
+            if (likeToolTip!=null)
+                likeToolTip.set("");
+
+            if (downloadToolTip!=null)
+                downloadToolTip.set("");
+
 //            if (understandToolTip!=null)
 //                understandToolTip.set("");
-//        }
+        }
 
     }
 
@@ -217,27 +218,15 @@ public class CourseMaterialViewModel extends BaseViewModel {
             }
         });
 
-        mDataManager.getUnitStatus(content.getSource_identity(), new OnResponseCallback<List<UnitStatus>>() {
-            @Override
-            public void onSuccess(List<UnitStatus> data) {
-                for (UnitStatus status: data){
-                    unitStatusMap.put(status.getUnit_id(), status);
-                }
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-
-            }
-        });
+        getUnitStatus();
 
         fetchCourseComponent();
 
         adapter.setItemClickListener((view, item) -> {
             switch (view.getId()) {
                 case R.id.item_delete_download:
-                    if (item.isContainer()){
+                    if (item.isContainer() && item.getChildren() != null &&
+                            !item.getChildren().isEmpty()){
                         CourseComponent component = (CourseComponent) item.getChildren().get(0);
                         if (component instanceof PDFBlockModel || component instanceof ScormBlockModel){
                             ScormBlockModel scorm = (ScormBlockModel) component;
@@ -258,7 +247,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
                     }
                     break;
                 default:
-                    if (item.isContainer()){
+                    if (item.isContainer() && item.getChildren() != null &&
+                            !item.getChildren().isEmpty()){
                         CourseComponent component = (CourseComponent) item.getChildren().get(0);
                         if (component instanceof PDFBlockModel || component instanceof ScormBlockModel){
                             ScormBlockModel scorm = (ScormBlockModel) component;
@@ -283,8 +273,47 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
     }
 
+    private void getUnitStatus(){
+
+        mDataManager.getUnitStatus(content.getSource_identity(), new OnResponseCallback<List<UnitStatus>>() {
+            @Override
+            public void onSuccess(List<UnitStatus> data) {
+                for (UnitStatus status: data){
+                    unitStatusMap.put(status.getUnit_id(), status);
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+
+    }
+
+    private void startScorm(String blockId){
+
+        mDataManager.startScorm(content.getSource_identity(), blockId,
+                new OnResponseCallback<ScormStartResponse>() {
+                    @Override
+                    public void onSuccess(ScormStartResponse data) {
+                        if (data != null && data.isSuccess()) {
+                            getUnitStatus();
+                            getContentStatus();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
+
+    }
+
     private void deleteScorm(ScormBlockModel scorm) {
-//        setToolTip();
+        setToolTip();
         selectedScormForDelete = scorm;
         actionMode = ACTION_DELETE;
         mFragment.askForPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -302,6 +331,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void showScorm(ScormBlockModel scorm) {
+        setToolTip();
         selectedScormForPlay = scorm;
         actionMode = ACTION_PLAY;
         mFragment.askForPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -325,7 +355,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
             parameters.putString(Constants.KEY_UNIT_ID, selectedScormForPlay.getId());
             ActivityUtil.gotoPage(mActivity, CourseScormViewActivity.class, parameters);
 
-            mDataManager.startScorm(content.getSource_identity(), selectedScormForPlay.getId(), null);
+            startScorm(selectedScormForPlay.getId());
 
         } else if (selectedScormForPlay.getType().equals(BlockType.PDF)) {
             ActivityUtil.viewPDF(mActivity, new File(filePath));
@@ -380,6 +410,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
 
         footerTitle.set(assessmentComponent.getDisplayName());
+        footerTitleVisible.set(true);
         footerDownloadIcon.set(R.drawable.t_icon_download);
 
         getCertificateStatus();
@@ -424,10 +455,10 @@ public class CourseMaterialViewModel extends BaseViewModel {
                         etName.setText(mDataManager.getLoginPrefs().getDisplayName());
 
                         AlertDialog dialog = new AlertDialog.Builder(mActivity)
-                                .setTitle("Name on certificate")
+                                .setTitle(mActivity.getString(R.string.name_on_certificate))
                                 .setView(view)
-                                .setPositiveButton("Save", null)
-                                .setNegativeButton("Cancel", null)
+                                .setPositiveButton(mActivity.getString(R.string.save), null)
+                                .setNegativeButton(mActivity.getString(R.string.cancel), null)
                                 .create();
 
                         dialog.setOnShowListener(dialogInterface -> {
@@ -718,7 +749,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void downloadSingle(ScormBlockModel scorm){
-//        setToolTip();
+        setToolTip();
         downloadModeIsAll = false;
         selectedScormForDownload = scorm;
         actionMode = ACTION_DOWNLOAD;
@@ -752,7 +783,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
                     adapter.notifyDataSetChanged();
                 }
 
-                if (contentStatus == null && firstDownload){
+                /*if (contentStatus == null && firstDownload){
                     firstDownload = false;
                     ContentStatus status = new ContentStatus();
                     status.setContent_id(content.getId());
@@ -772,7 +803,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
                                 }
                             });
-                }
+                }*/
+
+                startScorm(selectedScormForDownload.getId());
 
                 mActivity.analytic.addMxAnalytics_db(
                         selectedScormForDownload.getInternalName(), Action.StartScormDownload, content.getName(),
@@ -809,7 +842,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
     }
 
     private void downloadAllRemaining(){
-//        setToolTip();
+        setToolTip();
         downloadModeIsAll = true;
         actionMode = ACTION_DOWNLOAD;
         mFragment.askForPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -867,6 +900,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
                         }
 
                         for (ScormBlockModel model: remainingScorms){
+
+                            startScorm(model.getId());
 
                             mActivity.analytic.addMxAnalytics_db(
                                     model.getInternalName(), Action.StartScormDownload, content.getName(),
@@ -1088,13 +1123,17 @@ public class CourseMaterialViewModel extends BaseViewModel {
                         for (IBlock childBlock : comp.getChildren()) {
                             CourseComponent child = (CourseComponent) childBlock;
                             if (child.getDisplayName().contains("अपनी समझ")){
-                                assessmentComponent = child;
-                                enableFooter();
+                                if (child.isContainer() && child.getChildren() != null &&
+                                        !child.getChildren().isEmpty()) {
+                                    assessmentComponent = child;
+                                    enableFooter();
+                                }
                             } else if (!child.getDisplayName().contains("कोर्स के बारे में")){
                                 components.add(child);
                             }
 
-                            if (child.isContainer()){
+                            if (child.isContainer() && child.getChildren() != null &&
+                                    !child.getChildren().isEmpty()){
                                 CourseComponent childComp = (CourseComponent) child.getChildren().get(0);
                                 if (childComp instanceof PDFBlockModel || childComp instanceof ScormBlockModel){
                                     if (mDataManager.scormNotDownloaded((ScormBlockModel) childComp)){
@@ -1107,8 +1146,11 @@ public class CourseMaterialViewModel extends BaseViewModel {
                         }
                     }else {
                         if (comp.getDisplayName().contains("अपनी समझ")){
-                            assessmentComponent = comp;
-                            enableFooter();
+                            if (comp.isContainer() && comp.getChildren() != null &&
+                                    !comp.getChildren().isEmpty()) {
+                                assessmentComponent = comp;
+                                enableFooter();
+                            }
                         } else if (!comp.getDisplayName().contains("कोर्स के बारे में")){
                             components.add(comp);
                         }
@@ -1210,7 +1252,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
                 TRowCourseMaterialItemBinding itemBinding = (TRowCourseMaterialItemBinding) binding;
                 itemBinding.loadingIndicator.setVisibility(View.GONE);
                 itemBinding.itemStatus.setVisibility(View.GONE);
-                if (item.isContainer()){
+                if (item.isContainer() && item.getChildren() != null &&
+                        !item.getChildren().isEmpty()){
                     CourseComponent component = (CourseComponent) item.getChildren().get(0);
                     if (component instanceof PDFBlockModel || component instanceof ScormBlockModel){
                         ScormBlockModel scorm = (ScormBlockModel) component;
@@ -1250,25 +1293,30 @@ public class CourseMaterialViewModel extends BaseViewModel {
                                 .into(itemBinding.itemImage);
 
                         if (unitStatusMap.containsKey(scorm.getId())){
-                            switch (UnitStatusType.valueOf(unitStatusMap.get(scorm.getId()).getStatus())){
-                                case InProgress:
-                                    itemBinding.itemStatus.setText(mActivity.getString(R.string.viewing));
-                                    itemBinding.itemStatus.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                                            R.drawable.t_icon_refresh, 0, 0, 0
-                                    );
-                                    itemBinding.itemStatus.setVisibility(View.VISIBLE);
-                                    break;
+                            try {
+                                switch (UnitStatusType.valueOf(unitStatusMap.get(scorm.getId()).getStatus())){
+                                    case InProgress:
+                                        itemBinding.itemStatus.setText(mActivity.getString(R.string.viewing));
+                                        itemBinding.itemStatus.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                                R.drawable.t_icon_refresh, 0, 0, 0
+                                        );
+                                        itemBinding.itemStatus.setVisibility(View.VISIBLE);
+                                        break;
 
-                                case Completed:
-                                    itemBinding.itemStatus.setText(mActivity.getString(R.string.viewed));
-                                    itemBinding.itemStatus.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                                            R.drawable.t_icon_done, 0, 0, 0
-                                    );
-                                    itemBinding.itemStatus.setVisibility(View.VISIBLE);
-                                    break;
+                                    case Completed:
+                                        itemBinding.itemStatus.setText(mActivity.getString(R.string.viewed));
+                                        itemBinding.itemStatus.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                                R.drawable.t_icon_done, 0, 0, 0
+                                        );
+                                        itemBinding.itemStatus.setVisibility(View.VISIBLE);
+                                        break;
 
-                                default:
-                                    itemBinding.itemStatus.setVisibility(View.GONE);
+                                    default:
+                                        itemBinding.itemStatus.setVisibility(View.GONE);
+                                }
+                            } catch (IllegalArgumentException e) {
+                                e.printStackTrace();
+                                itemBinding.itemStatus.setVisibility(View.GONE);
                             }
                         } else {
                             itemBinding.itemStatus.setVisibility(View.GONE);

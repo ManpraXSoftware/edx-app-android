@@ -81,6 +81,7 @@ public enum Action {
     ViewCert,
     FollowUser,
     Search,
+    SearchPeople,
     ViewProfile,
     ViewPoints,
     ViewBadges,
@@ -95,6 +96,7 @@ public enum Action {
     Comment,
     Enrolled,
     EnrolFailed,
-    TTAFeed
+    TTAFeed,
+    AppUpdate
 
 }

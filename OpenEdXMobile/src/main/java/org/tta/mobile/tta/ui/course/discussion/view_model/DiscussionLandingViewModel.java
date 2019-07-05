@@ -140,7 +140,7 @@ public class DiscussionLandingViewModel extends BaseViewModel {
                 @Override
                 public void onFailure(Exception e) {
                     progressVisible.set(false);
-                    mActivity.showLongSnack(e.getLocalizedMessage());
+//                    mActivity.showLongSnack(e.getLocalizedMessage());
                     toggleEmptyVisibility();
                 }
             });

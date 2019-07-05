@@ -98,7 +98,8 @@ public class EnterNumberViewModel extends BaseViewModel {
             @Override
             protected void onException(Exception ex) {
                 mActivity.hideLoading();
-                mActivity.showErrorDialog("User not exist", "User with this mobile number doesn't exist.");
+                mActivity.showErrorDialog(mActivity.getString(R.string.user_not_exist),
+                        mActivity.getString(R.string.user_not_exist_message));
             }
         }.execute();
     }

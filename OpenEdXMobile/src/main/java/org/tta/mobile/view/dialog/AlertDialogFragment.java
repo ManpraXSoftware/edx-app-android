@@ -47,7 +47,7 @@ public class AlertDialogFragment extends RoboDialogFragment {
             @NonNull
             @Override
             public String getText() {
-                return fragment.getResources().getString(R.string.label_ok);
+                return fragment.getResources().getString(R.string.ok);
             }
 
             @Nullable
