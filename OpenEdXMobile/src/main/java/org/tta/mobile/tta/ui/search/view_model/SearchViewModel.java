@@ -112,6 +112,7 @@ public class SearchViewModel extends BaseViewModel {
     public ObservableBoolean filtersVisible = new ObservableBoolean(true);
     public ObservableBoolean notifySources = new ObservableBoolean();
     public ObservableBoolean searchOptionsVisible = new ObservableBoolean(true);
+    public ObservableBoolean searchFocus = new ObservableBoolean();
 
     public ObservableField<String> searchToolTip;
     public ObservableInt toolTipGravity;
@@ -169,6 +170,8 @@ public class SearchViewModel extends BaseViewModel {
                 filtersVisible.set(false);
                 searchHint.set(mActivity.getString(R.string.search));
                 emptyMessage.set(mActivity.getString(R.string.empty_user_search_message));
+                searchFocus.set(false);
+                searchFocus.set(true);
                 break;
         }
         changesMade = true;
