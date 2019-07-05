@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -23,8 +22,6 @@ import org.tta.mobile.tta.ui.course.view_model.CourseDashboardViewModel;
 import org.tta.mobile.tta.ui.landing.LandingActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
-import org.tta.mobile.tta.utils.ToolTip;
-import org.tta.mobile.tta.utils.ToolTipView;
 import org.tta.mobile.view.common.PageViewStateCallback;
 
 public class CourseDashboardActivity extends BaseVMActivity {

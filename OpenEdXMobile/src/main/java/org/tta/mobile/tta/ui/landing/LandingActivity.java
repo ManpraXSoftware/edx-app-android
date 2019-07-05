@@ -4,7 +4,6 @@ package org.tta.mobile.tta.ui.landing;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.view.Gravity;
 
 
 import org.tta.mobile.R;
@@ -12,7 +11,6 @@ import org.tta.mobile.tta.data.pref.AppPref;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.landing.view_model.LandingViewModel;
 import org.tta.mobile.tta.ui.search.SearchFragment;
-import org.tta.mobile.tta.utils.ToolTipView;
 
 public class LandingActivity extends BaseVMActivity {
 

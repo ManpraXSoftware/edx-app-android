@@ -19,8 +19,6 @@ import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.interfaces.SearchPageOpenedListener;
 import org.tta.mobile.tta.ui.library.view_model.LibraryViewModel;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
-import org.tta.mobile.tta.utils.ToolTip;
-import org.tta.mobile.tta.utils.ToolTipView;
 import org.tta.mobile.view.common.PageViewStateCallback;
 
 public class LibraryFragment extends TaBaseFragment {

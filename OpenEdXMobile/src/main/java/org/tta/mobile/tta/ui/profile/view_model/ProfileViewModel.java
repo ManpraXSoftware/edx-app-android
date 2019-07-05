@@ -19,7 +19,6 @@ import org.tta.mobile.tta.ui.profile.FollowersFragment;
 import org.tta.mobile.tta.ui.profile.FollowingFragment;
 import org.tta.mobile.tta.ui.profile.MyCertificatesFragment;
 import org.tta.mobile.tta.utils.ActivityUtil;
-import org.tta.mobile.tta.utils.ToolTipView;
 import org.tta.mobile.user.Account;
 import org.tta.mobile.user.ProfileImage;
 import org.tta.mobile.util.NetworkUtil;

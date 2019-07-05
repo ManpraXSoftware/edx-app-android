@@ -23,7 +23,6 @@ import org.tta.mobile.tta.tutorials.MxTooltip;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.course.view_model.CourseMaterialViewModel;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
-import org.tta.mobile.tta.utils.ToolTipView;
 import org.tta.mobile.util.PermissionsUtil;
 
 public class CourseMaterialTab extends TaBaseFragment {

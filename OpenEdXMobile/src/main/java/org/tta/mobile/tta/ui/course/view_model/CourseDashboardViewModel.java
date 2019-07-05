@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
 import android.view.View;
 
 import org.tta.mobile.R;
@@ -22,7 +21,6 @@ import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.course.CourseMaterialTab;
 import org.tta.mobile.tta.ui.course.discussion.CourseDiscussionTab;
-import org.tta.mobile.tta.utils.ToolTipView;
 import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.images.ShareUtils;
 import org.tta.mobile.view.AuthenticatedWebViewFragment;

@@ -50,7 +50,6 @@ import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.BadgeHelper;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.tta.utils.DataUtil;
-import org.tta.mobile.tta.utils.ToolTipView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -728,13 +727,6 @@ public class FeedViewModel extends BaseViewModel {
 
                 feedBinding.feedTitle.setText(Html.fromHtml(getFeedTitle(model)));
 
-                if (getItemPosition(model) == 0) {
-                    if (mDataManager.getAppPref().isFeedVisited()) {
-                        ToolTipView.showToolTip(mActivity, " सभी के साथ यहाँ सामग्री साझा \nकरने के लिए यहाँ बटन दबाएँ ",
-                                feedBinding.feedShare, Gravity.TOP);
-                        mDataManager.getAppPref().setFeedVisited(true);
-                    }
-                }
 
 
                 try {

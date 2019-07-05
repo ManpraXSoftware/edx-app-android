@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.SpannableString;
@@ -39,7 +38,6 @@ import org.tta.mobile.tta.ui.base.BaseArrayAdapter;
 import org.tta.mobile.tta.ui.custom.FormEditText;
 import org.tta.mobile.tta.ui.custom.NonScrollListView;
 import org.tta.mobile.tta.utils.BottomNavigationViewHelper;
-import org.tta.mobile.tta.utils.ToolTipView;
 import org.tta.mobile.util.SoftKeyboardUtil;
 
 import java.lang.reflect.Constructor;
@@ -427,7 +425,6 @@ public class BindingAdapters {
 
     @BindingAdapter({"tool_tip", "tool_tip_gravity"})
     public static void showToolTip(View view, String message, int gravity) {
-        if (!ToolTipView.isToolTipAdded(view))
             if (message != null && !message.trim().equals("")) {
                 if (view instanceof MxFiniteRecyclerView) {
                     MxFiniteRecyclerView mxView = (MxFiniteRecyclerView) view;
@@ -452,7 +449,6 @@ public class BindingAdapters {
                                 .build()
                                 .show();
                     }
-//                    ToolTipView.showToolTip(mxView.getContext(), message.trim(), mxView.getTitleTextView(), gravity);
                 } else {
                     if (gravity == Gravity.TOP) {
                         new MxTooltip.Builder(view.getContext())
@@ -475,7 +471,6 @@ public class BindingAdapters {
                                 .build()
                                 .show();
                     }
-//                    ToolTipView.showToolTip(view.getContext(), message.trim(), view, gravity);
                 }
             }
     }
@@ -484,9 +479,8 @@ public class BindingAdapters {
     public static void showToolTipPos(TabLayout view, String message, int gravity, int position) {
         view.post(() -> {
             View v = view.getChildAt(position);
-            if (v != null && !ToolTipView.isToolTipAdded(v))
+            if (v != null)
                 if (message != null && !message.trim().equals(""))
-//                    ToolTipView.showToolTip(v.getContext(), message.trim(), v, gravity);
                     if (gravity == Gravity.TOP) {
                         new MxTooltip.Builder(v.getContext())
                                 .anchorView(v)
@@ -514,9 +508,8 @@ public class BindingAdapters {
     public static void showToolTipPos(BottomNavigationView view, String message, int gravity, int position) {
         view.post(() -> {
             View v = view.findViewById(R.id.action_library);
-            if (v != null && !ToolTipView.isToolTipAdded(v))
+            if (v != null)
                 if (message != null && !message.trim().equals(""))
-//                    ToolTipView.showToolTip(v.getContext(), message.trim(), v, gravity);
                     if (gravity == Gravity.TOP) {
                         new MxTooltip.Builder(v.getContext())
                                 .anchorView(v)

@@ -23,7 +23,6 @@ import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.ContentSourceUtil;
-import org.tta.mobile.tta.utils.ToolTipView;
 
 import java.util.ArrayList;
 import java.util.Collections;

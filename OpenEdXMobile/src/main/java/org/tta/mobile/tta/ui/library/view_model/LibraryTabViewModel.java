@@ -9,12 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
-import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +50,6 @@ import org.tta.mobile.tta.ui.search.SearchFragment;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.tta.utils.ContentSourceUtil;
-import org.tta.mobile.tta.utils.ToolTipView;
 
 
 import java.util.ArrayList;

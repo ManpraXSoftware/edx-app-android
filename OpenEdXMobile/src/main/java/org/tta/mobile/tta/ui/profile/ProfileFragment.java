@@ -24,7 +24,6 @@ import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.profile.view_model.ProfileViewModel;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
-import org.tta.mobile.tta.utils.ToolTipView;
 
 public class ProfileFragment extends TaBaseFragment {
     public static final String TAG = ProfileFragment.class.getCanonicalName();

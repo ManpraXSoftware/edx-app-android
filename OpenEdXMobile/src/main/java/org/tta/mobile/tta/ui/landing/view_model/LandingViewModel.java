@@ -4,7 +4,6 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.MenuItem;
 
@@ -24,7 +23,6 @@ import org.tta.mobile.tta.ui.library.LibraryFragment;
 import org.tta.mobile.tta.ui.profile.ProfileFragment;
 import org.tta.mobile.tta.ui.search.SearchFragment;
 import org.tta.mobile.tta.utils.ActivityUtil;
-import org.tta.mobile.tta.utils.ToolTipView;
 import org.tta.mobile.util.NetworkUtil;
 
 import java.util.ArrayList;
@@ -116,21 +114,17 @@ public class LandingViewModel extends BaseViewModel {
                             .arrowDrawable(R.drawable.down_arrow)
                             .build()
                             .show();
-//                    ToolTipView.showToolTip(getActivity(), getActivity().getResources().getString(R.string.agenda_tab), mActivity.findViewById(R.id.action_agenda), Gravity.TOP);
                 }
                 showAgenda();
                 return true;
             case R.id.action_profile:
                 selectedId = R.id.action_profile;
-//                if (!mDataManager.getAppPref().isProfileVisited()) {
-////                    ToolTipView.showToolTip(getActivity(), "रूपरेखा",mActivity.findViewById(R.id.action_profile),Gravity.TOP);
-//                }
+
                 showProfile();
                 return true;
             default:
                 selectedId = R.id.action_library;
 
-//                ToolTipView.showToolTip(getActivity(), "यहाँ सभी सामग्री पाए",mActivity.findViewById(R.id.action_library),Gravity.TOP);
                 showLibrary();
                 return true;
         }
