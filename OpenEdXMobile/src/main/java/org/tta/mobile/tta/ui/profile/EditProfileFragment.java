@@ -244,7 +244,7 @@ public class EditProfileFragment extends TaBaseFragment {
                 profileModel.district == null ? null : new RegistrationOption(profileModel.district, profileModel.district));
         districtSpinner.setMandatory(true);
 
-        blockSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Block/तहसील*", viewModel.blocks,
+        blockSpinner = ViewUtil.addOptionSpinner(userInfoLayout, "Block/खंड*", viewModel.blocks,
                 profileModel.block == null ? null : new RegistrationOption(profileModel.block, profileModel.block));
         blockSpinner.setMandatory(true);
 

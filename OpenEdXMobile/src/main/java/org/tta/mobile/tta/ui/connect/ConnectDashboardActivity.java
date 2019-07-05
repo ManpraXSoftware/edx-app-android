@@ -420,7 +420,7 @@ public class ConnectDashboardActivity extends BaseVMActivity {
     protected void onPermissionDenied(String[] permissions, int requestCode) {
         switch (requestCode){
             case PermissionsUtil.WRITE_STORAGE_PERMISSION_REQUEST:
-                showLongSnack("Permission Denied");
+                showLongSnack(getString(R.string.permission_not_granted));
                 break;
         }
     }
@@ -455,7 +455,7 @@ public class ConnectDashboardActivity extends BaseVMActivity {
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (!NetworkUtil.isConnected(ConnectDashboardActivity.this)) {
                 //noInternetConnection_tv.setVisibility(View.VISIBLE);
-                showLongSnack(getString(R.string.reset_no_network_message));
+                showLongSnack(getString(R.string.you_are_offline));
                 webView.setVisibility(View.GONE);
                 return true;
             }
@@ -539,7 +539,7 @@ public class ConnectDashboardActivity extends BaseVMActivity {
                         view.getTitle().equals(currentPost.getLink().toString().split("//")[1])) {
                     // cache failed as well, load a local resource as last resort
                     // or inform the user
-                    showLongSnack(getString(R.string.reset_no_network_message));
+                    showLongSnack(getString(R.string.you_are_offline));
                 }
 
                 ViewGroup.LayoutParams params = webView.getLayoutParams();

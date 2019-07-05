@@ -166,7 +166,7 @@ public class CourseMaterialTab extends TaBaseFragment {
     public void onPermissionDenied(String[] permissions, int requestCode) {
         switch (requestCode) {
             case PermissionsUtil.WRITE_STORAGE_PERMISSION_REQUEST:
-                viewModel.getActivity().showLongSnack("Permission Denied");
+                viewModel.getActivity().showLongSnack(getString(R.string.permission_not_granted));
                 break;
         }
     }

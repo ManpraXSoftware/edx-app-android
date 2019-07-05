@@ -33,7 +33,7 @@
                 android:layout_weight="1"
                 android:textSize="14sp"
                 app:closeIcon="@drawable/t_icon_close_16"
-                app:defaultQueryHint="@string/search_only_hindi"
+                search_view_hint="@{viewModel.searchHint}"
                 app:iconifiedByDefault="false"
                 app:searchIcon="@drawable/t_icon_search_blue" />
 
@@ -58,6 +58,82 @@
 
         </LinearLayout>
 
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/horizontal_filters_layout"
+            app:layout_constraintTop_toBottomOf="@id/searchview_layout"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="4dp"
+            android:background="@color/white"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:scrollbars="none"
+            tool_tip="@{viewModel.searchToolTip}"
+            tool_tip_gravity="@{viewModel.toolTipGravity}">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:animateLayoutChanges="true">
+
+                <org.tta.mobile.tta.ui.custom.DropDownFilterView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_16px"
+                    android:layout_marginEnd="@dimen/_8px"
+                    drop_down_items="@{viewModel.searchTypeFilters}"
+                    drop_down_listener="@{viewModel.searchTypeListener}"/>
+
+                <org.tta.mobile.tta.ui.custom.DropDownFilterView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_16px"
+                    android:layout_marginEnd="@dimen/_8px"
+                    drop_down_items="@{viewModel.sourceFilters}"
+                    drop_down_listener="@{viewModel.sourceListener}"
+                    drop_down_selection="@{viewModel.selectedSourcePosition}"
+                    drop_down_notify="@{viewModel.notifySources}"
+                    android:visibility="@{viewModel.sourcesVisible?View.VISIBLE:View.GONE}"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_16px"
+                    android:layout_marginEnd="@dimen/_8px"
+                    android:background="@drawable/t_background_tag_filled"
+                    android:text="@{viewModel.contentListText}"
+                    android:gravity="center"
+                    android:textColor="@color/gray_5"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/hind_medium"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:visibility="@{viewModel.contentListVisible?View.VISIBLE:View.GONE}"/>
+
+                <org.tta.mobile.tta.ui.custom.DropDownFilterView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_16px"
+                    android:layout_marginEnd="@dimen/_8px"
+                    drop_down_items="@{viewModel.classFilters}"
+                    drop_down_listener="@{viewModel.classListener}"
+                    android:visibility="@{viewModel.classesVisible?View.VISIBLE:View.GONE}" />
+
+                <org.tta.mobile.tta.ui.custom.NonScrollHorizontalRecyclerView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    recycler_adapter="@{viewModel.filterAdapter}"
+                    layout_manager="@{viewModel.filterLayoutManager}"
+                    android:visibility="@{viewModel.filtersVisible?View.VISIBLE:View.GONE}" />
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
         <LinearLayout
             android:id="@+id/dual_filter_layout"
             android:layout_width="match_parent"
@@ -68,16 +144,15 @@
             android:baselineAligned="false"
             android:elevation="2dp"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/searchview_layout">
+            app:layout_constraintTop_toBottomOf="@id/searchview_layout"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="horizontal"
-                tool_tip="@{viewModel.searchToolTip}"
-                tool_tip_gravity="@{viewModel.toolTipGravity}">
+                android:orientation="horizontal">
 
                 <TextView
                     selected="@{viewModel.filterSelected.get()}"
@@ -99,9 +174,7 @@
                 android:layout_height="50dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="horizontal"
-                tool_tip="@{viewModel.selectedToolTip}"
-                tool_tip_gravity="@{viewModel.selectedToolTipGravity}">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -143,7 +216,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider_line">
+            app:layout_constraintTop_toBottomOf="@id/horizontal_filters_layout">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -168,7 +241,7 @@
                     android:layout_marginEnd="@dimen/_70px"
                     android:fontFamily="@font/hind_regular"
                     android:gravity="center"
-                    android:text="@string/empty_search_message"
+                    android:text="@{viewModel.emptyMessage}"
                     android:textColor="@color/primary_cyan"
                     android:textSize="12sp" />
 
@@ -183,7 +256,20 @@
                 android:layout_height="match_parent"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
-                app:mx_itemLayout="@layout/t_row_agenda_content" />
+                app:mx_itemLayout="@layout/t_row_agenda_content"
+                android:visibility="@{viewModel.contentsVisible?View.VISIBLE:View.GONE}"/>
+
+            <com.maurya.mx.mxlib.view.MxRecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                app:mx_itemLayout="@layout/t_row_suggested_teacher_grid"
+                infinite_recycler_adapter="@{viewModel.usersAdapter}"
+                layout_manager="@{viewModel.usersLayoutManager}"
+                infinite_load_more_listener="@{viewModel.loadMoreListener}"
+                android:visibility="@{viewModel.contentsVisible?View.GONE:View.VISIBLE}"/>
 
         </FrameLayout>
 
@@ -275,14 +361,14 @@
                             android:paddingEnd="@dimen/_26px"
                             android:scrollbars="none" />
 
-                        <org.tta.mobile.tta.ui.custom.NonScrollRecyclerView
+                        <!--<org.tta.mobile.tta.ui.custom.NonScrollRecyclerView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/_26px"
                             android:layout_marginEnd="@dimen/_26px"
                             android:nestedScrollingEnabled="false"
                             recycler_adapter="@{viewModel.filterAdapter}"
-                            layout_manager="@{viewModel.filterLayoutManager}" />
+                            layout_manager="@{viewModel.filterLayoutManager}" />-->
 
                     </LinearLayout>
 

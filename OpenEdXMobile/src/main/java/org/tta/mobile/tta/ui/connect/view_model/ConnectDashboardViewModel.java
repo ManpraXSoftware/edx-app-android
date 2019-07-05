@@ -754,11 +754,9 @@ public class ConnectDashboardViewModel extends BaseViewModel
             return;
         }
 
-        mActivity.showAlertDailog("Delete",
-                "Are you sure you want to delete \"" + content.getName() + "\"?",
-                (dialog, which) -> {
-                    mDataManager.deletePost(post);
-                },
+        mActivity.showAlertDailog(mActivity.getString(R.string.delete),
+                String.format(mActivity.getString(R.string.delete_question), content.getName()),
+                (dialog, which) -> mDataManager.deletePost(post),
                 null);
     }
 
@@ -769,7 +767,7 @@ public class ConnectDashboardViewModel extends BaseViewModel
 
         String comment = this.comment.get();
         if (comment == null || comment.trim().equals("")){
-            mActivity.showShortToast("Comment cannot be empty");
+            mActivity.showShortToast(mActivity.getString(R.string.empty_comment_message));
             return;
         }
 
@@ -780,7 +778,7 @@ public class ConnectDashboardViewModel extends BaseViewModel
                     public void onSuccess(Comment data) {
                         mActivity.hideLoading();
                         if (commentParentId == 0) {
-                            mActivity.showLongSnack("Commented successfully");
+                            mActivity.showLongSnack(mActivity.getString(R.string.comment_successful));
                             comments.add(0, data);
                             post.setTotal_comments(post.getTotal_comments() + 1);
 
@@ -791,7 +789,7 @@ public class ConnectDashboardViewModel extends BaseViewModel
                             EventBus.getDefault().post(new ConnectCommentAddedEvent(data));
 
                         } else {
-                            mActivity.showLongSnack("Replied successfully");
+                            mActivity.showLongSnack(mActivity.getString(R.string.reply_successful));
                             replyingToVisible.set(false);
                             commentParentId = 0;
                             selectedComment.incrementReplies();
@@ -924,7 +922,7 @@ public class ConnectDashboardViewModel extends BaseViewModel
                         intent.setComponent(componentName);
                         mActivity.startActivity(intent);
                     } else {
-                        mActivity.showLongToast("Post shared on TheTeacherApp");
+                        mActivity.showLongToast(mActivity.getString(R.string.post_share_successful));
                     }
 
 

@@ -13,11 +13,11 @@
     <!-- Alert dialog cancel button -->
     <string name="label_cancel" translatable="false">Cancel</string>
     <!-- Alert dialog No button -->
-    <string name="label_no" translatable="false">No</string>
+    <string name="label_no">No</string>
     <!-- Alert dialog download button -->
     <string name="label_download" translatable="false">Download</string>
     <!-- Alert dialog yes confirmation button -->
-    <string name="label_yes" translatable="false">Yes</string>
+    <string name="label_yes">Yes</string>
     <!-- Alert dialog delete confirmation button -->
     <string name="label_delete" translatable="false">Delete</string>
     <!-- Alert dialog okay button -->

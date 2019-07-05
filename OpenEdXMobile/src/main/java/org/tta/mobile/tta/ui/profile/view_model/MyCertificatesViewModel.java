@@ -65,10 +65,10 @@ public class MyCertificatesViewModel extends BaseViewModel {
             @Override
             public void onFailure(Exception e) {
                 mActivity.hideLoading();
-                mActivity.showLongSnack(e.getLocalizedMessage());
+//                mActivity.showLongSnack(e.getLocalizedMessage());
                 toggleEmptyVisibility();
             }
-        }, new TaException("Certificates not available"));
+        }, new TaException(mActivity.getString(R.string.empty_certificates_message)));
 
     }
 

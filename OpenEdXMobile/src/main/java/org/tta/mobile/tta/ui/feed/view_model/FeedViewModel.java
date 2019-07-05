@@ -47,6 +47,7 @@ import org.tta.mobile.tta.ui.feed.NotificationsFragment;
 import org.tta.mobile.tta.ui.feed.RecommendedUsersFragment;
 import org.tta.mobile.tta.ui.profile.OtherProfileActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
+import org.tta.mobile.tta.utils.AppUtil;
 import org.tta.mobile.tta.utils.BadgeHelper;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.tta.utils.DataUtil;
@@ -77,7 +78,8 @@ public class FeedViewModel extends BaseViewModel {
 
     private List<Feed> feeds;
     List<SuggestedUser> users;
-    private int take, skip;
+//    private int take, skip;
+    private int skip;
     private boolean allLoaded;
     private String delimiterTagChunks, delimiterSectionTag;
 
@@ -105,7 +107,7 @@ public class FeedViewModel extends BaseViewModel {
 //        setToolTip();
         feeds = new ArrayList<>();
         users = new ArrayList<>();
-        take = DEFAULT_TAKE;
+//        take = DEFAULT_TAKE;
         skip = DEFAULT_SKIP;
         allLoaded = false;
         delimiterTagChunks = Constants.DELIMITER_TAG_CHUNKS;
@@ -120,7 +122,7 @@ public class FeedViewModel extends BaseViewModel {
 
             switch (view.getId()) {
                 case R.id.meta_user_layout:
-                    mActivity.showShortSnack(item.getMeta_data().getUser_name());
+                    showOtherUserProfile(item.getMeta_data().getUser_username());
                     break;
                 case R.id.feed_share:
                     openShareMenu(item);
@@ -181,6 +183,10 @@ public class FeedViewModel extends BaseViewModel {
                                             });
                                     break;
                                 }
+
+                            case AppUpdate:
+                                AppUtil.openAppOnPlayStore(mActivity, mActivity.getPackageName());
+                                break;
 
                             default:
                                 if (item.getMeta_data().getId() != null) {
@@ -336,11 +342,11 @@ public class FeedViewModel extends BaseViewModel {
 
     private void getFeeds() {
 
-        mDataManager.getFeeds(take, skip, new OnResponseCallback<List<Feed>>() {
+        mDataManager.getFeeds(skip, new OnResponseCallback<List<Feed>>() {
             @Override
             public void onSuccess(List<Feed> data) {
                 mActivity.hideLoading();
-                if (data.size() < take) {
+                if (data.size() < 1) {
                     allLoaded = true;
                 }
                 populateFeeds(data);
@@ -591,6 +597,9 @@ public class FeedViewModel extends BaseViewModel {
                 case TTAFeed:
                     return feed.getTitle();
 
+                case AppUpdate:
+                    return mActivity.getString(R.string.app_update_title);
+
                 default:
                     return feed.getMeta_data().getSource_title();
             }
@@ -804,6 +813,22 @@ public class FeedViewModel extends BaseViewModel {
                                     .placeholder(R.drawable.placeholder_course_card_image)
                                     .into(feedBinding.feedContentImage);
                             feedBinding.feedMetaText.setText(model.getMeta_data().getText());
+
+                        case TTAFeed:
+
+                            Glide.with(getContext())
+                                    .load(model.getMeta_data().getIcon())
+                                    .placeholder(R.drawable.placeholder_course_card_image)
+                                    .into(feedBinding.feedContentImage);
+                            feedBinding.feedMetaText.setText(model.getMessage());
+
+                        case AppUpdate:
+
+                            Glide.with(getContext())
+                                    .load(R.drawable.tta_launcher_foreground)
+                                    .into(feedBinding.feedContentImage);
+
+                            feedBinding.feedMetaText.setText(mActivity.getString(R.string.app_update_message));
 
                             break;
 

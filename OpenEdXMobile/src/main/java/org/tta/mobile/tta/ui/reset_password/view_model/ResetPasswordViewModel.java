@@ -111,7 +111,7 @@ public class ResetPasswordViewModel extends BaseViewModel {
                 if(resetForgotedPasswordResponse.success() ) {
 
                     //rHelper.replaceFragment(R.id.verif_forgeted_password_otp_fragment_id, new ResetForgetedPasswordFagment(), getFragmentManager());
-                    mActivity.showLongToast("Password successfully updated. Please login to continue");
+                    mActivity.showLongToast(mActivity.getString(R.string.reset_password_successful));
 
                     ActivityUtil.gotoPage(mActivity, SigninRegisterActivity.class, Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     mActivity.finish();
@@ -121,7 +121,8 @@ public class ResetPasswordViewModel extends BaseViewModel {
             @Override
             protected void onException(Exception ex) {
                 mActivity.hideLoading();
-                mActivity.showErrorDialog("Reset password failure", "Please try again later.");
+                mActivity.showErrorDialog(mActivity.getString(R.string.reset_password_failure),
+                        mActivity.getString(R.string.try_later));
             }
         }.execute();
 

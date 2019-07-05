@@ -156,7 +156,7 @@ public class ProfileViewModel extends BaseViewModel {
                 if (accountReceived) {
                     setDetails();
                 }
-                mActivity.showLongSnack(e.getLocalizedMessage());
+//                mActivity.showLongSnack(e.getLocalizedMessage());
             }
         });
 
@@ -275,6 +275,13 @@ public class ProfileViewModel extends BaseViewModel {
                     true,
                     null);
         }
+    }
+
+    public void showPrivacyPolicy(){
+        mDataManager.getEdxEnvironment().getRouter().showAuthenticatedWebviewActivity(
+                mActivity, mActivity.getString(R.string.privacy_policy_url),
+                mActivity.getString(R.string.privacy_policy)
+        );
     }
 
     private void setDetails() {

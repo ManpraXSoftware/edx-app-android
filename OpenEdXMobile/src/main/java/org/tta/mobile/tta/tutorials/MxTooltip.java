@@ -71,6 +71,8 @@ public class MxTooltip implements PopupWindow.OnDismissListener {
 
     private static final String TAG = MxTooltip.class.getSimpleName();
 
+    private static final String VIEW_TAG_VALUE = "view_tag_value";
+
     // Default Resources
     private static final int mDefaultPopupWindowStyleRes = android.R.attr.popupWindowStyle;
     private static final int mDefaultTextAppearanceRes = R.style.simpletooltip_default;
@@ -167,6 +169,10 @@ public class MxTooltip implements PopupWindow.OnDismissListener {
         configContentView();
     }
 
+    public static boolean isToolTipAdded(View view){
+        return view != null && view.getTag(view.getId()) != null;
+    }
+
     private void configPopupWindow() {
         mPopupWindow = new PopupWindow(mContext, null, mDefaultPopupWindowStyleRes);
         mPopupWindow.setOnDismissListener(this);
@@ -207,8 +213,10 @@ public class MxTooltip implements PopupWindow.OnDismissListener {
         mRootView.post(new Runnable() {
             @Override
             public void run() {
-                if (mRootView.isShown())
+                if (mRootView.isShown()) {
                     mPopupWindow.showAtLocation(mRootView, Gravity.NO_GRAVITY, mRootView.getWidth(), mRootView.getHeight());
+                    mAnchorView.setTag(mAnchorView.getId(), VIEW_TAG_VALUE);
+                }
                 else
                     Log.e(TAG, "Tooltip cannot be shown, root view is invalid or has been closed.");
             }
@@ -377,6 +385,8 @@ public class MxTooltip implements PopupWindow.OnDismissListener {
         MxTooltipUtils.removeOnGlobalLayoutListener(mPopupWindow.getContentView(), mAutoDismissLayoutListener);
 
         mPopupWindow = null;
+
+        mAnchorView.setTag(mAnchorView.getId(), null);
     }
 
     private final View.OnTouchListener mOverlayTouchListener = new View.OnTouchListener() {
