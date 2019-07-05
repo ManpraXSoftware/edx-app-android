@@ -14,6 +14,8 @@ public class AgendaItem implements Comparable<AgendaItem> {
 
     private String source_icon;
 
+    private long order;
+
     public long getSource_id() {
         return source_id;
     }
@@ -54,6 +56,14 @@ public class AgendaItem implements Comparable<AgendaItem> {
         this.source_icon = source_icon;
     }
 
+    public long getOrder() {
+        return order;
+    }
+
+    public void setOrder(long order) {
+        this.order = order;
+    }
+
     @Override
     public boolean equals(@Nullable Object obj) {
         return (obj instanceof AgendaItem) && source_name.equalsIgnoreCase(((AgendaItem) obj).source_name);
@@ -61,6 +71,6 @@ public class AgendaItem implements Comparable<AgendaItem> {
 
     @Override
     public int compareTo(AgendaItem o) {
-        return source_title.compareTo(o.source_title);
+        return Long.compare(order, o.order);
     }
 }

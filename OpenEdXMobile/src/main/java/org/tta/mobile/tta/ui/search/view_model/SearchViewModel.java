@@ -27,6 +27,7 @@ import org.tta.mobile.databinding.TRowAgendaContentBinding;
 import org.tta.mobile.databinding.TRowFilterDropDownBinding;
 import org.tta.mobile.databinding.TRowFilterTagBinding;
 import org.tta.mobile.databinding.TRowSuggestedTeacherGridBinding;
+import org.tta.mobile.event.NetworkConnectivityChangeEvent;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
@@ -59,6 +60,7 @@ import org.tta.mobile.tta.ui.custom.DropDownFilterView;
 import org.tta.mobile.tta.ui.profile.OtherProfileActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.ContentSourceUtil;
+import org.tta.mobile.util.NetworkUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -109,6 +111,7 @@ public class SearchViewModel extends BaseViewModel {
     public ObservableBoolean classesVisible = new ObservableBoolean(true);
     public ObservableBoolean filtersVisible = new ObservableBoolean(true);
     public ObservableBoolean notifySources = new ObservableBoolean();
+    public ObservableBoolean searchOptionsVisible = new ObservableBoolean(true);
 
     public ObservableField<String> searchToolTip;
     public ObservableInt toolTipGravity;
@@ -433,6 +436,13 @@ public class SearchViewModel extends BaseViewModel {
 
         loadFilters();
         loadDefaultCategory();
+
+        if (NetworkUtil.isConnected(mActivity)){
+            searchOptionsVisible.set(true);
+        } else {
+            searchOptionsVisible.set(false);
+            search();
+        }
     }
 
     private void setSearchTypes(){
@@ -667,7 +677,7 @@ public class SearchViewModel extends BaseViewModel {
                     /*if (section.isIn_profile()){
                         removables.add(section);
                     }*/
-                    if (classSection == null && section.getName().contains("कक्षा")){
+                    if (section.getName().contains("कक्षा")){
                         classSection = section;
                         removables.add(section);
                     }
@@ -826,10 +836,12 @@ public class SearchViewModel extends BaseViewModel {
             }
         }
 
-        classSection.getTags().clear();
-        if (selectedClasses != null && !selectedClasses.isEmpty()){
-            classSection.getTags().addAll(selectedClasses);
-            filterSections.add(classSection);
+        if (classSection != null) {
+            classSection.getTags().clear();
+            if (selectedClasses != null && !selectedClasses.isEmpty()){
+                classSection.getTags().addAll(selectedClasses);
+                filterSections.add(classSection);
+            }
         }
 
     }
@@ -1045,6 +1057,18 @@ public class SearchViewModel extends BaseViewModel {
             contentStatusMap.put(contentStatus.getContent_id(), contentStatus);
         }
         contentsAdapter.notifyDataSetChanged();
+    }
+
+    @SuppressWarnings("unused")
+    public void onEventMainThread(NetworkConnectivityChangeEvent event){
+        if (NetworkUtil.isConnected(mActivity)){
+            searchOptionsVisible.set(true);
+            if (searchFilter == null) {
+                loadFilters();
+            }
+        } else {
+            searchOptionsVisible.set(false);
+        }
     }
 
     public void registerEventBus(){

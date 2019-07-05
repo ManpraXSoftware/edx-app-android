@@ -740,14 +740,14 @@ public class DataManager extends BaseRoboInjector {
                 getdownloadedCourseContents(new OnResponseCallback<List<Content>>() {
                     @Override
                     public void onSuccess(List<Content> data) {
-                        addContentsToAgendaList(data, agendaList, source.getName(), source.getTitle());
+                        addContentsToAgendaList(data, agendaList, source);
                         receivedSources.put(source.getName(), true);
                         sendDownloadAgenda(receivedSources, agendaList, callback);
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        addContentsToAgendaList(null, agendaList, source.getName(), source.getTitle());
+                        addContentsToAgendaList(null, agendaList, source);
                         receivedSources.put(source.getName(), true);
                         sendDownloadAgenda(receivedSources, agendaList, callback);
                     }
@@ -758,14 +758,14 @@ public class DataManager extends BaseRoboInjector {
                 getdownloadedWPContents(source.getName(), new OnResponseCallback<List<Content>>() {
                     @Override
                     public void onSuccess(List<Content> data) {
-                        addContentsToAgendaList(data, agendaList, source.getName(), source.getTitle());
+                        addContentsToAgendaList(data, agendaList, source);
                         receivedSources.put(source.getName(), true);
                         sendDownloadAgenda(receivedSources, agendaList, callback);
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        addContentsToAgendaList(null, agendaList, source.getName(), source.getTitle());
+                        addContentsToAgendaList(null, agendaList, source);
                         receivedSources.put(source.getName(), true);
                         sendDownloadAgenda(receivedSources, agendaList, callback);
                     }
@@ -776,13 +776,13 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    private void addContentsToAgendaList(List<Content> contents, AgendaList agendaList,
-                                         String sourceName, String sourceTitle) {
+    private void addContentsToAgendaList(List<Content> contents, AgendaList agendaList, Source source) {
 
         AgendaItem item = new AgendaItem();
         item.setContent_count(contents == null ? 0 : contents.size());
-        item.setSource_name(sourceName);
-        item.setSource_title(sourceTitle);
+        item.setSource_name(source.getName());
+        item.setSource_title(source.getTitle());
+        item.setOrder(source.getOrder());
         agendaList.getResult().add(item);
 
     }
@@ -1831,8 +1831,39 @@ public class DataManager extends BaseRoboInjector {
             }.execute();
 
         } else {
-            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+            searchLocalContent(sourceId, take, skip, callback,
+                    new TaException(context.getString(R.string.no_connection_exception)));
         }
+
+    }
+
+    private void searchLocalContent(long sourceId, int take, int skip, OnResponseCallback<List<Content>> callback, Exception e){
+
+        new Task<List<Content>>(context) {
+            @Override
+            public List<Content> call() {
+                if (sourceId == 0) {
+                    return mLocalDataSource.getContents(take, skip);
+                } else {
+                    return mLocalDataSource.getContentsBySourceId(sourceId, take, skip);
+                }
+            }
+
+            @Override
+            protected void onSuccess(List<Content> contents) throws Exception {
+                super.onSuccess(contents);
+
+                if (contents == null) {
+                    contents = new ArrayList<>();
+                }
+                callback.onSuccess(contents);
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
+            }
+        }.execute();
 
     }
 
