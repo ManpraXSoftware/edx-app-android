@@ -97,6 +97,10 @@ public enum Action {
     Enrolled,
     EnrolFailed,
     TTAFeed,
-    appupdate
+    appupdate,
+
+    //for discussion board
+    Postname_AD,
+    Postname_CD
 
 }

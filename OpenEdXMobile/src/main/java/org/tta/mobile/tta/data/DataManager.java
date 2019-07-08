@@ -3759,7 +3759,7 @@ public class DataManager extends BaseRoboInjector {
             }
             JobInfo jobInfo = builder.build();
 
-            JobScheduler jobScheduler = (JobScheduler)context.getSystemService(JOB_SCHEDULER_SERVICE);
+            JobScheduler jobScheduler = (JobScheduler) context.getSystemService(JOB_SCHEDULER_SERVICE);
             int resultCode = jobScheduler.schedule(jobInfo);
             if (resultCode == JobScheduler.RESULT_SUCCESS) {
                 Log.d("_____TAG_____", "Sync analytics job scheduled!");
@@ -3767,8 +3767,6 @@ public class DataManager extends BaseRoboInjector {
                 Log.d("_____TAG_____", "Sync analytics job not scheduled");
             }
         }
-
     }
-
 }
 
