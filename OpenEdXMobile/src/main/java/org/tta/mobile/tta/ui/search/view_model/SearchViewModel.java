@@ -62,6 +62,7 @@ import org.tta.mobile.tta.ui.profile.OtherProfileActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.ContentSourceUtil;
 import org.tta.mobile.util.NetworkUtil;
+import org.tta.mobile.util.SoftKeyboardUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -227,6 +228,8 @@ public class SearchViewModel extends BaseViewModel {
             selectedSource = null;
             selectedSourcePosition.set(0);
         }
+        searchFocus.set(true);
+        searchFocus.set(false);
         setSelectedContentList();
         populateFilters();
         changesMade = true;
@@ -243,6 +246,8 @@ public class SearchViewModel extends BaseViewModel {
         } else {
             selectedClasses = null;
         }
+        searchFocus.set(true);
+        searchFocus.set(false);
         changesMade = true;
         isAllLoaded = false;
         mActivity.showLoading();
@@ -308,6 +313,8 @@ public class SearchViewModel extends BaseViewModel {
                 searchTextObs.set(query);
                 changesMade = true;
             }
+            searchFocus.set(true);
+            searchFocus.set(false);
             hideFilters();
             return false;
         }
@@ -770,6 +777,7 @@ public class SearchViewModel extends BaseViewModel {
                 searchType = SearchType.content;
                 contentsVisible.set(true);
                 sourcesVisible.set(true);
+                SoftKeyboardUtil.hide(mActivity);
                 if (selectedContentList == null) {
                     contentListVisible.set(false);
                 } else {
@@ -779,6 +787,8 @@ public class SearchViewModel extends BaseViewModel {
                 filtersVisible.set(true);
                 searchHint.set(mActivity.getString(R.string.search_only_hindi));
                 emptyMessage.set(mActivity.getString(R.string.empty_search_message));
+                searchFocus.set(true);
+                searchFocus.set(false);
                 break;
         }
         changesMade = true;
@@ -1275,7 +1285,8 @@ public class SearchViewModel extends BaseViewModel {
                     if (item.getItem() != null){
                         tags.add((FilterTag) item.getItem());
                     }
-
+                    searchFocus.set(true);
+                    searchFocus.set(false);
                     changesMade = true;
                     isAllLoaded = false;
                     mActivity.showLoading();

@@ -313,6 +313,8 @@ public class BindingAdapters {
                 ((EditText) view).setSelection(((EditText) view).getText().length());
                 SoftKeyboardUtil.show((EditText) view);
             }
+        } else {
+            SoftKeyboardUtil.clearViewFocus(view);
         }
     }
 

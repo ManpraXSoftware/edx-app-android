@@ -86,7 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="27dp"
-                    android:layout_marginEnd="@dimen/_8px"
+                    android:layout_marginEnd="@dimen/_6px"
                     drop_down_items="@{viewModel.searchTypeFilters}"
                     drop_down_listener="@{viewModel.searchTypeListener}"
                     android:visibility="gone"/>
@@ -95,7 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="27dp"
-                    android:layout_marginEnd="@dimen/_8px"
+                    android:layout_marginEnd="@dimen/_6px"
                     drop_down_items="@{viewModel.sourceFilters}"
                     drop_down_listener="@{viewModel.sourceListener}"
                     drop_down_selection="@{viewModel.selectedSourcePosition}"
@@ -105,8 +105,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8px"
-                    android:layout_marginEnd="@dimen/_8px"
+                    android:layout_marginStart="@dimen/_6px"
+                    android:layout_marginEnd="@dimen/_6px"
                     android:background="@drawable/t_background_tag_filled"
                     android:text="@{viewModel.contentListText}"
                     android:gravity="center"
@@ -122,8 +122,8 @@
                 <org.tta.mobile.tta.ui.custom.DropDownFilterView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8px"
-                    android:layout_marginEnd="@dimen/_8px"
+                    android:layout_marginStart="@dimen/_6px"
+                    android:layout_marginEnd="@dimen/_6px"
                     drop_down_items="@{viewModel.classFilters}"
                     drop_down_listener="@{viewModel.classListener}"
                     android:visibility="@{viewModel.classesVisible?View.VISIBLE:View.GONE}" />
@@ -138,7 +138,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8px"
+                    android:layout_marginStart="@dimen/_6px"
                     android:layout_marginEnd="@dimen/_16px"
                     android:background="@drawable/t_background_tag_selector"
                     selected="@{viewModel.peopleSelected}"
