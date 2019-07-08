@@ -37,7 +37,8 @@
                 search_view_hint="@{viewModel.searchHint}"
                 app:iconifiedByDefault="false"
                 app:searchIcon="@drawable/t_icon_search_blue"
-                request_focus="@{viewModel.searchFocus}"/>
+                request_focus="@{viewModel.searchFocus}"
+                query="@{viewModel.searchTextObs}"/>
 
             <!--<EditText
                 android:layout_width="match_parent"
@@ -84,7 +85,7 @@
                 <org.tta.mobile.tta.ui.custom.DropDownFilterView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_16px"
+                    android:layout_marginStart="27dp"
                     android:layout_marginEnd="@dimen/_8px"
                     drop_down_items="@{viewModel.searchTypeFilters}"
                     drop_down_listener="@{viewModel.searchTypeListener}"
@@ -93,7 +94,7 @@
                 <org.tta.mobile.tta.ui.custom.DropDownFilterView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_16px"
+                    android:layout_marginStart="27dp"
                     android:layout_marginEnd="@dimen/_8px"
                     drop_down_items="@{viewModel.sourceFilters}"
                     drop_down_listener="@{viewModel.sourceListener}"
@@ -104,7 +105,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_16px"
+                    android:layout_marginStart="@dimen/_8px"
                     android:layout_marginEnd="@dimen/_8px"
                     android:background="@drawable/t_background_tag_filled"
                     android:text="@{viewModel.contentListText}"
@@ -121,7 +122,7 @@
                 <org.tta.mobile.tta.ui.custom.DropDownFilterView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_16px"
+                    android:layout_marginStart="@dimen/_8px"
                     android:layout_marginEnd="@dimen/_8px"
                     drop_down_items="@{viewModel.classFilters}"
                     drop_down_listener="@{viewModel.classListener}"
@@ -137,7 +138,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_16px"
+                    android:layout_marginStart="@dimen/_8px"
                     android:layout_marginEnd="@dimen/_16px"
                     android:background="@drawable/t_background_tag_selector"
                     selected="@{viewModel.peopleSelected}"
@@ -288,8 +289,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/_60px"
+                android:layout_gravity="center"
                 android:orientation="vertical"
                 android:visibility="@{viewModel.emptyVisible ? View.VISIBLE : View.GONE}">
 

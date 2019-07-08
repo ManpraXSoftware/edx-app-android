@@ -98,6 +98,7 @@ public class SearchViewModel extends BaseViewModel {
     private Map<Long, ContentStatus> contentStatusMap;
 
     public ObservableField<String> searchText = new ObservableField<>("");
+    public ObservableField<String> searchTextObs = new ObservableField<>("");
     public ObservableField<String> searchHint = new ObservableField<>("");
     public ObservableField<String> contentListText = new ObservableField<>();
     public ObservableBoolean filterSelected = new ObservableBoolean();
@@ -304,6 +305,7 @@ public class SearchViewModel extends BaseViewModel {
         public boolean onQueryTextSubmit(String query) {
             if (!searchText.get().equalsIgnoreCase(query)) {
                 searchText.set(query);
+                searchTextObs.set(query);
                 changesMade = true;
             }
             hideFilters();
@@ -313,6 +315,7 @@ public class SearchViewModel extends BaseViewModel {
         @Override
         public boolean onQueryTextChange(String newText) {
             searchText.set(newText);
+            searchTextObs.set(newText);
             changesMade = true;
             if (newText == null || newText.equals("")){
                 hideFilters();
@@ -748,6 +751,8 @@ public class SearchViewModel extends BaseViewModel {
 
     public void selectPeople(){
         peopleSelected.set(!peopleSelected.get());
+        searchText.set("");
+        searchTextObs.set("");
         switch (searchType){
             case content:
                 searchType = SearchType.people;
@@ -1110,6 +1115,15 @@ public class SearchViewModel extends BaseViewModel {
     }
 
     @SuppressWarnings("unused")
+    public void onEventMainThread(UserFollowingChangedEvent event) {
+        if (users != null && users.contains(event.getUser())) {
+            int position = users.indexOf(event.getUser());
+            users.get(position).setFollowed(event.getUser().isFollowed());
+            usersAdapter.notifyItemChanged(position);
+        }
+    }
+
+    @SuppressWarnings("unused")
     public void onEventMainThread(ContentStatusesReceivedEvent event){
 
         for (ContentStatus status: event.getStatuses()){
@@ -1333,6 +1347,12 @@ public class SearchViewModel extends BaseViewModel {
                         .load(model.getProfileImage().getImageUrlLarge())
                         .placeholder(R.drawable.profile_photo_placeholder)
                         .into(teacherBinding.userImage);
+
+                if (model.getUsername().equals(mDataManager.getLoginPrefs().getUsername())){
+                    teacherBinding.followBtn.setVisibility(View.GONE);
+                } else {
+                    teacherBinding.followBtn.setVisibility(View.VISIBLE);
+                }
 
                 if (model.isFollowed()) {
                     teacherBinding.followBtn.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.btn_selector_filled));

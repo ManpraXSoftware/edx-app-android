@@ -5,7 +5,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/filter_drop_down"
-        android:layout_marginStart="@dimen/_16px"
+        android:layout_marginStart="@dimen/_8px"
         android:layout_marginEnd="@dimen/_8px" />
 
 </layout>

@@ -352,6 +352,11 @@ public class BindingAdapters {
         view.setOnQueryTextListener(listener);
     }
 
+    @BindingAdapter({"query"})
+    public static void setQuery(SearchView view, String text) {
+        view.setQuery(text, false);
+    }
+
     @BindingAdapter({"selected"})
     public static void setChecked(View view, boolean b) {
         view.setSelected(b);
