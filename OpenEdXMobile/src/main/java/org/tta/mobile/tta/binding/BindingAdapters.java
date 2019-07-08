@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -569,5 +570,10 @@ public class BindingAdapters {
     @BindingAdapter({"search_view_hint"})
     public static void setSearchViewHint(SearchView view, String hint){
         view.setQueryHint(hint);
+    }
+
+    @BindingAdapter({"checked_change_listener"})
+    public static void setOnCheckedChangeListener(RadioGroup view, RadioGroup.OnCheckedChangeListener listener){
+        view.setOnCheckedChangeListener(listener);
     }
 }

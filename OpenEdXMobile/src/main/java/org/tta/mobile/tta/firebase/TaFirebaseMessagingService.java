@@ -66,7 +66,7 @@ public class TaFirebaseMessagingService extends FirebaseMessagingService {
 
         //get Intent for notification landing page
         //remove this for generlisation && path!=null && !path.equals("")
-        if (path.equalsIgnoreCase(Action.AppUpdate.name())){
+        /*if (path.equalsIgnoreCase(Action.appupdate.name())){
 
             String my_package_name = getApplicationContext().getPackageName();
             String url = "";
@@ -78,7 +78,8 @@ public class TaFirebaseMessagingService extends FirebaseMessagingService {
             notificationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        } else if(type!=null && !type.equals("")) {
+        } else */
+            if(type!=null && !type.equals("")) {
             notificationIntent=getNavigationIntent(type,path);
         } else {
             notificationIntent = new Intent(getApplicationContext(), SplashActivity.class);
@@ -90,9 +91,13 @@ public class TaFirebaseMessagingService extends FirebaseMessagingService {
             notification.setDescription(messageBody);
             notification.setTitle(messageTitle);
             notification.setUsername(loginPrefs.getUsername());
-            notification.setType(path.equalsIgnoreCase(Action.AppUpdate.name()) ?
-                    NotificationType.app.name() : NotificationType.content.name());
-            notification.setRef_id(path);
+            if (type != null && type.equalsIgnoreCase(Action.appupdate.name())) {
+                notification.setType(NotificationType.app.name());
+                notification.setRef_id(type);
+            } else {
+                notification.setType(NotificationType.content.name());
+                notification.setRef_id(path);
+            }
 
             DataManager dataManager = DataManager.getInstance(this);
             dataManager.addNotification(notification);
@@ -131,6 +136,21 @@ public class TaFirebaseMessagingService extends FirebaseMessagingService {
             navigationIntent = new Intent(getApplicationContext(), SplashActivity.class);
             //return here default intent for dashboard
             return navigationIntent;
+        }
+
+        if (type.equalsIgnoreCase(Action.appupdate.name())){
+
+            String my_package_name = getApplicationContext().getPackageName();
+            String url = "";
+            try {
+                url = "market://details?id=" + my_package_name;
+            } catch ( final Exception e ) {
+                url = "https://play.google.com/store/apps/details?id=" + my_package_name;
+            }
+            navigationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            navigationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            return navigationIntent;
+
         }
 
         if(type.equals(COURSE)|| type.equals(CONNECT))

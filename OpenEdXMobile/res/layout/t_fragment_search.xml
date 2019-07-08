@@ -87,7 +87,8 @@
                     android:layout_marginStart="@dimen/_16px"
                     android:layout_marginEnd="@dimen/_8px"
                     drop_down_items="@{viewModel.searchTypeFilters}"
-                    drop_down_listener="@{viewModel.searchTypeListener}"/>
+                    drop_down_listener="@{viewModel.searchTypeListener}"
+                    android:visibility="gone"/>
 
                 <org.tta.mobile.tta.ui.custom.DropDownFilterView
                     android:layout_width="wrap_content"
@@ -132,6 +133,69 @@
                     recycler_adapter="@{viewModel.filterAdapter}"
                     layout_manager="@{viewModel.filterLayoutManager}"
                     android:visibility="@{viewModel.filtersVisible?View.VISIBLE:View.GONE}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_16px"
+                    android:layout_marginEnd="@dimen/_16px"
+                    android:background="@drawable/t_background_tag_selector"
+                    selected="@{viewModel.peopleSelected}"
+                    android:text="@string/people"
+                    android:gravity="center"
+                    android:textColor="@color/gray_5"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/hind_medium"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:onClick="@{()->viewModel.selectPeople()}"/>
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/toggle"
+                    android:checkedButton="@id/content"
+                    android:layout_marginStart="@dimen/_16px"
+                    android:layout_marginEnd="@dimen/_16px"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
+                    checked_change_listener="@{viewModel.searchTypeRadioListener}"
+                    android:visibility="gone">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/content"
+                        android:background="@drawable/t_background_tag_selector_left"
+                        android:button="@null"
+                        android:text="@string/content"
+                        android:gravity="center"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:textColor="@color/gray_5"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/hind_medium" />
+
+                    <RadioButton
+                        android:id="@+id/people"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/t_background_tag_selector_right"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:text="@string/people"
+                        android:textColor="@color/gray_5"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/hind_medium"/>
+                </RadioGroup>
 
             </LinearLayout>
 
@@ -282,7 +346,7 @@
             android:layout_height="0dp"
             android:background="@color/transparent_black_50"
             android:orientation="vertical"
-            android:visibility="@{viewModel.filterSelected?View.VISIBLE:View.GONE}"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -425,7 +489,7 @@
             android:layout_height="0dp"
             android:background="@color/transparent_black_50"
             android:orientation="vertical"
-            android:visibility="@{viewModel.contentListSelected?View.VISIBLE:View.GONE}"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

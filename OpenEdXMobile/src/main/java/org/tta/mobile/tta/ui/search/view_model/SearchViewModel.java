@@ -16,6 +16,7 @@ import android.support.v7.widget.SearchView;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.RadioGroup;
 
 import com.bumptech.glide.Glide;
 import com.maurya.mx.mxlib.core.MxFiniteAdapter;
@@ -113,6 +114,7 @@ public class SearchViewModel extends BaseViewModel {
     public ObservableBoolean notifySources = new ObservableBoolean();
     public ObservableBoolean searchOptionsVisible = new ObservableBoolean(true);
     public ObservableBoolean searchFocus = new ObservableBoolean();
+    public ObservableBoolean peopleSelected = new ObservableBoolean();
 
     public ObservableField<String> searchToolTip;
     public ObservableInt toolTipGravity;
@@ -173,6 +175,41 @@ public class SearchViewModel extends BaseViewModel {
                 searchFocus.set(false);
                 searchFocus.set(true);
                 break;
+        }
+        changesMade = true;
+        isAllLoaded = false;
+        mActivity.showLoading();
+        search();
+    };
+
+    public RadioGroup.OnCheckedChangeListener searchTypeRadioListener = (group, checkedId) -> {
+        switch (checkedId){
+            case R.id.people:
+                searchType = SearchType.people;
+                contentsVisible.set(false);
+                sourcesVisible.set(false);
+                contentListVisible.set(false);
+                classesVisible.set(false);
+                filtersVisible.set(false);
+                searchHint.set(mActivity.getString(R.string.search));
+                emptyMessage.set(mActivity.getString(R.string.empty_user_search_message));
+                searchFocus.set(false);
+                searchFocus.set(true);
+                break;
+
+            default:
+                searchType = SearchType.content;
+                contentsVisible.set(true);
+                sourcesVisible.set(true);
+                if (selectedContentList == null) {
+                    contentListVisible.set(false);
+                } else {
+                    contentListVisible.set(true);
+                }
+                classesVisible.set(true);
+                filtersVisible.set(true);
+                searchHint.set(mActivity.getString(R.string.search_only_hindi));
+                emptyMessage.set(mActivity.getString(R.string.empty_search_message));
         }
         changesMade = true;
         isAllLoaded = false;
@@ -706,6 +743,43 @@ public class SearchViewModel extends BaseViewModel {
 //                mActivity.showLongSnack(e.getLocalizedMessage());
             }
         });
+
+    }
+
+    public void selectPeople(){
+        peopleSelected.set(!peopleSelected.get());
+        switch (searchType){
+            case content:
+                searchType = SearchType.people;
+                contentsVisible.set(false);
+                sourcesVisible.set(false);
+                contentListVisible.set(false);
+                classesVisible.set(false);
+                filtersVisible.set(false);
+                searchHint.set(mActivity.getString(R.string.search));
+                emptyMessage.set(mActivity.getString(R.string.empty_user_search_message));
+                searchFocus.set(false);
+                searchFocus.set(true);
+                break;
+            case people:
+                searchType = SearchType.content;
+                contentsVisible.set(true);
+                sourcesVisible.set(true);
+                if (selectedContentList == null) {
+                    contentListVisible.set(false);
+                } else {
+                    contentListVisible.set(true);
+                }
+                classesVisible.set(true);
+                filtersVisible.set(true);
+                searchHint.set(mActivity.getString(R.string.search_only_hindi));
+                emptyMessage.set(mActivity.getString(R.string.empty_search_message));
+                break;
+        }
+        changesMade = true;
+        isAllLoaded = false;
+        mActivity.showLoading();
+        search();
 
     }
 

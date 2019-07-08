@@ -51,7 +51,6 @@ import org.tta.mobile.tta.utils.AppUtil;
 import org.tta.mobile.tta.utils.BadgeHelper;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.tta.utils.DataUtil;
-import org.tta.mobile.tta.utils.ToolTipView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -184,7 +183,7 @@ public class FeedViewModel extends BaseViewModel {
                                     break;
                                 }
 
-                            case AppUpdate:
+                            case appupdate:
                                 AppUtil.openAppOnPlayStore(mActivity, mActivity.getPackageName());
                                 break;
 
@@ -597,7 +596,7 @@ public class FeedViewModel extends BaseViewModel {
                 case TTAFeed:
                     return feed.getTitle();
 
-                case AppUpdate:
+                case appupdate:
                     return mActivity.getString(R.string.app_update_title);
 
                 default:
@@ -686,8 +685,9 @@ public class FeedViewModel extends BaseViewModel {
                                 .build()
                                 .show();
 //                        ToolTipView.showToolTip(mActivity, "अन्य शिक्षको से जुड़ने के लिए फॉलो बटन दबाएँ ", teacherBinding.followBtn, Gravity.BOTTOM);
-                        mDataManager.getAppPref().setFeedVisited(true);
                     }
+                    mDataManager.getAppPref().setFeedVisited(true);
+
                 }
 
 
@@ -822,6 +822,7 @@ public class FeedViewModel extends BaseViewModel {
                                     .placeholder(R.drawable.placeholder_course_card_image)
                                     .into(feedBinding.feedContentImage);
                             feedBinding.feedMetaText.setText(model.getMeta_data().getText());
+                            break;
 
                         case TTAFeed:
 
@@ -830,8 +831,9 @@ public class FeedViewModel extends BaseViewModel {
                                     .placeholder(R.drawable.placeholder_course_card_image)
                                     .into(feedBinding.feedContentImage);
                             feedBinding.feedMetaText.setText(model.getMessage());
+                            break;
 
-                        case AppUpdate:
+                        case appupdate:
 
                             Glide.with(getContext())
                                     .load(R.drawable.tta_launcher_foreground)

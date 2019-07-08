@@ -103,7 +103,7 @@ public class NotificationsViewModel extends BaseViewModel {
 
                         break;
                     case app:
-                        if (item.getRef_id().equalsIgnoreCase(Action.AppUpdate.name())){
+                        if (item.getRef_id().equalsIgnoreCase(Action.appupdate.name())){
                             AppUtil.openAppOnPlayStore(mActivity, mActivity.getPackageName());
                         }
                         break;
