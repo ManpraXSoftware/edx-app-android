@@ -52,9 +52,7 @@ public class SyncAnalyticsJob extends JobService {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             scheduleRefresh();
         }
-
     }
-
 
     @Override
     public boolean onStopJob(JobParameters params) {
@@ -85,6 +83,5 @@ public class SyncAnalyticsJob extends JobService {
                 Log.d("_____TAG_____", "Sync analytics job not scheduled");
             }
         }
-
     }
 }

@@ -183,10 +183,6 @@ public class FeedViewModel extends BaseViewModel {
                                     break;
                                 }
 
-                            case AppUpdate:
-                                AppUtil.openAppOnPlayStore(mActivity, mActivity.getPackageName());
-                                break;
-
                             default:
                                 if (item.getMeta_data().getId() != null) {
                                     mActivity.showLoading();
@@ -204,6 +200,8 @@ public class FeedViewModel extends BaseViewModel {
                                                     mActivity.showLongSnack(e.getLocalizedMessage());
                                                 }
                                             });
+                                } else if (item.getMeta_data().getSource_name().equalsIgnoreCase(Action.appupdate.name())){
+                                    AppUtil.openAppOnPlayStore(mActivity, mActivity.getPackageName());
                                 }
 
                         }
@@ -596,9 +594,6 @@ public class FeedViewModel extends BaseViewModel {
                 case TTAFeed:
                     return feed.getTitle();
 
-                case AppUpdate:
-                    return mActivity.getString(R.string.app_update_title);
-
                 default:
                     return feed.getMeta_data().getSource_title();
             }
@@ -818,23 +813,21 @@ public class FeedViewModel extends BaseViewModel {
                                     .placeholder(R.drawable.placeholder_course_card_image)
                                     .into(feedBinding.feedContentImage);
                             feedBinding.feedMetaText.setText(model.getMeta_data().getText());
+                            break;
 
                         case TTAFeed:
 
-                            Glide.with(getContext())
-                                    .load(model.getMeta_data().getIcon())
-                                    .placeholder(R.drawable.placeholder_course_card_image)
-                                    .into(feedBinding.feedContentImage);
+                            if (model.getMeta_data().getSource_name().equalsIgnoreCase(Action.appupdate.name())) {
+                                Glide.with(getContext())
+                                        .load(R.drawable.tta_launcher_foreground)
+                                        .into(feedBinding.feedContentImage);
+                            } else {
+                                Glide.with(getContext())
+                                        .load(model.getMeta_data().getIcon())
+                                        .placeholder(R.drawable.placeholder_course_card_image)
+                                        .into(feedBinding.feedContentImage);
+                            }
                             feedBinding.feedMetaText.setText(model.getMessage());
-
-                        case AppUpdate:
-
-                            Glide.with(getContext())
-                                    .load(R.drawable.tta_launcher_foreground)
-                                    .into(feedBinding.feedContentImage);
-
-                            feedBinding.feedMetaText.setText(mActivity.getString(R.string.app_update_message));
-
                             break;
 
                     }

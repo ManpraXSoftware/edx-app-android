@@ -83,15 +83,6 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
         int layoutId;
         try {
             switch (Action.valueOf(feed.getAction())){
-                case CourseLike:
-                case ShareCourse:
-                case Certificate:
-                case GenerateCertificate:
-                case CertificateGenerate:
-                case Badge:
-                    layoutId = R.layout.t_fragment_feed_share;
-                    break;
-
                 case LikePost:
                 case MostPopular:
                 case CommentPost:
@@ -100,12 +91,13 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
                 case NewPost:
                 case DBComment:
                 case DBLike:
+                case Like:
+                case Comment:
+                case TTAFeed:
                     if (feed.getMeta_data().getUser_name() != null) {
                         layoutId = R.layout.t_fragment_feed_share_with_user;
-                    } else {
-                        layoutId = R.layout.t_fragment_feed_share;
+                        break;
                     }
-                    break;
 
                 default:
                     layoutId = R.layout.t_fragment_feed_share;
@@ -140,7 +132,11 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
 
         contentView.findViewById(R.id.ivClose).setOnClickListener(v -> dismiss());
 
-        ((TextView) contentView.findViewById(R.id.feed_meta_text)).setText(feed.getMeta_data().getText());
+        if (feed.getAction().equalsIgnoreCase(Action.TTAFeed.name())) {
+            ((TextView) contentView.findViewById(R.id.feed_meta_text)).setText(feed.getMessage());
+        } else {
+            ((TextView) contentView.findViewById(R.id.feed_meta_text)).setText(feed.getMeta_data().getText());
+        }
         Glide.with(getContext())
                 .load(feed.getMeta_data().getIcon())
                 .placeholder(R.drawable.placeholder_course_card_image)

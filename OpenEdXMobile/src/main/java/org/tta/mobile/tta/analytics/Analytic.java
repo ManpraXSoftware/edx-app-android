@@ -249,64 +249,6 @@ public class Analytic {
             }
         };
         task.execute();
-        /*if (ctx instanceof RoboContext) {
-            final MXAnalyticsTask task = new MXAnalyticsTask(ctx, finalList) {
-                @Override
-                protected void onSuccess(SuccessResponse mx_AnalyticsResponse) throws Exception {
-                    super.onSuccess(mx_AnalyticsResponse);
-                    deleteAnalytics(finalList);
-                    Log.d("MXAnaltics", "successfully updated mx Normal analytics");
-                }
-
-                @Override
-                protected void onException(Exception ex) {
-                    Log.d("MXAnaltics", "fail to update mx analytics");
-                }
-            };
-            task.execute();
-        } else {
-            new AsyncTask<Void, Void, SuccessResponse>() {
-                @Override
-                protected SuccessResponse doInBackground(Void... voids) {
-                    try {
-                        Response<SuccessResponse> response = mxAnalyticsAPI.postMxAnalytics(finalList).execute();
-                        Gson gson=new Gson();
-
-                        if (!response.isSuccessful()) {
-                            final int errorCode = response.code();
-                            final String errorBody = response.errorBody().string();
-                            if ((errorCode == HttpStatus.BAD_REQUEST || errorCode == HttpStatus.CONFLICT) && !android.text.TextUtils.isEmpty(errorBody)) {
-                                try {
-                                    final FormFieldMessageBody body = gson.fromJson(errorBody, FormFieldMessageBody.class);
-                                    if (body != null && body.size() > 0) {
-                                        return null;
-                                    }
-                                } catch (JsonSyntaxException ex) {
-                                    // Looks like the response does not contain form validation errors.
-                                }
-                            }
-                            return null;
-                        }
-                        return response.body();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-                }
-
-                @Override
-                protected void onPostExecute(SuccessResponse successResponse) {
-                    super.onPostExecute(successResponse);
-
-                    if (successResponse == null){
-                        Log.d("MXAnaltics", "fail to update mx analytics");
-                    } else {
-                        deleteAnalytics(finalList);
-                        Log.d("MXAnaltics", "successfully updated mx Normal analytics");
-                    }
-                }
-            }.execute();
-        }*/
     }
 
     private void syncTinCanAnalytics() {
@@ -346,63 +288,5 @@ public class Analytic {
             }
         };
         task.execute();
-        /*if (ctx instanceof RoboContext) {
-            final TinCanAnalyticTask task = new TinCanAnalyticTask(ctx, tincan_item) {
-                @Override
-                protected void onSuccess(SuccessResponse mx_AnalyticsResponse) throws Exception {
-                    super.onSuccess(mx_AnalyticsResponse);
-                    deleteAnalytics(finalList);
-                    Log.d("MXAnaltics", "successfully updated mx TinCanAnalytics");
-                }
-
-                @Override
-                protected void onException(Exception ex) {
-                    Log.d("MXAnaltics", "fail to update tincan analytics");
-                }
-            };
-            task.execute();
-        } else {
-            new AsyncTask<Void, Void, SuccessResponse>() {
-                @Override
-                protected SuccessResponse doInBackground(Void... voids) {
-                    try {
-                        Response<SuccessResponse> response = mxAnalyticsAPI.postTincanAnalytics(tincan_item).execute();
-                        Gson gson=new Gson();
-
-                        if (!response.isSuccessful()) {
-                            final int errorCode = response.code();
-                            final String errorBody = response.errorBody().string();
-                            if ((errorCode == HttpStatus.BAD_REQUEST || errorCode == HttpStatus.CONFLICT) && !android.text.TextUtils.isEmpty(errorBody)) {
-                                try {
-                                    final FormFieldMessageBody body = gson.fromJson(errorBody, FormFieldMessageBody.class);
-                                    if (body != null && body.size() > 0) {
-                                        return null;
-                                    }
-                                } catch (JsonSyntaxException ex) {
-                                    // Looks like the response does not contain form validation errors.
-                                }
-                            }
-                            return null;
-                        }
-                        return response.body();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-                }
-
-                @Override
-                protected void onPostExecute(SuccessResponse successResponse) {
-                    super.onPostExecute(successResponse);
-
-                    if (successResponse == null){
-                        Log.d("MXAnaltics", "fail to update tincan analytics");
-                    } else {
-                        deleteAnalytics(finalList);
-                        Log.d("MXAnaltics", "successfully updated mx TinCanAnalytics");
-                    }
-                }
-            }.execute();
-        }*/
     }
 }

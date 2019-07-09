@@ -37,6 +37,8 @@ public interface ILocalDataSource {
     void insertContent(Content content);
     void insertOrIgnoreContent(Content content);
     Content getContentBySourceIdentity(String sourceIdentity);
+    List<Content> getContentsBySourceId(long sourceId, int take, int skip);
+    List<Content> getContents(int take, int skip);
 
     List<Feed> getFeeds(String username, int take, int skip);
     void insertFeeds(List<Feed> feeds);

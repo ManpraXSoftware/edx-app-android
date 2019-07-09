@@ -29,6 +29,8 @@ public class Source implements Parcelable
 
     private String modified_at;
 
+    private long order;
+
     public Source() {
     }
 
@@ -144,6 +146,14 @@ public class Source implements Parcelable
     public void setModified_at (String modified_at)
     {
         this.modified_at = modified_at;
+    }
+
+    public long getOrder() {
+        return order;
+    }
+
+    public void setOrder(long order) {
+        this.order = order;
     }
 
     @Override

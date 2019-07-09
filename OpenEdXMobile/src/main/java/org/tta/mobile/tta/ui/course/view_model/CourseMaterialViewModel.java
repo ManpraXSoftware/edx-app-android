@@ -122,6 +122,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
     public ObservableBoolean footerBtnVisible = new ObservableBoolean(false);
 
     public ObservableBoolean emptyVisible = new ObservableBoolean();
+    public String certificateStatus = "certificate";
 
     private int numberOfDownloadingVideos;
     private int numberOfDownloadedVideos;
@@ -631,16 +632,18 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
             case APPLICABLE:
                 footerBtnText.set(mActivity.getString(R.string.generate_certificate));
+                certificateStatus = "progress";
                 break;
 
             case PROGRESS:
                 footerBtnText.set(mActivity.getString(R.string.certificate));
+                certificateStatus = "progress";
                 break;
 
             case GENERATED:
                 footerBtnText.set(mActivity.getString(R.string.view_certificate));
+                certificateStatus = "generated";
                 if (footerBtnText.get().equals(mActivity.getResources().getString(R.string.view_certificate))){
-                    Constants.IsCertificateExits = true;
                 }
                 break;
         }

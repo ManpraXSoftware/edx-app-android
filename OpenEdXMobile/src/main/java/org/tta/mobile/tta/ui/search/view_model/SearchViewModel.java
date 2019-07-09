@@ -16,6 +16,7 @@ import android.support.v7.widget.SearchView;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.RadioGroup;
 
 import com.bumptech.glide.Glide;
 import com.maurya.mx.mxlib.core.MxFiniteAdapter;
@@ -27,6 +28,7 @@ import org.tta.mobile.databinding.TRowAgendaContentBinding;
 import org.tta.mobile.databinding.TRowFilterDropDownBinding;
 import org.tta.mobile.databinding.TRowFilterTagBinding;
 import org.tta.mobile.databinding.TRowSuggestedTeacherGridBinding;
+import org.tta.mobile.event.NetworkConnectivityChangeEvent;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
@@ -59,6 +61,8 @@ import org.tta.mobile.tta.ui.custom.DropDownFilterView;
 import org.tta.mobile.tta.ui.profile.OtherProfileActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.ContentSourceUtil;
+import org.tta.mobile.util.NetworkUtil;
+import org.tta.mobile.util.SoftKeyboardUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -95,6 +99,7 @@ public class SearchViewModel extends BaseViewModel {
     private Map<Long, ContentStatus> contentStatusMap;
 
     public ObservableField<String> searchText = new ObservableField<>("");
+    public ObservableField<String> searchTextObs = new ObservableField<>("");
     public ObservableField<String> searchHint = new ObservableField<>("");
     public ObservableField<String> contentListText = new ObservableField<>();
     public ObservableBoolean filterSelected = new ObservableBoolean();
@@ -109,6 +114,9 @@ public class SearchViewModel extends BaseViewModel {
     public ObservableBoolean classesVisible = new ObservableBoolean(true);
     public ObservableBoolean filtersVisible = new ObservableBoolean(true);
     public ObservableBoolean notifySources = new ObservableBoolean();
+    public ObservableBoolean searchOptionsVisible = new ObservableBoolean(true);
+    public ObservableBoolean searchFocus = new ObservableBoolean();
+    public ObservableBoolean peopleSelected = new ObservableBoolean();
 
     public ObservableField<String> searchToolTip;
     public ObservableInt toolTipGravity;
@@ -166,7 +174,44 @@ public class SearchViewModel extends BaseViewModel {
                 filtersVisible.set(false);
                 searchHint.set(mActivity.getString(R.string.search));
                 emptyMessage.set(mActivity.getString(R.string.empty_user_search_message));
+                searchFocus.set(false);
+                searchFocus.set(true);
                 break;
+        }
+        changesMade = true;
+        isAllLoaded = false;
+        mActivity.showLoading();
+        search();
+    };
+
+    public RadioGroup.OnCheckedChangeListener searchTypeRadioListener = (group, checkedId) -> {
+        switch (checkedId){
+            case R.id.people:
+                searchType = SearchType.people;
+                contentsVisible.set(false);
+                sourcesVisible.set(false);
+                contentListVisible.set(false);
+                classesVisible.set(false);
+                filtersVisible.set(false);
+                searchHint.set(mActivity.getString(R.string.search));
+                emptyMessage.set(mActivity.getString(R.string.empty_user_search_message));
+                searchFocus.set(false);
+                searchFocus.set(true);
+                break;
+
+            default:
+                searchType = SearchType.content;
+                contentsVisible.set(true);
+                sourcesVisible.set(true);
+                if (selectedContentList == null) {
+                    contentListVisible.set(false);
+                } else {
+                    contentListVisible.set(true);
+                }
+                classesVisible.set(true);
+                filtersVisible.set(true);
+                searchHint.set(mActivity.getString(R.string.search_only_hindi));
+                emptyMessage.set(mActivity.getString(R.string.empty_search_message));
         }
         changesMade = true;
         isAllLoaded = false;
@@ -183,6 +228,8 @@ public class SearchViewModel extends BaseViewModel {
             selectedSource = null;
             selectedSourcePosition.set(0);
         }
+        searchFocus.set(true);
+        searchFocus.set(false);
         setSelectedContentList();
         populateFilters();
         changesMade = true;
@@ -199,6 +246,8 @@ public class SearchViewModel extends BaseViewModel {
         } else {
             selectedClasses = null;
         }
+        searchFocus.set(true);
+        searchFocus.set(false);
         changesMade = true;
         isAllLoaded = false;
         mActivity.showLoading();
@@ -261,8 +310,11 @@ public class SearchViewModel extends BaseViewModel {
         public boolean onQueryTextSubmit(String query) {
             if (!searchText.get().equalsIgnoreCase(query)) {
                 searchText.set(query);
+                searchTextObs.set(query);
                 changesMade = true;
             }
+            searchFocus.set(true);
+            searchFocus.set(false);
             hideFilters();
             return false;
         }
@@ -270,6 +322,7 @@ public class SearchViewModel extends BaseViewModel {
         @Override
         public boolean onQueryTextChange(String newText) {
             searchText.set(newText);
+            searchTextObs.set(newText);
             changesMade = true;
             if (newText == null || newText.equals("")){
                 hideFilters();
@@ -433,6 +486,13 @@ public class SearchViewModel extends BaseViewModel {
 
         loadFilters();
         loadDefaultCategory();
+
+        if (NetworkUtil.isConnected(mActivity)){
+            searchOptionsVisible.set(true);
+        } else {
+            searchOptionsVisible.set(false);
+            search();
+        }
     }
 
     private void setSearchTypes(){
@@ -667,7 +727,7 @@ public class SearchViewModel extends BaseViewModel {
                     /*if (section.isIn_profile()){
                         removables.add(section);
                     }*/
-                    if (classSection == null && section.getName().contains("कक्षा")){
+                    if (section.getName().contains("कक्षा")){
                         classSection = section;
                         removables.add(section);
                     }
@@ -693,6 +753,48 @@ public class SearchViewModel extends BaseViewModel {
 //                mActivity.showLongSnack(e.getLocalizedMessage());
             }
         });
+
+    }
+
+    public void selectPeople(){
+        peopleSelected.set(!peopleSelected.get());
+        searchText.set("");
+        searchTextObs.set("");
+        switch (searchType){
+            case content:
+                searchType = SearchType.people;
+                contentsVisible.set(false);
+                sourcesVisible.set(false);
+                contentListVisible.set(false);
+                classesVisible.set(false);
+                filtersVisible.set(false);
+                searchHint.set(mActivity.getString(R.string.search));
+                emptyMessage.set(mActivity.getString(R.string.empty_user_search_message));
+                searchFocus.set(false);
+                searchFocus.set(true);
+                break;
+            case people:
+                searchType = SearchType.content;
+                contentsVisible.set(true);
+                sourcesVisible.set(true);
+                SoftKeyboardUtil.hide(mActivity);
+                if (selectedContentList == null) {
+                    contentListVisible.set(false);
+                } else {
+                    contentListVisible.set(true);
+                }
+                classesVisible.set(true);
+                filtersVisible.set(true);
+                searchHint.set(mActivity.getString(R.string.search_only_hindi));
+                emptyMessage.set(mActivity.getString(R.string.empty_search_message));
+                searchFocus.set(true);
+                searchFocus.set(false);
+                break;
+        }
+        changesMade = true;
+        isAllLoaded = false;
+        mActivity.showLoading();
+        search();
 
     }
 
@@ -826,10 +928,12 @@ public class SearchViewModel extends BaseViewModel {
             }
         }
 
-        classSection.getTags().clear();
-        if (selectedClasses != null && !selectedClasses.isEmpty()){
-            classSection.getTags().addAll(selectedClasses);
-            filterSections.add(classSection);
+        if (classSection != null) {
+            classSection.getTags().clear();
+            if (selectedClasses != null && !selectedClasses.isEmpty()){
+                classSection.getTags().addAll(selectedClasses);
+                filterSections.add(classSection);
+            }
         }
 
     }
@@ -1021,6 +1125,15 @@ public class SearchViewModel extends BaseViewModel {
     }
 
     @SuppressWarnings("unused")
+    public void onEventMainThread(UserFollowingChangedEvent event) {
+        if (users != null && users.contains(event.getUser())) {
+            int position = users.indexOf(event.getUser());
+            users.get(position).setFollowed(event.getUser().isFollowed());
+            usersAdapter.notifyItemChanged(position);
+        }
+    }
+
+    @SuppressWarnings("unused")
     public void onEventMainThread(ContentStatusesReceivedEvent event){
 
         for (ContentStatus status: event.getStatuses()){
@@ -1045,6 +1158,18 @@ public class SearchViewModel extends BaseViewModel {
             contentStatusMap.put(contentStatus.getContent_id(), contentStatus);
         }
         contentsAdapter.notifyDataSetChanged();
+    }
+
+    @SuppressWarnings("unused")
+    public void onEventMainThread(NetworkConnectivityChangeEvent event){
+        if (NetworkUtil.isConnected(mActivity)){
+            searchOptionsVisible.set(true);
+            if (searchFilter == null) {
+                loadFilters();
+            }
+        } else {
+            searchOptionsVisible.set(false);
+        }
     }
 
     public void registerEventBus(){
@@ -1160,7 +1285,8 @@ public class SearchViewModel extends BaseViewModel {
                     if (item.getItem() != null){
                         tags.add((FilterTag) item.getItem());
                     }
-
+                    searchFocus.set(true);
+                    searchFocus.set(false);
                     changesMade = true;
                     isAllLoaded = false;
                     mActivity.showLoading();
@@ -1232,6 +1358,12 @@ public class SearchViewModel extends BaseViewModel {
                         .load(model.getProfileImage().getImageUrlLarge())
                         .placeholder(R.drawable.profile_photo_placeholder)
                         .into(teacherBinding.userImage);
+
+                if (model.getUsername().equals(mDataManager.getLoginPrefs().getUsername())){
+                    teacherBinding.followBtn.setVisibility(View.GONE);
+                } else {
+                    teacherBinding.followBtn.setVisibility(View.VISIBLE);
+                }
 
                 if (model.isFollowed()) {
                     teacherBinding.followBtn.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.btn_selector_filled));

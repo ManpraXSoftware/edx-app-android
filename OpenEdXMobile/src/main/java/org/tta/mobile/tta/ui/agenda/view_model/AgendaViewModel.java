@@ -105,7 +105,7 @@ public class AgendaViewModel extends BaseViewModel {
                         showEmptyAgendaList(stateListAdapter);
                     } else {
                         List<AgendaItem> items = list.getResult();
-                        if (items.size() != sources.size()) {
+//                        if (items.size() != sources.size()) {
 
                             for (Source source : sources) {
                                 AgendaItem item = new AgendaItem();
@@ -113,11 +113,14 @@ public class AgendaViewModel extends BaseViewModel {
                                 if (!items.contains(item)) {
                                     item.setSource_title(source.getTitle());
                                     item.setContent_count(0);
+                                    item.setOrder(source.getOrder());
                                     items.add(item);
+                                } else {
+                                    items.get(items.indexOf(item)).setOrder(source.getOrder());
                                 }
                             }
 
-                        }
+//                        }
                         sortAgendaItems(items);
                         stateListAdapter.setItems(list.getResult());
                     }
@@ -144,6 +147,7 @@ public class AgendaViewModel extends BaseViewModel {
             item.setSource_title(source.getTitle());
             item.setSource_name(source.getName());
             item.setContent_count(0);
+            item.setOrder(source.getOrder());
             items.add(item);
         }
 
@@ -164,19 +168,23 @@ public class AgendaViewModel extends BaseViewModel {
                 hideLoader();
                 if (data != null && data.getResult() != null && !data.getResult().isEmpty()) {
                     List<AgendaItem> items = data.getResult();
-                    if (items.size() != sources.size()) {
+//                    if (items.size() != sources.size()) {
 
                         for (Source source : sources) {
                             AgendaItem item = new AgendaItem();
                             item.setSource_name(source.getName());
+                            item.setOrder(source.getOrder());
                             if (!items.contains(item)) {
                                 item.setSource_title(source.getTitle());
                                 item.setContent_count(0);
+                                item.setOrder(source.getOrder());
                                 items.add(item);
+                            } else {
+                                items.get(items.indexOf(item)).setOrder(source.getOrder());
                             }
                         }
 
-                    }
+//                    }
                     sortAgendaItems(items);
                     myListAdapter.setItems(data.getResult());
                 } else {
@@ -212,6 +220,7 @@ public class AgendaViewModel extends BaseViewModel {
                             if (!items.contains(item)) {
                                 item.setSource_title(source.getTitle());
                                 item.setContent_count(0);
+                                item.setOrder(source.getOrder());
                                 items.add(item);
                             }
                         }

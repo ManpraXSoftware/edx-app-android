@@ -13,7 +13,6 @@ import org.tta.mobile.discussion.DiscussionTopic;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
-import org.tta.mobile.tta.analytics.analytics_enums.DiscussionTopicType;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
 import org.tta.mobile.tta.ui.base.BasePagerAdapter;
@@ -54,8 +53,8 @@ public class DiscussionThreadActivity extends BaseVMActivity {
 
         analytic.addMxAnalytics_db(
                 topic.getName().contains("लेखक") ?
-                        DiscussionTopicType.Postname_AD.name() :
-                        DiscussionTopicType.Postname_CD.name(),
+                        Action.Postname_AD.name() :
+                        Action.Postname_CD.name(),
                 Action.DBView, course.getCourse().getName(),
                 Source.Mobile, thread.getIdentifier());
     }

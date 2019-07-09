@@ -15,6 +15,13 @@ public interface ContentDao {
     @Query("Select * from content")
     List<Content> getAll();
 
+    @Query("Select * from content where source_id = :sourceId " +
+            "limit :take offset (:take*:skip)")
+    List<Content> getAllBySourceId(long sourceId, int take, int skip);
+
+    @Query("Select * from content limit :take offset (:take*:skip)")
+    List<Content> getAll(int take, int skip);
+
     @Query("Select * from content where id = :id")
     Content getById(long id);
 

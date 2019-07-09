@@ -95,7 +95,7 @@ public class CourseMaterialTab extends TaBaseFragment {
                                             if (!appPref.isCourseBottom()) {
                                                 int lastVisiblePosition = ((LinearLayoutManager) layoutManager).findLastCompletelyVisibleItemPosition();
                                                 if (lastVisiblePosition == lastVisibleItemPosition) {
-                                                    if (!Constants.IsCertificateExits) {
+                                                    if (viewModel.certificateStatus.equals("certificate")) {
                                                         new MxTooltip.Builder(recyclerView.getContext())
                                                                 .anchorView(holder.itemView.findViewById(R.id.item_btn))
                                                                 .text(getResources().getString(R.string.samjhe_parkhe_btn))
@@ -108,7 +108,18 @@ public class CourseMaterialTab extends TaBaseFragment {
 //                                                        ToolTipView.showToolTip(recyclerView.getContext(),
 //                                                                getResources().getString(R.string.samjhe_parkhe_btn),
 //                                                                holder.itemView.findViewById(R.id.item_btn), Gravity.TOP);
-                                                    }else {
+                                                    }else if (viewModel.certificateStatus.equals("progress")){
+                                                        new MxTooltip.Builder(recyclerView.getContext())
+                                                                .anchorView(holder.itemView.findViewById(R.id.item_btn))
+                                                                .text("अपना सर्टिफिकेट उत्पन्न करने के लिए यह बटन दबायें")
+                                                                .gravity(Gravity.TOP)
+                                                                .animated(true)
+                                                                .transparentOverlay(true)
+                                                                .arrowDrawable(R.drawable.down_arrow)
+                                                                .build()
+                                                                .show();
+                                                    }
+                                                        else {
                                                         new MxTooltip.Builder(recyclerView.getContext())
                                                                 .anchorView(holder.itemView.findViewById(R.id.item_btn))
                                                                 .text(getResources().getString(R.string.certificate_btn))
