@@ -452,7 +452,6 @@ public class BindingAdapters {
                                 .build()
                                 .show();
                     }
-//                    ToolTipView.showToolTip(mxView.getContext(), message.trim(), mxView.getTitleTextView(), gravity);
                 } else {
                     if (gravity == Gravity.TOP) {
                         new MxTooltip.Builder(view.getContext())
@@ -475,7 +474,6 @@ public class BindingAdapters {
                                 .build()
                                 .show();
                     }
-//                    ToolTipView.showToolTip(view.getContext(), message.trim(), view, gravity);
                 }
             }
     }

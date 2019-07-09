@@ -200,7 +200,7 @@
             android:name="org.tta.mobile.view.CertificateActivity"
             android:label="@string/tab_label_certificate"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar"/>
+            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
 
         <activity
             android:name="org.tta.mobile.view.SettingsActivity"
@@ -240,7 +240,7 @@
         <activity
             android:name="org.tta.mobile.view.CourseTabsDashboardActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar"/>
+            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
 
         <activity
             android:name="org.tta.mobile.view.dialog.WebViewActivity"
@@ -262,6 +262,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
                 <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
@@ -274,26 +275,31 @@
         </receiver>
 
         <!-- Setup Facebook -->
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="${facebookAppId}"/>
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="${facebookAppId}" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="${fbLoginProtocolScheme}" />
             </intent-filter>
         </activity>
 
         <!-- TTA activities start -->
 
-        <activity android:name="org.tta.mobile.tta.ui.splash.SplashActivity"
+        <activity
+            android:name="org.tta.mobile.tta.ui.splash.SplashActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.Fullscreen.TaLaunch">
@@ -303,8 +309,11 @@
             </intent-filter>
 
             <intent-filter>
-                <data android:scheme="edx" android:host="open" />
+                <data
+                    android:scheme="edx"
+                    android:host="open" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
@@ -321,43 +330,40 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.Fullscreen"
-            android:windowSoftInputMode="adjustResize">
-        </activity>
+            android:windowSoftInputMode="adjustResize"></activity>
 
         <activity
             android:name="org.tta.mobile.tta.ui.launch.SwipeLaunchActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.Fullscreen">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar.Fullscreen"></activity>
 
         <activity
             android:name="org.tta.mobile.tta.ui.reset_password.EnterNumberActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.Fullscreen"
-            android:windowSoftInputMode="adjustResize">
-        </activity>
+            android:windowSoftInputMode="adjustResize"></activity>
 
         <activity
             android:name="org.tta.mobile.tta.ui.otp.OtpActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.Fullscreen"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name="org.tta.mobile.tta.ui.reset_password.ResetPasswordActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.Fullscreen"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name="org.tta.mobile.tta.ui.landing.LandingActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.CustomStatusBar"/>
+            android:theme="@style/AppTheme.NoActionBar.CustomStatusBar" />
 
         <activity
             android:name="org.tta.mobile.tta.ui.logistration.UserInfoActivity"
@@ -373,16 +379,16 @@
             android:label="Scorm"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name="org.tta.mobile.tta.ui.connect.ConnectDashboardActivity"
             android:label="@string/app_name"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AppTheme.NoActionBar.CustomStatusBar"/>
+            android:theme="@style/AppTheme.NoActionBar.CustomStatusBar" />
 
-        <activity
+        <!--<activity
             android:name="org.tta.mobile.tta.ui.deep_link.DeepLinkActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -390,68 +396,163 @@
             android:launchMode="singleTask"
             android:noHistory="true">
 
-            <intent-filter android:label="@string/app_name">
+            <tools:validation testUrl="http://connect.theteacherapp.org/category/chatshaala/" />
+            <tools:validation testUrl="http://theteacherapp.org" />
+
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Accepts URIs that begin with "http://connect.theteacherapp.org" -->
+
                 <data
-                    android:host="connect.theteacherapp.org"
-                    android:scheme="http" />
+                    android:scheme="http"
+                    android:host="connect.theteacherapp.org" />
+            </intent-filter>
+            <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
 
-                <!-- Accepts URIs that begin with "http://theteacherapp.org" -->
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data
+            android:scheme="http"
+            android:host="theteacherapp.org" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
-                    android:host="theteacherapp.org"
-                    android:scheme="http" />
+                    android:scheme="http"
+                    android:host="www.theteacherapp.org" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-                <!-- Accepts URIs that begin with "http://www.theteacherapp.org" -->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
-                    android:host="www.theteacherapp.org"
-                    android:scheme="http" />
+                    android:scheme="http"
+                    android:host="www.connect.theteacherapp.org" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-                <!-- Accepts URIs that begin with "http://www.connect.theteacherapp.org" -->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
-                    android:host="www.connect.theteacherapp.org"
-                    android:scheme="http" />
+                    android:scheme="http"
+                    android:host="connect.theteacherapp.org" />
+            </intent-filter>
+            <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
 
-                <!-- for https -->
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
 
+            <data
+            android:scheme="http"
+            android:host="theteacherapp.org" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-                <!-- Accepts URIs that begin with "http://connect.theteacherapp.org" -->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
-                    android:host="connect.theteacherapp.org"
-                    android:scheme="https" />
+                    android:scheme="http"
+                    android:host="www.theteacherapp.org" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-                <!-- Accepts URIs that begin with "http://theteacherapp.org" -->
-                <data
-                    android:host="theteacherapp.org"
-                    android:scheme="https" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-                <!-- Accepts URIs that begin with "http://www.theteacherapp.org/" -->
                 <data
-                    android:host="www.theteacherapp.org"
-                    android:scheme="https" />
+                    android:scheme="http"
+                    android:host="www.connect.theteacherapp.org" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-                <!-- Accepts URIs that begin with "https://www.connect.theteacherapp.org/" -->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
-                    android:host="www.connect.theteacherapp.org"
-                    android:scheme="https" />
+                    android:scheme="https"
+                    android:host="connect.theteacherapp.org" />
+            </intent-filter>
+            <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data
+            android:scheme="https"
+            android:host="theteacherapp.org" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="www.theteacherapp.org" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="connect.theteacherapp.org" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="www.theteacherapp.org" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="www.connect.theteacherapp.org" />
             </intent-filter>
 
-        </activity>
+        </activity>-->
 
         <activity
             android:name="org.tta.mobile.tta.ui.course.discussion.DiscussionThreadActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.CustomStatusBar"/>
+            android:theme="@style/AppTheme.NoActionBar.CustomStatusBar" />
 
         <activity
             android:name="org.tta.mobile.tta.ui.course.discussion.DiscussionCommentActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.CustomStatusBar"/>
+            android:theme="@style/AppTheme.NoActionBar.CustomStatusBar" />
 
         <activity
             android:name="org.tta.mobile.tta.ui.course.CourseDashboardActivity"
@@ -463,19 +564,45 @@
             android:name="org.tta.mobile.tta.ui.profile.OtherProfileActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.CustomStatusBar"/>
+            android:theme="@style/AppTheme.NoActionBar.CustomStatusBar" />
 
         <activity
             android:name=".tta.ui.survey.UserSurveyActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.CustomStatusBar"/>
+            android:theme="@style/AppTheme.NoActionBar.CustomStatusBar" />
 
         <activity
             android:name=".tta.ui.certificate.CertificateActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.CustomStatusBar"/>
+            android:theme="@style/AppTheme.NoActionBar.CustomStatusBar" />
+
+        <activity android:name=".tta.ui.android_app_link.AppLinkActivity">
+
+            <tools:validation testUrl="http://connect.theteacherapp.org" />
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="http"
+                    android:host="connect.theteacherapp.org" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="www.connect.theteacherapp.org" />
+            </intent-filter>
+        </activity>
 
         <!-- TTA activities end -->
 
@@ -485,15 +612,21 @@
             android:value="@integer/google_play_services_version" />
 
         <!-- Setup Firebase -->
-        <meta-data android:name="firebase_analytics_collection_enabled"
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
             android:value="${firebaseEnabled}" />
-        <meta-data android:name="firebase_messaging_auto_init_enabled"
+        <meta-data
+            android:name="firebase_messaging_auto_init_enabled"
             android:value="${firebaseEnabled}" />
 
         <!-- Branch -->
-        <meta-data android:name="io.branch.sdk.BranchKey" android:value="${branchKey}" />
+        <meta-data
+            android:name="io.branch.sdk.BranchKey"
+            android:value="${branchKey}" />
 
-        <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
+        <receiver
+            android:name="io.branch.referral.InstallListener"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
@@ -517,27 +650,28 @@
         </receiver>
 
         <provider
-                android:name="android.support.v4.content.FileProvider"
-                android:authorities="${applicationId}.provider"
-                android:exported="false"
-                android:grantUriPermissions="true">
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
-                    android:name="android.support.FILE_PROVIDER_PATHS"
-                    android:resource="@xml/image_provider"/>
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/image_provider" />
         </provider>
 
         <service android:name="org.tta.mobile.services.DownloadSpeedService" />
 
         <!-- Notifications through Firebase Cloud Messaging (FCM) -->
-       <!-- <service
+        <!-- <service
             android:name="org.tta.mobile.notifications.services.NotificationService"
             android:enabled="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>-->
-        <service android:name="org.tta.mobile.tta.firebase.TaFirebaseMessagingService"
-            android:enabled="true" >
+        <service
+            android:name="org.tta.mobile.tta.firebase.TaFirebaseMessagingService"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -546,11 +680,11 @@
         <!-- Job to sync analytics -->
         <service
             android:name=".tta.analytics.SyncAnalyticsJob"
-            android:permission="android.permission.BIND_JOB_SERVICE"/>
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
 
         <!-- Set the icon for notifications -->
-<!--        <meta-data
+        <!--        <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notification" />
         &lt;!&ndash; Set color used with incoming notification messages.  &ndash;&gt;

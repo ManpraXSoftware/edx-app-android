@@ -445,7 +445,7 @@ public class FeedViewModel extends BaseViewModel {
             shareToolTip = new ObservableField<>(mActivity.getResources().getString(R.string.feed_share));
             toolTipGravity = new ObservableInt(Gravity.BOTTOM);
             sharetoolTipGravity = new ObservableInt(Gravity.BOTTOM);
-//            mDataManager.getAppPref().setFeedVisited(true);
+            mDataManager.getAppPref().setFeedVisited(true);
         }
     }
 
@@ -684,11 +684,10 @@ public class FeedViewModel extends BaseViewModel {
                                 .arrowDrawable(R.drawable.up_arrow)
                                 .build()
                                 .show();
-//                        ToolTipView.showToolTip(mActivity, "अन्य शिक्षको से जुड़ने के लिए फॉलो बटन दबाएँ ", teacherBinding.followBtn, Gravity.BOTTOM);
-                        mDataManager.getAppPref().setFeedVisited(true);
-                    }
-                }
 
+                    }
+                    mDataManager.getAppPref().setFeedVisited(true);
+                }
 
                 if (model.isFollowed()) {
                     teacherBinding.followBtn.setBackground(ContextCompat.getDrawable(mActivity, R.drawable.btn_selector_filled));
@@ -735,7 +734,22 @@ public class FeedViewModel extends BaseViewModel {
                 feedBinding.feedLikeCommentLayout.setVisibility(View.GONE);
 
                 feedBinding.feedTitle.setText(Html.fromHtml(getFeedTitle(model)));
-
+                if (feedBinding.feedShare.getVisibility() == View.VISIBLE) {
+                    if (getItemPosition(model) == 0) {
+                        if (!mDataManager.getAppPref().isFeedVisited()) {
+                            new MxTooltip.Builder(mActivity)
+                                    .anchorView(feedBinding.feedShare)
+                                    .text(" सभी के साथ यह सामग्री साझा करने के लिए यहाँ दबायें ")
+                                    .gravity(Gravity.BOTTOM)
+                                    .animated(true)
+                                    .transparentOverlay(true)
+                                    .arrowDrawable(R.drawable.up_arrow)
+                                    .build()
+                                    .show();
+                            mDataManager.getAppPref().setFeedVisited(true);
+                        }
+                    }
+                }
 
 
                 try {
@@ -777,7 +791,6 @@ public class FeedViewModel extends BaseViewModel {
                                     .load(R.drawable.t_image_cert_1)
                                     .into(feedBinding.itemImage);
                             feedBinding.itemImage.setVisibility(View.VISIBLE);
-
                             break;
 
                         case Badge:

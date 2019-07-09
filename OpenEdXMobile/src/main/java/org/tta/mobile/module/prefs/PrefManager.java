@@ -311,6 +311,7 @@ public class PrefManager {
         public static final String IS_PROFILE_VISITED = "profile_visited";
         public static final String IS_AGENDA_VISITED = "agenda_visited";
         public static final String IS_FEED_VISITED = "feed_visited";
+        public static final String IS_FEED_NAV_VISITED = "feed_nav_visited";
         public static final String IS_SEARCH_VISITED = "search_visited";
         public static final String IS_Setting_VISITED = "setting_visited";
 

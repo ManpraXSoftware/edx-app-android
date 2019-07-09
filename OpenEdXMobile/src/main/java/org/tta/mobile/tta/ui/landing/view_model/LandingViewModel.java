@@ -54,7 +54,6 @@ public class LandingViewModel extends BaseViewModel {
             case R.id.action_library:
                 showLibrary();
                 selectedId = R.id.action_library;
-//                ToolTipView.showToolTip(getActivity(), "यहाँ सभी सामग्री पाए",mActivity.findViewById(R.id.action_library),Gravity.TOP);
                 if (!mDataManager.getAppPref().isProfileVisited()) {
                     new MxTooltip.Builder(mActivity)
                             .anchorView(mActivity.findViewById(R.id.action_library))
@@ -65,13 +64,12 @@ public class LandingViewModel extends BaseViewModel {
                             .arrowDrawable(R.drawable.down_arrow)
                             .build()
                             .show();
-//                    ToolTipView.showToolTip(getActivity(), "  यहाँ सभी सामग्री पाएँ  "  , mActivity.findViewById(R.id.action_library), Gravity.TOP);
                 }
                 return true;
             case R.id.action_feed:
                 selectedId = R.id.action_feed;
                 showFeed();
-                if (!mDataManager.getAppPref().isFeedVisited()) {
+                if (!mDataManager.getAppPref().isFeedNavVisited()) {
                     new MxTooltip.Builder(mActivity)
                             .anchorView(mActivity.findViewById(R.id.action_feed))
                             .text(getActivity().getResources().getString(R.string.feed_tab))
@@ -81,9 +79,9 @@ public class LandingViewModel extends BaseViewModel {
                             .arrowDrawable(R.drawable.down_arrow)
                             .build()
                             .show();
-//                    ToolTipView.showToolTip(getActivity(), getActivity().getResources().getString(R.string.feed_tab), mActivity.findViewById(R.id.action_feed), Gravity.TOP);
-                }
+                    mDataManager.getAppPref().setFeedNavVisited(true);
 
+                }
 
                 return true;
             case R.id.action_search:
@@ -98,7 +96,6 @@ public class LandingViewModel extends BaseViewModel {
                             .arrowDrawable(R.drawable.down_arrow)
                             .build()
                             .show();
-//                    ToolTipView.showToolTip(getActivity(),getActivity().getResources().getString(R.string.search_tab) , mActivity.findViewById(R.id.action_search), Gravity.TOP);
                 }
                 showSearch();
                 return true;
@@ -202,7 +199,7 @@ public class LandingViewModel extends BaseViewModel {
         );
     }
 
-    private void onAppStart(){
+    private void onAppStart() {
         mDataManager.getMyContentStatuses(new OnResponseCallback<List<ContentStatus>>() {
             @Override
             public void onSuccess(List<ContentStatus> data) {
@@ -217,7 +214,7 @@ public class LandingViewModel extends BaseViewModel {
         });
 
 
-        Migration280719 spt=new Migration280719(getActivity());
+        Migration280719 spt = new Migration280719(getActivity());
         spt.MigrateScromPackages();
         spt.MigrateConnectVideos();
 

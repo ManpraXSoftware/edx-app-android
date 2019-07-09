@@ -72,6 +72,14 @@ public class AppPref {
     public void setFeedVisited(boolean feedVisited) {
         prefManager.put(PrefManager.Key.IS_FEED_VISITED, feedVisited);
     }
+
+    public boolean isFeedNavVisited() {
+        return prefManager.getBoolean(PrefManager.Key.IS_FEED_NAV_VISITED, false);
+    }
+
+    public void setFeedNavVisited(boolean feedNavVisited) {
+        prefManager.put(PrefManager.Key.IS_FEED_NAV_VISITED, feedNavVisited);
+    }
     public boolean isSearchVisited() {
         return prefManager.getBoolean(PrefManager.Key.IS_SEARCH_VISITED, false);
     }
