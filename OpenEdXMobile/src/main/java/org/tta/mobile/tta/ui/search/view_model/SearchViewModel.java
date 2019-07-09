@@ -799,7 +799,12 @@ public class SearchViewModel extends BaseViewModel {
                 } else {
                     contentListVisible.set(true);
                 }
-                classesVisible.set(true);
+                if (selectedSource.getName().equalsIgnoreCase(SourceName.hois.name()) ||
+                        selectedSource.getName().equalsIgnoreCase(SourceName.state.name())){
+                    classesVisible.set(false);
+                } else {
+                    classesVisible.set(true);
+                }
                 filtersVisible.set(true);
                 searchHint.set(mActivity.getString(R.string.search_only_hindi));
                 emptyMessage.set(mActivity.getString(R.string.empty_search_message));
