@@ -53,12 +53,13 @@ public class ProfileViewModel extends BaseViewModel {
 
     private boolean accountReceived, filtersReceived;
     private String tagLabel;
-    private String delimiterTagChunks, delimiterSectionTag;
+    private String delimiterTagChunks, delimiterSectionTag, replacementTagSpace;
 
     public ProfileViewModel(Context context, TaBaseFragment fragment) {
         super(context, fragment);
         delimiterTagChunks = Constants.DELIMITER_TAG_CHUNKS;
         delimiterSectionTag = Constants.DELIMITER_SECTION_TAG;
+        replacementTagSpace = Constants.REPLACEMENT_TAG_SPACE;
 //        adapter = new BadgeListAdapter(context);
         fetchAccount();
         fetchFilters();
@@ -315,6 +316,7 @@ public class ProfileViewModel extends BaseViewModel {
                     if (sectionTagsMap.containsKey(section.getName())) {
                         StringBuilder builder = new StringBuilder();
                         for (String tag : sectionTagsMap.get(section.getName())) {
+                            tag = tag.replace(replacementTagSpace, " ");
                             builder.append(tag + ", ");
                         }
                         if (builder.length() > 0) {
@@ -324,7 +326,7 @@ public class ProfileViewModel extends BaseViewModel {
 
                         if (section.getName().contains("कक्षा")) {
                             classes.set(builder.toString());
-                        } else if (section.getName().contains("कौशल")) {
+                        } else if (section.getName().contains("क्षमताएं")) {
                             skills.set(builder.toString());
                         }
                     }

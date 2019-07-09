@@ -142,10 +142,10 @@
 
                 <ImageView
                     android:id="@+id/item_image"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginStart="@dimen/_20px"
-                    android:scaleType="centerInside"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginStart="@dimen/_30px"
+                    android:scaleType="fitXY"
                     app:layout_constraintBottom_toBottomOf="@id/content_image_layout"
                     app:layout_constraintStart_toEndOf="@id/content_image_layout" />
 

@@ -124,7 +124,6 @@
                             android:layout_height="25dp"
                             android:minWidth="100dp"
                             android:id="@+id/item_btn"
-                            android:background="@drawable/btn_selector_hollow"
                             android:gravity="center"
                             android:layout_marginStart="@dimen/_40px"
                             android:paddingStart="8dp"
@@ -132,9 +131,9 @@
                             android:text="@{viewModel.footerBtnText}"
                             android:visibility="@{viewModel.footerBtnVisible?View.VISIBLE:View.GONE}"
                             android:textSize="12sp"
-                            android:textColor="@color/primary_cyan"
                             android:fontFamily="@font/hind_regular"
-                           />
+                            android:background="@{viewModel.footerBtnBackground}"
+                            android:textColor="@{viewModel.footerBtnTextColor}"/>
 
                     </LinearLayout>
 

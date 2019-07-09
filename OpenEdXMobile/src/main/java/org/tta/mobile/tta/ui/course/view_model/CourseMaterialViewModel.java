@@ -120,6 +120,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
     public ObservableBoolean footerDownloadProgressVisible = new ObservableBoolean(false);
     public ObservableField<String> footerBtnText = new ObservableField<>("");
     public ObservableBoolean footerBtnVisible = new ObservableBoolean(false);
+    public ObservableInt footerBtnBackground = new ObservableInt(R.drawable.btn_selector_hollow);
+    public ObservableInt footerBtnTextColor = new ObservableInt(R.color.primary_cyan);
 
     public ObservableBoolean emptyVisible = new ObservableBoolean();
     public String certificateStatus = "certificate";
@@ -628,20 +630,28 @@ public class CourseMaterialViewModel extends BaseViewModel {
             case FAIL:
             case NONE:
                 footerBtnText.set(mActivity.getString(R.string.assessment));
+                footerBtnBackground.set(R.drawable.btn_selector_hollow);
+                footerBtnTextColor.set(R.color.primary_cyan);
                 break;
 
             case APPLICABLE:
                 footerBtnText.set(mActivity.getString(R.string.generate_certificate));
+                footerBtnBackground.set(R.drawable.t_btn_backgound_filled_blue);
+                footerBtnTextColor.set(R.color.white);
                 certificateStatus = "progress";
                 break;
 
             case PROGRESS:
                 footerBtnText.set(mActivity.getString(R.string.certificate));
+                footerBtnBackground.set(R.drawable.t_btn_backgound_filled_blue);
+                footerBtnTextColor.set(R.color.white);
                 certificateStatus = "progress";
                 break;
 
             case GENERATED:
                 footerBtnText.set(mActivity.getString(R.string.view_certificate));
+                footerBtnBackground.set(R.drawable.btn_selector_filled);
+                footerBtnTextColor.set(R.color.white);
                 certificateStatus = "generated";
                 if (footerBtnText.get().equals(mActivity.getResources().getString(R.string.view_certificate))){
                 }
@@ -1125,7 +1135,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
                     if (comp.isContainer()){
                         for (IBlock childBlock : comp.getChildren()) {
                             CourseComponent child = (CourseComponent) childBlock;
-                            if (child.getDisplayName().contains("अपनी समझ")){
+                            if (child.getDisplayName().contains("अपनी समझ को परखें")){
                                 if (child.isContainer() && child.getChildren() != null &&
                                         !child.getChildren().isEmpty()) {
                                     assessmentComponent = child;
@@ -1148,7 +1158,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
                             }
                         }
                     }else {
-                        if (comp.getDisplayName().contains("अपनी समझ")){
+                        if (comp.getDisplayName().contains("अपनी समझ को परखें")){
                             if (comp.isContainer() && comp.getChildren() != null &&
                                     !comp.getChildren().isEmpty()) {
                                 assessmentComponent = comp;

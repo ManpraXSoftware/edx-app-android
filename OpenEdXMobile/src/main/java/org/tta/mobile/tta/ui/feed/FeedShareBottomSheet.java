@@ -48,7 +48,7 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
 
     private ShareUtils.ShareMenuItemListener listener;
     private Feed feed;
-    private String delimiterTagChunks, delimiterSectionTag;
+    private String delimiterTagChunks, delimiterSectionTag, replacementTagSpace;
 
     public static FeedShareBottomSheet newInstance(ShareUtils.ShareMenuItemListener listener, Feed feed){
         FeedShareBottomSheet fragment = new FeedShareBottomSheet();
@@ -79,6 +79,7 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
         super.setupDialog(dialog, style);
         delimiterTagChunks = Constants.DELIMITER_TAG_CHUNKS;
         delimiterSectionTag = Constants.DELIMITER_SECTION_TAG;
+        replacementTagSpace = Constants.REPLACEMENT_TAG_SPACE;
 
         int layoutId;
         try {
@@ -94,7 +95,8 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
                 case Like:
                 case Comment:
                 case TTAFeed:
-                    if (feed.getMeta_data().getUser_name() != null) {
+                    if (feed.getMeta_data() != null &&
+                            feed.getMeta_data().getUser_name() != null) {
                         layoutId = R.layout.t_fragment_feed_share_with_user;
                         break;
                     }
@@ -338,6 +340,7 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
         for (String section_tag : section_tag_list) {
             String[] duet = section_tag.split(delimiterSectionTag);
             if (duet[0].contains("कक्षा")){
+                duet[1] = duet[1].replace(replacementTagSpace, " ");
                 builder.append(duet[1]).append(", ");
                 classesAdded = true;
             }

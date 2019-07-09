@@ -80,7 +80,7 @@ public class FeedViewModel extends BaseViewModel {
 //    private int take, skip;
     private int skip;
     private boolean allLoaded;
-    private String delimiterTagChunks, delimiterSectionTag;
+    private String delimiterTagChunks, delimiterSectionTag, replacementTagSpace;
 
     public MxInfiniteAdapter.OnLoadMoreListener loadMoreListener = page -> {
         if (allLoaded)
@@ -111,6 +111,7 @@ public class FeedViewModel extends BaseViewModel {
         allLoaded = false;
         delimiterTagChunks = Constants.DELIMITER_TAG_CHUNKS;
         delimiterSectionTag = Constants.DELIMITER_SECTION_TAG;
+        replacementTagSpace = Constants.REPLACEMENT_TAG_SPACE;
 
         feedAdapter = new FeedAdapter(context);
         suggestedUsersAdapter = new SuggestedUsersAdapter(mActivity);
@@ -420,9 +421,11 @@ public class FeedViewModel extends BaseViewModel {
     }
 
     private void showOtherUserProfile(String username) {
-        Bundle parameters = new Bundle();
-        parameters.putString(Constants.KEY_USERNAME, username);
-        ActivityUtil.gotoPage(mActivity, OtherProfileActivity.class, parameters);
+        if (username != null) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_USERNAME, username);
+            ActivityUtil.gotoPage(mActivity, OtherProfileActivity.class, parameters);
+        }
     }
 
     public void showNotifications() {
@@ -616,6 +619,7 @@ public class FeedViewModel extends BaseViewModel {
         for (String section_tag : section_tag_list) {
             String[] duet = section_tag.split(delimiterSectionTag);
             if (duet[0].contains("कक्षा")) {
+                duet[1] = duet[1].replace(replacementTagSpace, " ");
                 builder.append(duet[1]).append(", ");
                 classesAdded = true;
             }
@@ -988,7 +992,8 @@ public class FeedViewModel extends BaseViewModel {
                         case Like:
                         case Comment:
                         case TTAFeed:
-                            if (getItem(position).getMeta_data().getUser_name() != null) {
+                            if (getItem(position).getMeta_data() != null &&
+                                    getItem(position).getMeta_data().getUser_name() != null) {
                                 return R.layout.t_row_feed_with_user;
                             }
 

@@ -130,12 +130,9 @@ public class DropDownFilterView extends FrameLayout
         selectedPosition = position;
         mSelectedFilter = filterItems.get(position).name;
         selectedItem = filterItems.get(position);
-        try {
-            if (appCompatSpinner.getSelectedItem() != null) {
-                ((FilterItem) appCompatSpinner.getSelectedItem()).setSelected(false);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        for (FilterItem item: filterItems){
+            item.setSelected(false);
         }
         selectedItem.setSelected(true);
         appCompatSpinner.post(() -> {
@@ -169,8 +166,8 @@ public class DropDownFilterView extends FrameLayout
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (parent.getItemAtPosition(position) instanceof FilterItem) {
             FilterItem prev = selectedItem;
-            if (prev != null){
-                prev.setSelected(false);
+            for (FilterItem item: filterItems){
+                item.setSelected(false);
             }
             selectedItem = (FilterItem) parent.getItemAtPosition(position);
             selectedItem.setSelected(true);

@@ -34,6 +34,7 @@ import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.data.enums.ContentListMode;
 import org.tta.mobile.tta.data.enums.SearchType;
+import org.tta.mobile.tta.data.enums.SourceName;
 import org.tta.mobile.tta.data.enums.SourceType;
 import org.tta.mobile.tta.data.local.db.table.Category;
 import org.tta.mobile.tta.data.local.db.table.Content;
@@ -117,6 +118,7 @@ public class SearchViewModel extends BaseViewModel {
     public ObservableBoolean searchOptionsVisible = new ObservableBoolean(true);
     public ObservableBoolean searchFocus = new ObservableBoolean();
     public ObservableBoolean peopleSelected = new ObservableBoolean();
+    public ObservableBoolean peopleVisible = new ObservableBoolean(true);
 
     public ObservableField<String> searchToolTip;
     public ObservableInt toolTipGravity;
@@ -224,9 +226,24 @@ public class SearchViewModel extends BaseViewModel {
         if (item.getItem() != null) {
             selectedSource = (Source) item.getItem();
             selectedSourcePosition.set(position);
+
+            if (selectedSource.getName().equalsIgnoreCase(SourceName.hois.name()) ||
+                    selectedSource.getName().equalsIgnoreCase(SourceName.state.name())){
+                classesVisible.set(false);
+            } else {
+                classesVisible.set(true);
+            }
+
+            if (selectedSource.getName().equalsIgnoreCase(SourceName.state.name())){
+                peopleVisible.set(false);
+            } else {
+                peopleVisible.set(true);
+            }
         } else {
             selectedSource = null;
             selectedSourcePosition.set(0);
+            classesVisible.set(true);
+            peopleVisible.set(true);
         }
         searchFocus.set(true);
         searchFocus.set(false);
@@ -724,12 +741,11 @@ public class SearchViewModel extends BaseViewModel {
 
                 List<FilterSection> removables = new ArrayList<>();
                 for (FilterSection section: data.getResult()){
-                    /*if (section.isIn_profile()){
+                    if (section.isIn_profile()){
                         removables.add(section);
-                    }*/
+                    }
                     if (section.getName().contains("कक्षा")){
                         classSection = section;
-                        removables.add(section);
                     }
                 }
                 for (FilterSection section: removables){

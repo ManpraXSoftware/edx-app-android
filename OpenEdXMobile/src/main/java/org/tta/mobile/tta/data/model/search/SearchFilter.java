@@ -1,8 +1,9 @@
 package org.tta.mobile.tta.data.model.search;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class SearchFilter {
+public class SearchFilter implements Serializable {
 
     private List<FilterSection> result;
 

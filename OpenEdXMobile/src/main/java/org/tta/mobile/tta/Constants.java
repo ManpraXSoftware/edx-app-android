@@ -62,10 +62,11 @@ public class Constants {
     public static final String INTENT_DELETE_FEEDS = "delete_feeds";
     public static final int REQUEST_CODE_DELETE_FEEDS = 1243;
     public static final long INTERVAL_DELETE_FEEDS = 24*60*60*1000;
-    public static final long INTERVAL_SYNC_ANALYTICS_JOB = 30*1000;
+    public static final long INTERVAL_SYNC_ANALYTICS_JOB = 60*1000;
     public static final String EXTRA_NOTIFICATION = "notification";
-    public static final String DELIMITER_TAG_CHUNKS = "   ";
+    public static final String DELIMITER_TAG_CHUNKS = " ";
     public static final String DELIMITER_SECTION_TAG = "___";
+    public static final String REPLACEMENT_TAG_SPACE = "#_#";
     public static Boolean IsCertificateExits = false;
     public static Boolean certificateInProgress = false;
 }

@@ -1,10 +1,12 @@
 package org.tta.mobile.tta.data.model.search;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class FilterTag {
+public class FilterTag implements Serializable {
 
     private long id;
 
@@ -50,5 +52,10 @@ public class FilterTag {
     @Override
     public String toString() {
         return display_name != null && !display_name.equals("") ? display_name : value;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return obj instanceof FilterTag && (((FilterTag) obj).toString().equals(toString()));
     }
 }

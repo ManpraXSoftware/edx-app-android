@@ -65,7 +65,7 @@
     <string name="edit_profile">प्रोफाइल सम्पादित करें</string>
     <string name="change_password_underlined"><u>पासवर्ड बदलें</u></string>
     <string name="classes_taught">कक्षाएं</string>
-    <string name="skills">कौशल</string>
+    <string name="skills">क्षमताएं</string>
     <string name="following">फॉलोइंग</string>
     <string name="all_parts">एक कोर्स के सभी  भाग देखने पर</string>
     <string name="followers">फालोअर्ज़</string>
@@ -113,7 +113,7 @@
     <string name="error_profession">कृपया अपना व्यवसाय चुनिए</string>
     <string name="error_gender">कृपया अपना लिंग चुनिए</string>
     <string name="error_classes">कृपया किस स्तर तक पढ़ाया है, चुनिए</string>
-    <string name="error_skills">कृपया अपने कौशल चुनिए</string>
+    <string name="error_skills">कृपया अपने क्षमताएं चुनिए</string>
     <string name="error_diet">कृपया अपना DIET कोड चुनिए</string>
     <string name="error_pmis">PMIS कोड रिक्त नहीं हो सकता</string>
     <string name="error_teacher_id">टीचर ID रिक्त नहीं हो सकती</string>
