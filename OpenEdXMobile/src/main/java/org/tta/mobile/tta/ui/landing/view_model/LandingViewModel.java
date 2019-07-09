@@ -73,7 +73,7 @@ public class LandingViewModel extends BaseViewModel {
             case R.id.action_feed:
                 selectedId = R.id.action_feed;
                 showFeed();
-                if (!mDataManager.getAppPref().isFeedVisited()) {
+                if (!mDataManager.getAppPref().isFeedNavVisited()) {
                     new MxTooltip.Builder(mActivity)
                             .anchorView(mActivity.findViewById(R.id.action_feed))
                             .text(getActivity().getResources().getString(R.string.feed_tab))
@@ -83,7 +83,7 @@ public class LandingViewModel extends BaseViewModel {
                             .arrowDrawable(R.drawable.down_arrow)
                             .build()
                             .show();
-//                    ToolTipView.showToolTip(getActivity(), getActivity().getResources().getString(R.string.feed_tab), mActivity.findViewById(R.id.action_feed), Gravity.TOP);
+                    mDataManager.getAppPref().setFeedNavVisited(true);
                 }
 
 
