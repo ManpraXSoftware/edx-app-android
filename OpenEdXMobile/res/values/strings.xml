@@ -854,6 +854,7 @@
     <string name="correct_old_password">Please enter correct old password</string>
     <string name="password_changed_login">Password changed successfully. Please login to continue</string>
     <string name="unable_to_get_account">Unable to get account details</string>
+    <string name="selection_limit_crossed">You cannot select more than %d</string>
 
     <string name="anonymous" translatable="false">Anonymous</string>
     <string name="privacy_policy_url" translatable="false">http://theteacherapp.org/privacy</string>

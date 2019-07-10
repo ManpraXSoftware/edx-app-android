@@ -6,7 +6,9 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.util.AttributeSet;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 
 import org.tta.mobile.R;
 
@@ -17,19 +19,16 @@ import java.util.List;
 public class MultiSelectionSpinner extends android.support.v7.widget.AppCompatSpinner implements
         OnMultiChoiceClickListener {
 
-    public interface OnMultipleItemsSelectedListener{
-        void selectedIndices(List<Integer> indices);
-        void selectedStrings(List<String> strings);
-    }
-    private OnMultipleItemsSelectedListener listener;
-
     String[] _items = null;
     boolean[] mSelection = null;
     boolean[] mSelectionAtStart = null;
     String _itemsAtStart = null;
+    ArrayAdapter<String> simple_adapter;
+    private OnMultipleItemsSelectedListener listener;
     private String title;
 
-    ArrayAdapter<String> simple_adapter;
+    private int mLimit = -1;
+    private int count = 0;
 
     public MultiSelectionSpinner(Context context) {
         super(context);
@@ -51,15 +50,24 @@ public class MultiSelectionSpinner extends android.support.v7.widget.AppCompatSp
         this.title = title;
     }
 
-    public void setListener(OnMultipleItemsSelectedListener listener){
+    public void setListener(OnMultipleItemsSelectedListener listener) {
         this.listener = listener;
     }
 
     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+
         if (mSelection != null && which < mSelection.length) {
+
+            if (isChecked) {
+                count++;
+            } else {
+                count--;
+            }
+
             mSelection[which] = isChecked;
             simple_adapter.clear();
             simple_adapter.add(buildSelectedItemString());
+
         } else {
             throw new IllegalArgumentException(
                     "Argument 'which' is out of bounds.");
@@ -68,21 +76,53 @@ public class MultiSelectionSpinner extends android.support.v7.widget.AppCompatSp
 
     @Override
     public boolean performClick() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(title);
-        builder.setMultiChoiceItems(_items, mSelection, this);
         _itemsAtStart = getSelectedItemsAsString();
-        builder.setPositiveButton(getContext().getString(R.string.submit), (dialog, which) -> {
-            System.arraycopy(mSelection, 0, mSelectionAtStart, 0, mSelection.length);
-            listener.selectedIndices(getSelectedIndices());
-            listener.selectedStrings(getSelectedStrings());
+
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+                .setTitle(title)
+                .setMultiChoiceItems(_items, mSelection, this)
+                .setPositiveButton(getContext().getString(R.string.submit), null)
+                .setNegativeButton(getContext().getString(R.string.cancel), null)
+                .create();
+
+        dialog.setOnShowListener(dialogInterface -> {
+            Button pBtn = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            pBtn.setOnClickListener(view1 -> {
+                System.arraycopy(mSelection, 0, mSelectionAtStart, 0, mSelection.length);
+                listener.selectedIndices(getSelectedIndices());
+                listener.selectedStrings(getSelectedStrings());
+
+                if (mLimit == -1 || count <= mLimit) {
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(getContext(),
+                            String.format(getContext().getString(R.string.selection_limit_crossed), mLimit),
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+
+            Button nBtn = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+            nBtn.setOnClickListener(view1 -> {
+                simple_adapter.clear();
+                simple_adapter.add(_itemsAtStart);
+                System.arraycopy(mSelectionAtStart, 0, mSelection, 0, mSelectionAtStart.length);
+                dialog.dismiss();
+            });
         });
-        builder.setNegativeButton(getContext().getString(R.string.cancel), (dialog, which) -> {
+
+        dialog.setOnDismissListener(dialogInterface -> {
             simple_adapter.clear();
             simple_adapter.add(_itemsAtStart);
             System.arraycopy(mSelectionAtStart, 0, mSelection, 0, mSelectionAtStart.length);
+            count = 0;
+            for (boolean b: mSelectionAtStart){
+                if (b){
+                    count++;
+                }
+            }
         });
-        builder.show();
+
+        dialog.show();
         return true;
     }
 
@@ -103,7 +143,7 @@ public class MultiSelectionSpinner extends android.support.v7.widget.AppCompatSp
     public void setItems(List<String> items) {
         _items = items.toArray(new String[items.size()]);
         mSelection = new boolean[_items.length];
-        mSelectionAtStart  = new boolean[_items.length];
+        mSelectionAtStart = new boolean[_items.length];
         simple_adapter.clear();
         Arrays.fill(mSelection, false);
     }
@@ -118,6 +158,7 @@ public class MultiSelectionSpinner extends android.support.v7.widget.AppCompatSp
                 if (_items[j].equals(cell)) {
                     mSelection[j] = true;
                     mSelectionAtStart[j] = true;
+                    count++;
                 }
             }
         }
@@ -135,6 +176,7 @@ public class MultiSelectionSpinner extends android.support.v7.widget.AppCompatSp
                 if (_items[j].equals(sel)) {
                     mSelection[j] = true;
                     mSelectionAtStart[j] = true;
+                    count++;
                 }
             }
         }
@@ -150,6 +192,7 @@ public class MultiSelectionSpinner extends android.support.v7.widget.AppCompatSp
         if (index >= 0 && index < mSelection.length) {
             mSelection[index] = true;
             mSelectionAtStart[index] = true;
+            count++;
         } else {
             throw new IllegalArgumentException("Index " + index
                     + " is out of bounds.");
@@ -167,6 +210,7 @@ public class MultiSelectionSpinner extends android.support.v7.widget.AppCompatSp
             if (index >= 0 && index < mSelection.length) {
                 mSelection[index] = true;
                 mSelectionAtStart[index] = true;
+                count++;
             } else {
                 throw new IllegalArgumentException("Index " + index
                         + " is out of bounds.");
@@ -174,6 +218,10 @@ public class MultiSelectionSpinner extends android.support.v7.widget.AppCompatSp
         }
         simple_adapter.clear();
         simple_adapter.add(buildSelectedItemString());
+    }
+
+    public void setSelectionLimit(int limit) {
+        mLimit = limit;
     }
 
     public List<String> getSelectedStrings() {
@@ -227,5 +275,11 @@ public class MultiSelectionSpinner extends android.support.v7.widget.AppCompatSp
             }
         }
         return sb.toString();
+    }
+
+    public interface OnMultipleItemsSelectedListener {
+        void selectedIndices(List<Integer> indices);
+
+        void selectedStrings(List<String> strings);
     }
 }

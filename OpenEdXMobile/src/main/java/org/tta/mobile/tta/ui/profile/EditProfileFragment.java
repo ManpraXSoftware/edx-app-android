@@ -267,6 +267,7 @@ public class EditProfileFragment extends TaBaseFragment {
 
         skillsSpinner = ViewUtil.addMultiOptionSpinner(userInfoLayout, "दी गयी क्षमताओं में से आप किन में खुद को निपुण मानते हैं ? कोई 5 चुनिए |*",
                 viewModel.skills, null);
+        skillsSpinner.setSelectionLimit(5);
         skillsSpinner.setMandatory(true);
 
         etPmis = ViewUtil.addFormEditText(userInfoLayout, "PMIS Code/पी इम आइ इस कोड");

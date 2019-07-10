@@ -116,8 +116,8 @@ public class FormMultiSpinner extends LinearLayout {
         }*/
     }
 
-    public boolean isMandatory() {
-        return isMandatory;
+    public void setSelectionLimit(int limit){
+        mBinding.spinner.setSelectionLimit(limit);
     }
 
     public boolean validate() {
