@@ -799,8 +799,9 @@ public class SearchViewModel extends BaseViewModel {
                 } else {
                     contentListVisible.set(true);
                 }
-                if (selectedSource.getName().equalsIgnoreCase(SourceName.hois.name()) ||
-                        selectedSource.getName().equalsIgnoreCase(SourceName.state.name())){
+                if (selectedSource != null &&
+                        (selectedSource.getName().equalsIgnoreCase(SourceName.hois.name()) ||
+                        selectedSource.getName().equalsIgnoreCase(SourceName.state.name()))){
                     classesVisible.set(false);
                 } else {
                     classesVisible.set(true);
