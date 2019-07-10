@@ -81,7 +81,7 @@ public enum ShareUtils {
                             intent.setComponent(componentName);
                             activity.startActivity(intent);
                         } else {
-                            Toast.makeText(activity, "Course shared on TheTeacherApp", Toast.LENGTH_LONG).show();
+                            Toast.makeText(activity, activity.getString(R.string.course_share_successful), Toast.LENGTH_LONG).show();
                         }
                     }
 

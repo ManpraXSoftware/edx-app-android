@@ -213,7 +213,11 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
             if (listener != null){
                 listener.onMenuItemClick(null, ShareUtils.ShareType.TTA);
             }
-            Toast.makeText(getActivity(), "Content shared on TheTeacherApp", Toast.LENGTH_LONG).show();
+            if (feed.getMeta_data().getSource_name().equalsIgnoreCase(SourceName.course.name())) {
+                Toast.makeText(getActivity(), getActivity().getString(R.string.course_share_successful), Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getActivity(), getActivity().getString(R.string.post_share_successful), Toast.LENGTH_LONG).show();
+            }
         });
 
     }
