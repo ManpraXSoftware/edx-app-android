@@ -2986,6 +2986,17 @@ public class DataManager extends BaseRoboInjector {
 
                     if (feeds != null && !feeds.isEmpty()) {
 
+                        List<Feed> removables = new ArrayList<>();
+                        for (Feed feed: feeds){
+                            if (feed.getMeta_data() == null){
+                                removables.add(feed);
+                            }
+                        }
+
+                        for (Feed feed: removables){
+                            feeds.remove(feed);
+                        }
+
                         new Thread() {
                             @Override
                             public void run() {

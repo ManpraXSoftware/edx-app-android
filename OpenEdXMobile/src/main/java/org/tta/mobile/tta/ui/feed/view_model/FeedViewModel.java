@@ -74,22 +74,6 @@ public class FeedViewModel extends BaseViewModel {
     public ObservableField<String> shareToolTip;
     public ObservableInt sharetoolTipGravity;
     public ObservableInt toolTipGravity;
-
-    private List<Feed> feeds;
-    List<SuggestedUser> users;
-//    private int take, skip;
-    private int skip;
-    private boolean allLoaded;
-    private String delimiterTagChunks, delimiterSectionTag, replacementTagSpace;
-
-    public MxInfiniteAdapter.OnLoadMoreListener loadMoreListener = page -> {
-        if (allLoaded)
-            return false;
-        this.skip++;
-        getFeeds();
-        return true;
-    };
-
     public View.OnClickListener viewMoreListener = v -> {
         ActivityUtil.replaceFragmentInActivity(
                 mActivity.getSupportFragmentManager(),
@@ -100,6 +84,19 @@ public class FeedViewModel extends BaseViewModel {
                 null
         );
     };
+    List<SuggestedUser> users;
+    private List<Feed> feeds;
+    //    private int take, skip;
+    private int skip;
+    private boolean allLoaded;
+    public MxInfiniteAdapter.OnLoadMoreListener loadMoreListener = page -> {
+        if (allLoaded)
+            return false;
+        this.skip++;
+        getFeeds();
+        return true;
+    };
+    private String delimiterTagChunks, delimiterSectionTag, replacementTagSpace;
 
     public FeedViewModel(Context context, TaBaseFragment fragment) {
         super(context, fragment);
@@ -128,7 +125,8 @@ public class FeedViewModel extends BaseViewModel {
                     openShareMenu(item);
                     break;
                 case R.id.feed_comment_layout:
-                    if (item.getMeta_data().getSource_name().equalsIgnoreCase(SourceName.course.name())) {
+                    if (item.getMeta_data().getSource_name() != null &&
+                            item.getMeta_data().getSource_name().equalsIgnoreCase(SourceName.course.name())) {
                         mActivity.showLoading();
                         mDataManager.getContentFromSourceIdentity(item.getMeta_data().getId(),
                                 new OnResponseCallback<Content>() {
@@ -201,14 +199,15 @@ public class FeedViewModel extends BaseViewModel {
                                                     mActivity.showLongSnack(e.getLocalizedMessage());
                                                 }
                                             });
-                                } else if (item.getMeta_data().getSource_name().equalsIgnoreCase(Action.appupdate.name())){
+                                } else if (item.getMeta_data().getSource_name() != null &&
+                                        item.getMeta_data().getSource_name().equalsIgnoreCase(Action.appupdate.name())) {
                                     AppUtil.openAppOnPlayStore(mActivity, mActivity.getPackageName());
                                 }
 
                         }
 
                         break;
-                    } catch (IllegalArgumentException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 /*case R.id.feed_like_layout:
@@ -600,7 +599,7 @@ public class FeedViewModel extends BaseViewModel {
                 default:
                     return feed.getMeta_data().getSource_title();
             }
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return feed.getMeta_data().getSource_title();
         }
 
@@ -767,7 +766,7 @@ public class FeedViewModel extends BaseViewModel {
                         case Comment:
 
                             Glide.with(getContext())
-                                    .load(model.getMeta_data().getIcon())
+                                    .load(model.getMeta_data().getIcon() == null ? "" : model.getMeta_data().getIcon())
                                     .placeholder(R.drawable.placeholder_course_card_image)
                                     .into(feedBinding.feedContentImage);
                             feedBinding.feedMetaText.setText(model.getMeta_data().getText());
@@ -783,7 +782,8 @@ public class FeedViewModel extends BaseViewModel {
 
                             Glide.with(getContext())
                                     .load(mDataManager.getConfig().getApiHostURL() +
-                                            model.getMeta_data().getUser_icon().getFull())
+                                            (model.getMeta_data().getUser_icon() == null ? "" :
+                                                    model.getMeta_data().getUser_icon().getFull()))
                                     .placeholder(R.drawable.profile_photo_placeholder)
                                     .into(feedBinding.feedContentImage);
                             feedBinding.feedMetaText.setText(model.getMeta_data().getUser_name());
@@ -800,7 +800,8 @@ public class FeedViewModel extends BaseViewModel {
 
                             Glide.with(getContext())
                                     .load(mDataManager.getConfig().getApiHostURL() +
-                                            model.getMeta_data().getUser_icon().getFull())
+                                            (model.getMeta_data().getUser_icon() == null ? "" :
+                                                    model.getMeta_data().getUser_icon().getFull()))
                                     .placeholder(R.drawable.profile_photo_placeholder)
                                     .into(feedBinding.feedContentImage);
                             feedBinding.feedMetaText.setText(model.getMeta_data().getUser_name());
@@ -825,13 +826,14 @@ public class FeedViewModel extends BaseViewModel {
 
                         case TTAFeed:
 
-                            if (model.getMeta_data().getSource_name().equalsIgnoreCase(Action.appupdate.name())) {
+                            if (model.getMeta_data().getSource_name() == null ||
+                                    model.getMeta_data().getSource_name().equalsIgnoreCase(Action.appupdate.name())) {
                                 Glide.with(getContext())
                                         .load(R.drawable.tta_launcher_foreground)
                                         .into(feedBinding.feedContentImage);
                             } else {
                                 Glide.with(getContext())
-                                        .load(model.getMeta_data().getIcon())
+                                        .load(model.getMeta_data().getIcon() == null ? "" : model.getMeta_data().getIcon())
                                         .placeholder(R.drawable.placeholder_course_card_image)
                                         .into(feedBinding.feedContentImage);
                             }
@@ -839,9 +841,9 @@ public class FeedViewModel extends BaseViewModel {
                             break;
 
                     }
-                } catch (IllegalArgumentException e) {
+                } catch (Exception e) {
                     Glide.with(getContext())
-                            .load(model.getMeta_data().getIcon())
+                            .load(model.getMeta_data().getIcon() == null ? "" : model.getMeta_data().getIcon())
                             .placeholder(R.drawable.placeholder_course_card_image)
                             .into(feedBinding.feedContentImage);
                     feedBinding.feedMetaText.setText(model.getMeta_data().getText());
@@ -895,7 +897,8 @@ public class FeedViewModel extends BaseViewModel {
                 feedWithUserBinding.feedTitle.setText(Html.fromHtml(getFeedTitle(model)));
                 Glide.with(getContext())
                         .load(mDataManager.getConfig().getApiHostURL() +
-                                model.getMeta_data().getUser_icon().getLarge())
+                                (model.getMeta_data().getUser_icon() == null ? "" :
+                                        model.getMeta_data().getUser_icon().getLarge()))
                         .placeholder(R.drawable.profile_photo_placeholder)
                         .into(feedWithUserBinding.feedUserImage);
                 feedWithUserBinding.feedUserName.setText(model.getMeta_data().getUser_name());
@@ -914,11 +917,11 @@ public class FeedViewModel extends BaseViewModel {
                             feedWithUserBinding.feedContentImage.setVisibility(View.VISIBLE);
                             feedWithUserBinding.feedContentViewBtn.setText(getContext().getString(R.string.view));
                             Glide.with(getContext())
-                                    .load(model.getMeta_data().getIcon())
+                                    .load(model.getMeta_data().getIcon() == null ? "" : model.getMeta_data().getIcon())
                                     .placeholder(R.drawable.placeholder_course_card_image)
                                     .into(feedWithUserBinding.feedContentImage);
                     }
-                } catch (IllegalArgumentException e) {
+                } catch (Exception e) {
                     feedWithUserBinding.feedContentViewBtn.setText(getContext().getString(R.string.view));
                 }
 
@@ -992,8 +995,7 @@ public class FeedViewModel extends BaseViewModel {
                         case Like:
                         case Comment:
                         case TTAFeed:
-                            if (getItem(position).getMeta_data() != null &&
-                                    getItem(position).getMeta_data().getUser_name() != null) {
+                            if (getItem(position).getMeta_data().getUser_name() != null) {
                                 return R.layout.t_row_feed_with_user;
                             }
 
@@ -1001,7 +1003,7 @@ public class FeedViewModel extends BaseViewModel {
                             return R.layout.t_row_feed;
 
                     }
-                } catch (IllegalArgumentException e) {
+                } catch (Exception e) {
                     return R.layout.t_row_feed;
                 }
             }
