@@ -741,7 +741,7 @@ public class SearchViewModel extends BaseViewModel {
 
                 List<FilterSection> removables = new ArrayList<>();
                 for (FilterSection section: data.getResult()){
-                    if (section.isIn_profile()){
+                    if (!section.isIn_search()){
                         removables.add(section);
                     }
                     if (section.getName().contains("कक्षा")){

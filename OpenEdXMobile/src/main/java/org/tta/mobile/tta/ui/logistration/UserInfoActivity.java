@@ -3,7 +3,6 @@ package org.tta.mobile.tta.ui.logistration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -24,7 +23,6 @@ import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.custom.FormEditText;
 import org.tta.mobile.tta.ui.custom.FormMultiSpinner;
 import org.tta.mobile.tta.ui.custom.FormSpinner;
-import org.tta.mobile.tta.ui.interfaces.OnTaItemClickListener;
 import org.tta.mobile.tta.ui.logistration.view_model.UserInfoViewModel;
 import org.tta.mobile.tta.utils.DataUtil;
 import org.tta.mobile.tta.utils.ViewUtil;
@@ -42,6 +40,7 @@ public class UserInfoActivity extends BaseVMActivity {
     private FormSpinner genderSpinner;
     private FormMultiSpinner classTaughtSpinner;
     private FormMultiSpinner skillsSpinner;
+    private FormMultiSpinner subjectsSpinner;
     private FormSpinner dietSpinner;
     private FormEditText etPmis;
     private Button btn;
@@ -69,7 +68,7 @@ public class UserInfoActivity extends BaseVMActivity {
         getCustomFieldAttributes();
         mViewModel.getData();
         getBlocks();
-        getClassesAndSkills();
+        getClassSkillSubject();
         setupForm();
     }
 
@@ -121,9 +120,9 @@ public class UserInfoActivity extends BaseVMActivity {
                 });
     }
 
-    private void getClassesAndSkills() {
+    private void getClassSkillSubject() {
 
-        mViewModel.getClassesAndSkills(new OnResponseCallback<List<RegistrationOption>>() {
+        mViewModel.getClassSkillSubject(new OnResponseCallback<List<RegistrationOption>>() {
             @Override
             public void onSuccess(List<RegistrationOption> data) {
                 classTaughtSpinner.setItems(data, null);
@@ -137,6 +136,16 @@ public class UserInfoActivity extends BaseVMActivity {
             @Override
             public void onSuccess(List<RegistrationOption> data) {
                 skillsSpinner.setItems(data, null);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        }, new OnResponseCallback<List<RegistrationOption>>() {
+            @Override
+            public void onSuccess(List<RegistrationOption> data) {
+                subjectsSpinner.setItems(data, null);
             }
 
             @Override
@@ -179,6 +188,10 @@ public class UserInfoActivity extends BaseVMActivity {
         skillsSpinner.setSelectionLimit(5);
         skillsSpinner.setMandatory(true);
 
+        subjectsSpinner = ViewUtil.addMultiOptionSpinner(userInfoLayout, "आपको किन विषयों में दिलचस्पी हैं ?*",
+                mViewModel.subjects, null);
+        subjectsSpinner.setMandatory(true);
+
         etPmis = ViewUtil.addFormEditText(userInfoLayout, "PMIS Code/पी इम आइ इस कोड");
         etPmis.setSingleLine();
         setCustomField(mViewModel.currentState, mViewModel.currentProfession);
@@ -209,6 +222,7 @@ public class UserInfoActivity extends BaseVMActivity {
 
             List<FilterSection> sections = new ArrayList<>();
             StringBuilder builder = new StringBuilder();
+
             if (classTaughtSpinner.getSelectedOptions() != null && mViewModel.classSection != null) {
                 List<FilterTag> tags = new ArrayList<>();
                 List<FilterTag> classTags = mViewModel.classSection.getTags();
@@ -237,6 +251,7 @@ public class UserInfoActivity extends BaseVMActivity {
                     sections.add(section);
                 }
             }
+
             if (skillsSpinner.getSelectedOptions() != null && mViewModel.skillSection != null) {
                 List<FilterTag> tags = new ArrayList<>();
                 List<FilterTag> skillTags = mViewModel.skillSection.getTags();
@@ -265,6 +280,36 @@ public class UserInfoActivity extends BaseVMActivity {
                     sections.add(section);
                 }
             }
+
+            if (subjectsSpinner.getSelectedOptions() != null && mViewModel.subjectSection != null) {
+                List<FilterTag> tags = new ArrayList<>();
+                List<FilterTag> subjectTags = mViewModel.subjectSection.getTags();
+
+                for (RegistrationOption option: subjectsSpinner.getSelectedOptions()){
+
+                    FilterTag tag = new FilterTag();
+                    tag.setValue(option.getName());
+                    if (subjectTags.contains(tag)){
+                        tags.add(subjectTags.get(subjectTags.indexOf(tag)));
+                    }
+
+                    builder.append(mViewModel.subjectSectionName)
+                            .append(delimiterSectionTag)
+                            .append(option.getName())
+                            .append(delimiterTagChunks);
+                }
+
+                if (!tags.isEmpty()){
+                    FilterSection section = new FilterSection();
+                    section.setTags(tags);
+                    section.setName(mViewModel.subjectSection.getName());
+                    section.setId(mViewModel.subjectSection.getId());
+                    section.setIn_profile(mViewModel.subjectSection.isIn_profile());
+                    section.setOrder(mViewModel.subjectSection.getOrder());
+                    sections.add(section);
+                }
+            }
+
             String label = "";
             if (builder.length() > 0){
                 label = builder.substring(0, builder.length() - delimiterTagChunks.length());
@@ -449,6 +494,10 @@ public class UserInfoActivity extends BaseVMActivity {
         if (!skillsSpinner.validate()){
             valid = false;
             skillsSpinner.setError(getString(R.string.error_skills));
+        }
+        if (!subjectsSpinner.validate()){
+            valid = false;
+            subjectsSpinner.setError(getString(R.string.error_subjects));
         }
         if (etPmis.isVisible() && !etPmis.validate()){
             valid = false;
