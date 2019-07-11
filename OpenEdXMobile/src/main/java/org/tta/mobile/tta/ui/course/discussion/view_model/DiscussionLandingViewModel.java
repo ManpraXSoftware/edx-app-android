@@ -50,6 +50,7 @@ import de.greenrobot.event.EventBus;
 public class DiscussionLandingViewModel extends BaseViewModel {
 
     private EnrolledCoursesResponse course;
+    private Content content;
     private Map<String, List<DiscussionThread>> topicThreadsMap;
     private List<DiscussionTopicDepth> topics;
 
@@ -59,9 +60,10 @@ public class DiscussionLandingViewModel extends BaseViewModel {
     public ObservableBoolean progressVisible = new ObservableBoolean();
     public ObservableBoolean emptyVisible = new ObservableBoolean();
 
-    public DiscussionLandingViewModel(Context context, TaBaseFragment fragment, EnrolledCoursesResponse course) {
+    public DiscussionLandingViewModel(Context context, TaBaseFragment fragment, EnrolledCoursesResponse course, Content content) {
         super(context, fragment);
         this.course = course;
+        this.content = content;
         topicThreadsMap = new HashMap<>();
 
         topicsAdapter = new DiscussionTopicsAdapter(mActivity);
@@ -71,7 +73,7 @@ public class DiscussionLandingViewModel extends BaseViewModel {
                     if (topicThreadsMap.containsKey(item.getDiscussionTopic().getIdentifier())) {
                         ActivityUtil.replaceFragmentInActivity(
                                 mActivity.getSupportFragmentManager(),
-                                DiscussionTopicFragment.newInstance(course, item),
+                                DiscussionTopicFragment.newInstance(this.course, this.content, item),
                                 R.id.discussion_tab,
                                 DiscussionTopicFragment.TAG,
                                 true, null
@@ -231,6 +233,7 @@ public class DiscussionLandingViewModel extends BaseViewModel {
                                 parameters.putSerializable(Constants.KEY_ENROLLED_COURSE, course);
                                 parameters.putSerializable(Constants.KEY_DISCUSSION_TOPIC, model.getDiscussionTopic());
                                 parameters.putSerializable(Constants.KEY_DISCUSSION_THREAD, item);
+                                parameters.putParcelable(Constants.KEY_CONTENT, content);
                                 ActivityUtil.gotoPage(mActivity, DiscussionThreadActivity.class, parameters);
                         }
                     });

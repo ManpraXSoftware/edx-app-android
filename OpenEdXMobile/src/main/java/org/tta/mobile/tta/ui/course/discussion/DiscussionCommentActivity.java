@@ -12,6 +12,7 @@ import org.tta.mobile.discussion.DiscussionTopic;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
+import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.course.discussion.view_model.DiscussionCommentViewModel;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
@@ -22,6 +23,7 @@ public class DiscussionCommentActivity extends BaseVMActivity {
     private DiscussionCommentViewModel viewModel;
 
     private EnrolledCoursesResponse course;
+    private Content content;
     private DiscussionTopic topic;
     private DiscussionThread thread;
     private DiscussionComment comment;
@@ -33,7 +35,7 @@ public class DiscussionCommentActivity extends BaseVMActivity {
         super.onCreate(savedInstanceState);
         RANK = BreadcrumbUtil.getCurrentRank() + 1;
         getExtras();
-        viewModel = new DiscussionCommentViewModel(this, course, topic, thread, comment);
+        viewModel = new DiscussionCommentViewModel(this, course, content, topic, thread, comment);
         binding(R.layout.t_activity_discussion_comment, viewModel);
 
         toolbar = findViewById(R.id.toolbar);
@@ -59,6 +61,7 @@ public class DiscussionCommentActivity extends BaseVMActivity {
             topic = (DiscussionTopic) parameters.getSerializable(Constants.KEY_DISCUSSION_TOPIC);
             thread = (DiscussionThread) parameters.getSerializable(Constants.KEY_DISCUSSION_THREAD);
             comment = (DiscussionComment) parameters.getSerializable(Constants.KEY_DISCUSSION_COMMENT);
+            content = parameters.getParcelable(Constants.KEY_CONTENT);
         }
     }
 

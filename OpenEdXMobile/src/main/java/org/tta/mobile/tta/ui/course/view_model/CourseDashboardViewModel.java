@@ -89,7 +89,7 @@ public class CourseDashboardViewModel extends BaseViewModel {
     public void loadCourseData(OnResponseCallback<EnrolledCoursesResponse> callback){
         mActivity.showLoading();
 
-        mDataManager.getCourse(content.getSource_identity(), new OnResponseCallback<EnrolledCoursesResponse>() {
+        mDataManager.getCourse(content, new OnResponseCallback<EnrolledCoursesResponse>() {
             @Override
             public void onSuccess(EnrolledCoursesResponse data) {
                 course = data;
@@ -135,7 +135,7 @@ public class CourseDashboardViewModel extends BaseViewModel {
         }
         discussionFragment.setRetainInstance(true);
         fragments.add(discussionFragment);*/
-        fragments.add(CourseDiscussionTab.newInstance(course));
+        fragments.add(CourseDiscussionTab.newInstance(course, content));
         titles.add(mActivity.getString(R.string.discussion));
 
         CourseHandoutFragment handoutFragment = new CourseHandoutFragment();
@@ -226,7 +226,8 @@ public class CourseDashboardViewModel extends BaseViewModel {
         }
 
         ShareUtils.showCourseShareMenu(getActivity(), anchor, course,
-                mDataManager.getEdxEnvironment().getAnalyticsRegistry(), mDataManager.getEdxEnvironment());
+                mDataManager.getEdxEnvironment().getAnalyticsRegistry(), mDataManager.getEdxEnvironment(),
+                content.getId());
 
     }
 

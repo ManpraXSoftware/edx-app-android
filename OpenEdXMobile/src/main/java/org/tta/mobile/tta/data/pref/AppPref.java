@@ -90,6 +90,13 @@ public class AppPref {
         prefManager.put(PrefManager.Key.IS_SEARCH_VISITED, searchVisited);
     }
 
+    public boolean isFeedNavVisited() {
+        return prefManager.getBoolean(PrefManager.Key.IS_FEED_NAV_VISITED, false);
+    }
+    public void setFeedNavVisited(boolean feedNavVisited) {
+        prefManager.put(PrefManager.Key.IS_FEED_NAV_VISITED, feedNavVisited);
+    }
+
     public boolean isFirstLogin() {
         return prefManager.getBoolean(PrefManager.Key.FIRST_LOGIN, true);
     }

@@ -24,6 +24,7 @@ import org.tta.mobile.discussion.DiscussionTopic;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.enums.SortType;
+import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.event.DiscussionCommentUpdateEvent;
 import org.tta.mobile.tta.event.LoadMoreDiscussionCommentsEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
@@ -51,6 +52,7 @@ public class DiscussionCommentsTabViewModel extends BaseViewModel {
     public RecyclerView.LayoutManager layoutManager;
 
     private EnrolledCoursesResponse course;
+    private Content content;
     private DiscussionTopic topic;
     private DiscussionThread thread;
     private DiscussionCommentClickListener commentClickListener;
@@ -73,11 +75,12 @@ public class DiscussionCommentsTabViewModel extends BaseViewModel {
     };
 
     public DiscussionCommentsTabViewModel(Context context, TaBaseFragment fragment,
-                                          EnrolledCoursesResponse course, DiscussionTopic topic, DiscussionThread thread,
+                                          EnrolledCoursesResponse course, Content content, DiscussionTopic topic, DiscussionThread thread,
                                           DiscussionCommentClickListener listener,
                                           List<DiscussionComment> comments, SortType sortType) {
         super(context, fragment);
         this.course = course;
+        this.content = content;
         this.topic = topic;
         this.thread = thread;
         this.commentClickListener = listener;

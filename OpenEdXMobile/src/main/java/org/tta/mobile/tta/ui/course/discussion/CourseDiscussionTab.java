@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import org.tta.mobile.R;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
+import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.course.discussion.view_model.CourseDiscussionViewModel;
 import org.tta.mobile.tta.utils.ActivityUtil;
@@ -21,10 +22,12 @@ public class CourseDiscussionTab extends TaBaseFragment {
     private CourseDiscussionViewModel viewModel;
 
     private EnrolledCoursesResponse course;
+    private Content content;
 
-    public static CourseDiscussionTab newInstance(EnrolledCoursesResponse course){
+    public static CourseDiscussionTab newInstance(EnrolledCoursesResponse course, Content content){
         CourseDiscussionTab fragment = new CourseDiscussionTab();
         fragment.course = course;
+        fragment.content = content;
         fragment.RANK = BreadcrumbUtil.getCurrentRank() + 1;
         return fragment;
     }
@@ -43,7 +46,7 @@ public class CourseDiscussionTab extends TaBaseFragment {
         if (isAdded()) {
             ActivityUtil.replaceFragmentInActivity(
                     getActivity().getSupportFragmentManager(),
-                    DiscussionLandingFragment.newInstance(course),
+                    DiscussionLandingFragment.newInstance(course, content),
                     R.id.discussion_tab,
                     DiscussionLandingFragment.TAG,
                     false, null

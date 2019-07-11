@@ -55,6 +55,7 @@ public class EditProfileViewModel extends BaseViewModel  {
 
     public String currentState, currentDistrict, currentProfession;
     public String classesSectionName, skillSectionName;
+    public FilterSection classSection, skillSection;
 
     public EditProfileViewModel(Context context, TaBaseFragment fragment,
                                 ProfileModel profileModel, ProfileImage profileImage,
@@ -184,11 +185,13 @@ public class EditProfileViewModel extends BaseViewModel  {
                 if (section.isIn_profile() && section.getTags() != null) {
                     if (section.getName().contains("कक्षा")) {
                         classesSectionName = section.getName();
+                        classSection = section;
                         for (FilterTag tag: section.getTags()){
                             classesTaught.add(new RegistrationOption(tag.toString(), tag.toString()));
                         }
-                    } else if (section.getName().contains("कौशल")){
+                    } else if (section.getName().contains("क्षमताएं")){
                         skillSectionName = section.getName();
+                        skillSection = section;
                         for (FilterTag tag: section.getTags()){
                             skills.add(new RegistrationOption(tag.toString(), tag.toString()));
                         }
@@ -200,7 +203,7 @@ public class EditProfileViewModel extends BaseViewModel  {
 
         } else {
             classesCallback.onFailure(new TaException("Classes not found"));
-            skillsCallback.onFailure(new TaException("Skills not found"));
+            skillsCallback.onFailure(new TaException("Capabilities not found"));
         }
     }
 

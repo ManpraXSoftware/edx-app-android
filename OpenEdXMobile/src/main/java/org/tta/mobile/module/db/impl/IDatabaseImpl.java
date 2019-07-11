@@ -947,6 +947,8 @@ public class IDatabaseImpl extends IDatabaseBaseImpl implements IDatabase {
         values.put(DbStructure.Column.EVENT_DATE, de.getEvent_timestamp());
         values.put(DbStructure.Column.NAV, de.getNav());
         values.put(DbStructure.Column.ACTION_ID, de.getAction_id());
+        values.put(DbStructure.Column.SOURCE_ID, de.getSource_id());
+        values.put(DbStructure.Column.CONTENT_ID, de.getContent_id());
 
         DbOperationInsert op = new DbOperationInsert(DbStructure.Table.ANALYTIC, values);
         op.setCallback(callback);

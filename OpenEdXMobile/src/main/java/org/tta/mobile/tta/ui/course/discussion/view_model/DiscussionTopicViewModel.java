@@ -24,6 +24,7 @@ import org.tta.mobile.discussion.DiscussionThreadPostedEvent;
 import org.tta.mobile.discussion.DiscussionTopicDepth;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.Constants;
+import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.event.DiscussionThreadUpdateEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
@@ -48,6 +49,7 @@ public class DiscussionTopicViewModel extends BaseViewModel {
 
     public DiscussionTopicDepth topicDepth;
     private EnrolledCoursesResponse course;
+    private Content content;
     private List<DiscussionThread> threads;
 
     public DiscussionThreadsAdapter adapter;
@@ -66,9 +68,10 @@ public class DiscussionTopicViewModel extends BaseViewModel {
         return true;
     };
 
-    public DiscussionTopicViewModel(Context context, TaBaseFragment fragment, EnrolledCoursesResponse course, DiscussionTopicDepth topicDepth) {
+    public DiscussionTopicViewModel(Context context, TaBaseFragment fragment, EnrolledCoursesResponse course, Content content, DiscussionTopicDepth topicDepth) {
         super(context, fragment);
         this.course = course;
+        this.content = content;
         this.topicDepth = topicDepth;
         threads = new ArrayList<>();
         take = DEFAULT_TAKE;
@@ -87,9 +90,10 @@ public class DiscussionTopicViewModel extends BaseViewModel {
 
                 default:
                     Bundle parameters = new Bundle();
-                    parameters.putSerializable(Constants.KEY_ENROLLED_COURSE, course);
-                    parameters.putSerializable(Constants.KEY_DISCUSSION_TOPIC, topicDepth.getDiscussionTopic());
+                    parameters.putSerializable(Constants.KEY_ENROLLED_COURSE, this.course);
+                    parameters.putSerializable(Constants.KEY_DISCUSSION_TOPIC, this.topicDepth.getDiscussionTopic());
                     parameters.putSerializable(Constants.KEY_DISCUSSION_THREAD, item);
+                    parameters.putParcelable(Constants.KEY_CONTENT, this.content);
                     ActivityUtil.gotoPage(mActivity, DiscussionThreadActivity.class, parameters);
             }
         });

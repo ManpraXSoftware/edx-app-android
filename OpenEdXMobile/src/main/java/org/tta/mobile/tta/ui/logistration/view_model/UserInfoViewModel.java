@@ -39,6 +39,7 @@ public class UserInfoViewModel extends BaseViewModel {
 
     public String currentState, currentDistrict, currentProfession;
     public String classesSectionName, skillSectionName;
+    public FilterSection classSection, skillSection;
 
     public UserInfoViewModel(BaseVMActivity activity) {
         super(activity);
@@ -76,11 +77,13 @@ public class UserInfoViewModel extends BaseViewModel {
                     if (section.isIn_profile() && section.getTags() != null) {
                         if (section.getName().contains("कक्षा")) {
                             classesSectionName = section.getName();
+                            classSection = section;
                             for (FilterTag tag: section.getTags()){
                                 classesTaught.add(new RegistrationOption(tag.toString(), tag.toString()));
                             }
-                        } else if (section.getName().contains("कौशल")){
+                        } else if (section.getName().contains("क्षमताएं")){
                             skillSectionName = section.getName();
+                            skillSection = section;
                             for (FilterTag tag: section.getTags()){
                                 skills.add(new RegistrationOption(tag.toString(), tag.toString()));
                             }

@@ -531,7 +531,11 @@ public class LoginAPI {
     {
         final Map<String, String> parameterMap = new HashMap<>();
         for (String key : parameters.keySet()) {
-            parameterMap.put(key, parameters.getString(key));
+            if (key.equals("tag_label")) {
+                parameterMap.put(key, gson.toJson(parameters.getSerializable(key)));
+            } else {
+                parameterMap.put(key, parameters.getString(key));
+            }
         }
         Response<UpdateMyProfileResponse> res = loginService.mxUpdateProfile(parameterMap).execute();
 

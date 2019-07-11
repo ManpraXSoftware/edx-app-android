@@ -40,18 +40,18 @@ public enum ShareUtils {
 
     /**
      * Display a popup having a list of shareable apps through which a user can share course info.
-     *
-     * @param activity          Calling activity, pop up style will be based on this activity's style.
+     *  @param activity          Calling activity, pop up style will be based on this activity's style.
      * @param anchor            Anchor view around which popup will be shown.
      * @param courseData        Data of course which needs to be shared.
      * @param analyticsRegistry Analytics registry to fire required analytics events.
      * @param environment       Relevant configuration environment.
+     * @param id
      */
     public static void showCourseShareMenu(@NonNull final Activity activity,
                                            @NonNull final View anchor,
                                            @NonNull final EnrolledCoursesResponse courseData,
                                            @NonNull final AnalyticsRegistry analyticsRegistry,
-                                           @NonNull final IEdxEnvironment environment) {
+                                           @NonNull final IEdxEnvironment environment, long contentId) {
         final String COURSE_ABOUT_URL = courseData.getCourse().getCourse_about();
         final String shareTextWithPlatformName = ResourceUtil.getFormattedString(
                 activity.getResources(),
@@ -74,14 +74,15 @@ public enum ShareUtils {
                         Analytic analytic = new Analytic(activity);
                         analytic.addMxAnalytics_db(courseData.getCourse().getName(), Action.Share,
                                 SourceName.course.name(), Source.Mobile, courseData.getCourse().getId(),
-                                BreadcrumbUtil.getBreadcrumb() + "/" + shareType.name());
+                                BreadcrumbUtil.getBreadcrumb() + "/" + shareType.name(),
+                                courseData.getCourse().getId(), contentId);
 
                         if (!shareType.equals(ShareType.TTA)) {
                             final Intent intent = ShareUtils.newShareIntent(shareText);
                             intent.setComponent(componentName);
                             activity.startActivity(intent);
                         } else {
-                            Toast.makeText(activity, "Course shared on TheTeacherApp", Toast.LENGTH_LONG).show();
+                            Toast.makeText(activity, activity.getString(R.string.course_share_successful), Toast.LENGTH_LONG).show();
                         }
                     }
 

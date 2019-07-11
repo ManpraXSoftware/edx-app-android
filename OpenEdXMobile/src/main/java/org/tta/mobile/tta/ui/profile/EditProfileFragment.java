@@ -25,6 +25,8 @@ import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.data.model.authentication.FieldInfo;
 import org.tta.mobile.tta.data.model.authentication.Profession;
 import org.tta.mobile.tta.data.model.authentication.StateCustomAttribute;
+import org.tta.mobile.tta.data.model.search.FilterSection;
+import org.tta.mobile.tta.data.model.search.FilterTag;
 import org.tta.mobile.tta.data.model.search.SearchFilter;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
@@ -85,7 +87,7 @@ public class EditProfileFragment extends TaBaseFragment {
     private String tagLabel;
     private FieldInfo fieldInfo;
     private String pmisError;
-    private String delimiterTagChunks, delimiterSectionTag;
+    private String delimiterTagChunks, delimiterSectionTag, replacementTagSpace;
     private File cropped;
 
     public static EditProfileFragment newInstance(ProfileModel profileModel, ProfileImage profileImage,
@@ -107,6 +109,7 @@ public class EditProfileFragment extends TaBaseFragment {
 
         delimiterTagChunks = Constants.DELIMITER_TAG_CHUNKS;
         delimiterSectionTag = Constants.DELIMITER_SECTION_TAG;
+        replacementTagSpace = Constants.REPLACEMENT_TAG_SPACE;
     }
 
     @Nullable
@@ -182,6 +185,7 @@ public class EditProfileFragment extends TaBaseFragment {
                         for (String chunk: tagLabel.split(delimiterTagChunks)){
                             String[] duet = chunk.split(delimiterSectionTag);
                             if (duet[0].equals(viewModel.classesSectionName)){
+                                duet[1] = duet[1].replace(replacementTagSpace, " ");
                                 selectedOptions.add(new RegistrationOption(duet[1], duet[1]));
                             }
                         }
@@ -206,6 +210,7 @@ public class EditProfileFragment extends TaBaseFragment {
                         for (String chunk: tagLabel.split(delimiterTagChunks)){
                             String[] duet = chunk.split(delimiterSectionTag);
                             if (duet[0].equals(viewModel.skillSectionName)){
+                                duet[1] = duet[1].replace(replacementTagSpace, " ");
                                 selectedOptions.add(new RegistrationOption(duet[1], duet[1]));
                             }
                         }
@@ -257,8 +262,9 @@ public class EditProfileFragment extends TaBaseFragment {
                 viewModel.classesTaught, null);
         classTaughtSpinner.setMandatory(true);
 
-        skillsSpinner = ViewUtil.addMultiOptionSpinner(userInfoLayout, "Skills/कौशल*",
+        skillsSpinner = ViewUtil.addMultiOptionSpinner(userInfoLayout, "दी गयी क्षमताओं में से आप किन में खुद को निपुण मानते हैं ? कोई 5 चुनिए |*",
                 viewModel.skills, null);
+        skillsSpinner.setSelectionLimit(5);
         skillsSpinner.setMandatory(true);
 
         etPmis = ViewUtil.addFormEditText(userInfoLayout, "PMIS Code/पी इम आइ इस कोड");
@@ -291,28 +297,73 @@ public class EditProfileFragment extends TaBaseFragment {
             parameters.putString("title", professionSpinner.getSelectedOption().getValue());
             parameters.putString("gender", genderSpinner.getSelectedOption().getValue());
 
+            List<FilterSection> sections = new ArrayList<>();
             StringBuilder builder = new StringBuilder();
-            if (classTaughtSpinner.getSelectedOptions() != null) {
+            if (classTaughtSpinner.getSelectedOptions() != null && viewModel.classSection != null) {
+                List<FilterTag> tags = new ArrayList<>();
+                List<FilterTag> classTags = viewModel.classSection.getTags();
+
                 for (RegistrationOption option: classTaughtSpinner.getSelectedOptions()){
+
+                    FilterTag tag = new FilterTag();
+                    tag.setValue(option.getName());
+                    if (classTags.contains(tag)){
+                        tags.add(classTags.get(classTags.indexOf(tag)));
+                    }
+
                     builder.append(viewModel.classesSectionName)
                             .append(delimiterSectionTag)
                             .append(option.getName())
                             .append(delimiterTagChunks);
                 }
+
+                if (!tags.isEmpty()){
+                    FilterSection section = new FilterSection();
+                    section.setTags(tags);
+                    section.setName(viewModel.classSection.getName());
+                    section.setId(viewModel.classSection.getId());
+                    section.setIn_profile(viewModel.classSection.isIn_profile());
+                    section.setOrder(viewModel.classSection.getOrder());
+                    sections.add(section);
+                }
             }
-            if (skillsSpinner.getSelectedOptions() != null) {
+            if (skillsSpinner.getSelectedOptions() != null && viewModel.skillSection != null) {
+                List<FilterTag> tags = new ArrayList<>();
+                List<FilterTag> skillTags = viewModel.skillSection.getTags();
+
                 for (RegistrationOption option: skillsSpinner.getSelectedOptions()){
+
+                    FilterTag tag = new FilterTag();
+                    tag.setValue(option.getName());
+                    if (skillTags.contains(tag)){
+                        tags.add(skillTags.get(skillTags.indexOf(tag)));
+                    }
+
                     builder.append(viewModel.skillSectionName)
                             .append(delimiterSectionTag)
                             .append(option.getName())
                             .append(delimiterTagChunks);
+                }
+
+                if (!tags.isEmpty()){
+                    FilterSection section = new FilterSection();
+                    section.setTags(tags);
+                    section.setName(viewModel.skillSection.getName());
+                    section.setId(viewModel.skillSection.getId());
+                    section.setIn_profile(viewModel.skillSection.isIn_profile());
+                    section.setOrder(viewModel.skillSection.getOrder());
+                    sections.add(section);
                 }
             }
             String label = "";
             if (builder.length() > 0){
                 label = builder.substring(0, builder.length() - delimiterTagChunks.length());
             }
-            parameters.putString("tag_label", label);
+//            parameters.putString("tag_label", label);
+
+            SearchFilter filter = new SearchFilter();
+            filter.setResult(sections);
+            parameters.putSerializable("tag_label", filter);
 
             if (etPmis.isVisible()) {
                 parameters.putString("pmis_code", etPmis.getText());

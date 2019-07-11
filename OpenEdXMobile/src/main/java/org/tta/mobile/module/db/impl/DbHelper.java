@@ -119,7 +119,13 @@ public class DbHelper extends SQLiteOpenHelper {
                         + DbStructure.Column.ACTION_ID + " TEXT ",
 
                 "ALTER TABLE " + DbStructure.Table.ANALYTIC + " ADD COLUMN "
-                        + DbStructure.Column.NAV + " TEXT "};
+                        + DbStructure.Column.NAV + " TEXT ",
+
+                "ALTER TABLE " + DbStructure.Table.ANALYTIC + " ADD COLUMN "
+                        + DbStructure.Column.SOURCE_ID + " TEXT ",
+
+                "ALTER TABLE " + DbStructure.Table.ANALYTIC + " ADD COLUMN "
+                        + DbStructure.Column.CONTENT_ID + " INTEGER "};
 
 
         if (oldVersion == 1) {
@@ -279,7 +285,9 @@ public class DbHelper extends SQLiteOpenHelper {
                 + DbStructure.Column.STATUS  + " BOOLEAN, "
                 + DbStructure.Column.EVENT_DATE + " INTEGER, "
                 + DbStructure.Column.NAV + " TEXT, "
-                + DbStructure.Column.ACTION_ID + " TEXT "
+                + DbStructure.Column.ACTION_ID + " TEXT, "
+                + DbStructure.Column.SOURCE_ID + " TEXT, "
+                + DbStructure.Column.CONTENT_ID + " INTEGER "
                 + ")";
         db.execSQL(sql);
 

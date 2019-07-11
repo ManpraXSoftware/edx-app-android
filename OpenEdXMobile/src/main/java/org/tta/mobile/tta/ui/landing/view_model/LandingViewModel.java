@@ -102,7 +102,6 @@ public class LandingViewModel extends BaseViewModel {
                             .build()
                             .show();
                     mDataManager.getAppPref().setFeedNavVisited(true);
-
                 }
 
                 return true;
@@ -157,7 +156,6 @@ public class LandingViewModel extends BaseViewModel {
         statuses = new ArrayList<>();
         showLibrary();
         onAppStart();
-
     }
 
     @Override
@@ -193,7 +191,7 @@ public class LandingViewModel extends BaseViewModel {
         );
     }
 
-    public void showSearch() {
+    public void showSearch(){
         ActivityUtil.clearBackstackAndReplaceFragmentInActivity(
                 mActivity.getSupportFragmentManager(),
                 new SearchFragment(),
@@ -226,7 +224,7 @@ public class LandingViewModel extends BaseViewModel {
         );
     }
 
-    private void onAppStart() {
+    private void onAppStart(){
         mDataManager.getMyContentStatuses(new OnResponseCallback<List<ContentStatus>>() {
             @Override
             public void onSuccess(List<ContentStatus> data) {
@@ -241,7 +239,7 @@ public class LandingViewModel extends BaseViewModel {
         });
 
 
-        Migration280719 spt = new Migration280719(getActivity());
+        Migration280719 spt=new Migration280719(getActivity());
         spt.MigrateScromPackages();
         spt.MigrateConnectVideos();
 
@@ -257,13 +255,13 @@ public class LandingViewModel extends BaseViewModel {
         }
     }
 
-    public void selectLibrary() {
+    public void selectLibrary(){
         selectedId = R.id.action_library;
     }
 
     @SuppressWarnings("unused")
-    public void onEventMainThread(NetworkConnectivityChangeEvent event) {
-        if (NetworkUtil.isConnected(mActivity)) {
+    public void onEventMainThread(NetworkConnectivityChangeEvent event){
+        if (NetworkUtil.isConnected(mActivity)){
             offlineVisible.set(false);
         } else {
             offlineVisible.set(true);
@@ -271,17 +269,17 @@ public class LandingViewModel extends BaseViewModel {
     }
 
     @SuppressWarnings("unused")
-    public void onEventMainThread(ContentStatusReceivedEvent event) {
-        if (statuses == null) {
+    public void onEventMainThread(ContentStatusReceivedEvent event){
+        if (statuses == null){
             statuses = new ArrayList<>();
         }
         ContentStatus contentStatus = event.getContentStatus();
-        if (statuses.contains(contentStatus)) {
+        if (statuses.contains(contentStatus)){
             ContentStatus prev = statuses.get(statuses.indexOf(contentStatus));
-            if (prev.getCompleted() == null && contentStatus.getCompleted() != null) {
+            if (prev.getCompleted() == null && contentStatus.getCompleted() != null){
                 prev.setCompleted(contentStatus.getCompleted());
             }
-            if (prev.getStarted() == null && contentStatus.getStarted() != null) {
+            if (prev.getStarted() == null && contentStatus.getStarted() != null){
                 prev.setStarted(contentStatus.getStarted());
             }
         } else {
@@ -289,11 +287,11 @@ public class LandingViewModel extends BaseViewModel {
         }
     }
 
-    public void registerEventBus() {
+    public void registerEventBus(){
         EventBus.getDefault().register(this);
     }
 
-    public void unRegisterEventBus() {
+    public void unRegisterEventBus(){
         EventBus.getDefault().unregister(this);
     }
 

@@ -120,6 +120,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
     public ObservableBoolean footerDownloadProgressVisible = new ObservableBoolean(false);
     public ObservableField<String> footerBtnText = new ObservableField<>("");
     public ObservableBoolean footerBtnVisible = new ObservableBoolean(false);
+    public ObservableInt footerBtnBackground = new ObservableInt(R.drawable.btn_selector_hollow);
+    public ObservableInt footerBtnTextColor = new ObservableInt(R.color.primary_cyan);
 
     public ObservableBoolean emptyVisible = new ObservableBoolean();
     public String certificateStatus = "certificate";
@@ -364,7 +366,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
         mActivity.analytic.addMxAnalytics_db(
                 selectedScormForPlay.getInternalName(), Action.ViewSection, content.getName(),
-                Source.Mobile, selectedScormForPlay.getId());
+                Source.Mobile, selectedScormForPlay.getId(),
+                content.getSource_identity(), content.getId());
 
     }
 
@@ -563,7 +566,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
                 mActivity.analytic.addMxAnalytics_db(
                         scorm.getInternalName(), Action.GenerateCertificate, content.getName(),
-                        Source.Mobile, content.getSource_identity());
+                        Source.Mobile, content.getSource_identity(),
+                        content.getSource_identity(), content.getId());
 
                 getContentStatus();
 
@@ -628,20 +632,28 @@ public class CourseMaterialViewModel extends BaseViewModel {
             case FAIL:
             case NONE:
                 footerBtnText.set(mActivity.getString(R.string.assessment));
+                footerBtnBackground.set(R.drawable.btn_selector_hollow);
+                footerBtnTextColor.set(R.color.primary_cyan);
                 break;
 
             case APPLICABLE:
                 footerBtnText.set(mActivity.getString(R.string.generate_certificate));
+                footerBtnBackground.set(R.drawable.t_btn_backgound_filled_blue);
+                footerBtnTextColor.set(R.color.white);
                 certificateStatus = "progress";
                 break;
 
             case PROGRESS:
                 footerBtnText.set(mActivity.getString(R.string.certificate));
+                footerBtnBackground.set(R.drawable.t_btn_backgound_filled_blue);
+                footerBtnTextColor.set(R.color.white);
                 certificateStatus = "progress";
                 break;
 
             case GENERATED:
                 footerBtnText.set(mActivity.getString(R.string.view_certificate));
+                footerBtnBackground.set(R.drawable.btn_selector_filled);
+                footerBtnTextColor.set(R.color.white);
                 certificateStatus = "generated";
                 if (footerBtnText.get().equals(mActivity.getResources().getString(R.string.view_certificate))){
                 }
@@ -664,11 +676,13 @@ public class CourseMaterialViewModel extends BaseViewModel {
                 if (data.isIs_active()){
                     mActivity.analytic.addMxAnalytics_db(
                             content.getName() , Action.BookmarkCourse, content.getName(),
-                            Source.Mobile, content.getSource_identity());
+                            Source.Mobile, content.getSource_identity(),
+                            content.getSource_identity(), content.getId());
                 } else {
                     mActivity.analytic.addMxAnalytics_db(
                             content.getName() , Action.UnbookmarkCourse, content.getName(),
-                            Source.Mobile, content.getSource_identity());
+                            Source.Mobile, content.getSource_identity(),
+                            content.getSource_identity(), content.getId());
                 }
 
                 EventBus.getDefault().post(new ContentBookmarkChangedEvent(content, data.isIs_active()));
@@ -713,7 +727,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
                         content.getName() ,
                         data.getStatus() ? Action.CourseLike : Action.CourseUnlike,
                         content.getName(),
-                        Source.Mobile, content.getSource_identity());
+                        Source.Mobile, content.getSource_identity(),
+                        content.getSource_identity(), content.getId());
 
             }
 
@@ -812,7 +827,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
                 mActivity.analytic.addMxAnalytics_db(
                         selectedScormForDownload.getInternalName(), Action.StartScormDownload, content.getName(),
-                        Source.Mobile, selectedScormForDownload.getId());
+                        Source.Mobile, selectedScormForDownload.getId(),
+                        content.getSource_identity(), content.getId());
 
             }
 
@@ -908,7 +924,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
                             mActivity.analytic.addMxAnalytics_db(
                                     model.getInternalName(), Action.StartScormDownload, content.getName(),
-                                    Source.Mobile, model.getId());
+                                    Source.Mobile, model.getId(),
+                                    content.getSource_identity(), content.getId());
 
                         }
                     }
@@ -976,16 +993,19 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
             mActivity.analytic.addMxAnalytics_db(
                     e.getEntry().videoId, Action.ScromDownloadCompleted, content.getName(),
-                    Source.Mobile, e.getEntry().videoId);
+                    Source.Mobile, e.getEntry().videoId,
+                    content.getSource_identity(), content.getId());
 
             //first do count update then update local db
-            mActivity.analytic.addScromDownload_db(mActivity, e.getEntry());
+            mActivity.analytic.addScromDownload_db(mActivity, e.getEntry(),
+                    content.getSource_identity(), content.getId());
 
             mDataManager.getdownloadedCourseContents(new OnResponseCallback<List<Content>>() {
                 @Override
                 public void onSuccess(List<Content> data) {
                     mActivity.analytic.addMxAnalytics_db(String.valueOf(data.size()), Action.OfflineSections, Nav.profile.name(),
-                            Source.Mobile, null);
+                            Source.Mobile, null,
+                            content.getSource_identity(), content.getId());
                 }
 
                 @Override
@@ -1012,7 +1032,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
             mActivity.analytic.addMxAnalytics_db(
                     e.getModel().getVideoId(), Action.DeleteSection, content.getName(),
-                    Source.Mobile, e.getModel().getVideoId());
+                    Source.Mobile, e.getModel().getVideoId(),
+                    content.getSource_identity(), content.getId());
 
             //delete resume cache
             Tincan tincan=new Tincan();
@@ -1125,7 +1146,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
                     if (comp.isContainer()){
                         for (IBlock childBlock : comp.getChildren()) {
                             CourseComponent child = (CourseComponent) childBlock;
-                            if (child.getDisplayName().contains("अपनी समझ")){
+                            if (child.getDisplayName().contains("अपनी समझ को परखें")){
                                 if (child.isContainer() && child.getChildren() != null &&
                                         !child.getChildren().isEmpty()) {
                                     assessmentComponent = child;
@@ -1148,7 +1169,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
                             }
                         }
                     }else {
-                        if (comp.getDisplayName().contains("अपनी समझ")){
+                        if (comp.getDisplayName().contains("अपनी समझ को परखें")){
                             if (comp.isContainer() && comp.getChildren() != null &&
                                     !comp.getChildren().isEmpty()) {
                                 assessmentComponent = comp;

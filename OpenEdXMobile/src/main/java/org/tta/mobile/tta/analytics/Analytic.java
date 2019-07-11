@@ -77,6 +77,35 @@ public class Analytic {
         }
     }
 
+    public void addMxAnalytics_db(String metadata, Action action, String page, Source source,
+                                  String actionId, String sourceIdentity, long contentId) {
+        String username = loginPrefs.getUsername();
+
+        //save analytics to  local db first
+        //download entry to db
+        if (username != null) {
+            AnalyticModel model = new AnalyticModel();
+            model.user_id = username;
+            model.action = String.valueOf(action);
+            model.metadata = metadata;
+            model.page = page;
+            model.source = String.valueOf(source);
+            model.nav = BreadcrumbUtil.getBreadcrumb();
+            model.action_id = actionId;
+            model.source_id = sourceIdentity;
+            model.content_id = contentId;
+
+            model.setEvent_date();
+            model.setStatus(0);
+
+            environment.getStorage().addAnalytic(model);
+
+            if (getAnalyticsCount() >= ANALYTICS_COUNT_FOR_SYNC){
+                syncAnalytics();
+            }
+        }
+    }
+
     public void addMxAnalytics_db(String metadata, Action action, String page, Source source, String actionId, String nav) {
         String username = loginPrefs.getUsername();
 
@@ -91,6 +120,35 @@ public class Analytic {
             model.source = String.valueOf(source);
             model.nav = nav;
             model.action_id = actionId;
+
+            model.setEvent_date();
+            model.setStatus(0);
+
+            environment.getStorage().addAnalytic(model);
+
+            if (getAnalyticsCount() >= ANALYTICS_COUNT_FOR_SYNC){
+                syncAnalytics();
+            }
+        }
+    }
+
+    public void addMxAnalytics_db(String metadata, Action action, String page, Source source,
+                                  String actionId, String nav, String sourceIdentity, long contentId) {
+        String username = loginPrefs.getUsername();
+
+        //save analytics to  local db first
+        //download entry to db
+        if (username != null) {
+            AnalyticModel model = new AnalyticModel();
+            model.user_id = username;
+            model.action = String.valueOf(action);
+            model.metadata = metadata;
+            model.page = page;
+            model.source = String.valueOf(source);
+            model.nav = nav;
+            model.action_id = actionId;
+            model.source_id = sourceIdentity;
+            model.content_id = contentId;
 
             model.setEvent_date();
             model.setStatus(0);
@@ -132,11 +190,43 @@ public class Analytic {
         }
     }
 
+    public void addTinCanAnalyticDB(String tincan_obj, String course_name, String course_id,
+                                    String sourceIdentity, long contentId) {
+        String username = loginPrefs.getUsername();
+
+        //save Tincan analytics to  local db first
+        //download entry to db
+        if (username == null || tincan_obj.isEmpty()) {
+            Log.d("TinCanDbEntry", "unable to add");
+            return;
+        }
+
+        AnalyticModel model = new AnalyticModel();
+        model.user_id = username;
+        model.action = String.valueOf(Action.TinCanObject);
+        model.metadata = tincan_obj;
+        //we are adding courseid to page in case of tincan
+        model.page = course_name;
+        model.source = String.valueOf(Source.Mobile);
+        model.nav = BreadcrumbUtil.getBreadcrumb();
+        model.action_id = course_id;
+        model.source_id = sourceIdentity;
+        model.content_id = contentId;
+        model.setEvent_date();
+        model.setStatus(0);
+
+        environment.getStorage().addAnalytic(model);
+
+        if (getAnalyticsCount() >= ANALYTICS_COUNT_FOR_SYNC){
+            syncAnalytics();
+        }
+    }
+
     public void deleteAnalytics(ArrayList<AnalyticModel> analyticModelList) {
         environment.getStorage().removeAnalytics(getIds(analyticModelList), getINQueryParams(getIds(analyticModelList)));
     }
 
-    public void addScromDownload_db(Context mContext, final DownloadEntry model) {
+    public void addScromDownload_db(Context mContext, final DownloadEntry model, String sourceIdentity, long contentId) {
         GetAllDownloadedScromCountTask getAllDownloadedScromCountTask = new GetAllDownloadedScromCountTask(mContext) {
             @Override
             protected void onSuccess(Integer scromCount) throws Exception {
@@ -144,7 +234,8 @@ public class Analytic {
                 scromCount = scromCount + 1;
                 //update analytics
                 addMxAnalytics_db("" + scromCount, Action.OfflineSections,
-                        String.valueOf(Page.ProfilePage), Source.Mobile, null);
+                        String.valueOf(Page.ProfilePage), Source.Mobile, null,
+                        sourceIdentity, contentId);
 
                 //download entry to db
                 environment.getStorage().addDownload(model);
@@ -269,6 +360,8 @@ public class Analytic {
             tincan.metadata = item.metadata;
             tincan.action_id = item.action_id;
             tincan.nav = item.nav;
+            tincan.source_id = item.source_id;
+            tincan.content_id = item.content_id;
 
             tincan_item.tincanObj.add(tincan);
         }

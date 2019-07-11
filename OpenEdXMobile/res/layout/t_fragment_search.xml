@@ -117,7 +117,7 @@
                     android:paddingBottom="4dp"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
-                    android:visibility="@{viewModel.contentListVisible?View.VISIBLE:View.GONE}"/>
+                    android:visibility="gone"/>
 
                 <org.tta.mobile.tta.ui.custom.DropDownFilterView
                     android:layout_width="wrap_content"
@@ -151,7 +151,8 @@
                     android:paddingBottom="4dp"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
-                    android:onClick="@{()->viewModel.selectPeople()}"/>
+                    android:onClick="@{()->viewModel.selectPeople()}"
+                    android:visibility="@{viewModel.peopleVisible?View.VISIBLE:View.GONE}"/>
 
                 <RadioGroup
                     android:layout_width="wrap_content"

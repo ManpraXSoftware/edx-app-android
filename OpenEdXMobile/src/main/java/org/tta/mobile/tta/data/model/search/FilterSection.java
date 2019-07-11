@@ -1,10 +1,11 @@
 package org.tta.mobile.tta.data.model.search;
 
+import java.io.Serializable;
 import java.util.List;
 
 import androidx.annotation.Nullable;
 
-public class FilterSection implements Comparable<FilterSection> {
+public class FilterSection implements Comparable<FilterSection>, Serializable {
 
     private long id;
 

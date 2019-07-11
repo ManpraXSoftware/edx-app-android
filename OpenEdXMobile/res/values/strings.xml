@@ -745,7 +745,7 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="classes_taught">Classes Taught</string>
     <string name="padaav">Paddav</string>
-    <string name="skills">Skills</string>
+    <string name="skills">Capabilities</string>
     <string name="following">Following</string>
     <string name="number">Number</string>
     <string name="followers">Followers</string>
@@ -826,6 +826,7 @@
     <string name="empty_comment_message">Comment cannot be empty</string>
     <string name="reply_successful">Replied successfully</string>
     <string name="post_share_successful">Post shared successfully on TheTeacherApp</string>
+    <string name="course_share_successful">Course shared successfully on TheTeacherApp</string>
     <string name="sign_out_message">Are you sure you want to Sign Out?</string>
     <string name="be_the_first_to_comment">Be the first to comment</string>
     <string name="name_on_certificate">Name on certificate</string>
@@ -854,6 +855,7 @@
     <string name="correct_old_password">Please enter correct old password</string>
     <string name="password_changed_login">Password changed successfully. Please login to continue</string>
     <string name="unable_to_get_account">Unable to get account details</string>
+    <string name="selection_limit_crossed">You cannot select more than %d</string>
 
     <string name="anonymous" translatable="false">Anonymous</string>
     <string name="privacy_policy_url" translatable="false">http://theteacherapp.org/privacy</string>

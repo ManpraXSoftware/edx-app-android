@@ -19,6 +19,7 @@ import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
 import org.tta.mobile.tta.data.enums.SortType;
+import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.event.DiscussionThreadUpdateEvent;
 import org.tta.mobile.tta.event.LoadMoreDiscussionCommentsEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
@@ -50,6 +51,7 @@ public class DiscussionThreadViewModel extends BaseViewModel
     private static final int DEFAULT_PAGE = 1;
 
     public EnrolledCoursesResponse course;
+    private Content content;
     public DiscussionTopic topic;
     public DiscussionThread thread;
     private List<Fragment> fragments;
@@ -101,9 +103,10 @@ public class DiscussionThreadViewModel extends BaseViewModel
         }
     };
 
-    public DiscussionThreadViewModel(BaseVMActivity activity, EnrolledCoursesResponse course, DiscussionTopic topic, DiscussionThread thread) {
+    public DiscussionThreadViewModel(BaseVMActivity activity, EnrolledCoursesResponse course, Content content, DiscussionTopic topic, DiscussionThread thread) {
         super(activity);
         this.course = course;
+        this.content = content;
         this.topic = topic;
         this.thread = thread;
         fragments = new ArrayList<>();
@@ -190,15 +193,15 @@ public class DiscussionThreadViewModel extends BaseViewModel
 
     private void setTabs() {
 
-        tab1 = DiscussionCommentsTab.newInstance(course, topic, thread, this, comments, SortType.all);
+        tab1 = DiscussionCommentsTab.newInstance(course, content, topic, thread, this, comments, SortType.all);
         fragments.add(tab1);
         titles.add(mActivity.getString(R.string.all));
 
-        tab2 = DiscussionCommentsTab.newInstance(course, topic, thread, this, comments, SortType.recent);
+        tab2 = DiscussionCommentsTab.newInstance(course, content, topic, thread, this, comments, SortType.recent);
         fragments.add(tab2);
         titles.add(mActivity.getString(R.string.recently_added_list));
 
-        tab3 = DiscussionCommentsTab.newInstance(course, topic, thread, this, comments, SortType.relevant);
+        tab3 = DiscussionCommentsTab.newInstance(course, content, topic, thread, this, comments, SortType.relevant);
         fragments.add(tab3);
         titles.add(mActivity.getString(R.string.most_relevant_list));
 
@@ -235,7 +238,8 @@ public class DiscussionThreadViewModel extends BaseViewModel
                                         Action.Postname_CD.name(),
                                 data.isVoted() ? Action.DBLike : Action.DBUnlike,
                                 course.getCourse().getName(),
-                                Source.Mobile, thread.getIdentifier());
+                                Source.Mobile, thread.getIdentifier(),
+                                content.getSource_identity(), content.getId());
 
                         postThreadUpdated();
                     }
@@ -307,14 +311,16 @@ public class DiscussionThreadViewModel extends BaseViewModel
                                             Action.Postname_AD.name() :
                                             Action.Postname_CD.name(),
                                     Action.DBComment, course.getCourse().getName(),
-                                    Source.Mobile, thread.getIdentifier());
+                                    Source.Mobile, thread.getIdentifier(),
+                                    content.getSource_identity(), content.getId());
 
                         } else {
                             selectedComment.incrementChildCount();
 
                             mActivity.analytic.addMxAnalytics_db(thread.getIdentifier(),
                                     Action.DBCommentReply, course.getCourse().getName(),
-                                    Source.Mobile, selectedComment.getIdentifier());
+                                    Source.Mobile, selectedComment.getIdentifier(),
+                                    content.getSource_identity(), content.getId());
 
                         }
                         refreshComments();
@@ -346,7 +352,8 @@ public class DiscussionThreadViewModel extends BaseViewModel
                         mActivity.analytic.addMxAnalytics_db(thread.getIdentifier(),
                                 data.isVoted() ? Action.DBCommentlike : Action.DBCommentUnlike,
                                 course.getCourse().getName(),
-                                Source.Mobile, comment.getIdentifier());
+                                Source.Mobile, comment.getIdentifier(),
+                                content.getSource_identity(), content.getId());
                     }
 
                     @Override
@@ -386,6 +393,7 @@ public class DiscussionThreadViewModel extends BaseViewModel
         parameters.putSerializable(Constants.KEY_DISCUSSION_TOPIC, topic);
         parameters.putSerializable(Constants.KEY_DISCUSSION_THREAD, thread);
         parameters.putSerializable(Constants.KEY_DISCUSSION_COMMENT, comment);
+        parameters.putParcelable(Constants.KEY_CONTENT, content);
         ActivityUtil.gotoPage(mActivity, DiscussionCommentActivity.class, parameters);
     }
 

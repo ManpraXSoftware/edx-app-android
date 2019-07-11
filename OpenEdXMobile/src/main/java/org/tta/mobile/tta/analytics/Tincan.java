@@ -11,4 +11,6 @@ public class Tincan {
     public String metadata;
     public String action_id;
     public String nav;
+    public String source_id;
+    public long content_id;
 }

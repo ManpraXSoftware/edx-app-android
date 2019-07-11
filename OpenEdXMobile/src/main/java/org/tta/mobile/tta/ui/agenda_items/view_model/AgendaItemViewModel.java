@@ -200,7 +200,8 @@ public class AgendaItemViewModel extends BaseViewModel {
 
             mActivity.analytic.addMxAnalytics_db(
                     selectedContent.getName() , Action.CourseOpen, nav.name(),
-                    org.tta.mobile.tta.analytics.analytics_enums.Source.Mobile, selectedContent.getSource_identity());
+                    org.tta.mobile.tta.analytics.analytics_enums.Source.Mobile, selectedContent.getSource_identity(),
+                    selectedContent.getSource_identity(), selectedContent.getId());
 
         } else {
             ActivityUtil.gotoPage(mActivity, ConnectDashboardActivity.class, parameters);
