@@ -14,6 +14,7 @@ import org.tta.mobile.discussion.DiscussionTopic;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.data.enums.SortType;
+import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.course.discussion.view_model.DiscussionCommentsTabViewModel;
 import org.tta.mobile.tta.ui.interfaces.DiscussionCommentClickListener;
@@ -28,17 +29,19 @@ public class DiscussionCommentsTab extends TaBaseFragment {
     private DiscussionCommentsTabViewModel viewModel;
 
     private EnrolledCoursesResponse course;
+    private Content content;
     private DiscussionTopic topic;
     private DiscussionThread thread;
     private DiscussionCommentClickListener listener;
     private List<DiscussionComment> comments;
     private SortType sortType;
 
-    public static DiscussionCommentsTab newInstance(EnrolledCoursesResponse course, DiscussionTopic topic,
+    public static DiscussionCommentsTab newInstance(EnrolledCoursesResponse course, Content content, DiscussionTopic topic,
                                                     DiscussionThread thread, DiscussionCommentClickListener listener,
                                                     List<DiscussionComment> comments, SortType sortType){
         DiscussionCommentsTab fragment = new DiscussionCommentsTab();
         fragment.course = course;
+        fragment.content = content;
         fragment.topic = topic;
         fragment.thread = thread;
         fragment.listener = listener;
@@ -51,7 +54,7 @@ public class DiscussionCommentsTab extends TaBaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new DiscussionCommentsTabViewModel(getActivity(), this, course, topic, thread, listener, comments, sortType);
+        viewModel = new DiscussionCommentsTabViewModel(getActivity(), this, course, content, topic, thread, listener, comments, sortType);
         viewModel.registerEventBus();
     }
 

@@ -906,10 +906,10 @@ public class DataManager extends BaseRoboInjector {
 
     }
 
-    public void getCourse(String courseId, OnResponseCallback<EnrolledCoursesResponse> callback) {
+    public void getCourse(Content content, OnResponseCallback<EnrolledCoursesResponse> callback) {
 
         if (NetworkUtil.isConnected(context)) {
-            new UserEnrollmentCourseTask(context, courseId) {
+            new UserEnrollmentCourseTask(context, content.getSource_identity()) {
                 @Override
                 protected void onSuccess(EnrolledCoursesResponse enrolledCoursesResponse) throws Exception {
                     super.onSuccess(enrolledCoursesResponse);
@@ -919,10 +919,10 @@ public class DataManager extends BaseRoboInjector {
                             enrolledCoursesResponse.getMode().equals("") ||
                             enrolledCoursesResponse.getCourse() == null) {
 
-                        enrolInCourse(courseId, new OnResponseCallback<ResponseBody>() {
+                        enrolInCourse(content, new OnResponseCallback<ResponseBody>() {
                             @Override
                             public void onSuccess(ResponseBody data) {
-                                getCourse(courseId, callback);
+                                getCourse(content, callback);
                             }
 
                             @Override
@@ -938,11 +938,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
-                    getCourseFromLocal(courseId, callback, ex);
+                    getCourseFromLocal(content.getSource_identity(), callback, ex);
                 }
             }.execute();
         } else {
-            getCourseFromLocal(courseId, callback, new TaException(context.getString(R.string.no_connection_exception)));
+            getCourseFromLocal(content.getSource_identity(), callback, new TaException(context.getString(R.string.no_connection_exception)));
         }
 
     }
@@ -969,23 +969,24 @@ public class DataManager extends BaseRoboInjector {
         }.execute();
     }
 
-    private void enrolInCourse(String courseId, OnResponseCallback<ResponseBody> callback) {
+    private void enrolInCourse(Content content, OnResponseCallback<ResponseBody> callback) {
 
         if (!NetworkUtil.isConnected(context)) {
             callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
             return;
         }
 
-        Call<ResponseBody> enrolCall = courseApi.enrolInCourse(courseId);
+        Call<ResponseBody> enrolCall = courseApi.enrolInCourse(content.getSource_identity());
         enrolCall.enqueue(new CourseService.EnrollCallback(context) {
             @Override
             protected void onResponse(@NonNull ResponseBody responseBody) {
                 super.onResponse(responseBody);
                 callback.onSuccess(responseBody);
 
-                analytic.addMxAnalytics_db(courseId, Action.Enrolled,
+                analytic.addMxAnalytics_db(content.getSource_identity(), Action.Enrolled,
                         org.tta.mobile.tta.analytics.analytics_enums.Page.CourseHomePage.name(),
-                        org.tta.mobile.tta.analytics.analytics_enums.Source.Mobile, courseId);
+                        org.tta.mobile.tta.analytics.analytics_enums.Source.Mobile, content.getSource_identity(),
+                        content.getSource_identity(), content.getId());
             }
 
             @Override
@@ -993,9 +994,10 @@ public class DataManager extends BaseRoboInjector {
                 super.onFailure(error);
                 callback.onFailure(new TaException(error.getMessage()));
 
-                analytic.addMxAnalytics_db(courseId, Action.EnrolFailed,
+                analytic.addMxAnalytics_db(content.getSource_identity(), Action.EnrolFailed,
                         org.tta.mobile.tta.analytics.analytics_enums.Page.CourseHomePage.name(),
-                        org.tta.mobile.tta.analytics.analytics_enums.Source.Mobile, courseId);
+                        org.tta.mobile.tta.analytics.analytics_enums.Source.Mobile, content.getSource_identity(),
+                        content.getSource_identity(), content.getId());
             }
         });
 

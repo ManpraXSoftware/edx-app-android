@@ -590,11 +590,13 @@ public class ConnectDashboardViewModel extends BaseViewModel
                 if (data.isIs_active()) {
                     mActivity.analytic.addMxAnalytics_db(
                             content.getName() , Action.BookmarkPost, content.getSource().getName(),
-                            Source.Mobile, content.getSource_identity());
+                            Source.Mobile, content.getSource_identity(),
+                            content.getSource_identity(), content.getId());
                 } else {
                     mActivity.analytic.addMxAnalytics_db(
                             content.getName() , Action.UnbookmarkPost, content.getSource().getName(),
-                            Source.Mobile, content.getSource_identity());
+                            Source.Mobile, content.getSource_identity(),
+                            content.getSource_identity(), content.getId());
                 }
 
                 EventBus.getDefault().post(new ContentBookmarkChangedEvent(content, data.isIs_active()));
@@ -639,7 +641,8 @@ public class ConnectDashboardViewModel extends BaseViewModel
                         content.getName() ,
                         data.getStatus() ? Action.LikePost : Action.UnlikePost,
                         content.getSource().getName(),
-                        Source.Mobile, content.getSource_identity());
+                        Source.Mobile, content.getSource_identity(),
+                        content.getSource_identity(), content.getId());
             }
 
             @Override
@@ -784,7 +787,8 @@ public class ConnectDashboardViewModel extends BaseViewModel
 
                             mActivity.analytic.addMxAnalytics_db(
                                     content.getName() , Action.CommentPost, content.getSource().getName(),
-                                    Source.Mobile, content.getSource_identity());
+                                    Source.Mobile, content.getSource_identity(),
+                                    content.getSource_identity(), content.getId());
 
                             EventBus.getDefault().post(new ConnectCommentAddedEvent(data));
 
@@ -796,7 +800,8 @@ public class ConnectDashboardViewModel extends BaseViewModel
 
                             mActivity.analytic.addMxAnalytics_db(
                                     content.getName() , Action.ReplyComment, content.getSource().getName(),
-                                    Source.Mobile, String.valueOf(selectedComment.getId()));
+                                    Source.Mobile, String.valueOf(selectedComment.getId()),
+                                    content.getSource_identity(), content.getId());
 
                             if (repliesMap.containsKey(selectedComment.getId())){
                                 repliesMap.get(selectedComment.getId()).add(0, data);
@@ -914,7 +919,8 @@ public class ConnectDashboardViewModel extends BaseViewModel
 
                     mActivity.analytic.addMxAnalytics_db(content.getName(), Action.Share,
                             content.getSource().getName(), Source.Mobile, content.getSource_identity(),
-                            BreadcrumbUtil.getBreadcrumb() + "/" + shareType.name());
+                            BreadcrumbUtil.getBreadcrumb() + "/" + shareType.name(),
+                            content.getSource_identity(), content.getId());
 
 //                    segIO.courseDetailShared(post.getLink(), shareText, shareType);
                     if (!shareType.equals(ShareUtils.ShareType.TTA)) {
@@ -974,7 +980,8 @@ public class ConnectDashboardViewModel extends BaseViewModel
 
             mActivity.analytic.addMxAnalytics_db(
                     content.getName() , Action.DownloadPostComplete, content.getSource().getName(),
-                    Source.Mobile, content.getSource_identity());
+                    Source.Mobile, content.getSource_identity(),
+                    content.getSource_identity(), content.getId());
 
         }
     }
@@ -994,7 +1001,8 @@ public class ConnectDashboardViewModel extends BaseViewModel
 
             mActivity.analytic.addMxAnalytics_db(
                     content.getName() , Action.DeletePost, content.getSource().getName(),
-                    Source.Mobile, content.getSource_identity());
+                    Source.Mobile, content.getSource_identity(),
+                    content.getSource_identity(), content.getId());
         }
     }
 

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import org.tta.mobile.R;
 import org.tta.mobile.discussion.DiscussionTopicDepth;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
+import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.course.discussion.view_model.DiscussionTopicViewModel;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
@@ -22,11 +23,13 @@ public class DiscussionTopicFragment extends TaBaseFragment {
 
     private DiscussionTopicDepth topicDepth;
     private EnrolledCoursesResponse course;
+    private Content content;
 
-    public static DiscussionTopicFragment newInstance(EnrolledCoursesResponse course, DiscussionTopicDepth topicDepth){
+    public static DiscussionTopicFragment newInstance(EnrolledCoursesResponse course, Content content, DiscussionTopicDepth topicDepth){
         DiscussionTopicFragment fragment = new DiscussionTopicFragment();
         fragment.course = course;
         fragment.topicDepth = topicDepth;
+        fragment.content = content;
         fragment.RANK = BreadcrumbUtil.getCurrentRank() + 1;
         return fragment;
     }
@@ -34,7 +37,7 @@ public class DiscussionTopicFragment extends TaBaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new DiscussionTopicViewModel(getActivity(), this, course, topicDepth);
+        viewModel = new DiscussionTopicViewModel(getActivity(), this, course, content, topicDepth);
         viewModel.registerEventBus();
     }
 

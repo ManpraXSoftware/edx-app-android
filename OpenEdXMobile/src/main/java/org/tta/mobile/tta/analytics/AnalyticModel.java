@@ -19,6 +19,8 @@ public class AnalyticModel {
 
     public String nav;
     public String action_id;
+    public String source_id;
+    public long content_id;
 
     //its not a API Field //Having it for local storage.
     public Status status;
@@ -68,6 +70,17 @@ public class AnalyticModel {
             return "";
         }
         return action_id;
+    }
+
+    public String getSource_id() {
+        if (source_id == null || source_id.trim().length() == 0) {
+            return "";
+        }
+        return source_id;
+    }
+
+    public long getContent_id() {
+        return content_id;
     }
 
     public int getStatus() {

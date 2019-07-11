@@ -26,6 +26,7 @@ import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
+import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.event.DiscussionCommentUpdateEvent;
 import org.tta.mobile.tta.event.DiscussionThreadUpdateEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
@@ -49,6 +50,7 @@ public class DiscussionCommentViewModel extends BaseViewModel {
     private static final int DEFAULT_PAGE = 1;
 
     public EnrolledCoursesResponse course;
+    private Content content;
     public DiscussionTopic topic;
     public DiscussionThread thread;
     public DiscussionComment comment;
@@ -80,9 +82,10 @@ public class DiscussionCommentViewModel extends BaseViewModel {
         return true;
     };
 
-    public DiscussionCommentViewModel(BaseVMActivity activity, EnrolledCoursesResponse course, DiscussionTopic topic, DiscussionThread thread, DiscussionComment comment) {
+    public DiscussionCommentViewModel(BaseVMActivity activity, EnrolledCoursesResponse course, Content content, DiscussionTopic topic, DiscussionThread thread, DiscussionComment comment) {
         super(activity);
         this.course = course;
+        this.content = content;
         this.topic = topic;
         this.thread = thread;
         this.comment = comment;
@@ -199,7 +202,8 @@ public class DiscussionCommentViewModel extends BaseViewModel {
                         mActivity.analytic.addMxAnalytics_db(thread.getIdentifier(),
                                 data.isVoted() ? Action.DBCommentlike : Action.DBCommentUnlike,
                                 course.getCourse().getName(),
-                                Source.Mobile, comment.getIdentifier());
+                                Source.Mobile, comment.getIdentifier(),
+                                content.getSource_identity(), content.getId());
 
                         postCommentUpdated();
                     }

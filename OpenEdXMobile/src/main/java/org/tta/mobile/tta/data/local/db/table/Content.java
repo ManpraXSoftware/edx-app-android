@@ -44,6 +44,8 @@ public class Content implements Parcelable {
 
     private String detail;
 
+    private String feature_icon;
+
     public Content() {
     }
 
@@ -61,6 +63,7 @@ public class Content implements Parcelable {
             lists = new ArrayList<>();
         }
         in.readList(lists, Long.class.getClassLoader());
+        feature_icon = in.readString();
     }
 
     public static final Creator<Content> CREATOR = new Creator<Content>() {
@@ -184,6 +187,14 @@ public class Content implements Parcelable {
         this.detail = detail;
     }
 
+    public String getFeature_icon() {
+        return feature_icon;
+    }
+
+    public void setFeature_icon(String feature_icon) {
+        this.feature_icon = feature_icon;
+    }
+
     @Override
     public String toString()
     {
@@ -207,6 +218,7 @@ public class Content implements Parcelable {
         dest.writeString(created_at);
         dest.writeString(modified_at);
         dest.writeList(lists);
+        dest.writeString(feature_icon);
     }
 
     @Override

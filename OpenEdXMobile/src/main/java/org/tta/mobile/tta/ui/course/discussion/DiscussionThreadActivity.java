@@ -15,6 +15,7 @@ import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
+import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.ui.base.BasePagerAdapter;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.course.discussion.view_model.DiscussionThreadViewModel;
@@ -27,6 +28,7 @@ public class DiscussionThreadActivity extends BaseVMActivity {
     private DiscussionThreadViewModel viewModel;
 
     private EnrolledCoursesResponse course;
+    private Content content;
     private DiscussionTopic topic;
     private DiscussionThread thread;
 
@@ -39,7 +41,7 @@ public class DiscussionThreadActivity extends BaseVMActivity {
         RANK = BreadcrumbUtil.getCurrentRank() + 1;
         logD("TTA Nav ======> " + BreadcrumbUtil.setBreadcrumb(RANK, Nav.thread.name()));
         getExtras();
-        viewModel = new DiscussionThreadViewModel(this, course, topic, thread);
+        viewModel = new DiscussionThreadViewModel(this, course, content, topic, thread);
         viewModel.registerEventBus();
         binding(R.layout.t_activity_discussion_thread, viewModel);
 
@@ -56,7 +58,8 @@ public class DiscussionThreadActivity extends BaseVMActivity {
                         Action.Postname_AD.name() :
                         Action.Postname_CD.name(),
                 Action.DBView, course.getCourse().getName(),
-                Source.Mobile, thread.getIdentifier());
+                Source.Mobile, thread.getIdentifier(),
+                content.getSource_identity(), content.getId());
     }
 
     @Override
@@ -75,6 +78,7 @@ public class DiscussionThreadActivity extends BaseVMActivity {
             course = (EnrolledCoursesResponse) parameters.getSerializable(Constants.KEY_ENROLLED_COURSE);
             topic = (DiscussionTopic) parameters.getSerializable(Constants.KEY_DISCUSSION_TOPIC);
             thread = (DiscussionThread) parameters.getSerializable(Constants.KEY_DISCUSSION_THREAD);
+            content = parameters.getParcelable(Constants.KEY_CONTENT);
         }
     }
 

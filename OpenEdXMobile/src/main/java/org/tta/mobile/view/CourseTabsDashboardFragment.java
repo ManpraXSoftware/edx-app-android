@@ -96,7 +96,7 @@ public class CourseTabsDashboardFragment extends TabsBaseFragment {
         switch (item.getItemId()) {
             case R.id.menu_item_share:
                 ShareUtils.showCourseShareMenu(getActivity(), getActivity().findViewById(R.id.menu_item_share),
-                        courseData, analyticsRegistry, environment);
+                        courseData, analyticsRegistry, environment, 0);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -208,7 +208,8 @@ public class LibraryTabViewModel extends BaseViewModel {
 
             mActivity.analytic.addMxAnalytics_db(
                     selectedContent.getName(), Action.CourseOpen, Nav.library.name(),
-                    org.tta.mobile.tta.analytics.analytics_enums.Source.Mobile, selectedContent.getSource_identity());
+                    org.tta.mobile.tta.analytics.analytics_enums.Source.Mobile, selectedContent.getSource_identity(),
+                    selectedContent.getSource_identity(), selectedContent.getId());
 
         } else {
             ActivityUtil.gotoPage(mActivity, ConnectDashboardActivity.class, parameters);
@@ -287,7 +288,7 @@ public class LibraryTabViewModel extends BaseViewModel {
                                 .inflate(R.layout.t_row_slider_item, container, false);
                         ImageView imageView = view.findViewById(R.id.slider_image);
                         Glide.with(mActivity)
-                                .load(contentListMap.get(model.getId()).get(position).getIcon())
+                                .load(contentListMap.get(model.getId()).get(position).getFeature_icon())
                                 .placeholder(R.drawable.placeholder_course_card_image)
                                 .into(imageView);
                         container.addView(view);

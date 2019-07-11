@@ -51,7 +51,7 @@ public class CertificateActivity extends BaseVMActivity implements View.OnClickL
 
         analytic.addMxAnalytics_db(
                 certificate.getCourse_name(), Action.ViewCert, certificate.getCourse_name(),
-                Source.Mobile, certificate.getCourse_id());
+                Source.Mobile, certificate.getCourse_id(), certificate.getCourse_id(), 0);
 
         initializeWebview();
     }
@@ -148,7 +148,8 @@ public class CertificateActivity extends BaseVMActivity implements View.OnClickL
         switch (v.getId()){
             case R.id.print_certificate_fab:
                 analytic.addMxAnalytics_db(certificate.getCourse_id(), Action.CertificateDownload,
-                        String.valueOf(Page.CertificatePage), Source.Mobile, certificate.getCourse_id());
+                        String.valueOf(Page.CertificatePage), Source.Mobile, certificate.getCourse_id(),
+                        certificate.getCourse_id(), 0);
 
                 WebViewUtil.createWebPrintJob(baseActivityContext, webview, certificate.getCourse_name());
                 break;

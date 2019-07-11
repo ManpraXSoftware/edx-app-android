@@ -73,7 +73,8 @@ public class CourseDashboardActivity extends BaseVMActivity {
         viewModel.registerEventBus();
 
         analytic.addMxAnalytics_db(content.getName(), Action.CourseView, content.getName(),
-                Source.Mobile, content.getSource_identity());
+                Source.Mobile, content.getSource_identity(),
+                content.getSource_identity(), content.getId());
 
         viewModel.loadCourseData(new OnResponseCallback<EnrolledCoursesResponse>() {
             @Override

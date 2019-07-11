@@ -61,7 +61,7 @@ public class FeedFragment extends TaBaseFragment {
                         .inflate(R.layout.t_row_slider_item, container, false);
                 ImageView imageView = view.findViewById(R.id.slider_image);
                 Glide.with(getActivity())
-                        .load(featuredContents.get(position).getIcon())
+                        .load(featuredContents.get(position).getFeature_icon())
                         .placeholder(R.drawable.placeholder_course_card_image)
                         .into(imageView);
                 container.addView(view);

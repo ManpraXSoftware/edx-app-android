@@ -202,7 +202,7 @@ public class ConnectDashboardActivity extends BaseVMActivity {
 
         analytic.addMxAnalytics_db(
                 content.getName() , Action.ViewPost, content.getSource().getName(),
-                Source.Mobile, content.getSource_identity());
+                Source.Mobile, content.getSource_identity(), content.getSource_identity(), content.getId());
     }
 
     @Override

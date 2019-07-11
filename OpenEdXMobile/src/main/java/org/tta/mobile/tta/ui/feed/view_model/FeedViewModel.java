@@ -456,7 +456,8 @@ public class FeedViewModel extends BaseViewModel {
 
                     mActivity.analytic.addMxAnalytics_db(feed.getMeta_data().getText(), Action.Share,
                             feed.getMeta_data().getSource_name(), Source.Mobile, feed.getMeta_data().getId(),
-                            BreadcrumbUtil.getBreadcrumb() + "/" + shareType.name());
+                            BreadcrumbUtil.getBreadcrumb() + "/" + shareType.name(),
+                            feed.getMeta_data().getId(), 0);
 
                 }, feed
         );

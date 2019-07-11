@@ -21,10 +21,12 @@ public class DiscussionLandingFragment extends TaBaseFragment {
     private DiscussionLandingViewModel viewModel;
 
     private EnrolledCoursesResponse course;
+    private Content content;
 
-    public static DiscussionLandingFragment newInstance(EnrolledCoursesResponse course) {
+    public static DiscussionLandingFragment newInstance(EnrolledCoursesResponse course, Content content) {
         DiscussionLandingFragment discussionLandingFragment = new DiscussionLandingFragment();
         discussionLandingFragment.course = course;
+        discussionLandingFragment.content = content;
         discussionLandingFragment.RANK = BreadcrumbUtil.getCurrentRank() + 1;
         return discussionLandingFragment;
     }
@@ -32,7 +34,7 @@ public class DiscussionLandingFragment extends TaBaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new DiscussionLandingViewModel(getActivity(), this, course);
+        viewModel = new DiscussionLandingViewModel(getActivity(), this, course, content);
         viewModel.registerEventBus();
     }
 
