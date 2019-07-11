@@ -1021,7 +1021,11 @@ public class SearchViewModel extends BaseViewModel {
 
             mDataManager.search(take, skip, isPriority,
                     selectedContentList != null ? selectedContentList.getId() : 0,
-                    searchText.get(), filterSections,
+                    searchText.get(),
+                    selectedSource != null &&
+                            (selectedSource.getName().equalsIgnoreCase(SourceName.hois.name()) ||
+                                    selectedSource.getName().equalsIgnoreCase(SourceName.state.name()))
+                            ? new ArrayList<>() : filterSections,
                     selectedSource != null ? selectedSource.getId() : 0,
                     new OnResponseCallback<List<Content>>() {
                         @Override

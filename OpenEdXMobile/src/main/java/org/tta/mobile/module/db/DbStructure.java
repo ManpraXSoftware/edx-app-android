@@ -84,8 +84,8 @@ public final class DbStructure {
         public static final String EVENT_DATE= "event_timestamp";
         public static final String NAV = "nav";
         public static final String ACTION_ID = "action_id";
-        public static final String SOURCE_ID = "action_id";
-        public static final String CONTENT_ID = "action_id";
+        public static final String SOURCE_ID = "source_id";
+        public static final String CONTENT_ID = "content_id";
 
         //table for TTA Tincan /scorm resume state
         public static final String COURSE_ID="course_id";
