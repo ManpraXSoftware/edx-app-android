@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.tta.mobile.R;
@@ -300,7 +301,8 @@ public class LandingViewModel extends BaseViewModel {
         latestVersion = "3.12.2";
         if (!latestVersion.equals(currentVersion)) {
 
-            showCustomAlertDialog();
+//            showCustomAlertDialog();
+            showImmediateAlertDialog();
 ////            if (data.type.equals("flexible")){
 //            AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
 ////            builder.setIcon(R.drawable.teacherapplogo);
@@ -483,6 +485,43 @@ public class LandingViewModel extends BaseViewModel {
             dialog.dismiss();
         });
 
+
+        builder.setCancelable(false);
+        dialog.setCancelable(false);
+
+        dialog.show();
+    }
+    private void showImmediateAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        LayoutInflater i = mActivity.getLayoutInflater();
+
+        View v = i.inflate(R.layout.alert_dialog_full_screen, null);
+
+        TextView update= v.findViewById(R.id.tv_release_note);
+        update.setText("अपडेट मौजूद हैं, कृपया ऐप को अपडेट करें ");
+
+
+        TextView title = v.findViewById(R.id.tv_title);
+        title.setText(R.string.update_tta);
+
+        Button mbtn_update = v.findViewById(R.id.btn_update);
+        ImageView miv_close = v.findViewById(R.id.iv_close);
+
+        builder.setView(v);
+        AlertDialog dialog = builder.create();
+
+
+
+        mbtn_update.setOnClickListener(v12 -> {
+            mActivity.startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=org.tta.mobile")));
+            dialog.dismiss();
+        });
+
+        miv_close.setOnClickListener(v1 -> {
+            mActivity.finishAffinity();
+            System.exit(0);
+        });
 
         builder.setCancelable(false);
         dialog.setCancelable(false);
