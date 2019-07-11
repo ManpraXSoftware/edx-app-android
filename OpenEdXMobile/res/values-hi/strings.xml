@@ -239,4 +239,5 @@
     <string name="region_btn_agenda">  आपके राज्य ने आपके \nलिए यह सामग्री चुनी है  </string>
     <string name="download_btn_agenda">  आपके द्वारा डाउनलोड की गयी सामग्री यहाँ है  </string>
     <string name="personal_btn_agenda">  आपके द्वारा चुनी गयी सामग्री यहाँ हैं  </string>
+    <string name="update_tta">अपडेट</string>
 </resources>

@@ -68,4 +68,5 @@ public class Constants {
     public static final String DELIMITER_SECTION_TAG = "___";
     public static Boolean IsCertificateExits = false;
     public static Boolean certificateInProgress = false;
+    public static Boolean IsUpdateDelay = false;
 }

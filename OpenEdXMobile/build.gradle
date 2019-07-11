@@ -156,6 +156,9 @@ dependencies {
 
     implementation 'org.jsoup:jsoup:1.11.3'
 
+    // adding in_app_update library
+//    implementation 'com.github.Piashsarker:AndroidAppUpdateLibrary:1.0.3'
+
     //adding Room ORM for Database
     // database
     implementation "android.arch.persistence.room:rxjava2:${roomDatabase}"

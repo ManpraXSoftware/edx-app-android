@@ -96,6 +96,16 @@
         <item name="colorAccent">@color/dialog_button_selector</item>
     </style>
 
+    <style name="AppBaseTheme.Dialog.UpdateAlert" parent="Theme.AppCompat.Dialog">
+        <item name="colorPrimary">@color/edx_brand_primary_base</item>
+        <item name="colorPrimaryDark">@color/edx_brand_primary_dark</item>
+        <item name="colorAccent">@color/dialog_button_selector</item>
+        <item name="buttonBarButtonStyle">@color/colorPrimary</item>
+        <item name="buttonStyle">@color/colorPrimary</item>
+        <item name="alertDialogTheme">@style/AppBaseTheme</item>
+    </style>
+
+
     <style name="AppTheme.spinner" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:spinnerStyle">@style/holoSpinner</item>
     </style>

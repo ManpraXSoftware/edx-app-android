@@ -447,6 +447,7 @@ public class FeedViewModel extends BaseViewModel {
         }
     }
 
+
     private void openShareMenu(Feed feed) {
 
         FeedShareBottomSheet bottomSheet = FeedShareBottomSheet.newInstance(

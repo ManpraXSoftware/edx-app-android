@@ -156,7 +156,13 @@ public class ProfileFragment extends TaBaseFragment {
                     break;
 
                 case R.id.help_layout:
-                    if (appPref.isProfileVisited()) {
+                    if (appPref.isProfileVisited() ||
+                        appPref.isFeedNavVisited()||
+                        appPref.isProfileVisited() ||
+                            appPref.isCourseBottom()||
+                    appPref.isAgendaVisited()||
+                    appPref.isSearchVisited()) {
+//                        appPref.setSettingsVisited(false);
                         appPref.setProfileVisited(false);
                         appPref.setFeedVisited(false);
                         appPref.setCourseBottom(false);
@@ -164,6 +170,7 @@ public class ProfileFragment extends TaBaseFragment {
                         appPref.setSearchVisited(false);
                         appPref.setCourseVisited(false);
                         appPref.setSettingsVisited(false);
+                        appPref.setFeedNavVisited(false);
                         if (!appPref.isSettingVisited()) {
                             new MxTooltip.Builder(v.getContext())
                                     .anchorView(optionsBtn)

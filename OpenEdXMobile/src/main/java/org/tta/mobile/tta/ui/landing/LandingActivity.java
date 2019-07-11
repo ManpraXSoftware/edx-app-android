@@ -27,9 +27,15 @@ import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.landing.view_model.LandingViewModel;
 import org.tta.mobile.tta.ui.search.SearchFragment;
 
+import java.io.IOException;
+
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Response;
+
 import static com.crashlytics.android.Crashlytics.log;
 
-public class LandingActivity extends BaseVMActivity {
+public class LandingActivity extends BaseVMActivity{
 
     private LandingViewModel viewModel;
 
@@ -48,11 +54,10 @@ public class LandingActivity extends BaseVMActivity {
         BottomNavigationView view = findViewById(R.id.dashboard_bottom_nav);
         view.setItemIconTintList(null);
 
-        appUpdateManager = AppUpdateManagerFactory.create(this);
-        checkForAppUpdates();
+//        appUpdateManager = AppUpdateManagerFactory.create(this);
+//        checkForAppUpdates();
 
         viewModel.registerEventBus();
-
 
     }
 
@@ -70,16 +75,16 @@ public class LandingActivity extends BaseVMActivity {
     protected void onResume() {
         super.onResume();
         isAlreadyOpened = true;
-        checkForAppUpdates();
-        appUpdateManager
-                .getAppUpdateInfo()
-                .addOnSuccessListener(appUpdateInfo -> {
-                    // If the update is downloaded but not installed,
-                    // notify the user to complete the update.
-                    if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
-                        popupSnackbarForCompleteUpdate();
-                    }
-                });
+//        checkForAppUpdates();
+//        appUpdateManager
+//                .getAppUpdateInfo()
+//                .addOnSuccessListener(appUpdateInfo -> {
+//                    // If the update is downloaded but not installed,
+//                    // notify the user to complete the update.
+//                    if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+//                        popupSnackbarForCompleteUpdate();
+//                    }
+//                });
 
     }
 
@@ -170,5 +175,9 @@ public class LandingActivity extends BaseVMActivity {
         snackbar.show();
     }
 
+//    private void downloadUpdate(){
+//        OkHttpClient okHttpClient = new OkHttpClient.Builder().addNetworkInterceptor(
+//        )
+//    }
 
 }

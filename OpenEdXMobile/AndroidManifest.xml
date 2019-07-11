@@ -32,6 +32,9 @@
     <!-- TTA: To listen boot completed -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <!--To read external file package-->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+
     <!-- Setup for Code Coverage -->
     <instrumentation
         android:name="org.tta.mobile.instrumentation.EdxInstrumentation"
@@ -657,6 +660,7 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/image_provider" />
+
         </provider>
 
         <service android:name="org.tta.mobile.services.DownloadSpeedService" />

@@ -74,6 +74,7 @@ import org.tta.mobile.tta.data.model.BaseResponse;
 import org.tta.mobile.tta.data.model.CountResponse;
 import org.tta.mobile.tta.data.model.EmptyResponse;
 import org.tta.mobile.tta.data.model.StatusResponse;
+import org.tta.mobile.tta.data.model.UpdatedVersionResponse;
 import org.tta.mobile.tta.data.model.agenda.AgendaItem;
 import org.tta.mobile.tta.data.model.agenda.AgendaList;
 import org.tta.mobile.tta.data.model.authentication.FieldInfo;
@@ -102,6 +103,7 @@ import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.receiver.DeleteFeedsReceiver;
 import org.tta.mobile.tta.scorm.ScormBlockModel;
 import org.tta.mobile.tta.scorm.ScormStartResponse;
+import org.tta.mobile.tta.task.GetVersionUpdatedTask;
 import org.tta.mobile.tta.task.agenda.GetMyAgendaContentTask;
 import org.tta.mobile.tta.task.agenda.GetMyAgendaCountTask;
 import org.tta.mobile.tta.task.agenda.GetStateAgendaContentTask;
@@ -3767,6 +3769,27 @@ public class DataManager extends BaseRoboInjector {
                 Log.d("_____TAG_____", "Sync analytics job not scheduled");
             }
         }
+    }
+
+    public void getUpdatedVersion(OnResponseCallback<UpdatedVersionResponse> callback) {
+
+        if (NetworkUtil.isConnected(context)) {
+
+            new GetVersionUpdatedTask(context) {
+                @Override
+                protected void onSuccess(UpdatedVersionResponse versionResponse) throws Exception {
+                    super.onSuccess(versionResponse);
+                    callback.onSuccess(versionResponse);
+                }
+
+                @Override
+                protected void onException(Exception ex) {
+                    callback.onFailure(ex);
+                }
+            }.execute();
+
+        }
+
     }
 }
 

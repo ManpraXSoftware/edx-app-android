@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_height="260dp"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/title"
+            android:textSize="@dimen/_16px_sp"
+            android:layout_marginTop="@dimen/_10px"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:textColor="@color/primary_cyan"
+            android:fontFamily="@font/hind_bold"/>
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/updateSize"-->
+            <!--android:textSize="@dimen/_14px_sp"-->
+            <!--android:layout_margin="@dimen/_6px"-->
+            <!--android:textColor="@color/gray_2"-->
+            <!--android:fontFamily="@font/hind_bold"/>-->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/release_notes"
+            android:layout_marginTop="@dimen/_10px"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/hind_regular"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10px"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:textColor="@color/primary_cyan"
+                android:layout_margin="@dimen/_6px"
+                android:text="बाद में करे"
+                android:paddingTop="@dimen/_10px"
+                android:paddingBottom="@dimen/_10px"
+                android:paddingLeft="@dimen/_20px"
+                android:paddingRight="@dimen/_20px"
+                android:gravity="center"
+                android:textSize="@dimen/_12px_sp"
+                android:fontFamily="@font/hind_regular"
+                android:id="@+id/btn_delay"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/primary_cyan"
+                android:gravity="center"
+                android:layout_margin="@dimen/_6px"
+                android:textColor="@color/white"
+                android:paddingTop="@dimen/_10px"
+                android:paddingBottom="@dimen/_10px"
+                android:paddingLeft="@dimen/_20px"
+                android:paddingRight="@dimen/_20px"
+                android:text="अपडेट करें"
+                android:textSize="@dimen/_12px_sp"
+                android:fontFamily="@font/hind_regular"
+                android:id="@+id/btn_update"/>
+
+        </LinearLayout>
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:layout_marginTop="@dimen/_6px"-->
+            <!--android:background="@color/gray_2"/>-->
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:id="@+id/app_name"
+            android:layout_gravity="start"
+            android:text="@string/app_name"
+            android:layout_marginStart="@dimen/_18px"
+            android:src="@drawable/teacherapplogo"
+            android:textColor="@color/light_gray"
+            android:fontFamily="@font/hind_bold"/>
+    </LinearLayout>
+
+</LinearLayout>

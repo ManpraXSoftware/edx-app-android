@@ -1008,6 +1008,7 @@
     <string name="region_btn_agenda">Data defined by your state</string>
     <string name="download_btn_agenda">Data downloaded by you</string>
     <string name="personal_btn_agenda">Agenda choosed by you is here</string>
+    <string name="update_tta">ंअपडेट TTA</string>
 
     <!-- TTA strings end -->
 
