@@ -407,7 +407,6 @@ public class SearchViewModel extends BaseViewModel {
             switch (view.getId()) {
                 case R.id.follow_btn:
                     mActivity.showLoading();
-
                     mDataManager.followUnfollowUser(item.getUsername(), new OnResponseCallback<StatusResponse>() {
                         @Override
                         public void onSuccess(StatusResponse data) {

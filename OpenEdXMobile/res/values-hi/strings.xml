@@ -221,7 +221,7 @@
     <string name="unable_to_get_account">खाता विवरण प्राप्त करने में असमर्थ</string>
     <string name="empty_user_search_message">खोज से जुड़े साथी शिक्षक अभी उपलब्ध नहीं</string>
     <string name="help">हेल्प </string>
-    <string name="search_tool_tip">  कक्षा स्तर के हिसाब से सामग्री छाटें।  </string>
+    <string name="search_tool_tip">  कृपया अपने विकल्प यहाँ चुनें  </string>
     <string name="selected_tool_tip">  विषय के अनुसार सामग्री छाटें।  </string>
     <string name="library_tabs_top"> प्रत्येक बटन पर क्लिक करके \nउससे जुड़ी प्रशिक्षण सामग्री पाएँ। </string>
     <string name="library_tab">  यहाँ सभी सामग्री पाएँ  </string>

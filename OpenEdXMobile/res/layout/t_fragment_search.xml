@@ -72,6 +72,8 @@
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
             android:scrollbars="none"
+            tool_tip="@{viewModel.searchToolTip}"
+            tool_tip_gravity="@{viewModel.toolTipGravity}"
             android:visibility="@{viewModel.searchOptionsVisible?View.VISIBLE:View.GONE}">
 
             <LinearLayout
@@ -124,8 +126,7 @@
                     android:layout_marginEnd="@dimen/_6px"
                     drop_down_items="@{viewModel.classFilters}"
                     drop_down_listener="@{viewModel.classListener}"
-                    tool_tip="@{viewModel.searchToolTip}"
-                    tool_tip_gravity="@{viewModel.toolTipGravity}"
+
                     android:visibility="@{viewModel.classesVisible?View.VISIBLE:View.GONE}" />
 
                 <org.tta.mobile.tta.ui.custom.NonScrollHorizontalRecyclerView
@@ -151,8 +152,6 @@
                     android:paddingBottom="4dp"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
-                    tool_tip="@{viewModel.selectedToolTip}"
-                    tool_tip_gravity="@{viewModel.selectedToolTipGravity}"
                     android:onClick="@{()->viewModel.selectPeople()}"
                     android:visibility="@{viewModel.peopleVisible?View.VISIBLE:View.GONE}"/>
 
