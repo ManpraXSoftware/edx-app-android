@@ -49,6 +49,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
     private String courseName;
     private String courseId;
     private String unitId;
+    private long contentId;
 
     private Tincan tincan;
     private Resume resume_info;
@@ -100,6 +101,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
         courseName = parameters.getString(Constants.KEY_COURSE_NAME);
         courseId = parameters.getString(Constants.KEY_COURSE_ID);
         unitId = parameters.getString(Constants.KEY_UNIT_ID);
+        contentId = parameters.getLong(Constants.KEY_CONTENT_ID);
     }
 
     private File findFile(File aFile, String sDir, String toFind) {
@@ -274,7 +276,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
     }
 
     public void ReceiveTinCanStatement(String statement) {
-        analytic.addTinCanAnalyticDB(statement, courseName, courseId);
+        analytic.addTinCanAnalyticDB(statement, courseName, courseId, courseId, contentId);
         // Toast.makeText(CourseScormViewActivity.this, statement, Toast.LENGTH_LONG).show();
     }
 

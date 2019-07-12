@@ -373,6 +373,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
             parameters.putString(Constants.KEY_COURSE_NAME, selectedScormForPlay.getRoot().getDisplayName());
             parameters.putString(Constants.KEY_COURSE_ID, selectedScormForPlay.getRoot().getId());
             parameters.putString(Constants.KEY_UNIT_ID, selectedScormForPlay.getId());
+            parameters.putLong(Constants.KEY_CONTENT_ID, content.getId());
             ActivityUtil.gotoPage(mActivity, CourseScormViewActivity.class, parameters);
 
             startScorm(selectedScormForPlay.getId());
