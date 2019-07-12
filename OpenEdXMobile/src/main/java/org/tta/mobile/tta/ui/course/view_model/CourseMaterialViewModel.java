@@ -81,7 +81,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
     private static final int ACTION_DOWNLOAD = 1;
     private static final int ACTION_DELETE = 2;
-    private static final int ACTION_PLAY = 3;
+    private static final int ACTION_DELETE_MANY = 3;
+    private static final int ACTION_PLAY = 4;
 
     private static final String javascript = "javascript:document.getElementsByid('xblock.xblock-student_view.xblock-student_view-html.xmodule_display.xmodule_HtmlModule.xblock-initialized').html();";
 
@@ -132,8 +133,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
     private int actionMode;
     private boolean firstDownload;
     private boolean somethingIsDownloading;
-
-
+    private boolean scormsChecked;
+    private int nDeleted;
+    private List<ScormBlockModel> toBeDeleted;
 
     public CourseMaterialViewModel(Context context, TaBaseFragment fragment, Content content, EnrolledCoursesResponse course, CourseComponent rootComponent) {
         super(context, fragment);
@@ -331,6 +333,21 @@ public class CourseMaterialViewModel extends BaseViewModel {
                 (dialog, which) -> mDataManager.deleteScorm(selectedScormForDelete),
                 null);
 
+    }
+
+    private void deleteToBeDeleted(){
+        actionMode = ACTION_DELETE_MANY;
+        mFragment.askForPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                PermissionsUtil.WRITE_STORAGE_PERMISSION_REQUEST);
+    }
+
+    private void deleteMany(){
+        if (toBeDeleted != null && !toBeDeleted.isEmpty()){
+            nDeleted = 0;
+            for (ScormBlockModel scorm: toBeDeleted){
+                mDataManager.deleteScorm(scorm);
+            }
+        }
     }
 
     private void showScorm(ScormBlockModel scorm) {
@@ -749,6 +766,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
             case ACTION_DELETE:
                 deleteScorm();
                 break;
+            case ACTION_DELETE_MANY:
+                deleteMany();
+                break;
             case ACTION_PLAY:
                 showScorm();
                 break;
@@ -1027,7 +1047,14 @@ public class CourseMaterialViewModel extends BaseViewModel {
                 e.getModel().getDownloadType() != null &&
                 (e.getModel().getDownloadType().equalsIgnoreCase(DownloadType.Scrom.name()) ||
                         e.getModel().getDownloadType().equalsIgnoreCase(DownloadType.Pdf.name()))) {
-            fetchCourseComponent();
+            if (actionMode == ACTION_DELETE) {
+                fetchCourseComponent();
+            } else {
+                nDeleted++;
+                if (toBeDeleted != null && nDeleted == toBeDeleted.size()) {
+                    fetchCourseComponent();
+                }
+            }
             allDownloadStatusIcon.set(R.drawable.t_icon_download);
 
             mActivity.analytic.addMxAnalytics_db(
@@ -1043,6 +1070,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
             mActivity.analytic.addScromCountAnalytic_db(mActivity);
 
         }
+
     }
 
     @SuppressWarnings("unused")
@@ -1152,6 +1180,17 @@ public class CourseMaterialViewModel extends BaseViewModel {
                                 CourseComponent childComp = (CourseComponent) child.getChildren().get(0);
                                 if (childComp instanceof PDFBlockModel || childComp instanceof ScormBlockModel){
 
+                                    if (!scormsChecked && mDataManager.scormNeedsDeletion((ScormBlockModel) childComp)){
+                                        if (toBeDeleted == null){
+                                            toBeDeleted = new ArrayList<>();
+                                        }
+                                        toBeDeleted.add((ScormBlockModel) childComp);
+                                    }
+
+                                    if (toBeDeleted != null && !toBeDeleted.isEmpty()){
+                                        deleteToBeDeleted();
+                                    }
+
                                     if (child.getDisplayName().contains("अपनी समझ को परखें")){
                                         assessmentComponent = child;
                                         enableFooter();
@@ -1180,6 +1219,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
                     }
                 }
             }
+            scormsChecked = true;
             enableHeader();
             set(components);
         }

@@ -46,4 +46,11 @@ public class ScormBlockModel extends CourseComponent implements HasDownloadEntry
         return data.scormData;
     }
 
+    public String getLastModified(){
+        if (data == null){
+            return null;
+        }
+        return data.lastModified;
+    }
+
 }

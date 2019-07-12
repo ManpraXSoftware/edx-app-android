@@ -91,4 +91,7 @@ public interface VideoModel {
 
     long getContent_id();
     void setContent_id(long content_id);
+
+    String getLastModified();
+    void setLastModified(String lastModified);
 }

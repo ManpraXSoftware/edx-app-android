@@ -46,6 +46,7 @@ public class DownloadEntry implements SectionItemInterface, VideoModel {
 
     public String type;
     public long content_id;
+    public String lastModified;
 
     // enrollment id
     public String eid;
@@ -162,6 +163,16 @@ public class DownloadEntry implements SectionItemInterface, VideoModel {
 
     public void setContent_id(long content_id) {
         this.content_id = content_id;
+    }
+
+    @Override
+    public String getLastModified() {
+        return lastModified;
+    }
+
+    @Override
+    public void setLastModified(String lastModified) {
+        this.lastModified = lastModified;
     }
 
     @Override

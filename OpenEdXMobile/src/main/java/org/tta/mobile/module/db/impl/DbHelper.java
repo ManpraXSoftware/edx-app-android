@@ -60,9 +60,10 @@ public class DbHelper extends SQLiteOpenHelper {
                 + DbStructure.Column.LAST_PLAYED_OFFSET     + " INTEGER, "
                 + DbStructure.Column.IS_COURSE_ACTIVE       + " BOOLEAN, "
                 + DbStructure.Column.UNIT_URL               + " TEXT, "
-                + DbStructure.Column.TYPE               + " TEXT, "
-                + DbStructure.Column.CONTENT_ID               + " LONG, "
-                + DbStructure.Column.VIDEO_FOR_WEB_ONLY     + " BOOLEAN "
+                + DbStructure.Column.TYPE                   + " TEXT, "
+                + DbStructure.Column.CONTENT_ID             + " LONG, "
+                + DbStructure.Column.VIDEO_FOR_WEB_ONLY     + " BOOLEAN, "
+                + DbStructure.Column.LAST_MODIFIED          + " TEXT "
                 + ")";
         db.execSQL(sql);
 
@@ -128,6 +129,11 @@ public class DbHelper extends SQLiteOpenHelper {
 
                 "ALTER TABLE " + DbStructure.Table.ANALYTIC + " ADD COLUMN "
                         + DbStructure.Column.CONTENT_ID + " INTEGER "
+        };
+
+        String[] upgradeToV13 = new String[]{
+                "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
+                        + DbStructure.Column.LAST_MODIFIED + " TEXT "
         };
 
         if (oldVersion == 1) {
@@ -261,6 +267,16 @@ public class DbHelper extends SQLiteOpenHelper {
             }
 
             logger.debug("Migration 11_12 done.s");
+        }
+
+        if(oldVersion<13)
+        {
+            // upgrade from 10 to 11
+            for (String query : upgradeToV13) {
+                db.execSQL(query);
+            }
+
+            logger.debug("Migration 12_13 done.s");
         }
     }
 
