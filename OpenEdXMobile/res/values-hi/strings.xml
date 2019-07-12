@@ -113,7 +113,7 @@
     <string name="error_profession">कृपया अपना व्यवसाय चुनिए</string>
     <string name="error_gender">कृपया अपना लिंग चुनिए</string>
     <string name="error_classes">कृपया किस स्तर तक पढ़ाया है, चुनिए</string>
-    <string name="error_skills">कृपया अपने क्षमताएं चुनिए</string>
+    <string name="error_skills">कृपया अपनी क्षमताएं चुनिए</string>
     <string name="error_diet">कृपया अपना DIET कोड चुनिए</string>
     <string name="error_pmis">PMIS कोड रिक्त नहीं हो सकता</string>
     <string name="error_teacher_id">टीचर ID रिक्त नहीं हो सकती</string>
@@ -231,7 +231,7 @@
     <string name="feed_follow">  अन्य शिक्षको से जुड़ने के \nलिए फॉलो बटन दबाएँ  </string>
     <string name="feed_share">  सभी के साथ यहाँ सामग्री साझा \nकरने के लिए यहाँ बटन दबाएँ  </string>
     <string name="samjhe_parkhe_btn">  सभी भाग देखने पर और 60% या उससे \nअधिक पाने पर आपको सर्टिफिकेट मिलेगा  </string>
-    <string name="certificate_btn">  आपका सर्टिफिकेट तैयार हैं   </string>
+    <string name="certificate_btn">  आपका सर्टिफिकेट तैयार हैं  </string>
     <string name="app_tuts_activate">  ऐप्प टुटोरिअल सक्रिय कर दिए गए हैं  </string>
     <string name="app_tuts_already">  ऐप्प टुटोरिअल सक्रिय हैं  </string>
     <string name="course_button">  सामग्री को अपने लक्ष्य से \nजोड़ने के लिए इस बटन को दबाएँ  </string>
@@ -241,5 +241,5 @@
     <string name="personal_btn_agenda">  आपके द्वारा चुनी गयी सामग्री यहाँ हैं  </string>
     <string name="selection_limit_crossed">आप %d से अधिक का चयन नहीं कर सकते</string>
     <string name="course_share_successful">TheTeacherApp पर कोर्स को सफलतापूर्वक साझा किया गया</string>
-    <string name="update_tta">अपडेट</string>
+    <string name="error_subjects">कृपया अपने विषय चुनिए</string>
 </resources>

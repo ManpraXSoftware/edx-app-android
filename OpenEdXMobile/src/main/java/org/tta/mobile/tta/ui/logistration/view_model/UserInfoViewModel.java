@@ -35,11 +35,11 @@ public class UserInfoViewModel extends BaseViewModel {
     public List<RegistrationOption> classesTaught;
     public List<RegistrationOption> skills;
     public List<RegistrationOption> dietCodes;
-    public List<RegistrationOption> organisation;
+    public List<RegistrationOption> subjects;
 
     public String currentState, currentDistrict, currentProfession;
-    public String classesSectionName, skillSectionName;
-    public FilterSection classSection, skillSection;
+    public String classesSectionName, skillSectionName, subjectSectionName;
+    public FilterSection classSection, skillSection, subjectSection;
 
     public UserInfoViewModel(BaseVMActivity activity) {
         super(activity);
@@ -52,6 +52,7 @@ public class UserInfoViewModel extends BaseViewModel {
         classesTaught = new ArrayList<>();
         skills = new ArrayList<>();
         dietCodes = new ArrayList<>();
+        subjects = new ArrayList<>();
     }
 
     public void logout(){
@@ -67,8 +68,9 @@ public class UserInfoViewModel extends BaseViewModel {
         mDataManager.getBlocks(callback, parameters, blocks);
     }
 
-    public void getClassesAndSkills(OnResponseCallback<List<RegistrationOption>> classesCallback,
-                                    OnResponseCallback<List<RegistrationOption>> skillsCallback){
+    public void getClassSkillSubject(OnResponseCallback<List<RegistrationOption>> classesCallback,
+                                     OnResponseCallback<List<RegistrationOption>> skillsCallback,
+                                     OnResponseCallback<List<RegistrationOption>> subjectsCallback){
 
         mDataManager.getSearchFilter(new OnResponseCallback<SearchFilter>() {
             @Override
@@ -79,25 +81,39 @@ public class UserInfoViewModel extends BaseViewModel {
                             classesSectionName = section.getName();
                             classSection = section;
                             for (FilterTag tag: section.getTags()){
-                                classesTaught.add(new RegistrationOption(tag.toString(), tag.toString()));
+                                if (tag.isIn_profile()) {
+                                    classesTaught.add(new RegistrationOption(tag.toString(), tag.toString()));
+                                }
                             }
                         } else if (section.getName().contains("क्षमताएं")){
                             skillSectionName = section.getName();
                             skillSection = section;
                             for (FilterTag tag: section.getTags()){
-                                skills.add(new RegistrationOption(tag.toString(), tag.toString()));
+                                if (tag.isIn_profile()) {
+                                    skills.add(new RegistrationOption(tag.toString(), tag.toString()));
+                                }
+                            }
+                        } else if (section.getName().contains("विषय")){
+                            subjectSectionName = section.getName();
+                            subjectSection = section;
+                            for (FilterTag tag: section.getTags()){
+                                if (tag.isIn_profile()) {
+                                    subjects.add(new RegistrationOption(tag.toString(), tag.toString()));
+                                }
                             }
                         }
                     }
                 }
                 classesCallback.onSuccess(classesTaught);
                 skillsCallback.onSuccess(skills);
+                subjectsCallback.onSuccess(subjects);
             }
 
             @Override
             public void onFailure(Exception e) {
                 classesCallback.onFailure(e);
                 skillsCallback.onFailure(e);
+                subjectsCallback.onFailure(e);
             }
         });
     }
@@ -183,6 +199,5 @@ public class UserInfoViewModel extends BaseViewModel {
         professions = DataUtil.getAllProfessions();
         genders = DataUtil.getAllGenders();
         dietCodes = DataUtil.getAllDietCodesOfState(currentState);
-        organisation = DataUtil.getAllOrganisation();
     }
 }

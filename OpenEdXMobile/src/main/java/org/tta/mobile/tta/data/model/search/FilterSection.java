@@ -17,6 +17,8 @@ public class FilterSection implements Comparable<FilterSection>, Serializable {
 
     private boolean in_profile;
 
+    private boolean in_search;
+
     public long getId() {
         return id;
     }
@@ -55,6 +57,14 @@ public class FilterSection implements Comparable<FilterSection>, Serializable {
 
     public void setIn_profile(boolean in_profile) {
         this.in_profile = in_profile;
+    }
+
+    public boolean isIn_search() {
+        return in_search;
+    }
+
+    public void setIn_search(boolean in_search) {
+        this.in_search = in_search;
     }
 
     @Override

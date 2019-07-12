@@ -51,11 +51,11 @@ public class EditProfileViewModel extends BaseViewModel  {
     public List<RegistrationOption> classesTaught;
     public List<RegistrationOption> skills;
     public List<RegistrationOption> dietCodes;
-    public List<RegistrationOption> organisation;
+    public List<RegistrationOption> subjects;
 
     public String currentState, currentDistrict, currentProfession;
-    public String classesSectionName, skillSectionName;
-    public FilterSection classSection, skillSection;
+    public String classesSectionName, skillSectionName, subjectSectionName;
+    public FilterSection classSection, skillSection, subjectSection;
 
     public EditProfileViewModel(Context context, TaBaseFragment fragment,
                                 ProfileModel profileModel, ProfileImage profileImage,
@@ -75,7 +75,7 @@ public class EditProfileViewModel extends BaseViewModel  {
         classesTaught = new ArrayList<>();
         skills = new ArrayList<>();
         dietCodes = new ArrayList<>();
-        organisation = new ArrayList<>();
+        subjects = new ArrayList<>();
 
         if (profileImage == null || profileImage.getImageUrlLarge() == null){
             imageAddVisible.set(true);
@@ -176,8 +176,9 @@ public class EditProfileViewModel extends BaseViewModel  {
         mDataManager.getBlocks(callback, parameters, blocks);
     }
 
-    public void getClassesAndSkills(OnResponseCallback<List<RegistrationOption>> classesCallback,
-                                    OnResponseCallback<List<RegistrationOption>> skillsCallback){
+    public void getClassSkillSubject(OnResponseCallback<List<RegistrationOption>> classesCallback,
+                                     OnResponseCallback<List<RegistrationOption>> skillsCallback,
+                                     OnResponseCallback<List<RegistrationOption>> subjectsCallback){
 
         if (searchFilter != null){
 
@@ -187,23 +188,37 @@ public class EditProfileViewModel extends BaseViewModel  {
                         classesSectionName = section.getName();
                         classSection = section;
                         for (FilterTag tag: section.getTags()){
-                            classesTaught.add(new RegistrationOption(tag.toString(), tag.toString()));
+                            if (tag.isIn_profile()) {
+                                classesTaught.add(new RegistrationOption(tag.toString(), tag.toString()));
+                            }
                         }
                     } else if (section.getName().contains("क्षमताएं")){
                         skillSectionName = section.getName();
                         skillSection = section;
                         for (FilterTag tag: section.getTags()){
-                            skills.add(new RegistrationOption(tag.toString(), tag.toString()));
+                            if (tag.isIn_profile()) {
+                                skills.add(new RegistrationOption(tag.toString(), tag.toString()));
+                            }
+                        }
+                    } else if (section.getName().contains("विषय")){
+                        subjectSectionName = section.getName();
+                        subjectSection = section;
+                        for (FilterTag tag: section.getTags()){
+                            if (tag.isIn_profile()) {
+                                subjects.add(new RegistrationOption(tag.toString(), tag.toString()));
+                            }
                         }
                     }
                 }
             }
             classesCallback.onSuccess(classesTaught);
             skillsCallback.onSuccess(skills);
+            subjectsCallback.onSuccess(subjects);
 
         } else {
             classesCallback.onFailure(new TaException("Classes not found"));
             skillsCallback.onFailure(new TaException("Capabilities not found"));
+            subjectsCallback.onFailure(new TaException("Subjects not found"));
         }
     }
 
@@ -215,6 +230,5 @@ public class EditProfileViewModel extends BaseViewModel  {
         professions.addAll(DataUtil.getAllProfessions());
         genders.addAll(DataUtil.getAllGenders());
         dietCodes.addAll(DataUtil.getAllDietCodesOfState(currentState));
-        organisation.addAll(DataUtil.getAllOrganisation());
     }
 }

@@ -16,6 +16,8 @@ public class FilterTag implements Serializable {
 
     private List<TagSourceCount> sources;
 
+    private boolean in_profile;
+
     public long getId() {
         return id;
     }
@@ -46,6 +48,14 @@ public class FilterTag implements Serializable {
 
     public void setSources(List<TagSourceCount> sources) {
         this.sources = sources;
+    }
+
+    public boolean isIn_profile() {
+        return in_profile;
+    }
+
+    public void setIn_profile(boolean in_profile) {
+        this.in_profile = in_profile;
     }
 
     @NonNull

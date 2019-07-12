@@ -119,14 +119,16 @@ public class DbHelper extends SQLiteOpenHelper {
                         + DbStructure.Column.ACTION_ID + " TEXT ",
 
                 "ALTER TABLE " + DbStructure.Table.ANALYTIC + " ADD COLUMN "
-                        + DbStructure.Column.NAV + " TEXT ",
+                        + DbStructure.Column.NAV + " TEXT "};
 
+
+        String[] upgradeToV12 = new String[]{
                 "ALTER TABLE " + DbStructure.Table.ANALYTIC + " ADD COLUMN "
                         + DbStructure.Column.SOURCE_ID + " TEXT ",
 
                 "ALTER TABLE " + DbStructure.Table.ANALYTIC + " ADD COLUMN "
-                        + DbStructure.Column.CONTENT_ID + " INTEGER "};
-
+                        + DbStructure.Column.CONTENT_ID + " INTEGER "
+        };
 
         if (oldVersion == 1) {
             // upgrade from 1 to 2
@@ -249,6 +251,16 @@ public class DbHelper extends SQLiteOpenHelper {
             }
 
             logger.debug("Migration 10_11 done.s");
+        }
+
+        if(oldVersion<12)
+        {
+            // upgrade from 10 to 11
+            for (String query : upgradeToV12) {
+                db.execSQL(query);
+            }
+
+            logger.debug("Migration 11_12 done.s");
         }
     }
 

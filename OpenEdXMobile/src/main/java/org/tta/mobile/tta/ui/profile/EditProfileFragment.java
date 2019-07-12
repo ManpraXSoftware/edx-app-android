@@ -79,6 +79,7 @@ public class EditProfileFragment extends TaBaseFragment {
     private FormSpinner genderSpinner;
     private FormMultiSpinner classTaughtSpinner;
     private FormMultiSpinner skillsSpinner;
+    private FormMultiSpinner subjectsSpinner;
     private FormSpinner dietSpinner;
     private FormSpinner organisationSpinner;
     private FormEditText etPmis;
@@ -129,7 +130,7 @@ public class EditProfileFragment extends TaBaseFragment {
         viewModel.getData();
         setupForm();
         getBlocks();
-        getClassesAndSkills();
+        getClassSkillSubject();
 
         return view;
     }
@@ -173,18 +174,18 @@ public class EditProfileFragment extends TaBaseFragment {
                 });
     }
 
-    private void getClassesAndSkills() {
+    private void getClassSkillSubject() {
 
-        viewModel.getClassesAndSkills(new OnResponseCallback<List<RegistrationOption>>() {
+        viewModel.getClassSkillSubject(new OnResponseCallback<List<RegistrationOption>>() {
             @Override
             public void onSuccess(List<RegistrationOption> data) {
                 List<RegistrationOption> selectedOptions = null;
                 try {
-                    if (tagLabel != null && tagLabel.length() > 0){
+                    if (tagLabel != null && tagLabel.length() > 0) {
                         selectedOptions = new ArrayList<>();
-                        for (String chunk: tagLabel.split(delimiterTagChunks)){
+                        for (String chunk : tagLabel.split(delimiterTagChunks)) {
                             String[] duet = chunk.split(delimiterSectionTag);
-                            if (duet[0].equals(viewModel.classesSectionName)){
+                            if (duet[0].equals(viewModel.classesSectionName)) {
                                 duet[1] = duet[1].replace(replacementTagSpace, " ");
                                 selectedOptions.add(new RegistrationOption(duet[1], duet[1]));
                             }
@@ -205,11 +206,11 @@ public class EditProfileFragment extends TaBaseFragment {
             public void onSuccess(List<RegistrationOption> data) {
                 List<RegistrationOption> selectedOptions = null;
                 try {
-                    if (tagLabel != null && tagLabel.length() > 0){
+                    if (tagLabel != null && tagLabel.length() > 0) {
                         selectedOptions = new ArrayList<>();
-                        for (String chunk: tagLabel.split(delimiterTagChunks)){
+                        for (String chunk : tagLabel.split(delimiterTagChunks)) {
                             String[] duet = chunk.split(delimiterSectionTag);
-                            if (duet[0].equals(viewModel.skillSectionName)){
+                            if (duet[0].equals(viewModel.skillSectionName)) {
                                 duet[1] = duet[1].replace(replacementTagSpace, " ");
                                 selectedOptions.add(new RegistrationOption(duet[1], duet[1]));
                             }
@@ -219,6 +220,31 @@ public class EditProfileFragment extends TaBaseFragment {
                     e.printStackTrace();
                 }
                 skillsSpinner.setItems(data, selectedOptions);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        }, new OnResponseCallback<List<RegistrationOption>>() {
+            @Override
+            public void onSuccess(List<RegistrationOption> data) {
+                List<RegistrationOption> selectedOptions = null;
+                try {
+                    if (tagLabel != null && tagLabel.length() > 0) {
+                        selectedOptions = new ArrayList<>();
+                        for (String chunk : tagLabel.split(delimiterTagChunks)) {
+                            String[] duet = chunk.split(delimiterSectionTag);
+                            if (duet[0].equals(viewModel.subjectSectionName)) {
+                                duet[1] = duet[1].replace(replacementTagSpace, " ");
+                                selectedOptions.add(new RegistrationOption(duet[1], duet[1]));
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                subjectsSpinner.setItems(data, selectedOptions);
             }
 
             @Override
@@ -266,6 +292,10 @@ public class EditProfileFragment extends TaBaseFragment {
                 viewModel.skills, null);
         skillsSpinner.setSelectionLimit(5);
         skillsSpinner.setMandatory(true);
+
+        subjectsSpinner = ViewUtil.addMultiOptionSpinner(userInfoLayout, "आपको किन विषयों में दिलचस्पी हैं ?*",
+                viewModel.subjects, null);
+        subjectsSpinner.setMandatory(true);
 
         etPmis = ViewUtil.addFormEditText(userInfoLayout, "PMIS Code/पी इम आइ इस कोड");
         etPmis.setSingleLine();
@@ -327,6 +357,7 @@ public class EditProfileFragment extends TaBaseFragment {
                     sections.add(section);
                 }
             }
+
             if (skillsSpinner.getSelectedOptions() != null && viewModel.skillSection != null) {
                 List<FilterTag> tags = new ArrayList<>();
                 List<FilterTag> skillTags = viewModel.skillSection.getTags();
@@ -355,6 +386,36 @@ public class EditProfileFragment extends TaBaseFragment {
                     sections.add(section);
                 }
             }
+
+            if (subjectsSpinner.getSelectedOptions() != null && viewModel.subjectSection != null) {
+                List<FilterTag> tags = new ArrayList<>();
+                List<FilterTag> subjectTags = viewModel.subjectSection.getTags();
+
+                for (RegistrationOption option: subjectsSpinner.getSelectedOptions()){
+
+                    FilterTag tag = new FilterTag();
+                    tag.setValue(option.getName());
+                    if (subjectTags.contains(tag)){
+                        tags.add(subjectTags.get(subjectTags.indexOf(tag)));
+                    }
+
+                    builder.append(viewModel.subjectSectionName)
+                            .append(delimiterSectionTag)
+                            .append(option.getName())
+                            .append(delimiterTagChunks);
+                }
+
+                if (!tags.isEmpty()){
+                    FilterSection section = new FilterSection();
+                    section.setTags(tags);
+                    section.setName(viewModel.subjectSection.getName());
+                    section.setId(viewModel.subjectSection.getId());
+                    section.setIn_profile(viewModel.subjectSection.isIn_profile());
+                    section.setOrder(viewModel.subjectSection.getOrder());
+                    sections.add(section);
+                }
+            }
+
             String label = "";
             if (builder.length() > 0){
                 label = builder.substring(0, builder.length() - delimiterTagChunks.length());
@@ -538,6 +599,10 @@ public class EditProfileFragment extends TaBaseFragment {
         if (!skillsSpinner.validate()){
             valid = false;
             skillsSpinner.setError(getString(R.string.error_skills));
+        }
+        if (!subjectsSpinner.validate()){
+            valid = false;
+            subjectsSpinner.setError(getString(R.string.error_subjects));
         }
         if (etPmis.isVisible() && !etPmis.validate()){
             valid = false;

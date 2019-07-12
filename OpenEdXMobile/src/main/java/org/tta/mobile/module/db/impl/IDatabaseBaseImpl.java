@@ -62,7 +62,9 @@ class IDatabaseBaseImpl implements Runnable {
                  * or upgrade process invoked by the helper, deliver the exception to the callback,
                  * log it in Crashlytics, and return the default value of the operation.
                  */
-                op.getCallback().sendException(e);
+                if (op.getCallback() != null) {
+                    op.getCallback().sendException(e);
+                }
                 logger.error(e, true);
                 result = op.getDefaultValue();
             }

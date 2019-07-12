@@ -785,6 +785,7 @@
     <string name="error_gender">Please select your gender</string>
     <string name="error_classes">Please select the classes you have taught</string>
     <string name="error_skills">Please select your skills</string>
+    <string name="error_subjects">Please select your subjects</string>
     <string name="error_pmis">PMIS code cannot be empty</string>
     <string name="error_teacher_id">Teacher ID cannot be empty</string>
     <string name="error_diet">Please select your DIET code</string>

@@ -1146,20 +1146,19 @@ public class CourseMaterialViewModel extends BaseViewModel {
                     if (comp.isContainer()){
                         for (IBlock childBlock : comp.getChildren()) {
                             CourseComponent child = (CourseComponent) childBlock;
-                            if (child.getDisplayName().contains("अपनी समझ को परखें")){
-                                if (child.isContainer() && child.getChildren() != null &&
-                                        !child.getChildren().isEmpty()) {
-                                    assessmentComponent = child;
-                                    enableFooter();
-                                }
-                            } else if (!child.getDisplayName().contains("कोर्स के बारे में")){
-                                components.add(child);
-                            }
 
                             if (child.isContainer() && child.getChildren() != null &&
                                     !child.getChildren().isEmpty()){
                                 CourseComponent childComp = (CourseComponent) child.getChildren().get(0);
                                 if (childComp instanceof PDFBlockModel || childComp instanceof ScormBlockModel){
+
+                                    if (child.getDisplayName().contains("अपनी समझ को परखें")){
+                                        assessmentComponent = child;
+                                        enableFooter();
+                                    } else if (!child.getDisplayName().contains("कोर्स के बारे में")){
+                                        components.add(child);
+                                    }
+
                                     if (mDataManager.scormNotDownloaded((ScormBlockModel) childComp)){
                                         remainingScorms.add((ScormBlockModel) childComp);
                                     } else if (mDataManager.scormDownloading((ScormBlockModel) childComp)){
