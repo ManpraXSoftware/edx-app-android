@@ -120,11 +120,15 @@ public class SearchViewModel extends BaseViewModel {
     public ObservableBoolean peopleSelected = new ObservableBoolean();
     public ObservableBoolean peopleVisible = new ObservableBoolean(true);
 
+
+    //ToolTip
     public ObservableField<String> searchToolTip;
     public ObservableInt toolTipGravity;
 
     public ObservableField<String> selectedToolTip;
+    public ObservableField<String> teacherFriends;
     public ObservableInt selectedToolTipGravity;
+    //end tooltip
 
     public SearchedContentsAdapter contentsAdapter;
     public RecyclerView.LayoutManager contentsLayoutManager;
@@ -510,6 +514,8 @@ public class SearchViewModel extends BaseViewModel {
             searchOptionsVisible.set(false);
             search();
         }
+        setToolTip();
+
     }
 
     private void setSearchTypes(){
@@ -525,8 +531,9 @@ public class SearchViewModel extends BaseViewModel {
         if (!mDataManager.getAppPref().isSearchVisited()){
             searchToolTip = new ObservableField<>(mActivity.getResources().getString(R.string.search_tool_tip));
             selectedToolTip = new ObservableField<>(mActivity.getResources().getString(R.string.selected_tool_tip));
+            teacherFriends = new ObservableField<>("आपके कई साथी TheTeacherApp \nपर हैं। उनका नाम लिखकर यहाँ खोजें।");
             toolTipGravity = new ObservableInt(Gravity.BOTTOM);
-            selectedToolTipGravity = new ObservableInt(Gravity.BOTTOM);
+            selectedToolTipGravity = new ObservableInt(Gravity.TOP);
             mDataManager.getAppPref().setSearchVisited(true);
         }
     }
@@ -734,7 +741,6 @@ public class SearchViewModel extends BaseViewModel {
 
     private void loadFilters() {
         mActivity.showLoading();
-        setToolTip();
         mDataManager.getSearchFilter(new OnResponseCallback<SearchFilter>() {
             @Override
             public void onSuccess(SearchFilter data) {

@@ -21,6 +21,7 @@ import org.tta.mobile.R;
 import org.tta.mobile.event.NetworkConnectivityChangeEvent;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.local.db.table.ContentStatus;
+import org.tta.mobile.tta.data.model.UpdatedVersionResponse;
 import org.tta.mobile.tta.event.ContentStatusReceivedEvent;
 import org.tta.mobile.tta.event.ContentStatusesReceivedEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
@@ -79,7 +80,7 @@ public class LandingViewModel extends BaseViewModel {
                 if (!mDataManager.getAppPref().isProfileVisited()) {
                     new MxTooltip.Builder(mActivity)
                             .anchorView(mActivity.findViewById(R.id.action_library))
-                            .text("यहाँ सभी सामग्री पाएँ")
+                            .text("यहाँ सारी सामग्री देखें।")
                             .gravity(Gravity.TOP)
                             .animated(true)
                             .transparentOverlay(true)
@@ -103,7 +104,6 @@ public class LandingViewModel extends BaseViewModel {
                             .show();
                     mDataManager.getAppPref().setFeedNavVisited(true);
                 }
-
                 return true;
             case R.id.action_search:
                 selectedId = R.id.action_search;
@@ -246,9 +246,9 @@ public class LandingViewModel extends BaseViewModel {
         mDataManager.setContentIdForLegacyDownloads();
     }
 
-    public void setToolTip() {
+    private void setToolTip() {
         if (!mDataManager.getAppPref().isProfileVisited()) {
-            libraryToolTip.set("  यहाँ सभी सामग्री पाएँ  ");
+            libraryToolTip.set("यहाँ सारी सामग्री देखें।");
             toolTipGravity.set(Gravity.TOP);
             toolTipPosition.set(0);
 //            mDataManager.getAppPref().setProfileVisited(true);
@@ -298,9 +298,8 @@ public class LandingViewModel extends BaseViewModel {
     private void getAppUpdate() {
         latestVersion = "3.12.2";
         if (!latestVersion.equals(currentVersion)) {
-
-//            showCustomAlertDialog();
-            showImmediateAlertDialog();
+            showCustomAlertDialog();
+//            showImmediateAlertDialog();
 ////            if (data.type.equals("flexible")){
 //            AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
 ////            builder.setIcon(R.drawable.teacherapplogo);
@@ -334,54 +333,55 @@ public class LandingViewModel extends BaseViewModel {
 //            builder.show();
 
         }
-    }
-
-//        mDataManager.getUpdatedVersion(new OnResponseCallback<UpdatedVersionResponse>() {
-//            @Override
-//            public void onSuccess(UpdatedVersionResponse data) {
-//                if (!data.updated_version.equals(currentVersion)){
-//                    if (data.type.equals("flexible")){
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity, R.style.AppBaseTheme);
-//                        builder.setIcon(R.drawable.teacherapplogo);
-//                        builder.setTitle(data.release_note);
-//                        builder.setPositiveButton("Update", (dialog, which) -> {
-//                            //Click button action
-//                            mActivity.startActivity(new Intent(Intent.ACTION_VIEW,
-//                                    Uri.parse("https://play.google.com/store/apps/details?id=org.tta.mobile")));
-//                            dialog.dismiss();
-//                        });
+//            mDataManager.getUpdatedVersion(new OnResponseCallback<UpdatedVersionResponse>() {
+//                @Override
+//                public void onSuccess(UpdatedVersionResponse data) {
+//                    if (!data.updated_version.equals(currentVersion)) {
+//                        if (data.type.equals("flexible")) {
+//                            showCustomAlertDialog();
+//                            AlertDialog.Builder builder = new AlertDialog.Builder(mActivity, R.style.AppBaseTheme);
+//                            builder.setIcon(R.drawable.teacherapplogo);
+//                            builder.setTitle(data.release_note);
+//                            builder.setPositiveButton("Update", (dialog, which) -> {
+//                                //Click button action
+//                                mActivity.startActivity(new Intent(Intent.ACTION_VIEW,
+//                                        Uri.parse("https://play.google.com/store/apps/details?id=org.tta.mobile")));
+//                                dialog.dismiss();
+//                            });
 //
-//                        builder.setNegativeButton("Delay", (dialog, which) -> {
-//                            mDataManager.getAppPref().setUpdateSeenDate(current_date.toString());
-//                            dialog.dismiss();
-//                        });
-//                        builder.setCancelable(false);
-//                        builder.show();
-//                    }else if (data.updated_version.equals("immediate")){
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity, R.style.AppBaseTheme);
-//                        builder.setIcon(R.drawable.teacherapplogo);
-//                        builder.setTitle("An Update is Available..");
-//                        builder.setPositiveButton("Update", (dialog, which) -> {
-//                            //Click button action
-//                            mActivity.startActivity(new Intent(Intent.ACTION_VIEW,
-//                                    Uri.parse("https://play.google.com/store/apps/details?id=org.tta.mobile")));
-//                            dialog.dismiss();
+//                            builder.setNegativeButton("Delay", (dialog, which) -> {
+//                                mDataManager.getAppPref().setUpdateSeenDate(current_date.toString());
+//                                dialog.dismiss();
+//                            });
+//                            builder.setCancelable(false);
+//                            builder.show();
+//                        } else if (data.updated_version.equals("immediate")) {
+//                            showImmediateAlertDialog();
+//                            AlertDialog.Builder builder = new AlertDialog.Builder(mActivity, R.style.AppBaseTheme);
+//                            builder.setIcon(R.drawable.teacherapplogo);
+//                            builder.setTitle("An Update is Available..");
+//                            builder.setPositiveButton("Update", (dialog, which) -> {
+//                                //Click button action
+//                                mActivity.startActivity(new Intent(Intent.ACTION_VIEW,
+//                                        Uri.parse("https://play.google.com/store/apps/details?id=org.tta.mobile")));
+//                                dialog.dismiss();
 //
-//                        });
+//                            });
 //
-//                        builder.setCancelable(false);
-//                        builder.show();
+//                            builder.setCancelable(false);
+//                            builder.show();
+//                        }
 //                    }
 //                }
-//            }
 //
-//            @Override
-//            public void onFailure(Exception e) {
+//                @Override
+//                public void onFailure(Exception e) {
 //
-//            }
-//        });
-//
-//    }
+//                }
+//            });
+//        }
+
+    }
 
     private String getCurrentVersion() {
 //        Date date = Calendar.getInstance().getTime();
@@ -418,7 +418,7 @@ public class LandingViewModel extends BaseViewModel {
         return currentVersion;
     }
 
-    public void printDifference(Date startDate, Date endDate) {
+    private void printDifference(Date startDate, Date endDate) {
         //milliseconds
         long different = endDate.getTime() - startDate.getTime();
 
@@ -500,7 +500,7 @@ public class LandingViewModel extends BaseViewModel {
 
 
         TextView title = v.findViewById(R.id.tv_title);
-        title.setText(R.string.update_tta);
+        title.setText("नया अपडेट उपलब्ध हैं |");
 
         Button mbtn_update = v.findViewById(R.id.btn_update);
         ImageView miv_close = v.findViewById(R.id.iv_close);

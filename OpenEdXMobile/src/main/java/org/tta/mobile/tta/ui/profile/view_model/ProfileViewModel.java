@@ -230,7 +230,7 @@ public class ProfileViewModel extends BaseViewModel {
     public void showToolTip(){
         if (!mDataManager.getAppPref().isSettingVisited()) {
 //            ToolTipView.showToolTip(view.getContext(), "सेटिंग्स ऑप्शन के लिए यह बटन दबायें ", optionsBtn, Gravity.BOTTOM);
-            profiletoolTip.set("सेटिंग्स ऑप्शन के लिए यह बटन दबायें ");
+            profiletoolTip.set("सेटिंग्स में जाने के लिए यह बटन दबाएँ।");
             profiletoolTipGravity.set(Gravity.BOTTOM);
             mDataManager.getAppPref().setSettingsVisited(true);
         }
