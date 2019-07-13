@@ -391,7 +391,7 @@
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme.NoActionBar.CustomStatusBar" />
 
-        <!--<activity
+        <activity
             android:name="org.tta.mobile.tta.ui.deep_link.DeepLinkActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -399,151 +399,58 @@
             android:launchMode="singleTask"
             android:noHistory="true">
 
-            <tools:validation testUrl="http://connect.theteacherapp.org/category/chatshaala/" />
-            <tools:validation testUrl="http://theteacherapp.org" />
-
-            <intent-filter android:autoVerify="true">
+            <intent-filter
+                android:label="@string/app_name"
+                android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
+                <!-- Accepts URIs that begin with "http://connect.theteacherapp.org" -->
                 <data
-                    android:scheme="http"
-                    android:host="connect.theteacherapp.org" />
-            </intent-filter>
-            <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
+                    android:host="connect.theteacherapp.org"
+                    android:scheme="http" />
 
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
-
-            <data
-            android:scheme="http"
-            android:host="theteacherapp.org" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
+                <!-- Accepts URIs that begin with "http://theteacherapp.org" -->
                 <data
-                    android:scheme="http"
-                    android:host="www.theteacherapp.org" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                    android:host="theteacherapp.org"
+                    android:scheme="http" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
+                <!-- Accepts URIs that begin with "http://www.theteacherapp.org" -->
                 <data
-                    android:scheme="http"
-                    android:host="www.connect.theteacherapp.org" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                    android:host="www.theteacherapp.org"
+                    android:scheme="http" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
+                <!-- Accepts URIs that begin with "http://www.connect.theteacherapp.org" -->
                 <data
-                    android:scheme="http"
-                    android:host="connect.theteacherapp.org" />
-            </intent-filter>
-            <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
+                    android:host="www.connect.theteacherapp.org"
+                    android:scheme="http" />
 
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
+                <!-- for https -->
 
-            <data
-            android:scheme="http"
-            android:host="theteacherapp.org" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
+                <!-- Accepts URIs that begin with "http://connect.theteacherapp.org" -->
                 <data
-                    android:scheme="http"
-                    android:host="www.theteacherapp.org" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                    android:host="connect.theteacherapp.org"
+                    android:scheme="https" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
+                <!-- Accepts URIs that begin with "http://theteacherapp.org" -->
                 <data
-                    android:scheme="http"
-                    android:host="www.connect.theteacherapp.org" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                    android:host="theteacherapp.org"
+                    android:scheme="https" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
+                <!-- Accepts URIs that begin with "http://www.theteacherapp.org/" -->
                 <data
-                    android:scheme="https"
-                    android:host="connect.theteacherapp.org" />
-            </intent-filter>
-            <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
+                    android:host="www.theteacherapp.org"
+                    android:scheme="https" />
 
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
-
-            <data
-            android:scheme="https"
-            android:host="theteacherapp.org" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
+                <!-- Accepts URIs that begin with "https://www.connect.theteacherapp.org/" -->
                 <data
-                    android:scheme="https"
-                    android:host="www.theteacherapp.org" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:scheme="https"
-                    android:host="connect.theteacherapp.org" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:scheme="https"
-                    android:host="www.theteacherapp.org" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:scheme="https"
-                    android:host="www.connect.theteacherapp.org" />
+                    android:host="www.connect.theteacherapp.org"
+                    android:scheme="https" />
             </intent-filter>
 
-        </activity>-->
+        </activity>
 
         <activity
             android:name="org.tta.mobile.tta.ui.course.discussion.DiscussionThreadActivity"
@@ -581,7 +488,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.CustomStatusBar" />
 
-        <activity android:name=".tta.ui.android_app_link.AppLinkActivity">
+        <!--<activity android:name=".tta.ui.android_app_link.AppLinkActivity">
 
             <tools:validation testUrl="http://connect.theteacherapp.org" />
 
@@ -605,7 +512,7 @@
                     android:scheme="https"
                     android:host="www.connect.theteacherapp.org" />
             </intent-filter>
-        </activity>
+        </activity>-->
 
         <!-- TTA activities end -->
 
