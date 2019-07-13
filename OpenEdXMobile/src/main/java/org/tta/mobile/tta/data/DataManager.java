@@ -1278,6 +1278,7 @@ public class DataManager extends BaseRoboInjector {
             de.url = scorm.getDownloadUrl();
             de.title = scorm.getParent().getDisplayName();
             de.content_id = contentId;
+            de.lastModified = scorm.getLastModified();
             downloadManager.downloadVideo(de, activity, callback);
         }
     }
@@ -1291,6 +1292,18 @@ public class DataManager extends BaseRoboInjector {
 
     public void getDownloadedStateForVideoId(String videoId, DataCallback<DownloadEntry.DownloadedState> callback) {
         edxEnvironment.getDatabase().getDownloadedStateForVideoId(videoId, callback);
+    }
+
+    public boolean scormNeedsDeletion(ScormBlockModel scorm){
+        DownloadEntry entry = scorm.getDownloadEntry(edxEnvironment.getStorage());
+        if (entry == null){
+            return false;
+        }
+        if (entry.lastModified == null){
+            entry.lastModified = scorm.getLastModified();
+            edxEnvironment.getStorage().updateInfoByVideoId(entry.videoId, entry, null);
+        }
+        return !entry.lastModified.equals(scorm.getLastModified());
     }
 
     public boolean scormNotDownloaded(ScormBlockModel scorm) {
@@ -1362,6 +1375,10 @@ public class DataManager extends BaseRoboInjector {
                                 mLocalDataSource.deleteAllBookmarks();
                             }
                         }.start();
+
+                        if (callback != null) {
+                            callback.onFailure(new TaException("No content in your agenda"));
+                        }
                     }
 
                 }
@@ -1441,6 +1458,10 @@ public class DataManager extends BaseRoboInjector {
                                 mLocalDataSource.deleteAllStateContents();
                             }
                         }.start();
+
+                        if (callback != null) {
+                            callback.onFailure(new TaException("No content in your state agenda"));
+                        }
                     }
 
                 }

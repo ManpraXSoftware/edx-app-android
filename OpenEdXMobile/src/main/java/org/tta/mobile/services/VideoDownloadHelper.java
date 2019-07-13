@@ -92,6 +92,7 @@ public class VideoDownloadHelper {
                 de.url = v.getDownloadUrl();
                 if (v instanceof PDFBlockModel || v instanceof ScormBlockModel){
                     de.title = ((ScormBlockModel) v).getParent().getDisplayName();
+                    de.lastModified = ((ScormBlockModel) v).getLastModified();
                 }
                 de.content_id = contentid;
             }

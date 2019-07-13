@@ -66,6 +66,7 @@ public final class DbStructure {
 
         //for differnciating content (wordpress,scrom,pdf)
         public static final String TYPE = "type";
+        public static final String LAST_MODIFIED = "last_modified";
 
 
         //table for assessment learning history

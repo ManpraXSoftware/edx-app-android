@@ -80,8 +80,7 @@ public class Config {
     //TTA start
 
     private static final String TTA_OTP_SENDER_ADDRESS = "TTA_OTP_SENDER_ADDRESS";
-    //Tincan LRS
-    private static final String TINCAN_LRS_URL = "TINCAN_LRS_URL";
+
     //Analytics Url
     private static final String ANALYTICS_STORE_URL = "ANALYTICS_STORE_URL";
 
@@ -736,14 +735,20 @@ public class Config {
         return getString(TTA_OTP_SENDER_ADDRESS);
     }
 
-    //Tincan url
-    public String getTincanLrsUrl() {
-        return getString(TINCAN_LRS_URL);
-    }
-
     //Analyytics store url
     public String getAnalyticsStoreUrl() {
         return getString(ANALYTICS_STORE_URL);
+    }
+
+    //Analyytics store url
+    public String getAnalyticsUrlForResume() {
+
+        String url="" ;
+        if(getString(ANALYTICS_STORE_URL).isEmpty())
+            return url;
+
+        return Uri.parse(getString(ANALYTICS_STORE_URL)).getScheme()+"://"
+                +Uri.parse(getString(ANALYTICS_STORE_URL)).getHost();
     }
 
     public String getSMSKey() {

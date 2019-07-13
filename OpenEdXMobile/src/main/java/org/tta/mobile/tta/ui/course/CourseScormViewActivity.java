@@ -49,6 +49,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
     private String courseName;
     private String courseId;
     private String unitId;
+    private long contentId;
 
     private Tincan tincan;
     private Resume resume_info;
@@ -100,6 +101,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
         courseName = parameters.getString(Constants.KEY_COURSE_NAME);
         courseId = parameters.getString(Constants.KEY_COURSE_ID);
         unitId = parameters.getString(Constants.KEY_UNIT_ID);
+        contentId = parameters.getLong(Constants.KEY_CONTENT_ID);
     }
 
     private File findFile(File aFile, String sDir, String toFind) {
@@ -199,7 +201,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
 
         if (launcher != null) {
             String url = "file://" + launcher.getAbsolutePath() +
-                            "?tincan=true&endpoint=" + viewModel.getDataManager().getConfig().getTincanLrsUrl() +
+                            "?tincan=true&endpoint=" + viewModel.getDataManager().getConfig().getAnalyticsUrlForResume() +
                             "&auth=" + viewModel.getDataManager().getLoginPrefs().getAuthorizationHeader() +
                             "&actor={\"name\": [" + viewModel.getDataManager().getLoginPrefs().getUsername() +
                             "], \"mbox\": [\"mailto:example@theteacherapp.org\"], \"objectType\": [\"Agent\"]}&course_id=" + courseName +
@@ -217,7 +219,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
         String encoding = "";
         InputStream inputStream = null;
 
-        if (url.startsWith(viewModel.getDataManager().getConfig().getTincanLrsUrl() + "/activities/state?stateId=resume")) {
+        if (url.startsWith(viewModel.getDataManager().getConfig().getAnalyticsUrlForResume() + "/activities/state?stateId=resume")) {
             //get
             encoding = "UTF-8";
             mimeType = "text/html";
@@ -236,7 +238,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
             responseHeaders.put("X-Powered-By", "ASP.NET");
 
             inputStream = IOUtils.toInputStream(resume_info.getResume_Payload());
-        } else if (url.startsWith(viewModel.getDataManager().getConfig().getTincanLrsUrl() + "/statements?")) {
+        } else if (url.startsWith(viewModel.getDataManager().getConfig().getAnalyticsUrlForResume() + "/statements?")) {
             //option
             encoding = "UTF-8";
             mimeType = "text/html";
@@ -247,7 +249,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
             responseHeaders.put("Access-Control-Allow-Headers", "authorization, content-type, x-experience-api-version");
             responseHeaders.put("Access-Control-Max-Age", "1728000");
             responseHeaders.put("X-Powered-By:", "ASP.NET");
-        } else if (url.startsWith(viewModel.getDataManager().getConfig().getTincanLrsUrl() + "/statements?")) {
+        } else if (url.startsWith(viewModel.getDataManager().getConfig().getAnalyticsUrlForResume() + "/statements?")) {
             //option
             encoding = "UTF-8";
             mimeType = "text/html";
@@ -274,7 +276,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
     }
 
     public void ReceiveTinCanStatement(String statement) {
-        analytic.addTinCanAnalyticDB(statement, courseName, courseId);
+        analytic.addTinCanAnalyticDB(statement, courseName, courseId, courseId, contentId);
         // Toast.makeText(CourseScormViewActivity.this, statement, Toast.LENGTH_LONG).show();
     }
 

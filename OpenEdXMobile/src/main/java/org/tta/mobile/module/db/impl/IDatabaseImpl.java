@@ -440,6 +440,7 @@ public class IDatabaseImpl extends IDatabaseBaseImpl implements IDatabase {
             values.put(DbStructure.Column.VIDEO_FOR_WEB_ONLY, de.isVideoForWebOnly());
             values.put(DbStructure.Column.TYPE, de.getDownloadType());
             values.put(DbStructure.Column.CONTENT_ID, de.getContent_id());
+            values.put(DbStructure.Column.LAST_MODIFIED, de.getLastModified());
 
             DbOperationInsert op = new DbOperationInsert(DbStructure.Table.DOWNLOADS, values);
             op.setCallback(callback);
@@ -665,6 +666,7 @@ public class IDatabaseImpl extends IDatabaseBaseImpl implements IDatabase {
         values.put(DbStructure.Column.CONTENT_ID, model.getContent_id());
         values.put(DbStructure.Column.USERNAME, model.getUsername());
         values.put(DbStructure.Column.CHAPTER, model.getChapterName());
+        values.put(DbStructure.Column.LAST_MODIFIED, model.getLastModified());
 
         DbOperationUpdate op = new DbOperationUpdate(DbStructure.Table.DOWNLOADS, values,
                 DbStructure.Column.VIDEO_ID + "=?",
