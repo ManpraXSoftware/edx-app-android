@@ -45,18 +45,39 @@ public class DeepLinkActivity extends BaseVMActivity {
         viewModel = new DeepLinkViewModel(this);
         binding(R.layout.t_activity_deep_link, viewModel);
 
-        if (loginPrefs == null || !loginPrefs.isLoggedIn()) {
-            ActivityUtil.gotoPage(this, SigninRegisterActivity.class);
-            this.finish();
-            return;
-        } else if (loginPrefs.getDisplayName() == null || loginPrefs.getDisplayName().equals(loginPrefs.getUsername())){
-            ActivityUtil.gotoPage(this, UserInfoActivity.class);
-            this.finish();
+        if (requiresAuthentication()){
             return;
         }
 
         //region get data form push notification if exist
         Intent intent = getIntent();
+        handleIntent(intent);
+        viewModel.getDataManager().getEdxEnvironment().getAnalyticsRegistry().trackScreenView(getString(R.string.label_my_courses));
+
+    }
+
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (requiresAuthentication()){
+            return;
+        }
+        handleIntent(intent);
+    }
+
+    private boolean requiresAuthentication(){
+        if (loginPrefs == null || !loginPrefs.isLoggedIn()) {
+            ActivityUtil.gotoPage(this, SigninRegisterActivity.class);
+            this.finish();
+            return true;
+        } else if (loginPrefs.getDisplayName() == null || loginPrefs.getDisplayName().equals(loginPrefs.getUsername())){
+            ActivityUtil.gotoPage(this, UserInfoActivity.class);
+            this.finish();
+            return true;
+        }
+        return false;
+    }
+
+    private void handleIntent(Intent intent){
         Bundle push_notification_extras = intent.getExtras();
         if (push_notification_extras != null) {
 
@@ -111,8 +132,6 @@ public class DeepLinkActivity extends BaseVMActivity {
         } else {
             onClickLink();
         }
-        viewModel.getDataManager().getEdxEnvironment().getAnalyticsRegistry().trackScreenView(getString(R.string.label_my_courses));
-
     }
 
     private void onClickLink(){
