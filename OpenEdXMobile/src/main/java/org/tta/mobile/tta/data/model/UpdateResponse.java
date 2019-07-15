@@ -4,6 +4,7 @@ public class UpdateResponse {
 
     public String version_name;
     public Long version_code;
+    public String status;
 
     public String type;
 
@@ -30,6 +31,12 @@ public class UpdateResponse {
         if(type.isEmpty())
             return "";
         return type;
+    }
+
+    public String getStatus() {
+        if(status.isEmpty())
+            return "";
+        return status;
     }
 
 

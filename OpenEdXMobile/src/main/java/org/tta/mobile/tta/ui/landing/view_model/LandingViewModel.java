@@ -298,10 +298,10 @@ public class LandingViewModel extends BaseViewModel {
                     //set last update date time
                     getDataManager().getAppPref().setUpdateSeenDate(Calendar.getInstance().getTime().toString());
 
-                    if (res.type.toLowerCase().equals(UpdateType.FLEXIBLE.toString().toLowerCase())) {
+                    if (res.getStatus().toLowerCase().equals(UpdateType.FLEXIBLE.toString().toLowerCase())) {
                         showFlexibleUpdate(res.release_note);
 
-                    } else if (res.type.toLowerCase().equals(UpdateType.IMMEDIATE.toString().toLowerCase())) {
+                    } else if (res.getStatus().toLowerCase().equals(UpdateType.IMMEDIATE.toString().toLowerCase())) {
                         showImmediateUpdate(res.release_note);
                     }
                 }
