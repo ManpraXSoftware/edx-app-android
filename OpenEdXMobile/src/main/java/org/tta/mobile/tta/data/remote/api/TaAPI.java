@@ -14,7 +14,7 @@ import org.tta.mobile.tta.data.local.db.table.Notification;
 import org.tta.mobile.tta.data.local.db.table.UnitStatus;
 import org.tta.mobile.tta.data.model.CountResponse;
 import org.tta.mobile.tta.data.model.StatusResponse;
-import org.tta.mobile.tta.data.model.UpdatedVersionResponse;
+import org.tta.mobile.tta.data.model.UpdateResponse;
 import org.tta.mobile.tta.data.model.agenda.AgendaList;
 import org.tta.mobile.tta.data.model.content.BookmarkResponse;
 import org.tta.mobile.tta.data.model.content.CertificateStatusResponse;
@@ -263,7 +263,7 @@ public class TaAPI {
         return taService.getFollowersOrFollowing(follower, take, skip);
     }
 
-//    public Call<UpdatedVersionResponse> getVersionUpdate(String version){
-//        return taService.getContentFromSourceIdentity(version);
-//    }
+    public Call<UpdateResponse> getVersionUpdate(String v_name,Long v_code){
+        return taService.getAppUpdate(v_name,v_code);
+    }
 }

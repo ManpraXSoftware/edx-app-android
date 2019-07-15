@@ -2,8 +2,6 @@ package org.tta.mobile.tta.ui.landing.view_model;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
@@ -13,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,8 +19,9 @@ import android.widget.TextView;
 import org.tta.mobile.R;
 import org.tta.mobile.event.NetworkConnectivityChangeEvent;
 import org.tta.mobile.tta.Constants;
+import org.tta.mobile.tta.appupdate.model.UpdateType;
 import org.tta.mobile.tta.data.local.db.table.ContentStatus;
-import org.tta.mobile.tta.data.model.UpdatedVersionResponse;
+import org.tta.mobile.tta.data.model.UpdateResponse;
 import org.tta.mobile.tta.event.ContentStatusReceivedEvent;
 import org.tta.mobile.tta.event.ContentStatusesReceivedEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
@@ -37,13 +37,10 @@ import org.tta.mobile.tta.ui.search.SearchFragment;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.util.NetworkUtil;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import de.greenrobot.event.EventBus;
 
@@ -60,12 +57,6 @@ public class LandingViewModel extends BaseViewModel {
     public ObservableField<String> libraryToolTip = new ObservableField<>();
     public ObservableInt toolTipGravity = new ObservableInt();
     public ObservableInt toolTipPosition = new ObservableInt();
-
-    private String latestVersion, currentVersion;
-    private Date current_date, lastSeenDate;
-    private int version_code;
-    private long elapsedDays;
-
 
     public BottomNavigationView.OnNavigationItemSelectedListener itemSelectedListener = item -> {
         menuItem = item;
@@ -162,10 +153,11 @@ public class LandingViewModel extends BaseViewModel {
     public void onResume() {
         super.onResume();
         onEventMainThread(new NetworkConnectivityChangeEvent());
-        getCurrentVersion();
-//        if (lastSeenDate==null)
-        if (!Constants.IsUpdateDelay)
-            getAppUpdate();
+
+        if(mDataManager.checkUpdate()) {
+            if (!Constants.IsUpdateDelay)
+                getAppUpdate();
+        }
     }
 
     public void showLibrary() {
@@ -191,7 +183,7 @@ public class LandingViewModel extends BaseViewModel {
         );
     }
 
-    public void showSearch(){
+    public void showSearch() {
         ActivityUtil.clearBackstackAndReplaceFragmentInActivity(
                 mActivity.getSupportFragmentManager(),
                 new SearchFragment(),
@@ -224,7 +216,7 @@ public class LandingViewModel extends BaseViewModel {
         );
     }
 
-    private void onAppStart(){
+    private void onAppStart() {
         mDataManager.getMyContentStatuses(new OnResponseCallback<List<ContentStatus>>() {
             @Override
             public void onSuccess(List<ContentStatus> data) {
@@ -239,7 +231,7 @@ public class LandingViewModel extends BaseViewModel {
         });
 
 
-        Migration280719 spt=new Migration280719(getActivity());
+        Migration280719 spt = new Migration280719(getActivity());
         spt.MigrateScromPackages();
         spt.MigrateConnectVideos();
 
@@ -255,13 +247,13 @@ public class LandingViewModel extends BaseViewModel {
         }
     }
 
-    public void selectLibrary(){
+    public void selectLibrary() {
         selectedId = R.id.action_library;
     }
 
     @SuppressWarnings("unused")
-    public void onEventMainThread(NetworkConnectivityChangeEvent event){
-        if (NetworkUtil.isConnected(mActivity)){
+    public void onEventMainThread(NetworkConnectivityChangeEvent event) {
+        if (NetworkUtil.isConnected(mActivity)) {
             offlineVisible.set(false);
         } else {
             offlineVisible.set(true);
@@ -269,17 +261,17 @@ public class LandingViewModel extends BaseViewModel {
     }
 
     @SuppressWarnings("unused")
-    public void onEventMainThread(ContentStatusReceivedEvent event){
-        if (statuses == null){
+    public void onEventMainThread(ContentStatusReceivedEvent event) {
+        if (statuses == null) {
             statuses = new ArrayList<>();
         }
         ContentStatus contentStatus = event.getContentStatus();
-        if (statuses.contains(contentStatus)){
+        if (statuses.contains(contentStatus)) {
             ContentStatus prev = statuses.get(statuses.indexOf(contentStatus));
-            if (prev.getCompleted() == null && contentStatus.getCompleted() != null){
+            if (prev.getCompleted() == null && contentStatus.getCompleted() != null) {
                 prev.setCompleted(contentStatus.getCompleted());
             }
-            if (prev.getStarted() == null && contentStatus.getStarted() != null){
+            if (prev.getStarted() == null && contentStatus.getStarted() != null) {
                 prev.setStarted(contentStatus.getStarted());
             }
         } else {
@@ -287,187 +279,55 @@ public class LandingViewModel extends BaseViewModel {
         }
     }
 
-    public void registerEventBus(){
+    public void registerEventBus() {
         EventBus.getDefault().register(this);
     }
 
-    public void unRegisterEventBus(){
+    public void unRegisterEventBus() {
         EventBus.getDefault().unregister(this);
     }
 
     private void getAppUpdate() {
-        latestVersion = "3.12.2";
-        if (!latestVersion.equals(currentVersion)) {
-            showCustomAlertDialog();
-//            showImmediateAlertDialog();
-////            if (data.type.equals("flexible")){
-//            AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-////            builder.setIcon(R.drawable.teacherapplogo);
-//            builder.setPositiveButton("ऐप्प अपडेट करें", (dialog, which) -> {
-//                //Click button action
-//                mActivity.startActivity(new Intent(Intent.ACTION_VIEW,
-//                        Uri.parse("https://play.google.com/store/apps/details?id=org.tta.mobile")));
-//                dialog.dismiss();
-//            });
-//
-//
-//            builder.setNegativeButton("बाद में अपडेट करें", (dialog, which) -> {
-//                Constants.IsUpdateDelay = true;
-//                mDataManager.getAppPref().setUpdateSeenDate(current_date.toString());
-//                dialog.dismiss();
-//            });
-//            builder.setCancelable(false);
-//
-//
-//            LayoutInflater i = mActivity.getLayoutInflater();
-//
-//            View v = i.inflate(R.layout.alert_dialog_layout,null);
-//
-//            TextView title = v.findViewById(R.id.title);
-//            title.setText("अपडेट मौजूद हैं, कृपया ऐप्प को अपडेट करें ");
-//
-//            TextView update = v.findViewById(R.id.showUpdate);
-//            update.setText(R.string.update_tta);
-//
-//            builder.setView(v);
-//            builder.show();
+        mDataManager.getUpdatedVersion(new OnResponseCallback<UpdateResponse>() {
+            @Override
+            public void onSuccess(UpdateResponse res) {
+                if(res==null|| res.version_code==null)
+                    return;
 
-        }
-//            mDataManager.getUpdatedVersion(new OnResponseCallback<UpdatedVersionResponse>() {
-//                @Override
-//                public void onSuccess(UpdatedVersionResponse data) {
-//                    if (!data.updated_version.equals(currentVersion)) {
-//                        if (data.type.equals("flexible")) {
-//                            showCustomAlertDialog();
-//                            AlertDialog.Builder builder = new AlertDialog.Builder(mActivity, R.style.AppBaseTheme);
-//                            builder.setIcon(R.drawable.teacherapplogo);
-//                            builder.setTitle(data.release_note);
-//                            builder.setPositiveButton("Update", (dialog, which) -> {
-//                                //Click button action
-//                                mActivity.startActivity(new Intent(Intent.ACTION_VIEW,
-//                                        Uri.parse("https://play.google.com/store/apps/details?id=org.tta.mobile")));
-//                                dialog.dismiss();
-//                            });
-//
-//                            builder.setNegativeButton("Delay", (dialog, which) -> {
-//                                mDataManager.getAppPref().setUpdateSeenDate(current_date.toString());
-//                                dialog.dismiss();
-//                            });
-//                            builder.setCancelable(false);
-//                            builder.show();
-//                        } else if (data.updated_version.equals("immediate")) {
-//                            showImmediateAlertDialog();
-//                            AlertDialog.Builder builder = new AlertDialog.Builder(mActivity, R.style.AppBaseTheme);
-//                            builder.setIcon(R.drawable.teacherapplogo);
-//                            builder.setTitle("An Update is Available..");
-//                            builder.setPositiveButton("Update", (dialog, which) -> {
-//                                //Click button action
-//                                mActivity.startActivity(new Intent(Intent.ACTION_VIEW,
-//                                        Uri.parse("https://play.google.com/store/apps/details?id=org.tta.mobile")));
-//                                dialog.dismiss();
-//
-//                            });
-//
-//                            builder.setCancelable(false);
-//                            builder.show();
-//                        }
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Exception e) {
-//
-//                }
-//            });
-//        }
+                if (res.getVersion_code()>mDataManager.getCurrent_vCode()) {
+                    //set last update date time
+                    getDataManager().getAppPref().setUpdateSeenDate(Calendar.getInstance().getTime().toString());
 
-    }
+                    if (res.getStatus().toLowerCase().equals(UpdateType.FLEXIBLE.toString().toLowerCase())) {
+                        showFlexibleUpdate(res.release_note);
 
-    private String getCurrentVersion() {
-//        Date date = Calendar.getInstance().getTime();
-        current_date = Calendar.getInstance().getTime();
-        PackageManager pm = mActivity.getPackageManager();
-        PackageInfo pInfo = null;
-
-        try {
-            pInfo = pm.getPackageInfo(mActivity.getPackageName(), 0);
-
-        } catch (PackageManager.NameNotFoundException e1) {
-            e1.printStackTrace();
-        }
-        currentVersion = null;
-        if (pInfo != null) {
-            currentVersion = pInfo.versionName;
-            version_code = pInfo.versionCode;
-        }
-//        if (mDataManager.getAppPref().getUpdateSeenDate()== null){
-//            mDataManager.getAppPref().setUpdateSeenDate(current_date.toString());
-//        }
-        String date1 = mDataManager.getAppPref().getUpdateSeenDate();
-        SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
-        try {
-            if (date1 != null)
-                lastSeenDate = format.parse(date1);
-            System.out.println(lastSeenDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        if (lastSeenDate != null)
-            printDifference(lastSeenDate, current_date);
-
-        return currentVersion;
-    }
-
-    private void printDifference(Date startDate, Date endDate) {
-        //milliseconds
-        long different = endDate.getTime() - startDate.getTime();
-
-        System.out.println("startDate : " + startDate);
-        System.out.println("endDate : " + endDate);
-        System.out.println("different : " + different);
-
-        long secondsInMilli = 1000;
-        long minutesInMilli = secondsInMilli * 60;
-        long hoursInMilli = minutesInMilli * 60;
-        long daysInMilli = hoursInMilli * 24;
-
-        elapsedDays = different / daysInMilli;
-        different = different % daysInMilli;
-
-        if (elapsedDays >= 1) {
-            if (!Constants.IsUpdateDelay) {
-                getAppUpdate();
+                    } else if (res.getStatus().toLowerCase().equals(UpdateType.IMMEDIATE.toString().toLowerCase())) {
+                        showImmediateUpdate(res.release_note);
+                    }
+                }
             }
-        }
 
-//        long elapsedHours = different / hoursInMilli;
-//        different = different % hoursInMilli;
-//
-//        long elapsedMinutes = different / minutesInMilli;
-//        different = different % minutesInMilli;
-//
-//        long elapsedSeconds = different / secondsInMilli;
-//
-//        System.out.printf(
-//                "%d days, %d hours, %d minutes, %d seconds%n",
-//                elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds);
+            @Override
+            public void onFailure(Exception e) {
+            }
+        },mDataManager.getCurrentV_name(),mDataManager.getCurrent_vCode());
     }
 
-    private void showCustomAlertDialog() {
+    private void showFlexibleUpdate(String notes_html) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         LayoutInflater i = mActivity.getLayoutInflater();
 
         View v = i.inflate(R.layout.alert_dialog_layout, null);
-
-        TextView title = v.findViewById(R.id.release_notes);
-        title.setText("अपडेट मौजूद हैं, कृपया ऐप को अपडेट करें ");
-
-
-        TextView update = v.findViewById(R.id.title);
-        update.setText(R.string.update_tta);
+        TextView title = v.findViewById(R.id.title);
+        title.setText("नया अपडेट उपलब्ध हैं |");
 
         Button mbtn_delay = v.findViewById(R.id.btn_delay);
         Button mbtn_update = v.findViewById(R.id.btn_update);
+
+        WebView flxible_notes_wv=v.findViewById(R.id.notes_flxible_wv);
+
+        flxible_notes_wv.loadData(notes_html,
+                "text/html", "UTF-8");
 
         builder.setView(v);
         AlertDialog dialog = builder.create();
@@ -483,21 +343,20 @@ public class LandingViewModel extends BaseViewModel {
             dialog.dismiss();
         });
 
-
         builder.setCancelable(false);
         dialog.setCancelable(false);
-
         dialog.show();
     }
-    private void showImmediateAlertDialog() {
+
+    private void showImmediateUpdate(String notes_html) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         LayoutInflater i = mActivity.getLayoutInflater();
 
         View v = i.inflate(R.layout.alert_dialog_full_screen, null);
+        WebView immediate_notes_wv=v.findViewById(R.id.immediate_notes_wv);
 
-        TextView update= v.findViewById(R.id.tv_release_note);
-        update.setText("अपडेट मौजूद हैं, कृपया ऐप को अपडेट करें ");
-
+        immediate_notes_wv.loadData(notes_html,
+                "text/html", "UTF-8");
 
         TextView title = v.findViewById(R.id.tv_title);
         title.setText("नया अपडेट उपलब्ध हैं |");
@@ -507,8 +366,6 @@ public class LandingViewModel extends BaseViewModel {
 
         builder.setView(v);
         AlertDialog dialog = builder.create();
-
-
 
         mbtn_update.setOnClickListener(v12 -> {
             mActivity.startActivity(new Intent(Intent.ACTION_VIEW,
@@ -523,9 +380,10 @@ public class LandingViewModel extends BaseViewModel {
 
         builder.setCancelable(false);
         dialog.setCancelable(false);
-
         dialog.show();
     }
+
 }
+
 
 

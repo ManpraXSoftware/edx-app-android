@@ -122,7 +122,7 @@ public class ApiConstants {
     //Post generate certificate request
     public static final String URL_MX_GENERATE_CERTIFICATE = "api/mxcertification_api/generate_certificate/";
 
-    public static final String URL_MX_GET_CONTENT = "api/mx_catalog/v1/content/";
+    public static final String URL_MX_GET_CONTENT = "api/appupdate/v1/getappupdate/";
 
     public static final String URL_MX_GET_SUGGESTED_USERS = "api/mx_recommended_users/v1/getrecommendedusers/";
 

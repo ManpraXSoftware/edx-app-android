@@ -1,4 +1,4 @@
-package org.tta.mobile.tta.in_app_update;
+package org.tta.mobile.tta.appupdate;
 
 
 import java.io.IOException;

@@ -14,6 +14,7 @@ import org.tta.mobile.tta.data.local.db.table.Notification;
 import org.tta.mobile.tta.data.local.db.table.UnitStatus;
 import org.tta.mobile.tta.data.model.CountResponse;
 import org.tta.mobile.tta.data.model.StatusResponse;
+import org.tta.mobile.tta.data.model.UpdateResponse;
 import org.tta.mobile.tta.data.model.agenda.AgendaList;
 import org.tta.mobile.tta.data.model.content.BookmarkResponse;
 import org.tta.mobile.tta.data.model.content.CertificateStatusResponse;
@@ -192,4 +193,9 @@ public interface TaService {
     Call<List<SuggestedUser>> getFollowersOrFollowing(@Query(Constants.KEY_FOLLOWER) boolean follower,
                                                       @Query(Constants.KEY_TAKE) int take,
                                                       @Query(Constants.KEY_SKIP) int skip);
+
+    //for app update
+    @GET(ApiConstants.URL_MX_GET_CONTENT)
+    Call<UpdateResponse> getAppUpdate(@Query(Constants.VERSION_NAME) String v_name,
+                                      @Query(Constants.VERSION_CODE) Long v_code);
 }
