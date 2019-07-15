@@ -57,6 +57,10 @@ public class Constants {
     public static final String KEY_CERTIFICATE = "certificate";
     public static final String KEY_FOLLOWER = "follower";
 
+    //for app update
+    public static final String VERSION_NAME = "version_name";
+    public static final String VERSION_CODE = "version_code";
+
     public static final String OTP_SOURCE_REGISTER = "register";
     public static final String OTP_SOURCE_RESET_PASSWORD = "reset_password";
     public static final String INTENT_DELETE_FEEDS = "delete_feeds";

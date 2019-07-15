@@ -7,6 +7,8 @@ import android.arch.persistence.room.Room;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -74,7 +76,7 @@ import org.tta.mobile.tta.data.model.BaseResponse;
 import org.tta.mobile.tta.data.model.CountResponse;
 import org.tta.mobile.tta.data.model.EmptyResponse;
 import org.tta.mobile.tta.data.model.StatusResponse;
-import org.tta.mobile.tta.data.model.UpdatedVersionResponse;
+import org.tta.mobile.tta.data.model.UpdateResponse;
 import org.tta.mobile.tta.data.model.agenda.AgendaItem;
 import org.tta.mobile.tta.data.model.agenda.AgendaList;
 import org.tta.mobile.tta.data.model.authentication.FieldInfo;
@@ -180,12 +182,16 @@ import org.tta.mobile.util.Config;
 import org.tta.mobile.util.DateUtil;
 import org.tta.mobile.util.NetworkUtil;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -3805,13 +3811,13 @@ public class DataManager extends BaseRoboInjector {
         }
     }
 
-    public void getUpdatedVersion(OnResponseCallback<UpdatedVersionResponse> callback) {
+    public void getUpdatedVersion(OnResponseCallback<UpdateResponse> callback,
+                                  String version_name ,Long version_code ) {
 
         if (NetworkUtil.isConnected(context)) {
-
-            new GetVersionUpdatedTask(context) {
+            new GetVersionUpdatedTask(context,version_name,version_code) {
                 @Override
-                protected void onSuccess(UpdatedVersionResponse versionResponse) throws Exception {
+                protected void onSuccess(UpdateResponse versionResponse) throws Exception {
                     super.onSuccess(versionResponse);
                     callback.onSuccess(versionResponse);
                 }
@@ -3821,9 +3827,80 @@ public class DataManager extends BaseRoboInjector {
                     callback.onFailure(ex);
                 }
             }.execute();
+        }
+    }
 
+
+    public boolean checkUpdate() {
+        boolean isupdate = false;
+        Date lastSeenDate = new Date();
+        Date current_date = new Date();
+        current_date = Calendar.getInstance().getTime();
+
+        String lastUpdatedDate_str = getAppPref().getUpdateSeenDate();
+
+        SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+        try {
+            if (lastUpdatedDate_str == null)
+                return true;
+
+                lastSeenDate = format.parse(lastUpdatedDate_str);
+
+            if (lastSeenDate == null)
+                return true;
+
+            long different = lastSeenDate.getTime() - current_date.getTime();
+            long elapsedDays;
+            long secondsInMilli = 1000;
+            long minutesInMilli = secondsInMilli * 60;
+            long hoursInMilli = minutesInMilli * 60;
+            long daysInMilli = hoursInMilli * 24;
+
+            elapsedDays = different / daysInMilli;
+
+            if (elapsedDays >= 1) {
+                isupdate = true;
+            } else {
+                isupdate = false;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
+        return isupdate;
+    }
+
+
+    public Long getCurrent_vCode() {
+        Long v_code=0l;
+        PackageManager pm = context.getPackageManager();
+        PackageInfo info = null;
+
+        try {
+            info = pm.getPackageInfo(context.getPackageName(), 0);
+            v_code= Long.valueOf(info.versionCode);
+
+        } catch (PackageManager.NameNotFoundException e1) {
+            e1.printStackTrace();
+        }
+
+        return v_code;
+    }
+
+    public String getCurrentV_name() {
+        String v_name=new String();
+        PackageManager pm = context.getPackageManager();
+        PackageInfo info = null;
+
+        try {
+            info = pm.getPackageInfo(context.getPackageName(), 0);
+            v_name=info.versionName;
+
+        } catch (PackageManager.NameNotFoundException e1) {
+            e1.printStackTrace();
+        }
+
+        return v_name;
     }
 }
 
