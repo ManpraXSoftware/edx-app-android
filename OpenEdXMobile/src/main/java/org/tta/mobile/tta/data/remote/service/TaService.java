@@ -195,7 +195,7 @@ public interface TaService {
                                                       @Query(Constants.KEY_SKIP) int skip);
 
     //for app update
-    @GET(ApiConstants.URL_MX_GET_CONTENT)
+    @GET(ApiConstants.URL_MX_GET_APP_UPDATE)
     Call<UpdateResponse> getAppUpdate(@Query(Constants.VERSION_NAME) String v_name,
                                       @Query(Constants.VERSION_CODE) Long v_code);
 }
