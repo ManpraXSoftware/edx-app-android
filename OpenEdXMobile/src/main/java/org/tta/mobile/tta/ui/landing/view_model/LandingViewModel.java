@@ -320,14 +320,20 @@ public class LandingViewModel extends BaseViewModel {
 
     private void decideUpdateUI(UpdateResponse res)
     {
-        if(res==null|| res.version_code==null)
+        if(res==null || res.version_code==null)
             return;
 
+        String mFinal_notes=new String();
+        if(res.getRelease_note()==null || res.getRelease_note().isEmpty())
+            mFinal_notes=Constants.DefaultUpdateMessage;
+        else
+            mFinal_notes=res.getRelease_note();
+
         if (res.getStatus().toLowerCase().equals(UpdateType.FLEXIBLE.toString().toLowerCase())) {
-            showFlexibleUpdate(res.release_note);
+            showFlexibleUpdate(mFinal_notes);
 
         } else if (res.getStatus().toLowerCase().equals(UpdateType.IMMEDIATE.toString().toLowerCase())) {
-            showImmediateUpdate(res.release_note);
+            showImmediateUpdate(mFinal_notes);
         }
     }
 

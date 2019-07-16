@@ -74,4 +74,7 @@ public class Constants {
     public static Boolean IsCertificateExits = false;
     public static Boolean certificateInProgress = false;
     public static Boolean IsUpdateDelay = false;
+    public static String DefaultUpdateMessage = "<html><body><div style=\"margin:0 auto;padding:10px;\"> <ul><li>कृपया अपना ऐप अपडेट करें ।</li></ul>\n" +
+            "</div></body></html>\n";
+
 }

@@ -3837,7 +3837,7 @@ public class DataManager extends BaseRoboInjector {
         current_date = Calendar.getInstance().getTime();
 
         String lastUpdatedDate_str = getAppPref().getUpdateSeenDate();
-        if (lastUpdatedDate_str.isEmpty())
+        if (lastUpdatedDate_str==null || lastUpdatedDate_str.isEmpty())
             return true;
 
         SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
