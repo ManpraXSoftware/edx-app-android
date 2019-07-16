@@ -7,6 +7,7 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.net.Uri;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -71,7 +72,7 @@ public class LandingViewModel extends BaseViewModel {
                 if (!mDataManager.getAppPref().isProfileVisited()) {
                     new MxTooltip.Builder(mActivity)
                             .anchorView(mActivity.findViewById(R.id.action_library))
-                            .text("यहाँ सारी सामग्री देखें।")
+                            .text(R.string.library_tab)
                             .gravity(Gravity.TOP)
                             .animated(true)
                             .transparentOverlay(true)
@@ -158,6 +159,11 @@ public class LandingViewModel extends BaseViewModel {
             if (!Constants.IsUpdateDelay)
                 getAppUpdate();
         }
+        else {
+            UpdateResponse res = mDataManager.getLoginPrefs().getLatestAppInfo();
+            if (!Constants.IsUpdateDelay)
+                decideUpdateUI(res);
+        }
     }
 
     public void showLibrary() {
@@ -230,7 +236,6 @@ public class LandingViewModel extends BaseViewModel {
             }
         });
 
-
         Migration280719 spt = new Migration280719(getActivity());
         spt.MigrateScromPackages();
         spt.MigrateConnectVideos();
@@ -240,7 +245,7 @@ public class LandingViewModel extends BaseViewModel {
 
     private void setToolTip() {
         if (!mDataManager.getAppPref().isProfileVisited()) {
-            libraryToolTip.set("यहाँ सारी सामग्री देखें।");
+            libraryToolTip.set(mActivity.getString(R.string.library_tab));
             toolTipGravity.set(Gravity.TOP);
             toolTipPosition.set(0);
 //            mDataManager.getAppPref().setProfileVisited(true);
@@ -287,6 +292,10 @@ public class LandingViewModel extends BaseViewModel {
         EventBus.getDefault().unregister(this);
     }
 
+    //hit the api one a day
+    //store the latest version info in login pref
+    //refresh latest version info every day.
+    //now check the show update panel by checking the current and api latest version app
     private void getAppUpdate() {
         mDataManager.getUpdatedVersion(new OnResponseCallback<UpdateResponse>() {
             @Override
@@ -294,16 +303,13 @@ public class LandingViewModel extends BaseViewModel {
                 if(res==null|| res.version_code==null)
                     return;
 
+                //set last update date time
+                mDataManager.getAppPref().setUpdateSeenDate(Calendar.getInstance().getTime().toString());
+
+                //store latest version info ,in-case user go to play store and come back without update.
+                mDataManager.getLoginPrefs().storeLatestAppInfo(res);
                 if (res.getVersion_code()>mDataManager.getCurrent_vCode()) {
-                    //set last update date time
-                    getDataManager().getAppPref().setUpdateSeenDate(Calendar.getInstance().getTime().toString());
-
-                    if (res.getStatus().toLowerCase().equals(UpdateType.FLEXIBLE.toString().toLowerCase())) {
-                        showFlexibleUpdate(res.release_note);
-
-                    } else if (res.getStatus().toLowerCase().equals(UpdateType.IMMEDIATE.toString().toLowerCase())) {
-                        showImmediateUpdate(res.release_note);
-                    }
+                    decideUpdateUI(res);
                 }
             }
 
@@ -311,6 +317,25 @@ public class LandingViewModel extends BaseViewModel {
             public void onFailure(Exception e) {
             }
         },mDataManager.getCurrentV_name(),mDataManager.getCurrent_vCode());
+    }
+
+    private void decideUpdateUI(UpdateResponse res)
+    {
+        if(res==null || res.version_code==null)
+            return;
+
+        String mFinal_notes=new String();
+        if(res.getRelease_note()==null || res.getRelease_note().isEmpty())
+            mFinal_notes=Constants.DefaultUpdateMessage;
+        else
+            mFinal_notes=res.getRelease_note();
+
+        if (res.getStatus().toLowerCase().equals(UpdateType.FLEXIBLE.toString().toLowerCase())) {
+            showFlexibleUpdate(mFinal_notes);
+
+        } else if (res.getStatus().toLowerCase().equals(UpdateType.IMMEDIATE.toString().toLowerCase())) {
+            showImmediateUpdate(mFinal_notes);
+        }
     }
 
     private void showFlexibleUpdate(String notes_html) {
@@ -382,7 +407,6 @@ public class LandingViewModel extends BaseViewModel {
         dialog.setCancelable(false);
         dialog.show();
     }
-
 }
 
 

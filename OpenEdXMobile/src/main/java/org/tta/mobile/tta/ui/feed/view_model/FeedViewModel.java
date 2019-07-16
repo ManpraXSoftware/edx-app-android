@@ -6,6 +6,7 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -445,7 +446,7 @@ public class FeedViewModel extends BaseViewModel {
             shareToolTip = new ObservableField<>(mActivity.getResources().getString(R.string.feed_share));
             toolTipGravity = new ObservableInt(Gravity.BOTTOM);
             sharetoolTipGravity = new ObservableInt(Gravity.BOTTOM);
-            mDataManager.getAppPref().setFeedVisited(true);
+//            mDataManager.getAppPref().setFeedVisited(true);
         }
     }
 
@@ -667,26 +668,30 @@ public class FeedViewModel extends BaseViewModel {
             if (binding instanceof TRowSuggestedTeacherBinding) {
                 TRowSuggestedTeacherBinding teacherBinding = (TRowSuggestedTeacherBinding) binding;
                 teacherBinding.userName.setText(model.getName());
-                setToolTip();
+//                setToolTip();
                 Glide.with(getContext())
                         .load(model.getProfileImage().getImageUrlLarge())
                         .placeholder(R.drawable.profile_photo_placeholder)
                         .into(teacherBinding.userImage);
 
                 if (getItemPosition(model) == 0) {
-                    if (!mDataManager.getAppPref().isFeedVisited()) {
-                        new MxTooltip.Builder(mActivity)
-                                .anchorView(teacherBinding.followBtn)
-                                .text("अन्य शिक्षको से जुड़ने के लिए फॉलो बटन दबाएँ ")
-                                .gravity(Gravity.BOTTOM)
-                                .animated(true)
-                                .transparentOverlay(true)
-                                .arrowDrawable(R.drawable.up_arrow)
-                                .build()
-                                .show();
+                    Handler handler = new Handler();
+                    handler.postDelayed(() -> {
+                        if (!mDataManager.getAppPref().isFeedVisited()) {
+                            new MxTooltip.Builder(mActivity)
+                                    .anchorView(teacherBinding.followBtn)
+                                    .text("अन्य शिक्षको से जुड़ने के लिए फॉलो बटन दबाएँ ")
+                                    .gravity(Gravity.BOTTOM)
+                                    .animated(true)
+                                    .transparentOverlay(true)
+                                    .arrowDrawable(R.drawable.up_arrow)
+                                    .build()
+                                    .show();
 
-                    }
-                    mDataManager.getAppPref().setFeedVisited(true);
+                        }
+                        mDataManager.getAppPref().setFeedVisited(true);
+                    }, 1000);
+
                 }
 
                 if (model.isFollowed()) {
@@ -737,16 +742,19 @@ public class FeedViewModel extends BaseViewModel {
                 if (feedBinding.feedShare.getVisibility() == View.VISIBLE) {
                     if (getItemPosition(model) == 0) {
                         if (!mDataManager.getAppPref().isFeedVisited()) {
-                            new MxTooltip.Builder(mActivity)
-                                    .anchorView(feedBinding.feedShare)
-                                    .text(" सभी के साथ यह सामग्री साझा करने के लिए यहाँ दबायें ")
-                                    .gravity(Gravity.BOTTOM)
-                                    .animated(true)
-                                    .transparentOverlay(true)
-                                    .arrowDrawable(R.drawable.up_arrow)
-                                    .build()
-                                    .show();
-                            mDataManager.getAppPref().setFeedVisited(true);
+                            Handler handler = new Handler();
+                            handler.postDelayed(() -> {
+                                new MxTooltip.Builder(mActivity)
+                                        .anchorView(feedBinding.feedShare)
+                                        .text(R.string.feed_share)
+                                        .gravity(Gravity.TOP)
+                                        .animated(true)
+                                        .transparentOverlay(true)
+                                        .arrowDrawable(R.drawable.down_arrow)
+                                        .build()
+                                        .show();
+//                            mDataManager.getAppPref().setFeedVisited(true);
+                            },1000);
                         }
                     }
                 }

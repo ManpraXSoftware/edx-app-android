@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -16,7 +17,7 @@ import java.util.List;
  * Created by mukesh on 8/9/18.
  */
 
-public abstract class MxBaseAdapter<T> extends RecyclerView.Adapter<MxViewHolder> implements MxAdapter<T> {
+public abstract class MxBaseAdapter<T> extends RecyclerView.Adapter<MxViewHolder> implements MxAdapter<T> ,BaseDiffCallback.Listener<T>{
     private List<T> mList;
     private OnRecyclerItemClickListener<T> mListener;
     private Context mContext;
@@ -50,6 +51,7 @@ public abstract class MxBaseAdapter<T> extends RecyclerView.Adapter<MxViewHolder
     @Override
     public void onBindViewHolder(MxViewHolder holder, int position) {
         onBind(holder.getBinding(), getItem(position),mListener);
+        holder.getBinding().executePendingBindings();
     }
 
     @Override
@@ -81,6 +83,7 @@ public abstract class MxBaseAdapter<T> extends RecyclerView.Adapter<MxViewHolder
             return;
         this.mList = items;
         notifyDataSetChanged();
+//        swapItems(items);
     }
 
     @Override
@@ -144,5 +147,24 @@ public abstract class MxBaseAdapter<T> extends RecyclerView.Adapter<MxViewHolder
         }
         mList.add(index, item);
         notifyItemInserted(index);
+    }
+    private void swapItems(List<T> items){
+        final DiffUtil.Callback diffCallback = new BaseDiffCallback<T>(this.mList, items, this);//getCallback(items);
+        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+
+        this.mList.clear();
+
+        this.mList.addAll(items);
+        diffResult.dispatchUpdatesTo(this);
+    }
+
+    @Override
+    public boolean areItemAreSame(T oldItem, T newItem) {
+        return false;
+    }
+
+    @Override
+    public boolean areContentsTheSame(T oldItem, T newItem) {
+        return false;
     }
 }

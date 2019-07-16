@@ -5,4 +5,5 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:background="@null"
+    android:spinnerMode="dropdown"
     android:popupBackground="@drawable/t_background_tag_hollow" />
