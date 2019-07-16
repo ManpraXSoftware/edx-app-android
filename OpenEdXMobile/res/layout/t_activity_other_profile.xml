@@ -31,7 +31,7 @@
                 app:contentInsetStart="0dp"
                 app:contentInsetStartWithNavigation="0dp"
                 app:navigationIcon="@drawable/back"
-                app:title="Profile"
+                app:title="@string/profile"
                 app:titleMarginStart="0dp"
                 app:titleTextAppearance="@style/ta_toolbar_title_style" />
 
@@ -326,7 +326,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_20px"
                     android:fontFamily="@font/hind_medium"
-                    android:text="Certificates"
+                    android:text="@string/certificates"
                     android:textColor="@color/gray_5"
                     android:textSize="14sp" />
 
