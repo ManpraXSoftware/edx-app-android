@@ -158,6 +158,8 @@ public class LandingActivity extends BaseVMActivity{
                 // you can request to start the update again.
             }
 
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
