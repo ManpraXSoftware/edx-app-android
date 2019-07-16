@@ -158,6 +158,11 @@ public class LandingViewModel extends BaseViewModel {
             if (!Constants.IsUpdateDelay)
                 getAppUpdate();
         }
+        else {
+            UpdateResponse res = mDataManager.getLoginPrefs().getLatestAppInfo();
+            if (!Constants.IsUpdateDelay)
+                decideUpdateUI(res);
+        }
     }
 
     public void showLibrary() {
@@ -230,7 +235,6 @@ public class LandingViewModel extends BaseViewModel {
             }
         });
 
-
         Migration280719 spt = new Migration280719(getActivity());
         spt.MigrateScromPackages();
         spt.MigrateConnectVideos();
@@ -287,6 +291,10 @@ public class LandingViewModel extends BaseViewModel {
         EventBus.getDefault().unregister(this);
     }
 
+    //hit the api one a day
+    //store the latest version info in login pref
+    //refresh latest version info every day.
+    //now check the show update panel by checking the current and api latest version app
     private void getAppUpdate() {
         mDataManager.getUpdatedVersion(new OnResponseCallback<UpdateResponse>() {
             @Override
@@ -294,16 +302,13 @@ public class LandingViewModel extends BaseViewModel {
                 if(res==null|| res.version_code==null)
                     return;
 
+                //set last update date time
+                mDataManager.getAppPref().setUpdateSeenDate(Calendar.getInstance().getTime().toString());
+
+                //store latest version info ,in-case user go to play store and come back without update.
+                mDataManager.getLoginPrefs().storeLatestAppInfo(res);
                 if (res.getVersion_code()>mDataManager.getCurrent_vCode()) {
-                    //set last update date time
-                    getDataManager().getAppPref().setUpdateSeenDate(Calendar.getInstance().getTime().toString());
-
-                    if (res.getStatus().toLowerCase().equals(UpdateType.FLEXIBLE.toString().toLowerCase())) {
-                        showFlexibleUpdate(res.release_note);
-
-                    } else if (res.getStatus().toLowerCase().equals(UpdateType.IMMEDIATE.toString().toLowerCase())) {
-                        showImmediateUpdate(res.release_note);
-                    }
+                    decideUpdateUI(res);
                 }
             }
 
@@ -311,6 +316,19 @@ public class LandingViewModel extends BaseViewModel {
             public void onFailure(Exception e) {
             }
         },mDataManager.getCurrentV_name(),mDataManager.getCurrent_vCode());
+    }
+
+    private void decideUpdateUI(UpdateResponse res)
+    {
+        if(res==null|| res.version_code==null)
+            return;
+
+        if (res.getStatus().toLowerCase().equals(UpdateType.FLEXIBLE.toString().toLowerCase())) {
+            showFlexibleUpdate(res.release_note);
+
+        } else if (res.getStatus().toLowerCase().equals(UpdateType.IMMEDIATE.toString().toLowerCase())) {
+            showImmediateUpdate(res.release_note);
+        }
     }
 
     private void showFlexibleUpdate(String notes_html) {
@@ -382,7 +400,6 @@ public class LandingViewModel extends BaseViewModel {
         dialog.setCancelable(false);
         dialog.show();
     }
-
 }
 
 

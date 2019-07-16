@@ -348,6 +348,10 @@ public class PrefManager {
 
         //Mx Chirag: To store state agenda list id
         public static final String STATE_LIST_ID = "state_list_id";
+
+        //Mx:Arjun to store latest app info json
+        public static final String LATEST_APP_INFO_JSON = "latest_app_info_json";
+
     }
 
     public static final class Value {
