@@ -85,7 +85,7 @@ public class DropDownFilterView extends FrameLayout
     }
 
     public void setFilterItems(List<FilterItem> filterItems) {
-        if (mxSpinnerAdapter == null)
+        if (filterItems == null||filterItems.isEmpty())
             return;
         this.filterItems.clear();
         this.filterItems = filterItems;
@@ -127,10 +127,11 @@ public class DropDownFilterView extends FrameLayout
     }
 
     public void setSelection(int position) {
-        if (position < 0 || position > filterItems.size())
+        if (position < 0 || position >= filterItems.size())
             return;
-
-        appCompatSpinner.post(() -> {
+        if (!filterItems.isEmpty()&&filterItems.size()!=mxSpinnerAdapter.getCount())
+          notifyDataSetChanged();
+//        appCompatSpinner.post(() -> {
             selectedPosition = position;
             mSelectedFilter = filterItems.get(position).name;
             selectedItem = filterItems.get(position);
@@ -142,15 +143,15 @@ public class DropDownFilterView extends FrameLayout
 
             appCompatSpinner.setBackgroundResource(filterItems.get(position).selectedBackground);
             appCompatSpinner.setOnItemSelectedListener(null);
-            appCompatSpinner.setSelection(position, true);
+            appCompatSpinner.setSelection(position, false);
             appCompatSpinner.setOnItemSelectedListener(this);
-        });
+//        });
     }
 
     public void notifyDataSetChanged() {
         mxSpinnerAdapter.clear();
         mxSpinnerAdapter.addAll(filterItems);
-        mxSpinnerAdapter.notifyDataSetChanged();
+        //mxSpinnerAdapter.notifyDataSetChanged();
     }
 
     @Nullable
