@@ -14,6 +14,7 @@ import org.tta.mobile.module.analytics.Analytics;
 import org.tta.mobile.services.EdxCookieManager;
 import org.tta.mobile.tta.data.model.UpdateResponse;
 import org.tta.mobile.tta.data.model.authentication.FieldInfo;
+import org.tta.mobile.tta.data.model.search.SearchFilter;
 import org.tta.mobile.tta.wordpress_client.model.WPProfileModel;
 import org.tta.mobile.tta.wordpress_client.model.WpAuthResponse;
 import org.tta.mobile.user.ProfileImage;
@@ -589,5 +590,18 @@ public class LoginPrefs {
             return null;
         }
         return gson.fromJson(json, UpdateResponse.class);
+    }
+
+    public void setSearchFilter(@NonNull SearchFilter searchFilter){
+        pref.put(PrefManager.Key.SEARCH_FILTER_JSON, gson.toJson(searchFilter));
+    }
+
+    @Nullable
+    public SearchFilter getSearchFilter(){
+        final String json = pref.getString(PrefManager.Key.SEARCH_FILTER_JSON);
+        if (null == json) {
+            return null;
+        }
+        return gson.fromJson(json, SearchFilter.class);
     }
 }

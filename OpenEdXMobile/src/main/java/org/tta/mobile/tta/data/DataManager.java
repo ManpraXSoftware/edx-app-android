@@ -1778,16 +1778,28 @@ public class DataManager extends BaseRoboInjector {
                             searchFilter.getResult().remove(section);
                         }
                         Collections.sort(searchFilter.getResult());
+                        loginPrefs.setSearchFilter(searchFilter);
                         callback.onSuccess(searchFilter);
                     }
                 }
 
                 @Override
                 protected void onException(Exception ex) {
-                    callback.onFailure(ex);
+                    SearchFilter searchFilter = loginPrefs.getSearchFilter();
+                    if (searchFilter == null) {
+                        callback.onFailure(ex);
+                    } else {
+                        callback.onSuccess(searchFilter);
+                    }
                 }
             }.execute();
         } else {
+            SearchFilter searchFilter = loginPrefs.getSearchFilter();
+            if (searchFilter == null) {
+                callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+            } else {
+                callback.onSuccess(searchFilter);
+            }
             callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
         }
 
