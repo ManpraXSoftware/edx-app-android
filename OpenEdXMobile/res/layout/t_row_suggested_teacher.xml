@@ -57,8 +57,6 @@
                 android:textColor="@color/primary_cyan"
                 android:fontFamily="@font/hind_medium"
                 android:background="@drawable/btn_selector_hollow"
-                tool_tip="@{viewModel.feedToolTip}"
-                tool_tip_gravity="@{viewModel.toolTipGravity}"
                 android:enabled="true"/>
 
         </LinearLayout>

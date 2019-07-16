@@ -7,6 +7,7 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.net.Uri;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -71,7 +72,7 @@ public class LandingViewModel extends BaseViewModel {
                 if (!mDataManager.getAppPref().isProfileVisited()) {
                     new MxTooltip.Builder(mActivity)
                             .anchorView(mActivity.findViewById(R.id.action_library))
-                            .text("यहाँ सारी सामग्री देखें।")
+                            .text(R.string.library_tab)
                             .gravity(Gravity.TOP)
                             .animated(true)
                             .transparentOverlay(true)
@@ -240,7 +241,7 @@ public class LandingViewModel extends BaseViewModel {
 
     private void setToolTip() {
         if (!mDataManager.getAppPref().isProfileVisited()) {
-            libraryToolTip.set("यहाँ सारी सामग्री देखें।");
+            libraryToolTip.set(mActivity.getString(R.string.library_tab));
             toolTipGravity.set(Gravity.TOP);
             toolTipPosition.set(0);
 //            mDataManager.getAppPref().setProfileVisited(true);

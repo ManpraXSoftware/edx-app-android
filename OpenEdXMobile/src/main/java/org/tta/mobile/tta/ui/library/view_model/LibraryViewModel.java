@@ -127,7 +127,6 @@ public class LibraryViewModel extends BaseViewModel {
             }
         }
 
-
 //        toolTipPosition.set(0);
 
     }
