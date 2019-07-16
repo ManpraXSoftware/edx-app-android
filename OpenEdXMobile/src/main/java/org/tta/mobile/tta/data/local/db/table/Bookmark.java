@@ -19,11 +19,19 @@ public class Bookmark {
     @ColumnInfo(name = "content_id")
     private long contentId;
 
+    @ColumnInfo(name = "content_source_id")
+    private long sourceId;
+
     public Bookmark() {
     }
 
     public Bookmark(long contentId) {
         this.contentId = contentId;
+    }
+
+    public Bookmark(long contentId, long sourceId) {
+        this.contentId = contentId;
+        this.sourceId = sourceId;
     }
 
     public long getContentId() {
@@ -32,5 +40,13 @@ public class Bookmark {
 
     public void setContentId(long contentId) {
         this.contentId = contentId;
+    }
+
+    public long getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(long sourceId) {
+        this.sourceId = sourceId;
     }
 }

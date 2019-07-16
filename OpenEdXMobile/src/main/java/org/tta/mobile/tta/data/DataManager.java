@@ -580,6 +580,25 @@ public class DataManager extends BaseRoboInjector {
                             }
                         });
 
+                    } else {
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                getSources(new OnResponseCallback<List<Source>>() {
+                                    @Override
+                                    public void onSuccess(List<Source> data) {
+                                        for (Source source : data) {
+                                            mLocalDataSource.deleteAllStateContents(source.getId());
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Exception e) {
+
+                                    }
+                                });
+                            }
+                        }.start();
                     }
                     callback.onSuccess(agendaLists);
                 }
@@ -1057,7 +1076,7 @@ public class DataManager extends BaseRoboInjector {
         }
     }
 
-    public void isContentMyAgenda(long contentId, OnResponseCallback<StatusResponse> callback) {
+    public void isContentMyAgenda(long contentId, long sourceId, OnResponseCallback<StatusResponse> callback) {
         if (NetworkUtil.isConnected(context)) {
             new IsContentMyAgendaTask(context, contentId) {
                 @Override
@@ -1067,7 +1086,7 @@ public class DataManager extends BaseRoboInjector {
                         new Thread() {
                             @Override
                             public void run() {
-                                mLocalDataSource.deleteBookmark(new Bookmark(contentId));
+                                mLocalDataSource.deleteBookmark(new Bookmark(contentId, sourceId));
                             }
                         }.start();
 
@@ -1078,9 +1097,9 @@ public class DataManager extends BaseRoboInjector {
                             @Override
                             public void run() {
                                 if (statusResponse.getStatus()) {
-                                    mLocalDataSource.insertBookmark(new Bookmark(contentId));
+                                    mLocalDataSource.insertBookmark(new Bookmark(contentId, sourceId));
                                 } else {
-                                    mLocalDataSource.deleteBookmark(new Bookmark(contentId));
+                                    mLocalDataSource.deleteBookmark(new Bookmark(contentId, sourceId));
                                 }
                             }
                         }.start();
@@ -1172,7 +1191,7 @@ public class DataManager extends BaseRoboInjector {
         }
     }
 
-    public void setBookmark(long contentId, OnResponseCallback<BookmarkResponse> callback) {
+    public void setBookmark(long contentId, long sourceId, OnResponseCallback<BookmarkResponse> callback) {
         if (NetworkUtil.isConnected(context)) {
             new SetBookmarkTask(context, contentId) {
                 @Override
@@ -1186,9 +1205,9 @@ public class DataManager extends BaseRoboInjector {
                             @Override
                             public void run() {
                                 if (bookmarkResponse.isIs_active()) {
-                                    mLocalDataSource.insertBookmark(new Bookmark(contentId));
+                                    mLocalDataSource.insertBookmark(new Bookmark(contentId, sourceId));
                                 } else {
-                                    mLocalDataSource.deleteBookmark(new Bookmark(contentId));
+                                    mLocalDataSource.deleteBookmark(new Bookmark(contentId, sourceId));
                                 }
                             }
                         }.start();
@@ -1365,7 +1384,7 @@ public class DataManager extends BaseRoboInjector {
                                 mLocalDataSource.insertContents(response);
                                 List<Bookmark> bookmarks = new ArrayList<>();
                                 for (Content content : response) {
-                                    bookmarks.add(new Bookmark(content.getId()));
+                                    bookmarks.add(new Bookmark(content.getId(), sourceId));
                                 }
                                 mLocalDataSource.insertBookmarks(bookmarks);
                             }
@@ -1378,7 +1397,7 @@ public class DataManager extends BaseRoboInjector {
                         new Thread() {
                             @Override
                             public void run() {
-                                mLocalDataSource.deleteAllBookmarks();
+                                mLocalDataSource.deleteAllBookmarks(sourceId);
                             }
                         }.start();
 
@@ -1446,9 +1465,9 @@ public class DataManager extends BaseRoboInjector {
                                 mLocalDataSource.insertContents(response);
                                 List<StateContent> stateContents = new ArrayList<>();
                                 for (Content content : response) {
-                                    stateContents.add(new StateContent(content.getId()));
+                                    stateContents.add(new StateContent(content.getId(), sourceId));
                                 }
-                                mLocalDataSource.deleteAllStateContents();
+                                mLocalDataSource.deleteAllStateContents(sourceId);
                                 mLocalDataSource.insertStateContents(stateContents);
                             }
                         }.start();
@@ -1461,7 +1480,7 @@ public class DataManager extends BaseRoboInjector {
                         new Thread() {
                             @Override
                             public void run() {
-                                mLocalDataSource.deleteAllStateContents();
+                                mLocalDataSource.deleteAllStateContents(sourceId);
                             }
                         }.start();
 

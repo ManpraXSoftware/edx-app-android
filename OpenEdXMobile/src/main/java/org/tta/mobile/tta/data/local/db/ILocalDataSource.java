@@ -86,9 +86,9 @@ public interface ILocalDataSource {
     void insertBookmark(Bookmark bookmark);
     void insertBookmarks(List<Bookmark> bookmarks);
     void deleteBookmark(Bookmark bookmark);
-    void deleteAllBookmarks();
+    void deleteAllBookmarks(long sourceId);
 
     List<Content> getStateContents(long sourceId);
     void insertStateContents(List<StateContent> stateContents);
-    void deleteAllStateContents();
+    void deleteAllStateContents(long sourceId);
 }

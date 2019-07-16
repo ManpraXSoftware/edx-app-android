@@ -72,16 +72,22 @@ public enum ShareUtils {
                         analyticsRegistry.courseDetailShared(courseData.getCourse().getId(), COURSE_ABOUT_URL, shareType);
 
                         Analytic analytic = new Analytic(activity);
-                        analytic.addMxAnalytics_db(courseData.getCourse().getName(), Action.Share,
-                                SourceName.course.name(), Source.Mobile, courseData.getCourse().getId(),
-                                BreadcrumbUtil.getBreadcrumb() + "/" + shareType.name(),
-                                courseData.getCourse().getId(), contentId);
 
                         if (!shareType.equals(ShareType.TTA)) {
+                            analytic.addMxAnalytics_db(courseData.getCourse().getName(), Action.Share,
+                                    SourceName.course.name(), Source.Mobile, courseData.getCourse().getId(),
+                                    BreadcrumbUtil.getBreadcrumb() + "/" + shareType.name(),
+                                    courseData.getCourse().getId(), contentId);
+
                             final Intent intent = ShareUtils.newShareIntent(shareText);
                             intent.setComponent(componentName);
                             activity.startActivity(intent);
                         } else {
+                            analytic.syncSingleMXAnalytic(courseData.getCourse().getName(), Action.Share,
+                                    SourceName.course.name(), Source.Mobile, courseData.getCourse().getId(),
+                                    BreadcrumbUtil.getBreadcrumb() + "/" + shareType.name(),
+                                    courseData.getCourse().getId(), contentId);
+
                             Toast.makeText(activity, activity.getString(R.string.course_share_successful), Toast.LENGTH_LONG).show();
                         }
                     }

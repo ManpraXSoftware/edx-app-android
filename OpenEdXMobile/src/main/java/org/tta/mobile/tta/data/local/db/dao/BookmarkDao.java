@@ -34,4 +34,7 @@ public interface BookmarkDao {
     @Query("Delete from bookmark")
     void deleteAll();
 
+    @Query("Delete from bookmark where content_source_id = :sourceId")
+    void deleteAllBySourceId(long sourceId);
+
 }

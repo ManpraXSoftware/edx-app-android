@@ -300,8 +300,8 @@ public class LocalDataSource implements ILocalDataSource {
     }
 
     @Override
-    public void deleteAllBookmarks() {
-        mAppDatabase.bookmarkDao().deleteAll();
+    public void deleteAllBookmarks(long sourceId) {
+        mAppDatabase.bookmarkDao().deleteAllBySourceId(sourceId);
     }
 
     @Override
@@ -315,7 +315,7 @@ public class LocalDataSource implements ILocalDataSource {
     }
 
     @Override
-    public void deleteAllStateContents() {
-        mAppDatabase.stateContentDao().deleteAll();
+    public void deleteAllStateContents(long sourceId) {
+        mAppDatabase.stateContentDao().deleteAllBySourceId(sourceId);
     }
 }

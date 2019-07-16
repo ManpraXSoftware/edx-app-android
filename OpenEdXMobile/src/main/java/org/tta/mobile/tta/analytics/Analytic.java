@@ -342,6 +342,45 @@ public class Analytic {
         task.execute();
     }
 
+    public void syncSingleMXAnalytic(String metadata, Action action, String page, Source source,
+                                  String actionId, String nav, String sourceIdentity, long contentId) {
+        String username = loginPrefs.getUsername();
+
+        //save analytics to  local db first
+        //download entry to db
+        if (username != null) {
+            AnalyticModel model = new AnalyticModel();
+            model.user_id = username;
+            model.action = String.valueOf(action);
+            model.metadata = metadata;
+            model.page = page;
+            model.source = String.valueOf(source);
+            model.nav = nav;
+            model.action_id = actionId;
+            model.source_id = sourceIdentity;
+            model.content_id = contentId;
+
+            model.setEvent_date();
+            model.setStatus(0);
+
+            ArrayList<AnalyticModel> list = new ArrayList<>();
+            list.add(model);
+            final MXAnalyticsTask task = new MXAnalyticsTask(ctx, list) {
+                @Override
+                protected void onSuccess(SuccessResponse mx_AnalyticsResponse) throws Exception {
+                    super.onSuccess(mx_AnalyticsResponse);
+                    Log.d("MXAnaltics single", "successfully updated single mx Normal analytic");
+                }
+
+                @Override
+                protected void onException(Exception ex) {
+                    Log.d("MXAnaltics single", "fail to update single mx analytic");
+                }
+            };
+            task.execute();
+        }
+    }
+
     private void syncTinCanAnalytics() {
         ArrayList<AnalyticModel> list = getTincanAnalytics();
 

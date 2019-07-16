@@ -307,7 +307,7 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
         imageView.setImageResource(R.drawable.t_icon_link);
         imageView.setOnClickListener(v -> {
             if (listener != null){
-                listener.onMenuItemClick(null, ShareUtils.ShareType.TTA);
+                listener.onMenuItemClick(null, ShareUtils.ShareType.UNKNOWN);
             }
 
             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
