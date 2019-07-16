@@ -25,7 +25,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import org.tta.mobile.R;
-import org.tta.mobile.tta.utils.Tools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,15 +63,19 @@ public class DropDownFilterView extends FrameLayout
     }
 
     private void init(Context context) {
-        appCompatSpinner = new AppCompatSpinner(context);
-        appCompatSpinner.setBackgroundResource(R.drawable.t_background_tag_hollow);
-        appCompatSpinner.setPopupBackgroundResource(R.drawable.t_background_tag_hollow);
-        appCompatSpinner.setLayoutMode(ViewGroup.LAYOUT_MODE_CLIP_BOUNDS);
+        LayoutInflater.from(context).inflate(R.layout.t_row_dropdown_spinner,this,true);
+        appCompatSpinner= this.findViewById(R.id.dropdown_spinner);
+//        appCompatSpinner = new AppCompatSpinner(context);
+//        ViewGroup.LayoutParams params= new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+//        appCompatSpinner.setLayoutParams(params);
+//        appCompatSpinner.setBackgroundResource(R.drawable.t_background_tag_hollow);
+//        appCompatSpinner.setPopupBackgroundResource(R.drawable.t_background_tag_hollow);
+//        appCompatSpinner.setLayoutMode(ViewGroup.LAYOUT_MODE_CLIP_BOUNDS);
         mxSpinnerAdapter = new MxSpinnerAdapter(context, new ArrayList<>());
         appCompatSpinner.setAdapter(mxSpinnerAdapter);
         appCompatSpinner.setOnTouchListener(this);
         appCompatSpinner.setOnItemSelectedListener(this);
-        addView(appCompatSpinner);
+//        addView(appCompatSpinner);
     }
 
     @Override
@@ -82,7 +85,7 @@ public class DropDownFilterView extends FrameLayout
     }
 
     public void setFilterItems(List<FilterItem> filterItems) {
-        if (mxSpinnerAdapter == null)
+        if (filterItems == null||filterItems.isEmpty())
             return;
         this.filterItems.clear();
         this.filterItems = filterItems;
@@ -124,29 +127,31 @@ public class DropDownFilterView extends FrameLayout
     }
 
     public void setSelection(int position) {
-        if (position < 0 || position > filterItems.size())
+        if (position < 0 || position >= filterItems.size())
             return;
+        if (!filterItems.isEmpty()&&filterItems.size()!=mxSpinnerAdapter.getCount())
+          notifyDataSetChanged();
+//        appCompatSpinner.post(() -> {
+            selectedPosition = position;
+            mSelectedFilter = filterItems.get(position).name;
+            selectedItem = filterItems.get(position);
 
-        selectedPosition = position;
-        mSelectedFilter = filterItems.get(position).name;
-        selectedItem = filterItems.get(position);
+            for (FilterItem item: filterItems){
+                item.setSelected(false);
+            }
+            selectedItem.setSelected(true);
 
-        for (FilterItem item: filterItems){
-            item.setSelected(false);
-        }
-        selectedItem.setSelected(true);
-        appCompatSpinner.post(() -> {
             appCompatSpinner.setBackgroundResource(filterItems.get(position).selectedBackground);
             appCompatSpinner.setOnItemSelectedListener(null);
-            appCompatSpinner.setSelection(position, true);
+            appCompatSpinner.setSelection(position, false);
             appCompatSpinner.setOnItemSelectedListener(this);
-        });
+//        });
     }
 
     public void notifyDataSetChanged() {
         mxSpinnerAdapter.clear();
         mxSpinnerAdapter.addAll(filterItems);
-        mxSpinnerAdapter.notifyDataSetChanged();
+        //mxSpinnerAdapter.notifyDataSetChanged();
     }
 
     @Nullable
@@ -283,7 +288,7 @@ public class DropDownFilterView extends FrameLayout
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             final View view;
-            TextView textView = createTextView(parent, 12, 6, 12, 6);
+            TextView textView = createTextView(parent, 12, 6, 12, 6, false);
 
             if (convertView == null) {
                 view = textView;//LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);
@@ -323,9 +328,10 @@ public class DropDownFilterView extends FrameLayout
             return view;
         }
 
-        private TextView createTextView(ViewGroup parent, int left, int top, int right, int bottom) {
+        private TextView createTextView(ViewGroup parent, int left, int top, int right, int bottom, boolean isDropDown) {
             return (TextView) LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.t_view_filter_text_view, parent, false);
+                    .inflate(isDropDown ? R.layout.t_row_dropdown_item : R.layout.t_view_filter_text_view,
+                            parent, false);
             /*TextView textView = new TextView(context);
             textView.setTextSize(14);
             textView.setTypeface(new CustomTypefaceSpan(context, "Hind-Medium.ttf").getTypeface());
@@ -347,7 +353,7 @@ public class DropDownFilterView extends FrameLayout
         @Override
         public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             final View view;
-            TextView textView = createTextView(parent, 12, 6, 12, 6);
+            TextView textView = createTextView(parent, 12, 6, 12, 6, true);
 
             if (convertView == null) {
                 view = textView;//LayoutInflater.from(parent.getContext()).inflate(resource, parent, false);

@@ -12,6 +12,7 @@ import org.tta.mobile.base.MainApplication;
 import org.tta.mobile.model.api.ProfileModel;
 import org.tta.mobile.module.analytics.Analytics;
 import org.tta.mobile.services.EdxCookieManager;
+import org.tta.mobile.tta.data.model.UpdateResponse;
 import org.tta.mobile.tta.data.model.authentication.FieldInfo;
 import org.tta.mobile.tta.wordpress_client.model.WPProfileModel;
 import org.tta.mobile.tta.wordpress_client.model.WpAuthResponse;
@@ -572,5 +573,21 @@ public class LoginPrefs {
 
     public long getStateListId(){
         return pref.getLong(PrefManager.Key.STATE_LIST_ID);
+    }
+
+
+    //for app update check.store the latest app version info in login pref ,so that we can force user
+    //to update the app by compairing it with current version
+    public void storeLatestAppInfo(@NonNull UpdateResponse res) {
+        pref.put(PrefManager.Key.LATEST_APP_INFO_JSON, gson.toJson(res));
+    }
+
+    @Nullable
+    public UpdateResponse getLatestAppInfo() {
+        final String json = pref.getString(PrefManager.Key.LATEST_APP_INFO_JSON);
+        if (null == json) {
+            return null;
+        }
+        return gson.fromJson(json, UpdateResponse.class);
     }
 }

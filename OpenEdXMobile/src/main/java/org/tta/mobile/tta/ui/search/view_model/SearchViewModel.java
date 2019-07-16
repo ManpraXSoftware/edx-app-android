@@ -393,6 +393,7 @@ public class SearchViewModel extends BaseViewModel {
         classesAdapter.setItems(new ArrayList<>(classTagsMap.keySet()));
 
         contentsAdapter = new SearchedContentsAdapter(mActivity);
+        contentsAdapter.setLoadMoreRes(R.layout.t_row_loading_indicator);
         tagsAdapter = new TagsAdapter(mActivity);
         filterAdapter = new SearchFilterAdapter(mActivity);
         contentListsAdapter = new ContentListsAdapter(mActivity, R.layout.t_row_single_choice_item);
@@ -403,6 +404,7 @@ public class SearchViewModel extends BaseViewModel {
         });
 
         usersAdapter = new UsersAdapter(mActivity);
+        usersAdapter.setLoadMoreRes(R.layout.t_row_loading_indicator);
         usersAdapter.setItemClickListener((view, item) -> {
             switch (view.getId()) {
                 case R.id.follow_btn:
@@ -495,7 +497,7 @@ public class SearchViewModel extends BaseViewModel {
         emptyMessage.set(mActivity.getString(R.string.empty_search_message));
         searchType = SearchType.content;
         searchTypeFilters = new ArrayList<>();
-        setSearchTypes();
+//        setSearchTypes();
 
         sourceFilters = new ArrayList<>();
         sourceFilters.add(new DropDownFilterView.FilterItem(
@@ -900,6 +902,15 @@ public class SearchViewModel extends BaseViewModel {
         }
 
 //        populateTags();
+        //for selection of section content filter item
+        if (selectedContentList!=null&&selectedContentList.getName()!=null)
+        for (FilterSection s:currentSections) {
+            for (FilterTag tag:s.getTags()) {
+               if (tag.toString().equalsIgnoreCase(selectedContentList.getName()))
+                   tags.add(tag);
+            }
+        }
+
         filterAdapter.setItems(currentSections);
 
     }
@@ -1085,7 +1096,6 @@ public class SearchViewModel extends BaseViewModel {
                     });
 
         } else {
-
             mDataManager.searchPeople(take, skip, searchText.get(),
                     new OnResponseCallback<List<SuggestedUser>>() {
                         @Override
@@ -1297,7 +1307,7 @@ public class SearchViewModel extends BaseViewModel {
 
                 List<DropDownFilterView.FilterItem> items = new ArrayList<>();
                 items.add(new DropDownFilterView.FilterItem(
-                        model.getName(), null, true,
+                        model.getName(), null, false,
                         R.color.gray_5, R.drawable.t_background_tag_hollow
                 ));
 
@@ -1309,6 +1319,7 @@ public class SearchViewModel extends BaseViewModel {
                 }
 
                 dropDownBinding.filterDropDown.setFilterItems(items);
+//                dropDownBinding.filterDropDown.setSelection();
                 dropDownBinding.filterDropDown.setOnFilterItemListener((v, item, position, prev) -> {
                     if (prev != null && prev.getItem() != null){
                         tags.remove((FilterTag) prev.getItem());
@@ -1380,6 +1391,17 @@ public class SearchViewModel extends BaseViewModel {
             super(context);
         }
 
+
+//        @Override
+//        public boolean areContentsTheSame(SuggestedUser oldItem, SuggestedUser newItem) {
+//            return oldItem.getUsername().equalsIgnoreCase(newItem.getUsername());
+//        }
+//
+//        @Override
+//        public boolean areItemAreSame(SuggestedUser oldItem, SuggestedUser newItem) {
+//            return oldItem.equals(newItem);
+//        }
+
         @Override
         public void onBind(@NonNull ViewDataBinding binding, @NonNull SuggestedUser model, @Nullable OnRecyclerItemClickListener<SuggestedUser> listener) {
             if (binding instanceof TRowSuggestedTeacherGridBinding) {
@@ -1405,7 +1427,7 @@ public class SearchViewModel extends BaseViewModel {
                     teacherBinding.followBtn.setTextColor(ContextCompat.getColor(mActivity, R.color.primary_cyan));
                     teacherBinding.followBtn.setText(mActivity.getString(R.string.follow));
                 }
-
+//                teacherBinding.executePendingBindings();
                 teacherBinding.followBtn.setOnClickListener(v -> {
                     if (listener != null) {
                         listener.onItemClick(v, model);
