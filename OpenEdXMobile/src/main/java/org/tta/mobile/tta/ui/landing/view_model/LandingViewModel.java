@@ -324,7 +324,7 @@ public class LandingViewModel extends BaseViewModel {
         if(res==null || res.version_code==null)
             return;
 
-        String mFinal_notes=new String();
+        String mFinal_notes = new String();
         if(res.getRelease_note()==null || res.getRelease_note().isEmpty())
             mFinal_notes=Constants.DefaultUpdateMessage;
         else
@@ -407,6 +407,7 @@ public class LandingViewModel extends BaseViewModel {
         dialog.setCancelable(false);
         dialog.show();
     }
+
 }
 
 

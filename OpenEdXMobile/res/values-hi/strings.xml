@@ -232,13 +232,13 @@
     <string name="feed_share"> सभी के साथ ये सामग्री साझा करने के लिए यहाँ दबाएँ। \nशायद आपसे प्रेरित होकर, \nआपके साथी-शिक्षक भी इस कोर्स को पूरा करें| \nउम्मीद पर ही तो दुनिया कायम है!   </string>
     <string name="samjhe_parkhe_btn"> खुद को परखना, सीखने में मदद कर सकता है| \nआकलन के बाद सर्टिफ़िकेट लेना ना भूलें| \nसभी भाग देखकर, आकलन में 60% या उससे \nज़्यादा अंक आने पर आप इसके हक़दार बनेंगे। </string>
     <string name="certificate_btn">  आपका सर्टिफिकेट तैयार हैं  </string>
-    <string name="app_tuts_activate">  ऐप्प टुटोरिअल सक्रिय कर दिए गए हैं  </string>
-    <string name="app_tuts_already">  ऐप्प टुटोरिअल सक्रिय हैं  </string>
+    <string name="app_tuts_activate">  ऐप टुटोरिअल सक्रिय कर दिए गए हैं  </string>
+    <string name="app_tuts_already">  ऐप टुटोरिअल सक्रिय हैं  </string>
     <string name="course_button"> सामग्री को अपने लक्ष्य से जोड़ने के लिए यह बटन दबाएँ। \nइस तरह आप, ख़ास अपने लिए सामग्री, \nयहाँ संजोकर रख सकेंगे|   </string>
     <string name="course_download_button"> सामग्री डाउनलोड करने के लिए यह बटन दबाएँ। \nतब आप इसे, बिना इन्टरनेट भी देख पाएँगे!   </string>
-    <string name="region_btn_agenda"> राज्य-स्तर पर कई लोग आपके विकास \nके लिए निरंतर कोशिश करते हैं| \nउन्होंने आपके लिए यह प्रशिक्षण सामग्री चुनी है।</string>
+    <string name="region_btn_agenda"> शिक्षा विभाग ने आपके लिए यह प्रशिक्षण सामग्री चुनी है।</string>
     <string name="download_btn_agenda"> आपने जो सामग्री डाउनलोड की वह यहाँ है।  </string>
-    <string name="personal_btn_agenda"> अपने विकास के रास्ते खुद तय करना \nसीखने के सफ़र को नए मायने देता है| \nआप खुद जो सामग्री चुनेंगे, \nवह यहाँ देख सकते हैं।</string>
+    <string name="personal_btn_agenda"> आपने जो सामग्री चुनी है वह यहाँ हैं। </string>
     <string name="selection_limit_crossed">आप %d से अधिक का चयन नहीं कर सकते</string>
     <string name="course_share_successful">TheTeacherApp पर कोर्स को सफलतापूर्वक साझा किया गया</string>
     <string name="error_subjects">कृपया अपने विषय चुनिए</string>

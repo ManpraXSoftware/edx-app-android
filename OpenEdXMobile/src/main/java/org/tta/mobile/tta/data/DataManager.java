@@ -3186,7 +3186,8 @@ public class DataManager extends BaseRoboInjector {
                                         callback.onFailure(e);
                                     }
                                 });
-                    } else {
+                    }
+                    else {
                         callback.onFailure(new TaException("Feature list not available"));
                     }
                 }
@@ -3870,13 +3871,13 @@ public class DataManager extends BaseRoboInjector {
 
 
     public Long getCurrent_vCode() {
-        Long v_code=0l;
+        long v_code=0L;
         PackageManager pm = context.getPackageManager();
-        PackageInfo info = null;
+        PackageInfo info;
 
         try {
             info = pm.getPackageInfo(context.getPackageName(), 0);
-            v_code= Long.valueOf(info.versionCode);
+            v_code= (long) info.versionCode;
 
         } catch (PackageManager.NameNotFoundException e1) {
             e1.printStackTrace();
@@ -3886,9 +3887,9 @@ public class DataManager extends BaseRoboInjector {
     }
 
     public String getCurrentV_name() {
-        String v_name=new String();
+        String v_name= "";
         PackageManager pm = context.getPackageManager();
-        PackageInfo info = null;
+        PackageInfo info;
 
         try {
             info = pm.getPackageInfo(context.getPackageName(), 0);
@@ -3900,5 +3901,6 @@ public class DataManager extends BaseRoboInjector {
 
         return v_name;
     }
+
 }
 
