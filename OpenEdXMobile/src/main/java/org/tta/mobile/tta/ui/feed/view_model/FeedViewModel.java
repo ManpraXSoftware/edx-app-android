@@ -689,8 +689,8 @@ public class FeedViewModel extends BaseViewModel {
                                     .show();
 
                         }
-                        mDataManager.getAppPref().setFeedVisited(true);
-                    }, 1000);
+//                        mDataManager.getAppPref().setFeedVisited(true);
+                    }, 800);
 
                 }
 
@@ -753,7 +753,7 @@ public class FeedViewModel extends BaseViewModel {
                                         .arrowDrawable(R.drawable.down_arrow)
                                         .build()
                                         .show();
-//                            mDataManager.getAppPref().setFeedVisited(true);
+                            mDataManager.getAppPref().setFeedVisited(true);
                             },1000);
                         }
                     }
