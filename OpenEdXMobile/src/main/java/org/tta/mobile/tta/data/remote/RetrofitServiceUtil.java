@@ -37,11 +37,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RetrofitServiceUtil {
 
-    private static final int cacheSize = 10 * 1024 * 1024; // 10 MiB
+    private static final long cacheSize = 10 * 1024 * 1024; // 10 MiB
 
     public static IRemoteDataSource create(Context context, boolean isTargetedForJson) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        List<Interceptor> interceptors = builder.interceptors();
+        /*List<Interceptor> interceptors = builder.interceptors();
 
         final File cacheDirectory = new File(context.getFilesDir(), "http-cache");
         if (!cacheDirectory.exists()) {
@@ -71,14 +71,15 @@ public class RetrofitServiceUtil {
         }
         builder.authenticator(new OauthRefreshTokenAuthenticator(context));
 
-        OkHttpClient client = Tls12SocketFactory.enableTls12OnPreLollipop(builder).build();
+        OkHttpClient client = Tls12SocketFactory.enableTls12OnPreLollipop(builder).build();*/
 
         //BuildConfig.DEBUG
-        /*if (true) {
+        if (true) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addInterceptor(loggingInterceptor);
         }
+        builder.authenticator(new OauthRefreshTokenAuthenticator(context));
 
         OkHttpClient client = builder.addInterceptor(chain -> {
             Request.Builder requestBuilder = chain.request().newBuilder();
@@ -96,7 +97,7 @@ public class RetrofitServiceUtil {
             .connectTimeout(IRemoteDataSource.TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(IRemoteDataSource.READ_TIMEOUT, TimeUnit.SECONDS)
             //.addNetworkInterceptor(new StethoInterceptor())
-            .build();*/
+            .build();
 
         Gson gson = new GsonBuilder().serializeNulls().create();
 

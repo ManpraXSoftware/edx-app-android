@@ -274,7 +274,7 @@ public class Analytic {
     }
 
     public void syncAnalytics() {
-        if (NetworkUtil.isConnected(ctx)) {
+        if (NetworkUtil.isConnected(ctx) && loginPrefs.isLoggedIn()) {
             syncMXAnalytics();
             syncTinCanAnalytics();
         }

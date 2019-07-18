@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -103,6 +104,7 @@ import org.tta.mobile.tta.data.remote.api.MxSurveyAPI;
 import org.tta.mobile.tta.exception.TaException;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.receiver.DeleteFeedsReceiver;
+import org.tta.mobile.tta.scorm.ContentType;
 import org.tta.mobile.tta.scorm.ScormBlockModel;
 import org.tta.mobile.tta.scorm.ScormStartResponse;
 import org.tta.mobile.tta.task.GetVersionUpdatedTask;
@@ -239,6 +241,8 @@ public class DataManager extends BaseRoboInjector {
 
     private Analytic analytic;
 
+    private Handler mHandler;
+
     private DataManager(Context context, IRemoteDataSource remoteDataSource, ILocalDataSource localDataSource) {
         super(context);
         this.context = context;
@@ -253,6 +257,8 @@ public class DataManager extends BaseRoboInjector {
         db_commands = new DB_Commands(context);
 
         analytic = new Analytic(context);
+
+        mHandler = new Handler();
     }
 
     public static DataManager getInstance(Context context) {
@@ -265,7 +271,7 @@ public class DataManager extends BaseRoboInjector {
                 }
             }
         }
-        mDataManager.wpClientRetrofit = new WpClientRetrofit(true, false);
+        mDataManager.wpClientRetrofit = new WpClientRetrofit(true, false, context);
         return mDataManager;
     }
 
@@ -581,24 +587,24 @@ public class DataManager extends BaseRoboInjector {
                         });
 
                     } else {
-                        new Thread() {
+                        getSources(new OnResponseCallback<List<Source>>() {
                             @Override
-                            public void run() {
-                                getSources(new OnResponseCallback<List<Source>>() {
+                            public void onSuccess(List<Source> data) {
+                                new Thread(){
                                     @Override
-                                    public void onSuccess(List<Source> data) {
+                                    public void run() {
                                         for (Source source : data) {
                                             mLocalDataSource.deleteAllStateContents(source.getId());
                                         }
                                     }
-
-                                    @Override
-                                    public void onFailure(Exception e) {
-
-                                    }
-                                });
+                                }.start();
                             }
-                        }.start();
+
+                            @Override
+                            public void onFailure(Exception e) {
+
+                            }
+                        });
                     }
                     callback.onSuccess(agendaLists);
                 }
@@ -1744,7 +1750,7 @@ public class DataManager extends BaseRoboInjector {
                 if (config.isWordpressAuthentication() &&
                         !NetworkUtil.isLimitedAcess(errorResponse) && NetworkUtil.isUnauthorize(errorResponse)) {
                     logout();
-                    Toast.makeText(context, "Session expire", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, context.getString(R.string.session_expire), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -3763,7 +3769,7 @@ public class DataManager extends BaseRoboInjector {
         if (NetworkUtil.isConnected(context)) {
 
             List<VideoModel> wpDownloads = edxEnvironment.getStorage().getLegacyWPDownloads();
-            List<VideoModel> edxDownloads = edxEnvironment.getStorage().getLegacyEdxDownloads();
+//            List<VideoModel> edxDownloads = edxEnvironment.getStorage().getLegacyEdxDownloads();
 
             if (wpDownloads != null) {
 
@@ -3799,7 +3805,7 @@ public class DataManager extends BaseRoboInjector {
                 }
             }
 
-            if (edxDownloads != null) {
+            /*if (edxDownloads != null) {
 
                 for (VideoModel model : edxDownloads) {
                     getContentFromSourceIdentity(model.getEnrollmentId(), new OnResponseCallback<Content>() {
@@ -3816,7 +3822,59 @@ public class DataManager extends BaseRoboInjector {
                         }
                     });
                 }
+            }*/
+        }
+    }
+
+    public void setContentIdForLegacyDownload(VideoModel model){
+        if ((model.getDownloadType() != null && model.getDownloadType().equals(ContentType.Scrom.name())) ||
+                (model.getFilePath() != null && model.getFilePath().equals(ContentType.Scrom.name()))) {
+
+            /*getContentFromSourceIdentity(model.getEnrollmentId(), new OnResponseCallback<Content>() {
+                @Override
+                public void onSuccess(Content data) {
+                    model.setContent_id(data.getId());
+                    edxEnvironment.getStorage().updateInfoByVideoId(model.getVideoId(), model, null);
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    edxEnvironment.getStorage().updateInfoByVideoId(model.getVideoId(), model, null);
+                }
+            });*/
+
+        } else if (model.getDownloadType() != null && model.getDownloadType().equals(ContentType.CONNECTVIDEO.name())){
+
+            try {
+                getPostById(Long.parseLong(model.getVideoId()), new OnResponseCallback<Post>() {
+                    @Override
+                    public void onSuccess(Post data) {
+                        getContentFromSourceIdentity(data.getSlug(), new OnResponseCallback<Content>() {
+                            @Override
+                            public void onSuccess(Content data) {
+                                model.setContent_id(data.getId());
+                                model.setChapterName(data.getSource().getName());
+                                edxEnvironment.getStorage().updateInfoByVideoId(model.getVideoId(),
+                                        model, null);
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+                                edxEnvironment.getStorage().updateInfoByVideoId(model.getVideoId(), model, null);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        edxEnvironment.getStorage().updateInfoByVideoId(model.getVideoId(), model, null);
+                    }
+                });
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                edxEnvironment.getStorage().updateInfoByVideoId(model.getVideoId(), model, null);
             }
+
         }
     }
 
@@ -3930,6 +3988,10 @@ public class DataManager extends BaseRoboInjector {
         }
 
         return v_name;
+    }
+
+    public void showToastFromOtherThread(String msg, int duration){
+        mHandler.post(() -> Toast.makeText(context, msg, duration).show());
     }
 }
 

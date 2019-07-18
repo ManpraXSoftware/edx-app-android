@@ -97,7 +97,7 @@ public class LibraryViewModel extends BaseViewModel {
 
             @Override
             public void onFailure(Exception e) {
-//                mActivity.hideLoading();
+                mActivity.hideLoading();
 //                mActivity.showShortSnack(e.getLocalizedMessage());
             }
         });

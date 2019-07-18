@@ -840,11 +840,9 @@ public class FeedViewModel extends BaseViewModel {
 
                         case TTAFeed:
 
-                            if (model.getMeta_data().getSource_name() == null ||
+                            if (model.getMeta_data().getSource_name() != null &&
                                     model.getMeta_data().getSource_name().equalsIgnoreCase(Action.appupdate.name())) {
-                                Glide.with(getContext())
-                                        .load(R.drawable.tta_launcher_foreground)
-                                        .into(feedBinding.feedContentImage);
+                                feedBinding.feedContentImage.setImageResource(R.drawable.tta_launcher_foreground);
                             } else {
                                 Glide.with(getContext())
                                         .load(model.getMeta_data().getIcon() == null ? "" : model.getMeta_data().getIcon())

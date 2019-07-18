@@ -1,5 +1,6 @@
 package org.tta.mobile.tta.wordpress_client.rest;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -23,6 +24,7 @@ import org.tta.mobile.tta.wordpress_client.model.dto.PostCount;
 import org.tta.mobile.tta.wordpress_client.rest.interceptor.OkHttpBasicAuthInterceptor;
 import org.tta.mobile.tta.wordpress_client.rest.interceptor.OkHttpBearerTokenAuthInterceptor;
 import org.tta.mobile.tta.wordpress_client.rest.interceptor.OkHttpDebugInterceptor;
+import org.tta.mobile.tta.wordpress_client.rest.interceptor.WPOauthRefreshTokenAuthenticator;
 import org.tta.mobile.tta.wordpress_client.util.ContentUtil;
 
 import java.io.File;
@@ -104,7 +106,7 @@ public class WpClientRetrofit {
     }
 
     //for all oauth 2.0 hits
-    public WpClientRetrofit(boolean debugEnabled,boolean isTokenHit) {
+    public WpClientRetrofit(boolean debugEnabled, boolean isTokenHit, Context context) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
         builder.connectTimeout(30, TimeUnit.SECONDS);
@@ -116,7 +118,7 @@ public class WpClientRetrofit {
             if (loginPrefs.getWPAuthorizationHeader() != null)
                 builder.addInterceptor(new OkHttpBearerTokenAuthInterceptor(loginPrefs.getWPAuthorizationHeader()));
 
-            //builder.authenticator(new WPOauthRefreshTokenAuthenticator());
+            builder.authenticator(new WPOauthRefreshTokenAuthenticator(context));
         }
 
         if (debugEnabled) {

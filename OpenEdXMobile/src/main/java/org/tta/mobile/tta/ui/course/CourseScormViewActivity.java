@@ -31,7 +31,6 @@ import org.tta.mobile.util.IOUtils;
 
 import java.io.File;
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,6 +46,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
     private File launcher;
     private String folderPath;
     private String courseName;
+    private String courseRootId;
     private String courseId;
     private String unitId;
     private long contentId;
@@ -88,7 +88,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
 
         //get payload for resume
         resume_info=new Resume();
-        resume_info=viewModel.getDataManager().getEdxEnvironment().getDatabase().getResumeInfo(courseId, unitId);
+        resume_info=viewModel.getDataManager().getEdxEnvironment().getDatabase().getResumeInfo(courseRootId, unitId);
 
         if(resume_info==null || TextUtils.isEmpty(resume_info.getResume_Payload()))
             resume_info.setResume_Payload("");
@@ -99,6 +99,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
     private void getDataFromParameters(Bundle parameters){
         folderPath = parameters.getString(Constants.KEY_FILE_PATH);
         courseName = parameters.getString(Constants.KEY_COURSE_NAME);
+        courseRootId = parameters.getString(Constants.KEY_COURSE_ROOT_ID);
         courseId = parameters.getString(Constants.KEY_COURSE_ID);
         unitId = parameters.getString(Constants.KEY_UNIT_ID);
         contentId = parameters.getLong(Constants.KEY_CONTENT_ID);
@@ -107,7 +108,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
     private File findFile(File aFile, String sDir, String toFind) {
         if (aFile.isFile() &&
                 aFile.getAbsolutePath().contains(sDir) &&
-                aFile.getName().contains(toFind)) {
+                aFile.getName().equals(toFind)) {
             return aFile;
         } else if (aFile.isDirectory()) {
             for (File child : aFile.listFiles()) {
@@ -276,13 +277,13 @@ public class CourseScormViewActivity extends BaseVMActivity {
     }
 
     public void ReceiveTinCanStatement(String statement) {
-        analytic.addTinCanAnalyticDB(statement, courseName, courseId, courseId, contentId);
+        analytic.addTinCanAnalyticDB(statement, courseName, courseRootId, courseId, contentId);
         // Toast.makeText(CourseScormViewActivity.this, statement, Toast.LENGTH_LONG).show();
     }
 
     public void ReceiveTinCanResumePayload(String resume_payload) {
         Resume resume=new Resume();
-        resume.setCourse_Id(courseId);
+        resume.setCourse_Id(courseRootId);
         resume.setUnit_id(unitId);
         resume.setUser_Id(viewModel.getDataManager().getLoginPrefs().getUsername());
         resume.setResume_Payload(resume_payload);

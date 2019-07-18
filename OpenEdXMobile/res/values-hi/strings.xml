@@ -244,4 +244,5 @@
     <string name="error_subjects">कृपया अपने विषय चुनिए</string>
     <string name="certificates">सर्टिफ़िकेट</string>
     <string name="update_tta">अपडेट TTA</string>
+    <string name="session_expire">सेशन समाप्त हुआ। कृपया पुनः लॉगिन करें।</string>
 </resources>
