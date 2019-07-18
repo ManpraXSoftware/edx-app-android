@@ -122,7 +122,7 @@ public class ApiConstants {
     //Post generate certificate request
     public static final String URL_MX_GENERATE_CERTIFICATE = "api/mxcertification_api/generate_certificate/";
 
-    public static final String URL_MX_GET_CONTENT = "api/appupdate/v1/getappupdate/";
+    public static final String URL_MX_GET_CONTENT = "api/mx_catalog/v1/content/";
 
     public static final String URL_MX_GET_SUGGESTED_USERS = "api/mx_recommended_users/v1/getrecommendedusers/";
 
@@ -159,6 +159,8 @@ public class ApiConstants {
     public static final String URL_MX_GET_FOLLOW_STATUS = "api/mx_feed/v1/getfollowstatus/";
 
     public static final String URL_MX_GET_FOLLOWERS = "api/mx_feed/v1/getfollowership/";
+
+    public static final String URL_MX_GET_APP_UPDATE = "api/appupdate/v1/getappupdate/";
 
     //TTA end
 

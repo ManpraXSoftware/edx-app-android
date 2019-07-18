@@ -24,4 +24,7 @@ public interface StateContentDao {
     @Query("Delete from state_content")
     void deleteAll();
 
+    @Query("Delete from state_content where content_source_id = :sourceId")
+    void deleteAllBySourceId(long sourceId);
+
 }

@@ -192,6 +192,8 @@ public interface IStorage {
     //get all downloaded connect
     ArrayList<VideoModel> getDownloadedConnect();
 
+    void deleteLegacyScorms();
+
     int getAnalyticsCount();
 
     Integer updateInfoByVideoId(String videoId, VideoModel model,DataCallback<Integer> callback);

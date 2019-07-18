@@ -252,7 +252,7 @@ public class SearchViewModel extends BaseViewModel {
         searchFocus.set(true);
         searchFocus.set(false);
         setSelectedContentList();
-        populateFilters();
+        populateFilters(false);
         changesMade = true;
         isAllLoaded = false;
         mActivity.showLoading();
@@ -305,7 +305,7 @@ public class SearchViewModel extends BaseViewModel {
         }
 
         setSelectedContentList();
-        populateFilters();
+        populateFilters(false);
     };
 
     public AdapterView.OnItemClickListener classClickListener = (parent, view, position, id) -> {
@@ -477,7 +477,7 @@ public class SearchViewModel extends BaseViewModel {
                         selectedSource = null;
                         selectedSourcePosition.set(-1);
                         setSelectedContentList();
-                        populateFilters();
+                        populateFilters(false);
                     } else {
                         filterAdapter.notifyDataSetChanged();
                     }
@@ -649,8 +649,24 @@ public class SearchViewModel extends BaseViewModel {
                 if (selectedSource == null) {
 //                    selectedSourcePosition.set(-1);
                     selectedSourcePosition.set(0);
+
+                    classesVisible.set(true);
+                    peopleVisible.set(true);
                 } else {
                     selectedSourcePosition.set(sources.indexOf(selectedSource) + 1);
+
+                    if (selectedSource.getName().equalsIgnoreCase(SourceName.hois.name()) ||
+                            selectedSource.getName().equalsIgnoreCase(SourceName.state.name())){
+                        classesVisible.set(false);
+                    } else {
+                        classesVisible.set(true);
+                    }
+
+                    if (selectedSource.getName().equalsIgnoreCase(SourceName.state.name())){
+                        peopleVisible.set(false);
+                    } else {
+                        peopleVisible.set(true);
+                    }
 
                 }
             }
@@ -746,27 +762,29 @@ public class SearchViewModel extends BaseViewModel {
             @Override
             public void onSuccess(SearchFilter data) {
 
-                List<FilterSection> removables = new ArrayList<>();
-                for (FilterSection section: data.getResult()){
-                    if (!section.isIn_search()){
-                        removables.add(section);
+                if (searchFilter == null) {
+                    List<FilterSection> removables = new ArrayList<>();
+                    for (FilterSection section: data.getResult()){
+                        if (!section.isIn_search()){
+                            removables.add(section);
+                        }
+                        if (section.getName().contains("कक्षा")){
+                            classSection = section;
+                        }
                     }
-                    if (section.getName().contains("कक्षा")){
-                        classSection = section;
+                    for (FilterSection section: removables){
+                        data.getResult().remove(section);
                     }
-                }
-                for (FilterSection section: removables){
-                    data.getResult().remove(section);
-                }
-                removables.clear();
+                    removables.clear();
 
-                searchFilter = data;
-                populateFilters();
+                    searchFilter = data;
+                    populateFilters(true);
 
-                filtersReceived = true;
-                if (contentListsReceived){
-                    isAllLoaded = false;
-                    search();
+                    filtersReceived = true;
+                    if (contentListsReceived){
+                        isAllLoaded = false;
+                        search();
+                    }
                 }
             }
 
@@ -858,7 +876,7 @@ public class SearchViewModel extends BaseViewModel {
         }
     }
 
-    private void populateFilters(){
+    private void populateFilters(boolean isFirst){
         currentSections.clear();
         List<FilterTag> currentTags = new ArrayList<>();
         for (FilterSection section: searchFilter.getResult()){
@@ -903,11 +921,13 @@ public class SearchViewModel extends BaseViewModel {
 
 //        populateTags();
         //for selection of section content filter item
-        if (selectedContentList!=null&&selectedContentList.getName()!=null)
-        for (FilterSection s:currentSections) {
-            for (FilterTag tag:s.getTags()) {
-               if (tag.toString().equalsIgnoreCase(selectedContentList.getName()))
-                   tags.add(tag);
+        if (isFirst && selectedContentList!=null&&selectedContentList.getName()!=null) {
+            for (FilterSection s : currentSections) {
+                for (FilterTag tag : s.getTags()) {
+                    if (tag.toString().equalsIgnoreCase(selectedContentList.getName()) && !tags.contains(tag)) {
+                        tags.add(tag);
+                    }
+                }
             }
         }
 

@@ -4,11 +4,15 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
+import org.apache.commons.io.FileUtils;
 import org.tta.mobile.model.VideoModel;
+import org.tta.mobile.tta.data.DataManager;
+import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.Sha1Util;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static org.apache.commons.io.FileUtils.moveDirectory;
@@ -22,13 +26,18 @@ public class Migration280719 {
     private File packDir;
     private File downloadsDir;
 
+    private Context context;
+    private DataManager dataManager;
 
-    public Migration280719(Context context) {
+    public Migration280719(Context context, DataManager dataManager) {
         File android = new File(Environment.getExternalStorageDirectory(), "Android");
         downloadsDir = new File(android, "data");
         packDir = new File(downloadsDir, context.getPackageName());
         oldFolderPath = new File(packDir, "scormFolder");
         newFolderPath = new File(packDir, "videos");
+
+        this.context = context;
+        this.dataManager = dataManager;
 
         if (!newFolderPath.exists())
             newFolderPath.mkdirs();
@@ -70,7 +79,7 @@ public class Migration280719 {
                         File mFile = getSHA1Dir(vm.getVideoId(), user_dir);
 
                         if (!mFile.exists())
-                            return;
+                            continue;
 
                         //now put that file inside edx file storing structure
                         // i.e  root/mobile.tta.org/video/SHA1(user)/scrom file.
@@ -87,6 +96,17 @@ public class Migration280719 {
             }
         } catch (Exception e) {
             Log.e("MX_Scorm_Migration", "Scorm migration fail --------> " + e.toString());
+        }
+    }
+
+    public void deleteScormPackages(){
+        try {
+            deleteLegacyScromEntries();
+            if (oldFolderPath.exists()) {
+                FileUtils.deleteDirectory(oldFolderPath);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -146,7 +166,11 @@ public class Migration280719 {
         vm.setFilePath(file_path);
         vm.setUsername(getSHA1(vm.getUsername()));
 
-        environment.getStorage().updateInfoByVideoId(vm.getVideoId(), vm, null);
+        if (NetworkUtil.isConnected(context)) {
+            dataManager.setContentIdForLegacyDownload(vm);
+        } else {
+            environment.getStorage().updateInfoByVideoId(vm.getVideoId(), vm, null);
+        }
     }
 
     private ArrayList<VideoModel> getLagacyScromEntries() {
@@ -165,6 +189,10 @@ public class Migration280719 {
             return new ArrayList<>();
         else
             return arrayList;
+    }
+
+    private void deleteLegacyScromEntries(){
+        environment.getStorage().deleteLegacyScorms();
     }
 
     //it will provide you with folder containing scorm data which is associated with that particular scorm id

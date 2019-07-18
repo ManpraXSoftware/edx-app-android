@@ -857,6 +857,9 @@
     <string name="password_changed_login">Password changed successfully. Please login to continue</string>
     <string name="unable_to_get_account">Unable to get account details</string>
     <string name="selection_limit_crossed">You cannot select more than %d</string>
+    <string name="update_tta">Update TTA</string>
+    <string name="certificates">Certificates</string>
+    <string name="session_expire">Session Expired. Please login again.</string>
 
     <string name="anonymous" translatable="false">Anonymous</string>
     <string name="privacy_policy_url" translatable="false">http://theteacherapp.org/privacy</string>
@@ -1011,7 +1014,6 @@
     <string name="region_btn_agenda">Data defined by your state</string>
     <string name="download_btn_agenda">Data downloaded by you</string>
     <string name="personal_btn_agenda">Agenda choosed by you is here</string>
-    <string name="update_tta">ंअपडेट TTA</string>
 
     <!-- TTA strings end -->
 

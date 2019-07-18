@@ -3,12 +3,15 @@ package org.tta.mobile.tta.wordpress_client.rest.interceptor;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import com.google.inject.Inject;
 
+import org.tta.mobile.R;
 import org.tta.mobile.authentication.AuthResponse;
 import org.tta.mobile.http.HttpResponseStatusException;
 import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.data.DataManager;
 import org.tta.mobile.tta.wordpress_client.model.WpAuthResponse;
 import org.tta.mobile.tta.wordpress_client.rest.WpClientRetrofit;
 import org.json.JSONException;
@@ -34,8 +37,10 @@ public class WPOauthRefreshTokenAuthenticator implements Authenticator {
     private final static String TOKEN_EXPIRED_ERROR_MESSAGE = "401";
     private final static String TOKEN_NONEXISTENT_ERROR_MESSAGE = "token_nonexistent";
     private final static String TOKEN_INVALID_GRANT_ERROR_MESSAGE = "invalid_grant";
+    private Context context;
 
-    public WPOauthRefreshTokenAuthenticator( ) {
+    public WPOauthRefreshTokenAuthenticator(Context context) {
+        this.context = context;
     }
 
     @Override
@@ -44,6 +49,7 @@ public class WPOauthRefreshTokenAuthenticator implements Authenticator {
 
         final AuthResponse currentAuth = loginPrefs.getWPCurrentAuth();
         if (null == currentAuth || null == currentAuth.refresh_token) {
+            logout();
             return null;
         }
 
@@ -57,6 +63,7 @@ public class WPOauthRefreshTokenAuthenticator implements Authenticator {
                     try {
                         refreshedAuth = refreshAccessToken(currentAuth);
                     } catch (HttpResponseStatusException e) {
+                        logout();
                         return null;
                     }
                     return response.request().newBuilder()
@@ -102,6 +109,15 @@ public class WPOauthRefreshTokenAuthenticator implements Authenticator {
         } catch (JSONException ex) {
             logger.warn("Unable to get error_code from 401 response");
             return null;
+        }
+    }
+
+    private void logout(){
+        if (loginPrefs.isLoggedIn()) {
+            loginPrefs.clear();
+            DataManager dataManager = DataManager.getInstance(context);
+            dataManager.showToastFromOtherThread(context.getString(R.string.session_expire), Toast.LENGTH_LONG);
+            dataManager.logout();
         }
     }
 }

@@ -1,11 +1,14 @@
 package org.tta.mobile.http.authenticator;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import com.google.inject.Inject;
 
+import org.tta.mobile.R;
 import org.tta.mobile.authentication.LoginService;
 
 import org.tta.mobile.authentication.AuthResponse;
@@ -13,6 +16,7 @@ import org.tta.mobile.http.provider.RetrofitProvider;
 import org.tta.mobile.http.HttpStatusException;
 import org.tta.mobile.logger.Logger;
 import org.tta.mobile.module.prefs.LoginPrefs;
+import org.tta.mobile.tta.data.DataManager;
 import org.tta.mobile.util.Config;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,6 +64,7 @@ public class OauthRefreshTokenAuthenticator implements Authenticator {
 
         final AuthResponse currentAuth = loginPrefs.getCurrentAuth();
         if (null == currentAuth || null == currentAuth.refresh_token) {
+            logout();
             return null;
         }
 
@@ -72,6 +77,7 @@ public class OauthRefreshTokenAuthenticator implements Authenticator {
                     try {
                         refreshedAuth = refreshAccessToken(currentAuth);
                     } catch (HttpStatusException e) {
+                        logout();
                         return null;
                     }
                     return response.request().newBuilder()
@@ -115,6 +121,15 @@ public class OauthRefreshTokenAuthenticator implements Authenticator {
         } catch (JSONException ex) {
             logger.warn("Unable to get error_code from 401 response");
             return null;
+        }
+    }
+
+    private void logout(){
+        if (loginPrefs.isLoggedIn()) {
+            loginPrefs.clear();
+            DataManager dataManager = DataManager.getInstance(context);
+            dataManager.showToastFromOtherThread(context.getString(R.string.session_expire), Toast.LENGTH_LONG);
+            dataManager.logout();
         }
     }
 }

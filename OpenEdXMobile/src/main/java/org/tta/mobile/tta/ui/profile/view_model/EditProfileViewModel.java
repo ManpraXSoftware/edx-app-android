@@ -192,7 +192,7 @@ public class EditProfileViewModel extends BaseViewModel  {
                                 classesTaught.add(new RegistrationOption(tag.toString(), tag.toString()));
                             }
                         }
-                    } else if (section.getName().contains("क्षमताएं")){
+                    } else if (section.getName().contains("क्षमता")){
                         skillSectionName = section.getName();
                         skillSection = section;
                         for (FilterTag tag: section.getTags()){

@@ -236,8 +236,9 @@ public class LandingViewModel extends BaseViewModel {
             }
         });
 
-        Migration280719 spt = new Migration280719(getActivity());
-        spt.MigrateScromPackages();
+        Migration280719 spt = new Migration280719(getActivity(), mDataManager);
+//        spt.MigrateScromPackages();
+        spt.deleteScormPackages();
         spt.MigrateConnectVideos();
 
         mDataManager.setContentIdForLegacyDownloads();

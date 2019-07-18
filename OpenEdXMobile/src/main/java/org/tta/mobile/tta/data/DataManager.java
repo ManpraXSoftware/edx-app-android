@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -103,6 +104,7 @@ import org.tta.mobile.tta.data.remote.api.MxSurveyAPI;
 import org.tta.mobile.tta.exception.TaException;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.receiver.DeleteFeedsReceiver;
+import org.tta.mobile.tta.scorm.ContentType;
 import org.tta.mobile.tta.scorm.ScormBlockModel;
 import org.tta.mobile.tta.scorm.ScormStartResponse;
 import org.tta.mobile.tta.task.GetVersionUpdatedTask;
@@ -239,6 +241,8 @@ public class DataManager extends BaseRoboInjector {
 
     private Analytic analytic;
 
+    private Handler mHandler;
+
     private DataManager(Context context, IRemoteDataSource remoteDataSource, ILocalDataSource localDataSource) {
         super(context);
         this.context = context;
@@ -253,6 +257,8 @@ public class DataManager extends BaseRoboInjector {
         db_commands = new DB_Commands(context);
 
         analytic = new Analytic(context);
+
+        mHandler = new Handler();
     }
 
     public static DataManager getInstance(Context context) {
@@ -265,7 +271,7 @@ public class DataManager extends BaseRoboInjector {
                 }
             }
         }
-        mDataManager.wpClientRetrofit = new WpClientRetrofit(true, false);
+        mDataManager.wpClientRetrofit = new WpClientRetrofit(true, false, context);
         return mDataManager;
     }
 
@@ -580,6 +586,25 @@ public class DataManager extends BaseRoboInjector {
                             }
                         });
 
+                    } else {
+                        getSources(new OnResponseCallback<List<Source>>() {
+                            @Override
+                            public void onSuccess(List<Source> data) {
+                                new Thread(){
+                                    @Override
+                                    public void run() {
+                                        for (Source source : data) {
+                                            mLocalDataSource.deleteAllStateContents(source.getId());
+                                        }
+                                    }
+                                }.start();
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+
+                            }
+                        });
                     }
                     callback.onSuccess(agendaLists);
                 }
@@ -1057,7 +1082,7 @@ public class DataManager extends BaseRoboInjector {
         }
     }
 
-    public void isContentMyAgenda(long contentId, OnResponseCallback<StatusResponse> callback) {
+    public void isContentMyAgenda(long contentId, long sourceId, OnResponseCallback<StatusResponse> callback) {
         if (NetworkUtil.isConnected(context)) {
             new IsContentMyAgendaTask(context, contentId) {
                 @Override
@@ -1067,7 +1092,7 @@ public class DataManager extends BaseRoboInjector {
                         new Thread() {
                             @Override
                             public void run() {
-                                mLocalDataSource.deleteBookmark(new Bookmark(contentId));
+                                mLocalDataSource.deleteBookmark(new Bookmark(contentId, sourceId));
                             }
                         }.start();
 
@@ -1078,9 +1103,9 @@ public class DataManager extends BaseRoboInjector {
                             @Override
                             public void run() {
                                 if (statusResponse.getStatus()) {
-                                    mLocalDataSource.insertBookmark(new Bookmark(contentId));
+                                    mLocalDataSource.insertBookmark(new Bookmark(contentId, sourceId));
                                 } else {
-                                    mLocalDataSource.deleteBookmark(new Bookmark(contentId));
+                                    mLocalDataSource.deleteBookmark(new Bookmark(contentId, sourceId));
                                 }
                             }
                         }.start();
@@ -1172,7 +1197,7 @@ public class DataManager extends BaseRoboInjector {
         }
     }
 
-    public void setBookmark(long contentId, OnResponseCallback<BookmarkResponse> callback) {
+    public void setBookmark(long contentId, long sourceId, OnResponseCallback<BookmarkResponse> callback) {
         if (NetworkUtil.isConnected(context)) {
             new SetBookmarkTask(context, contentId) {
                 @Override
@@ -1186,9 +1211,9 @@ public class DataManager extends BaseRoboInjector {
                             @Override
                             public void run() {
                                 if (bookmarkResponse.isIs_active()) {
-                                    mLocalDataSource.insertBookmark(new Bookmark(contentId));
+                                    mLocalDataSource.insertBookmark(new Bookmark(contentId, sourceId));
                                 } else {
-                                    mLocalDataSource.deleteBookmark(new Bookmark(contentId));
+                                    mLocalDataSource.deleteBookmark(new Bookmark(contentId, sourceId));
                                 }
                             }
                         }.start();
@@ -1365,7 +1390,7 @@ public class DataManager extends BaseRoboInjector {
                                 mLocalDataSource.insertContents(response);
                                 List<Bookmark> bookmarks = new ArrayList<>();
                                 for (Content content : response) {
-                                    bookmarks.add(new Bookmark(content.getId()));
+                                    bookmarks.add(new Bookmark(content.getId(), sourceId));
                                 }
                                 mLocalDataSource.insertBookmarks(bookmarks);
                             }
@@ -1378,7 +1403,7 @@ public class DataManager extends BaseRoboInjector {
                         new Thread() {
                             @Override
                             public void run() {
-                                mLocalDataSource.deleteAllBookmarks();
+                                mLocalDataSource.deleteAllBookmarks(sourceId);
                             }
                         }.start();
 
@@ -1446,9 +1471,9 @@ public class DataManager extends BaseRoboInjector {
                                 mLocalDataSource.insertContents(response);
                                 List<StateContent> stateContents = new ArrayList<>();
                                 for (Content content : response) {
-                                    stateContents.add(new StateContent(content.getId()));
+                                    stateContents.add(new StateContent(content.getId(), sourceId));
                                 }
-                                mLocalDataSource.deleteAllStateContents();
+                                mLocalDataSource.deleteAllStateContents(sourceId);
                                 mLocalDataSource.insertStateContents(stateContents);
                             }
                         }.start();
@@ -1461,7 +1486,7 @@ public class DataManager extends BaseRoboInjector {
                         new Thread() {
                             @Override
                             public void run() {
-                                mLocalDataSource.deleteAllStateContents();
+                                mLocalDataSource.deleteAllStateContents(sourceId);
                             }
                         }.start();
 
@@ -1725,7 +1750,7 @@ public class DataManager extends BaseRoboInjector {
                 if (config.isWordpressAuthentication() &&
                         !NetworkUtil.isLimitedAcess(errorResponse) && NetworkUtil.isUnauthorize(errorResponse)) {
                     logout();
-                    Toast.makeText(context, "Session expire", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, context.getString(R.string.session_expire), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -1759,16 +1784,28 @@ public class DataManager extends BaseRoboInjector {
                             searchFilter.getResult().remove(section);
                         }
                         Collections.sort(searchFilter.getResult());
+                        loginPrefs.setSearchFilter(searchFilter);
                         callback.onSuccess(searchFilter);
                     }
                 }
 
                 @Override
                 protected void onException(Exception ex) {
-                    callback.onFailure(ex);
+                    SearchFilter searchFilter = loginPrefs.getSearchFilter();
+                    if (searchFilter == null) {
+                        callback.onFailure(ex);
+                    } else {
+                        callback.onSuccess(searchFilter);
+                    }
                 }
             }.execute();
         } else {
+            SearchFilter searchFilter = loginPrefs.getSearchFilter();
+            if (searchFilter == null) {
+                callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+            } else {
+                callback.onSuccess(searchFilter);
+            }
             callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
         }
 
@@ -3186,8 +3223,7 @@ public class DataManager extends BaseRoboInjector {
                                         callback.onFailure(e);
                                     }
                                 });
-                    }
-                    else {
+                    } else {
                         callback.onFailure(new TaException("Feature list not available"));
                     }
                 }
@@ -3733,7 +3769,7 @@ public class DataManager extends BaseRoboInjector {
         if (NetworkUtil.isConnected(context)) {
 
             List<VideoModel> wpDownloads = edxEnvironment.getStorage().getLegacyWPDownloads();
-            List<VideoModel> edxDownloads = edxEnvironment.getStorage().getLegacyEdxDownloads();
+//            List<VideoModel> edxDownloads = edxEnvironment.getStorage().getLegacyEdxDownloads();
 
             if (wpDownloads != null) {
 
@@ -3769,7 +3805,7 @@ public class DataManager extends BaseRoboInjector {
                 }
             }
 
-            if (edxDownloads != null) {
+            /*if (edxDownloads != null) {
 
                 for (VideoModel model : edxDownloads) {
                     getContentFromSourceIdentity(model.getEnrollmentId(), new OnResponseCallback<Content>() {
@@ -3786,7 +3822,59 @@ public class DataManager extends BaseRoboInjector {
                         }
                     });
                 }
+            }*/
+        }
+    }
+
+    public void setContentIdForLegacyDownload(VideoModel model){
+        if ((model.getDownloadType() != null && model.getDownloadType().equals(ContentType.Scrom.name())) ||
+                (model.getFilePath() != null && model.getFilePath().equals(ContentType.Scrom.name()))) {
+
+            /*getContentFromSourceIdentity(model.getEnrollmentId(), new OnResponseCallback<Content>() {
+                @Override
+                public void onSuccess(Content data) {
+                    model.setContent_id(data.getId());
+                    edxEnvironment.getStorage().updateInfoByVideoId(model.getVideoId(), model, null);
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    edxEnvironment.getStorage().updateInfoByVideoId(model.getVideoId(), model, null);
+                }
+            });*/
+
+        } else if (model.getDownloadType() != null && model.getDownloadType().equals(ContentType.CONNECTVIDEO.name())){
+
+            try {
+                getPostById(Long.parseLong(model.getVideoId()), new OnResponseCallback<Post>() {
+                    @Override
+                    public void onSuccess(Post data) {
+                        getContentFromSourceIdentity(data.getSlug(), new OnResponseCallback<Content>() {
+                            @Override
+                            public void onSuccess(Content data) {
+                                model.setContent_id(data.getId());
+                                model.setChapterName(data.getSource().getName());
+                                edxEnvironment.getStorage().updateInfoByVideoId(model.getVideoId(),
+                                        model, null);
+                            }
+
+                            @Override
+                            public void onFailure(Exception e) {
+                                edxEnvironment.getStorage().updateInfoByVideoId(model.getVideoId(), model, null);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        edxEnvironment.getStorage().updateInfoByVideoId(model.getVideoId(), model, null);
+                    }
+                });
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                edxEnvironment.getStorage().updateInfoByVideoId(model.getVideoId(), model, null);
             }
+
         }
     }
 
@@ -3902,5 +3990,8 @@ public class DataManager extends BaseRoboInjector {
         return v_name;
     }
 
+    public void showToastFromOtherThread(String msg, int duration){
+        mHandler.post(() -> Toast.makeText(context, msg, duration).show());
+    }
 }
 

@@ -777,6 +777,11 @@ public class Storage implements IStorage {
     }
 
     @Override
+    public void deleteLegacyScorms() {
+        db.deleteLegacyScorms();
+    }
+
+    @Override
     public Integer updateInfoByVideoId(String videoId, VideoModel model,DataCallback<Integer> callback) {
         return db.updateInfoByVideoId(videoId,model,callback);
     }

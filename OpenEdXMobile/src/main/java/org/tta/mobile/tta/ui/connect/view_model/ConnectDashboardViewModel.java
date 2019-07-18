@@ -431,7 +431,7 @@ public class ConnectDashboardViewModel extends BaseViewModel
             }
         });
 
-        mDataManager.isContentMyAgenda(content.getId(), new OnResponseCallback<StatusResponse>() {
+        mDataManager.isContentMyAgenda(content.getId(), content.getSource().getId(), new OnResponseCallback<StatusResponse>() {
             @Override
             public void onSuccess(StatusResponse data) {
                 bookmarkIcon.set(data.getStatus() ? R.drawable.t_icon_bookmark_filled : R.drawable.t_icon_bookmark);
@@ -581,7 +581,7 @@ public class ConnectDashboardViewModel extends BaseViewModel
         }
 
         mActivity.showLoading();
-        mDataManager.setBookmark(content.getId(), new OnResponseCallback<BookmarkResponse>() {
+        mDataManager.setBookmark(content.getId(), content.getSource().getId(), new OnResponseCallback<BookmarkResponse>() {
             @Override
             public void onSuccess(BookmarkResponse data) {
                 mActivity.hideLoading();
@@ -917,17 +917,22 @@ public class ConnectDashboardViewModel extends BaseViewModel
                         shareText = shareTextWithPlatformName;
                     }
 
-                    mActivity.analytic.addMxAnalytics_db(content.getName(), Action.Share,
-                            content.getSource().getName(), Source.Mobile, content.getSource_identity(),
-                            BreadcrumbUtil.getBreadcrumb() + "/" + shareType.name(),
-                            content.getSource_identity(), content.getId());
-
 //                    segIO.courseDetailShared(post.getLink(), shareText, shareType);
                     if (!shareType.equals(ShareUtils.ShareType.TTA)) {
+                        mActivity.analytic.addMxAnalytics_db(content.getName(), Action.Share,
+                                content.getSource().getName(), Source.Mobile, content.getSource_identity(),
+                                BreadcrumbUtil.getBreadcrumb() + "/" + shareType.name(),
+                                content.getSource_identity(), content.getId());
+
                         final Intent intent = ShareUtils.newShareIntent(shareText);
                         intent.setComponent(componentName);
                         mActivity.startActivity(intent);
                     } else {
+                        mActivity.analytic.syncSingleMXAnalytic(content.getName(), Action.Share,
+                                content.getSource().getName(), Source.Mobile, content.getSource_identity(),
+                                BreadcrumbUtil.getBreadcrumb() + "/" + shareType.name(),
+                                content.getSource_identity(), content.getId());
+
                         mActivity.showLongToast(mActivity.getString(R.string.post_share_successful));
                     }
 

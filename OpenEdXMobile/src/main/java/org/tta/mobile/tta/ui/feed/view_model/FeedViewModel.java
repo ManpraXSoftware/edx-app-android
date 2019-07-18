@@ -52,6 +52,7 @@ import org.tta.mobile.tta.utils.AppUtil;
 import org.tta.mobile.tta.utils.BadgeHelper;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.tta.utils.DataUtil;
+import org.tta.mobile.util.images.ShareUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -456,10 +457,17 @@ public class FeedViewModel extends BaseViewModel {
         FeedShareBottomSheet bottomSheet = FeedShareBottomSheet.newInstance(
                 (componentName, shareType) -> {
 
-                    mActivity.analytic.addMxAnalytics_db(feed.getMeta_data().getText(), Action.Share,
-                            feed.getMeta_data().getSource_name(), Source.Mobile, feed.getMeta_data().getId(),
-                            BreadcrumbUtil.getBreadcrumb() + "/" + shareType.name(),
-                            feed.getMeta_data().getId(), 0);
+                    if (!shareType.equals(ShareUtils.ShareType.TTA)) {
+                        mActivity.analytic.addMxAnalytics_db(feed.getMeta_data().getText(), Action.Share,
+                                feed.getMeta_data().getSource_name(), Source.Mobile, feed.getMeta_data().getId(),
+                                BreadcrumbUtil.getBreadcrumb() + "/" + shareType.name(),
+                                feed.getMeta_data().getId(), 0);
+                    } else {
+                        mActivity.analytic.syncSingleMXAnalytic(feed.getMeta_data().getText(), Action.Share,
+                                feed.getMeta_data().getSource_name(), Source.Mobile, feed.getMeta_data().getId(),
+                                BreadcrumbUtil.getBreadcrumb() + "/" + shareType.name(),
+                                feed.getMeta_data().getId(), 0);
+                    }
 
                 }, feed
         );
@@ -832,11 +840,9 @@ public class FeedViewModel extends BaseViewModel {
 
                         case TTAFeed:
 
-                            if (model.getMeta_data().getSource_name() == null ||
+                            if (model.getMeta_data().getSource_name() != null &&
                                     model.getMeta_data().getSource_name().equalsIgnoreCase(Action.appupdate.name())) {
-                                Glide.with(getContext())
-                                        .load(R.drawable.tta_launcher_foreground)
-                                        .into(feedBinding.feedContentImage);
+                                feedBinding.feedContentImage.setImageResource(R.drawable.tta_launcher_foreground);
                             } else {
                                 Glide.with(getContext())
                                         .load(model.getMeta_data().getIcon() == null ? "" : model.getMeta_data().getIcon())
@@ -861,7 +867,8 @@ public class FeedViewModel extends BaseViewModel {
                     feedBinding.feedLikeImage.setImageResource(R.drawable.t_icon_like);
                 }
 
-                if (model.getMeta_data().getShare_url() != null) {
+                if (model.getMeta_data().getShare_url() != null &&
+                        !model.getMeta_data().getShare_url().trim().equals("")) {
                     feedBinding.feedShare.setVisibility(View.VISIBLE);
                     feedBinding.feedShare.setOnClickListener(v -> {
                         if (listener != null) {
@@ -943,7 +950,8 @@ public class FeedViewModel extends BaseViewModel {
                     }
                 });
 
-                if (model.getMeta_data().getShare_url() != null) {
+                if (model.getMeta_data().getShare_url() != null &&
+                        !model.getMeta_data().getShare_url().trim().equals("")) {
                     feedWithUserBinding.feedShare.setVisibility(View.VISIBLE);
                     feedWithUserBinding.feedShare.setOnClickListener(v -> {
                         if (listener != null) {

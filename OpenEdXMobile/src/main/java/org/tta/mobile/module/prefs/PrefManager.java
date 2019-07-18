@@ -352,6 +352,9 @@ public class PrefManager {
         //Mx:Arjun to store latest app info json
         public static final String LATEST_APP_INFO_JSON = "latest_app_info_json";
 
+        //Mx Chirag: To store search filters
+        public static final String SEARCH_FILTER_JSON = "search_filter_json";
+
     }
 
     public static final class Value {

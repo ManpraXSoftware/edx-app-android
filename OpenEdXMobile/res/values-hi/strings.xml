@@ -64,8 +64,8 @@
     <string name="sign_out">साइन आउट करें</string>
     <string name="edit_profile">प्रोफाइल सम्पादित करें</string>
     <string name="change_password_underlined"><u>पासवर्ड बदलें</u></string>
-    <string name="classes_taught">कक्षाएं</string>
-    <string name="skills">क्षमताएं</string>
+    <string name="classes_taught">कक्षाएँ</string>
+    <string name="skills">क्षमताएँ</string>
     <string name="following">फॉलोइंग</string>
     <string name="all_parts">एक कोर्स के सभी  भाग देखने पर</string>
     <string name="followers">फालोअर्ज़</string>
@@ -113,7 +113,7 @@
     <string name="error_profession">कृपया अपना व्यवसाय चुनिए</string>
     <string name="error_gender">कृपया अपना लिंग चुनिए</string>
     <string name="error_classes">कृपया किस स्तर तक पढ़ाया है, चुनिए</string>
-    <string name="error_skills">कृपया अपनी क्षमताएं चुनिए</string>
+    <string name="error_skills">कृपया अपनी क्षमताएँ चुनिए</string>
     <string name="error_diet">कृपया अपना DIET कोड चुनिए</string>
     <string name="error_pmis">PMIS कोड रिक्त नहीं हो सकता</string>
     <string name="error_teacher_id">टीचर ID रिक्त नहीं हो सकती</string>
@@ -242,4 +242,7 @@
     <string name="selection_limit_crossed">आप %d से अधिक का चयन नहीं कर सकते</string>
     <string name="course_share_successful">TheTeacherApp पर कोर्स को सफलतापूर्वक साझा किया गया</string>
     <string name="error_subjects">कृपया अपने विषय चुनिए</string>
+    <string name="certificates">सर्टिफ़िकेट</string>
+    <string name="update_tta">अपडेट TTA</string>
+    <string name="session_expire">सेशन समाप्त हुआ। कृपया पुनः लॉगिन करें।</string>
 </resources>

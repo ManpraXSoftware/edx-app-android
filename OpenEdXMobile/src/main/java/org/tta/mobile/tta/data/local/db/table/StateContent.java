@@ -19,11 +19,19 @@ public class StateContent {
     @ColumnInfo(name = "content_id")
     private long contentId;
 
+    @ColumnInfo(name = "content_source_id")
+    private long sourceId;
+
     public StateContent() {
     }
 
     public StateContent(long contentId) {
         this.contentId = contentId;
+    }
+
+    public StateContent(long contentId, long sourceId) {
+        this.contentId = contentId;
+        this.sourceId = sourceId;
     }
 
     public long getContentId() {
@@ -34,4 +42,11 @@ public class StateContent {
         this.contentId = contentId;
     }
 
+    public long getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(long sourceId) {
+        this.sourceId = sourceId;
+    }
 }

@@ -211,7 +211,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
             }
         });
 
-        mDataManager.isContentMyAgenda(content.getId(), new OnResponseCallback<StatusResponse>() {
+        mDataManager.isContentMyAgenda(content.getId(), content.getSource().getId(), new OnResponseCallback<StatusResponse>() {
             @Override
             public void onSuccess(StatusResponse data) {
                 bookmarkIcon.set(data.getStatus() ? R.drawable.t_icon_bookmark_filled : R.drawable.t_icon_bookmark);
@@ -371,7 +371,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
             }
             parameters.putString(Constants.KEY_FILE_PATH, filePath);
             parameters.putString(Constants.KEY_COURSE_NAME, selectedScormForPlay.getRoot().getDisplayName());
-            parameters.putString(Constants.KEY_COURSE_ID, selectedScormForPlay.getRoot().getId());
+            parameters.putString(Constants.KEY_COURSE_ROOT_ID, selectedScormForPlay.getRoot().getId());
+            parameters.putString(Constants.KEY_COURSE_ID, content.getSource_identity());
             parameters.putString(Constants.KEY_UNIT_ID, selectedScormForPlay.getId());
             parameters.putLong(Constants.KEY_CONTENT_ID, content.getId());
             ActivityUtil.gotoPage(mActivity, CourseScormViewActivity.class, parameters);
@@ -685,7 +686,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
         }
 
         mActivity.showLoading();
-        mDataManager.setBookmark(content.getId(), new OnResponseCallback<BookmarkResponse>() {
+        mDataManager.setBookmark(content.getId(), content.getSource().getId(), new OnResponseCallback<BookmarkResponse>() {
             @Override
             public void onSuccess(BookmarkResponse data) {
                 mActivity.hideLoading();

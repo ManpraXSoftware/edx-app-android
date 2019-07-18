@@ -1049,7 +1049,7 @@ public class IDatabaseImpl extends IDatabaseBaseImpl implements IDatabase {
     @Override
     public ArrayList<VideoModel> getDownloadedScorm() {
         DbOperationGetVideos op = new DbOperationGetVideos(false, DbStructure.Table.DOWNLOADS, null,
-                DbStructure.Column.DOWNLOADED + "=? AND " + DbStructure.Column.TYPE + "=? OR "+ DbStructure.Column.FILEPATH + "=?",
+                DbStructure.Column.DOWNLOADED + "=? AND (" + DbStructure.Column.TYPE + "=? OR "+ DbStructure.Column.FILEPATH + "=?)",
                 new String[]{String.valueOf(DownloadedState.DOWNLOADED.ordinal()),String.valueOf(ContentType.Scrom),String.valueOf(ContentType.Scrom)},null);
         return (ArrayList<VideoModel>) enqueue(op);
     }
@@ -1060,6 +1060,18 @@ public class IDatabaseImpl extends IDatabaseBaseImpl implements IDatabase {
                 DbStructure.Column.DOWNLOADED + "=? AND " + DbStructure.Column.TYPE + "=? ",
                 new String[]{String.valueOf(DownloadedState.DOWNLOADED.ordinal()), String.valueOf(ContentType.CONNECTVIDEO)},null);
         return (ArrayList<VideoModel>) enqueue(op);
+    }
+
+    @Override
+    public Integer deleteLegacyScorms() {
+        DbOperationDelete op = new DbOperationDelete(DbStructure.Table.DOWNLOADS,
+                DbStructure.Column.DOWNLOADED + "=? AND " +
+                        DbStructure.Column.CONTENT_ID + "=0 AND (" +
+                        DbStructure.Column.TYPE + "=? OR "+ DbStructure.Column.FILEPATH + "=?)",
+                new String[]{String.valueOf(DownloadedState.DOWNLOADED.ordinal()),
+                        String.valueOf(ContentType.Scrom), String.valueOf(ContentType.Scrom)});
+        op.setCallback(null);
+        return enqueue(op);
     }
 
     @Override

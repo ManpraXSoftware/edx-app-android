@@ -214,7 +214,7 @@ public class OtherProfileViewModel extends BaseViewModel {
 
                         if (section.getName().contains("कक्षा")) {
                             classes.set(builder.toString());
-                        } else if (section.getName().contains("क्षमताएं")) {
+                        } else if (section.getName().contains("क्षमता")) {
                             skills.set(builder.toString());
                         }
                     }

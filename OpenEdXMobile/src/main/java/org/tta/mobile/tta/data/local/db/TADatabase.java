@@ -46,7 +46,7 @@ import org.tta.mobile.user.Account;
                 Bookmark.class,
                 StateContent.class
         },
-        version = 5,
+        version = 6,
         exportSchema = false
 )
 @TypeConverters({DbTypeConverters.class})

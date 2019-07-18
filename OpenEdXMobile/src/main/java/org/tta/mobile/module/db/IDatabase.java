@@ -539,6 +539,8 @@ public interface IDatabase {
     //get all downloaded scrom
     ArrayList<VideoModel> getDownloadedConnect();
 
+    Integer deleteLegacyScorms();
+
     List<VideoModel> getLegacyWPDownloads();
     List<VideoModel> getLegacyEdxDownloads();
 }

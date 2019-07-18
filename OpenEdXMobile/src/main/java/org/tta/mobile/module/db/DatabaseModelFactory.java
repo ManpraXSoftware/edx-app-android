@@ -180,6 +180,8 @@ public class DatabaseModelFactory {
         ae.event_timestamp =c.getLong(c.getColumnIndex(DbStructure.Column.EVENT_DATE));
         ae.nav=c.getString(c.getColumnIndex(DbStructure.Column.NAV));
         ae.action_id=c.getString(c.getColumnIndex(DbStructure.Column.ACTION_ID));
+        ae.source_id=c.getString(c.getColumnIndex(DbStructure.Column.SOURCE_ID));
+        ae.content_id=c.getLong(c.getColumnIndex(DbStructure.Column.CONTENT_ID));
 
         return ae;
     }
