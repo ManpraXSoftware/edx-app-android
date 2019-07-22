@@ -45,7 +45,7 @@ public class DeepLinkActivity extends BaseVMActivity {
         viewModel = new DeepLinkViewModel(this);
         binding(R.layout.t_activity_deep_link, viewModel);
 
-        if (requiresAuthentication()){
+        if (requiresAuthentication()) {
             return;
         }
 
@@ -54,6 +54,11 @@ public class DeepLinkActivity extends BaseVMActivity {
         handleIntent(intent);
         viewModel.getDataManager().getEdxEnvironment().getAnalyticsRegistry().trackScreenView(getString(R.string.label_my_courses));
 
+        //TODO: Arjun need us this for deeplink data extractor
+        // ATTENTION: This was auto-generated to handle app links.
+/*        Intent appLinkIntent = getIntent();
+        String appLinkAction = appLinkIntent.getAction();
+        Uri appLinkData = appLinkIntent.getData();*/
     }
 
     protected void onNewIntent(Intent intent) {
