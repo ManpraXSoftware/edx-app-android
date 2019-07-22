@@ -13,9 +13,9 @@
     <string name="forgot_password">पासवर्ड भूल गए?</string>
     <string name="change_password">पासवर्ड बदलें</string>
     <string name="create_new_account">नया अकाउंट बनाएँ</string>
-    <string name="launch_text_1">शिक्षकों के व्यवसायिक विकास के लिए रचनात्मक, निर्माणात्मक, ऑडियो-विज़ुअल सामग्री</string>
-    <string name="launch_text_2">अपने राज्य और साथी शिक्षकों द्वारा मान्यता पाने के अवसर</string>
-    <string name="launch_text_3">देश भर के विभिन्न शिक्षकों के साथ जुड़ने और अपने विचार साझा करने के अवसर</string>
+    <string name="launch_text_1">ऑडियो- विजुअल अनुभवों व कार्यक्रमों से शिक्षण की गहरी समझ बनाइए|</string>
+    <string name="launch_text_2">राज्य व साथी-शिक्षकों से प्रेरणा पाइए और उनकी प्रेरणा बनिए|</string>
+    <string name="launch_text_3">देश-भर के शिक्षकों के साथ जुड़िए और अपने अनुभव साझा कीजिए|</string>
     <string name="reset_password_msg">आपके password reset करने के लिए फ़ोन पर नंबर नीचे भरिये। आपके फ़ोन पर फिर verification OTP SMS नंबर द्वारा आएगा।</string>
     <string name="otp_verification_msg">आपके फ़ोन पर अभी एक SMS आएगा SMS में दिया verification number नीचे अपने आप भर जाएगा।</string>
     <string name="resend_otp">OTP पुनः भेजें?</string>
@@ -245,4 +245,5 @@
     <string name="certificates">सर्टिफ़िकेट</string>
     <string name="update_tta">अपडेट TTA</string>
     <string name="session_expire">सेशन समाप्त हुआ। कृपया पुनः लॉगिन करें।</string>
+    <string name="share_clipboard">साझा-URL को कॉपी कर लिया गया</string>
 </resources>

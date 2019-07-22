@@ -2,11 +2,13 @@ package org.tta.mobile.tta.ui.connect.view_model;
 
 import android.Manifest;
 import android.app.DownloadManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -50,6 +52,7 @@ import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.connect.ConnectCommentsTab;
 import org.tta.mobile.tta.ui.interfaces.CommentClickListener;
 import org.tta.mobile.tta.ui.profile.OtherProfileActivity;
+import org.tta.mobile.tta.ui.share.ShareBottomSheet;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.tta.utils.ContentSourceUtil;
@@ -884,7 +887,7 @@ public class ConnectDashboardViewModel extends BaseViewModel
     }
 
     //share post link with other apps
-    public void openShareMenu(View anchor) {
+    public void openShareMenu() {
         if (post == null){
             return;
         }
@@ -892,41 +895,15 @@ public class ConnectDashboardViewModel extends BaseViewModel
             return;
         }
 
-        final String shareTextWithPlatformName = ResourceUtil.getFormattedString(
-                mActivity.getResources(),
-                R.string.share_wp_post_message,
-                "course_name",
-                //getString(R.string.platform_name)).toString() + "\n" + courseData.getCourse().getCourse_about();
-                post.getTitle().getRendered()).toString() + "\n" + post.getLink();
-        ShareUtils.showShareMenu(
-                mActivity,
-                ShareUtils.newShareIntent(shareTextWithPlatformName),
-                anchor,
+        ShareBottomSheet sheet = ShareBottomSheet.newInstance(content.getSource().getTitle(),
+                content.getName(), content.getIcon(), post.getLink(),
                 (componentName, shareType) -> {
-                    final String shareText;
-                    final String twitterTag = mDataManager.getConfig().getTwitterConfig().getHashTag();
-                    if (shareType == ShareUtils.ShareType.TWITTER && !TextUtils.isEmpty(twitterTag)) {
-                        shareText = ResourceUtil.getFormattedString(
-                                mActivity.getResources(),
-                                R.string.share_wp_post_message,
-                                "course_name",
-                                //twitterTag).toString() + "\n" + courseData.getCourse().getCourse_about();
-                                twitterTag).toString() + "\n" + post.getLink();
 
-                    } else {
-                        shareText = shareTextWithPlatformName;
-                    }
-
-//                    segIO.courseDetailShared(post.getLink(), shareText, shareType);
                     if (!shareType.equals(ShareUtils.ShareType.TTA)) {
                         mActivity.analytic.addMxAnalytics_db(content.getName(), Action.Share,
                                 content.getSource().getName(), Source.Mobile, content.getSource_identity(),
                                 BreadcrumbUtil.getBreadcrumb() + "/" + shareType.name(),
                                 content.getSource_identity(), content.getId());
-
-                        final Intent intent = ShareUtils.newShareIntent(shareText);
-                        intent.setComponent(componentName);
-                        mActivity.startActivity(intent);
                     } else {
                         mActivity.analytic.syncSingleMXAnalytic(content.getName(), Action.Share,
                                 content.getSource().getName(), Source.Mobile, content.getSource_identity(),
@@ -935,9 +912,9 @@ public class ConnectDashboardViewModel extends BaseViewModel
 
                         mActivity.showLongToast(mActivity.getString(R.string.post_share_successful));
                     }
-
-
                 });
+
+        sheet.show(mActivity.getSupportFragmentManager(), ShareBottomSheet.TAG);
 
     }
 

@@ -860,6 +860,7 @@
     <string name="update_tta">Update TTA</string>
     <string name="certificates">Certificates</string>
     <string name="session_expire">Session Expired. Please login again.</string>
+    <string name="share_clipboard">Share URL copied to clipboard</string>
 
     <string name="anonymous" translatable="false">Anonymous</string>
     <string name="privacy_policy_url" translatable="false">http://theteacherapp.org/privacy</string>

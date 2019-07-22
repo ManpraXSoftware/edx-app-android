@@ -1,15 +1,12 @@
-package org.tta.mobile.tta.ui.feed;
+package org.tta.mobile.tta.ui.share;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -17,7 +14,6 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,35 +22,29 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 import org.tta.mobile.R;
-import org.tta.mobile.tta.Constants;
-import org.tta.mobile.tta.analytics.analytics_enums.Action;
-import org.tta.mobile.tta.analytics.analytics_enums.Source;
-import org.tta.mobile.tta.data.enums.SourceName;
-import org.tta.mobile.tta.data.local.db.table.Feed;
 import org.tta.mobile.tta.utils.AppUtil;
-import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.tta.utils.Tools;
 import org.tta.mobile.util.ResourceUtil;
 import org.tta.mobile.util.images.ShareUtils;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import static org.tta.mobile.util.BrowserUtil.config;
+public class ShareBottomSheet extends BottomSheetDialogFragment {
+    public static final String TAG = ShareBottomSheet.class.getCanonicalName();
 
-public class FeedShareBottomSheet extends BottomSheetDialogFragment {
-    public static final String TAG = FeedShareBottomSheet.class.getCanonicalName();
-
+    private String title, message, image, link;
     private ShareUtils.ShareMenuItemListener listener;
-    private Feed feed;
-    private String delimiterTagChunks, delimiterSectionTag, replacementTagSpace;
 
-    public static FeedShareBottomSheet newInstance(ShareUtils.ShareMenuItemListener listener, Feed feed){
-        FeedShareBottomSheet fragment = new FeedShareBottomSheet();
-        fragment.listener = listener;
-        fragment.feed = feed;
-        return fragment;
+    public static ShareBottomSheet newInstance(String title, String message, String image, String link,
+                                               ShareUtils.ShareMenuItemListener listener){
+        ShareBottomSheet sheet = new ShareBottomSheet();
+        sheet.title = title;
+        sheet.message = message;
+        sheet.image = image;
+        sheet.link = link;
+        sheet.listener = listener;
+        return sheet;
     }
 
     //Bottom Sheet Callback
@@ -77,110 +67,23 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
     @Override
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
-        delimiterTagChunks = Constants.DELIMITER_TAG_CHUNKS;
-        delimiterSectionTag = Constants.DELIMITER_SECTION_TAG;
-        replacementTagSpace = Constants.REPLACEMENT_TAG_SPACE;
 
-        int layoutId;
-        try {
-            switch (Action.valueOf(feed.getAction())){
-                case LikePost:
-                case MostPopular:
-                case CommentPost:
-                case Share:
-                case SharePostApp:
-                case NewPost:
-                case DBComment:
-                case DBLike:
-                case Like:
-                case Comment:
-                case TTAFeed:
-                    if (feed.getMeta_data() != null &&
-                            feed.getMeta_data().getUser_name() != null) {
-                        layoutId = R.layout.t_fragment_feed_share_with_user;
-                        break;
-                    }
-
-                default:
-                    layoutId = R.layout.t_fragment_feed_share;
-
-            }
-        } catch (IllegalArgumentException e) {
-            layoutId = R.layout.t_fragment_feed_share;
-        }
-
-        View contentView = View.inflate(getContext(), layoutId, null);
-
-        if (layoutId == R.layout.t_fragment_feed_share_with_user){
-
-            Glide.with(getContext())
-                    .load(config.getApiHostURL() +
-                            feed.getMeta_data().getUser_icon().getLarge())
-                    .placeholder(R.drawable.profile_photo_placeholder)
-                    .into((ImageView) contentView.findViewById(R.id.feed_user_image));
-
-            ((TextView) contentView.findViewById(R.id.feed_user_name)).setText(feed.getMeta_data().getUser_name());
-            ((TextView) contentView.findViewById(R.id.feed_user_classes)).setText(getUserClasses(feed.getMeta_data().getTag_label()));
-
-        } else {
-
-            ((TextView) contentView.findViewById(R.id.feed_title)).setText(feed.getMeta_data().getSource_title());
-            contentView.findViewById(R.id.play_icon).setVisibility(
-                    feed.getMeta_data().getSource_name().equalsIgnoreCase(SourceName.course.name()) ?
-                            View.GONE : View.VISIBLE
-            );
-
-        }
+        View contentView = View.inflate(getContext(), R.layout.t_fragment_feed_share, null);
 
         contentView.findViewById(R.id.ivClose).setOnClickListener(v -> dismiss());
+        ((TextView) contentView.findViewById(R.id.feed_title)).setText(title);
+        ((TextView) contentView.findViewById(R.id.feed_meta_text)).setText(message);
 
-        if (feed.getAction().equalsIgnoreCase(Action.TTAFeed.name())) {
-            ((TextView) contentView.findViewById(R.id.feed_meta_text)).setText(feed.getMessage());
-        } else {
-            ((TextView) contentView.findViewById(R.id.feed_meta_text)).setText(feed.getMeta_data().getText());
-        }
         Glide.with(getContext())
-                .load(feed.getMeta_data().getIcon())
+                .load(image)
                 .placeholder(R.drawable.placeholder_course_card_image)
                 .into((ImageView) contentView.findViewById(R.id.feed_content_image));
 
         LinearLayout shareOptionsLayout = contentView.findViewById(R.id.feed_share_options_layout);
-
         addTTAOption(shareOptionsLayout);
         addFbOption(shareOptionsLayout);
         addWhatsappOption(shareOptionsLayout);
         addClipboardOption(shareOptionsLayout);
-
-        /*final PackageManager packageManager = getActivity().getPackageManager();
-        String shareText = getShareString();
-        final List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(
-                ShareUtils.newShareIntent(shareText), 0);
-        for (final ResolveInfo resolveInfo : resolveInfoList) {
-            switch (resolveInfo.activityInfo.packageName){
-                case "com.facebook.katana":
-                case "com.facebook.lite":
-                case "com.whatsapp":
-                case "org.tta.mobile":
-                case "org.tta.mobile":
-                    ImageView shareImage = addShareOption(shareOptionsLayout);
-                    shareImage.setImageDrawable(resolveInfo.loadIcon(packageManager));
-                    shareImage.setOnClickListener(v -> {
-                        final ComponentName componentName = new ComponentName(
-                                resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name);
-                        ShareUtils.ShareType shareType = ShareUtils.getShareTypeFromComponentName(componentName);
-                        listener.onMenuItemClick(componentName, shareType);
-
-                        if (!shareType.equals(ShareUtils.ShareType.TTA)) {
-                            final Intent intent = ShareUtils.newShareIntent(shareText);
-                            intent.setComponent(componentName);
-                            getActivity().startActivity(intent);
-                        } else {
-                            Toast.makeText(getActivity(), "Content shared on TheTeacherApp", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                    break;
-            }
-        }*/
 
         dialog.setContentView(contentView);
 
@@ -192,17 +95,16 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
         if (behavior instanceof BottomSheetBehavior) {
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
         }
+
     }
 
     private String getShareString(){
         Map<String, CharSequence> map = new HashMap<>();
-        map.put("source_title", feed.getMeta_data().getSource_title());
-        map.put("platform_name", getActivity().getString(R.string.platform_name));
-        map.put("content_name", feed.getMeta_data().getText());
-        return ResourceUtil.getFormattedString(
-                getActivity().getResources(),
-                R.string.share_message,
-                map).toString() + "\n" + feed.getMeta_data().getShare_url();
+        map.put("source_title", title);
+        map.put("platform_name", getString(R.string.platform_name));
+        map.put("content_name", message);
+        return ResourceUtil.getFormattedString(getResources(), R.string.share_message, map)
+                .toString() + "\n" + link;
     }
 
     private void addTTAOption(LinearLayout optionsLayout){
@@ -212,11 +114,6 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
         imageView.setOnClickListener(v -> {
             if (listener != null){
                 listener.onMenuItemClick(null, ShareUtils.ShareType.TTA);
-            }
-            if (feed.getMeta_data().getSource_name().equalsIgnoreCase(SourceName.course.name())) {
-                Toast.makeText(getActivity(), getActivity().getString(R.string.course_share_successful), Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getActivity(), getActivity().getString(R.string.post_share_successful), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -311,7 +208,7 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
             }
 
             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("TTA share", feed.getMeta_data().getShare_url());
+            ClipData clip = ClipData.newPlainText("TTA share", link);
             clipboard.setPrimaryClip(clip);
 
             Toast.makeText(getActivity(), getString(R.string.share_clipboard), Toast.LENGTH_LONG).show();
@@ -329,32 +226,5 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
         imageView.setFocusable(true);
         layout.addView(imageView);
         return imageView;
-    }
-
-    private String getUserClasses(String tagLabel){
-        StringBuilder builder = new StringBuilder("कक्षाएँ - ");
-
-        if (tagLabel == null || tagLabel.length() == 0) {
-            return builder.append("N/A").toString();
-        }
-
-        String[] section_tag_list = tagLabel.split(delimiterTagChunks);
-        boolean classesAdded = false;
-
-        for (String section_tag : section_tag_list) {
-            String[] duet = section_tag.split(delimiterSectionTag);
-            if (duet[0].contains("कक्षा")){
-                duet[1] = duet[1].replace(replacementTagSpace, " ");
-                builder.append(duet[1]).append(", ");
-                classesAdded = true;
-            }
-        }
-
-        if (classesAdded){
-            return builder.substring(0, builder.length() - 2);
-        } else {
-            return builder.append("N/A").toString();
-        }
-
     }
 }

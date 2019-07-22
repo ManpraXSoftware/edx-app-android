@@ -14,6 +14,8 @@ import org.tta.mobile.event.NetworkConnectivityChangeEvent;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.model.course.CourseComponent;
 import org.tta.mobile.tta.Constants;
+import org.tta.mobile.tta.analytics.analytics_enums.Action;
+import org.tta.mobile.tta.analytics.analytics_enums.Source;
 import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.BasePagerAdapter;
@@ -21,6 +23,8 @@ import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.course.CourseMaterialTab;
 import org.tta.mobile.tta.ui.course.discussion.CourseDiscussionTab;
+import org.tta.mobile.tta.ui.share.ShareBottomSheet;
+import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.images.ShareUtils;
 import org.tta.mobile.view.AuthenticatedWebViewFragment;
@@ -219,15 +223,32 @@ public class CourseDashboardViewModel extends BaseViewModel {
         EventBus.getDefault().unregister(this);
     }
 
-    public void openShareMenu(View anchor) {
+    public void openShareMenu() {
 
         if (course == null){
             return;
         }
 
-        ShareUtils.showCourseShareMenu(getActivity(), anchor, course,
-                mDataManager.getEdxEnvironment().getAnalyticsRegistry(), mDataManager.getEdxEnvironment(),
-                content.getId());
+        ShareBottomSheet sheet = ShareBottomSheet.newInstance(content.getSource().getTitle(),
+                content.getName(), content.getIcon(), course.getCourse().getCourse_about(),
+                (componentName, shareType) -> {
+
+                    if (!shareType.equals(ShareUtils.ShareType.TTA)) {
+                        mActivity.analytic.addMxAnalytics_db(content.getName(), Action.Share,
+                                content.getSource().getName(), Source.Mobile, content.getSource_identity(),
+                                BreadcrumbUtil.getBreadcrumb() + "/" + shareType.name(),
+                                content.getSource_identity(), content.getId());
+                    } else {
+                        mActivity.analytic.syncSingleMXAnalytic(content.getName(), Action.Share,
+                                content.getSource().getName(), Source.Mobile, content.getSource_identity(),
+                                BreadcrumbUtil.getBreadcrumb() + "/" + shareType.name(),
+                                content.getSource_identity(), content.getId());
+
+                        mActivity.showLongToast(mActivity.getString(R.string.course_share_successful));
+                    }
+                });
+
+        sheet.show(mActivity.getSupportFragmentManager(), ShareBottomSheet.TAG);
 
     }
 
