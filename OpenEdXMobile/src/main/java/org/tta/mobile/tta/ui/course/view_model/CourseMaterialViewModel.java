@@ -864,11 +864,12 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
             @Override
             public void showProgressDialog(int numDownloads) {
-
+                mActivity.hideLoading();
             }
 
             @Override
             public void updateListUI() {
+                mActivity.hideLoading();
                 if (adapter != null){
                     adapter.notifyDataSetChanged();
                 }
@@ -876,6 +877,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
             @Override
             public boolean showInfoMessage(String message) {
+                mActivity.hideLoading();
                 return false;
             }
         });
@@ -965,11 +967,13 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
                     @Override
                     public void showProgressDialog(int numDownloads) {
+                        mActivity.hideLoading();
                         Log.d("Download", "showProgressDialog " + numDownloads);
                     }
 
                     @Override
                     public void updateListUI() {
+                        mActivity.hideLoading();
                         if (adapter != null){
                             adapter.notifyDataSetChanged();
                         }
@@ -977,6 +981,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
 
                     @Override
                     public boolean showInfoMessage(String message) {
+                        mActivity.hideLoading();
                         Log.d("Download", "showInfoMessage " + message);
                         return false;
                     }

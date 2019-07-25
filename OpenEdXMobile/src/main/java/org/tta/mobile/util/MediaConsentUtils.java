@@ -33,7 +33,7 @@ public class MediaConsentUtils {
     public static boolean canStreamMedia(Context context) {
         NetworkInfo info = NetworkUtil.getNetworkInfo(context);
         if (info == null || !info.isConnected()) return false;
-        switch (info.getType()) {
+        /*switch (info.getType()) {
             case ConnectivityManager.TYPE_WIFI:
             case ConnectivityManager.TYPE_BLUETOOTH:
             case ConnectivityManager.TYPE_ETHERNET:
@@ -41,7 +41,8 @@ public class MediaConsentUtils {
             default:
                 return !MainApplication.getEnvironment(context).getUserPrefs().isDownloadOverWifiOnly() ||
                         NetworkUtil.isOnZeroRatedNetwork(context, config);
-        }
+        }*/
+        return true;
     }
 
     /**

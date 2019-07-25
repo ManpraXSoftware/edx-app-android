@@ -32,6 +32,7 @@ import org.tta.mobile.tta.data.enums.DownloadType;
 import org.tta.mobile.tta.scorm.ScormBlockModel;
 import org.tta.mobile.tta.tincan.model.Resume;
 import org.tta.mobile.util.Config;
+import org.tta.mobile.util.FileUtil;
 import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.Sha1Util;
 import org.tta.mobile.view.BulkDownloadFragment;
@@ -243,7 +244,12 @@ public class Storage implements IStorage {
                 File file = new File(filepath);
 
                 if (file.exists()) {
-                    if (file.delete()) {
+
+                    if (file.isDirectory()){
+                        FileUtil.deleteRecursive(file);
+                        logger.debug("Deleted: " + file.getPath());
+                        return true;
+                    } else if (file.delete()) {
                         logger.debug("Deleted: " + file.getPath());
                         return true;
                     } else {
