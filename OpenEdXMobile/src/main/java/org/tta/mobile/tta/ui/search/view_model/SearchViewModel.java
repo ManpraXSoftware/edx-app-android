@@ -138,6 +138,7 @@ public class SearchViewModel extends BaseViewModel {
     public RecyclerView.LayoutManager filterLayoutManager;
     public ContentListsAdapter contentListsAdapter;
     private boolean isAllLoaded=false;
+    private boolean firstLoadDone=false;
 
     public SourcesAdapter sourcesAdapter;
 //    public ObservableInt selectedSourcePosition = new ObservableInt(-1);
@@ -322,10 +323,12 @@ public class SearchViewModel extends BaseViewModel {
     };
 
     public MxInfiniteAdapter.OnLoadMoreListener loadMoreListener = page -> {
-        if (isAllLoaded)
-            return false;
-        skip++;
-        search();
+        if (firstLoadDone) {
+            if (isAllLoaded)
+                return false;
+            skip++;
+            search();
+        }
         return true;
     };
 
@@ -347,9 +350,11 @@ public class SearchViewModel extends BaseViewModel {
         public boolean onQueryTextChange(String newText) {
             searchText.set(newText);
             searchTextObs.set(newText);
-            changesMade = true;
-            if (newText == null || newText.equals("")){
-                hideFilters();
+            if (firstLoadDone) {
+                changesMade = true;
+                if (newText == null || newText.equals("")){
+                    hideFilters();
+                }
             }
             return false;
         }
@@ -739,6 +744,8 @@ public class SearchViewModel extends BaseViewModel {
                 !selectedContentList.getAuto_function().equalsIgnoreCase(AutoFuntionType.Expression.name())) &&
                 cr != null){
             long sourceId = selectedSource == null ? 0 : selectedSource.getId();
+
+            int j = 0;
             for (Category cat: cr.getCategory()){
                 if (cat.getSource_id() == sourceId){
                     int i = 0;
@@ -757,7 +764,18 @@ public class SearchViewModel extends BaseViewModel {
                     }
                     break;
                 }
+                j++;
             }
+
+            if (j == cr.getCategory().size()){
+                selectedContentList = null;
+                contentListText.set("");
+                contentListVisible.set(false);
+            }
+        } else {
+            selectedContentList = null;
+            contentListText.set("");
+            contentListVisible.set(false);
         }
 
     }
@@ -1153,6 +1171,7 @@ public class SearchViewModel extends BaseViewModel {
     }
 
     private void populateContents(List<Content> contents) {
+        firstLoadDone = true;
 
         if (changesMade){
             this.contents = contents;
