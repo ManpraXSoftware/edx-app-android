@@ -117,7 +117,7 @@
                     android:paddingBottom="4dp"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
-                    android:visibility="gone"/>
+                    android:visibility="@{viewModel.contentListVisible?View.VISIBLE:View.GONE}"/>
 
                 <org.tta.mobile.tta.ui.custom.DropDownFilterView
                     android:layout_width="wrap_content"

@@ -32,6 +32,7 @@ import org.tta.mobile.event.NetworkConnectivityChangeEvent;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
+import org.tta.mobile.tta.data.enums.AutoFuntionType;
 import org.tta.mobile.tta.data.enums.ContentListMode;
 import org.tta.mobile.tta.data.enums.SearchType;
 import org.tta.mobile.tta.data.enums.SourceName;
@@ -162,7 +163,8 @@ public class SearchViewModel extends BaseViewModel {
             case content:
                 contentsVisible.set(true);
                 sourcesVisible.set(true);
-                if (selectedContentList == null) {
+                if (selectedContentList == null || (selectedContentList.getAuto_function() != null &&
+                        selectedContentList.getAuto_function().equalsIgnoreCase(AutoFuntionType.Expression.name()))) {
                     contentListVisible.set(false);
                 } else {
                     contentListVisible.set(true);
@@ -209,7 +211,8 @@ public class SearchViewModel extends BaseViewModel {
                 searchType = SearchType.content;
                 contentsVisible.set(true);
                 sourcesVisible.set(true);
-                if (selectedContentList == null) {
+                if (selectedContentList == null || (selectedContentList.getAuto_function() != null &&
+                        selectedContentList.getAuto_function().equalsIgnoreCase(AutoFuntionType.Expression.name()))) {
                     contentListVisible.set(false);
                 } else {
                     contentListVisible.set(true);
@@ -362,7 +365,8 @@ public class SearchViewModel extends BaseViewModel {
         selectedCategory = category;
         currentContentLists = contentLists;
         this.selectedContentList = selectedContentList;
-        if (selectedContentList != null){
+        if (selectedContentList != null && (selectedContentList.getAuto_function() == null ||
+                !selectedContentList.getAuto_function().equalsIgnoreCase(AutoFuntionType.Expression.name()))){
             contentListText.set(selectedContentList.getName());
             contentListVisible.set(true);
         } else {
@@ -731,7 +735,9 @@ public class SearchViewModel extends BaseViewModel {
 
     private void setSelectedContentList(){
 
-        if (selectedContentList != null && cr != null){
+        if (selectedContentList != null && (selectedContentList.getAuto_function() == null ||
+                !selectedContentList.getAuto_function().equalsIgnoreCase(AutoFuntionType.Expression.name())) &&
+                cr != null){
             long sourceId = selectedSource == null ? 0 : selectedSource.getId();
             for (Category cat: cr.getCategory()){
                 if (cat.getSource_id() == sourceId){
@@ -819,7 +825,8 @@ public class SearchViewModel extends BaseViewModel {
                 contentsVisible.set(true);
                 sourcesVisible.set(true);
                 SoftKeyboardUtil.hide(mActivity);
-                if (selectedContentList == null) {
+                if (selectedContentList == null || (selectedContentList.getAuto_function() != null &&
+                        selectedContentList.getAuto_function().equalsIgnoreCase(AutoFuntionType.Expression.name()))) {
                     contentListVisible.set(false);
                 } else {
                     contentListVisible.set(true);
@@ -921,7 +928,7 @@ public class SearchViewModel extends BaseViewModel {
 
 //        populateTags();
         //for selection of section content filter item
-        if (isFirst && selectedContentList!=null&&selectedContentList.getName()!=null) {
+        if (isFirst && selectedContentList != null && selectedContentList.getName()!=null) {
             for (FilterSection s : currentSections) {
                 for (FilterTag tag : s.getTags()) {
                     if (tag.toString().equalsIgnoreCase(selectedContentList.getName()) && !tags.contains(tag)) {
@@ -1020,7 +1027,8 @@ public class SearchViewModel extends BaseViewModel {
             setFilterSections();
 
             StringBuilder builder = new StringBuilder();
-            if (selectedContentList != null) {
+            if (selectedContentList != null && (selectedContentList.getAuto_function() == null ||
+                    !selectedContentList.getAuto_function().equalsIgnoreCase(AutoFuntionType.Expression.name()))) {
                 builder.append(selectedContentList.getName()).append(", ");
             }
             builder.append(searchText.get()).append(", ");
@@ -1056,7 +1064,9 @@ public class SearchViewModel extends BaseViewModel {
         if (searchType.equals(SearchType.content)) {
 
             mDataManager.search(take, skip, isPriority,
-                    selectedContentList != null ? selectedContentList.getId() : 0,
+                    selectedContentList != null && (selectedContentList.getAuto_function() == null ||
+                            !selectedContentList.getAuto_function().equalsIgnoreCase(AutoFuntionType.Expression.name()))
+                            ? selectedContentList.getId() : 0,
                     searchText.get(),
                     selectedSource != null &&
                             (selectedSource.getName().equalsIgnoreCase(SourceName.hois.name()) ||

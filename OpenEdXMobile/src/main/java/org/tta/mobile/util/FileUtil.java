@@ -7,6 +7,8 @@ import android.support.annotation.RawRes;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -106,5 +108,40 @@ public class FileUtil {
         // Don't break the recursion upon encountering an error
         // noinspection ResultOfMethodCallIgnored
         fileOrDirectory.delete();
+    }
+
+    public static boolean copyFile(@NonNull File srcFile, @NonNull File destFile){
+        InputStream in = null;
+        OutputStream out = null;
+
+        try {
+            in = new FileInputStream(srcFile);
+            out = new FileOutputStream(destFile);
+
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            in.close();
+            in = null;
+
+            // write the output file (You have now copied the file)
+            out.flush();
+            out.close();
+            out = null;
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean moveFile(@NonNull File srcFile, @NonNull File destFile){
+        boolean b = copyFile(srcFile, destFile);
+        if (b) {
+            deleteRecursive(srcFile);
+        }
+        return b;
     }
 }

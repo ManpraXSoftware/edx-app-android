@@ -237,6 +237,9 @@ public class Storage implements IStorage {
     private boolean deleteFile(String filepath) {
         try {
             if(filepath != null) {
+                if (filepath.endsWith(".zip")) {
+                    filepath = filepath.substring(0, filepath.length()-4);
+                }
                 File file = new File(filepath);
 
                 if (file.exists()) {

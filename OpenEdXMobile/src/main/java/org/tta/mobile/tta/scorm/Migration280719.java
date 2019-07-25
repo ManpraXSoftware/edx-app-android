@@ -7,6 +7,7 @@ import android.util.Log;
 import org.apache.commons.io.FileUtils;
 import org.tta.mobile.model.VideoModel;
 import org.tta.mobile.tta.data.DataManager;
+import org.tta.mobile.util.FileUtil;
 import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.Sha1Util;
 
@@ -103,9 +104,10 @@ public class Migration280719 {
         try {
             deleteLegacyScromEntries();
             if (oldFolderPath.exists()) {
-                FileUtils.deleteDirectory(oldFolderPath);
+//                FileUtils.deleteDirectory(oldFolderPath);
+                FileUtil.deleteRecursive(oldFolderPath);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -218,13 +220,15 @@ public class Migration280719 {
     }
 
     private boolean MoveFile(File source, File dest) {
-        try {
+        /*try {
             moveFileToDirectory(source, dest,false);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
-        }
+        }*/
+
+        return FileUtil.moveFile(source, new File(dest, source.getName()));
     }
 
     private static String getLagacyFileName(String filepath) {
