@@ -246,4 +246,6 @@
     <string name="update_tta">अपडेट TTA</string>
     <string name="session_expire">सेशन समाप्त हुआ। कृपया पुनः लॉगिन करें।</string>
     <string name="share_clipboard">साझा-URL को कॉपी कर लिया गया</string>
+    <string name="verify">सत्यापित करें</string>
+    <string name="verify_otp">OTP सत्यापित करें</string>
 </resources>
