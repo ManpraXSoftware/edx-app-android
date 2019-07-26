@@ -23,7 +23,15 @@ public final class DbStructure {
            //certificate table and fields.
            //add content_id to download table
 
-    public static final int VERSION = 11;
+
+    //Updated to version 12 to migrate all tables below
+    //Added SOURCE_ID , CONTENT_ID  in ANALYTIC table
+
+
+    //Updated to version 13 to migrate all tables below
+    //added LAST_MODIFIED in  DOWNLOADS table
+
+    public static final int VERSION = 13;
 
     public static final class Table {
         public static final String DOWNLOADS = "downloads";
