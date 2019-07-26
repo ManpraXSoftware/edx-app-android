@@ -21,6 +21,8 @@ public class SigninRegisterActivity extends BaseVMActivity {
 
     private SigninRegisterViewModel viewModel;
 
+    public static boolean isAlreadyOpened;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +37,7 @@ public class SigninRegisterActivity extends BaseVMActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        isAlreadyOpened = true;
         viewPager.post(() -> {
             try {
                 PageViewStateCallback callback = (PageViewStateCallback) ((BasePagerAdapter) viewPager.getAdapter())
@@ -46,5 +49,11 @@ public class SigninRegisterActivity extends BaseVMActivity {
                 e.printStackTrace();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isAlreadyOpened = false;
     }
 }
