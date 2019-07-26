@@ -51,6 +51,7 @@ public class UserInfoActivity extends BaseVMActivity {
     private FieldInfo fieldInfo;
     private String pmisError;
     private String delimiterTagChunks, delimiterSectionTag, replacementTagSpace;
+    public static boolean isAlreadyOpened;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -511,4 +512,15 @@ public class UserInfoActivity extends BaseVMActivity {
         return valid;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isAlreadyOpened = true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        isAlreadyOpened = false;
+    }
 }

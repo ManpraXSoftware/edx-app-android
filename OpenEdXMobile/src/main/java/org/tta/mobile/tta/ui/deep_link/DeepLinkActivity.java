@@ -71,11 +71,15 @@ public class DeepLinkActivity extends BaseVMActivity {
 
     private boolean requiresAuthentication(){
         if (loginPrefs == null || !loginPrefs.isLoggedIn()) {
-            ActivityUtil.gotoPage(this, SigninRegisterActivity.class);
+            if (!SigninRegisterActivity.isAlreadyOpened) {
+                ActivityUtil.gotoPage(this, SigninRegisterActivity.class);
+            }
             this.finish();
             return true;
         } else if (loginPrefs.getDisplayName() == null || loginPrefs.getDisplayName().equals(loginPrefs.getUsername())){
-            ActivityUtil.gotoPage(this, UserInfoActivity.class);
+            if (!UserInfoActivity.isAlreadyOpened) {
+                ActivityUtil.gotoPage(this, UserInfoActivity.class);
+            }
             this.finish();
             return true;
         }
