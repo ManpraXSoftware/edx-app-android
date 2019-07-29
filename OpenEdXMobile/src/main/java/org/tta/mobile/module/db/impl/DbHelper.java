@@ -131,14 +131,8 @@ public class DbHelper extends SQLiteOpenHelper {
                         + DbStructure.Column.CONTENT_ID + " INTEGER "
         };
 
-        String[] upgradeToV13 = new String[]{
-                "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
-                        + DbStructure.Column.LAST_MODIFIED + " TEXT "
-        };
-
-        String upgradeToV14 =
-                "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
-                        + DbStructure.Column.LAST_MODIFIED + " TEXT ";
+        String upgradeToV13 = "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
+                + DbStructure.Column.LAST_MODIFIED + " TEXT ";
 
         if (oldVersion == 1) {
             // upgrade from 1 to 2
@@ -252,7 +246,6 @@ public class DbHelper extends SQLiteOpenHelper {
                     new String[]{String.valueOf(DownloadEntry.DownloadedState.ONLINE.ordinal())});
         }
 
-
         if(oldVersion<11)
         {
             // upgrade from 10 to 11
@@ -275,19 +268,10 @@ public class DbHelper extends SQLiteOpenHelper {
 
         if(oldVersion<13)
         {
-            // upgrade from 10 to 11
-            for (String query : upgradeToV13) {
-                db.execSQL(query);
-            }
+            // upgrade from 12 to 13
+            db.execSQL(upgradeToV13);
 
             logger.debug("Migration 12_13 done.s");
-        }
-
-        //to solve migration issue for Lastmodified
-
-        if (oldVersion <14) {
-            // upgrade from 13 to 14
-            db.execSQL(upgradeToV14);
         }
     }
 
