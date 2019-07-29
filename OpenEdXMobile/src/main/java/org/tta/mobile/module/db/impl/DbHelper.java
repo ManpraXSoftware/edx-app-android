@@ -282,13 +282,6 @@ public class DbHelper extends SQLiteOpenHelper {
 
             logger.debug("Migration 12_13 done.s");
         }
-
-        //to solve migration issue for Lastmodified
-
-        if (oldVersion <14) {
-            // upgrade from 13 to 14
-            db.execSQL(upgradeToV14);
-        }
     }
 
     /**
