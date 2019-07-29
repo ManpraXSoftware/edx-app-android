@@ -136,6 +136,10 @@ public class DbHelper extends SQLiteOpenHelper {
                         + DbStructure.Column.LAST_MODIFIED + " TEXT "
         };
 
+        String upgradeToV14 =
+                "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
+                        + DbStructure.Column.LAST_MODIFIED + " TEXT ";
+
         if (oldVersion == 1) {
             // upgrade from 1 to 2
             db.execSQL(upgradeToV2);
@@ -277,6 +281,13 @@ public class DbHelper extends SQLiteOpenHelper {
             }
 
             logger.debug("Migration 12_13 done.s");
+        }
+
+        //to solve migration issue for Lastmodified
+
+        if (oldVersion <14) {
+            // upgrade from 13 to 14
+            db.execSQL(upgradeToV14);
         }
     }
 

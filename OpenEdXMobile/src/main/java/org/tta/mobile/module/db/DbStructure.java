@@ -31,7 +31,10 @@ public final class DbStructure {
     //Updated to version 13 to migrate all tables below
     //added LAST_MODIFIED in  DOWNLOADS table
 
-    public static final int VERSION = 13;
+
+    //Updated to version 14 to migrate all tables below
+    //added LAST_MODIFIED in  DOWNLOADS table ,which was not migated in last 13 version
+    public static final int VERSION = 14;
 
     public static final class Table {
         public static final String DOWNLOADS = "downloads";
