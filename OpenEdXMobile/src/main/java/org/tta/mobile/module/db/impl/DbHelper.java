@@ -109,7 +109,7 @@ public class DbHelper extends SQLiteOpenHelper {
         String upgradeToV7 = "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
                         + DbStructure.Column.URL_HLS + " TEXT ";
 
-        //for new design
+        //for new design :Arjun
         String[] upgradeToV11 = new String[]{
                 "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
                         + DbStructure.Column.CONTENT_ID + " TEXT ",
@@ -123,20 +123,16 @@ public class DbHelper extends SQLiteOpenHelper {
                         + DbStructure.Column.NAV + " TEXT "};
 
 
-        String[] upgradeToV12 = new String[]{
-                "ALTER TABLE " + DbStructure.Table.ANALYTIC + " ADD COLUMN "
-                        + DbStructure.Column.SOURCE_ID + " TEXT ",
+        //for chirag migration issue :Arjun
+        String upgradeToV14_SOURCE_ID_ANALYTICS = "ALTER TABLE " + DbStructure.Table.ANALYTIC + " ADD COLUMN "
+                + DbStructure.Column.SOURCE_ID + " TEXT ";
 
-                "ALTER TABLE " + DbStructure.Table.ANALYTIC + " ADD COLUMN "
-                        + DbStructure.Column.CONTENT_ID + " INTEGER "
-        };
+        String upgradeToV14_CONTENT_ID_ANALYTICS = "ALTER TABLE " + DbStructure.Table.ANALYTIC + " ADD COLUMN "
+                + DbStructure.Column.CONTENT_ID + " INTEGER ";
 
-        String upgradeToV13 = "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
+        String upgradeToV14_LAST_MODIFIED_DOWNLOADS = "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
                 + DbStructure.Column.LAST_MODIFIED + " TEXT ";
 
-        //for chirag migartion issue
-        String upgradeToV14 = "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
-                + DbStructure.Column.LAST_MODIFIED + " TEXT ";
 
         if (oldVersion == 1) {
             // upgrade from 1 to 2
@@ -260,49 +256,27 @@ public class DbHelper extends SQLiteOpenHelper {
             logger.debug("Migration 10_11 done.s");
         }
 
-        if(oldVersion<12)
-        {
-            // upgrade from 10 to 11
-            for (String query : upgradeToV12) {
-                db.execSQL(query);
-            }
-
-            logger.debug("Migration 11_12 done.s");
-        }
-
-        if(oldVersion<13)
-        {
-            // upgrade from 12 to 13
-            db.execSQL(upgradeToV13);
-
-            logger.debug("Migration 12_13 done.s");
-        }
-
         if(oldVersion<14)
         {
-            boolean isColExists=false;
-            Cursor c = db.query(DbStructure.Table.DOWNLOADS, null, null,
-                    null, null, null, null);
-            try {
-                String[] columnNames = c.getColumnNames();
-
-                for (String col: columnNames) {
-                    if(col.trim().toLowerCase().equals(DbStructure.
-                            Column.LAST_MODIFIED.trim().toLowerCase()))
-                    {
-                        isColExists=true;
-                        logger.debug("Migration 13_14  Fail  **********column allready exist");
-                        break;
-                    }
-                }
-            } finally {
-                c.close();
+            //upgradeToV14_SOURCE_ID_ANALYTICS
+            if(!isColumnExists(DbStructure.Table.ANALYTIC, DbStructure.Column.SOURCE_ID,db))
+            {
+                db.execSQL(upgradeToV14_SOURCE_ID_ANALYTICS);
+                logger.debug("Table ---->ANALYTIC  Column -->SOURCE_ID Added successfully");
             }
 
-            if(!isColExists)
+            //upgradeToV14_CONTENT_ID_ANALYTICS
+            if(!isColumnExists(DbStructure.Table.ANALYTIC, DbStructure.Column.CONTENT_ID,db))
             {
-                logger.debug("Migration 13_14 Success  ********** aaded column");
-                db.execSQL(upgradeToV14);
+                db.execSQL(upgradeToV14_CONTENT_ID_ANALYTICS);
+                logger.debug("Table ---->ANALYTIC  Column -->CONTENT_ID Added successfully");
+            }
+
+            //upgradeToV14_LAST_MODIFIED_DOWNLOADS
+            if(!isColumnExists(DbStructure.Table.DOWNLOADS, DbStructure.Column.LAST_MODIFIED,db))
+            {
+                db.execSQL(upgradeToV14_LAST_MODIFIED_DOWNLOADS);
+                logger.debug("Table ---->DOWNLOADS  Column -->LAST_MODIFIED Added successfully");
             }
         }
     }
@@ -359,5 +333,29 @@ public class DbHelper extends SQLiteOpenHelper {
                 + DbStructure.Column.COURSE_ID  + " TEXT "
                 + ")";
         db.execSQL(sql);
+    }
+
+    private boolean isColumnExists(String table_name,String col_name,SQLiteDatabase db)
+    {
+        boolean isColExists=false;
+        Cursor c = db.query(table_name, null, null,
+                null, null, null, null);
+        try {
+            String[] columnNames = c.getColumnNames();
+
+            for (String col: columnNames) {
+                if(col.trim().toLowerCase().equals(col_name.trim().toLowerCase()))
+                {
+                    isColExists=true;
+                    logger.debug("Table ---->"+table_name+ " Column -->"+col_name+ " allready exist");
+                    logger.warn("Table ---->"+table_name+ " Column -->"+col_name+ " allready exist");
+                    break;
+                }
+            }
+        } finally {
+            c.close();
+        }
+
+        return isColExists;
     }
 }
