@@ -200,4 +200,5 @@ public interface IStorage {
 
     List<VideoModel> getLegacyWPDownloads();
     List<VideoModel> getLegacyEdxDownloads();
+    int doMigrate(String table, String col_name,DataCallback<Integer> callback);
 }

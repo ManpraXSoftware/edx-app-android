@@ -42,6 +42,7 @@ import org.tta.mobile.model.course.CourseStructureV1Model;
 import org.tta.mobile.model.course.HasDownloadEntry;
 import org.tta.mobile.model.db.DownloadEntry;
 import org.tta.mobile.module.db.DataCallback;
+import org.tta.mobile.module.db.DbStructure;
 import org.tta.mobile.module.db.impl.DbHelper;
 import org.tta.mobile.module.prefs.LoginPrefs;
 import org.tta.mobile.module.registration.model.RegistrationOption;
@@ -3992,6 +3993,11 @@ public class DataManager extends BaseRoboInjector {
 
     public void showToastFromOtherThread(String msg, int duration){
         mHandler.post(() -> Toast.makeText(context, msg, duration).show());
+    }
+
+    public void doDownloadTableMigration(String table, String col_name)
+    {
+        edxEnvironment.getStorage().doMigrate(table,col_name,null);
     }
 }
 

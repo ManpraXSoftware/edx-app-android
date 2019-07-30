@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import org.tta.mobile.R;
 import org.tta.mobile.event.NetworkConnectivityChangeEvent;
+import org.tta.mobile.module.db.DbStructure;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.appupdate.model.UpdateType;
 import org.tta.mobile.tta.data.local.db.table.ContentStatus;
@@ -242,6 +243,9 @@ public class LandingViewModel extends BaseViewModel {
         spt.MigrateConnectVideos();
 
         mDataManager.setContentIdForLegacyDownloads();
+        //FOR Last_modified collumn
+        //mDataManager.doDownloadTableMigration(DbStructure.Table.DOWNLOADS,DbStructure.Column.LAST_MODIFIED);
+        //mDataManager.doDownloadTableMigration(DbStructure.Table.DOWNLOADS,"arjun_col");
     }
 
     private void setToolTip() {

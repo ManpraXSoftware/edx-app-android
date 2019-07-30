@@ -134,6 +134,10 @@ public class DbHelper extends SQLiteOpenHelper {
         String upgradeToV13 = "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
                 + DbStructure.Column.LAST_MODIFIED + " TEXT ";
 
+        //for chirag migartion issue
+        String upgradeToV14 = "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
+                + DbStructure.Column.LAST_MODIFIED + " TEXT ";
+
         if (oldVersion == 1) {
             // upgrade from 1 to 2
             db.execSQL(upgradeToV2);
@@ -272,6 +276,34 @@ public class DbHelper extends SQLiteOpenHelper {
             db.execSQL(upgradeToV13);
 
             logger.debug("Migration 12_13 done.s");
+        }
+
+        if(oldVersion<14)
+        {
+            boolean isColExists=false;
+            Cursor c = db.query(DbStructure.Table.DOWNLOADS, null, null,
+                    null, null, null, null);
+            try {
+                String[] columnNames = c.getColumnNames();
+
+                for (String col: columnNames) {
+                    if(col.trim().toLowerCase().equals(DbStructure.
+                            Column.LAST_MODIFIED.trim().toLowerCase()))
+                    {
+                        isColExists=true;
+                        logger.debug("Migration 13_14  Fail  **********column allready exist");
+                        break;
+                    }
+                }
+            } finally {
+                c.close();
+            }
+
+            if(!isColExists)
+            {
+                logger.debug("Migration 13_14 Success  ********** aaded column");
+                db.execSQL(upgradeToV14);
+            }
         }
     }
 
