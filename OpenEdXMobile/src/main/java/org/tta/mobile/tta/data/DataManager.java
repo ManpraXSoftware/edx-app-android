@@ -3994,10 +3994,5 @@ public class DataManager extends BaseRoboInjector {
     public void showToastFromOtherThread(String msg, int duration){
         mHandler.post(() -> Toast.makeText(context, msg, duration).show());
     }
-
-    public void doDownloadTableMigration(String table, String col_name)
-    {
-        edxEnvironment.getStorage().doMigrate(table,col_name,null);
-    }
 }
 
