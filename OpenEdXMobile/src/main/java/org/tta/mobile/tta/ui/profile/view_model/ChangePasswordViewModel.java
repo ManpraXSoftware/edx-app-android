@@ -119,6 +119,12 @@ public class ChangePasswordViewModel extends BaseViewModel {
     }
 
     public void save(){
+
+        if (oldPass.get().equals(newPass.get())){
+            mActivity.showLongSnack(mActivity.getString(R.string.same_old_new_password));
+            return;
+        }
+
         mActivity.showLoading();
         mDataManager.changePassword(oldPass.get(), newPass.get(), new OnResponseCallback<ChangePasswordResponse>() {
             @Override

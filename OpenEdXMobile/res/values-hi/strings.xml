@@ -248,4 +248,5 @@
     <string name="share_clipboard">साझा-URL को कॉपी कर लिया गया</string>
     <string name="verify">सत्यापित करें</string>
     <string name="verify_otp">OTP सत्यापित करें</string>
+    <string name="same_old_new_password">पुराना और नया पासवर्ड सामान नहीं हो सकता।</string>
 </resources>
