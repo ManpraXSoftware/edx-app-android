@@ -243,9 +243,6 @@ public class LandingViewModel extends BaseViewModel {
         spt.MigrateConnectVideos();
 
         mDataManager.setContentIdForLegacyDownloads();
-        //FOR Last_modified collumn
-        //mDataManager.doDownloadTableMigration(DbStructure.Table.DOWNLOADS,DbStructure.Column.LAST_MODIFIED);
-        //mDataManager.doDownloadTableMigration(DbStructure.Table.DOWNLOADS,"arjun_col");
     }
 
     private void setToolTip() {
