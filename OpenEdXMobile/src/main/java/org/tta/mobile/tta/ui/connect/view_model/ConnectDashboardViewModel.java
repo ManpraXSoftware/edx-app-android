@@ -17,6 +17,7 @@ import android.view.View;
 
 import org.tta.mobile.R;
 import org.tta.mobile.event.NetworkConnectivityChangeEvent;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.model.VideoModel;
 import org.tta.mobile.model.db.DownloadEntry;
 import org.tta.mobile.module.storage.DownloadCompletedEvent;
@@ -572,6 +573,11 @@ public class ConnectDashboardViewModel extends BaseViewModel
         try {
             adapter.setFragments(fragments, titles);
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, ConnectDashboardViewModel.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "setTabs");
+            parameters.putString(Constants.KEY_DATA, "Content id = " + content.getId());
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
         initialPosition.set(0);
@@ -630,6 +636,12 @@ public class ConnectDashboardViewModel extends BaseViewModel
                     try {
                         n = Integer.parseInt(likes.get());
                     } catch (Exception e) {
+                        Bundle parameters = new Bundle();
+                        parameters.putString(Constants.KEY_CLASS_NAME, ConnectDashboardViewModel.class.getName());
+                        parameters.putString(Constants.KEY_FUNCTION_NAME, "like");
+                        parameters.putString(Constants.KEY_DATA, "Content id = " + content.getId() +
+                                ", likes = " + likes.get());
+                        Logger.logCrashlytics(e, parameters);
                         n = 0;
                     }
                 }

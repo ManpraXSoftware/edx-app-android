@@ -15,6 +15,7 @@ import com.maurya.mx.mxlib.core.OnRecyclerItemClickListener;
 
 import org.tta.mobile.R;
 import org.tta.mobile.databinding.TRowNotificationBinding;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.data.enums.NotificationType;
@@ -117,6 +118,11 @@ public class NotificationsViewModel extends BaseViewModel {
 //                        mActivity.showLongSnack(item.getDescription());
                 }
             } catch (IllegalArgumentException e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, NotificationsViewModel.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "Constructor");
+                parameters.putString(Constants.KEY_DATA, "Notification = " + item.toString());
+                Logger.logCrashlytics(e, parameters);
                 mActivity.hideLoading();
 //                mActivity.showLongSnack(item.getDescription());
             }

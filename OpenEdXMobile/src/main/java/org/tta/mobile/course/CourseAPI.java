@@ -1,6 +1,7 @@
 package org.tta.mobile.course;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -14,6 +15,7 @@ import org.tta.mobile.http.notifications.ErrorNotification;
 import org.tta.mobile.http.notifications.SnackbarErrorNotification;
 import org.tta.mobile.interfaces.RefreshListener;
 import org.tta.mobile.interfaces.SectionItemInterface;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.model.Filter;
 import org.tta.mobile.model.Page;
 import org.tta.mobile.model.api.ChapterModel;
@@ -40,6 +42,7 @@ import org.tta.mobile.model.course.VideoBlockModel;
 import org.tta.mobile.model.course.VideoData;
 import org.tta.mobile.model.course.VideoInfo;
 import org.tta.mobile.module.prefs.UserPrefs;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.scorm.PDFBlockModel;
 import org.tta.mobile.tta.scorm.ScormBlockModel;
 import org.tta.mobile.tta.scorm.ScormData;
@@ -222,6 +225,11 @@ public class CourseAPI {
             try {
                 onResponse((CourseComponent) normalizeCourseStructure(model, courseId));
             } catch (CourseContentNotValidException e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, CourseAPI.class.getName());
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "GetCourseStructureCallback.onResponse");
+                parameters.putString(Constants.KEY_DATA, "courseId = " + courseId);
+                Logger.logCrashlytics(e, parameters);
                 onFailure(e);
             }
         }

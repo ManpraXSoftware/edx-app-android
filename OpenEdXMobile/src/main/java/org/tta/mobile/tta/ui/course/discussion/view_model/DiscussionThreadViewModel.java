@@ -14,6 +14,7 @@ import org.tta.mobile.discussion.DiscussionRequestFields;
 import org.tta.mobile.discussion.DiscussionThread;
 import org.tta.mobile.discussion.DiscussionTopic;
 import org.tta.mobile.event.NetworkConnectivityChangeEvent;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
@@ -208,6 +209,12 @@ public class DiscussionThreadViewModel extends BaseViewModel
         try {
             adapter.setFragments(fragments, titles);
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, DiscussionThreadViewModel.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "setTabs");
+            parameters.putString(Constants.KEY_DATA, "Content id = " + content.getId() +
+                    ", thread id = " + thread.getIdentifier());
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
 

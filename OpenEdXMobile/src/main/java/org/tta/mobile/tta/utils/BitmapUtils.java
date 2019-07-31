@@ -8,6 +8,10 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Bundle;
+
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 
 public class BitmapUtils {
 
@@ -23,7 +27,14 @@ public class BitmapUtils {
             layers[1] = new BitmapDrawable(r, BitmapUtils.decodeSampledBitmapFromResource(r, overlayDrawableResourceId, width, height));
             LayerDrawable layerDrawable = new LayerDrawable(layers);
             bitmap = BitmapUtils.drawableToBitmap(layerDrawable);
-        }catch (Exception ex){}
+        }catch (Exception ex){
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, BitmapUtils.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "applyOverlay");
+            parameters.putString(Constants.KEY_DATA, "sourceImage = " + sourceImage +
+                    ", overlayDrawableResourceId = " + overlayDrawableResourceId);
+            Logger.logCrashlytics(ex, parameters);
+        }
         return bitmap;
     }
 

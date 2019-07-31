@@ -37,6 +37,8 @@ apply plugin: 'newrelic'
 apply plugin: 'com.facebook.testing.screenshot'
 apply from: 'jacoco.gradle'
 
+apply plugin: 'io.fabric'
+
 class AndroidHelper {
     static def saveProcessedConfig(project, config) {
         def path = project.file('assets/config')

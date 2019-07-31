@@ -33,6 +33,7 @@ import org.tta.mobile.discussion.DiscussionThread;
 import org.tta.mobile.discussion.DiscussionTopic;
 import org.tta.mobile.discussion.DiscussionTopicDepth;
 import org.tta.mobile.http.callback.Callback;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.model.Page;
 import org.tta.mobile.model.VideoModel;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
@@ -325,6 +326,12 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             public void onFailure(HttpServerErrorResponse errorResponse) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "login");
+                parameters.putString(Constants.KEY_DATA, "username = " + username);
+                Logger.logCrashlytics(new TaException(errorResponse.getMessage()), parameters);
+
                 if (config.isWordpressAuthentication()) {
                     callback.onFailure(new TaException(errorResponse.getMessage()));
                 } else {
@@ -346,6 +353,11 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "doEdxLogin");
+                parameters.putString(Constants.KEY_DATA, "username = " + username);
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(ex);
             }
         }.execute();
@@ -392,6 +404,10 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getCollectionConfig");
+                    Logger.logCrashlytics(ex, parameters);
                     getCollectionConfigFromLocal(callback, ex);
                 }
             }.execute();
@@ -424,6 +440,10 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getCollectionConfigFromLocal");
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(ex);
             }
         }.execute();
@@ -442,6 +462,10 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getConfigModifiedDate");
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -499,6 +523,12 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getCollectionItems");
+                    parameters.putString(Constants.KEY_DATA, "listIds = " + Arrays.toString(listIds) +
+                            ", skip = " + skip + ", take = " + take);
+                    Logger.logCrashlytics(ex, parameters);
                     getCollectionItemsFromLocal(listIds, callback, ex);
                 }
             }.execute();
@@ -556,6 +586,11 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getCollectionItemsFromLocal");
+                parameters.putString(Constants.KEY_DATA, "listIds = " + Arrays.toString(listIds));
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(ex);
             }
         }.execute();
@@ -611,6 +646,10 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getStateAgendaCount");
+                    Logger.logCrashlytics(ex, parameters);
                     getStateAgendaCountFromLocal(callback, ex);
                 }
             }.execute();
@@ -664,6 +703,10 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getStateAgendaCountFromLocal");
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(e);
             }
         }.execute();
@@ -697,6 +740,10 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getMyAgendaCount");
+                    Logger.logCrashlytics(ex, parameters);
                     getMyAgendaCountFromLocal(callback, ex);
                 }
             }.execute();
@@ -749,6 +796,10 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getMyAgendaCountFromLocal");
+                Logger.logCrashlytics(e, parameters);
                 callback.onFailure(e);
             }
         }.execute();
@@ -839,6 +890,10 @@ public class DataManager extends BaseRoboInjector {
                 try {
                     contentIds = new GetCourseContentsOperation().execute(dbHelper.getDatabase());
                 } catch (Exception e) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getdownloadedCourseContents");
+                    Logger.logCrashlytics(e, parameters);
                     return contents;
                 }
 
@@ -866,6 +921,10 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getdownloadedCourseContents");
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(new TaException("No content downloaded"));
             }
         }.execute();
@@ -882,6 +941,11 @@ public class DataManager extends BaseRoboInjector {
                 try {
                     contentIds = new GetWPContentsOperation(sourceName).execute(dbHelper.getDatabase());
                 } catch (Exception e) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getdownloadedWPContents");
+                    parameters.putString(Constants.KEY_DATA, "sourceName = " + sourceName);
+                    Logger.logCrashlytics(e, parameters);
                     return contents;
                 }
 
@@ -909,6 +973,11 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getdownloadedWPContents");
+                parameters.putString(Constants.KEY_DATA, "sourceName = " + sourceName);
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(new TaException("No content downloaded"));
             }
         }.execute();
@@ -918,24 +987,34 @@ public class DataManager extends BaseRoboInjector {
     public void getBlocks(OnResponseCallback<List<RegistrationOption>> callback, Bundle parameters,
                           @NonNull List<RegistrationOption> blocks) {
 
-        new GetUserAddressTask(context, parameters) {
-            @Override
-            protected void onSuccess(UserAddressResponse userAddressResponse) throws Exception {
-                super.onSuccess(userAddressResponse);
-                blocks.clear();
-                if (userAddressResponse != null && userAddressResponse.getBlock() != null) {
-                    for (Object o : userAddressResponse.getBlock()) {
-                        blocks.add(new RegistrationOption(o.toString(), o.toString()));
+        if (NetworkUtil.isConnected(context)) {
+            new GetUserAddressTask(context, parameters) {
+                @Override
+                protected void onSuccess(UserAddressResponse userAddressResponse) throws Exception {
+                    super.onSuccess(userAddressResponse);
+                    blocks.clear();
+                    if (userAddressResponse != null && userAddressResponse.getBlock() != null) {
+                        for (Object o : userAddressResponse.getBlock()) {
+                            blocks.add(new RegistrationOption(o.toString(), o.toString()));
+                        }
+                        callback.onSuccess(blocks);
+                    } else {
+                        callback.onFailure(new TaException(context.getString(R.string.try_later)));
                     }
-                    callback.onSuccess(blocks);
                 }
-            }
 
-            @Override
-            protected void onException(Exception ex) {
-                callback.onFailure(ex);
-            }
-        }.execute();
+                @Override
+                protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getBlocks");
+                    Logger.logCrashlytics(ex, parameters);
+                    callback.onFailure(ex);
+                }
+            }.execute();
+        } else {
+            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+        }
 
     }
 
@@ -971,6 +1050,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getCourse");
+                    parameters.putString(Constants.KEY_DATA, "courseId = " + content.getSource_identity());
+                    Logger.logCrashlytics(ex, parameters);
                     getCourseFromLocal(content.getSource_identity(), callback, ex);
                 }
             }.execute();
@@ -997,6 +1081,11 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getCourseFromLocal");
+                parameters.putString(Constants.KEY_DATA, "courseId = " + courseId);
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(e);
             }
         }.execute();
@@ -1025,6 +1114,12 @@ public class DataManager extends BaseRoboInjector {
             @Override
             protected void onFailure(@NonNull Throwable error) {
                 super.onFailure(error);
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "enrolInCourse");
+                parameters.putString(Constants.KEY_DATA, "courseId = " + content.getSource_identity());
+                Logger.logCrashlytics(new TaException(error.getMessage()), parameters);
+
                 callback.onFailure(new TaException(error.getMessage()));
 
                 analytic.addMxAnalytics_db(content.getSource_identity(), Action.EnrolFailed,
@@ -1051,6 +1146,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getTotalLikes");
+                    parameters.putString(Constants.KEY_DATA, "contentId = " + contentId);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -1074,6 +1174,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "isLike");
+                    parameters.putString(Constants.KEY_DATA, "contentId = " + contentId);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -1116,6 +1221,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "isContentMyAgenda");
+                    parameters.putString(Constants.KEY_DATA, "contentId = " + contentId);
+                    Logger.logCrashlytics(ex, parameters);
                     isLocalContentMyAgenda(contentId, callback);
                 }
             }.execute();
@@ -1145,6 +1255,11 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "isLocalContentMyAgenda");
+                parameters.putString(Constants.KEY_DATA, "contentId = " + contentId);
+                Logger.logCrashlytics(ex, parameters);
                 callback.onSuccess(new StatusResponse(false));
             }
         }.execute();
@@ -1166,6 +1281,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "setLike");
+                    parameters.putString(Constants.KEY_DATA, "contentId = " + contentId);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -1189,6 +1309,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "setLikeUsingSourceIdentity");
+                    parameters.putString(Constants.KEY_DATA, "sourceIdentity = " + sourceIdentity);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -1224,6 +1349,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "setBookmark");
+                    parameters.putString(Constants.KEY_DATA, "contentId = " + contentId);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -1253,6 +1383,12 @@ public class DataManager extends BaseRoboInjector {
                 @Override
                 protected void onFailure(@NonNull Throwable error) {
                     super.onFailure(error);
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getCourseComponent");
+                    parameters.putString(Constants.KEY_DATA, "courseId = " + courseId);
+                    Logger.logCrashlytics(new TaException(error.getLocalizedMessage()), parameters);
+
                     getLocalCourseComponent(courseId, callback, new TaException(error.getLocalizedMessage()));
                 }
             });
@@ -1286,6 +1422,11 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getLocalCourseComponent");
+                parameters.putString(Constants.KEY_DATA, "courseId = " + courseId);
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(e);
             }
         }.execute();
@@ -1416,6 +1557,12 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getMyAgendaContent");
+                    parameters.putString(Constants.KEY_DATA, "sourceId = " + sourceId);
+                    Logger.logCrashlytics(ex, parameters);
+
                     if (callback != null) {
                         getMyAgendaContentFromLocal(sourceId, callback, ex);
                     }
@@ -1450,6 +1597,11 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getMyAgendaContentFromLocal");
+                parameters.putString(Constants.KEY_DATA, "sourceId = " + sourceId);
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(e);
             }
         }.execute();
@@ -1499,6 +1651,13 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getStateAgendaContent");
+                    parameters.putString(Constants.KEY_DATA, "sourceId = " + sourceId +
+                            ", list_id = " + list_id);
+                    Logger.logCrashlytics(ex, parameters);
+
                     if (callback != null) {
                         getStateAgendaContentFromLocal(sourceId, callback, ex);
                     }
@@ -1533,6 +1692,11 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getStateAgendaContentFromLocal");
+                parameters.putString(Constants.KEY_DATA, "sourceId = " + sourceId);
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(e);
             }
         }.execute();
@@ -1564,6 +1728,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 public void onFailure(HttpServerErrorResponse errorResponse) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getPostById");
+                    parameters.putString(Constants.KEY_DATA, "postId = " + postId);
+                    Logger.logCrashlytics(new TaException(errorResponse.getMessage()), parameters);
                     callback.onFailure(new TaException(errorResponse.getMessage()));
                 }
             });
@@ -1593,8 +1762,13 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 public void onFailure(HttpServerErrorResponse errorResponse) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getPostBySlug");
+                    parameters.putString(Constants.KEY_DATA, "slug = " + slug);
+                    Logger.logCrashlytics(new TaException(errorResponse.getMessage()), parameters);
+
                     getLocalPostBySlug(slug, callback, new TaException(errorResponse.getMessage()));
-                    callback.onFailure(new TaException(errorResponse.getMessage()));
                 }
             });
 
@@ -1636,6 +1810,13 @@ public class DataManager extends BaseRoboInjector {
 
                         @Override
                         public void onFailure(HttpServerErrorResponse errorResponse) {
+                            Bundle parameters = new Bundle();
+                            parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                            parameters.putString(Constants.KEY_FUNCTION_NAME, "getCommentsByPost");
+                            parameters.putString(Constants.KEY_DATA, "postId = " + postId +
+                                    ", take = " + take + ", page = " + page);
+                            Logger.logCrashlytics(new TaException(errorResponse.getMessage()), parameters);
+
                             callback.onFailure(new TaException(errorResponse.getMessage()));
                         }
                     });
@@ -1662,6 +1843,12 @@ public class DataManager extends BaseRoboInjector {
 
                         @Override
                         public void onFailure(HttpServerErrorResponse errorResponse) {
+                            Bundle parameters = new Bundle();
+                            parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                            parameters.putString(Constants.KEY_FUNCTION_NAME, "getRepliesOnComment");
+                            parameters.putString(Constants.KEY_DATA, "postId = " + postId +
+                                    ", commentId = " + commentId);
+                            Logger.logCrashlytics(new TaException(errorResponse.getMessage()), parameters);
                             callback.onFailure(new TaException(errorResponse.getMessage()));
                         }
                     });
@@ -1727,6 +1914,11 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             public void onFailure(HttpServerErrorResponse errorResponse) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "addComment");
+                parameters.putString(Constants.KEY_DATA, "comment = " + comment.toString());
+                Logger.logCrashlytics(new TaException(errorResponse.getMessage()), parameters);
                 callback.onFailure(new TaException(errorResponse.getMessage()));
             }
         });
@@ -1747,6 +1939,11 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             public void onFailure(HttpServerErrorResponse errorResponse) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "setWpProfileCache");
+                Logger.logCrashlytics(new TaException(errorResponse.getMessage()), parameters);
+
                 if (config.isWordpressAuthentication() &&
                         !NetworkUtil.isLimitedAcess(errorResponse) && NetworkUtil.isUnauthorize(errorResponse)) {
                     logout();
@@ -1791,6 +1988,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getSearchFilter");
+                    Logger.logCrashlytics(ex, parameters);
+
                     SearchFilter searchFilter = loginPrefs.getSearchFilter();
                     if (searchFilter == null) {
                         callback.onFailure(ex);
@@ -1832,6 +2034,11 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getCategoryFromLocal");
+                parameters.putString(Constants.KEY_DATA, "sourceId = " + sourceId);
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(new TaException("Category not found."));
             }
         }.execute();
@@ -1860,6 +2067,12 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getContentListsFromLocal");
+                parameters.putString(Constants.KEY_DATA, "categoryId = " + categoryId +
+                        ", mode = " + mode);
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(new TaException("Content lists not found."));
             }
         }.execute();
@@ -1894,6 +2107,14 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "search");
+                    parameters.putString(Constants.KEY_DATA, "take = " + take +
+                            ", skip = " + skip + ", isPriority = " + isPriority +
+                            ", listId = " + listId + ", searchText = " + searchText +
+                            ", sections = " + sections + ", sourceId = " + sourceId);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -1929,6 +2150,12 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "searchLocalContent");
+                parameters.putString(Constants.KEY_DATA, "take = " + take +
+                        ", skip = " + skip + ", sourceId = " + sourceId);
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(e);
             }
         }.execute();
@@ -1952,6 +2179,12 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "searchPeople");
+                    parameters.putString(Constants.KEY_DATA, "take = " + take +
+                            ", skip = " + skip + ", searchText = " + searchText);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -1981,6 +2214,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "submitFeedback");
+                    parameters.putString(Constants.KEY_DATA, "msg = " + msg);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -2029,6 +2267,10 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "changePassword");
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -2070,6 +2312,10 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getAccount");
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -2119,6 +2365,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters1 = new Bundle();
+                    parameters1.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters1.putString(Constants.KEY_FUNCTION_NAME, "updateProfile");
+                    parameters1.putString(Constants.KEY_DATA, "parameters = " + parameters);
+                    Logger.logCrashlytics(ex, parameters1);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -2155,6 +2406,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "updateProfileImage");
+                    parameters.putString(Constants.KEY_DATA, "uri = " + uri);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -2178,6 +2434,10 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getProfile");
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -2225,6 +2485,11 @@ public class DataManager extends BaseRoboInjector {
 
                         @Override
                         protected void onException(Exception ex) {
+                            Bundle parameters = new Bundle();
+                            parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                            parameters.putString(Constants.KEY_FUNCTION_NAME, "getCertificateStatus");
+                            parameters.putString(Constants.KEY_DATA, "courseId = " + courseId);
+                            Logger.logCrashlytics(ex, parameters);
                             callback.onFailure(ex);
                         }
                     }.execute();
@@ -2267,6 +2532,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getCertificate");
+                    parameters.putString(Constants.KEY_DATA, "courseId = " + courseId);
+                    Logger.logCrashlytics(ex, parameters);
                     getCertificateFromLocal(courseId, callback, ex);
                 }
             }.execute();
@@ -2298,6 +2568,11 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getCertificateFromLocal");
+                parameters.putString(Constants.KEY_DATA, "courseId = " + courseId);
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(e);
             }
         }.execute();
@@ -2334,6 +2609,10 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getMyCertificates");
+                    Logger.logCrashlytics(ex, parameters);
                     getMyCertificatesFromLocal(callback, new TaException("Certificates not available"));
                 }
             }.execute();
@@ -2365,6 +2644,10 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getMyCertificatesFromLocal");
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(e);
             }
         }.execute();
@@ -2388,6 +2671,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "generateCertificate");
+                    parameters.putString(Constants.KEY_DATA, "courseId = " + courseId);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -2422,6 +2710,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getContent");
+                    parameters.putString(Constants.KEY_DATA, "contentId = " + contentId);
+                    Logger.logCrashlytics(ex, parameters);
                     getContentFromLocal(contentId, callback, ex);
                 }
             }.execute();
@@ -2453,6 +2746,11 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getContentFromLocal");
+                parameters.putString(Constants.KEY_DATA, "contentId = " + contentId);
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(e);
             }
         }.execute();
@@ -2489,6 +2787,12 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getSuggestedUsers");
+                    parameters.putString(Constants.KEY_DATA, "take = " + take +
+                            ", skip = " + skip);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -2516,6 +2820,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "followUnfollowUser");
+                    parameters.putString(Constants.KEY_DATA, "username = " + username);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -2557,6 +2866,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getDiscussionTopics");
+                    parameters.putString(Constants.KEY_DATA, "courseId = " + courseId);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -2586,6 +2900,14 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getDiscussionThreads");
+                    parameters.putString(Constants.KEY_DATA, "courseId = " + courseId +
+                            ", topicIds = " + topicIds + ", view = " + view +
+                            ", orderBy = " + orderBy + ", take = " + take + ", page = " + page +
+                            ", requestedFields = " + requestedFields);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -2613,6 +2935,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getDiscussionThread");
+                    parameters.putString(Constants.KEY_DATA, "threadId = " + threadId);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -2641,6 +2968,13 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getThreadComments");
+                    parameters.putString(Constants.KEY_DATA, "threadId = " + threadId +
+                            ", take = " + take + ", page = " + page +
+                            ", requestedFields = " + requestedFields + ", isQuestionType = " + isQuestionType);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -2669,6 +3003,13 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getCommentReplies");
+                    parameters.putString(Constants.KEY_DATA, "commentId = " + commentId +
+                            ", take = " + take + ", page = " + page +
+                            ", requestedFields = " + requestedFields);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -2697,6 +3038,12 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "createDiscussionComment");
+                    parameters.putString(Constants.KEY_DATA, "threadId = " + threadId +
+                            ", comment = " + comment + ", parentCommentId = " + parentCommentId);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -2724,6 +3071,12 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "likeDiscussionThread");
+                    parameters.putString(Constants.KEY_DATA, "threadId = " + threadId +
+                            ", liked = " + liked);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -2751,6 +3104,12 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "likeDiscussionComment");
+                    parameters.putString(Constants.KEY_DATA, "commentId = " + commentId +
+                            ", liked = " + liked);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -2774,6 +3133,13 @@ public class DataManager extends BaseRoboInjector {
                 @Override
                 protected void onFailure(@NonNull Throwable error) {
                     super.onFailure(error);
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "findContentForAssistant");
+                    parameters.putString(Constants.KEY_DATA, "searchText = " + searchText +
+                            ", tags = " + tags);
+                    Logger.logCrashlytics(new TaException(error.getMessage()), parameters);
+
                     if (callback != null)
                         callback.onFailure(new TaException(error.getMessage()));
 
@@ -2806,6 +3172,10 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getSources");
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(new TaException("No sources available"));
             }
         }.execute();
@@ -2860,7 +3230,10 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
-
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "updateNotifications");
+                    Logger.logCrashlytics(ex, parameters);
                 }
             }.execute();
 
@@ -2936,6 +3309,12 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getNotifications");
+                    parameters.putString(Constants.KEY_DATA, "take = " + take +
+                            ", skip = " + skip);
+                    Logger.logCrashlytics(ex, parameters);
                     getNotificationsFromLocal(take, skip, callback, ex);
                 }
             }.execute();
@@ -2967,6 +3346,12 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getNotificationsFromLocal");
+                parameters.putString(Constants.KEY_DATA, "take = " + take +
+                        ", skip = " + skip);
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(e);
             }
         }.execute();
@@ -3009,7 +3394,10 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
-
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "createNotifications");
+                    Logger.logCrashlytics(ex, parameters);
                 }
             }.execute();
 
@@ -3037,6 +3425,10 @@ public class DataManager extends BaseRoboInjector {
             try {
                 analytic.syncAnalytics();
             } catch (Exception e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "syncAnalytics");
+                Logger.logCrashlytics(e, parameters);
                 e.printStackTrace();
             }
         }
@@ -3084,6 +3476,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getFeeds");
+                    parameters.putString(Constants.KEY_DATA, "skip = " + skip);
+                    Logger.logCrashlytics(ex, parameters);
                     getFeedsFromLocal(10, skip, callback, ex);
                 }
             }.execute();
@@ -3115,6 +3512,12 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getFeedsFromLocal");
+                parameters.putString(Constants.KEY_DATA, "skip = " + skip +
+                        ", take = " + take);
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(e);
             }
         }.execute();
@@ -3146,6 +3549,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getContentFromSourceIdentity");
+                    parameters.putString(Constants.KEY_DATA, "sourceIdentity = " + sourceIdentity);
+                    Logger.logCrashlytics(ex, parameters);
                     getLocalContentFromSourceIdentity(sourceIdentity, callback, ex);
                 }
             }.execute();
@@ -3178,6 +3586,11 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getLocalContentFromSourceIdentity");
+                parameters.putString(Constants.KEY_DATA, "sourceIdentity = " + sourceIdentity);
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(e);
             }
         }.execute();
@@ -3230,6 +3643,10 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getFeedFeatureList");
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(new TaException("Feature list not available"));
                 }
             }.execute();
@@ -3275,6 +3692,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "setUserContent");
+                    parameters.putString(Constants.KEY_DATA, "statuses = " + statuses);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -3316,6 +3738,10 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getMyContentStatuses");
+                    Logger.logCrashlytics(ex, parameters);
                     getMyContentStatusesFromLocal(callback, ex);
                 }
             }.execute();
@@ -3347,6 +3773,10 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getMyContentStatusesFromLocal");
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(e);
             }
         }.execute();
@@ -3387,6 +3817,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getUserContentStatus");
+                    parameters.putString(Constants.KEY_DATA, "contentIds = " + contentIds);
+                    Logger.logCrashlytics(ex, parameters);
                     getUserContentStatusFromLocal(contentIds, callback, ex);
                 }
             }.execute();
@@ -3419,6 +3854,11 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getUserContentStatusFromLocal");
+                parameters.putString(Constants.KEY_DATA, "contentIds = " + contentIds);
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(e);
             }
         }.execute();
@@ -3454,6 +3894,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getUnitStatus");
+                    parameters.putString(Constants.KEY_DATA, "courseId = " + courseId);
+                    Logger.logCrashlytics(ex, parameters);
                     getUnitStatusFromLocal(courseId, callback, ex);
                 }
             }.execute();
@@ -3485,6 +3930,11 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getUnitStatusFromLocal");
+                parameters.putString(Constants.KEY_DATA, "courseId = " + courseId);
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(e);
             }
         }.execute();
@@ -3506,6 +3956,12 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "startScorm");
+                    parameters.putString(Constants.KEY_DATA, "courseId = " + courseId +
+                            ", blockId = " + blockId);
+                    Logger.logCrashlytics(ex, parameters);
                     if (callback != null) {
                         callback.onFailure(ex);
                     }
@@ -3545,6 +4001,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getOtherUserAccount");
+                    parameters.putString(Constants.KEY_DATA, "username = " + username);
+                    Logger.logCrashlytics(ex, parameters);
                     getLocalOtherUserAccount(username, callback, ex);
                 }
             }.execute();
@@ -3577,6 +4038,11 @@ public class DataManager extends BaseRoboInjector {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getLocalOtherUserAccount");
+                parameters.putString(Constants.KEY_DATA, "username = " + username);
+                Logger.logCrashlytics(ex, parameters);
                 callback.onFailure(e);
             }
         }.execute();
@@ -3601,6 +4067,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getFollowStatus");
+                    parameters.putString(Constants.KEY_DATA, "username = " + username);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -3627,6 +4098,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 public void onFailure(HttpServerErrorResponse errorResponse) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getWpUser");
+                    parameters.putString(Constants.KEY_DATA, "userId = " + userId);
+                    Logger.logCrashlytics(new TaException(errorResponse.getMessage()), parameters);
                     callback.onFailure(new TaException(errorResponse.getMessage()));
                 }
             });
@@ -3652,6 +4128,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "setCustomFieldAttributes");
+                    Logger.logCrashlytics(ex, parameters);
+
                     if (callback != null) {
                         callback.onFailure(ex);
                     }
@@ -3725,6 +4206,11 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 public void onFailure(HttpServerErrorResponse errorResponse) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "likeConnectComment");
+                    parameters.putString(Constants.KEY_DATA, "commentId = " + commentId);
+                    Logger.logCrashlytics(new TaException(errorResponse.getMessage()), parameters);
                     callback.onFailure(new TaException(errorResponse.getMessage()));
                 }
             });
@@ -3755,6 +4241,12 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getFollowersOrFollowing");
+                    parameters.putString(Constants.KEY_DATA, "follower = " + follower +
+                            ", take = " + take + ", skip = " + skip);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -3800,6 +4292,10 @@ public class DataManager extends BaseRoboInjector {
                             }
                         });
                     } catch (NumberFormatException e) {
+                        Bundle parameters = new Bundle();
+                        parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                        parameters.putString(Constants.KEY_FUNCTION_NAME, "setContentIdForLegacyDownloads");
+                        Logger.logCrashlytics(e, parameters);
                         e.printStackTrace();
                     }
                 }
@@ -3871,6 +4367,11 @@ public class DataManager extends BaseRoboInjector {
                     }
                 });
             } catch (NumberFormatException e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "setContentIdForLegacyDownload");
+                parameters.putString(Constants.KEY_DATA, "video id = " + model.getVideoId());
+                Logger.logCrashlytics(e, parameters);
                 e.printStackTrace();
                 edxEnvironment.getStorage().updateInfoByVideoId(model.getVideoId(), model, null);
             }
@@ -3913,6 +4414,12 @@ public class DataManager extends BaseRoboInjector {
 
                 @Override
                 protected void onException(Exception ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getUpdatedVersion");
+                    parameters.putString(Constants.KEY_DATA, "version_name = " + version_name +
+                            ", version_code = " + version_code);
+                    Logger.logCrashlytics(ex, parameters);
                     callback.onFailure(ex);
                 }
             }.execute();
@@ -3951,6 +4458,10 @@ public class DataManager extends BaseRoboInjector {
                 isupdate = false;
             }
         } catch (ParseException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "checkUpdate");
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
 
@@ -3968,6 +4479,10 @@ public class DataManager extends BaseRoboInjector {
             v_code= (long) info.versionCode;
 
         } catch (PackageManager.NameNotFoundException e1) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "getCurrent_vCode");
+            Logger.logCrashlytics(e1, parameters);
             e1.printStackTrace();
         }
 
@@ -3984,6 +4499,10 @@ public class DataManager extends BaseRoboInjector {
             v_name=info.versionName;
 
         } catch (PackageManager.NameNotFoundException e1) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "getCurrentV_name");
+            Logger.logCrashlytics(e1, parameters);
             e1.printStackTrace();
         }
 

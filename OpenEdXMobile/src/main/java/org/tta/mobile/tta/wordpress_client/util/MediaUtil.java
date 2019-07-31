@@ -7,9 +7,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 
 import java.io.File;
 import java.io.IOException;
@@ -398,6 +402,11 @@ public class MediaUtil {
                 LogUtils.d("Couldn't delete file : " + file.getPath());
             }
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, MediaUtil.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "deleteFile");
+            parameters.putString(Constants.KEY_DATA, "file = " + file.getAbsolutePath());
+            Logger.logCrashlytics(e, parameters);
             LogUtils.i("Exception while trying to delete file", e);
         }
     }
@@ -406,6 +415,11 @@ public class MediaUtil {
         try {
             deleteFile(new File(filePath));
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, MediaUtil.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "deleteFile");
+            parameters.putString(Constants.KEY_DATA, "filePath = " + filePath);
+            Logger.logCrashlytics(e, parameters);
             LogUtils.i("Exception while trying to delete file", e);
         }
     }

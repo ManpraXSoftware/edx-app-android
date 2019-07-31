@@ -1,6 +1,10 @@
 package org.tta.mobile.tta.widget.loading;
 
 import android.content.Context;
+import android.os.Bundle;
+
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 
 
 /**
@@ -20,6 +24,10 @@ public class ProgressDialogLoading implements ILoading {
         try {
             mPd.show();
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, ProgressDialogLoading.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "showLoading");
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
     }
@@ -29,6 +37,10 @@ public class ProgressDialogLoading implements ILoading {
         try {
             mPd.dismiss();
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, ProgressDialogLoading.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "hideLoading");
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
     }
@@ -38,6 +50,10 @@ public class ProgressDialogLoading implements ILoading {
         try {
             mPd.dismiss();
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, ProgressDialogLoading.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "dismiss");
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
     }

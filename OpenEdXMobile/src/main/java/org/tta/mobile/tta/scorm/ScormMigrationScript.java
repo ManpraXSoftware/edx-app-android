@@ -2,10 +2,12 @@ package org.tta.mobile.tta.scorm;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 
 import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.scorm.ContentType;
 import org.tta.mobile.model.VideoModel;
 import org.tta.mobile.model.course.CourseComponent;
@@ -64,6 +66,10 @@ public class ScormMigrationScript {
             }
 
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, ScormMigrationScript.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "Constructor");
+            Logger.logCrashlytics(e, parameters);
             logger.error(e);
         }
     }
@@ -81,6 +87,11 @@ public class ScormMigrationScript {
                 //move data to new folder
                 moveDirectory(Sha1EncriptedFolderPath, hashFolder);
             } catch (IOException e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, ScormMigrationScript.class.getName());
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "doMigrate");
+                parameters.putString(Constants.KEY_DATA, "Unit id = " + download.getId());
+                Logger.logCrashlytics(e, parameters);
                 e.printStackTrace();
                 ismoved = false;
             }
@@ -217,10 +228,28 @@ public class ScormMigrationScript {
                 }
             }
         } catch (FileNotFoundException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, ScormMigrationScript.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "copyAssetFilePackage");
+            parameters.putString(Constants.KEY_DATA, "folder_name = " + folder_name +
+                    ", file_name = " + file_name + ", targeted_path = " + targeted_path);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         } catch (NullPointerException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, ScormMigrationScript.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "copyAssetFilePackage");
+            parameters.putString(Constants.KEY_DATA, "folder_name = " + folder_name +
+                    ", file_name = " + file_name + ", targeted_path = " + targeted_path);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, ScormMigrationScript.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "copyAssetFilePackage");
+            parameters.putString(Constants.KEY_DATA, "folder_name = " + folder_name +
+                    ", file_name = " + file_name + ", targeted_path = " + targeted_path);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
     }

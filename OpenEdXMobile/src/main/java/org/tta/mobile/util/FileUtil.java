@@ -1,9 +1,13 @@
 package org.tta.mobile.util;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RawRes;
+
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -132,6 +136,12 @@ public class FileUtil {
             out = null;
             return true;
         } catch (IOException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, FileUtil.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "copyFile");
+            parameters.putString(Constants.KEY_DATA, "srcFile = " + srcFile.getAbsolutePath() +
+                    ", destFile = " + destFile.getAbsolutePath());
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
             return false;
         }

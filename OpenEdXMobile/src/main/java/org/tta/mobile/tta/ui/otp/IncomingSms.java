@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
+
 public class IncomingSms extends BroadcastReceiver {
     private static final String SMS_EXTRA_NAME = "pdus";
     private  IMessageReceiver messageReceiver;
@@ -20,6 +23,10 @@ public class IncomingSms extends BroadcastReceiver {
         }
         catch (Exception ex)
         {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, IncomingSms.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "Constructor");
+            Logger.logCrashlytics(ex, parameters);
         }
         /*if ( messageReceiver == null )
             throw new IllegalArgumentException("messageReceiver");
@@ -49,6 +56,11 @@ public class IncomingSms extends BroadcastReceiver {
             // Uncomment this if you do not want the SMS put into the inbox (for priority > 999)
             // this.abortBroadcast();
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, IncomingSms.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "onReceive");
+            parameters.putString(Constants.KEY_DATA, "Extras = " + intent.getExtras());
+            Logger.logCrashlytics(e, parameters);
             Log.e("SmsReceiver", "Exception smsReceiver" +e);
         }
     }

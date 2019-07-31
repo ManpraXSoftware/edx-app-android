@@ -1,5 +1,8 @@
 package org.tta.mobile.tta.utils;
 
+import android.os.Bundle;
+
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.data.constants.Constants;
 import org.tta.mobile.tta.data.model.BaseResponse;
 
@@ -33,6 +36,12 @@ public class RxUtil {
                         data = (T) constructor.newInstance();
                     } catch (Exception e) {
                         // 没有data返回字段的请求，要求T一定要有default的构造函数
+
+                        Bundle parameters = new Bundle();
+                        parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, RxUtil.class.getName());
+                        parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "unwrapResponse");
+                        parameters.putString(org.tta.mobile.tta.Constants.KEY_DATA, "cls = " + cls.getName());
+                        Logger.logCrashlytics(e, parameters);
                         throw new WrongResponseException(e.getMessage());
                     }
                 }

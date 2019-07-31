@@ -1,6 +1,7 @@
 package org.tta.mobile.tta.scorm;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
 
@@ -8,6 +9,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.util.Sha1Util;
 
 import java.io.File;
@@ -229,6 +231,11 @@ public class ScormManager {
             }
             catch (Exception e)
             {
+                Bundle parameters = new Bundle();
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, ScormManager.class.getName());
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "startScormDownload");
+                parameters.putString(Constants.KEY_DATA, "Unit id = " + download.getId());
+                Logger.logCrashlytics(e, parameters);
                 logger.error(e);
             }
         }
@@ -436,6 +443,10 @@ public class ScormManager {
 
         } catch (Exception e)
         {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, ScormManager.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "setfolderPath");
+            Logger.logCrashlytics(e, parameters);
             logger.error(e);
         }
     }

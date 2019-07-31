@@ -225,7 +225,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    selected="@{viewModel.filterSelected.get()}"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:drawableEnd="@drawable/t_icon_dropdown_selector"

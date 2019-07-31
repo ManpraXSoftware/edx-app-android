@@ -2,6 +2,7 @@ package org.tta.mobile.tta.analytics;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -11,8 +12,10 @@ import com.google.inject.Inject;
 import org.tta.mobile.authentication.LoginAPI;
 import org.tta.mobile.http.HttpResponseStatusException;
 import org.tta.mobile.http.HttpStatus;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.model.api.FormFieldMessageBody;
 import org.tta.mobile.model.db.DownloadEntry;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Page;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
@@ -294,6 +297,10 @@ public class Analytic {
         try {
             list = environment.getStorage().getMxAnalytics(analyticBatchCount, 0);
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Analytic.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getMxAnalytics");
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
             Log.d("Analtics", "Dbfetch fail");
         }
@@ -305,6 +312,10 @@ public class Analytic {
         try {
             list = environment.getStorage().getTincanAnalytics(analyticBatchCount, 0);
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Analytic.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getTincanAnalytics");
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
             Log.d("TincanAnaltics", "Dbfetch fail");
         }
@@ -315,6 +326,10 @@ public class Analytic {
         try{
             return environment.getStorage().getAnalyticsCount();
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Analytic.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getAnalyticsCount");
+            Logger.logCrashlytics(e, parameters);
             return 0;
         }
     }

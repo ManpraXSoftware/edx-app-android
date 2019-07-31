@@ -97,4 +97,18 @@ public class ContentStatus {
     public boolean equals(@Nullable Object obj) {
         return obj instanceof ContentStatus && (((ContentStatus) obj).id == id);
     }
+
+    @Override
+    public String toString() {
+        return "ContentStatus{" +
+                "id=" + id +
+                ", content_id=" + content_id +
+                ", source_identity='" + source_identity + '\'' +
+                ", username='" + username + '\'' +
+                ", started='" + started + '\'' +
+                ", ready_for_certificate='" + ready_for_certificate + '\'' +
+                ", completed='" + completed + '\'' +
+                ", error='" + error + '\'' +
+                '}';
+    }
 }

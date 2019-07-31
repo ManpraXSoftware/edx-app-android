@@ -8,6 +8,7 @@ import android.util.Log;
 
 import org.tta.mobile.R;
 import org.tta.mobile.event.NewVersionAvailableEvent;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.data.local.db.table.Notification;
@@ -204,6 +205,11 @@ public class DeepLinkActivity extends BaseVMActivity {
         try {
             return Long.parseLong(uri.getQueryParameter(Constants.KEY_CONTENT_ID));
         } catch (NumberFormatException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, DeepLinkActivity.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "extractContentId");
+            parameters.putString(Constants.KEY_DATA, "Uri = " + uri);
+            Logger.logCrashlytics(e, parameters);
             return 0;
         }
     }
@@ -216,6 +222,11 @@ public class DeepLinkActivity extends BaseVMActivity {
         }
         catch(UnsupportedEncodingException e)
         {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, DeepLinkActivity.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "urldecode");
+            parameters.putString(Constants.KEY_DATA, "Encoded = " + encoded);
+            Logger.logCrashlytics(e, parameters);
             Log.d("deeplink ",e.toString());
         }
         return null;

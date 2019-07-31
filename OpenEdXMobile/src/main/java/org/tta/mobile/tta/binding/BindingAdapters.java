@@ -4,6 +4,7 @@ import android.content.Context;
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TextInputLayout;
@@ -34,6 +35,8 @@ import com.maurya.mx.mxlib.view.MxFiniteRecyclerView;
 import com.maurya.mx.mxlib.view.MxRecyclerView;
 
 import org.tta.mobile.R;
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.tutorials.MxTooltip;
 import org.tta.mobile.tta.ui.base.BaseArrayAdapter;
 import org.tta.mobile.tta.ui.custom.DropDownFilterView;
@@ -176,6 +179,12 @@ public class BindingAdapters {
                 constructor = cls.getConstructor(int.class, int.class);
                 view.setLayoutParams((ViewGroup.LayoutParams) constructor.newInstance(width, width * heightScale / widthScale));
             } catch (Exception e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, BindingAdapters.class.getName());
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "setViewRatio");
+                parameters.putString(Constants.KEY_DATA, "view = " + view.getClass().getName() +
+                        ", widthScale = " + widthScale + ", heightScale = " + heightScale);
+                Logger.logCrashlytics(e, parameters);
                 e.printStackTrace();
             }
         });
@@ -191,6 +200,12 @@ public class BindingAdapters {
                 constructor = cls.getConstructor(int.class, int.class);
                 viewGroup.setLayoutParams((ViewGroup.LayoutParams) constructor.newInstance(width, width * heightScale / widthScale));
             } catch (Exception e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, BindingAdapters.class.getName());
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "setViewGroupRatio");
+                parameters.putString(Constants.KEY_DATA, "viewGroup = " + viewGroup.getClass().getName() +
+                        ", widthScale = " + widthScale + ", heightScale = " + heightScale);
+                Logger.logCrashlytics(e, parameters);
                 e.printStackTrace();
             }
         });
@@ -393,6 +408,11 @@ public class BindingAdapters {
             try {
                 view.getRecyclerView().smoothScrollToPosition(pos);
             } catch (Exception e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, BindingAdapters.class.getName());
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "setScrollToPosition");
+                parameters.putString(Constants.KEY_DATA, "pos = " + pos);
+                Logger.logCrashlytics(e, parameters);
                 e.printStackTrace();
             }
         });
@@ -428,6 +448,11 @@ public class BindingAdapters {
             try {
                 view.getTabAt(position).select();
             } catch (Exception e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, BindingAdapters.class.getName());
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "setTabPosition");
+                parameters.putString(Constants.KEY_DATA, "position = " + position);
+                Logger.logCrashlytics(e, parameters);
                 e.printStackTrace();
             }
         });

@@ -36,6 +36,7 @@ import org.tta.mobile.logger.Logger;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.module.analytics.Analytics;
 import org.tta.mobile.module.analytics.AnalyticsRegistry;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.util.SoftKeyboardUtil;
 import org.tta.mobile.view.adapters.TopicSpinnerAdapter;
 import org.tta.mobile.view.common.TaskProgressCallback.ProgressViewController;
@@ -237,6 +238,11 @@ public class DiscussionAddPostFragment extends BaseFragment {
 
             @Override
             protected void onFailure(@NonNull final Throwable error) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DiscussionAddPostFragment.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "createThread");
+                parameters.putString(Constants.KEY_DATA, "threadBody = " + threadBody);
+                Logger.logCrashlytics(error, parameters);
                 addPostButton.setEnabled(true);
             }
         });

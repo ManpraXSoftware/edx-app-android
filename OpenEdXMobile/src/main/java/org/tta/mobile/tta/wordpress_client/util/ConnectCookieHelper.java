@@ -1,5 +1,9 @@
 package org.tta.mobile.tta.wordpress_client.util;
 
+import android.os.Bundle;
+
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.remote.api.MxCookiesAPI;
 
 import java.text.ParseException;
@@ -39,6 +43,10 @@ public class ConnectCookieHelper {
             }
 
         }catch (ParseException ex){
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, ConnectCookieHelper.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "isCookieExpire");
+            Logger.logCrashlytics(ex, parameters);
             ex.printStackTrace();
         }
         return isExpire;

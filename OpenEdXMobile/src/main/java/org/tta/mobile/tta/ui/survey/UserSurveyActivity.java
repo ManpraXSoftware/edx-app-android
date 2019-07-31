@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import org.tta.mobile.R;
 import org.tta.mobile.base.BaseFragmentActivity;
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.util.IntentFactory;
 import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.view.custom.IconProgressBar;
@@ -108,6 +110,11 @@ public class UserSurveyActivity extends BaseFragmentActivity {
 
                     }
                 } catch (Exception exception) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, UserSurveyActivity.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "onPageFinished");
+                    parameters.putString(Constants.KEY_DATA, "Url = " + url);
+                    Logger.logCrashlytics(exception, parameters);
                     exception.printStackTrace();
                 }
                 super.onPageFinished(view, url);

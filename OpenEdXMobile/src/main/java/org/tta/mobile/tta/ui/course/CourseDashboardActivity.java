@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.tta.mobile.R;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
@@ -146,6 +147,11 @@ public class CourseDashboardActivity extends BaseVMActivity {
                     callback.onPageShow();
                 }
             } catch (Exception e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, CourseDashboardActivity.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "onResume");
+                parameters.putString(Constants.KEY_DATA, "Content id = " + content.getId());
+                Logger.logCrashlytics(e, parameters);
                 e.printStackTrace();
             }
         });

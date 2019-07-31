@@ -166,4 +166,24 @@ public class Feed implements Comparable<Feed> {
     public int compareTo(Feed o) {
         return (int) (order - o.order);
     }
+
+    @Override
+    public String toString() {
+        return "Feed{" +
+                "id='" + id + '\'' +
+                ", action='" + action + '\'' +
+                ", action_by='" + action_by + '\'' +
+                ", action_on='" + action_on + '\'' +
+                ", created_at='" + created_at + '\'' +
+                ", modified_at='" + modified_at + '\'' +
+                ", meta_data=" + meta_data +
+                ", username='" + username + '\'' +
+                ", state='" + state + '\'' +
+                ", have_read=" + have_read +
+                ", order=" + order +
+                ", count=" + count +
+                ", title='" + title + '\'' +
+                ", message='" + message + '\'' +
+                '}';
+    }
 }

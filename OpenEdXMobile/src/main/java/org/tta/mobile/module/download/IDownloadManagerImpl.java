@@ -8,12 +8,14 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import org.tta.mobile.logger.Logger;
 import org.tta.mobile.model.download.NativeDownloadModel;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.util.Sha1Util;
 
 import java.io.File;
@@ -70,6 +72,11 @@ public class IDownloadManagerImpl implements IDownloadManager {
             }
             cursor.close();
         } catch(Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, IDownloadManagerImpl.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getDownload");
+            parameters.putString(Constants.KEY_DATA, "dmid = " + dmid);
+            Logger.logCrashlytics(e, parameters);
             logger.error(e);
         }
         return null;
@@ -149,6 +156,12 @@ public class IDownloadManagerImpl implements IDownloadManager {
 
             dmid = dm.enqueue(request);
         } catch(Exception ex) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, IDownloadManagerImpl.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "addMXDownload");
+            parameters.putString(Constants.KEY_DATA, "destFolder = " + destFolder.getAbsolutePath() +
+                    ", url" + url + ", title = " + title);
+            Logger.logCrashlytics(ex, parameters);
             logger.error(ex);
         }
 
@@ -199,6 +212,11 @@ public class IDownloadManagerImpl implements IDownloadManager {
             }
             c.close();
         }catch (Exception ex){
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, IDownloadManagerImpl.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getAverageProgressForDownloads");
+            parameters.putString(Constants.KEY_DATA, "dmids = " + dmids);
+            Logger.logCrashlytics(ex, parameters);
             logger.debug(ex.getMessage());
         }
 

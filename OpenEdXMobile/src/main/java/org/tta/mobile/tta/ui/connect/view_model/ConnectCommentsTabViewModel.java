@@ -218,7 +218,7 @@ public class ConnectCommentsTabViewModel extends BaseViewModel {
                 }
 
                 Glide.with(commentsBinding.userImage.getContext())
-                        .load("")
+                        .load(model.getAuthorIcon() == null ? "" : model.getAuthorIcon())
                         .placeholder(R.drawable.profile_photo_placeholder)
                         .into(commentsBinding.roundedUserImage);
 
@@ -294,7 +294,7 @@ public class ConnectCommentsTabViewModel extends BaseViewModel {
                 replyBinding.replyDate.setText(DateUtil.getDisplayTime(model.getDate()));
 
                 Glide.with(getContext())
-                        .load("")
+                        .load(model.getAuthorIcon() == null ? "" : model.getAuthorIcon())
                         .placeholder(R.drawable.profile_photo_placeholder)
                         .into(replyBinding.replyRoundedUserImage);
 

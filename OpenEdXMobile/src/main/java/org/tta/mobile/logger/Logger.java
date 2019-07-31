@@ -1,5 +1,7 @@
 package org.tta.mobile.logger;
 
+import android.os.Bundle;
+
 import java.io.Serializable;
 
 import de.greenrobot.event.EventBus;
@@ -36,7 +38,7 @@ public class Logger implements Serializable {
         LogUtil.error(this.tag, "", ex);
 
         if (submitCrashReport) {
-            EventBus.getDefault().post(new CrashReportEvent(ex));
+            EventBus.getDefault().post(new CrashReportEvent(ex, null));
         }
     }
 
@@ -48,15 +50,25 @@ public class Logger implements Serializable {
         LogUtil.debug(this.tag, log);
     }
 
+    public static void logCrashlytics(Throwable ex, Bundle parameters){
+        EventBus.getDefault().post(new CrashReportEvent(ex, parameters));
+    }
+
     public static class CrashReportEvent {
         private final Throwable error;
+        private final Bundle parameters;
 
-        public CrashReportEvent(Throwable error) {
+        public CrashReportEvent(Throwable error, Bundle parameters) {
             this.error = error;
+            this.parameters = parameters;
         }
 
         public Throwable getError() {
             return error;
+        }
+
+        public Bundle getParameters() {
+            return parameters;
         }
     }
 }

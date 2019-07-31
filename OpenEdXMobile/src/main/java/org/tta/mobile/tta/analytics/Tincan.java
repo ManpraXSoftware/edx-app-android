@@ -13,4 +13,17 @@ public class Tincan {
     public String nav;
     public String source_id;
     public long content_id;
+
+    @Override
+    public String toString() {
+        return "Tincan{" +
+                "analytic_id='" + analytic_id + '\'' +
+                ", course_id='" + course_id + '\'' +
+                ", metadata='" + metadata + '\'' +
+                ", action_id='" + action_id + '\'' +
+                ", nav='" + nav + '\'' +
+                ", source_id='" + source_id + '\'' +
+                ", content_id=" + content_id +
+                '}';
+    }
 }

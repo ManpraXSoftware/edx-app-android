@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import org.tta.mobile.R;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.scorm.JSInterfaceTincan;
 import org.tta.mobile.tta.tincan.Tincan;
@@ -183,6 +184,12 @@ public class CourseScormViewActivity extends BaseVMActivity {
                                 try {
                                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + intent.getPackage())));
                                 } catch (android.content.ActivityNotFoundException anfe) {
+                                    Bundle parameters = new Bundle();
+                                    parameters.putString(Constants.KEY_CLASS_NAME, CourseScormViewActivity.class.getName());
+                                    parameters.putString(Constants.KEY_FUNCTION_NAME, "shouldOverrideUrlLoading");
+                                    parameters.putString(Constants.KEY_DATA, "Content id = " + contentId +
+                                            ", Unit id = " + unitId + ", Url = " + url);
+                                    Logger.logCrashlytics(anfe, parameters);
                                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + intent.getPackage())));
                                 }
 
@@ -193,6 +200,12 @@ public class CourseScormViewActivity extends BaseVMActivity {
                             return true;
                         }
                     } catch (URISyntaxException e) {
+                        Bundle parameters = new Bundle();
+                        parameters.putString(Constants.KEY_CLASS_NAME, CourseScormViewActivity.class.getName());
+                        parameters.putString(Constants.KEY_FUNCTION_NAME, "shouldOverrideUrlLoading");
+                        parameters.putString(Constants.KEY_DATA, "Content id = " + contentId +
+                                ", Unit id = " + unitId + ", Url = " + url);
+                        Logger.logCrashlytics(e, parameters);
                         e.printStackTrace();
                     }
                 }
@@ -301,6 +314,12 @@ public class CourseScormViewActivity extends BaseVMActivity {
         try {
             Class.forName("android.webkit.WebView").getMethod("onPause", (Class[]) null).invoke(webView, (Object[]) null);
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, CourseScormViewActivity.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "onPause");
+            parameters.putString(Constants.KEY_DATA, "Content id = " + contentId +
+                    ", Unit id = " + unitId);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
     }
@@ -320,6 +339,12 @@ public class CourseScormViewActivity extends BaseVMActivity {
         try {
             Class.forName("android.webkit.WebView").getMethod("onResume", (Class[]) null).invoke(webView, (Object[]) null);
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, CourseScormViewActivity.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "onResume");
+            parameters.putString(Constants.KEY_DATA, "Content id = " + contentId +
+                    ", Unit id = " + unitId);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
     }

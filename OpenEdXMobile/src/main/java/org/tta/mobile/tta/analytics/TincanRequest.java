@@ -10,4 +10,13 @@ public class TincanRequest {
     public String user_id;
     public int version;
     ArrayList<Tincan> tincanObj=new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "TincanRequest{" +
+                "user_id='" + user_id + '\'' +
+                ", version=" + version +
+                ", tincanObj=" + tincanObj +
+                '}';
+    }
 }

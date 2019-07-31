@@ -6,6 +6,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 
 import org.tta.mobile.R;
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.ui.base.BasePagerAdapter;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.logistration.view_model.SigninRegisterViewModel;
@@ -46,6 +48,10 @@ public class SigninRegisterActivity extends BaseVMActivity {
                     callback.onPageShow();
                 }
             } catch (Exception e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, SigninRegisterActivity.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "onResume");
+                Logger.logCrashlytics(e, parameters);
                 e.printStackTrace();
             }
         });

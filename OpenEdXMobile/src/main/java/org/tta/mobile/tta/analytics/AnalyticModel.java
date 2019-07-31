@@ -96,4 +96,23 @@ public class AnalyticModel {
         else
             status=Status.LIVE;
     }
+
+    @Override
+    public String toString() {
+        return "AnalyticModel{" +
+                "user_id='" + user_id + '\'' +
+                ", analytic_id='" + analytic_id + '\'' +
+                ", action='" + action + '\'' +
+                ", source='" + source + '\'' +
+                ", metadata='" + metadata + '\'' +
+                ", page='" + page + '\'' +
+                ", event_timestamp=" + event_timestamp +
+                ", version=" + version +
+                ", nav='" + nav + '\'' +
+                ", action_id='" + action_id + '\'' +
+                ", source_id='" + source_id + '\'' +
+                ", content_id=" + content_id +
+                ", status=" + status +
+                '}';
+    }
 }

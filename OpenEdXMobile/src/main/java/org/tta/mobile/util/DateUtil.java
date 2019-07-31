@@ -1,11 +1,13 @@
 package org.tta.mobile.util;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.google.gson.internal.bind.util.ISO8601Utils;
 
 import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 
 import java.text.ParseException;
 import java.text.ParsePosition;
@@ -36,6 +38,11 @@ public class DateUtil {
             return parsedate;
 
         } catch (ParseException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DateUtil.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "convertToDate");
+            parameters.putString(Constants.KEY_DATA, "date = " + date);
+            Logger.logCrashlytics(e, parameters);
             logger.error(e);
         }
         return parsedate;
@@ -59,6 +66,11 @@ public class DateUtil {
             String formattedDate = dateFormat.format(startDate);
             return formattedDate;
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DateUtil.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "formatCourseNotStartedDate");
+            parameters.putString(Constants.KEY_DATA, "date = " + date);
+            Logger.logCrashlytics(e, parameters);
             //This will be removed when the PR for log changes is merged with master
             logger.error(e);
             return null;
@@ -77,6 +89,11 @@ public class DateUtil {
         try {
             return new SimpleDateFormat("MMMM d").format(millis);
         } catch (IllegalArgumentException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DateUtil.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "formatDateWithNoYear");
+            parameters.putString(Constants.KEY_DATA, "millis = " + millis);
+            Logger.logCrashlytics(e, parameters);
             logger.error(e);
             return null;
         }
@@ -91,6 +108,11 @@ public class DateUtil {
         try{
             return sdf.format(new Date(time));
         }catch (Exception e){
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DateUtil.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getDateForServerLocal");
+            parameters.putString(Constants.KEY_DATA, "time = " + time);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
         return "";
@@ -104,6 +126,10 @@ public class DateUtil {
         try{
             return sdf.format(new Date(System.currentTimeMillis()));
         }catch (Exception e){
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DateUtil.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getCurrentDateForServerGMT");
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
         return "";

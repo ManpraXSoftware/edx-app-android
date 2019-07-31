@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 
 import org.tta.mobile.R;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.model.authentication.ResetForgotedPasswordResponse;
 import org.tta.mobile.tta.task.authentication.ResetForgotedPasswordTask;
@@ -120,6 +121,11 @@ public class ResetPasswordViewModel extends BaseViewModel {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, ResetPasswordViewModel.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "submit");
+                parameters.putString(Constants.KEY_DATA, "mobile number = " + number);
+                Logger.logCrashlytics(ex, parameters);
                 mActivity.hideLoading();
                 mActivity.showErrorDialog(mActivity.getString(R.string.reset_password_failure),
                         mActivity.getString(R.string.try_later));

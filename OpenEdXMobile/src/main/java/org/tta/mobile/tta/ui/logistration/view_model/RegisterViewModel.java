@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 
 import org.tta.mobile.R;
 import org.tta.mobile.http.HttpResponseStatusException;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.model.authentication.SendOTPResponse;
 import org.tta.mobile.tta.task.authentication.GenerateOtpTask;
@@ -213,6 +214,12 @@ public class RegisterViewModel extends BaseViewModel {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters1 = new Bundle();
+                parameters1.putString(Constants.KEY_CLASS_NAME, RegisterViewModel.class.getName());
+                parameters1.putString(Constants.KEY_FUNCTION_NAME, "generateOTP");
+                parameters1.putString(Constants.KEY_DATA, "parameters = " + parameters);
+                Logger.logCrashlytics(ex, parameters1);
+
                 mActivity.hideLoading();
                 String errorMsg = "";
                 try {
@@ -224,6 +231,11 @@ public class RegisterViewModel extends BaseViewModel {
                         errorMsg = mActivity.getString(R.string.server_not_responding);
                     }
                 } catch (Exception exp) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, RegisterViewModel.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "generateOTP");
+                    parameters.putString(Constants.KEY_DATA, "Mobile number = " + cellphone.get());
+                    Logger.logCrashlytics(exp, parameters);
                     errorMsg = mActivity.getString(R.string.server_not_responding);
                 }
 

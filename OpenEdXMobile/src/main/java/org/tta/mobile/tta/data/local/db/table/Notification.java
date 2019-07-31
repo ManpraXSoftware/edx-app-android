@@ -176,4 +176,20 @@ public class Notification implements Parcelable {
             updated = notification.updated;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Notification{" +
+                "local_id=" + local_id +
+                ", id=" + id +
+                ", username='" + username + '\'' +
+                ", type='" + type + '\'' +
+                ", ref_id='" + ref_id + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", seen=" + seen +
+                ", created_time=" + created_time +
+                ", updated=" + updated +
+                '}';
+    }
 }

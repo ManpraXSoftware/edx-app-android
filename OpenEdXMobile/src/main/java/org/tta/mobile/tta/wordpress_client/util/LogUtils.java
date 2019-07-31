@@ -16,8 +16,12 @@
 
 package org.tta.mobile.tta.wordpress_client.util;
 
+import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -66,6 +70,11 @@ public class LogUtils {
             writer.close();
 
         } catch (IOException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, LogUtils.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "writeToFile");
+            parameters.putString(Constants.KEY_DATA, "msg = " + msg);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
     }

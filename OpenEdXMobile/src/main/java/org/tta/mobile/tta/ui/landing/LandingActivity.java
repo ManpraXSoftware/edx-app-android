@@ -22,6 +22,8 @@ import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.tasks.Task;
 
 import org.tta.mobile.R;
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.pref.AppPref;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.landing.view_model.LandingViewModel;
@@ -127,6 +129,10 @@ public class LandingActivity extends BaseVMActivity{
                             MY_REQUEST_CODE);
                     appUpdateManager.unregisterListener(listener);
                 } catch (IntentSender.SendIntentException e) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, LandingActivity.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "checkForAppUpdates");
+                    Logger.logCrashlytics(e, parameters);
                     e.printStackTrace();
                 }
             }

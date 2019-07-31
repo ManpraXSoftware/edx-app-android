@@ -1,5 +1,6 @@
 package org.tta.mobile.http.serialization;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import java.io.IOException;
@@ -15,6 +16,8 @@ import com.google.gson.internal.bind.util.ISO8601Utils;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+
+import org.tta.mobile.logger.Logger;
 
 /**
  * Gson adapter for converting between ISO 8601 date and (@link Date).
@@ -52,6 +55,10 @@ public final class ISO8601DateTypeAdapter extends TypeAdapter<Date> {
         try {
             return ISO8601Utils.parse(date, parsePosition);
         } catch (ParseException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, ISO8601DateTypeAdapter.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "read");
+            Logger.logCrashlytics(e, parameters);
             throw new JsonSyntaxException(date, e);
         }
     }

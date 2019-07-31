@@ -3,10 +3,12 @@ package org.tta.mobile.util;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.google.gson.Gson;
@@ -20,6 +22,7 @@ import com.squareup.phrase.Phrase;
 
 import org.tta.mobile.BuildConfig;
 import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -287,7 +290,7 @@ public class Config {
         public boolean isEnabled() {
             return mEnabled
                     && !TextUtils.isEmpty(mFabricKey)
-                    && !TextUtils.isEmpty(mFabricBuildSecret)
+//                    && !TextUtils.isEmpty(mFabricBuildSecret)
                     && mKitsConfig != null && mKitsConfig.hasEnabledKits();
         }
 
@@ -326,7 +329,7 @@ public class Config {
             List<Kit> fabricKits = new ArrayList<>();
 
             if (isCrashlyticsEnabled()) {
-                fabricKits.add(new CrashlyticsCore());
+                fabricKits.add(new Crashlytics());
             }
 
             if (isAnswersEnabled()) {
@@ -482,6 +485,10 @@ public class Config {
             JsonElement config = parser.parse(new InputStreamReader(in));
             mProperties = config.getAsJsonObject();
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Config.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "Constructor");
+            Logger.logCrashlytics(e, parameters);
             mProperties = new JsonObject();
             logger.error(e);
         }
@@ -721,8 +728,20 @@ public class Config {
             try {
                 return cls.newInstance();
             } catch (InstantiationException e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Config.class.getName());
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getObjectOrNewInstance");
+                parameters.putString(Constants.KEY_DATA, "key = " + key +
+                        ", cls = " + cls.getName());
+                Logger.logCrashlytics(e, parameters);
                 throw new RuntimeException(e);
             } catch (IllegalAccessException e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Config.class.getName());
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getObjectOrNewInstance");
+                parameters.putString(Constants.KEY_DATA, "key = " + key +
+                        ", cls = " + cls.getName());
+                Logger.logCrashlytics(e, parameters);
                 throw new RuntimeException(e);
             }
         }

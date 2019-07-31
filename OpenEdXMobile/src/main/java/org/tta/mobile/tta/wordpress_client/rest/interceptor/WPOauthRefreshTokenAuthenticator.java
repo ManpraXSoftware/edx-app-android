@@ -1,6 +1,7 @@
 package org.tta.mobile.tta.wordpress_client.rest.interceptor;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
@@ -11,6 +12,7 @@ import org.tta.mobile.R;
 import org.tta.mobile.authentication.AuthResponse;
 import org.tta.mobile.http.HttpResponseStatusException;
 import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.DataManager;
 import org.tta.mobile.tta.wordpress_client.model.WpAuthResponse;
 import org.tta.mobile.tta.wordpress_client.rest.WpClientRetrofit;
@@ -63,6 +65,11 @@ public class WPOauthRefreshTokenAuthenticator implements Authenticator {
                     try {
                         refreshedAuth = refreshAccessToken(currentAuth);
                     } catch (HttpResponseStatusException e) {
+                        Bundle parameters = new Bundle();
+                        parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, WPOauthRefreshTokenAuthenticator.class.getName());
+                        parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "authenticate");
+                        parameters.putString(Constants.KEY_DATA, "currentAuth = " + currentAuth.toString());
+                        Logger.logCrashlytics(e, parameters);
                         logout();
                         return null;
                     }
@@ -107,6 +114,12 @@ public class WPOauthRefreshTokenAuthenticator implements Authenticator {
             JSONObject jsonObj = new JSONObject(responseBody);
             return jsonObj.getString("error_code");
         } catch (JSONException ex) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, WPOauthRefreshTokenAuthenticator.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getErrorCode");
+            parameters.putString(Constants.KEY_DATA, "responseBody = " + responseBody);
+            Logger.logCrashlytics(ex, parameters);
+
             logger.warn("Unable to get error_code from 401 response");
             return null;
         }

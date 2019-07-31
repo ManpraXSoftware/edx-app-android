@@ -1,9 +1,11 @@
 package org.tta.mobile.util;
 
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.util.links.WebViewLink;
 
 import java.net.URI;
@@ -27,6 +29,12 @@ public class UrlUtil {
             URI result = baseUri.resolve(url);
             return result.toString();
         } catch (URISyntaxException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, UrlUtil.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "makeAbsolute");
+            parameters.putString(Constants.KEY_DATA, "url = " + url +
+                    ", base = " + base);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
             return null;
         }

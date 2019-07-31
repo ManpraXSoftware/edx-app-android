@@ -2,6 +2,10 @@ package org.tta.mobile.module.db.impl;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 
 public abstract class DbOperationSelect<T> extends DbOperationBase<T> {
     
@@ -44,6 +48,10 @@ public abstract class DbOperationSelect<T> extends DbOperationBase<T> {
             Cursor c = db.query(distinct, table, columns, whereClause, whereArgs, groupBy, null, orderBy, limit);
             return c;
         }catch (Exception ex){
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DbOperationSelect.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getCursor");
+            Logger.logCrashlytics(ex, parameters);
             logger.error(ex);
             throw new IllegalArgumentException(ex.getMessage());
         }

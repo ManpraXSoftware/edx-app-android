@@ -1,6 +1,8 @@
 package org.tta.mobile.module.db.impl;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+
 import org.tta.mobile.logger.Logger;
 import org.tta.mobile.module.db.DataCallback;
 
@@ -31,6 +33,10 @@ abstract class DbOperationBase<T> implements IDbOperation<T> {
             
             return result;
         } catch(Exception ex) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DbOperationBase.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "requestExecute");
+            Logger.logCrashlytics(ex, parameters);
             if (callback != null) {
                 callback.sendException(ex);
                 logger.debug("sending error...");

@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 import org.tta.mobile.R;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
@@ -106,6 +108,11 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
 
             }
         } catch (IllegalArgumentException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, FeedShareBottomSheet.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "setupDialog");
+            parameters.putString(Constants.KEY_DATA, "Feed = " + feed.toString());
+            Logger.logCrashlytics(e, parameters);
             layoutId = R.layout.t_fragment_feed_share;
         }
 
@@ -231,6 +238,12 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
                         new Intent().setAction(Intent.ACTION_SEND).setType("text/plain")
                                 .setPackage("com.facebook.katana"));
             } catch (PackageManager.NameNotFoundException e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, FeedShareBottomSheet.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "addFbOption");
+                parameters.putString(Constants.KEY_DATA, "Feed = " + feed.toString() +
+                        ", package = com.facebook.katana");
+                Logger.logCrashlytics(e, parameters);
                 e.printStackTrace();
             }
             imageView.setImageDrawable(d);
@@ -255,6 +268,12 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
                         new Intent().setAction(Intent.ACTION_SEND).setType("text/plain")
                                 .setPackage("com.facebook.lite"));
             } catch (PackageManager.NameNotFoundException e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, FeedShareBottomSheet.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "addFbOption");
+                parameters.putString(Constants.KEY_DATA, "Feed = " + feed.toString() +
+                        ", package = com.facebook.lite");
+                Logger.logCrashlytics(e, parameters);
                 e.printStackTrace();
             }
             imageView.setImageDrawable(d);
@@ -283,6 +302,12 @@ public class FeedShareBottomSheet extends BottomSheetDialogFragment {
                         new Intent().setAction(Intent.ACTION_SEND).setType("text/plain")
                                 .setPackage("com.whatsapp"));
             } catch (PackageManager.NameNotFoundException e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, FeedShareBottomSheet.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "addWhatsappOption");
+                parameters.putString(Constants.KEY_DATA, "Feed = " + feed.toString() +
+                        ", package = com.whatsapp");
+                Logger.logCrashlytics(e, parameters);
                 e.printStackTrace();
             }
             imageView.setImageDrawable(d);

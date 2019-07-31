@@ -14,11 +14,13 @@ import org.tta.mobile.http.HttpResponseStatusException;
 import org.tta.mobile.http.HttpStatus;
 import org.tta.mobile.http.HttpStatusException;
 import org.tta.mobile.http.constants.ApiConstants;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.model.api.FormFieldMessageBody;
 import org.tta.mobile.model.api.ProfileModel;
 import org.tta.mobile.module.analytics.AnalyticsRegistry;
 import org.tta.mobile.module.notification.NotificationDelegate;
 import org.tta.mobile.module.prefs.LoginPrefs;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.model.authentication.FieldInfo;
 import org.tta.mobile.tta.data.model.authentication.MobileNumberVerificationResponse;
 import org.tta.mobile.tta.data.model.authentication.RegisterResponse;
@@ -150,6 +152,12 @@ public class LoginAPI {
         try {
             response.profile = getProfile();
         } catch (Throwable e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, LoginAPI.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "finishLogIn");
+            parameters.putString(Constants.KEY_DATA, "response = " + response.toString() +
+                    ", usernameUsedToLogIn = " + usernameUsedToLogIn);
+            Logger.logCrashlytics(e, parameters);
             // The app doesn't properly handle the scenario that we are logged in but we don't have
             // a cached profile. So if we fail to fetch the profile, let's erase the stored token.
             // TODO: A better approach might be to fetch the profile *before* storing the token.
@@ -233,7 +241,6 @@ public class LoginAPI {
             parameterMap.put(key, parameters.getString(key));
         }
 
-        Log.d("________LOG_______", "registration api hit");
         Response<ResponseBody> response = loginService.register(parameterMap).execute();
         if (!response.isSuccessful()) {
             final int errorCode = response.code();
@@ -245,6 +252,11 @@ public class LoginAPI {
                         throw new RegistrationException(body);
                     }
                 } catch (JsonSyntaxException ex) {
+                    Bundle parameters1 = new Bundle();
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, LoginAPI.class.getName());
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "register");
+                    parameters1.putString(Constants.KEY_DATA, "parameters = " + parameterMap);
+                    Logger.logCrashlytics(ex, parameters1);
                     // Looks like the response does not contain form validation errors.
                 }
             }
@@ -379,6 +391,11 @@ public class LoginAPI {
                         throw new RegistrationException(body);
                     }
                 } catch (JsonSyntaxException ex) {
+                    Bundle parameters1 = new Bundle();
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, LoginAPI.class.getName());
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "mxMobileNumberVerification");
+                    parameters1.putString(Constants.KEY_DATA, "parameters = " + parameterMap);
+                    Logger.logCrashlytics(ex, parameters1);
                     // Looks like the response does not contain form validation errors.
                 }
             }
@@ -408,6 +425,11 @@ public class LoginAPI {
                         throw new RegistrationException(body);
                     }
                 } catch (JsonSyntaxException ex) {
+                    Bundle parameters1 = new Bundle();
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, LoginAPI.class.getName());
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "mxOTPVerification_For_ForgotedPassword");
+                    parameters1.putString(Constants.KEY_DATA, "parameters = " + parameterMap);
+                    Logger.logCrashlytics(ex, parameters1);
                     // Looks like the response does not contain form validation errors.
                 }
             }
@@ -437,6 +459,11 @@ public class LoginAPI {
                         throw new RegistrationException(body);
                     }
                 } catch (JsonSyntaxException ex) {
+                    Bundle parameters1 = new Bundle();
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, LoginAPI.class.getName());
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "mxResetForgotedPassword");
+                    parameters1.putString(Constants.KEY_DATA, "parameters = " + parameterMap);
+                    Logger.logCrashlytics(ex, parameters1);
                     // Looks like the response does not contain form validation errors.
                 }
             }
@@ -465,6 +492,11 @@ public class LoginAPI {
                         throw new RegistrationException(body);
                     }
                 } catch (JsonSyntaxException ex) {
+                    Bundle parameters1 = new Bundle();
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, LoginAPI.class.getName());
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "mxGrenerateOtp");
+                    parameters1.putString(Constants.KEY_DATA, "parameters = " + parameterMap);
+                    Logger.logCrashlytics(ex, parameters1);
                     // Looks like the response does not contain form validation errors.
                 }
             }
@@ -492,6 +524,11 @@ public class LoginAPI {
                         throw new RegistrationException(body);
                     }
                 } catch (JsonSyntaxException ex) {
+                    Bundle parameters1 = new Bundle();
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, LoginAPI.class.getName());
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "mxVerifyOtp");
+                    parameters1.putString(Constants.KEY_DATA, "parameters = " + parameterMap);
+                    Logger.logCrashlytics(ex, parameters1);
                     // Looks like the response does not contain form validation errors.
                 }
             }
@@ -518,6 +555,11 @@ public class LoginAPI {
                         throw new RegistrationException(body);
                     }
                 } catch (JsonSyntaxException ex) {
+                    Bundle parameters1 = new Bundle();
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, LoginAPI.class.getName());
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "mxGetUserAddress");
+                    parameters1.putString(Constants.KEY_DATA, "parameters = " + parameterMap);
+                    Logger.logCrashlytics(ex, parameters1);
                     // Looks like the response does not contain form validation errors.
                 }
             }
@@ -549,6 +591,11 @@ public class LoginAPI {
                         throw new RegistrationException(body);
                     }
                 } catch (JsonSyntaxException ex) {
+                    Bundle parameters1 = new Bundle();
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, LoginAPI.class.getName());
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "mxUpdateMyProfile");
+                    parameters1.putString(Constants.KEY_DATA, "parameters = " + parameterMap);
+                    Logger.logCrashlytics(ex, parameters1);
                     // Looks like the response does not contain form validation errors.
                 }
             }
@@ -560,6 +607,11 @@ public class LoginAPI {
                         throw new RegistrationFieldErrorException(body);
                     }
                 } catch (JsonSyntaxException ex) {
+                    Bundle parameters1 = new Bundle();
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, LoginAPI.class.getName());
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "mxUpdateMyProfile");
+                    parameters1.putString(Constants.KEY_DATA, "parameters = " + parameterMap);
+                    Logger.logCrashlytics(ex, parameters1);
                     // Looks like the response does not contain form validation errors.
                 }
             }
@@ -606,6 +658,11 @@ public class LoginAPI {
                         throw new LoginAPI.RegistrationException(body);
                     }
                 } catch (JsonSyntaxException ex) {
+                    Bundle parameters1 = new Bundle();
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, LoginAPI.class.getName());
+                    parameters1.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "Mx_updateTA_FirebaseToken");
+                    parameters1.putString(Constants.KEY_DATA, "parameters = " + parameterMap);
+                    Logger.logCrashlytics(ex, parameters1);
                     // Looks like the response does not contain form validation errors.
                 }
             }
@@ -630,6 +687,10 @@ public class LoginAPI {
                         throw new RegistrationException(body);
                     }
                 } catch (JsonSyntaxException ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, LoginAPI.class.getName());
+                    parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "mxGetCustomStateFieldAttributes");
+                    Logger.logCrashlytics(ex, parameters);
                     // Looks like the response does not contain form validation errors.
                 }
             }

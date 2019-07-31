@@ -344,7 +344,7 @@
                     android:padding="@dimen/_10px"
                     android:text="@string/reply"
                     android:textAllCaps="false"
-                    android:textColor="@color/secondary_grey_light"
+                    android:textColor="@color/primary_cyan"
                     android:textSize="12sp" />
 
             </LinearLayout>

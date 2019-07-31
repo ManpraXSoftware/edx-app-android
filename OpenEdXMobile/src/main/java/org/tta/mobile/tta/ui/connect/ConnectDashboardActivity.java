@@ -33,6 +33,7 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
 import org.tta.mobile.R;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
@@ -322,6 +323,11 @@ public class ConnectDashboardActivity extends BaseVMActivity {
                 try {
                     startActivityForResult(intent, REQUEST_SELECT_FILE);
                 } catch (ActivityNotFoundException e) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, ConnectDashboardActivity.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "onShowFileChooser");
+                    parameters.putString(Constants.KEY_DATA, "Content id = " + content.getId());
+                    Logger.logCrashlytics(e, parameters);
                     uploadMessage = null;
                     return false;
                 }
@@ -507,6 +513,12 @@ public class ConnectDashboardActivity extends BaseVMActivity {
                     Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(i);
                 } catch (ActivityNotFoundException ex) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, ConnectDashboardActivity.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "shouldOverrideUrlLoading");
+                    parameters.putString(Constants.KEY_DATA, "Content id = " + content.getId() +
+                            ", Url = " + url);
+                    Logger.logCrashlytics(ex, parameters);
                     showLongSnack("Application not found in your device to perform this action");
                 }
             }
@@ -553,6 +565,12 @@ public class ConnectDashboardActivity extends BaseVMActivity {
                 hideLoading();
 
             } catch (Exception exception) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, ConnectDashboardActivity.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "onPageFinished");
+                parameters.putString(Constants.KEY_DATA, "Content id = " + content.getId() +
+                        ", Url = " + url);
+                Logger.logCrashlytics(exception, parameters);
                 exception.printStackTrace();
             }
             super.onPageFinished(view, url);
@@ -571,6 +589,11 @@ public class ConnectDashboardActivity extends BaseVMActivity {
                     callback.onPageShow();
                 }
             } catch (Exception e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, ConnectDashboardActivity.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "onResume");
+                parameters.putString(Constants.KEY_DATA, "Content id = " + content.getId());
+                Logger.logCrashlytics(e, parameters);
                 e.printStackTrace();
             }
         });

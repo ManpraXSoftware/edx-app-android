@@ -11,6 +11,7 @@ import android.view.View;
 
 import org.tta.mobile.R;
 import org.tta.mobile.event.NetworkConnectivityChangeEvent;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.model.course.CourseComponent;
 import org.tta.mobile.tta.Constants;
@@ -181,6 +182,11 @@ public class CourseDashboardViewModel extends BaseViewModel {
         try {
             adapter.setFragments(fragments, titles);
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, CourseDashboardViewModel.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "setTabs");
+            parameters.putString(Constants.KEY_DATA, "Content id = " + content.getId());
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
         this.tabPosition.set(position);

@@ -3,6 +3,7 @@ package org.tta.mobile.tta.data.local.db.table;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "bookmark",
@@ -29,6 +30,7 @@ public class Bookmark {
         this.contentId = contentId;
     }
 
+    @Ignore
     public Bookmark(long contentId, long sourceId) {
         this.contentId = contentId;
         this.sourceId = sourceId;

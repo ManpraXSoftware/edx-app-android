@@ -5,6 +5,7 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.RoomWarnings;
 
 import org.tta.mobile.tta.data.local.db.table.Bookmark;
 import org.tta.mobile.tta.data.local.db.table.Content;
@@ -14,6 +15,7 @@ import java.util.List;
 @Dao
 public interface BookmarkDao {
 
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("Select * from content inner join bookmark " +
             "on content.id = bookmark.content_id " +
             "where content.source_id = :sourceId ")

@@ -14,6 +14,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
 import android.widget.Toast;
 
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.ui.logistration.SigninRegisterActivity;
 
 import java.io.File;
@@ -100,6 +102,11 @@ public class ActivityUtil {
         }
         catch (ActivityNotFoundException e)
         {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, ActivityUtil.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "viewPDF");
+            parameters.putString(Constants.KEY_DATA, "Filepath = " + filePath.getAbsolutePath());
+            Logger.logCrashlytics(e, parameters);
             Toast.makeText(ctx, "NO Pdf Viewer", Toast.LENGTH_SHORT).show();
         }
     }

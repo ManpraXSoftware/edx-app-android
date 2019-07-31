@@ -1,6 +1,10 @@
 package org.tta.mobile.tta.utils;
 
+import android.os.Bundle;
+
 import org.tta.mobile.R;
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.enums.SourceName;
 
 public class ContentSourceUtil {
@@ -60,6 +64,11 @@ public class ContentSourceUtil {
                     return R.drawable.t_icon_course_130;
             }
         } catch (IllegalArgumentException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, ContentSourceUtil.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "getSourceDrawable_130x130");
+            parameters.putString(Constants.KEY_DATA, "sourceName = " + sourceName);
+            Logger.logCrashlytics(e, parameters);
             return R.drawable.t_icon_course_130;
         }
     }

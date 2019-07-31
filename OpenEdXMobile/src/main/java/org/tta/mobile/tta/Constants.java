@@ -57,6 +57,9 @@ public class Constants {
     public static final String KEY_TAB_POSITION = "tab_position";
     public static final String KEY_CERTIFICATE = "certificate";
     public static final String KEY_FOLLOWER = "follower";
+    public static final String KEY_CLASS_NAME = "class_name";
+    public static final String KEY_FUNCTION_NAME = "function_name";
+    public static final String KEY_DATA = "data";
 
     //for app update
     public static final String VERSION_NAME = "version_name";

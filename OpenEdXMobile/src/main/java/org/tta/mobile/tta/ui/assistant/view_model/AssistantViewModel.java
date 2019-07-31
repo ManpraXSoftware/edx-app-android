@@ -23,6 +23,7 @@ import com.maurya.mx.mxlib.core.OnRecyclerItemClickListener;
 import org.tta.mobile.R;
 import org.tta.mobile.databinding.TRowAssistantItemBinding;
 import org.tta.mobile.databinding.TRowContentBinding;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.enums.SourceType;
 import org.tta.mobile.tta.data.local.db.table.Content;
@@ -145,6 +146,10 @@ public class AssistantViewModel extends BaseViewModel implements AIListener {
                 try {
                     return aiService.textRequest(requests[0]);
                 } catch (AIServiceException e) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, AssistantViewModel.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "send");
+                    Logger.logCrashlytics(e, parameters);
                     e.printStackTrace();
                 }
                 return null;

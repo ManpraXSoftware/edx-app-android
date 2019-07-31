@@ -2,6 +2,7 @@ package org.tta.mobile.module.prefs;
 
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -10,6 +11,7 @@ import com.google.inject.Singleton;
 
 import org.tta.mobile.logger.Logger;
 import org.tta.mobile.model.api.ProfileModel;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.util.AppConstants;
 import org.tta.mobile.util.FileUtil;
 import org.tta.mobile.util.Sha1Util;
@@ -64,6 +66,10 @@ public class UserPrefs {
                 File noMediaFile = new File(usersVidsDir, ".nomedia");
                 noMediaFile.createNewFile();
             } catch (IOException ioException) {
+                Bundle parameters = new Bundle();
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, UserPrefs.class.getName());
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getDownloadDirectory");
+                Logger.logCrashlytics(ioException, parameters);
                 logger.error(ioException);
             }
 
