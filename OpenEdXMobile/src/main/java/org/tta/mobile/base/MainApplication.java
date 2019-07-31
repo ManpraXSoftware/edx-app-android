@@ -118,7 +118,7 @@ public abstract class MainApplication extends MultiDexApplication {
         }*/
         final Fabric fabric = new Fabric.Builder(this)
                 .kits(new Crashlytics())
-//                .debuggable(true)  // Enables Crashlytics debugger
+                .debuggable(true)  // Enables Crashlytics debugger
                 .build();
         Fabric.with(fabric);
 
