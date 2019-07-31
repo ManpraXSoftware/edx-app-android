@@ -35,9 +35,9 @@ public class AssistantFragment extends TaBaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = binding(inflater, container, R.layout.t_fragment_assistant, viewModel).getRoot();
 //        viewModel.getAgenda();
-        if (!PermissionsUtil.checkPermissions(Manifest.permission.RECORD_AUDIO,getActivity())){
+        /*if (!PermissionsUtil.checkPermissions(Manifest.permission.RECORD_AUDIO,getActivity())){
           PermissionsUtil.requestPermissions(119,new String[]{Manifest.permission.RECORD_AUDIO},this);
-        }
+        }*/
         return view;
     }
 

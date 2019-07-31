@@ -27,7 +27,7 @@
     <!-- TTA To download without notification -->
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     <!--required into assistant search-->
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!--<uses-permission android:name="android.permission.RECORD_AUDIO" />-->
 
     <!-- TTA: To listen boot completed -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
