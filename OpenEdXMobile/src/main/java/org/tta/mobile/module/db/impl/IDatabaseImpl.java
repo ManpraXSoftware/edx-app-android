@@ -1085,4 +1085,12 @@ public class IDatabaseImpl extends IDatabaseBaseImpl implements IDatabase {
         GetLegacyEdxDownloadsOperation op = new GetLegacyEdxDownloadsOperation();
         return enqueue(op);
     }
+
+
+    @Override
+    public int doMigrate(String table, String col_name,DataCallback<Integer> callback) {
+        DbMigrateColumn op = new DbMigrateColumn(table,col_name);
+        op.setCallback(callback);
+        return enqueue(op);
+    }
 }

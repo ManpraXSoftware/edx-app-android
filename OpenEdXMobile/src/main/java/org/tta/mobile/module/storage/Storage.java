@@ -866,4 +866,9 @@ public class Storage implements IStorage {
     public List<VideoModel> getLegacyEdxDownloads() {
         return db.getLegacyEdxDownloads();
     }
+
+    @Override
+    public int doMigrate(String table, String col_name, DataCallback<Integer> callback) {
+        return db.doMigrate(table,col_name,null);
+    }
 }
