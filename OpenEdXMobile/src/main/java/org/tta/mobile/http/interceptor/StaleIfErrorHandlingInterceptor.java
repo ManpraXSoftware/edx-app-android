@@ -1,6 +1,10 @@
 package org.tta.mobile.http.interceptor;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -83,6 +87,10 @@ public class StaleIfErrorHandlingInterceptor implements Interceptor {
                     return response;
             }
         } catch (IOException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, StaleIfErrorHandlingInterceptor.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "intercept");
+            Logger.logCrashlytics(e, parameters);
             // If a network exception was encountered, store it and fall back to querying the cache
             // for an appropriate response. If none is available from the cache, then throw it.
             error = e;

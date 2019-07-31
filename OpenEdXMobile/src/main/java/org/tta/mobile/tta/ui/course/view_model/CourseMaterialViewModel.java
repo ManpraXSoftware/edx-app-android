@@ -25,6 +25,7 @@ import org.tta.mobile.R;
 import org.tta.mobile.databinding.TRowCourseMaterialFooterBinding;
 import org.tta.mobile.databinding.TRowCourseMaterialHeaderBinding;
 import org.tta.mobile.databinding.TRowCourseMaterialItemBinding;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.model.VideoModel;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.model.course.BlockType;
@@ -732,6 +733,12 @@ public class CourseMaterialViewModel extends BaseViewModel {
                     try {
                         n = Integer.parseInt(likes.get());
                     } catch (Exception e) {
+                        Bundle parameters = new Bundle();
+                        parameters.putString(Constants.KEY_CLASS_NAME, CourseMaterialViewModel.class.getName());
+                        parameters.putString(Constants.KEY_FUNCTION_NAME, "like");
+                        parameters.putString(Constants.KEY_DATA, "Content id = " + content.getId() +
+                                ", likes = " + likes.get());
+                        Logger.logCrashlytics(e, parameters);
                         n = 0;
                     }
                 }
@@ -1385,6 +1392,12 @@ public class CourseMaterialViewModel extends BaseViewModel {
                                         itemBinding.itemStatus.setVisibility(View.GONE);
                                 }
                             } catch (IllegalArgumentException e) {
+                                Bundle parameters = new Bundle();
+                                parameters.putString(Constants.KEY_CLASS_NAME, CourseMaterialViewModel.class.getName());
+                                parameters.putString(Constants.KEY_FUNCTION_NAME, "onBind");
+                                parameters.putString(Constants.KEY_DATA, "Content id = " + content.getId() +
+                                        ", unit id = " + item.getId());
+                                Logger.logCrashlytics(e, parameters);
                                 e.printStackTrace();
                                 itemBinding.itemStatus.setVisibility(View.GONE);
                             }

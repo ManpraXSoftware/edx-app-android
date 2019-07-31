@@ -76,4 +76,16 @@ public class FilterSection implements Comparable<FilterSection>, Serializable {
     public int compareTo(FilterSection o) {
         return Long.compare(order, o.order);
     }
+
+    @Override
+    public String toString() {
+        return "FilterSection{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", order=" + order +
+                ", tags=" + tags +
+                ", in_profile=" + in_profile +
+                ", in_search=" + in_search +
+                '}';
+    }
 }

@@ -25,6 +25,7 @@ import org.tta.mobile.R;
 import org.tta.mobile.databinding.TRowFeedBinding;
 import org.tta.mobile.databinding.TRowFeedWithUserBinding;
 import org.tta.mobile.databinding.TRowSuggestedTeacherBinding;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
@@ -210,6 +211,11 @@ public class FeedViewModel extends BaseViewModel {
 
                         break;
                     } catch (Exception e) {
+                        Bundle parameters = new Bundle();
+                        parameters.putString(Constants.KEY_CLASS_NAME, FeedViewModel.class.getName());
+                        parameters.putString(Constants.KEY_FUNCTION_NAME, "Constructor");
+                        parameters.putString(Constants.KEY_DATA, "Feed = " + item.toString());
+                        Logger.logCrashlytics(e, parameters);
                         e.printStackTrace();
                     }
                 /*case R.id.feed_like_layout:
@@ -611,6 +617,11 @@ public class FeedViewModel extends BaseViewModel {
                     return feed.getMeta_data().getSource_title();
             }
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, FeedViewModel.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "getFeedTitle");
+            parameters.putString(Constants.KEY_DATA, "Feed = " + feed.toString());
+            Logger.logCrashlytics(e, parameters);
             return feed.getMeta_data().getSource_title();
         }
 
@@ -848,12 +859,21 @@ public class FeedViewModel extends BaseViewModel {
                                         .load(model.getMeta_data().getIcon() == null ? "" : model.getMeta_data().getIcon())
                                         .placeholder(R.drawable.placeholder_course_card_image)
                                         .into(feedBinding.feedContentImage);
+
+                                feedBinding.feedBtn.setText(getContext().getString(R.string.view));
+                                feedBinding.feedBtn.setVisibility(View.VISIBLE);
                             }
                             feedBinding.feedMetaText.setText(model.getMessage());
                             break;
 
                     }
                 } catch (Exception e) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, FeedViewModel.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "onBind");
+                    parameters.putString(Constants.KEY_DATA, "Feed = " + model.toString());
+                    Logger.logCrashlytics(e, parameters);
+
                     Glide.with(getContext())
                             .load(model.getMeta_data().getIcon() == null ? "" : model.getMeta_data().getIcon())
                             .placeholder(R.drawable.placeholder_course_card_image)
@@ -935,6 +955,11 @@ public class FeedViewModel extends BaseViewModel {
                                     .into(feedWithUserBinding.feedContentImage);
                     }
                 } catch (Exception e) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, FeedViewModel.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "onBind");
+                    parameters.putString(Constants.KEY_DATA, "Feed = " + model.toString());
+                    Logger.logCrashlytics(e, parameters);
                     feedWithUserBinding.feedContentViewBtn.setText(getContext().getString(R.string.view));
                 }
 
@@ -1018,6 +1043,11 @@ public class FeedViewModel extends BaseViewModel {
 
                     }
                 } catch (Exception e) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, FeedViewModel.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getItemLayout");
+                    parameters.putString(Constants.KEY_DATA, "Feed = " + getItem(position).toString());
+                    Logger.logCrashlytics(e, parameters);
                     return R.layout.t_row_feed;
                 }
             }

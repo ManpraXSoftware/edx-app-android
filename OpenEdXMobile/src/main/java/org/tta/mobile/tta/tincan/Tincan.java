@@ -1,8 +1,11 @@
 package org.tta.mobile.tta.tincan;
 
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.tincan.model.Resume;
 
 import static org.tta.mobile.util.BrowserUtil.environment;
@@ -41,6 +44,14 @@ public class Tincan {
         try {
             payload = environment.getStorage().getResumeInfo(course_id, unit_id);
         } catch (Exception e) {
+
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Tincan.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getResumeInfo");
+            parameters.putString(Constants.KEY_DATA, "course_id = " + course_id +
+                    ", unit_id = " + unit_id);
+            Logger.logCrashlytics(e, parameters);
+
             e.printStackTrace();
             payload = null;
             Log.d("Tincan", "Dbfetch fail");

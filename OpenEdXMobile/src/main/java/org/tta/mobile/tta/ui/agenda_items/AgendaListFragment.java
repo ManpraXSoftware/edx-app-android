@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.tta.mobile.R;
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.data.model.agenda.AgendaItem;
 import org.tta.mobile.tta.data.model.agenda.AgendaList;
@@ -21,6 +23,7 @@ import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.view.common.PageViewStateCallback;
 
 import java.util.List;
+import java.util.Map;
 
 
 public class AgendaListFragment extends TaBaseFragment {
@@ -90,6 +93,10 @@ public class AgendaListFragment extends TaBaseFragment {
                     callback.onPageShow();
                 }
             } catch (Exception e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, AgendaListFragment.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "onResume");
+                Logger.logCrashlytics(e, parameters);
                 e.printStackTrace();
             }
         });

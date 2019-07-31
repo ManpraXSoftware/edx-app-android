@@ -95,7 +95,7 @@
     <string name="empty_my_agenda_list">\“%s\” में आपने %s नहीं चुना है। अपने लिए %s का चुनाव करने के लिए @ पर क्लिक करें</string>
     <string name="you_are_offline">आप ऑफलाइन हैं</string>
     <string name="feed_format_badge"><b>%s</b> ने हाल ही में <font fgcolor="#F75791">%s पदक</font> पाया</string>
-    <string name="feed_format_certificate"><b>%s</b> ने %s में <font fgcolor="#F75791">Certificate</font> पाया</string>
+    <string name="feed_format_certificate"><b>%s</b> ने %s में <font fgcolor="#F75791">सर्टिफिकेट</font> पाया</string>
     <string name="view_discussion">चर्चा देखें</string>
 
     <string-array name="spinner_classes">
@@ -152,10 +152,10 @@
     <string name="feed_format_advanced_like">%1$s शिक्षकों ने इस %2$s को पसंद किया है</string>
     <string name="feed_format_advanced_share" >%1$s शिक्षकों ने इस %2$s को साझा किया है</string>
     <string name="feed_format_advanced_share_from">%2$s के %1$s शिक्षकों ने इस %3$s को साझा किया है</string>
-    <string name="feed_format_comment_post" >%1$s ने इस %2$s पर टिपण्णी की</string>
-    <string name="feed_format_comment_post_from">%2$s से %1$s ने इस %3$s पर टिपण्णी की</string>
-    <string name="feed_format_db_comment" >%s ने चर्चा पर टिपण्णी की</string>
-    <string name="feed_format_db_comment_from">%2$s से %1$s ने चर्चा पर टिपण्णी की</string>
+    <string name="feed_format_comment_post" >%1$s ने इस %2$s पर टिप्पणी की</string>
+    <string name="feed_format_comment_post_from">%2$s से %1$s ने इस %3$s पर टिप्पणी की</string>
+    <string name="feed_format_db_comment" >%s ने चर्चा पर टिप्पणी की</string>
+    <string name="feed_format_db_comment_from">%2$s से %1$s ने चर्चा पर टिप्पणी की</string>
     <string name="empty_post_message">पोस्ट उपलब्ध नहीं है</string>
     <string name="empty_discussion_message">चर्चा मौजूद नहीं</string>
     <string name="empty_comments_message">इस चर्चा पर कोई टिप्पणी शामिल नहीं है</string>

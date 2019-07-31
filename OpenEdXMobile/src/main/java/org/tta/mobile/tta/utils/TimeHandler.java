@@ -1,7 +1,10 @@
 package org.tta.mobile.tta.utils;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+
+import org.tta.mobile.logger.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,6 +23,10 @@ public class TimeHandler {
         try {
             mDate = sdf.parse(givenDateString);
         } catch (ParseException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, TimeHandler.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "Default block");
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
     }

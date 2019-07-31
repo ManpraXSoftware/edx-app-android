@@ -1,6 +1,7 @@
 package org.tta.mobile.tta.ui.launch.view_model;
 
 import android.content.Intent;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,7 +29,7 @@ public class SwipeLaunchViewModel extends BaseViewModel {
 
     public SectionsPagerAdapter adapter;
     public List<Fragment> fragments;
-    public ObservableField<Boolean> fabVisible = new ObservableField<>(false);
+    public ObservableBoolean fabVisible = new ObservableBoolean(false);
 
     public ObservableField<ViewPager.OnPageChangeListener> listener = new ObservableField<>(
             new ViewPager.OnPageChangeListener() {

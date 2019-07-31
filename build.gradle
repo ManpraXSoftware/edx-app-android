@@ -16,10 +16,14 @@ buildscript {
         google()
         jcenter()       // This is the default repo
         mavenCentral()  //  This is the Maven Central repo
+
+        maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:${GRADLE_PLUGIN_VERSION}"
         classpath 'com.google.gms:google-services:4.2.0'
+
+        classpath 'io.fabric.tools:gradle:1.31.0'  // Crashlytics plugin
     }
 }
 

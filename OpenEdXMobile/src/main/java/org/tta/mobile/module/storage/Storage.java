@@ -3,6 +3,7 @@ package org.tta.mobile.module.storage;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.media.MediaMetadataRetriever;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -27,6 +28,7 @@ import org.tta.mobile.module.download.IDownloadManager;
 import org.tta.mobile.module.prefs.LoginPrefs;
 import org.tta.mobile.module.prefs.UserPrefs;
 import org.tta.mobile.module.prefs.VideoPrefs;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.AnalyticModel;
 import org.tta.mobile.tta.data.enums.DownloadType;
 import org.tta.mobile.tta.scorm.ScormBlockModel;
@@ -261,6 +263,11 @@ public class Storage implements IStorage {
                 }
             }
         } catch(Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Storage.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "deleteFile");
+            parameters.putString(Constants.KEY_DATA, "filepath = " + filepath);
+            Logger.logCrashlytics(e, parameters);
             logger.error(e);
         }
 
@@ -290,6 +297,13 @@ public class Storage implements IStorage {
             int progress = dm.getAverageProgressForDownloads(dmidArray);
             callback.sendResult(progress);
         } catch(Exception ex) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Storage.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getAverageDownloadProgressInChapter");
+            parameters.putString(Constants.KEY_DATA, "enrollmentId = " + enrollmentId +
+                    ", chapter = " + chapter);
+            Logger.logCrashlytics(ex, parameters);
+
             callback.sendException(ex);
             logger.error(ex);
         }
@@ -377,6 +391,13 @@ public class Storage implements IStorage {
             int progress = dm.getAverageProgressForDownloads(dmidArray);
             callback.sendResult(progress);
         } catch(Exception ex) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Storage.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getAverageDownloadProgressInSection");
+            parameters.putString(Constants.KEY_DATA, "enrollmentId = " + enrollmentId +
+                    ", chapter = " + chapter + ", section = " + section);
+            Logger.logCrashlytics(ex, parameters);
+
             logger.error(ex);
             callback.sendException(ex);
         }
@@ -430,6 +451,11 @@ public class Storage implements IStorage {
             }
             return video;
         } catch(Exception ex) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Storage.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "reloadDownloadEntry");
+            parameters.putString(Constants.KEY_DATA, "video id = " + video.videoId);
+            Logger.logCrashlytics(ex, parameters);
             logger.error(ex);
         }
         return null;
@@ -449,6 +475,11 @@ public class Storage implements IStorage {
             int progress = dm.getAverageProgressForDownloads(dmidArray);
             callback.sendResult(progress);
         } catch(Exception ex) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Storage.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getDownloadProgressByDmid");
+            parameters.putString(Constants.KEY_DATA, "dmId = " + dmId);
+            Logger.logCrashlytics(ex, parameters);
             logger.error(ex);
             callback.sendException(ex);
         }
@@ -469,7 +500,7 @@ public class Storage implements IStorage {
                     }
                     e.downloadedOn = System.currentTimeMillis();
                     // update file duration
-                    if(e.duration==0){
+                    /*if(e.duration==0){
                         try {
                             MediaMetadataRetriever r = new MediaMetadataRetriever();
                             FileInputStream in = new FileInputStream(new File(e.filepath));
@@ -481,9 +512,14 @@ public class Storage implements IStorage {
                             logger.debug("Duration updated to : " + duration);
                             in.close();
                         } catch (Exception ex) {
+                            Bundle parameters = new Bundle();
+                            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Storage.class.getName());
+                            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "markDownloadAsComplete");
+                            parameters.putString(Constants.KEY_DATA, "video id = " + e.videoId);
+                            Logger.logCrashlytics(ex, parameters);
                             logger.error(ex);
                         }
-                    }
+                    }*/
                     db.updateDownloadCompleteInfoByDmId(dmId, e, null);
                     callback.sendResult(e);
                     if (e.filepath.endsWith(".zip")) {
@@ -497,6 +533,12 @@ public class Storage implements IStorage {
                 logger.debug("Download not yet completed");
             }
         }catch(Exception e){
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Storage.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "markDownloadAsComplete");
+            parameters.putString(Constants.KEY_DATA, "dmId = " + dmId);
+            Logger.logCrashlytics(e, parameters);
+
             callback.sendException(e);
             logger.error(e);
         }
@@ -560,6 +602,12 @@ public class Storage implements IStorage {
         }
         catch(IOException e)
         {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Storage.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "unpackZip");
+            parameters.putString(Constants.KEY_DATA, "file = " + file);
+            Logger.logCrashlytics(e, parameters);
+
             withExt.delete();
             e.printStackTrace();
             return false;
@@ -608,6 +656,10 @@ public class Storage implements IStorage {
                             }
                         }
                     } catch (Exception ex) {
+                        Bundle parameters = new Bundle();
+                        parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Storage.class.getName());
+                        parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "repairDownloadCompletionData");
+                        Logger.logCrashlytics(ex, parameters);
                         logger.error(ex);
                     }
                 }
@@ -676,6 +728,11 @@ public class Storage implements IStorage {
                                 db.updateVideoWatchedState(v.getVideoId(), DownloadEntry.WatchedState.PARTIALLY_WATCHED,
                                         watchedStateCallback);
                             } catch (Exception ex) {
+                                Bundle parameters = new Bundle();
+                                parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Storage.class.getName());
+                                parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "markVideoPlaying");
+                                parameters.putString(Constants.KEY_DATA, "video id = " + videoModel.videoId);
+                                Logger.logCrashlytics(ex, parameters);
                                 logger.error(ex);
                             }
                         }
@@ -688,6 +745,11 @@ public class Storage implements IStorage {
                 }
             }
         } catch (Exception ex) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Storage.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "markVideoPlaying");
+            parameters.putString(Constants.KEY_DATA, "video id = " + videoModel.videoId);
+            Logger.logCrashlytics(ex, parameters);
             logger.error(ex);
         }
     }

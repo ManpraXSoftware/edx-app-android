@@ -1,9 +1,13 @@
 package org.tta.mobile.tta.utils;
 
+import android.os.Bundle;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
+
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 
 import java.lang.reflect.Field;
 
@@ -25,8 +29,16 @@ public class BottomNavigationViewHelper {
                 item.setChecked(item.getItemData().isChecked());
             }
         } catch (NoSuchFieldException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, BottomNavigationViewHelper.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "disableShiftMode");
+            Logger.logCrashlytics(e, parameters);
             Log.e("BNVHelper", "Unable to get shift mode field", e);
         } catch (IllegalAccessException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, BottomNavigationViewHelper.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "disableShiftMode");
+            Logger.logCrashlytics(e, parameters);
             Log.e("BNVHelper", "Unable to change value of shift mode", e);
         }
     }

@@ -3,8 +3,10 @@ package org.tta.mobile.tta.ui.profile.view_model;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
+import android.os.Bundle;
 
 import org.tta.mobile.R;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
@@ -221,6 +223,11 @@ public class OtherProfileViewModel extends BaseViewModel {
                 }
             }
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, OtherProfileViewModel.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "setDetails");
+            parameters.putString(Constants.KEY_DATA, "Taglabel = " + tagLabel);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
 

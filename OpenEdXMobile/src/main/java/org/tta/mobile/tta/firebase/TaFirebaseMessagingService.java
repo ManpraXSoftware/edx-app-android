@@ -4,12 +4,14 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.data.DataManager;
@@ -145,6 +147,12 @@ public class TaFirebaseMessagingService extends FirebaseMessagingService {
             try {
                 url = "market://details?id=" + my_package_name;
             } catch ( final Exception e ) {
+                Bundle parameters = new Bundle();
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, TaFirebaseMessagingService.class.getName());
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getNavigationIntent");
+                parameters.putString(Constants.KEY_DATA, "type = " + type +
+                        ", path = " + path);
+                Logger.logCrashlytics(e, parameters);
                 url = "https://play.google.com/store/apps/details?id=" + my_package_name;
             }
             navigationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));

@@ -1,6 +1,10 @@
 package org.tta.mobile.tta.wordpress_client.util;
 
+import android.os.Bundle;
 import android.util.Base64;
+
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
@@ -207,6 +211,11 @@ public class PasswordHash {
 
             return new String(Base64.encode(encrypted, Base64.DEFAULT));
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, PasswordHash.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "encrypt");
+            parameters.putString(Constants.KEY_DATA, "cleartext = " + cleartext);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
 
@@ -230,16 +239,46 @@ public class PasswordHash {
             byte[] decrypted = cipher.doFinal(enc);
             return new String(decrypted);
         } catch (NoSuchAlgorithmException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, PasswordHash.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "decrypt");
+            parameters.putString(Constants.KEY_DATA, "encrypted = " + encrypted);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         } catch (NoSuchPaddingException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, PasswordHash.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "decrypt");
+            parameters.putString(Constants.KEY_DATA, "encrypted = " + encrypted);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         } catch (BadPaddingException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, PasswordHash.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "decrypt");
+            parameters.putString(Constants.KEY_DATA, "encrypted = " + encrypted);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         } catch (InvalidKeyException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, PasswordHash.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "decrypt");
+            parameters.putString(Constants.KEY_DATA, "encrypted = " + encrypted);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         } catch (IllegalBlockSizeException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, PasswordHash.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "decrypt");
+            parameters.putString(Constants.KEY_DATA, "encrypted = " + encrypted);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         } catch (InvalidAlgorithmParameterException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, PasswordHash.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "decrypt");
+            parameters.putString(Constants.KEY_DATA, "encrypted = " + encrypted);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
         return null;

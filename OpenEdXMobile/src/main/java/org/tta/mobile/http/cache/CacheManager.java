@@ -2,6 +2,7 @@ package org.tta.mobile.http.cache;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -9,6 +10,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.util.Config;
 import org.tta.mobile.util.IOUtils;
 import org.tta.mobile.util.Sha1Util;
@@ -82,8 +84,18 @@ public class CacheManager {
             try {
                 return IOUtils.toString(file, Charset.defaultCharset());
             } catch (FileNotFoundException e) {
+                /*Bundle parameters = new Bundle();
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, CacheManager.class.getName());
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "get");
+                parameters.putString(Constants.KEY_DATA, "url = " + url);
+                Logger.logCrashlytics(e, parameters);*/
                 // Cache is not available.
             } catch (IOException e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, CacheManager.class.getName());
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "get");
+                parameters.putString(Constants.KEY_DATA, "url = " + url);
+                Logger.logCrashlytics(e, parameters);
                 logger.error(e, true);
             }
         }

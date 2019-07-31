@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import org.tta.mobile.R;
 import org.tta.mobile.discussion.DiscussionThread;
 import org.tta.mobile.discussion.DiscussionTopic;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
@@ -94,6 +95,12 @@ public class DiscussionThreadActivity extends BaseVMActivity {
                     callback.onPageShow();
                 }
             } catch (Exception e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DiscussionThreadActivity.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "onResume");
+                parameters.putString(Constants.KEY_DATA, "Content id = " + content.getId() +
+                        ", thread id = " + thread.getIdentifier());
+                Logger.logCrashlytics(e, parameters);
                 e.printStackTrace();
             }
         });

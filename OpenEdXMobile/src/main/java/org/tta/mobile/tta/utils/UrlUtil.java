@@ -5,10 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
+
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -19,6 +23,11 @@ public class UrlUtil {
         try {
             return URLDecoder.decode(encoded, "utf-8");
         } catch (UnsupportedEncodingException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, UrlUtil.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "urldecode");
+            parameters.putString(Constants.KEY_DATA, "encoded = " + encoded);
+            Logger.logCrashlytics(e, parameters);
             Log.e("decode error ", e.toString());
         }
         return null;

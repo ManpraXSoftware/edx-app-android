@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.telephony.TelephonyManager;
 
@@ -11,6 +12,7 @@ import org.tta.mobile.R;
 import org.tta.mobile.base.BaseFragmentActivity;
 import org.tta.mobile.logger.Logger;
 import org.tta.mobile.module.prefs.PrefManager;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.wordpress_client.rest.HttpServerErrorResponse;
 
 import java.util.List;
@@ -163,6 +165,11 @@ public class NetworkUtil {
         }
         catch (Exception ex)
         {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, NetworkUtil.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "isLimitedAcess");
+            parameters.putString(Constants.KEY_DATA, "HttpServerErrorResponse = " + response.toString());
+            Logger.logCrashlytics(ex, parameters);
             return status;
         }
 
@@ -179,6 +186,11 @@ public class NetworkUtil {
         }
         catch (Exception ex)
         {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, NetworkUtil.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "isUnauthorize");
+            parameters.putString(Constants.KEY_DATA, "HttpServerErrorResponse = " + response.toString());
+            Logger.logCrashlytics(ex, parameters);
             return status;
         }
 

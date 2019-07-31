@@ -3,12 +3,14 @@ package org.tta.mobile.util;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import org.tta.mobile.logger.Logger;
 import org.tta.mobile.module.db.DbStructure;
 import org.tta.mobile.module.prefs.PrefManager;
 import org.tta.mobile.services.CourseManager;
+import org.tta.mobile.tta.Constants;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -51,6 +53,10 @@ public class SecurityUtil {
                 }
             }
         } catch (PackageManager.NameNotFoundException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, SecurityUtil.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "clearUserData");
+            Logger.logCrashlytics(e, parameters);
             // Should never happen as we've given our app's package name to getPackageInfo function.
             logger.error(e);
         }

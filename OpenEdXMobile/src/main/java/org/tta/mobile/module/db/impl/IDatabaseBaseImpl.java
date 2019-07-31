@@ -2,8 +2,10 @@ package org.tta.mobile.module.db.impl;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteException;
+import android.os.Bundle;
 
 import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -58,6 +60,11 @@ class IDatabaseBaseImpl implements Runnable {
             try {
                 result = op.requestExecute(helper.getDatabase());
             } catch (SQLiteException e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, IDatabaseBaseImpl.class.getName());
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "execute");
+                parameters.putString(Constants.KEY_DATA, "operation = " + op.toString());
+                Logger.logCrashlytics(e, parameters);
                 /* Catch any SQLite exceptions thrown by the operation, or by the database creation
                  * or upgrade process invoked by the helper, deliver the exception to the callback,
                  * log it in Crashlytics, and return the default value of the operation.

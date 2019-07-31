@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -22,6 +23,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 import org.tta.mobile.R;
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.utils.AppUtil;
 import org.tta.mobile.tta.utils.Tools;
 import org.tta.mobile.util.ResourceUtil;
@@ -128,6 +131,12 @@ public class ShareBottomSheet extends BottomSheetDialogFragment {
                         new Intent().setAction(Intent.ACTION_SEND).setType("text/plain")
                                 .setPackage("com.facebook.katana"));
             } catch (PackageManager.NameNotFoundException e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, ShareBottomSheet.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "addFbOption");
+                parameters.putString(Constants.KEY_DATA, "Link = " + link +
+                        ", package = com.facebook.katana");
+                Logger.logCrashlytics(e, parameters);
                 e.printStackTrace();
             }
             imageView.setImageDrawable(d);
@@ -152,6 +161,12 @@ public class ShareBottomSheet extends BottomSheetDialogFragment {
                         new Intent().setAction(Intent.ACTION_SEND).setType("text/plain")
                                 .setPackage("com.facebook.lite"));
             } catch (PackageManager.NameNotFoundException e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, ShareBottomSheet.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "addFbOption");
+                parameters.putString(Constants.KEY_DATA, "Link = " + link +
+                        ", package = com.facebook.lite");
+                Logger.logCrashlytics(e, parameters);
                 e.printStackTrace();
             }
             imageView.setImageDrawable(d);
@@ -180,6 +195,12 @@ public class ShareBottomSheet extends BottomSheetDialogFragment {
                         new Intent().setAction(Intent.ACTION_SEND).setType("text/plain")
                                 .setPackage("com.whatsapp"));
             } catch (PackageManager.NameNotFoundException e) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, ShareBottomSheet.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "addWhatsappOption");
+                parameters.putString(Constants.KEY_DATA, "Link = " + link +
+                        ", package = com.whatsapp");
+                Logger.logCrashlytics(e, parameters);
                 e.printStackTrace();
             }
             imageView.setImageDrawable(d);

@@ -1,11 +1,14 @@
 package org.tta.mobile.tta.scorm;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 
 import org.apache.commons.io.FileUtils;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.model.VideoModel;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.DataManager;
 import org.tta.mobile.util.FileUtil;
 import org.tta.mobile.util.NetworkUtil;
@@ -96,6 +99,10 @@ public class Migration280719 {
                 }
             }
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Migration280719.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "MigrateScromPackages");
+            Logger.logCrashlytics(e, parameters);
             Log.e("MX_Scorm_Migration", "Scorm migration fail --------> " + e.toString());
         }
     }
@@ -108,6 +115,10 @@ public class Migration280719 {
                 FileUtil.deleteRecursive(oldFolderPath);
             }
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Migration280719.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "deleteScormPackages");
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
     }
@@ -159,6 +170,10 @@ public class Migration280719 {
         }
         catch (Exception e)
         {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Migration280719.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "MigrateConnectVideos");
+            Logger.logCrashlytics(e, parameters);
             Log.e("MX_Connect_Migration","Connect migration fail --------> "+e.toString());
         }
     }
@@ -214,6 +229,12 @@ public class Migration280719 {
             moveDirectory(source, dest);
             return true;
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, Migration280719.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "MoveDirectory");
+            parameters.putString(Constants.KEY_DATA, "source = " + source.getAbsolutePath() +
+                    ", dest = " + dest.getAbsolutePath());
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
             return false;
         }

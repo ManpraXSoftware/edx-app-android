@@ -17,6 +17,7 @@ import org.tta.mobile.R;
 import org.tta.mobile.authentication.AuthResponse;
 import org.tta.mobile.exception.AuthException;
 import org.tta.mobile.http.HttpResponseStatusException;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.social.SocialFactory;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
@@ -382,6 +383,11 @@ public class OtpViewModel extends BaseViewModel {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters1 = new Bundle();
+                parameters1.putString(Constants.KEY_CLASS_NAME, OtpViewModel.class.getName());
+                parameters1.putString(Constants.KEY_FUNCTION_NAME, "generateOtpForResetPassword");
+                parameters1.putString(Constants.KEY_DATA, "parameters = " + parameters);
+                Logger.logCrashlytics(ex, parameters1);
                 mActivity.hideLoading();
                 mActivity.showErrorDialog(mActivity.getString(R.string.user_not_exist),
                         mActivity.getString(R.string.user_not_exist_message));
@@ -407,6 +413,11 @@ public class OtpViewModel extends BaseViewModel {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters1 = new Bundle();
+                parameters1.putString(Constants.KEY_CLASS_NAME, OtpViewModel.class.getName());
+                parameters1.putString(Constants.KEY_FUNCTION_NAME, "generateOtpForRegistration");
+                parameters1.putString(Constants.KEY_DATA, "parameters = " + parameters);
+                Logger.logCrashlytics(ex, parameters1);
                 mActivity.hideLoading();
                 String errorMsg = "";
                 try {
@@ -418,6 +429,11 @@ public class OtpViewModel extends BaseViewModel {
                         errorMsg = mActivity.getString(R.string.server_not_responding);
                     }
                 } catch (Exception exp) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, OtpViewModel.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "generateOtpForRegistration");
+                    parameters.putString(Constants.KEY_DATA, "Mobile number = " + number);
+                    Logger.logCrashlytics(exp, parameters);
                     errorMsg = mActivity.getString(R.string.server_not_responding);
                 }
 
@@ -466,6 +482,11 @@ public class OtpViewModel extends BaseViewModel {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters1 = new Bundle();
+                parameters1.putString(Constants.KEY_CLASS_NAME, OtpViewModel.class.getName());
+                parameters1.putString(Constants.KEY_FUNCTION_NAME, "verifyOtpForForgottenPassword");
+                parameters1.putString(Constants.KEY_DATA, "parameters = " + parameters);
+                Logger.logCrashlytics(ex, parameters1);
                 mActivity.hideLoading();
                 mActivity.showErrorDialog(mActivity.getString(R.string.otp_verify_failure),
                         mActivity.getString(R.string.otp_verify_failure_message));
@@ -487,6 +508,11 @@ public class OtpViewModel extends BaseViewModel {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters1 = new Bundle();
+                parameters1.putString(Constants.KEY_CLASS_NAME, OtpViewModel.class.getName());
+                parameters1.putString(Constants.KEY_FUNCTION_NAME, "verifyOtp");
+                parameters1.putString(Constants.KEY_DATA, "parameters = " + parameters);
+                Logger.logCrashlytics(ex, parameters1);
                 mActivity.hideLoading();
                 mActivity.showErrorDialog(mActivity.getString(R.string.otp_verify_failure),
                         mActivity.getString(R.string.otp_verify_failure_message));
@@ -507,6 +533,11 @@ public class OtpViewModel extends BaseViewModel {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, OtpViewModel.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "register");
+                parameters.putString(Constants.KEY_DATA, "mobile number = " + number);
+                Logger.logCrashlytics(ex, parameters);
                 mActivity.hideLoading();
                 mActivity.showErrorDialog(mActivity.getString(R.string.registration_failure),
                         mActivity.getString(R.string.registration_failure_message));

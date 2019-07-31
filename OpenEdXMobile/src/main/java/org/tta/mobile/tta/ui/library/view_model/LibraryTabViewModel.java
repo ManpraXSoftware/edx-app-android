@@ -25,6 +25,7 @@ import org.tta.mobile.R;
 import org.tta.mobile.databinding.TRowContentBinding;
 import org.tta.mobile.databinding.TRowContentListBinding;
 import org.tta.mobile.databinding.TRowContentSliderBinding;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
@@ -262,6 +263,11 @@ public class LibraryTabViewModel extends BaseViewModel {
                         try {
                             return contentListMap.get(model.getId()).size();
                         } catch (Exception e) {
+                            Bundle parameters = new Bundle();
+                            parameters.putString(Constants.KEY_CLASS_NAME, LibraryTabViewModel.class.getName());
+                            parameters.putString(Constants.KEY_FUNCTION_NAME, "onBind");
+                            parameters.putString(Constants.KEY_DATA, "ContentList = " + model.toString());
+                            Logger.logCrashlytics(e, parameters);
                             return 0;
                         }
                     }

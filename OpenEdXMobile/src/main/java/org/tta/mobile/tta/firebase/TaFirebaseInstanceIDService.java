@@ -1,9 +1,14 @@
 package org.tta.mobile.tta.firebase;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
+
 import static org.tta.mobile.util.BrowserUtil.loginPrefs;
 
 public class TaFirebaseInstanceIDService extends FirebaseInstanceIdService {
@@ -50,6 +55,11 @@ public class TaFirebaseInstanceIDService extends FirebaseInstanceIdService {
         }
         catch (Exception ex)
         {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, TaFirebaseInstanceIDService.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "sendRegistrationToServer");
+            parameters.putString(Constants.KEY_DATA, "token = " + token);
+            Logger.logCrashlytics(ex, parameters);
             Log.d("ManpraxFirebase","MyFirebaseInstanceIDService class ID update crash");
         }
     }

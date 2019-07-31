@@ -15,7 +15,7 @@ import android.support.multidex.MultiDexApplication;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader;
 import com.bumptech.glide.load.model.GlideUrl;
-import com.crashlytics.android.core.CrashlyticsCore;
+import com.crashlytics.android.Crashlytics;
 import com.evernote.android.state.StateSaver;
 import com.facebook.FacebookSdk;
 import com.google.inject.Injector;
@@ -42,11 +42,14 @@ import org.tta.mobile.module.prefs.PrefManager;
 import org.tta.mobile.module.storage.IStorage;
 import org.tta.mobile.receivers.NetworkConnectivityReceiver;
 import org.tta.mobile.tta.utils.LocaleHelper;
+import org.tta.mobile.util.BrowserUtil;
 import org.tta.mobile.util.Config;
 import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.NotificationUtil;
 
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -101,8 +104,9 @@ public abstract class MainApplication extends MultiDexApplication {
         LocaleHelper.setLocale(getApplicationContext(), "hi");
 
         // initialize Fabric
-        if (config.getFabricConfig().isEnabled() && !BuildConfig.DEBUG) {
-            Fabric.with(this, config.getFabricConfig().getKitsConfig().getEnabledKits());
+        /*if (config.getFabricConfig().isEnabled()) {
+
+//            Fabric.with(this, config.getFabricConfig().getKitsConfig().getEnabledKits());
 
             if (config.getFabricConfig().getKitsConfig().isCrashlyticsEnabled()) {
                 EventBus.getDefault().register(new CrashlyticsCrashReportObserver());
@@ -111,7 +115,14 @@ public abstract class MainApplication extends MultiDexApplication {
             if (config.getFabricConfig().getKitsConfig().isAnswersEnabled()) {
                 analyticsRegistry.addAnalyticsProvider(injector.getInstance(AnswersAnalytics.class));
             }
-        }
+        }*/
+        final Fabric fabric = new Fabric.Builder(this)
+                .kits(new Crashlytics())
+//                .debuggable(true)  // Enables Crashlytics debugger
+                .build();
+        Fabric.with(fabric);
+
+        EventBus.getDefault().register(new CrashlyticsCrashReportObserver());
 
         if (config.getNewRelicConfig().isEnabled()) {
             EventBus.getDefault().register(new NewRelicObserver());
@@ -229,7 +240,19 @@ public abstract class MainApplication extends MultiDexApplication {
     public static class CrashlyticsCrashReportObserver {
         @SuppressWarnings("unused")
         public void onEventMainThread(Logger.CrashReportEvent e) {
-            CrashlyticsCore.getInstance().logException(e.getError());
+            if (BrowserUtil.loginPrefs.isLoggedIn()) {
+                Crashlytics.setUserIdentifier(BrowserUtil.loginPrefs.getUsername());
+            } else {
+                Crashlytics.setUserIdentifier("Logged out state");
+            }
+
+            Bundle parameters = e.getParameters();
+            if (parameters != null){
+                for (String key: parameters.keySet()){
+                    Crashlytics.setString(key, parameters.getString(key));
+                }
+            }
+            Crashlytics.logException(e.getError());
         }
     }
 

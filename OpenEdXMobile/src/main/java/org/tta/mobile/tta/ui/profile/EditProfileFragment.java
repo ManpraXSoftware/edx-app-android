@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.Glide;
 
 import org.tta.mobile.R;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.model.api.ProfileModel;
 import org.tta.mobile.module.registration.model.RegistrationOption;
 import org.tta.mobile.third_party.crop.CropUtil;
@@ -192,6 +193,12 @@ public class EditProfileFragment extends TaBaseFragment {
                         }
                     }
                 } catch (Exception e) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, EditProfileFragment.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getClassSkillSubject");
+                    parameters.putString(Constants.KEY_DATA, "Taglabel = " + tagLabel +
+                            "Option = class");
+                    Logger.logCrashlytics(e, parameters);
                     e.printStackTrace();
                 }
                 classTaughtSpinner.setItems(data, selectedOptions);
@@ -217,6 +224,12 @@ public class EditProfileFragment extends TaBaseFragment {
                         }
                     }
                 } catch (Exception e) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, EditProfileFragment.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getClassSkillSubject");
+                    parameters.putString(Constants.KEY_DATA, "Taglabel = " + tagLabel +
+                            "Option = skill");
+                    Logger.logCrashlytics(e, parameters);
                     e.printStackTrace();
                 }
                 skillsSpinner.setItems(data, selectedOptions);
@@ -242,6 +255,12 @@ public class EditProfileFragment extends TaBaseFragment {
                         }
                     }
                 } catch (Exception e) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, EditProfileFragment.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getClassSkillSubject");
+                    parameters.putString(Constants.KEY_DATA, "Taglabel = " + tagLabel +
+                            "Option = subject");
+                    Logger.logCrashlytics(e, parameters);
                     e.printStackTrace();
                 }
                 subjectsSpinner.setItems(data, selectedOptions);
@@ -678,6 +697,11 @@ public class EditProfileFragment extends TaBaseFragment {
                 try {
                     CropUtil.crop(getActivity(), uri, rect, 500, 500, cropped);
                 } catch (IOException e) {
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, EditProfileFragment.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "onActivityResult");
+                    parameters.putString(Constants.KEY_DATA, "Uri = " + uri);
+                    Logger.logCrashlytics(e, parameters);
                     e.printStackTrace();
                 }
                 Glide.with(getActivity())

@@ -399,6 +399,17 @@ public class Comment extends BaseModel {
         likes = String.valueOf(l);
     }
 
+    @SerializedName("author_icon")
+    private String authorIcon;
+
+    public String getAuthorIcon() {
+        return authorIcon;
+    }
+
+    public void setAuthorIcon(String authorIcon) {
+        this.authorIcon = authorIcon;
+    }
+
     public Comment() {
     }
 
@@ -421,6 +432,7 @@ public class Comment extends BaseModel {
         post = in.readInt();
         status = in.readString();
         type = in.readString();
+        authorIcon = in.readString();
     }
 
     @Override
@@ -443,6 +455,7 @@ public class Comment extends BaseModel {
         dest.writeLong(post);
         dest.writeString(status);
         dest.writeString(type);
+        dest.writeString(authorIcon);
     }
 
     @Override
@@ -482,6 +495,7 @@ public class Comment extends BaseModel {
                 ", post=" + post +
                 ", status='" + status + '\'' +
                 ", type='" + type + '\'' +
+                ", authorIcon='" + authorIcon + '\'' +
                 '}';
     }
 

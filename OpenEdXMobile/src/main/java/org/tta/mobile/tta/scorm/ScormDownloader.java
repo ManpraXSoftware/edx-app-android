@@ -1,11 +1,13 @@
 package org.tta.mobile.tta.scorm;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import com.google.inject.Inject;
 
 import org.tta.mobile.course.CourseAPI;
 import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -52,6 +54,11 @@ public abstract class ScormDownloader implements Runnable {
                 handle(null);
             }
         } catch (Exception localException) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, ScormDownloader.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "run");
+            Logger.logCrashlytics(localException, parameters);
+
             handle(localException);
             logger.error(localException);
         }
@@ -119,6 +126,12 @@ public abstract class ScormDownloader implements Runnable {
         }
         catch(IOException e)
         {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, ScormDownloader.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "unpackZip");
+            parameters.putString(Constants.KEY_DATA, "file = " + file);
+            Logger.logCrashlytics(e, parameters);
+
             arch.delete();
             withExt.delete();
             e.printStackTrace();

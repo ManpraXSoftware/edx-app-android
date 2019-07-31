@@ -1,11 +1,14 @@
 package org.tta.mobile.model.course;
 
+import android.os.Bundle;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
 import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 
 import java.lang.reflect.Type;
 import java.util.Locale;
@@ -42,6 +45,11 @@ public enum  BlockType {
                 //as it is just a mapping from english string to constants.
                 return BlockType.valueOf(value.toUpperCase(Locale.US));
             } catch (Exception ex) {
+                Bundle parameters = new Bundle();
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, BlockType.class.getName());
+                parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "deserialize");
+                parameters.putString(Constants.KEY_DATA, "json = " + json.toString());
+                Logger.logCrashlytics(ex, parameters);
                 logger.debug(ex.getMessage());
                 return BlockType.OTHERS;
             }

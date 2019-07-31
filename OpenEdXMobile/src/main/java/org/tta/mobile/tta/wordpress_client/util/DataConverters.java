@@ -1,10 +1,13 @@
 package org.tta.mobile.tta.wordpress_client.util;
 
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,6 +50,12 @@ public class DataConverters {
 
             return object.toString();
         } catch (JSONException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DataConverters.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "makeTaxonomyString");
+            parameters.putString(Constants.KEY_DATA, "categories = " + categories +
+                    ", jsonName = " + jsonName);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
 
@@ -69,6 +78,12 @@ public class DataConverters {
             }
             return ids;
         } catch (JSONException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DataConverters.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "makeTaxonomyIdList");
+            parameters.putString(Constants.KEY_DATA, "categoryString = " + categoryString +
+                    ", jsonName = " + jsonName);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
 
@@ -81,6 +96,11 @@ public class DataConverters {
                 return sPostDateFormat.parse(dateInput + " UTC").getTime();
             }
         } catch (ParseException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DataConverters.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "convertWpDateToLong");
+            parameters.putString(Constants.KEY_DATA, "dateInput = " + dateInput);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
 

@@ -4,7 +4,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
+import android.os.Bundle;
 
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.wordpress_client.data.tasks.callback.WpTaskCallback;
 
 import java.util.ArrayDeque;
@@ -48,6 +51,11 @@ public abstract class WpAsyncTask<Params, Progress, Result> extends AsyncTask<Pa
         try {
             return exec();
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, WpAsyncTask.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "doInBackground");
+            parameters.putString(Constants.KEY_DATA, "params = " + params);
+            Logger.logCrashlytics(e, parameters);
             //cancel(true);
             e.printStackTrace();
             taskFailed = true;

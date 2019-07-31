@@ -1,11 +1,14 @@
 package org.tta.mobile.tta.ui.logistration.view_model;
 
 import android.databinding.ObservableInt;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 
 import org.tta.mobile.R;
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.ui.base.BasePagerAdapter;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
@@ -62,6 +65,10 @@ public class SigninRegisterViewModel extends BaseViewModel {
         try {
             adapter.addFragments(fragments, titles);
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, SigninRegisterViewModel.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "Constructor");
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
         initialPosition.set(0);

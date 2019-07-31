@@ -4,8 +4,12 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -47,6 +51,10 @@ public class AppSignatureHelper extends ContextWrapper {
                 }
             }
         } catch (PackageManager.NameNotFoundException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, AppSignatureHelper.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "getAppSignatures");
+            Logger.logCrashlytics(e, parameters);
             Log.e(TAG, "Unable to find package to obtain hash.", e);
         }
         return appCodes;
@@ -68,6 +76,11 @@ public class AppSignatureHelper extends ContextWrapper {
             Log.d(TAG, String.format("pkg: %s -- hash: %s", packageName, base64Hash));
             return base64Hash;
         } catch (NoSuchAlgorithmException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, AppSignatureHelper.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "hash");
+            parameters.putString(Constants.KEY_DATA, "appInfo = " + appInfo);
+            Logger.logCrashlytics(e, parameters);
             Log.e(TAG, "hash:NoSuchAlgorithm", e);
         }
         return null;

@@ -3,7 +3,10 @@ package org.tta.mobile.tta.wordpress_client.data.db_command;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Bundle;
 
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.wordpress_client.data.WordPressContract;
 import org.tta.mobile.tta.wordpress_client.data.tasks.WpAsyncTask;
 import org.tta.mobile.tta.wordpress_client.data.tasks.WpInsertTask;
@@ -151,9 +154,17 @@ public class DB_Commands {
             }
 
         } catch (InterruptedException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DB_Commands.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getCategoryies");
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
             return taxonomies;
         } catch (ExecutionException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DB_Commands.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getCategoryies");
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
             return taxonomies;
         }
@@ -194,8 +205,18 @@ public class DB_Commands {
 
 
         } catch (InterruptedException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DB_Commands.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getCategoryies");
+            parameters.putString(Constants.KEY_DATA, "Taxonomy = " + item.toString());
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         } catch (ExecutionException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DB_Commands.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getCategoryies");
+            parameters.putString(Constants.KEY_DATA, "Taxonomy = " + item.toString());
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
 
@@ -231,8 +252,18 @@ public class DB_Commands {
             }
 
         } catch (InterruptedException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DB_Commands.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getCategoryById");
+            parameters.putString(Constants.KEY_DATA, "cat_id = " + cat_id);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         } catch (ExecutionException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DB_Commands.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getCategoryById");
+            parameters.putString(Constants.KEY_DATA, "cat_id = " + cat_id);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
 
@@ -345,9 +376,19 @@ public class DB_Commands {
             }
 
         } catch (InterruptedException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DB_Commands.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getPosts");
+            parameters.putString(Constants.KEY_DATA, "cat_id = " + cat_id);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
             return posts;
         } catch (ExecutionException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DB_Commands.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getPosts");
+            parameters.putString(Constants.KEY_DATA, "cat_id = " + cat_id);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
             return posts;
         }
@@ -388,8 +429,18 @@ public class DB_Commands {
 
 
         } catch (InterruptedException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DB_Commands.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "isPostExist");
+            parameters.putString(Constants.KEY_DATA, "post = " + post.toString());
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         } catch (ExecutionException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DB_Commands.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "isPostExist");
+            parameters.putString(Constants.KEY_DATA, "post = " + post.toString());
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
 
@@ -425,8 +476,18 @@ public class DB_Commands {
             }
 
         } catch (InterruptedException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DB_Commands.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getByPostID");
+            parameters.putString(Constants.KEY_DATA, "post_ID = " + post_ID);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         } catch (ExecutionException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DB_Commands.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getByPostID");
+            parameters.putString(Constants.KEY_DATA, "post_ID = " + post_ID);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
 
@@ -462,9 +523,19 @@ public class DB_Commands {
             }
 
         } catch (InterruptedException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DB_Commands.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getByPostIDs");
+            parameters.putString(Constants.KEY_DATA, "ids = " + ids);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
             return posts;
         } catch (ExecutionException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DB_Commands.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getByPostIDs");
+            parameters.putString(Constants.KEY_DATA, "ids = " + ids);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
             return posts;
         }
@@ -517,9 +588,21 @@ public class DB_Commands {
             }
 
         } catch (InterruptedException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DB_Commands.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getFilteredPosts");
+            parameters.putString(Constants.KEY_DATA, "cat_id = " + cat_id +
+                    ", filter = " + filter + ", sortType = " + sortType);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
             return posts;
         } catch (ExecutionException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DB_Commands.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getFilteredPosts");
+            parameters.putString(Constants.KEY_DATA, "cat_id = " + cat_id +
+                    ", filter = " + filter + ", sortType = " + sortType);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
             return posts;
         }
@@ -601,8 +684,18 @@ public class DB_Commands {
             }
 
         } catch (InterruptedException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DB_Commands.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getPostBySlug");
+            parameters.putString(Constants.KEY_DATA, "slug = " + slug);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         } catch (ExecutionException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, DB_Commands.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getPostBySlug");
+            parameters.putString(Constants.KEY_DATA, "slug = " + slug);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
 

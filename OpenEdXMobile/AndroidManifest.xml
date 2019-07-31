@@ -531,6 +531,10 @@
             android:name="firebase_messaging_auto_init_enabled"
             android:value="${firebaseEnabled}" />
 
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="false" />
+
         <!-- Branch -->
         <meta-data
             android:name="io.branch.sdk.BranchKey"

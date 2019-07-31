@@ -37,4 +37,16 @@ public class ThreadBody {
     public void setFollowing(boolean isFollowing) {
         following = isFollowing;
     }
+
+    @Override
+    public String toString() {
+        return "ThreadBody{" +
+                "type='" + type + '\'' +
+                ", courseId='" + courseId + '\'' +
+                ", topicId='" + topicId + '\'' +
+                ", title='" + title + '\'' +
+                ", rawBody='" + rawBody + '\'' +
+                ", following=" + following +
+                '}';
+    }
 }

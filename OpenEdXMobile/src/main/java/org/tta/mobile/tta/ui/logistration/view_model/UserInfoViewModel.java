@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import org.tta.mobile.R;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.model.api.ProfileModel;
 import org.tta.mobile.module.registration.model.RegistrationOption;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
@@ -174,6 +176,11 @@ public class UserInfoViewModel extends BaseViewModel {
 
             @Override
             protected void onException(Exception ex) {
+                Bundle parameters1 = new Bundle();
+                parameters1.putString(Constants.KEY_CLASS_NAME, UserInfoViewModel.class.getName());
+                parameters1.putString(Constants.KEY_FUNCTION_NAME, "submit");
+                parameters1.putString(Constants.KEY_DATA, "parameters = " + parameters);
+                Logger.logCrashlytics(ex, parameters1);
                 mActivity.hideLoading();
                 mActivity.showErrorDialog(null,mActivity.getString(R.string.action_not_completed));
             }

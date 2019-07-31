@@ -1,9 +1,13 @@
 package org.tta.mobile.tta.wordpress_client.rest;
 
+import android.os.Bundle;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.SerializedName;
 
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.wordpress_client.util.LogUtils;
 
 import okhttp3.ResponseBody;
@@ -40,8 +44,18 @@ public class HttpServerErrorResponse {
         try {
             response = new Gson().fromJson(body.charStream(), HttpServerErrorResponse.class);
         } catch (NullPointerException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, HttpServerErrorResponse.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "from");
+            parameters.putString(Constants.KEY_DATA, "ResponseBody = " + body);
+            Logger.logCrashlytics(e, parameters);
             LogUtils.w("Response body was null", e);
         } catch (JsonSyntaxException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, HttpServerErrorResponse.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "from");
+            parameters.putString(Constants.KEY_DATA, "ResponseBody = " + body);
+            Logger.logCrashlytics(e, parameters);
             LogUtils.w("Unable to parse JSON", e);
         }
 

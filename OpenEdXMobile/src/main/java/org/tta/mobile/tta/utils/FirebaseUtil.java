@@ -8,6 +8,9 @@ import android.util.Log;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.firebase.FirebaseTokenUpdateTask;
 import org.tta.mobile.tta.firebase.FirebaseUpdateTokenResponse;
 import static org.tta.mobile.util.BrowserUtil.loginPrefs;
@@ -77,6 +80,11 @@ public class FirebaseUtil {
             };
             task.execute();
         } catch (Exception ex) {
+            Bundle parameters1 = new Bundle();
+            parameters1.putString(Constants.KEY_CLASS_NAME, FirebaseUtil.class.getName());
+            parameters1.putString(Constants.KEY_FUNCTION_NAME, "updateFirebaseTokenToServer");
+            parameters1.putString(Constants.KEY_DATA, "token = " + token);
+            Logger.logCrashlytics(ex, parameters1);
             Log.d("Mx_FireBase", "firebase token update to server fail ex=>" + ex.toString());
         }
     }

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import org.tta.mobile.R;
 import org.tta.mobile.databinding.TFragmentCourseMaterialBinding;
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.model.course.CourseComponent;
 import org.tta.mobile.tta.Constants;
@@ -143,6 +144,11 @@ public class CourseMaterialTab extends TaBaseFragment {
                             }
                         });
                     } catch (Exception e) {
+                        Bundle parameters = new Bundle();
+                        parameters.putString(Constants.KEY_CLASS_NAME, CourseMaterialTab.class.getName());
+                        parameters.putString(Constants.KEY_FUNCTION_NAME, "onViewCreated");
+                        parameters.putString(Constants.KEY_DATA, "Content id = " + content.getId());
+                        Logger.logCrashlytics(e, parameters);
                         e.printStackTrace();
                     }
                 }

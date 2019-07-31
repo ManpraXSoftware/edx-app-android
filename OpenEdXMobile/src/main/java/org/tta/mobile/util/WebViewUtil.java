@@ -3,6 +3,7 @@ package org.tta.mobile.util;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import android.os.Bundle;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintJob;
@@ -19,6 +20,7 @@ import org.tta.mobile.http.notifications.FullScreenErrorNotification;
 import org.tta.mobile.http.provider.OkHttpClientProvider;
 import org.tta.mobile.interfaces.WebViewStatusListener;
 import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 
 import java.io.IOException;
 
@@ -50,6 +52,10 @@ public class WebViewUtil {
             buff.append(cssFileContent);
             buff.append("</style>");
         } catch (IOException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_CLASS_NAME, WebViewUtil.class.getName());
+            parameters.putString(org.tta.mobile.tta.Constants.KEY_FUNCTION_NAME, "getIntialWebviewBuffer");
+            Logger.logCrashlytics(e, parameters);
             logger.error(e);
         }
         buff.append("</head>");

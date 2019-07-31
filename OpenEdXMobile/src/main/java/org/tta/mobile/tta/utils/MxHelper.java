@@ -1,6 +1,7 @@
 package org.tta.mobile.tta.utils;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.text.Html;
 import android.view.Gravity;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.wordpress_client.model.CustomFilter;
 import org.tta.mobile.tta.wordpress_client.model.CustomFilterCache;
 
@@ -49,6 +52,11 @@ public class MxHelper {
         try {
             jsonInString = mapper.writeValueAsString(custom_filterslist);
         } catch (JsonProcessingException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, MxHelper.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "getJSONStringfromCustomFilterObj");
+            parameters.putString(Constants.KEY_DATA, "custom_filterslist = " + custom_filterslist);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
         return jsonInString;
@@ -67,6 +75,11 @@ public class MxHelper {
             if (obj != null)
                 filter_lst.addAll(new ArrayList<>(Arrays.asList(obj)));
         } catch (IOException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, MxHelper.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "getCustomFilterObjectFromJson");
+            parameters.putString(Constants.KEY_DATA, "json_filter_str = " + json_filter_str);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
 
@@ -81,6 +94,11 @@ public class MxHelper {
         try {
             jsonInString = mapper.writeValueAsString(custom_filterslist);
         } catch (JsonProcessingException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, MxHelper.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "getJSONStringfromCustomFilterCacheObj");
+            parameters.putString(Constants.KEY_DATA, "custom_filterslist = " + custom_filterslist);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
         return jsonInString;
@@ -99,6 +117,11 @@ public class MxHelper {
             if (obj != null)
                 cache_filter_lst.addAll(new ArrayList<>(Arrays.asList(obj)));
         } catch (IOException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, MxHelper.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "getCustomFilterCacheObjectFromJson");
+            parameters.putString(Constants.KEY_DATA, "json_filter_str = " + json_filter_str);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
 
@@ -133,6 +156,11 @@ public class MxHelper {
             converted = URLDecoder.decode(encoded, "UTF-8");
 
         } catch (UnsupportedEncodingException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, MxHelper.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "decodeUTF_string");
+            parameters.putString(Constants.KEY_DATA, "encoded = " + encoded);
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
 

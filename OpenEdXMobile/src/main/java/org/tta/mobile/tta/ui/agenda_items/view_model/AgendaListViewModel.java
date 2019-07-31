@@ -3,9 +3,14 @@ package org.tta.mobile.tta.ui.agenda_items.view_model;
 import android.content.Context;
 
 import android.databinding.ObservableInt;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;import org.tta.mobile.tta.data.model.agenda.AgendaItem;
+import android.support.v4.view.ViewPager;
+
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
+import org.tta.mobile.tta.data.model.agenda.AgendaItem;
 import org.tta.mobile.tta.data.model.agenda.AgendaList;
 import org.tta.mobile.tta.ui.agenda_items.AgendaItemTab;
 import org.tta.mobile.tta.ui.base.BasePagerAdapter;
@@ -72,6 +77,10 @@ public class AgendaListViewModel extends BaseViewModel {
         try {
             adapter.setFragments(fragments,titles);
         } catch (Exception e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, AgendaListViewModel.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "populateTabs");
+            Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
         initialPosition.set(0);

@@ -4,6 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
+
+import org.tta.mobile.logger.Logger;
+import org.tta.mobile.tta.Constants;
 
 public class AppUtil {
 
@@ -14,6 +18,11 @@ public class AppUtil {
             app_installed = true;
         }
         catch (PackageManager.NameNotFoundException e) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, AppUtil.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "appInstalledOrNot");
+            parameters.putString(Constants.KEY_DATA, "Uri = " + uri);
+            Logger.logCrashlytics(e, parameters);
             app_installed = false;
         }
         return app_installed;
@@ -23,6 +32,11 @@ public class AppUtil {
         try {
             context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName)));
         } catch (android.content.ActivityNotFoundException anfe) {
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, AppUtil.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "openAppOnPlayStore");
+            parameters.putString(Constants.KEY_DATA, "Package = " + packageName);
+            Logger.logCrashlytics(anfe, parameters);
             context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName)));
         }
     }
