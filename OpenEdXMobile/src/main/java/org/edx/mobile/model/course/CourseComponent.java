@@ -1,6 +1,5 @@
 package org.edx.mobile.model.course;
 
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import org.edx.mobile.R;
@@ -8,6 +7,8 @@ import org.edx.mobile.base.MainApplication;
 import org.edx.mobile.logger.Logger;
 import org.edx.mobile.model.Filter;
 import org.edx.mobile.model.api.IPathNode;
+import org.edx.mobile.tta.scorm.PDFBlockModel;
+import org.edx.mobile.tta.scorm.ScormBlockModel;
 import org.edx.mobile.util.VideoUtil;
 
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
 
 /**
  * Default implementation of IBlock
@@ -37,27 +40,10 @@ public class CourseComponent implements IBlock, IPathNode {
     private String format;
     private String dueDate;
 
-    public CourseComponent() {
-    }
+    //TTA Chirag: Estimated duration
+    private String duration;
 
-    public CourseComponent(@NonNull CourseComponent other) {
-        this.id = other.id;
-        this.blockId = other.blockId;
-        this.type = other.type;
-        this.name = other.name;
-        this.graded = other.graded;
-        this.multiDevice = other.multiDevice;
-        this.blockUrl = other.blockUrl;
-        this.webUrl = other.webUrl;
-        this.blockCount = other.blockCount;
-        this.parent = null;
-        this.root = new CourseComponent();
-        this.root.courseId = other.root.courseId;
-        this.children = other.children;
-        this.courseId = other.courseId;
-        this.format = other.format;
-        this.dueDate = other.dueDate;
-    }
+    public CourseComponent(){}
 
     /**
      *
@@ -461,5 +447,78 @@ public class CourseComponent implements IBlock, IPathNode {
     }
 
 
+    public CourseComponent findMxFirstComponent() {
+        CourseComponent mxfirstcomponent = null;
+        if(children!=null && children.size()>0) {
+            if (children.get(0) != null)
+                mxfirstcomponent = children.get(0);
+        }
+        return mxfirstcomponent;
+    }
 
+    public List<ScormBlockModel> getScorms(){
+        List<CourseComponent> videos = new ArrayList<>();
+        fetchAllLeafComponents(videos, EnumSet.of(BlockType.SCORM));
+        // Confirm that these are actually VideoBlockModel instances.
+        // This is necessary because if for some reason the data is null,
+        // then the block is represented as an HtmlBlockModel, even if
+        // the type is video. This should not actually happen in practice
+        // though; this is just a safeguard to handle that unlikely case.
+        for (Iterator<CourseComponent> videosIterator = videos.iterator();
+             videosIterator.hasNext();) {
+            CourseComponent videoComponent = videosIterator.next();
+            if (!(videoComponent instanceof ScormBlockModel)) {
+                videosIterator.remove();
+            }
+        }
+        return (List<ScormBlockModel>)(List)videos;
+    }
+
+    //get all pdf
+    public List<PDFBlockModel> getPDFs(){
+        List<CourseComponent> videos = new ArrayList<>();
+        fetchAllLeafComponents(videos, EnumSet.of(BlockType.PDF));
+        // Confirm that these are actually VideoBlockModel instances.
+        // This is necessary because if for some reason the data is null,
+        // then the block is represented as an HtmlBlockModel, even if
+        // the type is video. This should not actually happen in practice
+        // though; this is just a safeguard to handle that unlikely case.
+        for (Iterator<CourseComponent> videosIterator = videos.iterator();
+             videosIterator.hasNext();) {
+            CourseComponent videoComponent = videosIterator.next();
+            if (!(videoComponent instanceof PDFBlockModel)) {
+                videosIterator.remove();
+            }
+        }
+        return (List<PDFBlockModel>)(List)videos;
+    }
+
+    /*@NonNull
+    @Override
+    public String toString() {
+        return "CourseComponent" + "\n" +
+                "   id: " + id + "\n" +
+                "   blockId: " + blockId + "\n" +
+                "   type: " + type + "\n" +
+                "   name: " + name + "\n" +
+                "   graded: " + graded + "\n" +
+                "   blockUrl: " + blockUrl + "\n" +
+                "   webUrl: " + webUrl + "\n" +
+                "   multiDevice: " + multiDevice + "\n" +
+                "   format: " + format + "\n" +
+                "   dueDate: " + dueDate + "\n" +
+                "   blockCount: " + blockCount + "\n" +
+                "   parent: " + parent + "\n" +
+                "   root: " + root + "\n" +
+                "   children: " + children + "\n" +
+                "   courseId: " + courseId;
+    }*/
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
 }

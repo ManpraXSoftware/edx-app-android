@@ -2,9 +2,7 @@
 
 # edX Android
 
-[<img align="right" alt="Get it on Google Play" height="128" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png">](https://play.google.com/store/apps/details?id=org.edx.mobile)
-
-This is the source code for the edX mobile Android app. It is changing rapidly
+This is the source_id code for the edX mobile Android app. It is changing rapidly
 and its structure should not be relied upon. See http://code.edx.org for other
 parts of the edX code base.
 
@@ -22,17 +20,15 @@ Building
 
 This project is meant to be built using Android Studio. It can also be built from the `gradle` command line.
 
-1. Check out the source code:
+1. Check out the source_id code:
 
         git clone https://github.com/edx/edx-app-android
 
-2. Setup the Android Studio. The latest tested Android Studio version is v3.3.2, you can download it from [the previous versions archive](https://developer.android.com/studio/archive). (You can find further details to run the project on the said version of Android Studio on this [PR](https://github.com/edx/edx-app-android/pull/1264).
+2. Open Android Studio and choose **Open an Existing Android Studio Project**
 
-3. Open Android Studio and choose **Open an Existing Android Studio Project**
+3. Choose `edx-app-android`.
 
-4. Choose `edx-app-android`.
-
-5. Click the **Run** button.
+4. Click the **Run** button.
 
 Configuration
 =============
@@ -66,7 +62,7 @@ To use a custom configuration in place of the default configuration, you will ne
 
 
 The full set of known keys can be found in the
-`org/edx/mobile/util/Config.java` file or see [additional documentation](<https://openedx.atlassian.net/wiki/spaces/LEARNER/pages/48792067/App+Configuration+Flags>).
+`org/edx/mobile/util/Config.java` file or see [additional documentation](<https://openedx.atlassian.net/wiki/display/MA/App+Configuration+Flags>).
 
 
 Build Variants
@@ -76,7 +72,7 @@ There are 3 Build Variants in this project:
 
 - **prodDebug**: Uses prod flavor for debug builds.
 - **prodDebuggable**: Uses prod flavor for debug builds with debugging enabled.
-- **prodRelease**: Uses prod flavor for release builds that'll work on devices with Android 4.4.x (KitKat) and above.
+- **prodRelease**: Uses prod flavor for release builds that'll work on devices with Android 4.1.x (Jelly Bean) and above.
 
 Building For Release
 --------------------

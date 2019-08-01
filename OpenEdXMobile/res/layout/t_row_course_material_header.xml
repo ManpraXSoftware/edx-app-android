@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="org.edx.mobile.tta.ui.course.view_model.CourseMaterialViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/_30px"
+        android:paddingBottom="@dimen/_30px">
+
+        <TextView
+            android:id="@+id/course_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20px"
+            android:layout_marginEnd="@dimen/_20px"
+            android:fontFamily="@font/hind_regular"
+            android:text="@{viewModel.description}"
+            android:textColor="@color/gray_5"
+            android:textSize="14sp" />
+
+        <!--<org.edx.mobile.view.custom.AuthenticatedWebView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:id="@+id/description_webview"
+            android:scrollbars="none"/>-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="@dimen/_26px"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/like_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:id="@+id/course_likes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:fontFamily="@font/hind_medium"
+                        android:text="@{viewModel.likes}"
+                        android:textColor="@color/gray_3"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:id="@+id/course_like_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="3dp"
+                        android:contentDescription="@string/like"
+                        android:paddingBottom="4dp"
+                        android:src="@{viewModel.likeIcon}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="2dp"
+                        android:fontFamily="@font/hind_medium"
+                        android:text="@string/like"
+                        android:textColor="@color/gray_3"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/bookmark_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/course_bookmark_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="3dp"
+                        android:contentDescription="@string/add_to_my_agenda"
+                        android:paddingBottom="4dp"
+                        android:src="@{viewModel.bookmarkIcon}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="2dp"
+                        android:fontFamily="@font/hind_medium"
+                        android:gravity="bottom"
+                        android:text="@string/add_to_my_agenda"
+                        android:textColor="@color/gray_4"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/all_download_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="8dp">
+
+                    <org.edx.mobile.view.custom.IconProgressBar
+                        android:id="@+id/loading_indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:visibility="@{viewModel.allDownloadProgressVisible ? View.VISIBLE : View.GONE}" />
+
+                    <ImageView
+                        android:id="@+id/course_download_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="3dp"
+                        android:contentDescription="@string/download"
+                        android:paddingBottom="3dp"
+                        android:src="@{viewModel.allDownloadStatusIcon}"
+                        android:visibility="@{viewModel.allDownloadIconVisible ? View.VISIBLE : View.GONE}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="2dp"
+                        android:fontFamily="@font/hind_medium"
+                        android:gravity="bottom"
+                        android:text="@string/download_all"
+                        android:textColor="@color/gray_4"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

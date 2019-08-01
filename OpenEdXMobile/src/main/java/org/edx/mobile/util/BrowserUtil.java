@@ -1,18 +1,18 @@
 package org.edx.mobile.util;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.google.inject.Inject;
 
-import org.edx.mobile.R;
+import org.edx.mobile.authentication.LoginAPI;
 import org.edx.mobile.core.IEdxEnvironment;
 import org.edx.mobile.logger.Logger;
 import org.edx.mobile.module.analytics.AnalyticsRegistry;
+import org.edx.mobile.module.prefs.LoginPrefs;
+import org.edx.mobile.tta.data.pref.AppPref;
 import org.edx.mobile.view.dialog.IDialogCallback;
 
 public class BrowserUtil {
@@ -26,7 +26,19 @@ public class BrowserUtil {
     }
 
     @Inject
-    private static IEdxEnvironment environment;
+    public static IEdxEnvironment environment;
+
+    @Inject
+    public static Config config;
+
+    @Inject
+    public static LoginPrefs loginPrefs;
+
+    @Inject
+    public static AppPref appPref;
+
+    @Inject
+    public static LoginAPI loginAPI;
 
     /**
      * Opens given URL in native browser.
@@ -90,17 +102,10 @@ public class BrowserUtil {
         intent.addCategory(Intent.CATEGORY_BROWSABLE);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setData(Uri.parse(url));
-        try {
-            context.startActivity(intent);
-            AnalyticsRegistry analyticsRegistry = environment.getAnalyticsRegistry();
-            analyticsRegistry.trackBrowserLaunched(url);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(context, R.string.cannot_open_url, Toast.LENGTH_SHORT).show();
+        context.startActivity(intent);
 
-            // Send non-fatal exception
-            logger.error(new Exception(String.format("No activity found (browser cannot handle request) for this url: %s, error:\n", url)
-                    + e.getMessage()), true);
-        }
+        AnalyticsRegistry analyticsRegistry = environment.getAnalyticsRegistry();
+        analyticsRegistry.trackBrowserLaunched(url);
     }
 
     public static boolean isUrlOfHost(String url, String host) {
@@ -111,5 +116,9 @@ public class BrowserUtil {
             }
         }
         return false;
+    }
+
+    public static Config getConfig(){
+        return config;
     }
 }

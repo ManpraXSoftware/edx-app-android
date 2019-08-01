@@ -13,11 +13,17 @@ import android.support.v7.widget.PopupMenu;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import org.edx.mobile.R;
 import org.edx.mobile.core.IEdxEnvironment;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
 import org.edx.mobile.module.analytics.AnalyticsRegistry;
+import org.edx.mobile.tta.analytics.Analytic;
+import org.edx.mobile.tta.analytics.analytics_enums.Action;
+import org.edx.mobile.tta.analytics.analytics_enums.Source;
+import org.edx.mobile.tta.data.enums.SourceName;
+import org.edx.mobile.tta.utils.BreadcrumbUtil;
 import org.edx.mobile.util.ResourceUtil;
 
 import java.util.List;
@@ -64,9 +70,19 @@ public enum ShareUtils {
                             shareText = getSharingText(shareType);
                         }
                         analyticsRegistry.courseDetailShared(courseData.getCourse().getId(), COURSE_ABOUT_URL, shareType);
-                        final Intent intent = ShareUtils.newShareIntent(shareText);
-                        intent.setComponent(componentName);
-                        activity.startActivity(intent);
+
+                        Analytic analytic = new Analytic(activity);
+                        analytic.addMxAnalytics_db(courseData.getCourse().getName(), Action.Share,
+                                SourceName.course.name(), Source.Mobile, courseData.getCourse().getId(),
+                                BreadcrumbUtil.getBreadcrumb() + "/" + shareType.name());
+
+                        if (!shareType.equals(ShareType.TTA)) {
+                            final Intent intent = ShareUtils.newShareIntent(shareText);
+                            intent.setComponent(componentName);
+                            activity.startActivity(intent);
+                        } else {
+                            Toast.makeText(activity, "Course shared on TheTeacherApp", Toast.LENGTH_LONG).show();
+                        }
                     }
 
                     @NonNull
@@ -121,7 +137,7 @@ public enum ShareUtils {
         }
 
         // TODO: Find an alternative to following usage of support MenuPopupHelper which is hidden in the support package
-        // As PopupMenu doesn't support to show icons in main menu, use MenuPopupHelper for it
+        // As PopupMenu doesn't support to showLoading icons in main menu, use MenuPopupHelper for it
         final MenuPopupHelper menuHelper = new MenuPopupHelper(activity, (MenuBuilder) popupMenu.getMenu(), anchor);
         menuHelper.setForceShowIcon(true);
         menuHelper.show();
@@ -134,6 +150,8 @@ public enum ShareUtils {
     public enum ShareType {
         TWITTER("twitter"),
         FACEBOOK("facebook"),
+        WHATSAPP("whatsapp"),
+        TTA("tta"),
         UNKNOWN(null)
         ;
 
@@ -150,13 +168,18 @@ public enum ShareUtils {
     }
 
     @NonNull
-    private static ShareType getShareTypeFromComponentName(@NonNull ComponentName componentName) {
+    public static ShareType getShareTypeFromComponentName(@NonNull ComponentName componentName) {
         switch (componentName.getPackageName()) {
             case "com.facebook.katana":
             case "com.facebook.lite":
                 return ShareType.FACEBOOK;
             case "com.twitter.android":
                 return ShareType.TWITTER;
+            case "com.whatsapp":
+                return ShareType.WHATSAPP;
+            case "org.tta.mobile":
+            case "org.edx.mobile":
+                return ShareType.TTA;
             default:
                 return ShareType.UNKNOWN;
         }

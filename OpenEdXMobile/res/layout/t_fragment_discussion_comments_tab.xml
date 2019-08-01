@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="viewModel"
+            type="org.edx.mobile.tta.ui.course.discussion.view_model.DiscussionCommentsTabViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.maurya.mx.mxlib.view.MxRecyclerView
+            infinite_load_more_listener="@{viewModel.loadMoreListener}"
+            infinite_recycler_adapter="@{viewModel.adapter}"
+            layout_manager="@{viewModel.layoutManager}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:nestedScrollingEnabled="false"
+            app:mx_itemLayout="@layout/t_row_discussion_comment" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_36px"
+            android:orientation="vertical"
+            android:visibility="@{viewModel.emptyVisible ? View.VISIBLE : View.GONE}">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                app:srcCompat="@drawable/t_icon_first_comment" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_30px"
+                android:layout_marginStart="@dimen/_70px"
+                android:layout_marginEnd="@dimen/_70px"
+                android:fontFamily="@font/hind_regular"
+                android:gravity="center"
+                android:text="@string/be_the_first_to_comment"
+                android:textColor="@color/primary_cyan"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</layout>

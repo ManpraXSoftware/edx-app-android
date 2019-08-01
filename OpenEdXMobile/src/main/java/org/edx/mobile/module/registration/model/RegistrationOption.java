@@ -7,6 +7,14 @@ public class RegistrationOption {
     private @SerializedName("name")     String name;
     private @SerializedName("value")    String value;
 
+    public RegistrationOption() {
+    }
+
+    public RegistrationOption(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -23,16 +31,17 @@ public class RegistrationOption {
         return value;
     }
 
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     public boolean isDefaultValue() {
         return defaultValue;
     }
 
     public boolean equals(Object object){
-        if ( object == null || !(object instanceof RegistrationOption) )
-            return false;
-        RegistrationOption otherObject = (RegistrationOption)object;
-        return otherObject.name != null && otherObject.name.equals( name )
-                && otherObject.value != null && otherObject.value.equals( value );
+        return (object instanceof RegistrationOption) &&
+                toString().equals(((RegistrationOption) object).toString());
     }
 
     public int hashCode(){

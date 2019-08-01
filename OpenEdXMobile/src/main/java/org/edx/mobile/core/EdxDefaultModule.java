@@ -30,6 +30,9 @@ import org.edx.mobile.module.notification.DummyNotificationDelegate;
 import org.edx.mobile.module.notification.NotificationDelegate;
 import org.edx.mobile.module.storage.IStorage;
 import org.edx.mobile.module.storage.Storage;
+import org.edx.mobile.tta.analytics.AnalyticsRetrofitProvider;
+import org.edx.mobile.tta.data.remote.service.TaService;
+import org.edx.mobile.tta.scorm.ScormService;
 import org.edx.mobile.user.UserService;
 import org.edx.mobile.util.AppStoreUtils;
 import org.edx.mobile.util.BrowserUtil;
@@ -83,9 +86,26 @@ public class EdxDefaultModule extends AbstractModule {
         bind(CourseService.class).toProvider(CourseService.Provider.class).in(Singleton.class);
         bind(DiscussionService.class).toProvider(DiscussionService.Provider.class).in(Singleton.class);
         bind(UserService.class).toProvider(UserService.Provider.class).in(Singleton.class);
+        bind(ScormService.class).toProvider(ScormService.Provider.class).in(Singleton.class);
 
         bind(IStorage.class).to(Storage.class);
+        //Room.databaseBuilder(context, AppDatabase.class, dbName).fallbackToDestructiveMigration()
+        //                .build()
+       // bind(ILocalDataSource.class).to(LocalDataSource.class);
 
+       // bind(IRemoteDataSource.class).toInstance(RetrofitServiceUtil.create());
+
+        //bind(TADatabase.class).toInstance(Room.databaseBuilder(context, TADatabase.class, "dbasfsfs").fallbackToDestructiveMigration()
+          //      .build());
+
+        //bind(AppPref.class).toProvider(AppPref.Provider.class);
+        //bind(DataManager.class).toProvider(DataManager.Provider.class);
+
+        bind(TaService.class).toProvider(TaService.TaProvider.class);
+
+        bind(AnalyticsRetrofitProvider.class).to(AnalyticsRetrofitProvider.Impl.class);
+
+        bind(IEdxDataManager.class).to(EdxDataManager.class);
         requestStaticInjection(CallUtil.class, BrowserUtil.class, MediaConsentUtils.class,
                 DiscussionTextUtils.class, AppStoreUtils.class);
     }

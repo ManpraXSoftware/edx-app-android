@@ -10,6 +10,15 @@ import org.edx.mobile.model.api.ProfileModel;
 import org.edx.mobile.model.api.ResetPasswordResponse;
 import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.module.registration.model.RegistrationDescription;
+import org.edx.mobile.tta.data.model.authentication.FieldInfo;
+import org.edx.mobile.tta.data.model.authentication.MobileNumberVerificationResponse;
+import org.edx.mobile.tta.data.model.authentication.ResetForgotedPasswordResponse;
+import org.edx.mobile.tta.data.model.authentication.SendOTPResponse;
+import org.edx.mobile.tta.data.model.authentication.VerifyOTPForgotedPasswordResponse;
+import org.edx.mobile.tta.data.model.authentication.VerifyOTPResponse;
+import org.edx.mobile.tta.data.model.profile.UpdateMyProfileResponse;
+import org.edx.mobile.tta.data.model.profile.UserAddressResponse;
+import org.edx.mobile.tta.firebase.FirebaseUpdateTokenResponse;
 
 import java.util.Map;
 
@@ -29,7 +38,7 @@ import static org.edx.mobile.http.constants.ApiConstants.URL_MY_USER_INFO;
 public interface LoginService {
 
     /**
-     * A RoboGuice Provider implementation for LoginService.
+     * A RoboGuice TaProvider implementation for LoginService.
      */
     class Provider implements com.google.inject.Provider<LoginService> {
         @Inject
@@ -125,4 +134,39 @@ public interface LoginService {
     @NonNull
     @GET(URL_MY_USER_INFO)
     Call<ProfileModel> getProfile();
+
+    @FormUrlEncoded
+    @POST(ApiConstants.URL_MX_MOBILE_NUMBER_VERIFICATION)
+    Call<MobileNumberVerificationResponse> mxMobileNumberVerification(@FieldMap Map<String, String> parameters);
+
+    @FormUrlEncoded
+    @POST(ApiConstants.URL_MX_VERIFY_OTP_FOR_FORGOTED_PASSWORD)
+    Call<VerifyOTPForgotedPasswordResponse> mxOTPVerification_For_ForgotedPassword(@FieldMap Map<String, String> parameters);
+
+    @FormUrlEncoded
+    @POST(ApiConstants.URL_MX_RESET_FORGOTED_PASSWORD)
+    Call<ResetForgotedPasswordResponse> mxResetForgotedPassword(@FieldMap Map<String, String> parameters);
+
+    @FormUrlEncoded
+    @POST(ApiConstants.URL_MX_GENERATE_OTP)
+    Call<SendOTPResponse> mxGenerateOTP(@FieldMap Map<String, String> parameters);
+
+    @FormUrlEncoded
+    @POST(ApiConstants.URL_MX_VERIFY_OTP)
+    Call<VerifyOTPResponse> mxVerifyOTP(@FieldMap Map<String, String> parameters);
+
+    @FormUrlEncoded
+    @POST(ApiConstants.URL_MX_GET_USER_ADDRESS)
+    Call<UserAddressResponse> mxGetUserAddress(@FieldMap Map<String, String> parameters);
+
+    @FormUrlEncoded
+    @POST(ApiConstants.URL_MX_UPDATE_PROFILE)
+    Call<UpdateMyProfileResponse> mxUpdateProfile(@FieldMap Map<String, String> parameters);
+
+    @FormUrlEncoded
+    @POST(ApiConstants.URL_MX_FIREBASE_TOKEN_UPDATE)
+    Call<FirebaseUpdateTokenResponse> updateFirebaseToken(@FieldMap Map<String, String> parameters);
+
+    @GET(ApiConstants.URL_MX_CUSTOM_FIELD_ATTRIBUTES)
+    Call<FieldInfo> mxGetCustomStateFieldAttributes();
 }

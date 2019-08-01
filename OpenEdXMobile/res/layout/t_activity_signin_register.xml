@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="SigninRegisterViewModel" />
+
+        <import type="org.edx.mobile.tta.ui.logistration.view_model.SigninRegisterViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white">
+        
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout"
+            style="@style/ta_tab_style"
+            app:tabTextAppearance="@style/ta_tab_text_appearance"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/primary_cyan"
+            app:tabIndicatorHeight="2dp"
+            app:tabSelectedTextColor="@color/gray_4"
+            app:tabTextColor="@color/gray_5" />
+
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/view_pager"
+            selected_tab_position="@{viewModel.initialPosition}"
+            pager_adapter="@{viewModel.adapter}"
+            page_change_listener="@{viewModel.pageChangeListener}"/>
+        
+    </LinearLayout>
+    
+</layout>

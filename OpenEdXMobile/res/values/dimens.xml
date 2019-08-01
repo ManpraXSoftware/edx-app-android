@@ -112,11 +112,6 @@
     <dimen name="video_player_seekbar_line_width">4dp</dimen>
     <dimen name="video_player_seekbar_right_margin">6dp</dimen>
     <dimen name="video_player_duration_padding">4dp</dimen>
-    <dimen name="video_player_settings_divider_width">1dp</dimen>
-
-    <!-- Video Player Settings popup dimen values-->
-    <dimen name="settings_popup_height">80dp</dimen>
-    <dimen name="settings_popup_width">150dp</dimen>
 
     <!-- row height for CC language options, NONE option and the header of popup -->
     <dimen name="row_height_cc_option">40dp</dimen>
@@ -224,7 +219,6 @@
     <dimen name="edx_line">3px</dimen>
     <dimen name="edx_box_radius">5dp</dimen>
     <dimen name="edx_margin">15dp</dimen>
-    <dimen name="edx_half_margin">8dp</dimen>
     <dimen name="edx_double_margin">30dp</dimen>
     <dimen name="edx_quadruple_margin">60dp</dimen>
     <dimen name="widget_margin_half">5dp</dimen>
@@ -240,8 +234,77 @@
     <dimen name="whats_new_image_horizontal_margin">25dp</dimen>
     <dimen name="shadow_view_height">4dp</dimen>
 
-    <!-- Social platforms -->
-    <dimen name="social_btn_radius">3dp</dimen>
-    <dimen name="social_btn_min_height">40dp</dimen>
-    <dimen name="social_btn_divider_width">1dp</dimen>
+    <!-- TTA dimensions start -->
+    <!-- px to dp conversion
+        dp = round(px * 0.7)
+    -->
+    <dimen name="_2px">1dp</dimen>
+    <dimen name="_4px">3dp</dimen>
+    <dimen name="_6px">4dp</dimen>
+    <dimen name="_8px">6dp</dimen>
+    <dimen name="_10px">7dp</dimen>
+    <dimen name="_12px">8dp</dimen>
+    <dimen name="_14px">10dp</dimen>
+    <dimen name="_16px">11dp</dimen>
+    <dimen name="_18px">13dp</dimen>
+    <dimen name="_20px">14dp</dimen>
+    <dimen name="_22px">15dp</dimen>
+    <dimen name="_24px">17dp</dimen>
+    <dimen name="_26px">18dp</dimen>
+    <dimen name="_28px">20dp</dimen>
+    <dimen name="_30px">21dp</dimen>
+    <dimen name="_32px">22dp</dimen>
+    <dimen name="_34px">24dp</dimen>
+    <dimen name="_36px">25dp</dimen>
+    <dimen name="_38px">27dp</dimen>
+    <dimen name="_40px">28dp</dimen>
+    <dimen name="_42px">29dp</dimen>
+    <dimen name="_44px">31dp</dimen>
+    <dimen name="_46px">32dp</dimen>
+    <dimen name="_48px">34dp</dimen>
+    <dimen name="_50px">35dp</dimen>
+    <dimen name="_52px">36dp</dimen>
+    <dimen name="_54px">38dp</dimen>
+    <dimen name="_56px">39dp</dimen>
+    <dimen name="_58px">41dp</dimen>
+    <dimen name="_60px">42dp</dimen>
+    <dimen name="_62px">43dp</dimen>
+    <dimen name="_64px">45dp</dimen>
+    <dimen name="_66px">46dp</dimen>
+    <dimen name="_68px">48dp</dimen>
+    <dimen name="_70px">49dp</dimen>
+    <dimen name="_72px">50dp</dimen>
+    <dimen name="_74px">52dp</dimen>
+    <dimen name="_76px">53dp</dimen>
+    <dimen name="_78px">55dp</dimen>
+    <dimen name="_80px">56dp</dimen>
+    <dimen name="_82px">57dp</dimen>
+    <dimen name="_84px">59dp</dimen>
+    <dimen name="_86px">60dp</dimen>
+    <dimen name="_88px">62dp</dimen>
+    <dimen name="_90px">63dp</dimen>
+    <dimen name="_92px">64dp</dimen>
+    <dimen name="_94px">66dp</dimen>
+    <dimen name="_96px">67dp</dimen>
+    <dimen name="_98px">69dp</dimen>
+    <dimen name="_100px">70dp</dimen>
+
+    <dimen name="_200px">140dp</dimen>
+
+    <dimen name="_8px_sp">8sp</dimen>
+    <dimen name="_10px_sp">10sp</dimen>
+    <dimen name="_12px_sp">12sp</dimen>
+    <dimen name="_14px_sp">14sp</dimen>
+    <dimen name="_16px_sp">16sp</dimen>
+    <dimen name="_18px_sp">18sp</dimen>
+    <dimen name="_20px_sp">20sp</dimen>
+
+    <dimen name="_20dp">20dp</dimen>
+    <dimen name="_14dp">14dp</dimen>
+
+    <dimen name="list_title_size">7sp</dimen>
+    <dimen name="list_view_more_size">6sp</dimen>
+    <dimen name="btn_width">240dp</dimen>
+    <dimen name="btn_height">32dp</dimen>
+    <!-- TTA dimensions end -->
 </resources>

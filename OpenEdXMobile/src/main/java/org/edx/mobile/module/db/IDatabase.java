@@ -8,7 +8,10 @@ import org.edx.mobile.model.course.CourseComponent;
 import org.edx.mobile.model.db.DownloadEntry.DownloadedState;
 import org.edx.mobile.model.db.DownloadEntry.WatchedState;
 import org.edx.mobile.module.db.impl.DatabaseFactory;
+import org.edx.mobile.tta.analytics.AnalyticModel;
+import org.edx.mobile.tta.tincan.model.Resume;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -208,6 +211,12 @@ public interface IDatabase {
     int getDownloadedVideosCountForSection(String enrollmentId, String chapter, String section,
                                            final DataCallback<Integer> callback);
 
+    //Added by Arjun to get downloaded scrom count in device
+    Integer getDownloadedScromCountByCourse(String courseId, DataCallback<Integer> callback);
+
+    //Added by Arjun to get downloaded Pdf count in device
+    Integer getDownloadedPdfCountByCourse(String courseId, DataCallback<Integer> callback);
+
     /**
      * get number of videos marked as webOnly
      *
@@ -292,6 +301,8 @@ public interface IDatabase {
      * @return - the row ID of the newly inserted row, or -1 if an error occurred
      */
     Integer deleteVideoByVideoId(VideoModel video, String username, DataCallback<Integer> callback);
+
+    Integer deleteScromEntryByScromId(String scormBlockId, DataCallback<Integer> callback);
 
     /**
      * Returns if a IVideoModel with the same video URL is downloaded
@@ -487,4 +498,31 @@ public interface IDatabase {
      */
     boolean isUnitAccessed(DataCallback<Boolean> callback, String unitId);
 
+    VideoModel getPostVideo(String postId);
+
+    VideoModel getPostVideo(String p_id, String video_url , final DataCallback<VideoModel> callback);
+
+    /**
+     * add Analytic data
+     */
+    Long addAnalyticData(AnalyticModel de, DataCallback<Long> callback);
+    /**
+     * delete Analytic data
+     */
+    Integer deleteAnalyticByAnalyticId(String[] ids,String INQueryParams, DataCallback<Integer> callback);
+    /**
+     * get Analytic data
+     */
+    ArrayList<AnalyticModel> getAnalytics(int batch_count, int status, DataCallback<ArrayList<AnalyticModel>> callback);
+
+    /**
+     * get Tincan Analytic data
+     */
+    ArrayList<AnalyticModel> getTincanAnalytics(int batch_count, int status, DataCallback<ArrayList<AnalyticModel>> callback);
+
+    //for tincan resume handeling.
+    Long addResumePayload(Resume resume);
+    Integer updateResumePayload(Resume resume);
+    Integer deleteResumePayload(String course_id, String unit_id);
+    Resume getResumeInfo(String course_id, String unit_id);
 }

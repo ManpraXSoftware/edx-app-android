@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:mx="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="org.edx.mobile.tta.ui.course.view_model.CourseDashboardViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/app_background">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/toolbar"
+            android:background="@color/white"
+            app:title="@{viewModel.content.name}"
+            app:navigationIcon="@drawable/back"
+            app:titleTextAppearance="@style/ta_toolbar_title_style"
+            android:gravity="start|center_vertical"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:titleMarginStart="0dp" />
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout"
+            style="@style/ta_tab_style"
+            app:tabTextAppearance="@style/ta_tab_text_appearance"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/primary_cyan"
+            app:tabIndicatorHeight="2dp"
+            app:tabSelectedTextColor="@color/gray_4"
+            app:tabTextColor="@color/gray_5"
+            android:layout_marginTop="1dp"
+            tab_position="@{viewModel.tabPosition}"/>
+
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/view_pager"
+            mx:pager_adapter="@{viewModel.adapter}"
+            page_change_listener="@{viewModel.pageChangeListener}"/>
+
+        <include
+            layout="@layout/t_view_offline_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            mx:isVisible="@{viewModel.offlineVisible}"/>
+
+    </LinearLayout>
+
+</layout>

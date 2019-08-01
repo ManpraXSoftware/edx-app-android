@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="welcome_back">वापसी पर आपका स्वागत</string>
+    <string name="create_account_and_connect_with_us">अकाउंट बनाइये और हमारे साथ जुड़िये</string>
+    <string name="mobile_number">मोबाइल नम्बर</string>
+    <string name="password">पासवर्ड</string>
+    <string name="confirm_password">पासवर्ड पक्का करें</string>
+    <string name="register">रजिस्टर</string>
+    <string name="already_have_account">पहले से अकाउंट है?</string>
+    <string name="sign_in">साइन इन</string>
+    <string name="welcome">स्वागत</string>
+    <string name="keep_up_the_spirit">जारी रखें अपना उत्साह</string>
+    <string name="forgot_password">पासवर्ड भूल गए?</string>
+    <string name="change_password">पासवर्ड बदलें</string>
+    <string name="create_new_account">नया अकाउंट बनाएँ</string>
+    <string name="launch_text_1">शिक्षकों के व्यवसायिक विकास के लिए रचनात्मक, निर्माणात्मक, ऑडियो-विज़ुअल सामग्री</string>
+    <string name="launch_text_2">अपने राज्य और साथी शिक्षकों द्वारा मान्यता पाने के अवसर</string>
+    <string name="launch_text_3">देश भर के विभिन्न शिक्षकों के साथ जुड़ने और अपने विचार साझा करने के अवसर</string>
+    <string name="reset_password_msg">आपके password reset करने के लिए फ़ोन पर नंबर नीचे भरिये। आपके फ़ोन पर फिर verification OTP SMS नंबर द्वारा आएगा।</string>
+    <string name="otp_verification_msg">आपके फ़ोन पर अभी एक SMS आएगा SMS में दिया verification number नीचे अपने आप भर जाएगा।</string>
+    <string name="resend_otp">पुनः भेजें OTP?</string>
+    <string name="set_password">कृपया अपने खाते के लिए पासवर्ड सेट करें।</string>
+    <string name="confirm_new_password">कन्फर्म नया पासवर्ड</string>
+    <string name="library">लाइब्रेरी</string>
+    <string name="feed">खबर</string>
+    <string name="search">खोज</string>
+    <string name="agenda">लक्ष्य</string>
+    <string name="profile">प्रोफाइल</string>
+    <string name="view_more">और देखें</string>
+    <string name="course">कोर्स</string>
+    <string name="toolkit">शिक्षण सामग्री</string>
+    <string name="hois">प्रेरणा स्त्रोत</string>
+    <string name="chatshala">Chatशाला</string>
+    <string name="all">पूरी सूची</string>
+    <string name="state_wise_list">राज्य निर्धारित लक्ष्य</string>
+    <string name="my_agenda">मेरा लक्ष्य</string>
+    <string name="download">डाउनलोड</string>
+    <string name="suggested_teachers">ज़रूर देखें  अध्यापक</string>
+    <string name="follow">फॉलो करें</string>
+    <string name="view">देखें</string>
+    <string name="like">लाइक</string>
+    <string name="comment">टिप्पणी</string>
+    <string name="about">सन्दर्भ</string>
+    <string name="handouts">संसाधन</string>
+    <string name="discussion">चर्चा</string>
+    <string name="course_material">विषय-सूची</string>
+    <string name="add_to_my_agenda">अपने लक्ष्य में जोड़ें</string>
+    <string name="download_all">पूरा डाउनलोड</string>
+    <string name="viewed"><font color="#2FD233">देख लिया है</font></string>
+    <string name="viewing"><font color="#FFDB03">देख रहे हैं</font></string>
+    <string name="assessment">समझ परखें</string>
+    <string name="view_certificate">सर्टिफिकेट देखें</string>
+    <string name="estimated_duration">अनुमानित अवधि</string>
+    <string name="reply">जवाब दें</string>
+    <string name="all_list">सभी</string>
+    <string name="recently_added_list">अभी शामिल</string>
+    <string name="Connect_video_pre_download_msg">ऑफ़लाइन देखने के लिए कृपया यहां क्लिक करें</string>
+    <string name="connect_video_post_download_msg">ऑफ़लाइन देखने के लिए कृपया प्ले बटन पर क्लिक करें</string>
+    <string name="connect_video_post_downloading_msg">वीडियो डाउनलोड हो रहा है। प्रतीक्षा करें।</string>
+    <string name="duration">अवधि</string>
+    <string name="most_relevant_list">सबसे ज़रूरी</string>
+    <string name="share_wp_post_message">आप भी देखिए! {course_name} :</string>
+    <string name="contact_us">सम्पर्क करें</string>
+    <string name="sign_out">साइन आउट करें</string>
+    <string name="edit_profile">प्रोफाइल सम्पादित करें</string>
+    <string name="change_password_underlined"><u>पासवर्ड बदलें</u></string>
+    <string name="classes_taught">कक्षाएं</string>
+    <string name="skills">कौशल</string>
+    <string name="following">फॉलोइंग</string>
+    <string name="all_parts">एक कोर्स के सभी  भाग देखने पर</string>
+    <string name="followers">फालोअर्ज़</string>
+    <string name="write_here">यहाँ लिखिए</string>
+    <string name="connect_with_us">हमारे साथ जुड़िये</string>
+    <string name="old_password">पुराना पासवर्ड</string>
+    <string name="new_password">नया पासवर्ड</string>
+    <string name="write_name">नाम लिखें</string>
+    <string name="my_certificates">मेरे सर्टिफ़िकेट</string>
+    <string name="all_certificates">सभी सर्टिफ़िकेट</string>
+    <string name="position_obtained">प्राप्त करे पदक</string>
+    <string name="generate_certificate">सर्टिफिकेट उत्पन्न करें</string>
+    <string name="certificate">सर्टिफिकेट</string>
+    <string name="unfollow">अनफॉलो करें</string>
+    <string name="total">"कुल : "</string>
+    <string name="see_more">और देखें</string>
+    <string name="start_discussion">चर्चा शुरू करें</string>
+    <string name="view_previous_replies"><u>पिछले जवाब देखें</u></string>
+    <string name="your_information">आप की जानकारी</string>
+    <string name="please_insert_valide_pmis_code">"कृपया वैद्य पी एम आई एम कोड भरे या फिर खली छोड़ दे (वैकलिपक) "</string>
+    <string name="all_medal">सभी पदक</string>
+    <string name="padaav">पड़ाव</string>
+    <string name="number" >अंक</string>
+    <string name="notifications">सूचना</string>
+    <string name="empty_region_wise_list">\“%s\” में %s उपलब्ध नहीं है</string>
+    <string name="empty_download_list">\“%s\” में %s उपलब्ध नहीं है</string>
+    <string name="empty_my_agenda_list">\“%s\” में आपने %s नहीं चुना है। अपने लिए %s का चुनाव करने के लिए @ पर क्लिक करें</string>
+    <string name="you_are_offline">आप ऑफलाइन हैं</string>
+    <string name="feed_format_badge"><b>%s</b> ने हाल ही में <font fgcolor="#F75791">%s पदक</font> पाया</string>
+    <string name="feed_format_certificate"><b>%s</b> ने %s में <font fgcolor="#F75791">Certificate</font> पाया</string>
+    <string name="view_discussion">चर्चा देखें</string>
+
+    <string-array name="spinner_classes">
+        <item>1st</item>
+        <item>2nd</item>
+        <item>3rd</item>
+    </string-array>
+    <string name="share_message">कृपया इस {source_title} को {platform_name} में देखें। {content_name}</string>
+    <string name="share">साझा करें</string>
+    <string name="empty_feed_message">खबर उपलब्ध नहीं है</string>
+    <string name="error_name">उपयोगकर्ता नाम रिक्त या मोबाइल नंबर के समान नहीं हो सकता ।</string>
+    <string name="error_state">कृपया अपना राज्य चुनिए</string>
+    <string name="error_district">अपना जिला चुनिए</string>
+    <string name="error_block">अपनी तहसील चुनिए</string>
+    <string name="error_profession">कृपया अपना व्यवसाय चुनिए</string>
+    <string name="error_gender">कृपया अपना लिंग चुनिए</string>
+    <string name="error_classes">कृपया किस स्तर तक पढ़ाया है, चुनिए</string>
+    <string name="error_skills">कृपया अपने कौशल चुनिए</string>
+    <string name="error_diet">कृपया अपना DIET कोड चुनिए</string>
+    <string name="error_pmis">PMIS कोड रिक्त नहीं हो सकता</string>
+    <string name="error_teacher_id">टीचर ID रिक्त नहीं हो सकती</string>
+</resources>

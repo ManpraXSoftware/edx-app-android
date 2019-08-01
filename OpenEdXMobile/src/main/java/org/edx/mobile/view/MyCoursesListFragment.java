@@ -287,7 +287,7 @@ public class MyCoursesListFragment extends OfflineSupportBaseFragment
             if (NetworkUtil.isConnected(getContext())) {
                 binding.swipeContainer.setEnabled(true);
             } else {
-                //Disable swipe functionality and hide the loading view
+                //Disable swipe functionality and hideLoading the loading view
                 binding.swipeContainer.setEnabled(false);
                 binding.swipeContainer.setRefreshing(false);
             }

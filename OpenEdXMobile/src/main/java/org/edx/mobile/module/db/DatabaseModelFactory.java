@@ -7,11 +7,19 @@ import android.webkit.URLUtil;
 import org.edx.mobile.model.VideoModel;
 import org.edx.mobile.model.api.VideoResponseModel;
 import org.edx.mobile.model.course.BlockPath;
+import org.edx.mobile.model.course.BlockType;
 import org.edx.mobile.model.course.IBlock;
 import org.edx.mobile.model.course.VideoBlockModel;
 import org.edx.mobile.model.course.VideoData;
 import org.edx.mobile.model.course.VideoInfo;
 import org.edx.mobile.model.db.DownloadEntry;
+import org.edx.mobile.tta.analytics.AnalyticModel;
+import org.edx.mobile.tta.analytics.analytics_enums.Source;
+import org.edx.mobile.tta.data.enums.DownloadType;
+import org.edx.mobile.tta.scorm.PDFBlockModel;
+import org.edx.mobile.tta.scorm.ScormBlockModel;
+import org.edx.mobile.tta.scorm.ScormData;
+import org.edx.mobile.tta.tincan.model.Resume;
 
 /**
  * Model Factory class for the database models.
@@ -52,6 +60,8 @@ public class DatabaseModelFactory {
         de.isCourseActive = c.getInt(c.getColumnIndex(DbStructure.Column.IS_COURSE_ACTIVE));
         de.isVideoForWebOnly = c.getInt(c.getColumnIndex(DbStructure.Column.VIDEO_FOR_WEB_ONLY)) == 1;
         de.lmsUrl = c.getString(c.getColumnIndex(DbStructure.Column.UNIT_URL));
+        de.type = c.getString(c.getColumnIndex(DbStructure.Column.TYPE));
+        de.content_id = c.getLong(c.getColumnIndex(DbStructure.Column.CONTENT_ID));
 
         return de;
     }
@@ -111,11 +121,84 @@ public class DatabaseModelFactory {
         e.transcript = vrm.transcripts;
         e.lmsUrl = block.getBlockUrl();
         e.isVideoForWebOnly = vrm.onlyOnWeb;
+        e.type = DownloadType.EDX_VIDEO.name();
+        return e;
+    }
+
+    public static VideoModel getModel(ScormData scormData, ScormBlockModel block) {
+        DownloadEntry e = new DownloadEntry();
+        //FIXME - current database schema is not suitable for arbitary level of course structure tree
+        //solution - store the navigation path info in into one column field in the database,
+        //rather than individual column fields.
+        BlockPath path = block.getPath();
+        e.chapter = path.get(1) == null ? "" : path.get(1).getDisplayName();
+        e.section = path.get(2) == null ? "" : path.get(2).getDisplayName();
+        IBlock root = block.getRoot();
+        e.eid = root.getCourseId();
+//        e.duration = scormData.duration;
+//        final VideoInfo preferredVideoInfo = scormData.encodedVideos.getPreferredVideoInfoForDownloading();
+//        e.size = preferredVideoInfo.fileSize;
+        e.title = block.getDisplayName();
+//        e.url = preferredVideoInfo.url;
+//        e.url_hls = getVideoNetworkUrlOrNull(scormData.encodedVideos.hls);
+//        e.url_high_quality = getVideoNetworkUrlOrNull(scormData.encodedVideos.mobileHigh);
+//        e.url_low_quality = getVideoNetworkUrlOrNull(scormData.encodedVideos.mobileLow);
+//        e.url_youtube = getVideoNetworkUrlOrNull(scormData.encodedVideos.youtube);
+        e.videoId = block.getId();
+//        e.transcript = scormData.transcripts;
+        e.lmsUrl = block.getBlockUrl();
+//        e.isVideoForWebOnly = scormData.onlyOnWeb;
+        if (block.getType().equals(BlockType.SCORM)) {
+            e.type = DownloadType.SCORM.name();
+        } else if (block.getType().equals(BlockType.PDF)) {
+            e.type = DownloadType.PDF.name();
+        }
         return e;
     }
 
     @Nullable
     private static String getVideoNetworkUrlOrNull(@Nullable VideoInfo videoInfo) {
         return videoInfo != null && URLUtil.isNetworkUrl(videoInfo.url) ? videoInfo.url : null;
+    }
+
+    /**
+     * Returns new instance of {//@link org.tta.mobile.mx_analytic.org.tta.mobile.mx_analytic.AnalyticModel} initialized with given cursor.
+     *
+     * @param c
+     * @return
+     */
+    public static AnalyticModel getAnalyticModel(Cursor c) {
+        AnalyticModel ae = new AnalyticModel();
+
+        ae.analytic_id =String.valueOf(c.getLong(c.getColumnIndex(DbStructure.Column.ANALYTIC_TB_ID)));
+        ae.user_id=c.getString(c.getColumnIndex(DbStructure.Column.USER_ID));
+        ae.action=c.getString(c.getColumnIndex(DbStructure.Column.ACTION));
+        ae.metadata=c.getString(c.getColumnIndex(DbStructure.Column.METADATA));
+        ae.source= String.valueOf(Source.Mobile);
+        ae.page=c.getString(c.getColumnIndex(DbStructure.Column.PAGE));
+        ae.setStatus(c.getInt(c.getColumnIndex(DbStructure.Column.STATUS)));
+        ae.event_timestamp =c.getLong(c.getColumnIndex(DbStructure.Column.EVENT_DATE));
+        ae.nav=c.getString(c.getColumnIndex(DbStructure.Column.NAV));
+        ae.action_id=c.getString(c.getColumnIndex(DbStructure.Column.ACTION_ID));
+
+        return ae;
+    }
+
+    /**
+     * Returns new instance of {//@link org.tta.mobile.mx_analytic.org.tta.mobile.tincan.model.Resume} initialized with given cursor.
+     *
+     * @param c
+     * @return resume
+     */
+    public static Resume getResumeModel(Cursor c) {
+        Resume resume = new Resume();
+
+        resume.setId(String.valueOf(c.getLong(c.getColumnIndex(DbStructure.Column.ID))));
+        resume.setUser_Id(c.getString(c.getColumnIndex(DbStructure.Column.USER_ID)));
+        resume.setCourse_Id(c.getString(c.getColumnIndex(DbStructure.Column.COURSE_ID)));
+        resume.setUnit_id(c.getString(c.getColumnIndex(DbStructure.Column.UNIT_ID)));
+        resume.setResume_Payload(c.getString(c.getColumnIndex(DbStructure.Column.RESUME_PAYLOAD)));
+
+        return resume;
     }
 }

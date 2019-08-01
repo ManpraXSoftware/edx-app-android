@@ -17,6 +17,8 @@ import org.edx.mobile.module.storage.BulkVideosDownloadCancelledEvent;
 import org.edx.mobile.module.storage.BulkVideosDownloadStartedEvent;
 import org.edx.mobile.module.storage.IStorage;
 import org.edx.mobile.task.EnqueueDownloadTask;
+import org.edx.mobile.tta.scorm.PDFBlockModel;
+import org.edx.mobile.tta.scorm.ScormBlockModel;
 import org.edx.mobile.util.MediaConsentUtils;
 import org.edx.mobile.util.MemoryUtil;
 import org.edx.mobile.view.dialog.DownloadSizeExceedDialog;
@@ -59,7 +61,7 @@ public class VideoDownloadHelper {
     private AnalyticsRegistry analyticsRegistry;
 
 
-    public void downloadVideos(final List<? extends HasDownloadEntry> model, final FragmentActivity activity,
+    public void downloadVideos(final List<? extends HasDownloadEntry> model, long contentid, final FragmentActivity activity,
                                final DownloadManagerCallback callback) {
         if (model == null || model.isEmpty()) {
             return;
@@ -67,7 +69,7 @@ public class VideoDownloadHelper {
         IDialogCallback dialogCallback = new IDialogCallback() {
             @Override
             public void onPositiveClicked() {
-                startDownloadVideos(model, activity, callback);
+                startDownloadVideos(model, contentid, activity, callback);
             }
 
             @Override
@@ -79,7 +81,7 @@ public class VideoDownloadHelper {
         MediaConsentUtils.requestStreamMedia(activity, dialogCallback);
     }
 
-    private void startDownloadVideos(List<? extends HasDownloadEntry> model, FragmentActivity activity, DownloadManagerCallback callback) {
+    private void startDownloadVideos(List<? extends HasDownloadEntry> model, long contentid, FragmentActivity activity, DownloadManagerCallback callback) {
         long downloadSize = 0;
         ArrayList<DownloadEntry> downloadList = new ArrayList<>();
         int downloadCount = 0;
@@ -88,6 +90,10 @@ public class VideoDownloadHelper {
             if (!TextUtils.isEmpty(v.getDownloadUrl())) {
                 // Prefer download url to download
                 de.url = v.getDownloadUrl();
+                if (v instanceof PDFBlockModel || v instanceof ScormBlockModel){
+                    de.title = ((ScormBlockModel) v).getParent().getDisplayName();
+                }
+                de.content_id = contentid;
             }
             if (null == de
                     || de.downloaded == DownloadEntry.DownloadedState.DOWNLOADING

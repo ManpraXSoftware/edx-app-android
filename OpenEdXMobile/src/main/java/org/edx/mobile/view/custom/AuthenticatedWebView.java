@@ -36,6 +36,7 @@ import org.edx.mobile.interfaces.RefreshListener;
 import org.edx.mobile.logger.Logger;
 import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.services.EdxCookieManager;
+import org.edx.mobile.tta.interfaces.OnResponseCallback;
 import org.edx.mobile.util.NetworkUtil;
 import org.edx.mobile.util.WebViewUtil;
 
@@ -68,6 +69,9 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
     private boolean pageIsLoaded;
     private boolean didReceiveError;
     private boolean isManuallyReloadable;
+
+    private OnResponseCallback<String> htmlCallback;
+    private boolean isInitiated = false;
 
     public AuthenticatedWebView(Context context) {
         super(context);
@@ -105,13 +109,15 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
      * @param fragmentActivity     Reference of fragment activity.
      * @param isAllLinksExternal   A flag to treat every link as external link and open in external
      *                             web browser.
-     * @param isManuallyReloadable A flag that decides if we should give show/hide reload button
+     * @param isManuallyReloadable A flag that decides if we should give showLoading/hideLoading reload button
      *                             with full screen error.
      */
     @SuppressLint("SetJavaScriptEnabled")
     public void initWebView(@NonNull FragmentActivity fragmentActivity, boolean isAllLinksExternal,
                             boolean isManuallyReloadable) {
+        isInitiated = true;
         this.isManuallyReloadable = isManuallyReloadable;
+        webView.clearCache(true);
         webView.getSettings().setJavaScriptEnabled(true);
         webViewClient = new URLInterceptorWebViewClient(fragmentActivity, webView) {
             @Override
@@ -178,6 +184,14 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
         webViewClient.setAllLinksAsExternal(isAllLinksExternal);
     }
 
+    public void setHtmlCallback(OnResponseCallback<String> htmlCallback) {
+        this.htmlCallback = htmlCallback;
+    }
+
+    public boolean isInitiated() {
+        return isInitiated;
+    }
+
     public void loadUrl(boolean forceLoad, @NonNull String url) {
         loadUrlWithJavascript(forceLoad, url, null);
     }
@@ -192,12 +206,26 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
     }
 
     private void evaluateJavascript() {
-        webView.evaluateJavascript(javascript, new ValueCallback<String>() {
-            @Override
-            public void onReceiveValue(String value) {
-                hideLoadingProgress();
-            }
-        });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            webView.evaluateJavascript(javascript, new ValueCallback<String>() {
+                @Override
+                public void onReceiveValue(String value) {
+                    if (htmlCallback != null){
+                        htmlCallback.onSuccess(value);
+                    }
+                    hideLoadingProgress();
+                }
+            });
+        } else {
+            webView.loadUrl("javascript:" + javascript);
+            // Javascript evaluation takes some time, so hideLoading progressbar after 1 sec
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    hideLoadingProgress();
+                }
+            }, 1000);
+        }
     }
 
     private void tryToLoadWebView(boolean forceLoad) {
@@ -255,8 +283,8 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
     /**
      * Shows the error message with the given icon, if the web page failed to load
      *
-     * @param errorMsg  The error message to show
-     * @param errorIcon The error icon to show with the error message
+     * @param errorMsg  The error message to showLoading
+     * @param errorIcon The error icon to showLoading with the error message
      */
     private void showErrorMessage(@StringRes int errorMsg, @NonNull Icon errorIcon) {
         if (!pageIsLoaded) {

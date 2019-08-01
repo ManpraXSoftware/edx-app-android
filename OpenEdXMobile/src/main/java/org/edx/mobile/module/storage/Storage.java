@@ -3,6 +3,7 @@ package org.edx.mobile.module.storage;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -14,6 +15,7 @@ import org.edx.mobile.core.IEdxEnvironment;
 import org.edx.mobile.course.CourseAPI;
 import org.edx.mobile.logger.Logger;
 import org.edx.mobile.model.VideoModel;
+import org.edx.mobile.model.api.EnrolledCoursesResponse;
 import org.edx.mobile.model.api.ProfileModel;
 import org.edx.mobile.model.api.VideoResponseModel;
 import org.edx.mobile.model.course.CourseComponent;
@@ -28,15 +30,26 @@ import org.edx.mobile.module.download.IDownloadManager;
 import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.module.prefs.UserPrefs;
 import org.edx.mobile.module.prefs.VideoPrefs;
+import org.edx.mobile.tta.analytics.AnalyticModel;
+import org.edx.mobile.tta.data.enums.DownloadType;
+import org.edx.mobile.tta.scorm.ScormBlockModel;
+import org.edx.mobile.tta.tincan.model.Resume;
 import org.edx.mobile.util.Config;
 import org.edx.mobile.util.FileUtil;
 import org.edx.mobile.util.NetworkUtil;
 import org.edx.mobile.util.Sha1Util;
 import org.edx.mobile.view.BulkDownloadFragment;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import de.greenrobot.event.EventBus;
 
@@ -67,7 +80,17 @@ public class Storage implements IStorage {
 
 
     public long addDownload(VideoModel model) {
-        if(model.getVideoUrl()==null||model.getVideoUrl().length()<=0){
+        if((model.getVideoUrl()==null||model.getVideoUrl().length()<=0) && model.getFilePath()!=null &&
+                (!model.getFilePath().equalsIgnoreCase(String.valueOf(DownloadType.SCORM)) ||
+                        !model.getFilePath().equalsIgnoreCase(String.valueOf(DownloadType.PDF)) )){
+            return -1;
+        }
+        else if(model!=null && model.getFilePath()!=null &&(model.getFilePath().equalsIgnoreCase(String.valueOf(DownloadType.SCORM)) ||
+                model.getFilePath().equalsIgnoreCase(String.valueOf(DownloadType.PDF))))
+        {
+            model.setDownloadedStateForScrom(DownloadEntry.DownloadedState.DOWNLOADED);
+
+            db.addVideoData(model, null);
             return -1;
         }
 
@@ -77,7 +100,7 @@ public class Storage implements IStorage {
 
         if(model.isVideoForWebOnly())
             return -1;  //we may need to return different error code.
-                        //but for now we show same generic error message
+                        //but for now we showLoading same generic error message
         //IVideoModel videoById = db.getVideoEntryByVideoId(model.getVideoId(), null);
 
         if (videoByUrl == null || videoByUrl.getDmId() < 0) {
@@ -92,10 +115,16 @@ public class Storage implements IStorage {
             final File downloadDirectory = FileUtil.getDownloadDirectory(context, environment);
             if (downloadDirectory == null) return -1;
 
+            long dmid=-1;
             // there is no any download ever marked for this URL
             // so, add a download and map download info to given video
-            long dmid = dm.addDownload(downloadDirectory, model.getVideoUrl(),
-                    downloadPreference, model.getTitle());
+            if (model.getattachType()){
+                dmid = dm.addMXDownload(downloadDirectory, model.getVideoUrl(),
+                        model.getattachType(), model.getTitle());
+            } else {
+                dmid = dm.addDownload(downloadDirectory, model.getVideoUrl(),
+                        downloadPreference, model.getTitle());
+            }
             if(dmid==-1){
                 //Download did not start for the video because of an issue in DownloadManager
                 return -1;
@@ -145,7 +174,7 @@ public class Storage implements IStorage {
         int videosDeleted = db.deleteVideoByVideoId(model, null);
         // Reset the state of Videos Bulk Download view whenever a delete happens
         videoPrefs.setBulkDownloadSwitchState(BulkDownloadFragment.SwitchState.DEFAULT, model.getEnrollmentId());
-        EventBus.getDefault().post(new DownloadedVideoDeletedEvent());
+        EventBus.getDefault().post(new DownloadedVideoDeletedEvent(model));
         return videosDeleted;
     }
 
@@ -153,7 +182,7 @@ public class Storage implements IStorage {
     public int removeDownloads(List<VideoModel> modelList) {
         final int deletedVideos = removeDownloadsFromApp(modelList, null);
         logger.debug("Number of downloads removed by Download Manager: " + deletedVideos);
-        EventBus.getDefault().post(new DownloadedVideoDeletedEvent());
+        EventBus.getDefault().post(new DownloadedVideoDeletedEvent(modelList.isEmpty()?null:modelList.get(0)));
         return deletedVideos;
     }
 
@@ -171,7 +200,7 @@ public class Storage implements IStorage {
             @Override
             public void onResult(List<VideoModel> result) {
                 removeDownloadsFromApp(result, sha1Username);
-                EventBus.getDefault().post(new DownloadedVideoDeletedEvent());
+                EventBus.getDefault().post(new DownloadedVideoDeletedEvent(result.isEmpty()?null:result.get(0)));
             }
 
             @Override
@@ -374,6 +403,16 @@ public class Storage implements IStorage {
     }
 
     @Override
+    public VideoModel getDownloadEntryFromScormModel(ScormBlockModel block) {
+        VideoModel video = db.getVideoEntryByVideoId(block.getId(), null);
+        if (video != null) {
+            return video;
+        }
+
+        return DatabaseModelFactory.getModel(block.getData(), block);
+    }
+
+    @Override
     public NativeDownloadModel getNativeDownload(long dmId) {
         return dm.getDownload(dmId);
     }
@@ -445,7 +484,10 @@ public class Storage implements IStorage {
                     }
                     db.updateDownloadCompleteInfoByDmId(dmId, e, null);
                     callback.sendResult(e);
-                    EventBus.getDefault().post(new DownloadCompletedEvent());
+                    if (e.filepath.endsWith(".zip")) {
+                        unpackZip(e.filepath);
+                    }
+                    EventBus.getDefault().post(new DownloadCompletedEvent(e));
                 }
 
             } else {
@@ -456,6 +498,72 @@ public class Storage implements IStorage {
             callback.sendException(e);
             logger.error(e);
         }
+    }
+
+    private boolean unpackZip(String file)
+    {
+        InputStream is;
+        ZipInputStream zis;
+
+        File withExt = new File(file);
+        try
+        {
+
+            String filename;
+            String folder = withExt.getParent();
+            String name = withExt.getName().substring(0, withExt.getName().length()-4);
+
+            is = new FileInputStream(withExt.getAbsoluteFile());
+            zis = new ZipInputStream(new BufferedInputStream(is));
+            ZipEntry ze;
+            byte[] buffer = new byte[1024];
+            int count;
+
+            while ((ze = zis.getNextEntry()) != null)
+            {
+
+                filename = ze.getName();
+
+
+                if (ze.isDirectory()) {
+                    File fmd = new File(folder+"/" +name+"/"+ filename);
+
+                    fmd.mkdirs();
+                    continue;
+                }
+
+
+                File tmp = new File(folder+"/" +name+"/"+ filename);
+
+                File foldertmp = tmp.getParentFile();
+                if(!foldertmp.exists()){
+                    foldertmp.mkdirs();
+                }
+
+                FileOutputStream fout = new FileOutputStream(folder+"/" +name+"/"+ filename);
+
+
+                while ((count = zis.read(buffer)) != -1)
+                {
+                    fout.write(buffer, 0, count);
+                }
+
+                fout.close();
+                zis.closeEntry();
+            }
+
+            zis.close();
+
+            withExt.delete();
+        }
+        catch(IOException e)
+        {
+            withExt.delete();
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -506,6 +614,50 @@ public class Storage implements IStorage {
     }
 
     @Override
+    public DownloadEntry getPostVideo(String postId) {
+        VideoModel video = db.getPostVideo(postId);
+        if (video != null) {
+            // we have a db entry, so return it
+            return (DownloadEntry)video;
+        }
+
+        return null;
+    }
+
+    @Override
+    public DownloadEntry getPostVideo(String p_id, String video_url) {
+        VideoModel video = db.getPostVideo(p_id,video_url, null);
+        if (video != null) {
+            // we have a db entry, so return it
+            return (DownloadEntry)video;
+        }
+
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public long addAnalytic(AnalyticModel model) {
+        return db.addAnalyticData(model, null);
+    }
+
+    @NonNull
+    @Override
+    public int removeAnalytics(String[] ids, String INQueryParams) {
+        return  db.deleteAnalyticByAnalyticId(ids, INQueryParams,null);
+    }
+
+    @Override
+    public ArrayList<AnalyticModel> getMxAnalytics(int batch_count, int status) throws Exception {
+        return  db.getAnalytics(batch_count,status, null);
+    }
+
+    @Override
+    public ArrayList<AnalyticModel> getTincanAnalytics(int batch_count, int status) throws Exception {
+        return  db.getTincanAnalytics(batch_count,status, null);
+    }
+
+    @Override
     public void markVideoPlaying(DownloadEntry videoModel, final DataCallback<Integer> watchedStateCallback) {
         try {
             final DownloadEntry v = videoModel;
@@ -536,5 +688,83 @@ public class Storage implements IStorage {
         } catch (Exception ex) {
             logger.error(ex);
         }
+    }
+
+    @Nullable
+    private String getUsername() {
+        String ret = null;
+        ProfileModel profile = pref.getProfile();
+        if (profile != null) {
+            ret = profile.username;
+        }
+
+        return ret;
+    }
+
+    @NonNull
+    public Integer  getDownloadedScromCount () throws Exception
+    {
+        String username = getUsername();
+        Integer allCoursesScromCount=0;
+
+        /*if (username != null) {
+            for (EnrolledCoursesResponse enrolledCoursesResponse : api.getUserEnrolledCourses(username, true, context)) {
+                int scromCount = db.getDownloadedScromCountByCourse(
+                        enrolledCoursesResponse.getCourse().getId(), null);
+
+                if (scromCount > 0) {
+                    allCoursesScromCount=allCoursesScromCount+scromCount;
+                }
+            }
+
+            for (EnrolledCoursesResponse enrolledCoursesResponse : api.getUserEnrolledCourses(username, true, context)) {
+                int PdfCount = db.getDownloadedPdfCountByCourse(
+                        enrolledCoursesResponse.getCourse().getId(), null);
+
+                if (PdfCount > 0) {
+                    allCoursesScromCount=allCoursesScromCount+PdfCount;
+                }
+            }
+        }*/
+        return allCoursesScromCount;
+    }
+
+    @NonNull
+    public Integer  getDownloadedPdfCount () throws Exception
+    {
+        String username = getUsername();
+        Integer allCoursesScromCount=0;
+
+        /*if (username != null) {
+            for (EnrolledCoursesResponse enrolledCoursesResponse : api.getUserEnrolledCourses(username, true, context)) {
+                int scromCount = db.getDownloadedScromCountByCourse(
+                        enrolledCoursesResponse.getCourse().getId(), null);
+
+                if (scromCount > 0) {
+                    allCoursesScromCount=allCoursesScromCount+scromCount;
+                }
+            }
+        }*/
+        return allCoursesScromCount;
+    }
+
+    @Override
+    public Long addResumePayload(Resume resume) {
+        return db.addResumePayload(resume);
+    }
+
+    @Override
+    public Integer deleteResumePayload(String course_id, String unit_id) {
+        return db.deleteResumePayload(course_id,unit_id);
+    }
+
+    @Override
+    public Integer updateResumePayload(Resume resume) {
+        return db.updateResumePayload(resume);
+    }
+
+    @Override
+    public Resume getResumeInfo(String course_id, String unit_id) {
+        return  db.getResumeInfo(course_id,unit_id);
     }
 }

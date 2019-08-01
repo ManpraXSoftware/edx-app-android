@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="EnterNumberViewModel" />
+
+        <import type="org.edx.mobile.tta.ui.reset_password.view_model.EnterNumberViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_40px"
+                android:layout_marginTop="@dimen/_98px"
+                android:layout_marginEnd="@dimen/_40px"
+                android:fontFamily="@font/hind_medium"
+                android:text="@string/reset_password"
+                android:textColor="@color/primary_navy"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_40px"
+                android:layout_marginTop="@dimen/_16px"
+                android:layout_marginEnd="@dimen/_40px"
+                android:fontFamily="@font/hind_medium"
+                android:text="@string/reset_password_msg"
+                android:textColor="@color/primary_navy"
+                android:textSize="15sp" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_40px"
+                android:layout_marginTop="@dimen/_98px"
+                android:layout_marginEnd="@dimen/_40px"
+                android:textColorHint="@color/gray_1"
+                app:hintTextAppearance="@style/TextColorHint"
+                android:theme="@style/TextAppearence.App.TextInputLayout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/hind_medium"
+                    android:hint="@string/mobile_number"
+                    android:inputType="number"
+                    android:maxLength="10"
+                    android:text="@{viewModel.cellphone}"
+                    android:textColor="@color/gray_4"
+                    android:textColorHint="@color/gray_1"
+                    android:textSize="14sp"
+                    text_changed_listener="@{viewModel.cellWatcher}"
+                    android:paddingBottom="@dimen/_14px" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:layout_width="240dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_98px"
+                android:background="@drawable/btn_selector_filled"
+                android:enabled="@{viewModel.cellValid}"
+                android:fontFamily="@font/hind_semibold"
+                android:gravity="center"
+                android:onClick="@{()->viewModel.verify()}"
+                android:text="@string/verify"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</layout>

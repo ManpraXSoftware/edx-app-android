@@ -24,7 +24,7 @@ import java.util.Arrays;
  * @author rohan
  *
  */
-class DbHelper extends SQLiteOpenHelper {
+public class DbHelper extends SQLiteOpenHelper {
     private SQLiteDatabase sqliteDb;
     private Context context;
     protected final Logger logger = new Logger(getClass().getName());
@@ -60,11 +60,16 @@ class DbHelper extends SQLiteOpenHelper {
                 + DbStructure.Column.LAST_PLAYED_OFFSET     + " INTEGER, "
                 + DbStructure.Column.IS_COURSE_ACTIVE       + " BOOLEAN, "
                 + DbStructure.Column.UNIT_URL               + " TEXT, "
+                + DbStructure.Column.TYPE               + " TEXT, "
+                + DbStructure.Column.CONTENT_ID               + " LONG, "
                 + DbStructure.Column.VIDEO_FOR_WEB_ONLY     + " BOOLEAN "
                 + ")";
         db.execSQL(sql);
 
         createAssessmentTable(db);
+
+        //Mx Chirag: create table for analytics
+        createAnalyticTable(db);
 
         logger.debug("Database created");
     }
@@ -235,5 +240,37 @@ class DbHelper extends SQLiteOpenHelper {
 
         sqliteDb = null;
         logger.debug("Database closed");
+    }
+
+    //TTA
+
+    private void createAnalyticTable(SQLiteDatabase db){
+        String sql = "CREATE TABLE "                        + DbStructure.Table.ANALYTIC
+                + " ("
+                + DbStructure.Column.ANALYTIC_TB_ID       + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + DbStructure.Column.USER_ID + " TEXT, "
+                + DbStructure.Column.ACTION  + " TEXT, "
+                + DbStructure.Column.METADATA  + " TEXT, "
+                + DbStructure.Column.PAGE  + " TEXT, "
+                + DbStructure.Column.STATUS  + " BOOLEAN, "
+                + DbStructure.Column.EVENT_DATE + " INTEGER, "
+                + DbStructure.Column.NAV + " TEXT, "
+                + DbStructure.Column.ACTION_ID + " TEXT "
+                + ")";
+        db.execSQL(sql);
+
+        createTincanReumePayloadTable(db);
+    }
+
+    private void createTincanReumePayloadTable(SQLiteDatabase db){
+        String sql = "CREATE TABLE "                        + DbStructure.Table.TINCAN
+                + " ("
+                + DbStructure.Column.ID       + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + DbStructure.Column.UNIT_ID + " TEXT, "
+                + DbStructure.Column.USER_ID + " TEXT, "
+                + DbStructure.Column.RESUME_PAYLOAD  + " TEXT, "
+                + DbStructure.Column.COURSE_ID  + " TEXT "
+                + ")";
+        db.execSQL(sql);
     }
 }

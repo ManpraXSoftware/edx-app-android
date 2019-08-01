@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.inject.Inject;
+
 import org.edx.mobile.base.MainApplication;
 import org.edx.mobile.core.IEdxEnvironment;
 import org.edx.mobile.deeplink.DeepLinkManager;
 import org.edx.mobile.logger.Logger;
+import org.edx.mobile.tta.data.local.db.ILocalDataSource;
 import org.edx.mobile.util.Config;
 import org.edx.mobile.util.NetworkUtil;
 import org.json.JSONException;
@@ -18,6 +21,9 @@ import io.branch.referral.Branch;
 public class SplashActivity extends Activity {
     protected final Logger logger = new Logger(getClass().getName());
     private Config config = new Config(MainApplication.instance());
+
+    @Inject
+    ILocalDataSource dgd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +39,7 @@ public class SplashActivity extends Activity {
         - https://stackoverflow.com/questions/4341600/how-to-prevent-multiple-instances-of-an-activity-when-it-is-launched-with-differ/
         - https://stackoverflow.com/questions/16283079/re-launch-of-activity-on-home-button-but-only-the-first-time/16447508#16447508
          */
+
         if (!isTaskRoot()) {
             final Intent intent = getIntent();
             if (intent.hasCategory(Intent.CATEGORY_LAUNCHER) && Intent.ACTION_MAIN.equals(intent.getAction())) {

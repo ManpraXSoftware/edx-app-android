@@ -17,6 +17,11 @@ import org.edx.mobile.module.db.DataCallback;
 import org.edx.mobile.module.db.DbStructure;
 import org.edx.mobile.module.db.IDatabase;
 import org.edx.mobile.module.prefs.LoginPrefs;
+import org.edx.mobile.tta.analytics.AnalyticModel;
+import org.edx.mobile.tta.analytics.analytics_enums.Action;
+import org.edx.mobile.tta.analytics.db_operations.DbOperationGetAnalytic;
+import org.edx.mobile.tta.data.local.db.operation.DbOperationGetTinCanPayload;
+import org.edx.mobile.tta.tincan.model.Resume;
 import org.edx.mobile.util.Sha1Util;
 import org.edx.mobile.util.TextUtils;
 
@@ -306,6 +311,46 @@ public class IDatabaseImpl extends IDatabaseBaseImpl implements IDatabase {
         return enqueue(op);
     }
 
+    //Added by Arjun to get downloaded scrom conut in device
+    @Override
+    public Integer getDownloadedScromCountByCourse(String courseId,
+                                                   final DataCallback<Integer> callback) {
+        DbOperationGetCount op = new DbOperationGetCount(true, DbStructure.Table.DOWNLOADS,
+                new String[]{DbStructure.Column.VIDEO_ID},
+
+
+                DbStructure.Column.EID + "=? AND " + DbStructure.Column.DOWNLOADED + "=? AND "+DbStructure.Column.FILEPATH+"=? AND "
+                        + DbStructure.Column.USERNAME + "=?",
+
+
+                new String[]{courseId, String.valueOf(DownloadedState.DOWNLOADED.ordinal()),"Scrom",
+                        username()}, null);
+
+        op.setCallback(callback);
+        return enqueue(op);
+    }
+
+
+
+    //Added by Arjun to get downloaded Pdf conut in device
+    @Override
+    public Integer getDownloadedPdfCountByCourse(String courseId,
+                                                 final DataCallback<Integer> callback) {
+        DbOperationGetCount op = new DbOperationGetCount(true, DbStructure.Table.DOWNLOADS,
+                new String[]{DbStructure.Column.VIDEO_ID},
+
+
+                DbStructure.Column.EID + "=? AND " + DbStructure.Column.DOWNLOADED + "=? AND "+DbStructure.Column.FILEPATH+"=? AND "
+                        + DbStructure.Column.USERNAME + "=?",
+
+
+                new String[]{courseId, String.valueOf(DownloadedState.DOWNLOADED.ordinal()),"Pdf",
+                        username()}, null);
+
+        op.setCallback(callback);
+        return enqueue(op);
+    }
+
     @Override
     public Integer getVideosCountBySection(String enrollmentId, String chapter,
                                            String section, final DataCallback<Integer> callback) {
@@ -390,6 +435,8 @@ public class IDatabaseImpl extends IDatabaseBaseImpl implements IDatabase {
             values.put(DbStructure.Column.UNIT_URL, de.getLmsUrl());
             values.put(DbStructure.Column.IS_COURSE_ACTIVE, de.isCourseActive());
             values.put(DbStructure.Column.VIDEO_FOR_WEB_ONLY, de.isVideoForWebOnly());
+            values.put(DbStructure.Column.TYPE, de.getDownloadType());
+            values.put(DbStructure.Column.CONTENT_ID, de.getContent_id());
 
             DbOperationInsert op = new DbOperationInsert(DbStructure.Table.DOWNLOADS, values);
             op.setCallback(callback);
@@ -447,6 +494,22 @@ public class IDatabaseImpl extends IDatabaseBaseImpl implements IDatabase {
         DbOperationDelete op = new DbOperationDelete(DbStructure.Table.DOWNLOADS,
                 DbStructure.Column.VIDEO_ID + "=? AND " + DbStructure.Column.USERNAME + "=?",
                 new String[]{video.getVideoId(), username});
+        op.setCallback(callback);
+        return enqueue(op);
+    }
+
+    //Arjun:To remove scrom entry from db
+    @Override
+    public Integer deleteScromEntryByScromId(String scormBlockId, DataCallback<Integer> callback) {
+        ContentValues values = new ContentValues();
+        values.put(DbStructure.Column.DOWNLOADED, DownloadedState.ONLINE.ordinal());
+        values.put(DbStructure.Column.DM_ID, -1);
+        values.put(DbStructure.Column.FILEPATH, "");
+        values.put(DbStructure.Column.VIDEO_ID, "");
+
+        DbOperationUpdate op = new DbOperationUpdate(DbStructure.Table.DOWNLOADS, values,
+                DbStructure.Column.VIDEO_ID + "=? AND " + DbStructure.Column.USERNAME + "=?",
+                new String[]{scormBlockId, username()});
         op.setCallback(callback);
         return enqueue(op);
     }
@@ -820,5 +883,123 @@ public class IDatabaseImpl extends IDatabaseBaseImpl implements IDatabase {
         }
         List<Boolean> result = enqueue(op);
         return result != null && result.size() > 0 ? result.get(0) : false;
+    }
+
+    @Override
+    public VideoModel getPostVideo(String postId) {
+        DbOperationGetVideo op = new DbOperationGetVideo(false, DbStructure.Table.DOWNLOADS, null,
+                DbStructure.Column.VIDEO_ID + "=? AND " + DbStructure.Column.USERNAME + "=? ",
+                new String[]{postId, username()}, null);
+        return enqueue(op);
+    }
+
+    @Override
+    public VideoModel getPostVideo(String p_id , String video_url , final DataCallback<VideoModel> callback) {
+        video_url=video_url.replace("'","''");
+        DbOperationGetVideo op = new DbOperationGetVideo(false, DbStructure.Table.DOWNLOADS, null,
+                DbStructure.Column.VIDEO_ID + "=? AND "
+                        + DbStructure.Column.USERNAME + "=? AND " +
+                        DbStructure.Column.URL + "=? AND "
+                        +DbStructure.Column.DOWNLOADED + "=? AND "
+                        + DbStructure.Column.FILEPATH +" IS NOT NULL AND "+DbStructure.Column.FILEPATH +" !='' ",
+                new String[]{p_id, username(),video_url,String.valueOf(DownloadedState.DOWNLOADED.ordinal())}, null);
+        op.setCallback(callback);
+        return enqueue(op);
+    }
+
+    @Override
+    public Long addAnalyticData(AnalyticModel de, DataCallback<Long> callback) {
+        ContentValues values = new ContentValues();
+        values.put(DbStructure.Column.USER_ID, de.getUser_Id());
+        values.put(DbStructure.Column.ACTION, de.getAction());
+        values.put(DbStructure.Column.METADATA, de.getMetadata());
+        values.put(DbStructure.Column.PAGE, de.getPage());
+        values.put(DbStructure.Column.STATUS, de.getStatus());
+        values.put(DbStructure.Column.EVENT_DATE, de.getEvent_timestamp());
+        values.put(DbStructure.Column.NAV, de.getNav());
+        values.put(DbStructure.Column.ACTION_ID, de.getAction_id());
+
+        DbOperationInsert op = new DbOperationInsert(DbStructure.Table.ANALYTIC, values);
+        op.setCallback(callback);
+        return enqueue(op);
+    }
+
+    @Override
+    public Integer deleteAnalyticByAnalyticId(String[] ids,String INQueryParams, DataCallback<Integer> callback) {
+
+
+        DbOperationDelete op=new DbOperationDelete(DbStructure.Table.ANALYTIC,DbStructure.Column.ANALYTIC_TB_ID+ " IN ("+INQueryParams+")",ids);
+        op.setCallback(callback);
+        return enqueue(op);
+    }
+
+
+    @Override
+    public ArrayList<AnalyticModel> getAnalytics(int batch_count, int status,
+                                                 final DataCallback<ArrayList<AnalyticModel>> callback) {
+        DbOperationGetAnalytic op = new DbOperationGetAnalytic(false, DbStructure.Table.ANALYTIC, null,
+                DbStructure.Column.STATUS + "=? AND " + DbStructure.Column.USER_ID +"=? AND "+ DbStructure.Column.ACTION + "!=?",
+                new String[]{""+status, loginPrefs.getUsername(),String.valueOf(Action.TinCanObject)},null, String.valueOf(batch_count));
+        op.setCallback(callback);
+        return enqueue(op);
+    }
+
+    @Override
+    public ArrayList<AnalyticModel> getTincanAnalytics(int batch_count, int status, DataCallback<ArrayList<AnalyticModel>> callback) {
+        DbOperationGetAnalytic op = new DbOperationGetAnalytic(false, DbStructure.Table.ANALYTIC, null,
+                DbStructure.Column.STATUS + "=? AND " + DbStructure.Column.USER_ID + "=? AND "+ DbStructure.Column.ACTION + "=?",
+                new String[]{""+status, loginPrefs.getUsername(), String.valueOf(Action.TinCanObject)},null, String.valueOf(batch_count));
+        op.setCallback(callback);
+        return enqueue(op);
+    }
+
+    @Override
+    public Long addResumePayload(Resume resume) {
+        ContentValues values = new ContentValues();
+        values.put(DbStructure.Column.USER_ID, resume.getUser_Id());
+        values.put(DbStructure.Column.COURSE_ID, resume.getCourse_Id());
+        values.put(DbStructure.Column.UNIT_ID, resume.getUnit_id());
+        values.put(DbStructure.Column.RESUME_PAYLOAD, resume.getResume_Payload());
+
+        DbOperationInsert op = new DbOperationInsert(DbStructure.Table.TINCAN, values);
+        return enqueue(op);
+    }
+
+    @Override
+    public Integer updateResumePayload(Resume resume) {
+        ContentValues values = new ContentValues();
+        values.put(DbStructure.Column.USER_ID, resume.getUser_Id());
+        values.put(DbStructure.Column.COURSE_ID, resume.getCourse_Id());
+        values.put(DbStructure.Column.UNIT_ID, resume.getUnit_id());
+        values.put(DbStructure.Column.RESUME_PAYLOAD, resume.getResume_Payload());
+
+        DbOperationUpdate op = new DbOperationUpdate(DbStructure.Table.TINCAN, values,
+                DbStructure.Column.USER_ID + "=? AND "+
+                        DbStructure.Column.COURSE_ID + "=? AND "+
+                        DbStructure.Column.UNIT_ID + "=?",
+                new String[]{loginPrefs.getUsername(),resume.getCourse_Id(),resume.getUnit_id()});
+        return enqueue(op);
+    }
+
+    @Override
+    public Integer deleteResumePayload(String course_id, String unit_id) {
+
+        DbOperationDelete op=new DbOperationDelete(DbStructure.Table.TINCAN,
+                DbStructure.Column.COURSE_ID+ "=? AND "+
+                        DbStructure.Column.USER_ID+" =? AND "+
+                        DbStructure.Column.UNIT_ID+" =? ",
+                new String[]{course_id,loginPrefs.getUsername(),unit_id});
+        return enqueue(op);
+    }
+
+    @Override
+    public Resume getResumeInfo(String course_id, String unit_id) {
+        DbOperationGetTinCanPayload op = new DbOperationGetTinCanPayload(false,
+                DbStructure.Table.TINCAN, null,
+                DbStructure.Column.USER_ID + "=? AND " +
+                        DbStructure.Column.COURSE_ID +"=? AND "+
+                        DbStructure.Column.UNIT_ID + " =? ",
+                new String[]{loginPrefs.getUsername(),course_id,unit_id},null);
+        return enqueue(op);
     }
 }

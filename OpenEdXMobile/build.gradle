@@ -8,6 +8,12 @@ buildscript {
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url 'https://maven.fabric.io/public' }
+
+        //Arjun for MVVM
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
     }
 
     dependencies {
@@ -65,7 +71,9 @@ def getVersionName = { ->
 
         def hasSemanticVersion = { s ->
             // This branch/tag contains a semantic version (e.g. "rc/2.6.0" or "release/2.5")
-            return s.indexOf("rc/") >= 0 || s.indexOf("release/") >= 0
+            //for tta we are keeping it as "tta_rc" or "tta_release".
+            return s.indexOf("rc/") >= 0 || s.indexOf("release/") >= 0 ||
+                    s.indexOf("tta_rc/") >= 0 || s.indexOf("tta_release/") >= 0
         }
         if (hasSemanticVersion(branch)) {
             description = branch
@@ -125,6 +133,39 @@ dependencies {
     // with module updates.
     implementation project (':android-iconify-fontawesome')
 
+    // Mx module for listing
+    implementation project (':mxlib')
+
+    //MVVM ::Start Arjun
+    implementation "com.android.support:support-vector-drawable:${supportLibraryVersion}"
+    implementation "com.android.support:support-v4:${supportLibraryVersion}"
+    //implementation "com.squareup.retrofit2:adapter-rxjava2:${rxjava_retrofitVersion}"
+    implementation "io.reactivex.rxjava2:rxjava:${rxjavaVersion}"
+    implementation "io.reactivex.rxjava2:rxandroid:${rxandroidVersion}"
+    implementation "com.jakewharton:butterknife:${bkVersion}"
+    annotationProcessor "com.jakewharton:butterknife-compiler:${bkVersion}"
+    implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
+
+    implementation "com.trello.rxlifecycle2:rxlifecycle:${rxLifecycleVersion}"
+    implementation "com.trello.rxlifecycle2:rxlifecycle-android:${rxLifecycleVersion}"
+    implementation "com.trello.rxlifecycle2:rxlifecycle-components:${rxLifecycleVersion}"
+
+    implementation 'org.jsoup:jsoup:1.11.3'
+
+    //adding Room ORM for Database
+    // database
+    implementation "android.arch.persistence.room:rxjava2:${roomDatabase}"
+    annotationProcessor "android.arch.persistence.room:compiler:${roomDatabase}"
+    //MVVM ::End Arjun
+
+    //TTA start
+
+    implementation "com.fasterxml.jackson.core:jackson-core:2.5.3"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:2.5.3"
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.5.3"
+
+    //TTA end
+
     implementation "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
     implementation "com.android.support:recyclerview-v7:${SUPPORT_LIBRARY_VERSION}"
     implementation "com.android.support:cardview-v7:${SUPPORT_LIBRARY_VERSION}"
@@ -166,7 +207,7 @@ dependencies {
     implementation ('com.github.bumptech.glide:okhttp3-integration:1.4.0'){
         exclude group: 'glide-parent'
     }
-    implementation 'de.hdodenhof:circleimageview:2.0.0'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'uk.co.chrisjenx:calligraphy:2.1.0'
 
     // Segment Library
@@ -230,6 +271,12 @@ dependencies {
     androidTestImplementation ('org.mockito:mockito-core:1.10.19'){
         exclude group: 'org.hamcrest'
     }
+    //added for assistant integration vai dialogflow
+    implementation 'ai.api:sdk:2.0.7@aar'
+    annotationProcessor 'ai.api:libai:1.6.12'
+    implementation('ai.api:libai:1.6.12'){
+        exclude module: 'log4j-core'
+    }
 }
 
 configurations {
@@ -241,7 +288,7 @@ def config = new TaskHelper().loadConfig(project)
 def firebase = config.get('FIREBASE')
 def firebaseEnabled = firebase?.get('ENABLED')
 if (firebaseEnabled?: false) {
-    apply plugin: 'com.google.gms.google-services'
+//    apply plugin: 'com.google.gms.google-services'
 }
 
 android {
@@ -257,8 +304,17 @@ android {
     compileSdkVersion COMPILE_SDK_VERSION
     buildToolsVersion BUILD_TOOLS_VERSION
 
+    //MX: Chirag: Used in CourseScormViewActivity
+    useLibrary 'org.apache.http.legacy'
+
+    //MVVM Lambda
     dataBinding {
         enabled = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     dexOptions {
@@ -447,13 +503,33 @@ android {
     }
 
     packagingOptions {
-        exclude 'LICENSE.txt'
-        exclude 'APK LICENSE.txt'
         exclude 'META-INF/DEPENDENCIES'
         exclude 'META-INF/LICENSE'
-        exclude 'META-INF/NOTICE'
         exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
         exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/rxjava.properties'
+        exclude 'META-INF/androidx.properties'
+        exclude 'META-INF/androidx.localbroadcastmanager_localbroadcastmanager.version'
+        exclude 'META-INF/androidx.swiperefreshlayout_swiperefreshlayout.version'
+        exclude 'META-INF/androidx.cursoradapter_cursoradapter.version'
+        exclude 'META-INF/androidx.drawerlayout_drawerlayout.version'
+        exclude 'META-INF/androidx.print_print.version'
+        exclude 'META-INF/androidx.interpolator_interpolator.version'
+        exclude 'META-INF/androidx.fragment_fragment.version'
+        exclude 'META-INF/androidx.customview_customview.version'
+        exclude 'META-INF/androidx.documentfile_documentfile.version'
+        exclude 'META-INF/androidx.legacy_legacy-support-core-utils.version'
+        exclude 'META-INF/androidx.loader_loader.version'
+        exclude 'META-INF/androidx.viewpager_viewpager.version'
+        exclude 'META-INF/androidx.asynclayoutinflater_asynclayoutinflater.version'
+        exclude 'META-INF/proguard/androidx-annotations.pro'
+        exclude 'META-INF/*'
+
+
     }
     testOptions {
          unitTests.all {
@@ -484,3 +560,5 @@ android.applicationVariants.all { variant ->
         }
     }
 }
+
+//apply plugin: 'com.google.gms.google-services'

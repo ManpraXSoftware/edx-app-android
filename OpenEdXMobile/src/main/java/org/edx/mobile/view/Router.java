@@ -30,6 +30,8 @@ import org.edx.mobile.module.notification.NotificationDelegate;
 import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.module.storage.IStorage;
 import org.edx.mobile.profiles.UserProfileActivity;
+import org.edx.mobile.tta.ui.logistration.SigninRegisterActivity;
+import org.edx.mobile.tta.ui.survey.UserSurveyActivity;
 import org.edx.mobile.util.Config;
 import org.edx.mobile.util.EmailUtil;
 import org.edx.mobile.util.ResourceUtil;
@@ -119,7 +121,7 @@ public class Router {
     }
 
     public void showSplashScreen(Context context) {
-        final Intent launchIntent = new Intent(context, SplashActivity.class);
+        final Intent launchIntent = new Intent(context, SigninRegisterActivity.class);
         launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(launchIntent);
     }
@@ -462,5 +464,25 @@ public class Router {
                 .append(NEW_LINE).append(NEW_LINE)
                 .append(activity.getString(R.string.insert_feedback));
         EmailUtil.openEmailClient(activity, to, subject, body.toString(), config);
+    }
+
+    //TTA
+
+    //Mx:Arjun change password
+    public void resetAuthForChangePassword(Context context, AnalyticsRegistry analyticsRegistry, NotificationDelegate delegate) {
+        loginAPI.logOut();
+        loginPrefs.clear();
+
+        EventBus.getDefault().post(new LogoutEvent());
+
+        analyticsRegistry.trackUserLogout();
+        analyticsRegistry.resetIdentifyUser();
+
+        delegate.unsubscribeAll();
+    }
+
+    @NonNull
+    public void getSurveyFeedbackActivity(Activity sourceActivity,String surveyurl) {
+        sourceActivity.startActivity(UserSurveyActivity.newIntent(surveyurl));
     }
 }

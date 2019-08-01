@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="LaunchViewModel" />
+
+        <import type="org.edx.mobile.tta.ui.launch.view_model.LaunchViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/launch_content"
+            android:scaleType="fitXY"
+            android:src="@{viewModel.image}" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal | top"
+                android:lineSpacingMultiplier="1.2"
+                android:paddingStart="@dimen/_40px"
+                android:paddingEnd="@dimen/_40px"
+                android:text="@{viewModel.text}"
+                android:textColor="@color/primary_cyan"
+                android:textSize="16sp"
+                android:fontFamily="@font/hind_semibold"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</layout>

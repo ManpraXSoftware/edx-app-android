@@ -491,7 +491,7 @@ public class PlayerFragment extends BaseFragment implements IPlayerListener, Ser
                 showVideoNotAvailable(VideoNotPlayMessageType.IS_VIDEO_ONLY_ON_WEB);
                 path = "";
             } else {
-                // show loading indicator as player will prepare now
+                // showLoading loading indicator as player will prepare now
                 showProgress();
 
                 if (path == null || path.trim().length() == 0) {
@@ -532,7 +532,7 @@ public class PlayerFragment extends BaseFragment implements IPlayerListener, Ser
                     getActivity());
             controller.setAnchorView(container);
 
-            // changed to true after Lou's comments to hide the controllers
+            // changed to true after Lou's comments to hideLoading the controllers
             controller.setAutoHide(true);
 
             controller.setNextPreviousListeners(nextListner, prevListner);
@@ -1485,7 +1485,7 @@ public class PlayerFragment extends BaseFragment implements IPlayerListener, Ser
     // 
 
     /**
-     *This function is used to show Dialog fragment of
+     *This function is used to showLoading Dialog fragment of
      *language list in potrait mode
      */
     protected void showCCFragmentPopup() {
@@ -1674,7 +1674,7 @@ public class PlayerFragment extends BaseFragment implements IPlayerListener, Ser
         logger.debug("Updating controller from : " + source);
 
         if (player != null) {
-            // controller should also refresh, so hide and show it
+            // controller should also refresh, so hideLoading and showLoading it
             player.hideController();
             player.showController();
             updateNextPreviousListeners();

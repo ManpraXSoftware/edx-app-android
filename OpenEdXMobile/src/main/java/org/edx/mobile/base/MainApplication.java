@@ -5,6 +5,7 @@ import android.Manifest;
 import android.app.Application;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -42,6 +43,7 @@ import org.edx.mobile.module.db.IDatabase;
 import org.edx.mobile.module.prefs.PrefManager;
 import org.edx.mobile.module.storage.IStorage;
 import org.edx.mobile.receivers.NetworkConnectivityReceiver;
+import org.edx.mobile.tta.utils.LocaleHelper;
 import org.edx.mobile.util.Config;
 import org.edx.mobile.util.FileUtil;
 import org.edx.mobile.util.NetworkUtil;
@@ -103,6 +105,8 @@ public abstract class MainApplication extends MultiDexApplication {
                 (Module) RoboGuice.newDefaultRoboModule(this), (Module) new EdxDefaultModule(this));
 
         injector.injectMembers(this);
+
+        LocaleHelper.setLocale(getApplicationContext(), "hi");
 
         // initialize Fabric
         if (config.getFabricConfig().isEnabled() && !BuildConfig.DEBUG) {
@@ -185,6 +189,11 @@ public abstract class MainApplication extends MultiDexApplication {
         if (PermissionsUtil.checkPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, this)) {
             deleteExtraDownloadedFiles();
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base, "hi"));
     }
 
     private void checkIfAppVersionUpgraded(Context context) {

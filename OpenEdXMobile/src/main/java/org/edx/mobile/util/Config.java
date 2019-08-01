@@ -79,6 +79,26 @@ public class Config {
     private static final String COURSE_VIDEOS_ENABLED = "COURSE_VIDEOS_ENABLED";
     private static final String DOWNLOAD_TO_SD_CARD_ENABLED = "DOWNLOAD_TO_SD_CARD_ENABLED";
 
+    //TTA start
+
+    private static final String TTA_OTP_SENDER_ADDRESS = "TTA_OTP_SENDER_ADDRESS";
+    //Tincan LRS
+    private static final String TINCAN_LRS_URL = "TINCAN_LRS_URL";
+    //Analytics Url
+    private static final String ANALYTICS_STORE_URL = "ANALYTICS_STORE_URL";
+
+    private static final String EDX_CONNECT_URL = "EDX_CONNECT_URL";
+    private static final String WP_OAUTH_CLIENT_ID = "WP_OAUTH_CLIENT_ID";
+    private static final String WP_OAUTH_CLIENT_SECRET = "WP_OAUTH_CLIENT_SECRET";
+    private static final String WORDPRESS_AUTHENTICATION = "WORDPRESS_AUTHENTICATION";
+
+    //Dialog flow client token
+    private static final String DIALOGFLOW_CLIENT_TOKEN = "DIALOGFLOW_CLIENT_TOKEN";
+
+    private static  String SMS_KEY = "SMS_KEY";
+
+    //TTA end
+
     public static class ZeroRatingConfig {
         @SerializedName("ENABLED")
         private boolean mEnabled;
@@ -820,5 +840,83 @@ public class Config {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    //TTA
+
+    //MX:Arjun For TTA OTP sender url
+    public String get_TTA_OTP_SENDER_ADDRESS() {
+        return getString(TTA_OTP_SENDER_ADDRESS);
+    }
+
+    //Tincan url
+    public String getTincanLrsUrl() {
+        return getString(TINCAN_LRS_URL);
+    }
+
+    //Analyytics store url
+    public String getAnalyticsStoreUrl() {
+        return getString(ANALYTICS_STORE_URL);
+    }
+
+    public String getSMSKey() {
+        return getString(SMS_KEY);
+    }
+
+    //wordpress Client ID
+    public String getWPOAuthClientId() {
+        return getString(WP_OAUTH_CLIENT_ID);
+    }
+
+    //wordpress Client Secret
+    public String getWPOAuthClientSecret() {
+        return getString(WP_OAUTH_CLIENT_SECRET);
+    }
+
+    public boolean isWordpressAuthentication(){
+        return getBoolean(WORDPRESS_AUTHENTICATION, true);
+    }
+
+    //MX:Arjun For connect url
+    public String getConnectUrl() {
+        return getString(EDX_CONNECT_URL);
+    }
+
+    //MX:Arjun For connect url
+    public String getConnectDomainUrl() {
+
+        String url = getString(EDX_CONNECT_URL);
+        if(url != null && !url.equals(""))
+        {
+            url = url.toLowerCase();
+            url = url.replace("http://", "").replace("https://", "").split("/")[0];
+            if(url.contains(":"))
+            {
+                url = url.split(":")[0];
+            }
+        }
+
+        return  url;
+    }
+
+    //MX:Arjun For connect url
+    public String getEDXDomainUrl() {
+
+        String url = getString(API_HOST_URL);
+        if(url != null && !url.equals(""))
+        {
+            url = url.toLowerCase();
+            url = url.replace("http://", "").replace("https://", "").split("/")[0];
+            if(url.contains(":"))
+            {
+                url = url.split(":")[0];
+            }
+        }
+
+        return  url;
+    }
+    //Dailog flow client token
+    public String getDialogFlowClientToken() {
+        return getString(DIALOGFLOW_CLIENT_TOKEN);
     }
 }

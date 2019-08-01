@@ -3,11 +3,11 @@
 
     <!-- the theme applied to the application or activity -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/edx_brand_primary_base</item>
-        <item name="colorPrimaryDark">@color/edx_brand_primary_dark</item>
-        <item name="colorAccent">@color/edx_brand_primary_accent</item>
+        <item name="colorPrimary">@color/primary_cyan</item>
+        <item name="colorPrimaryDark">@color/primary_cyan</item>
+        <item name="colorAccent">@color/primary_cyan</item>
         <item name="toolbarStyle">@style/AppTheme.ToolBar</item>
-        <item name="actionModeBackground">@color/edx_brand_primary_dark</item>
+        <item name="actionModeBackground">@color/primary_cyan</item>
         <item name="actionMenuTextColor">@color/toolbar_controls_color</item>
         <item name="actionButtonStyle">@style/MyActionBarButton</item>
         <item name="actionMenuTextAppearance">@style/MyMenuTextAppearance</item>
@@ -27,7 +27,7 @@
         <item name="android:dropDownListViewStyle">@style/edX.Widget.DropDownListView</item>
         <item name="buttonStyle">@style/edX.Widget.Button</item>
         <item name="android:buttonStyle">@style/edX.Widget.Button</item>
-        <item name="android:textColorLink">@color/edx_brand_primary_base</item>
+        <item name="android:textColorLink">@color/primary_cyan</item>
         <!-- Default progress bar style is currently the same as large. Which means
              that there is no attribute for the medium one. But since we're not using
              any of the other sizes anywhere currently, it doesn't matter for now. -->
@@ -43,6 +43,10 @@
         <item name="android:progressBarStyleLargeInverse">
             @style/edX.Widget.ProgressBar.Large.Inverse
         </item>
+        
+        <!-- TTA -->
+        <item name="autoCompleteTextViewStyle">@style/SearchAutoCompleteTextView</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
 
     <style name="AppTheme.NoDisplayTheme" parent="android:style/Theme.NoDisplay">
@@ -50,7 +54,7 @@
     </style>
 
     <style name="AppTheme.Launch" parent="AppTheme.NoActionBar">
-        <item name="android:windowBackground">@drawable/launch_background</item>
+        <item name="android:windowBackground">@drawable/launch_background_tta</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -90,6 +94,15 @@
         <item name="colorPrimary">@color/edx_brand_primary_base</item>
         <item name="colorPrimaryDark">@color/edx_brand_primary_dark</item>
         <item name="colorAccent">@color/dialog_button_selector</item>
+    </style>
+
+    <style name="AppTheme.spinner" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:spinnerStyle">@style/holoSpinner</item>
+    </style>
+
+    <style name="holoSpinner" parent="Widget.AppCompat.Spinner.Underlined">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/gray_1</item>
     </style>
 
     <!-- ActionBar buttons -->
@@ -528,4 +541,87 @@
     <style name="edX.Widget.TextInputLayout.HintTextAppearance" parent="TextAppearance.AppCompat.Caption">
         <item name="android:textColor">@color/edx_brand_primary_base</item>
     </style>
+
+    <!-- loading dialog -->
+    <style name="dialog_progress_loading" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowMinWidthMajor">50%</item>
+        <item name="android:windowMinWidthMinor">50%</item>
+    </style>
+    
+    <!-- TTA styles start -->
+
+    <style name="AppTheme.NoActionBar.Fullscreen.TaLaunch">
+        <item name="android:windowBackground">@drawable/launch_background_tta</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.CustomStatusBar" />
+
+    <style name="ta_fab_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">14dp</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_alignParentBottom">true</item>
+    </style>
+
+    <style name="ta_dotted_tab_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?actionBarSize</item>
+        <item name="android:clickable">false</item>
+    </style>
+    
+    <style name="ta_tab_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:elevation">2dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="agenda_list_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">235dp</item>
+    </style>
+
+    <style name="ta_toolbar_title_style" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/hind_medium</item>
+        <item name="android:textColor">@color/primary_navy</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ta_snackbar_wrapper_style">
+
+    </style>
+
+    <style name="ta_tab_text_appearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/hind_medium</item>
+    </style>
+
+    <style name="SearchAutoCompleteTextView" parent="Widget.AppCompat.Light.AutoCompleteTextView">
+        <item name="android:textColor">@color/gray_4</item>
+        <item name="android:fontFamily">@font/hind_regular</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/t_background_bottom_sheet</item>
+    </style>
+
+    <!-- TTA styles end -->
+    
 </resources>
