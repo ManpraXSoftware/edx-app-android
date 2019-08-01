@@ -58,6 +58,11 @@ public class AnswersAnalytics implements Analytics {
     }
 
     @Override
+    public void trackVideoSpeed(String videoId, Double currentTime, String courseId,
+                                String unitUrl, float oldSpeed, float newSpeed) {
+    }
+
+    @Override
     public void trackHideTranscript(String videoId, Double currentTime, String courseId, String unitUrl) {
 
     }
@@ -310,6 +315,16 @@ public class AnswersAnalytics implements Analytics {
 
     @Override
     public void trackSubjectClicked(@NonNull String subjectId) {
+
+    }
+
+    @Override
+    public void trackDownloadToSdCardSwitchOn() {
+
+    }
+
+    @Override
+    public void trackDownloadToSdCardSwitchOff() {
 
     }
 }

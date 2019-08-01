@@ -30,6 +30,8 @@
     <string name="you_are_now_enrolled">You are now enrolled in this course.</string>
     <!-- Error message shown when dashboard cannot be shown from course detail view -->
     <string name="cannot_show_dashboard">Unable to show dashboard.</string>
+    <!-- Error message shown when browser cannot handle request for given web url -->
+    <string name="cannot_open_url" tools:ignore="MissingTranslation">Unable to open web page.</string>
 
     <!-- Subjects Discovery -->
 
@@ -52,6 +54,11 @@
     <string name="settings_wifi_top">Wi-Fi only download</string>
     <!-- Label explaining what wifi only means in detail -->
     <string name="settings_wifi_bottom">Only download content when Wi-Fi is turned on</string>
+
+    <!-- Label for the Download to sd-card setting -->
+    <string name="settings_download_to_sdcard_title" tools:ignore="MissingTranslation">Download Video to SD Card</string>
+    <!-- Label explaining the download location setting in detail -->
+    <string name="settings_download_to_sdcard_subtitle" tools:ignore="MissingTranslation">Videos will be downloaded to the SD Card if available</string>
 
     <!-- Certificate Page -->
     <!-- Description of button that will open the certificate sharing menu -->
@@ -120,6 +127,8 @@
     <string name="label_find_courses">Find Courses</string>
     <!-- Title of webview based Find Courses Screen -->
     <string name="label_discover">Discover</string>
+    <!-- Title of Degrees tab on Discovery screen -->
+    <string name="label_degrees" tools:ignore="MissingTranslation">Degrees</string>
     <!-- Title of Find Courses tab on Main Dashboard screen -->
     <string name="label_discovery">Discovery</string>
     <!-- Button allowing users to send an email for feedback -->
@@ -212,6 +221,15 @@
     <string name="label_ended">Ended {date}</string>
     <!-- Label for date when course is ending -->
     <string name="label_ending">Ending {date}</string>
+
+    <!-- Label for date when course is expiring in a specific time frame like in 2 days -->
+    <string name="label_expires" tools:ignore="MissingTranslation">Course access expires {date}</string>
+    <!-- Label for date when course is expiring on a specific date like on December 5 -->
+    <string name="label_expires_on" tools:ignore="MissingTranslation">Course access expires on {date}</string>
+    <!-- Label for date when course expired a specific time ago like 2 days ago -->
+    <string name="label_expired" tools:ignore="MissingTranslation">Course access expired {date}</string>
+    <!-- Label for date when course expired on a specific date like on November 5 -->
+    <string name="label_expired_on" tools:ignore="MissingTranslation">Course access expired on {date}</string>
 
     <!-- Course Details -->
     <!-- Accessible content description of label for course content -->
@@ -460,8 +478,10 @@
     <!-- Player Settings -->
     <!-- Label for closed captions in video player -->
     <string name="lbl_closed_caption">Closed Captions</string>
-    <!-- Label for no closed captions selected -->
-    <string name="lbl_cc_cancel">None</string>
+    <!--Label for video playback speed in video player-->
+    <string name="lbl_video_speed" tools:ignore="MissingTranslation">Video Speed</string>
+    <!-- Label for None captions selected -->
+    <string name="lbl_cc_none">None</string>
     <!-- Accessibility Label for Video Player -->
     <string name="video_player">Video Player</string>
     <!-- Accessibility Label for View on Web button on Video Player top bar -->
@@ -499,6 +519,10 @@
     <string name="email_client_not_present">No e-mail clients installed</string>
     <!-- Search for a course prompt -->
     <string name="search_for_courses">Search for courses</string>
+    <!-- Search for a program prompt -->
+    <string name="search_for_programs" tools:ignore="MissingTranslation">Search for programs</string>
+    <!-- Search for a degree prompt -->
+    <string name="search_for_degrees" tools:ignore="MissingTranslation">Search for degrees</string>
 
     <!-- Landing Activity text -->
     <!-- Prompt leading user to sign in screen -->
@@ -515,7 +539,7 @@
     <!-- Button leading user to log in screen -->
     <string name="launch_login">Log In</string>
     <!-- Introduction text on the launch screen -->
-    <string name="launch_text">Free courses from the world’s best universities in your pocket.</string>
+    <string name="launch_text" tools:ignore="MissingTranslation">Courses from the world’s best universities in your pocket.</string>
     <!-- Search view leading user to Find Courses screen from the launch screen upon searching some text -->
     <string name="launch_search_courses">Search Courses</string>
 

@@ -1,5 +1,40 @@
 [
   {
+    "version": "2.19",
+    "messages": [
+      {
+        "platforms": [
+          "android"
+        ],
+        "image": "screen_1",
+        "title": "Velocidad del Video",
+        "message": "Mire y aprenda a su propio ritmo ajustando los controles de velocidad de reproducción de video."
+      },
+      {
+        "platforms": [
+          "android"
+        ],
+        "image": "screen_2",
+        "title": "Opción de Tarjeta SD",
+        "message": "Ahora puede elegir almacenar los videos descargados en su tarjeta SD desde el área de configuración."
+      }
+    ]
+  },
+  {
+    "version": "2.18",
+    "messages": [
+      {
+        "platforms": [
+          "ios",
+          "android"
+        ],
+        "image": "screen_1",
+        "title": "Descubre Programas y Maestrías",
+        "message": "Ahora puede descubrir programas y maestrías de edX en cualquier lugar!"
+      }
+    ]
+  },
+  {
     "version": "2.16",
     "messages": [
       {

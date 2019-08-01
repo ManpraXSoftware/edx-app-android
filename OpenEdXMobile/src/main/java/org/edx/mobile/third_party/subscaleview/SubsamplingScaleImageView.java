@@ -16,6 +16,7 @@ limitations under the License.
 
 package org.edx.mobile.third_party.subscaleview;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -72,6 +73,8 @@ import java.util.concurrent.Executor;
  * v prefixes - coordinates, translations and distances measured in screen (view) pixels
  * s prefixes - coordinates, translations and distances measured in source image pixels (scaled)
  */
+
+// TODO - Update this legacy library code as part of https://openedx.atlassian.net/browse/LEARNER-7207, currently we are just suppressing the WrongThread warnings
 @SuppressWarnings("unused")
 public class SubsamplingScaleImageView extends View {
 
@@ -1436,6 +1439,7 @@ public class SubsamplingScaleImageView extends View {
                     Point dimensions = decoder.init(context, source);
                     int sWidth = dimensions.x;
                     int sHeight = dimensions.y;
+                    @SuppressLint("WrongThread")
                     int exifOrientation = view.getExifOrientation(sourceUri);
                     if (view.sRegion != null) {
                         sWidth = view.sRegion.width();
@@ -1505,6 +1509,7 @@ public class SubsamplingScaleImageView extends View {
             tile.loading = true;
         }
 
+        @SuppressLint("WrongThread")
         @Override
         protected Bitmap doInBackground(Void... params) {
             try {
@@ -1583,6 +1588,7 @@ public class SubsamplingScaleImageView extends View {
             this.preview = preview;
         }
 
+        @SuppressLint("WrongThread")
         @Override
         protected Integer doInBackground(Void... params) {
             try {
@@ -1714,7 +1720,7 @@ public class SubsamplingScaleImageView extends View {
     }
 
     private void execute(AsyncTask<Void, Void, ?> asyncTask) {
-        if (parallelLoadingEnabled && VERSION.SDK_INT >= 11) {
+        if (parallelLoadingEnabled) {
             try {
                 Field executorField = AsyncTask.class.getField("THREAD_POOL_EXECUTOR");
                 Executor executor = (Executor) executorField.get(null);
@@ -1785,14 +1791,12 @@ public class SubsamplingScaleImageView extends View {
      * In SDK 14 and above, use canvas max bitmap width and height instead of the default 2048, to avoid redundant tiling.
      */
     private Point getMaxBitmapDimensions(Canvas canvas) {
-        if (VERSION.SDK_INT >= 14) {
-            try {
-                int maxWidth = (Integer) Canvas.class.getMethod("getMaximumBitmapWidth").invoke(canvas);
-                int maxHeight = (Integer) Canvas.class.getMethod("getMaximumBitmapHeight").invoke(canvas);
-                return new Point(maxWidth, maxHeight);
-            } catch (Exception e) {
-                // Return default
-            }
+        try {
+            int maxWidth = (Integer) Canvas.class.getMethod("getMaximumBitmapWidth").invoke(canvas);
+            int maxHeight = (Integer) Canvas.class.getMethod("getMaximumBitmapHeight").invoke(canvas);
+            return new Point(maxWidth, maxHeight);
+        } catch (Exception e) {
+            // Return default
         }
         return new Point(2048, 2048);
     }

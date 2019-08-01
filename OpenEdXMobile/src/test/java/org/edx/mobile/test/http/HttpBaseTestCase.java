@@ -11,7 +11,6 @@ import org.edx.mobile.authentication.LoginService;
 import org.edx.mobile.course.CourseAPI;
 import org.edx.mobile.course.CourseService;
 import org.edx.mobile.http.HttpStatus;
-import org.edx.mobile.http.interceptor.JsonMergePatchInterceptor;
 import org.edx.mobile.http.interceptor.OnlyIfCachedStrippingInterceptor;
 import org.edx.mobile.http.provider.OkHttpClientProvider;
 import org.edx.mobile.test.BaseTestCase;
@@ -72,7 +71,6 @@ public class HttpBaseTestCase extends BaseTestCase {
 
         okHttpClient = new OkHttpClient.Builder()
                 .dispatcher(new Dispatcher(new RoboExecutorService()))
-                .addInterceptor(new JsonMergePatchInterceptor())
                 .addInterceptor(new OnlyIfCachedStrippingInterceptor())
                 .build();
 
@@ -245,12 +243,9 @@ public class HttpBaseTestCase extends BaseTestCase {
                     String baseMockUrl = getBaseMockUrl();
                     response.setBody(String.format(Locale.US, MockDataUtil.getMockResponse("get_my_user_info"), baseMockUrl));
                     response.setResponseCode(HttpStatus.OK);
-                } else if (urlMatches(path, "/api/mobile/v0.5/users/[^/]+/course_enrollments")) {
+                } else if (urlMatches(path, "/api/mobile/v1/users/[^/]+/course_enrollments")) {
                     String baseMockUrl = getBaseMockUrl();
                     response.setBody(String.format(Locale.US, MockDataUtil.getMockResponse("get_course_enrollments"), baseMockUrl));
-                    response.setResponseCode(HttpStatus.OK);
-                } else if (urlMatches(path, "/api/mobile/v0.5/video_outlines/courses/[^/]+/[^/]+/[^/]+")) {
-                    response.setBody(MockDataUtil.getMockResponse("get_video_outlines_courses"));
                     response.setResponseCode(HttpStatus.OK);
                 } else if (urlMatches(path, "/api/mobile/v0.5/course_info/[^/]+/[^/]+/[^/]+/updates")) {
                     response.setBody(MockDataUtil.getMockResponse("get_course_info_updates"));

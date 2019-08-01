@@ -226,6 +226,27 @@ public class SegmentAnalytics implements Analytics {
     }
 
     /**
+     * This function is used to track the video playback speed changes
+     *
+     * @param videoId
+     * @param currentTime
+     * @param courseId
+     * @param unitUrl
+     * @param oldSpeed
+     * @param newSpeed
+     */
+    @Override
+    public void trackVideoSpeed(String videoId, Double currentTime, String courseId,
+                                String unitUrl, float oldSpeed, float newSpeed) {
+        SegmentEvent aEvent = getCommonPropertiesWithCurrentTime(currentTime,
+                videoId, Values.VIDEO_PLAYBACK_SPEED_CHANGED);
+        aEvent.setCourseContext(courseId, unitUrl, Values.VIDEOPLAYER);
+        aEvent.data.putValue(Keys.NEW_SPEED, newSpeed);
+        aEvent.data.putValue(Keys.OLD_SPEED, oldSpeed);
+        trackSegmentEvent(Events.SPEED_CHANGE_VIDEO, aEvent.properties);
+    }
+
+    /**
      * This function is used to Hide Transcript
      *
      * @param videoId
@@ -794,5 +815,19 @@ public class SegmentAnalytics implements Analytics {
         aEvent.properties.putValue(Keys.CATEGORY, Values.DISCOVERY);
         aEvent.data.putValue(Keys.SUBJECT_ID, subjectId);
         trackSegmentEvent(Events.SUBJECT_DISCOVERY, aEvent.properties);
+    }
+
+    @Override
+    public void trackDownloadToSdCardSwitchOn() {
+        final SegmentEvent aEvent = new SegmentEvent();
+        aEvent.properties.putValue(Keys.NAME, Values.DOWNLOAD_TO_SD_CARD_SWITCH_ON);
+        trackSegmentEvent(Events.DOWNLOAD_TO_SD_CARD_ON, aEvent.properties);
+    }
+
+    @Override
+    public void trackDownloadToSdCardSwitchOff() {
+        final SegmentEvent aEvent = new SegmentEvent();
+        aEvent.properties.putValue(Keys.NAME, Values.DOWNLOAD_TO_SD_CARD_SWITCH_OFF);
+        trackSegmentEvent(Events.DOWNLOAD_TO_SD_CARD_OFF, aEvent.properties);
     }
 }

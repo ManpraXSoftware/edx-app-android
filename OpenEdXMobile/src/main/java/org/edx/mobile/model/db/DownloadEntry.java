@@ -42,7 +42,7 @@ public class DownloadEntry implements SectionItemInterface, VideoModel {
     public String chapter;
     public String section;
     public long downloadedOn;
-    public int lastPlayedOffset;
+    public long lastPlayedOffset;
     public int isCourseActive = 1; // default is TRUE
     public boolean isVideoForWebOnly; //default is FALSE
     public String lmsUrl;
@@ -185,7 +185,7 @@ public class DownloadEntry implements SectionItemInterface, VideoModel {
     }
 
     @Override
-    public int getLastPlayedOffset() {
+    public long getLastPlayedOffset() {
         return lastPlayedOffset;
     }
 
@@ -220,7 +220,7 @@ public class DownloadEntry implements SectionItemInterface, VideoModel {
     @Override
     public void setDownloadInfo(NativeDownloadModel download) {
         dmId = download.dmid;
-        downloaded = DownloadedState.DOWNLOADING;
+        downloaded = DownloadedState.values()[(int)download.downloaded];
         filepath = download.filepath;
         size = download.size;
         // duration can't be updated here

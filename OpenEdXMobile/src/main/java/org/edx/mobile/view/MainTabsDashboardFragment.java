@@ -16,6 +16,8 @@ import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
 import org.edx.mobile.R;
 import org.edx.mobile.event.AccountDataLoadedEvent;
+import org.edx.mobile.event.DiscoveryTabSelectedEvent;
+import org.edx.mobile.event.MoveToDiscoveryTabEvent;
 import org.edx.mobile.event.ProfilePhotoUpdatedEvent;
 import org.edx.mobile.model.FragmentItemModel;
 import org.edx.mobile.model.api.ProfileModel;
@@ -25,8 +27,8 @@ import org.edx.mobile.user.Account;
 import org.edx.mobile.user.ProfileImage;
 import org.edx.mobile.user.UserAPI;
 import org.edx.mobile.user.UserService;
+import org.edx.mobile.util.Config;
 import org.edx.mobile.util.UserProfileUtils;
-import org.edx.mobile.view.dialog.NativeFindCoursesFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +42,7 @@ public class MainTabsDashboardFragment extends TabsBaseFragment {
 
     private ProfileModel profile;
 
-    private MainDashboardToolbarCallbacks toolbarCallbacks;
+    private ToolbarCallbacks toolbarCallbacks;
 
     @Nullable
     private Call<Account> getAccountCall;
@@ -65,8 +67,8 @@ public class MainTabsDashboardFragment extends TabsBaseFragment {
         if (isUserProfileEnabled) {
             profile = loginPrefs.getCurrentUserProfile();
             sendGetUpdatedAccountCall();
-        }
-        if (!isUserProfileEnabled) {
+            toolbarCallbacks.getProfileView().setVisibility(View.VISIBLE);
+        } else {
             toolbarCallbacks.getProfileView().setVisibility(View.GONE);
         }
     }
@@ -98,7 +100,7 @@ public class MainTabsDashboardFragment extends TabsBaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        toolbarCallbacks = (MainDashboardToolbarCallbacks) getActivity();
+        toolbarCallbacks = (ToolbarCallbacks) getActivity();
     }
 
     public void sendGetUpdatedAccountCall() {
@@ -141,20 +143,32 @@ public class MainTabsDashboardFragment extends TabsBaseFragment {
                     }));
         }
 
-        if (environment.getConfig().getCourseDiscoveryConfig().isCourseDiscoveryEnabled()) {
-            items.add(new FragmentItemModel(
-                    environment.getConfig().getCourseDiscoveryConfig().isWebviewCourseDiscoveryEnabled()
-                            ? WebViewDiscoverCoursesFragment.class : NativeFindCoursesFragment.class,
+        final Config.ProgramDiscoveryConfig programDiscoveryConfig = environment.getConfig().getDiscoveryConfig().getProgramDiscoveryConfig();
+        final Config.CourseDiscoveryConfig courseDiscoveryConfig = environment.getConfig().getDiscoveryConfig().getCourseDiscoveryConfig();
+        if ((courseDiscoveryConfig != null && courseDiscoveryConfig.isDiscoveryEnabled()) ||
+                (programDiscoveryConfig != null && programDiscoveryConfig.isDiscoveryEnabled(environment))) {
+            items.add(new FragmentItemModel(MainDiscoveryFragment.class,
                     getResources().getString(R.string.label_discovery), FontAwesomeIcons.fa_search,
                     new FragmentItemModel.FragmentStateListener() {
                         @Override
                         public void onFragmentSelected() {
-                            environment.getAnalyticsRegistry().trackScreenView(Analytics.Screens.FIND_COURSES);
+                            EventBus.getDefault().post(new DiscoveryTabSelectedEvent());
                         }
-                    }));
+                    }
+            ));
         }
 
         return items;
+    }
+
+    @SuppressWarnings("unused")
+    public void onEventMainThread(@NonNull MoveToDiscoveryTabEvent event) {
+        if (!environment.getConfig().getDiscoveryConfig().getCourseDiscoveryConfig().isDiscoveryEnabled()) {
+            return;
+        }
+        if (binding != null) {
+            binding.viewPager.setCurrentItem(binding.viewPager.getAdapter().getCount() - 1, true);
+        }
     }
 
     @SuppressWarnings("unused")

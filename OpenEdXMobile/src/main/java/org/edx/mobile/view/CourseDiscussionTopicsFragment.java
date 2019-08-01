@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.TextViewCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,6 @@ import java.util.List;
 
 import de.greenrobot.event.EventBus;
 import retrofit2.Call;
-import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectView;
 
 public class CourseDiscussionTopicsFragment extends OfflineSupportBaseFragment
@@ -52,7 +52,6 @@ public class CourseDiscussionTopicsFragment extends OfflineSupportBaseFragment
     @InjectView(R.id.discussion_topics_listview)
     private ListView discussionTopicsListView;
 
-    @InjectExtra(Router.EXTRA_COURSE_DATA)
     private EnrolledCoursesResponse courseData;
 
     @Inject
@@ -74,6 +73,7 @@ public class CourseDiscussionTopicsFragment extends OfflineSupportBaseFragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        courseData = (EnrolledCoursesResponse) getArguments().getSerializable(Router.EXTRA_COURSE_DATA);
         return inflater.inflate(R.layout.fragment_discussion_topics, container, false);
     }
 
@@ -139,6 +139,7 @@ public class CourseDiscussionTopicsFragment extends OfflineSupportBaseFragment
         });
 
         getTopicList();
+        showCourseDiscussionTopic();
     }
 
     private void getTopicList() {
@@ -169,6 +170,21 @@ public class CourseDiscussionTopicsFragment extends OfflineSupportBaseFragment
                 }
             }
         });
+    }
+
+    private void showCourseDiscussionTopic() {
+        final String topicId = getArguments().getString(Router.EXTRA_DISCUSSION_TOPIC_ID);
+        if (!TextUtils.isEmpty(topicId)) {
+            router.showCourseDiscussionPostsForDiscussionTopic(
+                    getActivity(),
+                    getArguments().getString(Router.EXTRA_DISCUSSION_TOPIC_ID),
+                    getArguments().getString(Router.EXTRA_DISCUSSION_THREAD_ID),
+                    courseData);
+
+            // Setting this to null, so that upon recreation of the fragment, relevant activity
+            // shouldn't be auto-created again (e.g. due to a deep link).
+            getArguments().putString(Router.EXTRA_DISCUSSION_TOPIC_ID, null);
+        }
     }
 
     @Override

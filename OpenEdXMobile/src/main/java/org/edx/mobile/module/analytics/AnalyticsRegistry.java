@@ -197,6 +197,13 @@ public class AnalyticsRegistry implements Analytics {
         }
     }
 
+    public void trackVideoSpeed(String videoId, Double currentTime,
+                                String courseId, String unitUrl, float oldSpeed, float newSpeed) {
+        for (Analytics service : services) {
+            service.trackVideoSpeed(videoId, currentTime, courseId, unitUrl, oldSpeed, newSpeed);
+        }
+    }
+
     @Override
     public void trackVideoSeek(String videoId, Double oldTime, Double newTime,
                                String courseId, String unitUrl, Boolean skipSeek) {
@@ -395,6 +402,20 @@ public class AnalyticsRegistry implements Analytics {
     public void trackSubjectClicked(@NonNull String subjectId) {
         for (Analytics service : services) {
             service.trackSubjectClicked(subjectId);
+        }
+    }
+
+    @Override
+    public void trackDownloadToSdCardSwitchOn() {
+        for (Analytics service : services) {
+            service.trackDownloadToSdCardSwitchOn();
+        }
+    }
+
+    @Override
+    public void trackDownloadToSdCardSwitchOff() {
+        for (Analytics service : services) {
+            service.trackDownloadToSdCardSwitchOff();
         }
     }
 }

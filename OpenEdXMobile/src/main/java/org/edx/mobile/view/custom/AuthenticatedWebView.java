@@ -112,7 +112,6 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
     public void initWebView(@NonNull FragmentActivity fragmentActivity, boolean isAllLinksExternal,
                             boolean isManuallyReloadable) {
         this.isManuallyReloadable = isManuallyReloadable;
-        webView.clearCache(true);
         webView.getSettings().setJavaScriptEnabled(true);
         webViewClient = new URLInterceptorWebViewClient(fragmentActivity, webView) {
             @Override
@@ -193,23 +192,12 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
     }
 
     private void evaluateJavascript() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            webView.evaluateJavascript(javascript, new ValueCallback<String>() {
-                @Override
-                public void onReceiveValue(String value) {
-                    hideLoadingProgress();
-                }
-            });
-        } else {
-            webView.loadUrl("javascript:" + javascript);
-            // Javascript evaluation takes some time, so hide progressbar after 1 sec
-            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    hideLoadingProgress();
-                }
-            }, 1000);
-        }
+        webView.evaluateJavascript(javascript, new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String value) {
+                hideLoadingProgress();
+            }
+        });
     }
 
     private void tryToLoadWebView(boolean forceLoad) {

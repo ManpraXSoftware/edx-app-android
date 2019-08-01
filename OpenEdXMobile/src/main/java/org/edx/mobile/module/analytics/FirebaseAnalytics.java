@@ -140,6 +140,27 @@ public class FirebaseAnalytics implements Analytics {
         logFirebaseEvent(event.getName(), event.getBundle());
     }
 
+    /**
+     * This function is used to track the video playback speed changes
+     *
+     * @param videoId
+     * @param currentTime
+     * @param courseId
+     * @param unitUrl
+     * @param oldSpeed
+     * @param newSpeed
+     */
+    @Override
+    public void trackVideoSpeed(String videoId, Double currentTime, String courseId,
+                                String unitUrl, float oldSpeed, float newSpeed) {
+        final FirebaseEvent event = new FirebaseEvent(Events.SPEED_CHANGE_VIDEO,
+                videoId, Values.VIDEO_PLAYBACK_SPEED_CHANGED, currentTime);
+        event.setCourseContext(courseId, unitUrl, Values.VIDEOPLAYER);
+        event.putFloat(Keys.NEW_SPEED, newSpeed);
+        event.putFloat(Keys.OLD_SPEED, oldSpeed);
+        logFirebaseEvent(event.getName(), event.getBundle());
+    }
+
     @Override
     public void trackHideTranscript(String videoId, Double currentTime, String courseId,
                                     String unitUrl) {
@@ -549,6 +570,18 @@ public class FirebaseAnalytics implements Analytics {
         final FirebaseEvent event = new FirebaseEvent(Events.SUBJECT_DISCOVERY, Values.SUBJECT_CLICKED);
         event.putString(Keys.SUBJECT_ID, subjectId);
         event.putString(Keys.CATEGORY, Values.DISCOVERY);
+        logFirebaseEvent(event.getName(), event.getBundle());
+    }
+
+    @Override
+    public void trackDownloadToSdCardSwitchOn() {
+        final FirebaseEvent event = new FirebaseEvent(Events.DOWNLOAD_TO_SD_CARD_ON, Values.DOWNLOAD_TO_SD_CARD_SWITCH_ON);
+        logFirebaseEvent(event.getName(), event.getBundle());
+    }
+
+    @Override
+    public void trackDownloadToSdCardSwitchOff() {
+        final FirebaseEvent event = new FirebaseEvent(Events.DOWNLOAD_TO_SD_CARD_OFF, Values.DOWNLOAD_TO_SD_CARD_SWITCH_OFF);
         logFirebaseEvent(event.getName(), event.getBundle());
     }
 }
