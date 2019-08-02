@@ -128,7 +128,7 @@ public class WPOauthRefreshTokenAuthenticator implements Authenticator {
     private void logout(){
         if (loginPrefs.isLoggedIn()) {
             loginPrefs.clear();
-            DataManager dataManager = DataManager.getInstance(context);
+            DataManager dataManager = DataManager.getInstance(context.getApplicationContext());
             dataManager.showToastFromOtherThread(context.getString(R.string.session_expire), Toast.LENGTH_LONG);
             dataManager.logout();
         }

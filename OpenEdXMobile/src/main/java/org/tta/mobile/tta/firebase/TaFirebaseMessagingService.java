@@ -101,7 +101,7 @@ public class TaFirebaseMessagingService extends FirebaseMessagingService {
                 notification.setRef_id(path);
             }
 
-            DataManager dataManager = DataManager.getInstance(this);
+            DataManager dataManager = DataManager.getInstance(getApplicationContext());
             dataManager.addNotification(notification);
 
             notificationIntent.putExtra(Constants.EXTRA_NOTIFICATION, notification);
@@ -153,6 +153,7 @@ public class TaFirebaseMessagingService extends FirebaseMessagingService {
                 parameters.putString(Constants.KEY_DATA, "type = " + type +
                         ", path = " + path);
                 Logger.logCrashlytics(e, parameters);
+
                 url = "https://play.google.com/store/apps/details?id=" + my_package_name;
             }
             navigationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));

@@ -41,6 +41,7 @@ import org.tta.mobile.module.analytics.SegmentAnalytics;
 import org.tta.mobile.module.prefs.PrefManager;
 import org.tta.mobile.module.storage.IStorage;
 import org.tta.mobile.receivers.NetworkConnectivityReceiver;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.utils.LocaleHelper;
 import org.tta.mobile.util.BrowserUtil;
 import org.tta.mobile.util.Config;
@@ -253,6 +254,10 @@ public abstract class MainApplication extends MultiDexApplication {
                 }
             }
             Crashlytics.logException(e.getError());
+
+            Crashlytics.setString(Constants.KEY_CLASS_NAME, null);
+            Crashlytics.setString(Constants.KEY_FUNCTION_NAME, null);
+            Crashlytics.setString(Constants.KEY_DATA, null);
         }
     }
 

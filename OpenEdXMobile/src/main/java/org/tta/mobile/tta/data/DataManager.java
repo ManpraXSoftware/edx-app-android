@@ -260,7 +260,6 @@ public class DataManager extends BaseRoboInjector {
 
         analytic = new Analytic(context);
 
-        mHandler = new Handler();
     }
 
     public static DataManager getInstance(Context context) {
@@ -274,6 +273,13 @@ public class DataManager extends BaseRoboInjector {
             }
         }
         mDataManager.wpClientRetrofit = new WpClientRetrofit(true, false, context);
+        if (mDataManager.mHandler == null){
+            try {
+                mDataManager.mHandler = new Handler();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
         return mDataManager;
     }
 
@@ -4182,12 +4188,14 @@ public class DataManager extends BaseRoboInjector {
     }
 
     public void deleteAllFeeds() {
-        new Thread() {
-            @Override
-            public void run() {
-                mLocalDataSource.deleteFeeds(loginPrefs.getUsername());
-            }
-        }.start();
+        if (loginPrefs.isLoggedIn()) {
+            new Thread() {
+                @Override
+                public void run() {
+                    mLocalDataSource.deleteFeeds(loginPrefs.getUsername());
+                }
+            }.start();
+        }
     }
 
     public void logSMSHash() {
@@ -4511,7 +4519,9 @@ public class DataManager extends BaseRoboInjector {
     }
 
     public void showToastFromOtherThread(String msg, int duration){
-        mHandler.post(() -> Toast.makeText(context, msg, duration).show());
+        if (mHandler != null) {
+            mHandler.post(() -> Toast.makeText(context, msg, duration).show());
+        }
     }
 }
 

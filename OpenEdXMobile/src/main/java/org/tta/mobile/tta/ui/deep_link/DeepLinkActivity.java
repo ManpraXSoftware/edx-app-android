@@ -153,7 +153,7 @@ public class DeepLinkActivity extends BaseVMActivity {
             long contentId = extractContentId(intent.getData());
             if (contentId > 0) {
                 viewModel.fetchContent(contentId);
-            } else if (intent.getData().getEncodedPath().split("/").length > 1 &&
+            } else if (intent.getData().getEncodedPath().split("/").length > 2 &&
                     intent.getData().getEncodedPath().split("/")[2] != null &&
                     !intent.getData().getEncodedPath().split("/")[2].equals("")) {
 

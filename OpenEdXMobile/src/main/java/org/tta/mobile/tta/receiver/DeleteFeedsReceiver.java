@@ -10,7 +10,7 @@ public class DeleteFeedsReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (context != null && intent != null) {
-            DataManager dataManager = DataManager.getInstance(context);
+            DataManager dataManager = DataManager.getInstance(context.getApplicationContext());
             if (intent.getAction() != null && intent.getAction().equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED)) {
                 dataManager.scheduleDeleteFeeds();
                 return;
