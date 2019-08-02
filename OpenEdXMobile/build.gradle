@@ -351,7 +351,8 @@ android {
         renderscriptTargetApi 22
         renderscriptSupportModeEnabled true
 
-        vectorDrawables.useSupportLibrary = true
+        // Mx: Commented to support vector drawables in kitkat
+//        vectorDrawables.useSupportLibrary = true
 
         // test configuration
         testApplicationId 'org.tta.mobile.test'
