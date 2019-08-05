@@ -1,6 +1,7 @@
 package org.tta.mobile.tta.ui.agenda_items;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 
 import org.tta.mobile.R;
 
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.data.model.agenda.AgendaItem;
@@ -29,15 +31,28 @@ public class AgendaItemTab extends TaBaseFragment {
 
     public static AgendaItemTab newInstance(AgendaItem item, String toolbarData, AgendaList agendaList) {
         AgendaItemTab fragment = new AgendaItemTab();
-        fragment.item = item;
-        fragment.toolbarData = toolbarData;
-        fragment.agendaList = agendaList;
+        Bundle args = new Bundle();
+        args.putParcelable(Constants.KEY_AGENDA_ITEM, item);
+        args.putParcelable(Constants.KEY_AGENDA_LIST, agendaList);
+        args.putString(Constants.KEY_TOOLBAR_DATA, toolbarData);
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null){
+            agendaList = savedInstanceState.getParcelable(Constants.KEY_AGENDA_LIST);
+            item = savedInstanceState.getParcelable(Constants.KEY_AGENDA_ITEM);
+            toolbarData = savedInstanceState.getString(Constants.KEY_TOOLBAR_DATA);
+        } else if (getArguments() != null){
+            agendaList = getArguments().getParcelable(Constants.KEY_AGENDA_LIST);
+            item = getArguments().getParcelable(Constants.KEY_AGENDA_ITEM);
+            toolbarData = getArguments().getString(Constants.KEY_TOOLBAR_DATA);
+        }
+
         viewModel = new AgendaItemViewModel(getActivity(), this, item, toolbarData, agendaList);
         viewModel.registerEventBus();
     }
@@ -76,6 +91,20 @@ public class AgendaItemTab extends TaBaseFragment {
                 break;
         }
     }*/
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (item != null) {
+            outState.putParcelable(Constants.KEY_AGENDA_ITEM, item);
+        }
+        if (agendaList != null) {
+            outState.putParcelable(Constants.KEY_AGENDA_LIST, agendaList);
+        }
+        if (toolbarData != null) {
+            outState.putString(Constants.KEY_TOOLBAR_DATA, toolbarData);
+        }
+    }
 
     @Override
     public void onDestroy() {

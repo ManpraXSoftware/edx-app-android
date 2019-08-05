@@ -2,13 +2,14 @@ package org.tta.mobile.discussion;
 
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Decorates {@link DiscussionTopic} with a "depth" and "postable" flag to facilitate usage in adapter view
  */
-public class DiscussionTopicDepth {
+public class DiscussionTopicDepth implements Serializable {
 
     @NonNull
     private final DiscussionTopic discussionTopic;

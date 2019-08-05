@@ -63,6 +63,11 @@ public class Constants {
     public static final String KEY_CONFIGURATION = "configuration";
     public static final String KEY_CATEGORY = "category";
     public static final String KEY_COURSE_COMPONENT = "course_component";
+    public static final String KEY_AGENDA_ITEMS = "agenda_items";
+    public static final String KEY_AGENDA_ITEM = "agenda_item";
+    public static final String KEY_AGENDA_LIST = "agenda_list";
+    public static final String KEY_TOOLBAR_DATA = "toolbar_data";
+    public static final String KEY_TOPIC_DEPTH= "topic_depth";
 
     //for app update
     public static final String VERSION_NAME = "version_name";

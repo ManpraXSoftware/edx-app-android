@@ -1,8 +1,11 @@
 package org.tta.mobile.tta.data.model.agenda;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.Nullable;
 
-public class AgendaItem implements Comparable<AgendaItem> {
+public class AgendaItem implements Comparable<AgendaItem>, Parcelable {
 
     private long source_id;
 
@@ -15,6 +18,30 @@ public class AgendaItem implements Comparable<AgendaItem> {
     private String source_icon;
 
     private long order;
+
+    public AgendaItem() {
+    }
+
+    protected AgendaItem(Parcel in) {
+        source_id = in.readLong();
+        content_count = in.readLong();
+        source_name = in.readString();
+        source_title = in.readString();
+        source_icon = in.readString();
+        order = in.readLong();
+    }
+
+    public static final Creator<AgendaItem> CREATOR = new Creator<AgendaItem>() {
+        @Override
+        public AgendaItem createFromParcel(Parcel in) {
+            return new AgendaItem(in);
+        }
+
+        @Override
+        public AgendaItem[] newArray(int size) {
+            return new AgendaItem[size];
+        }
+    };
 
     public long getSource_id() {
         return source_id;
@@ -72,5 +99,20 @@ public class AgendaItem implements Comparable<AgendaItem> {
     @Override
     public int compareTo(AgendaItem o) {
         return Long.compare(order, o.order);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(source_id);
+        dest.writeLong(content_count);
+        dest.writeString(source_name);
+        dest.writeString(source_title);
+        dest.writeString(source_icon);
+        dest.writeLong(order);
     }
 }

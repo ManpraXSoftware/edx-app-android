@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import org.tta.mobile.R;
 import org.tta.mobile.discussion.DiscussionTopicDepth;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.course.discussion.view_model.DiscussionTopicViewModel;
@@ -27,9 +28,11 @@ public class DiscussionTopicFragment extends TaBaseFragment {
 
     public static DiscussionTopicFragment newInstance(EnrolledCoursesResponse course, Content content, DiscussionTopicDepth topicDepth){
         DiscussionTopicFragment fragment = new DiscussionTopicFragment();
-        fragment.course = course;
-        fragment.topicDepth = topicDepth;
-        fragment.content = content;
+        Bundle args = new Bundle();
+        args.putParcelable(Constants.KEY_CONTENT, content);
+        args.putSerializable(Constants.KEY_ENROLLED_COURSE, course);
+        args.putSerializable(Constants.KEY_TOPIC_DEPTH, topicDepth);
+        fragment.setArguments(args);
         fragment.RANK = BreadcrumbUtil.getCurrentRank() + 1;
         return fragment;
     }
@@ -37,6 +40,17 @@ public class DiscussionTopicFragment extends TaBaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null){
+            content = savedInstanceState.getParcelable(Constants.KEY_CONTENT);
+            course = (EnrolledCoursesResponse) savedInstanceState.getSerializable(Constants.KEY_ENROLLED_COURSE);
+            topicDepth = (DiscussionTopicDepth) savedInstanceState.getSerializable(Constants.KEY_TOPIC_DEPTH);
+        } else if (getArguments() != null){
+            content = getArguments().getParcelable(Constants.KEY_CONTENT);
+            course = (EnrolledCoursesResponse) getArguments().getSerializable(Constants.KEY_ENROLLED_COURSE);
+            topicDepth = (DiscussionTopicDepth) getArguments().getSerializable(Constants.KEY_TOPIC_DEPTH);
+        }
+
         viewModel = new DiscussionTopicViewModel(getActivity(), this, course, content, topicDepth);
         viewModel.registerEventBus();
     }
@@ -47,6 +61,20 @@ public class DiscussionTopicFragment extends TaBaseFragment {
         View view = binding(inflater, container, R.layout.t_fragment_discussion_topic, viewModel).getRoot();
 
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (content != null) {
+            outState.putParcelable(Constants.KEY_CONTENT, content);
+        }
+        if (course != null) {
+            outState.putSerializable(Constants.KEY_ENROLLED_COURSE, course);
+        }
+        if (topicDepth != null){
+            outState.putSerializable(Constants.KEY_TOPIC_DEPTH, topicDepth);
+        }
     }
 
     @Override

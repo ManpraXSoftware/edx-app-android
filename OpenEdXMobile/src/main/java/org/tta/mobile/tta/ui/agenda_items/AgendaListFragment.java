@@ -1,6 +1,7 @@
 package org.tta.mobile.tta.ui.agenda_items;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -22,6 +23,7 @@ import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.view.common.PageViewStateCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -40,22 +42,36 @@ public class AgendaListFragment extends TaBaseFragment {
     ViewPager viewPager;
     TabLayout tabLayout;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setBreadcrumb();
-        viewModel =  new AgendaListViewModel(getActivity(),this, toolbarData,items,tabSelected, agendaList);
-    }
-
-    public static AgendaListFragment newInstance(String toolabarData, List<AgendaItem> items, AgendaItem tabSelected, AgendaList agendaList){
+    public static AgendaListFragment newInstance(String toolbarData, List<AgendaItem> items, AgendaItem tabSelected, AgendaList agendaList){
         AgendaListFragment fragment = new AgendaListFragment();
-        fragment.toolbarData = toolabarData;
-        fragment.items = items;
-        fragment.tabSelected = tabSelected;
-        fragment.agendaList = agendaList;
+        Bundle args = new Bundle();
+        args.putParcelableArrayList(Constants.KEY_AGENDA_ITEMS, (ArrayList<? extends Parcelable>) items);
+        args.putParcelable(Constants.KEY_AGENDA_ITEM, tabSelected);
+        args.putParcelable(Constants.KEY_AGENDA_LIST, agendaList);
+        args.putString(Constants.KEY_TOOLBAR_DATA, toolbarData);
+        fragment.setArguments(args);
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null){
+            items = savedInstanceState.getParcelableArrayList(Constants.KEY_AGENDA_ITEMS);
+            agendaList = savedInstanceState.getParcelable(Constants.KEY_AGENDA_LIST);
+            tabSelected = savedInstanceState.getParcelable(Constants.KEY_AGENDA_ITEM);
+            toolbarData = savedInstanceState.getString(Constants.KEY_TOOLBAR_DATA);
+        } else if (getArguments() != null){
+            items = getArguments().getParcelableArrayList(Constants.KEY_AGENDA_ITEMS);
+            agendaList = getArguments().getParcelable(Constants.KEY_AGENDA_LIST);
+            tabSelected = getArguments().getParcelable(Constants.KEY_AGENDA_ITEM);
+            toolbarData = getArguments().getString(Constants.KEY_TOOLBAR_DATA);
+        }
+
+        setBreadcrumb();
+        viewModel =  new AgendaListViewModel(getActivity(),this, toolbarData,items,tabSelected, agendaList);
+    }
 
     @Nullable
     @Override
@@ -113,5 +129,22 @@ public class AgendaListFragment extends TaBaseFragment {
         }
         logD("TTA Nav ======> " + BreadcrumbUtil.setBreadcrumb(RANK, nav.name()));
 
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (items != null) {
+            outState.putParcelableArrayList(Constants.KEY_AGENDA_ITEMS, (ArrayList<? extends Parcelable>) items);
+        }
+        if (tabSelected != null) {
+            outState.putParcelable(Constants.KEY_AGENDA_ITEM, tabSelected);
+        }
+        if (agendaList != null) {
+            outState.putParcelable(Constants.KEY_AGENDA_LIST, agendaList);
+        }
+        if (toolbarData != null) {
+            outState.putString(Constants.KEY_TOOLBAR_DATA, toolbarData);
+        }
     }
 }
