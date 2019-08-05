@@ -40,9 +40,11 @@ public class CourseMaterialTab extends TaBaseFragment {
 
     public static CourseMaterialTab newInstance(Content content, EnrolledCoursesResponse course, CourseComponent rootComponent) {
         CourseMaterialTab courseMaterialTab = new CourseMaterialTab();
-        courseMaterialTab.content = content;
-        courseMaterialTab.courseData = course;
-        courseMaterialTab.rootComponent = rootComponent;
+        Bundle args = new Bundle();
+        args.putParcelable(Constants.KEY_CONTENT, content);
+        args.putSerializable(Constants.KEY_ENROLLED_COURSE, course);
+        args.putSerializable(Constants.KEY_COURSE_COMPONENT, rootComponent);
+        courseMaterialTab.setArguments(args);
         courseMaterialTab.RANK = BreadcrumbUtil.getCurrentRank() + 1;
         return courseMaterialTab;
     }
@@ -50,6 +52,17 @@ public class CourseMaterialTab extends TaBaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null){
+            content = savedInstanceState.getParcelable(Constants.KEY_CONTENT);
+            courseData = (EnrolledCoursesResponse) savedInstanceState.getSerializable(Constants.KEY_ENROLLED_COURSE);
+            rootComponent = (CourseComponent) savedInstanceState.getSerializable(Constants.KEY_COURSE_COMPONENT);
+        } else if (getArguments() != null){
+            content = getArguments().getParcelable(Constants.KEY_CONTENT);
+            courseData = (EnrolledCoursesResponse) getArguments().getSerializable(Constants.KEY_ENROLLED_COURSE);
+            rootComponent = (CourseComponent) getArguments().getSerializable(Constants.KEY_COURSE_COMPONENT);
+        }
+
         viewModel = new CourseMaterialViewModel(getActivity(), this, content, courseData, rootComponent);
         viewModel.registerEventBus();
 
@@ -161,6 +174,21 @@ public class CourseMaterialTab extends TaBaseFragment {
     public void onPageShow() {
         super.onPageShow();
         logD("TTA Nav ======> " + BreadcrumbUtil.setBreadcrumb(RANK, Nav.course_material.name()));
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (content != null) {
+            outState.putParcelable(Constants.KEY_CONTENT, content);
+        }
+        if (courseData != null) {
+            outState.putSerializable(Constants.KEY_ENROLLED_COURSE, courseData);
+        }
+        if (rootComponent != null) {
+            outState.putSerializable(Constants.KEY_COURSE_COMPONENT, rootComponent);
+        }
+
     }
 
     @Override

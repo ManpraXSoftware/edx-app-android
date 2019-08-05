@@ -2,9 +2,11 @@ package org.tta.mobile.tta.data.local.db.table;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 @Entity(tableName = "category")
-public class Category implements Comparable<Category>
+public class Category implements Comparable<Category>, Parcelable
 {
     private long created_by;
 
@@ -24,6 +26,33 @@ public class Category implements Comparable<Category>
     private String created_at;
 
     private String modified_at;
+
+    public Category() {
+    }
+
+    protected Category(Parcel in) {
+        created_by = in.readLong();
+        id = in.readLong();
+        icon = in.readString();
+        source_id = in.readLong();
+        order = in.readLong();
+        modified_by = in.readLong();
+        name = in.readString();
+        created_at = in.readString();
+        modified_at = in.readString();
+    }
+
+    public static final Creator<Category> CREATOR = new Creator<Category>() {
+        @Override
+        public Category createFromParcel(Parcel in) {
+            return new Category(in);
+        }
+
+        @Override
+        public Category[] newArray(int size) {
+            return new Category[size];
+        }
+    };
 
     public long getCreated_by ()
     {
@@ -124,5 +153,23 @@ public class Category implements Comparable<Category>
     @Override
     public int compareTo(Category o) {
         return Long.compare(order, o.order);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(created_by);
+        dest.writeLong(id);
+        dest.writeString(icon);
+        dest.writeLong(source_id);
+        dest.writeLong(order);
+        dest.writeLong(modified_by);
+        dest.writeString(name);
+        dest.writeString(created_at);
+        dest.writeString(modified_at);
     }
 }

@@ -44,6 +44,7 @@ public class Source implements Parcelable
         created_at = in.readString();
         type = in.readString();
         modified_at = in.readString();
+        order = in.readLong();
     }
 
     public static final Creator<Source> CREATOR = new Creator<Source>() {
@@ -178,6 +179,7 @@ public class Source implements Parcelable
         dest.writeString(created_at);
         dest.writeString(type);
         dest.writeString(modified_at);
+        dest.writeLong(order);
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import org.tta.mobile.R;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
@@ -26,8 +27,10 @@ public class CourseDiscussionTab extends TaBaseFragment {
 
     public static CourseDiscussionTab newInstance(EnrolledCoursesResponse course, Content content){
         CourseDiscussionTab fragment = new CourseDiscussionTab();
-        fragment.course = course;
-        fragment.content = content;
+        Bundle args = new Bundle();
+        args.putParcelable(Constants.KEY_CONTENT, content);
+        args.putSerializable(Constants.KEY_ENROLLED_COURSE, course);
+        fragment.setArguments(args);
         fragment.RANK = BreadcrumbUtil.getCurrentRank() + 1;
         return fragment;
     }
@@ -35,6 +38,15 @@ public class CourseDiscussionTab extends TaBaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null){
+            content = savedInstanceState.getParcelable(Constants.KEY_CONTENT);
+            course = (EnrolledCoursesResponse) savedInstanceState.getSerializable(Constants.KEY_ENROLLED_COURSE);
+        } else if (getArguments() != null){
+            content = getArguments().getParcelable(Constants.KEY_CONTENT);
+            course = (EnrolledCoursesResponse) getArguments().getSerializable(Constants.KEY_ENROLLED_COURSE);
+        }
+
         viewModel = new CourseDiscussionViewModel(getActivity(), this);
     }
 
@@ -60,5 +72,17 @@ public class CourseDiscussionTab extends TaBaseFragment {
     public void onPageShow() {
         super.onPageShow();
         logD("TTA Nav ======> " + BreadcrumbUtil.setBreadcrumb(RANK, Nav.discussion.name()));
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (content != null) {
+            outState.putParcelable(Constants.KEY_CONTENT, content);
+        }
+        if (course != null) {
+            outState.putSerializable(Constants.KEY_ENROLLED_COURSE, course);
+        }
+
     }
 }

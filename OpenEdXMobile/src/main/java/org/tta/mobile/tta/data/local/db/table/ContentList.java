@@ -2,11 +2,13 @@ package org.tta.mobile.tta.data.local.db.table;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import androidx.annotation.Nullable;
 
 @Entity(tableName = "content_list")
-public class ContentList implements Comparable<ContentList>
+public class ContentList implements Comparable<ContentList>, Parcelable
 {
     private String region;
 
@@ -40,6 +42,40 @@ public class ContentList implements Comparable<ContentList>
     private String modified_at;
 
     private String root_category;
+
+    public ContentList() {
+    }
+
+    protected ContentList(Parcel in) {
+        region = in.readString();
+        created_by = in.readLong();
+        sort_as = in.readString();
+        sort_by = in.readString();
+        mode = in.readString();
+        id = in.readLong();
+        auto_function = in.readString();
+        category_id = in.readLong();
+        order = in.readLong();
+        modified_by = in.readLong();
+        name = in.readString();
+        internal_name = in.readString();
+        format_type = in.readString();
+        created_at = in.readString();
+        modified_at = in.readString();
+        root_category = in.readString();
+    }
+
+    public static final Creator<ContentList> CREATOR = new Creator<ContentList>() {
+        @Override
+        public ContentList createFromParcel(Parcel in) {
+            return new ContentList(in);
+        }
+
+        @Override
+        public ContentList[] newArray(int size) {
+            return new ContentList[size];
+        }
+    };
 
     public String getRegion ()
     {
@@ -211,5 +247,30 @@ public class ContentList implements Comparable<ContentList>
     @Override
     public boolean equals(@Nullable Object obj) {
         return (obj instanceof ContentList) && (((ContentList) obj).id == id);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(region);
+        dest.writeLong(created_by);
+        dest.writeString(sort_as);
+        dest.writeString(sort_by);
+        dest.writeString(mode);
+        dest.writeLong(id);
+        dest.writeString(auto_function);
+        dest.writeLong(category_id);
+        dest.writeLong(order);
+        dest.writeLong(modified_by);
+        dest.writeString(name);
+        dest.writeString(internal_name);
+        dest.writeString(format_type);
+        dest.writeString(created_at);
+        dest.writeString(modified_at);
+        dest.writeString(root_category);
     }
 }

@@ -60,6 +60,9 @@ public class Constants {
     public static final String KEY_CLASS_NAME = "class_name";
     public static final String KEY_FUNCTION_NAME = "function_name";
     public static final String KEY_DATA = "data";
+    public static final String KEY_CONFIGURATION = "configuration";
+    public static final String KEY_CATEGORY = "category";
+    public static final String KEY_COURSE_COMPONENT = "course_component";
 
     //for app update
     public static final String VERSION_NAME = "version_name";

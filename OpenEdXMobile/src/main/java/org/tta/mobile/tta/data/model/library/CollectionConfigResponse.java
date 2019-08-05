@@ -1,18 +1,42 @@
 package org.tta.mobile.tta.data.model.library;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.tta.mobile.tta.data.local.db.table.Category;
 import org.tta.mobile.tta.data.local.db.table.ContentList;
 import org.tta.mobile.tta.data.local.db.table.Source;
 
 import java.util.List;
 
-public class CollectionConfigResponse
+public class CollectionConfigResponse implements Parcelable
 {
     private List<Category> category;
 
     private List<Source> source;
 
     private List<ContentList> content_list;
+
+    public CollectionConfigResponse() {
+    }
+
+    protected CollectionConfigResponse(Parcel in) {
+        category = in.createTypedArrayList(Category.CREATOR);
+        source = in.createTypedArrayList(Source.CREATOR);
+        content_list = in.createTypedArrayList(ContentList.CREATOR);
+    }
+
+    public static final Creator<CollectionConfigResponse> CREATOR = new Creator<CollectionConfigResponse>() {
+        @Override
+        public CollectionConfigResponse createFromParcel(Parcel in) {
+            return new CollectionConfigResponse(in);
+        }
+
+        @Override
+        public CollectionConfigResponse[] newArray(int size) {
+            return new CollectionConfigResponse[size];
+        }
+    };
 
     public List<Category> getCategory ()
     {
@@ -48,5 +72,17 @@ public class CollectionConfigResponse
     public String toString()
     {
         return "CollectionConfigResponse [category = "+category+", source = "+source+", content_list = "+ content_list +"]";
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(category);
+        dest.writeTypedList(source);
+        dest.writeTypedList(content_list);
     }
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.tta.mobile.R;
+import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.Analytic;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
@@ -35,8 +36,10 @@ public class LibraryTab extends TaBaseFragment {
     public static LibraryTab newInstance(CollectionConfigResponse cr, Category category,
                                          SearchPageOpenedListener searchPageOpenedListener){
         LibraryTab fragment = new LibraryTab();
-        fragment.cr = cr;
-        fragment.category = category;
+        Bundle args = new Bundle();
+        args.putParcelable(Constants.KEY_CONFIGURATION, cr);
+        args.putParcelable(Constants.KEY_CATEGORY, category);
+        fragment.setArguments(args);
         fragment.searchPageOpenedListener = searchPageOpenedListener;
         return fragment;
     }
@@ -44,6 +47,15 @@ public class LibraryTab extends TaBaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null){
+            cr = savedInstanceState.getParcelable(Constants.KEY_CONFIGURATION);
+            category = savedInstanceState.getParcelable(Constants.KEY_CATEGORY);
+        } else if (getArguments() != null){
+            cr = getArguments().getParcelable(Constants.KEY_CONFIGURATION);
+            category = getArguments().getParcelable(Constants.KEY_CATEGORY);
+        }
+
         viewModel = new LibraryTabViewModel(getActivity(), this, cr, category, searchPageOpenedListener);
         viewModel.registerEventBus();
     }
@@ -86,6 +98,17 @@ public class LibraryTab extends TaBaseFragment {
                 break;
         }
     }*/
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (cr != null) {
+            outState.putParcelable(Constants.KEY_CONFIGURATION, cr);
+        }
+        if (category != null) {
+            outState.putParcelable(Constants.KEY_CATEGORY, category);
+        }
+    }
 
     @Override
     public void onDestroy() {
