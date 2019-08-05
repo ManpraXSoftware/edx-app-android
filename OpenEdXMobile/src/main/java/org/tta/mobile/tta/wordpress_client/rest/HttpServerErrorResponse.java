@@ -79,6 +79,14 @@ public class HttpServerErrorResponse {
         return mMessage;
     }
 
+    public void setCode(String code) {
+        this.mCode = code;
+    }
+
+    public void setMessage(String message) {
+        this.mMessage = message;
+    }
+
     @Override
     public String toString() {
         return "HttpServerErrorResponse{" +

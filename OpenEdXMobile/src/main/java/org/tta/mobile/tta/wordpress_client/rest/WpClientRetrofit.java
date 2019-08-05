@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.tta.mobile.R;
 import org.tta.mobile.tta.data.model.StatusResponse;
 import org.tta.mobile.tta.wordpress_client.WordPressRestInterface;
 import org.tta.mobile.tta.wordpress_client.model.Comment;
@@ -53,6 +54,8 @@ import static org.tta.mobile.util.BrowserUtil.loginPrefs;
 public class WpClientRetrofit {
 
     private WordPressRestInterface mRestInterface;
+
+    private Context context;
 
     public WpClientRetrofit(String baseUrl, final String username, final String password) {
         this(baseUrl, username, password, false);
@@ -107,6 +110,8 @@ public class WpClientRetrofit {
 
     //for all oauth 2.0 hits
     public WpClientRetrofit(boolean debugEnabled, boolean isTokenHit, Context context) {
+        this.context = context;
+
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
         builder.connectTimeout(30, TimeUnit.SECONDS);
@@ -144,7 +149,16 @@ public class WpClientRetrofit {
                     //Log.d("connect response",response.body().toString());
                     callback.onSuccess(response.body());
                 } else {
-                    callback.onFailure(HttpServerErrorResponse.from(response.errorBody()));
+                    HttpServerErrorResponse errorResponse = HttpServerErrorResponse.from(response.errorBody());
+                    if (errorResponse == null){
+                        errorResponse = new HttpServerErrorResponse();
+                        if (context != null) {
+                            errorResponse.setMessage(context.getString(R.string.try_later));
+                        } else {
+                            errorResponse.setMessage("Please try again later.");
+                        }
+                    }
+                    callback.onFailure(errorResponse);
 
                     //Log.d("connect request",response.raw().request().url().toString());
                     //Log.d("connect response",response.errorBody().toString());

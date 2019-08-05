@@ -86,6 +86,10 @@ public class CourseMaterialTab extends TaBaseFragment {
                 public void run() {
                     try {
                         RecyclerView.LayoutManager layoutManager = binding.courseRecycler.getLayoutManager();
+                        if (layoutManager == null){
+                            return;
+                        }
+                        
                         binding.courseRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
                             @Override
                             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {

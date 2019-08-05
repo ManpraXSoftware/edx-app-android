@@ -68,9 +68,9 @@ public class UserInfoActivity extends BaseVMActivity {
 
         getCustomFieldAttributes();
         mViewModel.getData();
+        setupForm();
         getBlocks();
         getClassSkillSubject();
-        setupForm();
     }
 
     @Override

@@ -71,8 +71,13 @@ public class ConnectCommentsTabViewModel extends BaseViewModel {
         allLoaded = false;
         adapter = new CommentsAdapter(mActivity);
         setListeners();
-        layoutManager = new LinearLayoutManager(mActivity);
         adapter.setItems(comments);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        layoutManager = new LinearLayoutManager(mActivity);
     }
 
     private void setListeners() {

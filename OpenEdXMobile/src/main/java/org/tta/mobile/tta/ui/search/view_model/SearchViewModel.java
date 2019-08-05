@@ -902,6 +902,9 @@ public class SearchViewModel extends BaseViewModel {
     }
 
     private void populateFilters(boolean isFirst){
+        if (searchFilter == null){
+            return;
+        }
         currentSections.clear();
         List<FilterTag> currentTags = new ArrayList<>();
         for (FilterSection section: searchFilter.getResult()){

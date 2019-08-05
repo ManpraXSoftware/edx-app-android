@@ -3,6 +3,7 @@ package org.tta.mobile.module.prefs;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -565,7 +566,7 @@ public class LoginPrefs {
     }
 
     public boolean isLoggedIn(){
-        return getUsername() != null && !getUsername().equals("");
+        return !TextUtils.isEmpty(getUsername());
     }
 
     public void setStateListId(long listId){

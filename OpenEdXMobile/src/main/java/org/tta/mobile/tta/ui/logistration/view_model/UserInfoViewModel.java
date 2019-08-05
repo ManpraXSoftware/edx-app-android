@@ -197,14 +197,9 @@ public class UserInfoViewModel extends BaseViewModel {
 
     public void getData() {
         states.addAll(DataUtil.getAllStates());
-        currentState = states.get(0).getName();
         districts.addAll(DataUtil.getDistrictsByStateName(states.get(0).getName()));
-        currentDistrict = districts.get(0).getName();
         professions.addAll(DataUtil.getAllProfessions());
         genders.addAll(DataUtil.getAllGenders());
         dietCodes.addAll(DataUtil.getAllDietCodesOfState(currentState));
-        professions = DataUtil.getAllProfessions();
-        genders = DataUtil.getAllGenders();
-        dietCodes = DataUtil.getAllDietCodesOfState(currentState);
     }
 }

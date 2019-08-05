@@ -483,7 +483,7 @@ public class ConnectDashboardActivity extends BaseVMActivity {
                 }
                 return true;
             } else if (url.endsWith(".mp4")) {
-                showShortSnack("Download start.");
+                /*showShortSnack("Download start.");
                 //add analytics
 //                analytic.addMxAnalytics_db(loginPrefs.getUsername(),currentPost.getTitle().getRendered(), Action.DownloadConnect,category_name, Source.Mobile);
                 String name = "";
@@ -507,7 +507,7 @@ public class ConnectDashboardActivity extends BaseVMActivity {
                 request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, name + ".mp4");
                 // get download service and enqueue file
                 DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-                manager.enqueue(request);
+                manager.enqueue(request);*/
             } else {
                 try {
                     Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));

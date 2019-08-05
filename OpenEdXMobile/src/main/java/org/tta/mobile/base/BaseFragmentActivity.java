@@ -146,6 +146,12 @@ public abstract class BaseFragmentActivity extends BaseAppActivity
     }
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().registerSticky(this);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         isActivityStarted = true;
@@ -154,7 +160,6 @@ public abstract class BaseFragmentActivity extends BaseAppActivity
     @Override
     protected void onResume() {
         super.onResume();
-        EventBus.getDefault().registerSticky(this);
     }
 
     @Override
@@ -165,13 +170,13 @@ public abstract class BaseFragmentActivity extends BaseAppActivity
 
     @Override
     protected void onPause() {
-        EventBus.getDefault().unregister(this);
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
