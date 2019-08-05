@@ -129,6 +129,9 @@ public class CourseDashboardViewModel extends BaseViewModel {
     }
 
     public void setTabs(){
+        fragments.clear();
+        titles.clear();
+
         fragments.add(CourseMaterialTab.newInstance(content, course, rootComponent));
         titles.add(mActivity.getString(R.string.course_material));
 
