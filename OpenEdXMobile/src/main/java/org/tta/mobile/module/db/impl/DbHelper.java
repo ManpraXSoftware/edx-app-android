@@ -113,8 +113,6 @@ public class DbHelper extends SQLiteOpenHelper {
         String[] upgradeToV11 = new String[]{
                 "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
                         + DbStructure.Column.CONTENT_ID + " TEXT ",
-                "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
-                        + DbStructure.Column.URL_HLS + " TEXT ",
 
                 "ALTER TABLE " + DbStructure.Table.ANALYTIC + " ADD COLUMN "
                         + DbStructure.Column.ACTION_ID + " TEXT ",
