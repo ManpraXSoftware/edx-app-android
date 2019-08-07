@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 import org.tta.mobile.R;
 import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.Constants;
+import org.tta.mobile.tta.analytics.Analytic;
 import org.tta.mobile.tta.scorm.JSInterfaceTincan;
 import org.tta.mobile.tta.tincan.Tincan;
 import org.tta.mobile.tta.tincan.model.Resume;
@@ -36,7 +38,11 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CourseScormViewActivity extends BaseVMActivity {
+import static org.tta.mobile.util.BrowserUtil.config;
+import static org.tta.mobile.util.BrowserUtil.environment;
+import static org.tta.mobile.util.BrowserUtil.loginPrefs;
+
+public class CourseScormViewActivity extends AppCompatActivity {
 
     private final static String LAUNCHER_FILE = "index.html";//"story_html5.html";
 
@@ -52,33 +58,41 @@ public class CourseScormViewActivity extends BaseVMActivity {
     private String unitId;
     private long contentId;
 
+    private Analytic analytic;
     private Tincan tincan;
     private Resume resume_info;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.t_activity_course_scorm_view);
 
         // lock the current device orientation
-        int currentOrientation = this.getResources().getConfiguration().orientation;
+        /*int currentOrientation = this.getResources().getConfiguration().orientation;
         if (currentOrientation == Configuration.ORIENTATION_PORTRAIT){
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         else{
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
+        }*/
 
-        viewModel = new CourseScormViewModel(this);
-        binding(R.layout.t_activity_course_scorm_view, viewModel);
+//        viewModel = new CourseScormViewModel(this);
+//        binding(R.layout.t_activity_course_scorm_view, viewModel);
+
+        analytic=new Analytic(CourseScormViewActivity.this);
+        tincan=new Tincan();
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        tincan=new Tincan();
+        webView = (WebView) findViewById(R.id.webView);
+
+        if (savedInstanceState != null) {
+            webView.restoreState(savedInstanceState);
+        }
 
         if (getIntent().getExtras() != null) {
             getDataFromParameters(getIntent().getExtras());
         }
-
-        webView = (WebView) findViewById(R.id.webView);
 
         if (folderPath != null && folderPath.length() > 0) {
             launcher = findFile(new File(folderPath), "", LAUNCHER_FILE);
@@ -89,7 +103,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
 
         //get payload for resume
         resume_info=new Resume();
-        resume_info=viewModel.getDataManager().getEdxEnvironment().getDatabase().getResumeInfo(courseRootId, unitId);
+        resume_info=environment.getDatabase().getResumeInfo(courseRootId, unitId);
 
         if(resume_info==null || TextUtils.isEmpty(resume_info.getResume_Payload()))
             resume_info.setResume_Payload("");
@@ -215,9 +229,9 @@ public class CourseScormViewActivity extends BaseVMActivity {
 
         if (launcher != null) {
             String url = "file://" + launcher.getAbsolutePath() +
-                            "?tincan=true&endpoint=" + viewModel.getDataManager().getConfig().getAnalyticsUrlForResume() +
-                            "&auth=" + viewModel.getDataManager().getLoginPrefs().getAuthorizationHeader() +
-                            "&actor={\"name\": [" + viewModel.getDataManager().getLoginPrefs().getUsername() +
+                            "?tincan=true&endpoint=" + config.getAnalyticsUrlForResume() +
+                            "&auth=" + loginPrefs.getAuthorizationHeader() +
+                            "&actor={\"name\": [" + loginPrefs.getUsername() +
                             "], \"mbox\": [\"mailto:example@theteacherapp.org\"], \"objectType\": [\"Agent\"]}&course_id=" + courseName +
                             "&source=mobile";
             webView.loadUrl(url);
@@ -233,7 +247,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
         String encoding = "";
         InputStream inputStream = null;
 
-        if (url.startsWith(viewModel.getDataManager().getConfig().getAnalyticsUrlForResume() + "/activities/state?stateId=resume")) {
+        if (url.startsWith(config.getAnalyticsUrlForResume() + "/activities/state?stateId=resume")) {
             //get
             encoding = "UTF-8";
             mimeType = "text/html";
@@ -252,7 +266,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
             responseHeaders.put("X-Powered-By", "ASP.NET");
 
             inputStream = IOUtils.toInputStream(resume_info.getResume_Payload());
-        } else if (url.startsWith(viewModel.getDataManager().getConfig().getAnalyticsUrlForResume() + "/statements?")) {
+        } else if (url.startsWith(config.getAnalyticsUrlForResume() + "/statements?")) {
             //option
             encoding = "UTF-8";
             mimeType = "text/html";
@@ -263,7 +277,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
             responseHeaders.put("Access-Control-Allow-Headers", "authorization, content-type, x-experience-api-version");
             responseHeaders.put("Access-Control-Max-Age", "1728000");
             responseHeaders.put("X-Powered-By:", "ASP.NET");
-        } else if (url.startsWith(viewModel.getDataManager().getConfig().getAnalyticsUrlForResume() + "/statements?")) {
+        } else if (url.startsWith(config.getAnalyticsUrlForResume() + "/statements?")) {
             //option
             encoding = "UTF-8";
             mimeType = "text/html";
@@ -298,7 +312,7 @@ public class CourseScormViewActivity extends BaseVMActivity {
         Resume resume=new Resume();
         resume.setCourse_Id(courseRootId);
         resume.setUnit_id(unitId);
-        resume.setUser_Id(viewModel.getDataManager().getLoginPrefs().getUsername());
+        resume.setUser_Id(loginPrefs.getUsername());
         resume.setResume_Payload(resume_payload);
         tincan.addResumePayload(resume);
         //Toast.makeText(CourseScormViewActivity.this, resume_payload, Toast.LENGTH_LONG).show();
