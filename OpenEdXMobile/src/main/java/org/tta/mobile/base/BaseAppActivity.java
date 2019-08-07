@@ -12,7 +12,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public abstract class BaseAppActivity extends RoboAppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+        super.attachBaseContext(LocaleHelper.onAttach(newBase, "hi"));
     }
 
     @Override

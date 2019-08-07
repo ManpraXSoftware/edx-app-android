@@ -90,7 +90,10 @@ public class AgendaListFragment extends TaBaseFragment {
         viewPager.setOffscreenPageLimit(4);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.post(() -> {
-            tabLayout.getTabAt(items.indexOf(tabSelected)).select();
+            TabLayout.Tab tab = tabLayout.getTabAt(items.indexOf(tabSelected));
+            if (tab != null) {
+                tab.select();
+            }
         });
 
         return view;

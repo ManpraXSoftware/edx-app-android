@@ -114,7 +114,7 @@ public class TaBaseActivity extends RxAppCompatActivity implements RoboContext, 
 
     public void showIndefiniteSnack(String msg){
         Snackbar.make(findViewById(android.R.id.content), msg, Snackbar.LENGTH_INDEFINITE)
-                .setAction("OK", null)
+                .setAction(getString(R.string.ok), null)
                 .show();
     }
 
@@ -212,7 +212,7 @@ public class TaBaseActivity extends RxAppCompatActivity implements RoboContext, 
     @Override
     protected void attachBaseContext(Context newBase) {
         baseActivityContext = newBase;
-        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+        super.attachBaseContext(LocaleHelper.onAttach(newBase, "hi"));
     }
 
     @Override
