@@ -403,7 +403,7 @@ public class Analytic {
             return;
         TincanRequest tincan_item = new TincanRequest();
         tincan_item.user_id = list.get(0).user_id;
-        tincan_item.version = 1;// 1 means new analytis
+        tincan_item.version = list.get(0).version;
 
         Tincan tincan = new Tincan();
         for (AnalyticModel item : list) {
