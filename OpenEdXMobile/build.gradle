@@ -351,6 +351,9 @@ android {
         renderscriptTargetApi 22
         renderscriptSupportModeEnabled true
 
+        //Arjun:: Added for x64 bit architecture.
+        ndk.abiFilters 'armeabi-v7a','arm64-v8a','x86','x86_64'
+
         // Mx: Commented to support vector drawables in kitkat
 //        vectorDrawables.useSupportLibrary = true
 
