@@ -247,6 +247,10 @@ public abstract class MainApplication extends MultiDexApplication {
                 Crashlytics.setUserIdentifier("Logged out state");
             }
 
+            Crashlytics.setString(Constants.KEY_CLASS_NAME, null);
+            Crashlytics.setString(Constants.KEY_FUNCTION_NAME, null);
+            Crashlytics.setString(Constants.KEY_DATA, null);
+
             Bundle parameters = e.getParameters();
             if (parameters != null){
                 for (String key: parameters.keySet()){
@@ -254,10 +258,6 @@ public abstract class MainApplication extends MultiDexApplication {
                 }
             }
             Crashlytics.logException(e.getError());
-
-            Crashlytics.setString(Constants.KEY_CLASS_NAME, null);
-            Crashlytics.setString(Constants.KEY_FUNCTION_NAME, null);
-            Crashlytics.setString(Constants.KEY_DATA, null);
         }
     }
 
