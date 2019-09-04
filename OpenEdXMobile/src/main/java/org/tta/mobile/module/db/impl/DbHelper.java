@@ -36,37 +36,36 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE "                        + DbStructure.Table.DOWNLOADS
+        String sql = "CREATE TABLE " + DbStructure.Table.DOWNLOADS
                 + " ("
-                + DbStructure.Column.ID                     + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + DbStructure.Column.USERNAME               + " TEXT, "
-                + DbStructure.Column.VIDEO_ID               + " TEXT, "
-                + DbStructure.Column.TITLE                  + " TEXT, "
-                + DbStructure.Column.SIZE                   + " TEXT, "
-                + DbStructure.Column.DURATION               + " LONG, "
-                + DbStructure.Column.FILEPATH               + " TEXT, "
-                + DbStructure.Column.URL                    + " TEXT, "
-                + DbStructure.Column.URL_HLS                + " TEXT, "
-                + DbStructure.Column.URL_HIGH_QUALITY       + " TEXT, "
-                + DbStructure.Column.URL_LOW_QUALITY        + " TEXT, "
-                + DbStructure.Column.URL_YOUTUBE            + " TEXT, "
-                + DbStructure.Column.WATCHED                + " INTEGER, "
-                + DbStructure.Column.DOWNLOADED             + " INTEGER, "
-                + DbStructure.Column.DM_ID                  + " INTEGER, "
-                + DbStructure.Column.EID                    + " TEXT, "
-                + DbStructure.Column.CHAPTER                + " TEXT, "
-                + DbStructure.Column.SECTION                + " TEXT, "
-                + DbStructure.Column.DOWNLOADED_ON          + " INTEGER, "
-                + DbStructure.Column.LAST_PLAYED_OFFSET     + " INTEGER, "
-                + DbStructure.Column.IS_COURSE_ACTIVE       + " BOOLEAN, "
-                + DbStructure.Column.UNIT_URL               + " TEXT, "
-                + DbStructure.Column.TYPE                   + " TEXT, "
-                + DbStructure.Column.CONTENT_ID             + " LONG, "
-                + DbStructure.Column.VIDEO_FOR_WEB_ONLY     + " BOOLEAN, "
-                + DbStructure.Column.LAST_MODIFIED          + " TEXT "
+                + DbStructure.Column.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + DbStructure.Column.USERNAME + " TEXT, "
+                + DbStructure.Column.VIDEO_ID + " TEXT, "
+                + DbStructure.Column.TITLE + " TEXT, "
+                + DbStructure.Column.SIZE + " TEXT, "
+                + DbStructure.Column.DURATION + " LONG, "
+                + DbStructure.Column.FILEPATH + " TEXT, "
+                + DbStructure.Column.URL + " TEXT, "
+                + DbStructure.Column.URL_HLS + " TEXT, "
+                + DbStructure.Column.URL_HIGH_QUALITY + " TEXT, "
+                + DbStructure.Column.URL_LOW_QUALITY + " TEXT, "
+                + DbStructure.Column.URL_YOUTUBE + " TEXT, "
+                + DbStructure.Column.WATCHED + " INTEGER, "
+                + DbStructure.Column.DOWNLOADED + " INTEGER, "
+                + DbStructure.Column.DM_ID + " INTEGER, "
+                + DbStructure.Column.EID + " TEXT, "
+                + DbStructure.Column.CHAPTER + " TEXT, "
+                + DbStructure.Column.SECTION + " TEXT, "
+                + DbStructure.Column.DOWNLOADED_ON + " INTEGER, "
+                + DbStructure.Column.LAST_PLAYED_OFFSET + " INTEGER, "
+                + DbStructure.Column.IS_COURSE_ACTIVE + " BOOLEAN, "
+                + DbStructure.Column.UNIT_URL + " TEXT, "
+                + DbStructure.Column.TYPE + " TEXT, "
+                + DbStructure.Column.CONTENT_ID + " LONG, "
+                + DbStructure.Column.VIDEO_FOR_WEB_ONLY + " BOOLEAN, "
+                + DbStructure.Column.LAST_MODIFIED + " TEXT "
                 + ")";
         db.execSQL(sql);
-
         createAssessmentTable(db);
 
         //Mx Chirag: create table for analytics
@@ -75,14 +74,14 @@ public class DbHelper extends SQLiteOpenHelper {
         logger.debug("Analytics Database created");
     }
 
-    private void createAssessmentTable(SQLiteDatabase db){
-        String sql = "CREATE TABLE "                        + DbStructure.Table.ASSESSMENT
-            + " ("
-            + DbStructure.Column.ASSESSMENT_TB_ID       + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + DbStructure.Column.ASSESSMENT_TB_USERNAME + " TEXT, "
-            + DbStructure.Column.ASSESSMENT_TB_UNIT_ID  + " TEXT, "
-            + DbStructure.Column.ASSESSMENT_TB_UNIT_WATCHED + " BOOLEAN "
-            + ")";
+    private void createAssessmentTable(SQLiteDatabase db) {
+        String sql = "CREATE TABLE " + DbStructure.Table.ASSESSMENT
+                + " ("
+                + DbStructure.Column.ASSESSMENT_TB_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + DbStructure.Column.ASSESSMENT_TB_USERNAME + " TEXT, "
+                + DbStructure.Column.ASSESSMENT_TB_UNIT_ID + " TEXT, "
+                + DbStructure.Column.ASSESSMENT_TB_UNIT_WATCHED + " BOOLEAN "
+                + ")";
         db.execSQL(sql);
     }
 
@@ -107,7 +106,7 @@ public class DbHelper extends SQLiteOpenHelper {
                         + DbStructure.Column.VIDEO_FOR_WEB_ONLY + " BOOLEAN ";
 
         String upgradeToV7 = "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
-                        + DbStructure.Column.URL_HLS + " TEXT ";
+                + DbStructure.Column.URL_HLS + " TEXT ";
 
         //for new design :Arjun
         String[] upgradeToV11 = new String[]{
@@ -131,6 +130,9 @@ public class DbHelper extends SQLiteOpenHelper {
         String upgradeToV14_LAST_MODIFIED_DOWNLOADS = "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
                 + DbStructure.Column.LAST_MODIFIED + " TEXT ";
 
+        //for fixing edx migration
+        String upgradeToV15_URL_HLS_DOWNLOADS = "ALTER TABLE " + DbStructure.Table.DOWNLOADS + " ADD COLUMN "
+                + DbStructure.Column.URL_HLS + " TEXT ";
 
         if (oldVersion == 1) {
             // upgrade from 1 to 2
@@ -244,8 +246,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     new String[]{String.valueOf(DownloadEntry.DownloadedState.ONLINE.ordinal())});
         }
 
-        if(oldVersion<11)
-        {
+        if (oldVersion < 11) {
             // upgrade from 10 to 11
             for (String query : upgradeToV11) {
                 db.execSQL(query);
@@ -254,33 +255,45 @@ public class DbHelper extends SQLiteOpenHelper {
             logger.debug("Migration 10_11 done.s");
         }
 
-        if(oldVersion<14)
-        {
+        if (oldVersion < 14) {
             //upgradeToV14_SOURCE_ID_ANALYTICS
-            if(!isColumnExists(DbStructure.Table.ANALYTIC, DbStructure.Column.SOURCE_ID,db))
-            {
+            if (!isColumnExists(DbStructure.Table.ANALYTIC, DbStructure.Column.SOURCE_ID, db)) {
                 db.execSQL(upgradeToV14_SOURCE_ID_ANALYTICS);
                 logger.debug("Table ---->ANALYTIC  Column -->SOURCE_ID Added successfully");
             }
 
             //upgradeToV14_CONTENT_ID_ANALYTICS
-            if(!isColumnExists(DbStructure.Table.ANALYTIC, DbStructure.Column.CONTENT_ID,db))
-            {
+            if (!isColumnExists(DbStructure.Table.ANALYTIC, DbStructure.Column.CONTENT_ID, db)) {
                 db.execSQL(upgradeToV14_CONTENT_ID_ANALYTICS);
                 logger.debug("Table ---->ANALYTIC  Column -->CONTENT_ID Added successfully");
             }
 
             //upgradeToV14_LAST_MODIFIED_DOWNLOADS
-            if(!isColumnExists(DbStructure.Table.DOWNLOADS, DbStructure.Column.LAST_MODIFIED,db))
-            {
+            if (!isColumnExists(DbStructure.Table.DOWNLOADS, DbStructure.Column.LAST_MODIFIED, db)) {
                 db.execSQL(upgradeToV14_LAST_MODIFIED_DOWNLOADS);
                 logger.debug("Table ---->DOWNLOADS  Column -->LAST_MODIFIED Added successfully");
             }
+        }
+
+        if (oldVersion < 15) {
+            //upgradeToV14_LAST_MODIFIED_DOWNLOADS
+            if (!isColumnExists(DbStructure.Table.DOWNLOADS, DbStructure.Column.URL_HLS, db)) {
+                db.execSQL(upgradeToV15_URL_HLS_DOWNLOADS);
+                logger.debug("Table ---->DOWNLOADS  Column -->URL_HLS Added successfully");
+            }
+
+            //if Analytics table does't exist .Please re add it.
+           if(!isTableExists(DbStructure.Table.ANALYTIC,db))
+           {
+               createAnalyticTable(db);
+               logger.debug("Table ---->Fn(OnUpgarde) Analytic created successfully");
+           }
         }
     }
 
     /**
      * Returns singleton writable {@link SQLiteDatabase} object.
+     *
      * @return
      */
     public SQLiteDatabase getDatabase() {
@@ -299,17 +312,16 @@ public class DbHelper extends SQLiteOpenHelper {
         logger.debug("Database closed");
     }
 
-    //TTA
-
-    private void createAnalyticTable(SQLiteDatabase db){
-        String sql = "CREATE TABLE "                        + DbStructure.Table.ANALYTIC
+    //MX:Arjun:: tables for Analytics and resume
+    private void createAnalyticTable(SQLiteDatabase db) {
+        String sql = "CREATE TABLE " + DbStructure.Table.ANALYTIC
                 + " ("
-                + DbStructure.Column.ANALYTIC_TB_ID       + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + DbStructure.Column.ANALYTIC_TB_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + DbStructure.Column.USER_ID + " TEXT, "
-                + DbStructure.Column.ACTION  + " TEXT, "
-                + DbStructure.Column.METADATA  + " TEXT, "
-                + DbStructure.Column.PAGE  + " TEXT, "
-                + DbStructure.Column.STATUS  + " BOOLEAN, "
+                + DbStructure.Column.ACTION + " TEXT, "
+                + DbStructure.Column.METADATA + " TEXT, "
+                + DbStructure.Column.PAGE + " TEXT, "
+                + DbStructure.Column.STATUS + " BOOLEAN, "
                 + DbStructure.Column.EVENT_DATE + " INTEGER, "
                 + DbStructure.Column.NAV + " TEXT, "
                 + DbStructure.Column.ACTION_ID + " TEXT, "
@@ -318,42 +330,65 @@ public class DbHelper extends SQLiteOpenHelper {
                 + ")";
         db.execSQL(sql);
 
+        logger.debug("Table ---->Analytic created successfully");
         createTincanReumePayloadTable(db);
     }
 
-    private void createTincanReumePayloadTable(SQLiteDatabase db){
-        String sql = "CREATE TABLE "                        + DbStructure.Table.TINCAN
+    private void createTincanReumePayloadTable(SQLiteDatabase db) {
+        String sql = "CREATE TABLE " + DbStructure.Table.TINCAN
                 + " ("
-                + DbStructure.Column.ID       + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + DbStructure.Column.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + DbStructure.Column.UNIT_ID + " TEXT, "
                 + DbStructure.Column.USER_ID + " TEXT, "
-                + DbStructure.Column.RESUME_PAYLOAD  + " TEXT, "
-                + DbStructure.Column.COURSE_ID  + " TEXT "
+                + DbStructure.Column.RESUME_PAYLOAD + " TEXT, "
+                + DbStructure.Column.COURSE_ID + " TEXT "
                 + ")";
         db.execSQL(sql);
+        logger.debug("Table ---->TincanResumePayloadTable created successfully");
     }
 
-    private boolean isColumnExists(String table_name,String col_name,SQLiteDatabase db)
-    {
-        boolean isColExists=false;
-        Cursor c = db.query(table_name, null, null,
-                null, null, null, null);
-        try {
-            String[] columnNames = c.getColumnNames();
+    private boolean isColumnExists(String table_name, String col_name, SQLiteDatabase db) {
+        boolean isColExists = false;
 
-            for (String col: columnNames) {
-                if(col.trim().toLowerCase().equals(col_name.trim().toLowerCase()))
-                {
-                    isColExists=true;
-                    logger.debug("Table ---->"+table_name+ " Column -->"+col_name+ " allready exist");
-                    logger.warn("Table ---->"+table_name+ " Column -->"+col_name+ " allready exist");
-                    break;
+        try {
+            Cursor c = db.query(table_name, null, null,
+                    null, null, null, null);
+            try {
+                String[] columnNames = c.getColumnNames();
+
+                for (String col : columnNames) {
+                    if (col.trim().toLowerCase().equals(col_name.trim().toLowerCase())) {
+                        isColExists = true;
+                        logger.debug("Table ---->" + table_name + " Column -->" + col_name + " allready exist");
+                        logger.warn("Table ---->" + table_name + " Column -->" + col_name + " allready exist");
+                        break;
+                    }
                 }
+            } finally {
+                c.close();
             }
-        } finally {
-            c.close();
+        } catch (Exception ex) {
+            //for handing the thread
         }
 
         return isColExists;
+    }
+
+    private boolean isTableExists(String table_name, SQLiteDatabase db) {
+        boolean isExists = false;
+
+        try {
+            Cursor c = db.rawQuery("Select * from "+table_name+" LIMIT 2", null);
+            String[] columnNames = c.getColumnNames();
+
+            if (columnNames != null || columnNames.length > 0)
+                isExists = true;
+
+            c.close();
+        } catch (Exception ex) {
+            //we got Table not exist error
+        }
+
+        return isExists;
     }
 }
