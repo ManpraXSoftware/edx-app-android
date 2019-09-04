@@ -23,13 +23,19 @@ public final class DbStructure {
            //certificate table and fields.
            //add content_id to download table
 
+
+    // Updated to version 14 to migrate all tables below
+          // Added SOURCE_ID , CONTENT_ID  in ANALYTIC table
+           //Added LAST_MODIFIED in  DOWNLOADS table
+
+
     /**
-     * Updated to version 14 to migrate all tables below
-     * Added SOURCE_ID , CONTENT_ID  in ANALYTIC table
-     *Added LAST_MODIFIED in  DOWNLOADS table
+     * Updated to version 15 to migrate Downloads table
+     * Added URL_HLS
+     * take a check if the analytic and tincan table is nit created in last migration take a migaration/create table
      */
 
-    public static final int VERSION = 14;
+    public static final int VERSION = 15;
 
     public static final class Table {
         public static final String DOWNLOADS = "downloads";
