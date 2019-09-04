@@ -6,10 +6,12 @@ import android.app.job.JobScheduler;
 import android.app.job.JobService;
 import android.content.ComponentName;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.Constants;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -47,7 +49,15 @@ public class SyncAnalyticsJob extends JobService {
         Log.d("_____TAG_____", "Sync analytics job finished!");
         isWorking = false;
         boolean needsReschedule = false;
-        jobFinished(jobParameters, needsReschedule);
+        try {
+            jobFinished(jobParameters, needsReschedule);
+        } catch (Exception e) {
+            Bundle parameters1 = new Bundle();
+            parameters1.putString(Constants.KEY_CLASS_NAME, SyncAnalyticsJob.class.getName());
+            parameters1.putString(Constants.KEY_FUNCTION_NAME, "doWork");
+            Logger.logCrashlytics(e, parameters1);
+            e.printStackTrace();
+        }
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             scheduleRefresh();
@@ -59,7 +69,15 @@ public class SyncAnalyticsJob extends JobService {
         Log.d("_____TAG_____", "Sync analytics job cancelled before being completed.");
         jobCancelled = true;
         boolean needsReschedule = isWorking;
-        jobFinished(params, needsReschedule);
+        try {
+            jobFinished(params, needsReschedule);
+        } catch (Exception e) {
+            Bundle parameters1 = new Bundle();
+            parameters1.putString(Constants.KEY_CLASS_NAME, SyncAnalyticsJob.class.getName());
+            parameters1.putString(Constants.KEY_FUNCTION_NAME, "onStopJob");
+            Logger.logCrashlytics(e, parameters1);
+            e.printStackTrace();
+        }
         return needsReschedule;
     }
 

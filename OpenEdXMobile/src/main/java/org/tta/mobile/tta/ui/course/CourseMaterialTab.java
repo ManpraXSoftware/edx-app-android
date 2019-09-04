@@ -1,5 +1,6 @@
 package org.tta.mobile.tta.ui.course;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -99,64 +100,68 @@ public class CourseMaterialTab extends TaBaseFragment {
 
                             @Override
                             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                                if (dy > 0) {
-                                    Log.d("BINDING", String.format("onScrolled: dx:%1d dy:%2d", dx, dy));
-                                    int lastVisibleItemPosition = 0;
-                                    int totalItemCount = layoutManager.getItemCount();
-                                    if (layoutManager instanceof LinearLayoutManager)
-                                        lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
-                                    Log.d("BINDING", String.format("onScrolled: lastVisible:%1d total:%2d", lastVisibleItemPosition, totalItemCount));
-                                    if (!isShown && (lastVisibleItemPosition == totalItemCount - 1)) {
-                                        RecyclerView.ViewHolder holder = recyclerView.findViewHolderForLayoutPosition(lastVisibleItemPosition);
-                                        //scrolled to end place tooltip msg here
-                                        if (holder != null) {
-                                            if (!appPref.isCourseBottom()) {
-                                                int lastVisiblePosition = ((LinearLayoutManager) layoutManager).findLastCompletelyVisibleItemPosition();
-                                                if (lastVisiblePosition == lastVisibleItemPosition) {
-                                                    if (viewModel.certificateStatus.equals("certificate")) {
-                                                        new MxTooltip.Builder(recyclerView.getContext())
-                                                                .anchorView(holder.itemView.findViewById(R.id.item_btn))
-                                                                .text(getResources().getString(R.string.samjhe_parkhe_btn))
-                                                                .gravity(Gravity.TOP)
-                                                                .animated(true)
-                                                                .transparentOverlay(true)
-                                                                .arrowDrawable(R.drawable.down_arrow)
-                                                                .build()
-                                                                .show();
-//                                                        ToolTipView.showToolTip(recyclerView.getContext(),
-//                                                                getResources().getString(R.string.samjhe_parkhe_btn),
-//                                                                holder.itemView.findViewById(R.id.item_btn), Gravity.TOP);
-                                                    }else if (viewModel.certificateStatus.equals("progress")){
-                                                        new MxTooltip.Builder(recyclerView.getContext())
-                                                                .anchorView(holder.itemView.findViewById(R.id.item_btn))
-                                                                .text("अपना सर्टिफिकेट उत्पन्न करने के लिए यह बटन दबायें")
-                                                                .gravity(Gravity.TOP)
-                                                                .animated(true)
-                                                                .transparentOverlay(true)
-                                                                .arrowDrawable(R.drawable.down_arrow)
-                                                                .build()
-                                                                .show();
+                                try {
+                                    if (dy > 0) {
+                                        Log.d("BINDING", String.format("onScrolled: dx:%1d dy:%2d", dx, dy));
+                                        int lastVisibleItemPosition = 0;
+                                        int totalItemCount = layoutManager.getItemCount();
+                                        if (layoutManager instanceof LinearLayoutManager)
+                                            lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+                                        Log.d("BINDING", String.format("onScrolled: lastVisible:%1d total:%2d", lastVisibleItemPosition, totalItemCount));
+                                        if (!isShown && (lastVisibleItemPosition == totalItemCount - 1)) {
+                                            RecyclerView.ViewHolder holder = recyclerView.findViewHolderForLayoutPosition(lastVisibleItemPosition);
+                                            //scrolled to end place tooltip msg here
+                                            if (holder != null) {
+                                                if (!appPref.isCourseBottom()) {
+                                                    int lastVisiblePosition = ((LinearLayoutManager) layoutManager).findLastCompletelyVisibleItemPosition();
+                                                    if (lastVisiblePosition == lastVisibleItemPosition) {
+                                                        if (viewModel.certificateStatus.equals("certificate")) {
+                                                            new MxTooltip.Builder(recyclerView.getContext())
+                                                                    .anchorView(holder.itemView.findViewById(R.id.item_btn))
+                                                                    .text(getResources().getString(R.string.samjhe_parkhe_btn))
+                                                                    .gravity(Gravity.TOP)
+                                                                    .animated(true)
+                                                                    .transparentOverlay(true)
+                                                                    .arrowDrawable(R.drawable.down_arrow)
+                                                                    .build()
+                                                                    .show();
+    //                                                        ToolTipView.showToolTip(recyclerView.getContext(),
+    //                                                                getResources().getString(R.string.samjhe_parkhe_btn),
+    //                                                                holder.itemView.findViewById(R.id.item_btn), Gravity.TOP);
+                                                        }else if (viewModel.certificateStatus.equals("progress")){
+                                                            new MxTooltip.Builder(recyclerView.getContext())
+                                                                    .anchorView(holder.itemView.findViewById(R.id.item_btn))
+                                                                    .text("अपना सर्टिफिकेट उत्पन्न करने के लिए यह बटन दबायें")
+                                                                    .gravity(Gravity.TOP)
+                                                                    .animated(true)
+                                                                    .transparentOverlay(true)
+                                                                    .arrowDrawable(R.drawable.down_arrow)
+                                                                    .build()
+                                                                    .show();
+                                                        }
+                                                            else {
+                                                            new MxTooltip.Builder(recyclerView.getContext())
+                                                                    .anchorView(holder.itemView.findViewById(R.id.item_btn))
+                                                                    .text(getResources().getString(R.string.certificate_btn))
+                                                                    .gravity(Gravity.TOP)
+                                                                    .animated(true)
+                                                                    .transparentOverlay(true)
+                                                                    .arrowDrawable(R.drawable.down_arrow)
+                                                                    .build()
+                                                                    .show();
+    //                                                        ToolTipView.showToolTip(recyclerView.getContext(),
+    //                                                                getResources().getString(R.string.certificate_btn),
+    //                                                                holder.itemView.findViewById(R.id.item_btn), Gravity.TOP);
+                                                        }
+                                                        appPref.setCourseBottom(true);
+                                                        isShown = true;
                                                     }
-                                                        else {
-                                                        new MxTooltip.Builder(recyclerView.getContext())
-                                                                .anchorView(holder.itemView.findViewById(R.id.item_btn))
-                                                                .text(getResources().getString(R.string.certificate_btn))
-                                                                .gravity(Gravity.TOP)
-                                                                .animated(true)
-                                                                .transparentOverlay(true)
-                                                                .arrowDrawable(R.drawable.down_arrow)
-                                                                .build()
-                                                                .show();
-//                                                        ToolTipView.showToolTip(recyclerView.getContext(),
-//                                                                getResources().getString(R.string.certificate_btn),
-//                                                                holder.itemView.findViewById(R.id.item_btn), Gravity.TOP);
-                                                    }
-                                                    appPref.setCourseBottom(true);
-                                                    isShown = true;
                                                 }
                                             }
                                         }
                                     }
+                                } catch (IllegalArgumentException | Resources.NotFoundException e) {
+                                    e.printStackTrace();
                                 }
                             }
                         });
