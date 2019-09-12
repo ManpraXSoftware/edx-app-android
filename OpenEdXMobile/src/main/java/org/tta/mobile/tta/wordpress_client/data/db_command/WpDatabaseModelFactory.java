@@ -128,6 +128,9 @@ public class WpDatabaseModelFactory {
         if (c.getString(c.getColumnIndex(PostColumns.FILTERJSON))!=null)
             post.setFilterFromJSON(c.getString(c.getColumnIndex(PostColumns.FILTERJSON)));
 
+        if (c.getString(c.getColumnIndex(PostColumns.DATE_CACH_GMT))!=null)
+            post.setDateCacheGMT(c.getString(c.getColumnIndex(PostColumns.DATE_CACH_GMT)));
+
         return post;
     }
 }

@@ -216,4 +216,11 @@ public class PostColumns {
      * <P>Type: TEXT</P>
      */
     public static final String FILTERJSON = "filterjson";
+
+    /**
+     * Date post stored in post table, in GMT
+     * <P>Type: TEXT</P>
+     * For updating webview cached content for post.If this date is smaller than last modified gmt.
+     */
+    public static final String DATE_CACH_GMT = "date_cach_gmt";
 }
