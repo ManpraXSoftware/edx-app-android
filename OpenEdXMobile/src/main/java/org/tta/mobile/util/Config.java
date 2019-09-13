@@ -97,6 +97,9 @@ public class Config {
 
     private static  String SMS_KEY = "SMS_KEY";
 
+    //User agent for webview.
+    private static  String USER_AGENT = "USER_AGENT";
+
     //TTA end
 
     public static class ZeroRatingConfig {
@@ -829,5 +832,9 @@ public class Config {
     //Dailog flow client token
     public String getDialogFlowClientToken() {
         return getString(DIALOGFLOW_CLIENT_TOKEN);
+    }
+
+    public String getUserAgent() {
+        return getString(USER_AGENT);
     }
 }

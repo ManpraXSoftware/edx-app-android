@@ -12,6 +12,7 @@ import android.support.annotation.StringRes;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
@@ -37,6 +38,7 @@ import org.tta.mobile.logger.Logger;
 import org.tta.mobile.module.prefs.LoginPrefs;
 import org.tta.mobile.services.EdxCookieManager;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
+import org.tta.mobile.util.BrowserUtil;
 import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.WebViewUtil;
 
@@ -119,6 +121,13 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
         this.isManuallyReloadable = isManuallyReloadable;
         webView.clearCache(true);
         webView.getSettings().setJavaScriptEnabled(true);
+
+
+        //add user agent
+        String userAgent = webView.getSettings().getUserAgentString() + "/" + BrowserUtil.getConfig().getUserAgent();
+        Log.d("User agent : ", ""+ userAgent);
+        webView.getSettings().setUserAgentString(userAgent);
+
         webViewClient = new URLInterceptorWebViewClient(fragmentActivity, webView) {
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {

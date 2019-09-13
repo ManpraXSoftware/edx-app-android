@@ -23,6 +23,7 @@ import org.tta.mobile.tta.ui.profile.MyCertificatesFragment;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.user.Account;
 import org.tta.mobile.user.ProfileImage;
+import org.tta.mobile.util.BrowserUtil;
 import org.tta.mobile.util.NetworkUtil;
 
 import java.util.ArrayList;
@@ -281,7 +282,7 @@ public class ProfileViewModel extends BaseViewModel {
 
     public void showPrivacyPolicy(){
         mDataManager.getEdxEnvironment().getRouter().showAuthenticatedWebviewActivity(
-                mActivity, mActivity.getString(R.string.privacy_policy_url),
+                mActivity, BrowserUtil.config.getApiHostURL()+"privacy",
                 mActivity.getString(R.string.privacy_policy)
         );
     }

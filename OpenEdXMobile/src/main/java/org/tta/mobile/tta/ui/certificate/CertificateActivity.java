@@ -19,6 +19,8 @@ import org.tta.mobile.tta.analytics.analytics_enums.Source;
 import org.tta.mobile.tta.data.local.db.table.Certificate;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.certificate.view_model.CertificateViewModel;
+import org.tta.mobile.util.BrowserUtil;
+import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.WebViewUtil;
 import org.tta.mobile.view.custom.URLInterceptorWebViewClient;
 
@@ -75,20 +77,29 @@ public class CertificateActivity extends BaseVMActivity implements View.OnClickL
         webview.getSettings().setDisplayZoomControls(false);
 
         //Other settings
+        webview.getSettings().setJavaScriptEnabled( true );
+        webview.getSettings().setLoadsImagesAutomatically(true);
+        webview.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
+        //cache settings for webview
         webview.getSettings().setAppCacheMaxSize( 8 * 1024 * 1024 ); // 8MB
         webview.getSettings().setAppCachePath( getApplicationContext().getCacheDir().getAbsolutePath() );
         webview.getSettings().setAllowFileAccess( true );
         webview.getSettings().setAppCacheEnabled( true );
-        webview.getSettings().setJavaScriptEnabled( true );
-        webview.getSettings().setLoadsImagesAutomatically(true);
-        webview.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         webview.getSettings().setDomStorageEnabled(true);
-        webview.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK );
-        /*if (NetworkUtil.isConnected(this)) {
+        webview.getSettings().setCacheMode( WebSettings.LOAD_DEFAULT ); // load online by default
+
+        if (!NetworkUtil.isConnected(this)) {
+            // loading offline
             webview.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK );
-        } else {
-            webview.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ONLY );
-        }*/
+        }
+
+
+        //add user agent
+        String userAgent = webview.getSettings().getUserAgentString() + "/" + BrowserUtil.getConfig().getUserAgent();
+        logD("User agent : " + userAgent);
+        webview.getSettings().setUserAgentString(userAgent);
+
 
         URLInterceptorWebViewClient client = new URLInterceptorWebViewClient(this, webview);
         client.setPageStatusListener(new URLInterceptorWebViewClient.IPageStatusListener() {
@@ -122,7 +133,6 @@ public class CertificateActivity extends BaseVMActivity implements View.OnClickL
         });
 
         webview.loadUrl(viewModel.getDataManager().getConfig().getApiHostURL() + certificate.getDownload_url());
-
     }
 
     @Override

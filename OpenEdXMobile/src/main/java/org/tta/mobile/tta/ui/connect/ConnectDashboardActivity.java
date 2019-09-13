@@ -51,6 +51,7 @@ import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.AppUtil;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.tta.wordpress_client.model.Post;
+import org.tta.mobile.util.BrowserUtil;
 import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.PermissionsUtil;
 import org.tta.mobile.view.common.PageViewStateCallback;
@@ -229,25 +230,29 @@ public class ConnectDashboardActivity extends BaseVMActivity {
 
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
 
-        //setting store webpage in cache
-
-        webView.getSettings().setAppCacheMaxSize(8 * 1024 * 1024); // 8MB
-        webView.getSettings().setAppCachePath(getApplicationContext().getCacheDir().getAbsolutePath());
-        webView.getSettings().setAllowFileAccess(true);
-        webView.getSettings().setAppCacheEnabled(true);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        webView.getSettings().setDomStorageEnabled(true);
-        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 
-        String userAgent = webView.getSettings().getUserAgentString() + "/" + "theteacherapp/4.0";
+        //cache settings for webview
+        webView.getSettings().setAppCacheMaxSize( 8 * 1024 * 1024 ); // 5MB
+        webView.getSettings().setAppCachePath( getApplicationContext().getCacheDir().getAbsolutePath() );
+        webView.getSettings().setAllowFileAccess( true );
+        webView.getSettings().setAppCacheEnabled( true );
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setCacheMode( WebSettings.LOAD_DEFAULT ); // load online by default
+
+
+        //add user agent
+        String userAgent = webView.getSettings().getUserAgentString() + "/" + BrowserUtil.getConfig().getUserAgent();
         logD("User agent : " + userAgent);
         webView.getSettings().setUserAgentString(userAgent);
 
-        /*if (!NetworkUtil.isConnected(this)) {
-            webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-        }*/
+        if (!NetworkUtil.isConnected(this)) {
+            // loading offline
+            webView.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK );
+        }
+
 
         final CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
