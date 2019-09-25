@@ -338,14 +338,6 @@ public class WordPressContract {
          * <P>Type: TEXT</P>
          */
         String FILTERJSON = "filterjson";
-
-
-        /**
-         * Date post stored in post table, in GMT
-         * <P>Type: TEXT</P>
-         * For updating webview cached content for post.If this date is smaller than last modified gmt.
-         */
-        String DATE_CACH_GMT = "date_cach_gmt";
     }
 
     interface TaxonomyColumns {
@@ -742,7 +734,6 @@ public class WordPressContract {
         public static final int IDX_LIKE_COUNT = 28;
         public static final int IDX_ISLIKE = 29;
         public static final int IDX_FILTER = 30;
-        public static final int IDX_DATE_CACH_GMT = 31;
 
 
         public static final String SCHEMA = "CREATE TABLE " + TABLE_NAME + " ("
@@ -778,7 +769,6 @@ public class WordPressContract {
                 + ISLIKE + " INTEGER ,"
                 + FILTER + " TEXT,"
                 + FILTERJSON + " TEXT,"
-                + DATE_CACH_GMT + " TEXT,"
                 + UPLOADING + " INTEGER DEFAULT 0)";
 
         private static ContentValues makeContentValues(boolean update, long blogId, long authorId, long postId,
@@ -787,9 +777,7 @@ public class WordPressContract {
                                                        String type, String link, String title, String content,
                                                        String excerpt, long featuredMedia, int commentStatus,
                                                        int pingStatus, boolean sticky, String format,
-                                                       String categories, String tags,int comment_count,
-                                                       String likes,String image,boolean islike,String filter,
-                                                       String filterjson,String mDateCacheGMT) {
+                                                       String categories, String tags,int comment_count,String likes,String image,boolean islike,String filter,String filterjson) {
             ContentValues values = new ContentValues();
             if (!update) {
                 values.put(BLOG_ID, blogId);
@@ -821,7 +809,6 @@ public class WordPressContract {
                 values.put(ISLIKE,islike);
                 values.put(FILTER,filter);
                 values.put(FILTERJSON,filterjson);
-                values.put(DATE_CACH_GMT,mDateCacheGMT);
             } else {
                 if (blogId != -1) {
                     values.put(BLOG_ID, blogId);
@@ -900,10 +887,6 @@ public class WordPressContract {
                     values.put(IMAGE, image);
                 }
 
-                if (!TextUtils.isEmpty(mDateCacheGMT)) {
-                    values.put(DATE_CACH_GMT, mDateCacheGMT);
-                }
-
                     values.put(FILTER, filter);
 
                     values.put(FILTERJSON,filterjson);
@@ -920,11 +903,10 @@ public class WordPressContract {
                                            String type, String link, String title, String content,
                                            String excerpt, long featuredMedia, int commentStatus,
                                            int pingStatus, boolean sticky, String format,
-                                           String categories, String tags,int comment_count,String likes,String image,boolean islike,
-                                           String filter,String filterjson,String mDateCacheGMT) {
+                                           String categories, String tags,int comment_count,String likes,String image,boolean islike,String filter,String filterjson) {
             return makeContentValues(false, blogId, authorId, postId, date, dateGmt, guid, modified,
                     modifiedGmt, password, slug, status, type, link, title, content, excerpt,
-                    featuredMedia, commentStatus, pingStatus, sticky, format, categories, tags,comment_count,likes,image,islike,filter,filterjson,mDateCacheGMT);
+                    featuredMedia, commentStatus, pingStatus, sticky, format, categories, tags,comment_count,likes,image,islike,filter,filterjson);
         }
 
         public static ContentValues insert(long blogId, long authorId, Post post) {
@@ -935,9 +917,7 @@ public class WordPressContract {
                     post.getCommentStatus() != null ? post.getCommentStatus().getStatus() : WPStatus.OPEN,
                     post.getPingStatus() != null ? post.getPingStatus().getStatus() : WPStatus.OPEN,
                     post.getSticky(), post.getFormat(),post.getAsStringWithSeparater(),
-                    DataConverters.makeTagString(post.getTags()),post.getTotal_comments(),
-                    post.getLikes(),post.getPost_image(),post.getIsLikes(),
-                    post.getFormatedFilter(),post.geJSONFromFilter(post.getFilter()),post.getDateCacheGMT());
+                    DataConverters.makeTagString(post.getTags()),post.getTotal_comments(),post.getLikes(),post.getPost_image(),post.getIsLikes(),post.getFormatedFilter(),post.geJSONFromFilter(post.getFilter()));
         }
 
         public static ContentValues update(long blogId, long authorId, long postId,
@@ -946,13 +926,10 @@ public class WordPressContract {
                                            String type, String link, String title, String content,
                                            String excerpt, long featuredMedia, int commentStatus,
                                            int pingStatus, boolean sticky, String format,
-                                           String categories, String tags,int comment_count,
-                                           String likes,String image,boolean islike,
-                                           String filter,String filterjson,String mDateCacheGMT) {
+                                           String categories, String tags,int comment_count,String likes,String image,boolean islike,String filter,String filterjson) {
             return makeContentValues(true, blogId, authorId, postId, date, dateGmt, guid, modified,
                     modifiedGmt, password, slug, status, type, link, title, content, excerpt,
-                    featuredMedia, commentStatus, pingStatus, sticky, format, categories, tags,
-                    comment_count,likes,image,islike,filter,filterjson,mDateCacheGMT);
+                    featuredMedia, commentStatus, pingStatus, sticky, format, categories, tags,comment_count,likes,image,islike,filter,filterjson);
         }
 
         public static ContentValues update(long blogId, long authorId, Post post) {
@@ -969,7 +946,7 @@ public class WordPressContract {
                     post.getPost_image(),
                     post.getIsLikes(),
                     post.getFormatedFilter(),
-                    post.geJSONFromFilter(post.getFilter()),post.getDateCacheGMT());
+                    post.geJSONFromFilter(post.getFilter()));
         }
     }
 
