@@ -801,6 +801,7 @@
     <string name="empty_certificates_message">You have not earned any certificate yet</string>
     <string name="empty_list_message">List is empty</string>
     <string name="empty_course_material_message">Course material is not available</string>
+    <string name="empty_pending_certs_message">Pending certificates not available</string>
     <string name="not_available_message">%s not available</string>
     <string name="comment_btn_label">Comment</string>
     <string name="replying_to">Replying to {name}</string>
@@ -862,6 +863,10 @@
     <string name="session_expire">Session Expired. Please login again.</string>
     <string name="share_clipboard">Share URL copied to clipboard</string>
     <string name="same_old_new_password">Old and new password cannot be same</string>
+    <string name="generated_certificates">Generated Certificates</string>
+    <string name="pending_certificates">Pending Certificates</string>
+    <string name="certificate_successful">Certificate generated successfully</string>
+    <string name="certificate_error">Error occurred while generating certificate</string>
 
     <string name="anonymous" translatable="false">Anonymous</string>
     <string name="privacy_policy_url" translatable="false">http://theteacherapp.org/privacy</string>

@@ -4,6 +4,9 @@ import android.arch.persistence.room.Entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
+
+import androidx.annotation.Nullable;
 
 @Entity(tableName = "certificate", primaryKeys = {"course_id", "username"})
 public class Certificate implements Parcelable {
@@ -155,5 +158,10 @@ public class Certificate implements Parcelable {
         dest.writeString(download_url);
         dest.writeString(modified);
         dest.writeString(image);
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return obj instanceof Certificate && TextUtils.equals(((Certificate) obj).course_id, course_id);
     }
 }

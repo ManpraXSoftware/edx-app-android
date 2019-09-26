@@ -490,31 +490,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.CustomStatusBar" />
 
-        <!--<activity android:name=".tta.ui.android_app_link.AppLinkActivity">
-
-            <tools:validation testUrl="http://connect.theteacherapp.org" />
-
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:scheme="http"
-                    android:host="connect.theteacherapp.org" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:scheme="https"
-                    android:host="www.connect.theteacherapp.org" />
-            </intent-filter>
-        </activity>-->
+        <activity android:name=".tta.ui.profile.certificate.CertificatesActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.CustomStatusBar" />
 
         <!-- TTA activities end -->
 

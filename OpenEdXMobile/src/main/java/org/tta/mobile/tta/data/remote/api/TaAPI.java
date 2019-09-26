@@ -7,6 +7,7 @@ import com.google.inject.Singleton;
 
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.Constants;
+import org.tta.mobile.tta.data.local.db.table.Certificate;
 import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.data.local.db.table.ContentStatus;
 import org.tta.mobile.tta.data.local.db.table.Feed;
@@ -265,5 +266,9 @@ public class TaAPI {
 
     public Call<UpdateResponse> getVersionUpdate(String v_name,Long v_code){
         return taService.getAppUpdate(v_name,v_code);
+    }
+
+    public Call<List<Certificate>> getPendingCertificates(int take, int skip){
+        return taService.getPendingCertificates(take, skip);
     }
 }

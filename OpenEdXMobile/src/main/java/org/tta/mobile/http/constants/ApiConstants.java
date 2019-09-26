@@ -162,6 +162,8 @@ public class ApiConstants {
 
     public static final String URL_MX_GET_APP_UPDATE = "api/appupdate/v1/getappupdate/";
 
+    public static final String URL_MX_GET_PENDING_CERTIFICATES = "api/mxcertification_api/get_pending_certificates/";
+
     //TTA end
 
     public static final String TOKEN_TYPE_ACCESS = "access_token";

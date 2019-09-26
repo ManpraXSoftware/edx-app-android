@@ -7,6 +7,7 @@ import org.tta.mobile.http.constants.ApiConstants;
 import org.tta.mobile.http.provider.RetrofitProvider;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.Constants;
+import org.tta.mobile.tta.data.local.db.table.Certificate;
 import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.data.local.db.table.ContentStatus;
 import org.tta.mobile.tta.data.local.db.table.Feed;
@@ -198,4 +199,8 @@ public interface TaService {
     @GET(ApiConstants.URL_MX_GET_APP_UPDATE)
     Call<UpdateResponse> getAppUpdate(@Query(Constants.VERSION_NAME) String v_name,
                                       @Query(Constants.VERSION_CODE) Long v_code);
+
+    @GET(ApiConstants.URL_MX_GET_PENDING_CERTIFICATES)
+    Call<List<Certificate>> getPendingCertificates(@Query(Constants.KEY_TAKE) int take,
+                                                   @Query(Constants.KEY_SKIP) int skip);
 }

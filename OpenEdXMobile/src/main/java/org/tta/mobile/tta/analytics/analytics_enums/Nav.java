@@ -51,6 +51,8 @@ public enum Nav {
 
     //in profile
     all_certificates,
+    generated_certificates,
+    pending_certificates,
     certificate,
     edit,
     signout,

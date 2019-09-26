@@ -157,6 +157,7 @@ import org.tta.mobile.tta.task.profile.ChangePasswordTask;
 import org.tta.mobile.tta.task.profile.GetAccountTask;
 import org.tta.mobile.tta.task.profile.GetFollowStatusTask;
 import org.tta.mobile.tta.task.profile.GetFollowersOrFollowingTask;
+import org.tta.mobile.tta.task.profile.GetPendingCertificatesTask;
 import org.tta.mobile.tta.task.profile.GetProfileTask;
 import org.tta.mobile.tta.task.profile.GetUserAddressTask;
 import org.tta.mobile.tta.task.profile.SubmitFeedbackTask;
@@ -4522,6 +4523,33 @@ public class DataManager extends BaseRoboInjector {
         if (mHandler != null) {
             mHandler.post(() -> Toast.makeText(context, msg, duration).show());
         }
+    }
+    
+    public void getPendingCertificates(int take, int skip, OnResponseCallback<List<Certificate>> callback){
+
+        if (NetworkUtil.isConnected(context)) {
+
+            new GetPendingCertificatesTask(context, take, skip){
+                @Override
+                protected void onSuccess(List<Certificate> certificates) throws Exception {
+                    super.onSuccess(certificates);
+                    if (certificates == null || certificates.isEmpty()){
+                        callback.onFailure(new TaException(context.getString(R.string.empty_pending_certs_message)));
+                    } else {
+                        callback.onSuccess(certificates);
+                    }
+                }
+
+                @Override
+                protected void onException(Exception ex) {
+                    callback.onFailure(ex);
+                }
+            }.execute();
+
+        } else {
+            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
+        }
+        
     }
 }
 
