@@ -49,7 +49,7 @@
     <string name="viewed"><font color="#2FD233">देख लिया है</font></string>
     <string name="viewing"><font color="#FFDB03">देख रहे हैं</font></string>
     <string name="assessment">समझ परखें</string>
-    <string name="view_certificate">सर्टिफिकेट देखें</string>
+    <string name="view_certificate">सर्टिफ़िकेट देखें</string>
     <string name="estimated_duration">अनुमानित अवधि</string>
     <string name="reply">जवाब दें</string>
     <string name="all_list">सभी</string>
@@ -77,8 +77,8 @@
     <string name="my_certificates">मेरे सर्टिफ़िकेट</string>
     <string name="all_certificates">सभी सर्टिफ़िकेट</string>
     <string name="position_obtained">प्राप्त करे पदक</string>
-    <string name="generate_certificate">सर्टिफिकेट उत्पन्न करें</string>
-    <string name="certificate">सर्टिफिकेट</string>
+    <string name="generate_certificate">सर्टिफ़िकेट उत्पन्न करें</string>
+    <string name="certificate">सर्टिफ़िकेट</string>
     <string name="unfollow">अनफॉलो करें</string>
     <string name="total">"कुल : "</string>
     <string name="see_more">और देखें</string>
@@ -95,7 +95,7 @@
     <string name="empty_my_agenda_list">\“%s\” में आपने %s नहीं चुना है। अपने लिए %s का चुनाव करने के लिए @ पर क्लिक करें</string>
     <string name="you_are_offline">आप ऑफलाइन हैं</string>
     <string name="feed_format_badge"><b>%s</b> ने हाल ही में <font fgcolor="#F75791">%s पदक</font> पाया</string>
-    <string name="feed_format_certificate"><b>%s</b> ने %s में <font fgcolor="#F75791">सर्टिफिकेट</font> पाया</string>
+    <string name="feed_format_certificate"><b>%s</b> ने %s में <font fgcolor="#F75791">सर्टिफ़िकेट</font> पाया</string>
     <string name="view_discussion">चर्चा देखें</string>
 
     <string-array name="spinner_classes">
@@ -159,7 +159,7 @@
     <string name="empty_post_message">पोस्ट उपलब्ध नहीं है</string>
     <string name="empty_discussion_message">चर्चा मौजूद नहीं</string>
     <string name="empty_comments_message">इस चर्चा पर कोई टिप्पणी शामिल नहीं है</string>
-    <string name="empty_certificates_message">सर्टिफिकेट उपलब्ध नहीं है</string>
+    <string name="empty_certificates_message">सर्टिफ़िकेट उपलब्ध नहीं है</string>
     <string name="not_available_message">%s उपलब्ध नहीं है</string>
     <string name="empty_list_message">सूची खाली है</string>
     <string name="search_only_hindi">खोज (केवल हिंदी)</string>
@@ -189,7 +189,7 @@
     <string name="no_connection_exception">आप ऑफलाइन हैं</string>
     <string name="login_error">लॉगिन असफल</string>
     <string name="reset_password">पासवर्ड रीसेट</string>
-    <string name="name_on_certificate">सर्टिफिकेट पर नाम</string>
+    <string name="name_on_certificate">सर्टिफ़िकेट पर नाम</string>
     <string name="user_not_exist">उपयोगकर्ता मौजूद नहीं है</string>
     <string name="user_not_exist_message">इस मोबाइल नंबर के साथ उपयोगकर्ता मौजूद नहीं है।</string>
     <string name="message_sent_successfully">आपका फीडबैक सफलतापूर्वक भेज दिया गया है ।</string>
@@ -213,8 +213,8 @@
     <string name="user_not_available">उपयोगकर्ता उपलब्ध नहीं है</string>
     <string name="not_authenticated_to_comment">आप टिप्पणी करने के लिए प्रमाणित नहीं हैं</string>
     <string name="permission_not_granted">अनुमति नहीं दी गई</string>
-    <string name="certificate_not_available">सर्टिफिकेट उपलब्ध नहीं है</string>
-    <string name="certificate_not_generated">सर्टिफिकेट उत्पन्न नहीं हो सका</string>
+    <string name="certificate_not_available">सर्टिफ़िकेट उपलब्ध नहीं है</string>
+    <string name="certificate_not_generated">सर्टिफ़िकेट उत्पन्न नहीं हो सका</string>
     <string name="password_changed_successfully">पासवर्ड सफलतापूर्वक बदला गया</string>
     <string name="correct_old_password">कृपया सही पुराना पासवर्ड दर्ज करें</string>
     <string name="password_changed_login">पासवर्ड सफलतापूर्वक बदला गया। जारी रखने के लिए कृपया लॉगिन करें</string>
@@ -231,7 +231,7 @@
     <string name="feed_follow">  अन्य शिक्षको से जुड़ने के \nलिए फॉलो बटन दबाएँ  </string>
     <string name="feed_share"> सभी के साथ ये सामग्री साझा करने के लिए यहाँ दबाएँ। </string>
     <string name="samjhe_parkhe_btn"> खुद को परखना, सीखने में मदद कर सकता है| \nआकलन के बाद सर्टिफ़िकेट लेना ना भूलें| \nसभी भाग देखकर, आकलन में 60% या उससे \nज़्यादा अंक आने पर आप इसके हक़दार बनेंगे। </string>
-    <string name="certificate_btn">  आपका सर्टिफिकेट तैयार हैं  </string>
+    <string name="certificate_btn">"  आपका सर्टिफ़िकेट तैयार हैं  "</string>
     <string name="app_tuts_activate">  ऐप टुटोरिअल सक्रिय कर दिए गए हैं  </string>
     <string name="app_tuts_already">  ऐप टुटोरिअल सक्रिय हैं  </string>
     <string name="course_button"> सामग्री को अपने लक्ष्य से जोड़ने के लिए यह बटन दबाएँ। \nइस तरह आप, ख़ास अपने लिए सामग्री, \nयहाँ संजोकर रख सकेंगे|   </string>
@@ -249,9 +249,9 @@
     <string name="verify">सत्यापित करें</string>
     <string name="verify_otp">OTP सत्यापित करें</string>
     <string name="same_old_new_password">पुराना और नया पासवर्ड सामान नहीं हो सकता।</string>
-    <string name="generated_certificates">मिले हुए सर्टिफिकेट</string>
-    <string name="pending_certificates">लंबित सर्टिफिकेट</string>
-    <string name="empty_pending_certs_message">लंबित सर्टिफिकेट उपलब्ध नहीं हैं</string>
-    <string name="certificate_successful">सर्टिफिकेट सफलता पूर्वक उत्पन्न हुआ</string>
-    <string name="certificate_error">सर्टिफिकेट उत्पन्न करने में असफल</string>
+    <string name="generated_certificates">मौजूदा सर्टिफ़िकेट</string>
+    <string name="pending_certificates">आगामी सर्टिफ़िकेट</string>
+    <string name="empty_pending_certs_message">आगामी सर्टिफ़िकेट उपलब्ध नहीं हैं</string>
+    <string name="certificate_successful">आपका सर्टिफ़िकेट तैयार है</string>
+    <string name="certificate_error">सर्टिफ़िकेट उत्पन्न करने में असफल</string>
 </resources>

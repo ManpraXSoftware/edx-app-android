@@ -863,7 +863,7 @@
     <string name="session_expire">Session Expired. Please login again.</string>
     <string name="share_clipboard">Share URL copied to clipboard</string>
     <string name="same_old_new_password">Old and new password cannot be same</string>
-    <string name="generated_certificates">Generated Certificates</string>
+    <string name="generated_certificates">Current Certificates</string>
     <string name="pending_certificates">Pending Certificates</string>
     <string name="certificate_successful">Certificate generated successfully</string>
     <string name="certificate_error">Error occurred while generating certificate</string>
