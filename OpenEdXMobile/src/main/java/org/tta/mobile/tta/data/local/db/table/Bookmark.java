@@ -26,10 +26,6 @@ public class Bookmark {
     public Bookmark() {
     }
 
-    public Bookmark(long contentId) {
-        this.contentId = contentId;
-    }
-
     @Ignore
     public Bookmark(long contentId, long sourceId) {
         this.contentId = contentId;

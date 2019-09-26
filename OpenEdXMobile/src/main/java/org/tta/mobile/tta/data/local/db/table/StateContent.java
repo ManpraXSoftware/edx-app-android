@@ -3,6 +3,7 @@ package org.tta.mobile.tta.data.local.db.table;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "state_content",
@@ -25,10 +26,7 @@ public class StateContent {
     public StateContent() {
     }
 
-    public StateContent(long contentId) {
-        this.contentId = contentId;
-    }
-
+    @Ignore
     public StateContent(long contentId, long sourceId) {
         this.contentId = contentId;
         this.sourceId = sourceId;
