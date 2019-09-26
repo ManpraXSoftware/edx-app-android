@@ -378,23 +378,6 @@ public class Post extends WPObject<Post> {
         tags.add(tagId);
     }
 
-
-
-    /**
-     * The  date the when the post is cached in db, as GMT.
-     */
-    @SerializedName("date_cache_gmt")
-    private String dateCacheGMT;
-
-    public void setDateCacheGMT(String mDateGMT) {
-        this.dateCacheGMT = mDateGMT;
-    }
-
-    public String getDateCacheGMT() {
-        return dateCacheGMT;
-    }
-
-
     public Post withTags(List<Long> tags) {
         setTags(tags);
         return this;

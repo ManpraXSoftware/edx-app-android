@@ -23,7 +23,6 @@ public class WordPressDatabase extends SQLiteOpenHelper {
     private static final int VERSION_POST_UPLOADING_FLAG = 104;
     private static final int VERSION_MEDIA_UPLOAD_STATE = 105;
     private static final int VERSION_POST_FILTERJSON_FIELD = 106;
-    private static final int VERSION_POST_DATE_CACH_GMT_FIELD = 107;
 
     private static final int VERSION_CURRENT = VERSION_POST_FILTERJSON_FIELD;
 
@@ -70,8 +69,6 @@ public class WordPressDatabase extends SQLiteOpenHelper {
                 upgradeV104To105(db);
             case VERSION_MEDIA_UPLOAD_STATE:
                 upgradeV105To106(db);
-            case VERSION_POST_DATE_CACH_GMT_FIELD:
-                upgradeV106To107(db);
         }
     }
 
@@ -141,14 +138,6 @@ public class WordPressDatabase extends SQLiteOpenHelper {
     private void upgradeV105To106(SQLiteDatabase db) {
         db.execSQL("ALTER TABLE " + WordPressContract.Posts.TABLE_NAME + " ADD COLUMN "
                 + WordPressContract.Posts.FILTERJSON + " TEXT");
-    }
-
-    /**
-     * Add Post cache date flag column to Post
-     */
-    private void upgradeV106To107 (SQLiteDatabase db) {
-        db.execSQL("ALTER TABLE " + WordPressContract.Posts.TABLE_NAME + " ADD COLUMN "
-                + WordPressContract.Posts.DATE_CACH_GMT + " TEXT");
     }
 
     public void deleteDatabase(Context context) {
