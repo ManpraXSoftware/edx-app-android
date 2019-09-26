@@ -809,13 +809,19 @@ public class SearchViewModel extends BaseViewModel {
                         isAllLoaded = false;
                         search();
                     }
+                } else {
+                    mActivity.hideLoading();
                 }
             }
 
             @Override
             public void onFailure(Exception e) {
-                mActivity.hideLoading();
 //                mActivity.showLongSnack(e.getLocalizedMessage());
+                filtersReceived = true;
+                if (contentListsReceived){
+                    isAllLoaded = false;
+                    search();
+                }
             }
         });
 
