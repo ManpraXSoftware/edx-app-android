@@ -34,7 +34,7 @@ public class GeneratedCertificatesViewModel extends BaseViewModel {
     public CertificatesAdapter adapter;
     public RecyclerView.LayoutManager layoutManager;
 
-    List<Certificate> certificates;
+    private List<Certificate> certificates;
 
     public ObservableBoolean emptyVisible = new ObservableBoolean();
 
@@ -122,8 +122,13 @@ public class GeneratedCertificatesViewModel extends BaseViewModel {
             if (binding instanceof TRowCertificateBinding) {
                 TRowCertificateBinding certificateBinding = (TRowCertificateBinding) binding;
                 certificateBinding.contentTitle.setText(model.getCourse_name());
+
+                String imageUrl = model.getImage();
+                if (!imageUrl.startsWith(mDataManager.getConfig().getApiHostURL())){
+                    imageUrl = mDataManager.getConfig().getApiHostURL() + imageUrl;
+                }
                 Glide.with(getContext())
-                        .load(mDataManager.getConfig().getApiHostURL() + model.getImage())
+                        .load(imageUrl)
                         .placeholder(R.drawable.placeholder_course_card_image)
                         .into(certificateBinding.contentImage);
 

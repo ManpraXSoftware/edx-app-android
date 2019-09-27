@@ -11,6 +11,7 @@ import org.tta.mobile.logger.Logger;
 import org.tta.mobile.model.api.ProfileModel;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.local.db.table.Certificate;
+import org.tta.mobile.tta.data.model.profile.AllCertificatesResponse;
 import org.tta.mobile.tta.data.model.search.FilterSection;
 import org.tta.mobile.tta.data.model.search.SearchFilter;
 import org.tta.mobile.tta.event.CertificateGeneratedEvent;
@@ -218,7 +219,7 @@ public class ProfileViewModel extends BaseViewModel {
 
     private void fetchCertificates() {
 
-        mDataManager.getMyCertificates(new OnResponseCallback<List<Certificate>>() {
+        /*mDataManager.getMyCertificates(new OnResponseCallback<List<Certificate>>() {
             @Override
             public void onSuccess(List<Certificate> data) {
                 nCertificates.set(String.valueOf(data.size()));
@@ -227,6 +228,27 @@ public class ProfileViewModel extends BaseViewModel {
             @Override
             public void onFailure(Exception e) {
                 //Do nothing
+            }
+        });*/
+
+        mDataManager.getAllCertificates(new OnResponseCallback<AllCertificatesResponse>() {
+            @Override
+            public void onSuccess(AllCertificatesResponse data) {
+                int n = 0;
+                if (data!= null){
+                    if (data.getGenerated() != null){
+                        n += data.getGenerated().size();
+                    }
+                    if (data.getPending() != null){
+                        n += data.getPending().size();
+                    }
+                }
+                nCertificates.set(String.valueOf(n));
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
             }
         });
 

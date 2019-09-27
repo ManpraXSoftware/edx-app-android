@@ -471,6 +471,11 @@ public class CourseMaterialViewModel extends BaseViewModel {
                     break;
                 case R.id.item_btn:
                     if (footerBtnText.get().equalsIgnoreCase(mActivity.getString(R.string.generate_certificate))){
+                        if (!NetworkUtil.isConnected(mActivity)){
+                            mActivity.showLongSnack(mActivity.getString(R.string.no_connection_exception));
+                            return;
+                        }
+
                         ScormBlockModel finalScorm = scorm;
 
                         View view = LayoutInflater.from(mActivity)
@@ -661,6 +666,9 @@ public class CourseMaterialViewModel extends BaseViewModel {
                 footerBtnBackground.set(R.drawable.t_btn_backgound_filled_blue);
                 footerBtnTextColor.set(R.color.white);
                 certificateStatus = "progress";
+
+                mDataManager.addPendingCertificate(content.getSource_identity(), content.getName(),
+                        content.getIcon());
                 break;
 
             case PROGRESS:

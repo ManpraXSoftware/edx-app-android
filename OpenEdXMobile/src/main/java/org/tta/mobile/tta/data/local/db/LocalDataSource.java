@@ -8,6 +8,7 @@ import org.tta.mobile.tta.data.local.db.table.ContentList;
 import org.tta.mobile.tta.data.local.db.table.ContentStatus;
 import org.tta.mobile.tta.data.local.db.table.Feed;
 import org.tta.mobile.tta.data.local.db.table.Notification;
+import org.tta.mobile.tta.data.local.db.table.PendingCertificate;
 import org.tta.mobile.tta.data.local.db.table.Source;
 import org.tta.mobile.tta.data.local.db.table.StateContent;
 import org.tta.mobile.tta.data.local.db.table.UnitStatus;
@@ -172,6 +173,41 @@ public class LocalDataSource implements ILocalDataSource {
     @Override
     public void insertCertificate(Certificate certificate) {
         mAppDatabase.certificateDao().insert(certificate);
+    }
+
+    @Override
+    public List<PendingCertificate> getAllPendingCertificates(String username) {
+        return mAppDatabase.pendingCertificateDao().getAll(username);
+    }
+
+    @Override
+    public PendingCertificate getPendingCertificate(String courseId, String username) {
+        return mAppDatabase.pendingCertificateDao().getByCourseId(courseId, username);
+    }
+
+    @Override
+    public void insertPendingCertificates(List<PendingCertificate> pendingCertificates) {
+        mAppDatabase.pendingCertificateDao().insert(pendingCertificates);
+    }
+
+    @Override
+    public void insertPendingCertificate(PendingCertificate pendingCertificate) {
+        mAppDatabase.pendingCertificateDao().insert(pendingCertificate);
+    }
+
+    @Override
+    public void deletePendingCertificate(PendingCertificate pendingCertificate) {
+        mAppDatabase.pendingCertificateDao().delete(pendingCertificate);
+    }
+
+    @Override
+    public void deletePendingCertificateByCourseId(String courseId, String username) {
+        mAppDatabase.pendingCertificateDao().deleteByCourseId(courseId, username);
+    }
+
+    @Override
+    public void deleteAllPendingCertificates(String username) {
+        mAppDatabase.pendingCertificateDao().deleteAll(username);
     }
 
     @Override

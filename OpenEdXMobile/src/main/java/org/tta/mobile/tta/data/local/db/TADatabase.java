@@ -1,7 +1,9 @@
 package org.tta.mobile.tta.data.local.db;
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
+import android.arch.persistence.room.migration.Migration;
 
 import org.tta.mobile.tta.data.local.db.dao.AccountDao;
 import org.tta.mobile.tta.data.local.db.dao.BookmarkDao;
@@ -12,6 +14,7 @@ import org.tta.mobile.tta.data.local.db.dao.ContentListDao;
 import org.tta.mobile.tta.data.local.db.dao.ContentStatusDao;
 import org.tta.mobile.tta.data.local.db.dao.FeedDao;
 import org.tta.mobile.tta.data.local.db.dao.NotificationDao;
+import org.tta.mobile.tta.data.local.db.dao.PendingCertificateDao;
 import org.tta.mobile.tta.data.local.db.dao.SourceDao;
 import org.tta.mobile.tta.data.local.db.dao.StateContentDao;
 import org.tta.mobile.tta.data.local.db.dao.UnitStatusDao;
@@ -21,6 +24,7 @@ import org.tta.mobile.tta.data.local.db.table.Certificate;
 import org.tta.mobile.tta.data.local.db.table.ContentStatus;
 import org.tta.mobile.tta.data.local.db.table.Feed;
 import org.tta.mobile.tta.data.local.db.table.Notification;
+import org.tta.mobile.tta.data.local.db.table.PendingCertificate;
 import org.tta.mobile.tta.data.local.db.table.StateContent;
 import org.tta.mobile.tta.data.local.db.table.UnitStatus;
 import org.tta.mobile.tta.data.local.db.table.User;
@@ -44,9 +48,10 @@ import org.tta.mobile.user.Account;
                 UnitStatus.class,
                 Account.class,
                 Bookmark.class,
-                StateContent.class
+                StateContent.class,
+                PendingCertificate.class
         },
-        version = 6,
+        version = 7,
         exportSchema = false
 )
 @TypeConverters({DbTypeConverters.class})
@@ -65,4 +70,13 @@ public abstract class TADatabase extends RoomDatabase {
     public abstract AccountDao accountDao();
     public abstract BookmarkDao bookmarkDao();
     public abstract StateContentDao stateContentDao();
+    public abstract PendingCertificateDao pendingCertificateDao();
+
+    public static final Migration MIGRATION_6_7 = new Migration(6, 7) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE `pending_certificate` (`course_id` TEXT, "
+                    + "`course_name` TEXT, `image` TEXT, `username` TEXT, PRIMARY KEY(`course_id`))");
+        }
+    };
 }

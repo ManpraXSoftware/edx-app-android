@@ -7,6 +7,7 @@ import org.tta.mobile.tta.data.local.db.table.ContentList;
 import org.tta.mobile.tta.data.local.db.table.ContentStatus;
 import org.tta.mobile.tta.data.local.db.table.Feed;
 import org.tta.mobile.tta.data.local.db.table.Notification;
+import org.tta.mobile.tta.data.local.db.table.PendingCertificate;
 import org.tta.mobile.tta.data.local.db.table.Source;
 import org.tta.mobile.tta.data.local.db.table.StateContent;
 import org.tta.mobile.tta.data.local.db.table.UnitStatus;
@@ -56,6 +57,14 @@ public interface ILocalDataSource {
     Certificate getCertificate(String courseId, String username);
     void insertCertificates(List<Certificate> certificates);
     void insertCertificate(Certificate certificate);
+
+    List<PendingCertificate> getAllPendingCertificates(String username);
+    PendingCertificate getPendingCertificate(String courseId, String username);
+    void insertPendingCertificates(List<PendingCertificate> pendingCertificates);
+    void insertPendingCertificate(PendingCertificate pendingCertificate);
+    void deletePendingCertificate(PendingCertificate pendingCertificate);
+    void deletePendingCertificateByCourseId(String courseId, String username);
+    void deleteAllPendingCertificates(String username);
 
     List<Notification> getAllNotifications(String username);
     List<Notification> getAllNotificationsInPage(String username, int take, int skip);

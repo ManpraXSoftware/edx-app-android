@@ -23,13 +23,14 @@ import org.tta.mobile.databinding.TRowCertificateBinding;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Source;
 import org.tta.mobile.tta.data.enums.CertificateStatus;
-import org.tta.mobile.tta.data.local.db.table.Certificate;
+import org.tta.mobile.tta.data.local.db.table.PendingCertificate;
 import org.tta.mobile.tta.data.model.content.CertificateStatusResponse;
 import org.tta.mobile.tta.data.model.profile.UpdateMyProfileResponse;
 import org.tta.mobile.tta.event.CertificateGeneratedEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
+import org.tta.mobile.util.NetworkUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,37 +38,26 @@ import java.util.List;
 import de.greenrobot.event.EventBus;
 
 public class PendingCertificatesViewModel extends BaseViewModel {
-    private static final int DEFAULT_TAKE = 10;
-    private static final int DEFAULT_SKIP = 0;
 
     public CertificatesAdapter adapter;
     public RecyclerView.LayoutManager layoutManager;
 
-    List<Certificate> pendingCertificates;
-    private int take, skip;
-    private boolean allLoaded;
+    private List<PendingCertificate> pendingCertificates;
 
     public ObservableBoolean emptyVisible = new ObservableBoolean();
-
-    public MxInfiniteAdapter.OnLoadMoreListener loadMoreListener = page -> {
-        if (allLoaded)
-            return false;
-        this.skip++;
-        fetchPendingCertificates();
-        return true;
-    };
 
     public PendingCertificatesViewModel(Context context, TaBaseFragment fragment) {
         super(context, fragment);
 
         pendingCertificates = new ArrayList<>();
-        take = DEFAULT_TAKE;
-        skip = DEFAULT_SKIP;
-        allLoaded = false;
 
         adapter = new CertificatesAdapter(mActivity);
         adapter.setItems(pendingCertificates);
         adapter.setItemClickListener((view, item) -> {
+            if (!NetworkUtil.isConnected(mActivity)){
+                mActivity.showLongSnack(mActivity.getString(R.string.no_connection_exception));
+                return;
+            }
             showChangeNameDialog(item);
         });
 
@@ -75,7 +65,7 @@ public class PendingCertificatesViewModel extends BaseViewModel {
         fetchPendingCertificates();
     }
 
-    private void showChangeNameDialog(Certificate certificate) {
+    private void showChangeNameDialog(PendingCertificate certificate) {
 
         View view = LayoutInflater.from(mActivity)
                 .inflate(R.layout.t_dialog_change_name, null, false);
@@ -126,17 +116,17 @@ public class PendingCertificatesViewModel extends BaseViewModel {
 
     }
 
-    private void generateCertificate(Certificate certificate){
+    private void generateCertificate(PendingCertificate certificate){
 
-        mDataManager.generateCertificate(certificate.getCourse_id(),
+        mDataManager.generateCertificate(certificate.getCourseId(),
                 new OnResponseCallback<CertificateStatusResponse>() {
             @Override
             public void onSuccess(CertificateStatusResponse data) {
                 mActivity.hideLoading();
 
                 mActivity.analytic.addMxAnalytics_db(
-                        certificate.getCourse_id(), Action.GenerateCertificate, certificate.getCourse_name(),
-                        Source.Mobile, certificate.getCourse_id());
+                        certificate.getCourseId(), Action.GenerateCertificate, certificate.getCourseName(),
+                        Source.Mobile, certificate.getCourseId());
 
                 adapter.remove(certificate);
                 toggleEmptyVisibility();
@@ -144,7 +134,7 @@ public class PendingCertificatesViewModel extends BaseViewModel {
                 switch (CertificateStatus.getEnumFromString(data.getStatus())){
                     case GENERATED:
                         mActivity.showLongSnack(mActivity.getString(R.string.certificate_successful));
-                        EventBus.getDefault().post(new CertificateGeneratedEvent(certificate.getCourse_id()));
+                        EventBus.getDefault().post(new CertificateGeneratedEvent(certificate.getCourseId()));
                         break;
                     case PROGRESS:
                         mActivity.showIndefiniteSnack(
@@ -175,21 +165,16 @@ public class PendingCertificatesViewModel extends BaseViewModel {
 
     private void fetchPendingCertificates() {
 
-        mDataManager.getPendingCertificates(take, skip, new OnResponseCallback<List<Certificate>>() {
+        mDataManager.getPendingCertificatesFromLocal(new OnResponseCallback<List<PendingCertificate>>() {
             @Override
-            public void onSuccess(List<Certificate> data) {
+            public void onSuccess(List<PendingCertificate> data) {
                 mActivity.hideLoading();
-                if (data.size() < take) {
-                    allLoaded = true;
-                }
                 populateCertificates(data);
-                adapter.setLoadingDone();
             }
 
             @Override
             public void onFailure(Exception e) {
                 mActivity.hideLoading();
-                allLoaded = true;
                 adapter.setLoadingDone();
                 toggleEmptyVisibility();
             }
@@ -197,10 +182,10 @@ public class PendingCertificatesViewModel extends BaseViewModel {
 
     }
 
-    private void populateCertificates(List<Certificate> data) {
+    private void populateCertificates(List<PendingCertificate> data) {
         boolean newItemsAdded = false;
         int n = 0;
-        for (Certificate certificate : data) {
+        for (PendingCertificate certificate : data) {
             if (!pendingCertificates.contains(certificate)) {
                 pendingCertificates.add(certificate);
                 newItemsAdded = true;
@@ -222,18 +207,23 @@ public class PendingCertificatesViewModel extends BaseViewModel {
         }
     }
 
-    public class CertificatesAdapter extends MxInfiniteAdapter<Certificate> {
+    public class CertificatesAdapter extends MxInfiniteAdapter<PendingCertificate> {
         public CertificatesAdapter(Context context) {
             super(context);
         }
 
         @Override
-        public void onBind(@NonNull ViewDataBinding binding, @NonNull Certificate model, @Nullable OnRecyclerItemClickListener<Certificate> listener) {
+        public void onBind(@NonNull ViewDataBinding binding, @NonNull PendingCertificate model, @Nullable OnRecyclerItemClickListener<PendingCertificate> listener) {
             if (binding instanceof TRowCertificateBinding) {
                 TRowCertificateBinding certificateBinding = (TRowCertificateBinding) binding;
-                certificateBinding.contentTitle.setText(model.getCourse_name());
+                certificateBinding.contentTitle.setText(model.getCourseName());
+
+                String imageUrl = model.getImage();
+                if (!imageUrl.startsWith(mDataManager.getConfig().getApiHostURL())){
+                    imageUrl = mDataManager.getConfig().getApiHostURL() + imageUrl;
+                }
                 Glide.with(getContext())
-                        .load(mDataManager.getConfig().getApiHostURL() + model.getImage())
+                        .load(imageUrl)
                         .placeholder(R.drawable.placeholder_course_card_image)
                         .into(certificateBinding.contentImage);
 

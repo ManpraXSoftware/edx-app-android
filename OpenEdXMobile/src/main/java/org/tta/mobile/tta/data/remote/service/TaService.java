@@ -25,6 +25,7 @@ import org.tta.mobile.tta.data.model.feed.SuggestedUser;
 import org.tta.mobile.tta.data.model.library.CollectionConfigResponse;
 import org.tta.mobile.tta.data.model.library.CollectionItemsResponse;
 import org.tta.mobile.tta.data.model.library.ConfigModifiedDateResponse;
+import org.tta.mobile.tta.data.model.profile.AllCertificatesResponse;
 import org.tta.mobile.tta.data.model.profile.ChangePasswordResponse;
 import org.tta.mobile.tta.data.model.profile.FeedbackResponse;
 import org.tta.mobile.tta.data.model.profile.FollowStatus;
@@ -203,4 +204,7 @@ public interface TaService {
     @GET(ApiConstants.URL_MX_GET_PENDING_CERTIFICATES)
     Call<List<Certificate>> getPendingCertificates(@Query(Constants.KEY_TAKE) int take,
                                                    @Query(Constants.KEY_SKIP) int skip);
+
+    @GET(ApiConstants.URL_MX_GET_ALL_CERTIFICATES)
+    Call<AllCertificatesResponse> getAllCertificates();
 }

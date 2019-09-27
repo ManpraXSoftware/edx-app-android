@@ -72,6 +72,7 @@ import org.tta.mobile.tta.data.local.db.table.ContentList;
 import org.tta.mobile.tta.data.local.db.table.ContentStatus;
 import org.tta.mobile.tta.data.local.db.table.Feed;
 import org.tta.mobile.tta.data.local.db.table.Notification;
+import org.tta.mobile.tta.data.local.db.table.PendingCertificate;
 import org.tta.mobile.tta.data.local.db.table.Source;
 import org.tta.mobile.tta.data.local.db.table.StateContent;
 import org.tta.mobile.tta.data.local.db.table.UnitStatus;
@@ -91,6 +92,7 @@ import org.tta.mobile.tta.data.model.feed.SuggestedUser;
 import org.tta.mobile.tta.data.model.library.CollectionConfigResponse;
 import org.tta.mobile.tta.data.model.library.CollectionItemsResponse;
 import org.tta.mobile.tta.data.model.library.ConfigModifiedDateResponse;
+import org.tta.mobile.tta.data.model.profile.AllCertificatesResponse;
 import org.tta.mobile.tta.data.model.profile.ChangePasswordResponse;
 import org.tta.mobile.tta.data.model.profile.FeedbackResponse;
 import org.tta.mobile.tta.data.model.profile.FollowStatus;
@@ -155,6 +157,7 @@ import org.tta.mobile.tta.task.notification.GetNotificationsTask;
 import org.tta.mobile.tta.task.notification.UpdateNotificationsTask;
 import org.tta.mobile.tta.task.profile.ChangePasswordTask;
 import org.tta.mobile.tta.task.profile.GetAccountTask;
+import org.tta.mobile.tta.task.profile.GetAllCertificatesTask;
 import org.tta.mobile.tta.task.profile.GetFollowStatusTask;
 import org.tta.mobile.tta.task.profile.GetFollowersOrFollowingTask;
 import org.tta.mobile.tta.task.profile.GetPendingCertificatesTask;
@@ -268,7 +271,9 @@ public class DataManager extends BaseRoboInjector {
             synchronized (DataManager.class) {
                 if (mDataManager == null) {
                     mDataManager = new DataManager(context, RetrofitServiceUtil.create(context, true),
-                            new LocalDataSource(Room.databaseBuilder(context, TADatabase.class, TA_DATABASE).fallbackToDestructiveMigration()
+                            new LocalDataSource(Room.databaseBuilder(context, TADatabase.class, TA_DATABASE)
+                                    .addMigrations(TADatabase.MIGRATION_6_7)
+                                    .fallbackToDestructiveMigration()
                                     .build()));
                 }
             }
@@ -2478,33 +2483,47 @@ public class DataManager extends BaseRoboInjector {
             @Override
             public void onFailure(Exception e) {
 
-                if (NetworkUtil.isConnected(context)) {
+                getPendingCertificateFromLocal(courseId, new OnResponseCallback<PendingCertificate>() {
+                    @Override
+                    public void onSuccess(PendingCertificate data) {
+                        CertificateStatusResponse response = new CertificateStatusResponse();
+                        response.setStatus(CertificateStatus.APPLICABLE.name());
+                        callback.onSuccess(response);
+                    }
 
-                    new GetCertificateStatusTask(context, courseId) {
-                        @Override
-                        protected void onSuccess(CertificateStatusResponse certificateStatusResponse) throws Exception {
-                            super.onSuccess(certificateStatusResponse);
-                            if (certificateStatusResponse != null) {
-                                callback.onSuccess(certificateStatusResponse);
-                            } else {
-                                callback.onFailure(new TaException("Status of certificate could not be fetched"));
-                            }
+                    @Override
+                    public void onFailure(Exception e) {
+
+                        if (NetworkUtil.isConnected(context)) {
+
+                            new GetCertificateStatusTask(context, courseId) {
+                                @Override
+                                protected void onSuccess(CertificateStatusResponse certificateStatusResponse) throws Exception {
+                                    super.onSuccess(certificateStatusResponse);
+                                    if (certificateStatusResponse != null) {
+                                        callback.onSuccess(certificateStatusResponse);
+                                    } else {
+                                        callback.onFailure(new TaException("Status of certificate could not be fetched"));
+                                    }
+                                }
+
+                                @Override
+                                protected void onException(Exception ex) {
+                                    Bundle parameters = new Bundle();
+                                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getCertificateStatus");
+                                    parameters.putString(Constants.KEY_DATA, "courseId = " + courseId);
+                                    Logger.logCrashlytics(ex, parameters);
+                                    callback.onFailure(ex);
+                                }
+                            }.execute();
+
+                        } else {
+                            callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
                         }
 
-                        @Override
-                        protected void onException(Exception ex) {
-                            Bundle parameters = new Bundle();
-                            parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
-                            parameters.putString(Constants.KEY_FUNCTION_NAME, "getCertificateStatus");
-                            parameters.putString(Constants.KEY_DATA, "courseId = " + courseId);
-                            Logger.logCrashlytics(ex, parameters);
-                            callback.onFailure(ex);
-                        }
-                    }.execute();
-
-                } else {
-                    callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
-                }
+                    }
+                });
 
             }
         }, null);
@@ -2671,6 +2690,9 @@ public class DataManager extends BaseRoboInjector {
                 protected void onSuccess(CertificateStatusResponse certificateStatusResponse) throws Exception {
                     super.onSuccess(certificateStatusResponse);
                     if (certificateStatusResponse != null) {
+                        if (certificateStatusResponse.getStatus().equalsIgnoreCase(CertificateStatus.GENERATED.name())){
+                            mLocalDataSource.deletePendingCertificateByCourseId(courseId, loginPrefs.getUsername());
+                        }
                         callback.onSuccess(certificateStatusResponse);
                     } else {
                         callback.onFailure(new TaException(context.getString(R.string.certificate_not_generated)));
@@ -4550,6 +4572,171 @@ public class DataManager extends BaseRoboInjector {
             callback.onFailure(new TaException(context.getString(R.string.no_connection_exception)));
         }
         
+    }
+
+    public void getPendingCertificatesFromLocal(OnResponseCallback<List<PendingCertificate>> callback){
+
+        new Task<List<PendingCertificate>>(context) {
+            @Override
+            public List<PendingCertificate> call() {
+                return mLocalDataSource.getAllPendingCertificates(loginPrefs.getUsername());
+            }
+
+            @Override
+            protected void onSuccess(List<PendingCertificate> pendingCertificates) throws Exception {
+                super.onSuccess(pendingCertificates);
+                if (pendingCertificates == null || pendingCertificates.isEmpty()){
+                    callback.onFailure(new TaException(context.getString(R.string.empty_pending_certs_message)));
+                } else {
+                    callback.onSuccess(pendingCertificates);
+                }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(ex);
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getPendingCertificatesFromLocal");
+                Logger.logCrashlytics(ex, parameters);
+            }
+        }.execute();
+
+    }
+
+    public void getPendingCertificateFromLocal(String courseId, OnResponseCallback<PendingCertificate> callback){
+
+        new Task<PendingCertificate>(context) {
+            @Override
+            public PendingCertificate call() {
+                return mLocalDataSource.getPendingCertificate(courseId, loginPrefs.getUsername());
+            }
+
+            @Override
+            protected void onSuccess(PendingCertificate pendingCertificate) throws Exception {
+                super.onSuccess(pendingCertificate);
+                if (pendingCertificate == null){
+                    callback.onFailure(new TaException("Pending certificate not available"));
+                } else {
+                    callback.onSuccess(pendingCertificate);
+                }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(ex);
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getPendingCertificateFromLocal");
+                parameters.putString(Constants.KEY_DATA, "courseId = " + courseId);
+                Logger.logCrashlytics(ex, parameters);
+            }
+        }.execute();
+
+    }
+
+    public void getAllCertificates(OnResponseCallback<AllCertificatesResponse> callback){
+
+        if (NetworkUtil.isConnected(context)) {
+
+            new GetAllCertificatesTask(context){
+                @Override
+                protected void onSuccess(AllCertificatesResponse allCertificatesResponse) throws Exception {
+                    super.onSuccess(allCertificatesResponse);
+                    if (allCertificatesResponse == null){
+                        getAllCertificatesFromLocal(callback, new TaException("Certificates not available"));
+                    } else {
+
+                        if (allCertificatesResponse.getPending() != null){
+                            if (loginPrefs.isLoggedIn()) {
+                                for (PendingCertificate certificate: allCertificatesResponse.getPending()){
+                                    certificate.setUsername(loginPrefs.getUsername());
+                                }
+                            }
+                            new Thread(){
+                                @Override
+                                public void run() {
+                                    mLocalDataSource.deleteAllPendingCertificates(loginPrefs.getUsername());
+                                    mLocalDataSource.insertPendingCertificates(allCertificatesResponse.getPending());
+                                }
+                            }.start();
+                        }
+
+                        if (allCertificatesResponse.getGenerated() != null){
+                            if (loginPrefs.isLoggedIn()) {
+                                for (Certificate certificate: allCertificatesResponse.getGenerated()){
+                                    certificate.setUsername(loginPrefs.getUsername());
+                                }
+                            }
+                            new Thread(){
+                                @Override
+                                public void run() {
+                                    mLocalDataSource.insertCertificates(allCertificatesResponse.getGenerated());
+                                }
+                            }.start();
+                        }
+
+                        callback.onSuccess(allCertificatesResponse);
+                    }
+                }
+
+                @Override
+                protected void onException(Exception ex) {
+                    getAllCertificatesFromLocal(callback, ex);
+                    Bundle parameters = new Bundle();
+                    parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                    parameters.putString(Constants.KEY_FUNCTION_NAME, "getAllCertificates");
+                    Logger.logCrashlytics(ex, parameters);
+                }
+            }.execute();
+
+        } else {
+            getAllCertificatesFromLocal(callback, new TaException(context.getString(R.string.no_connection_exception)));
+        }
+
+    }
+
+    private void getAllCertificatesFromLocal(OnResponseCallback<AllCertificatesResponse> callback,
+                                            Exception e){
+
+        new Task<AllCertificatesResponse>(context) {
+            @Override
+            public AllCertificatesResponse call() {
+                AllCertificatesResponse response = new AllCertificatesResponse();
+                response.setGenerated(mLocalDataSource.getAllCertificates(loginPrefs.getUsername()));
+                response.setPending(mLocalDataSource.getAllPendingCertificates(loginPrefs.getUsername()));
+                return response;
+            }
+
+            @Override
+            protected void onSuccess(AllCertificatesResponse allCertificatesResponse) throws Exception {
+                super.onSuccess(allCertificatesResponse);
+                if (allCertificatesResponse == null){
+                    callback.onFailure(e);
+                } else {
+                    callback.onSuccess(allCertificatesResponse);
+                }
+            }
+
+            @Override
+            protected void onException(Exception ex) {
+                callback.onFailure(e);
+                Bundle parameters = new Bundle();
+                parameters.putString(Constants.KEY_CLASS_NAME, DataManager.class.getName());
+                parameters.putString(Constants.KEY_FUNCTION_NAME, "getAllCertificatesFromLocal");
+                Logger.logCrashlytics(ex, parameters);
+            }
+        }.execute();
+
+    }
+
+    public void addPendingCertificate(String courseId, String courseName, String image){
+        PendingCertificate pendingCertificate = new PendingCertificate();
+        pendingCertificate.setUsername(loginPrefs.getUsername());
+        pendingCertificate.setCourseId(courseId);
+        pendingCertificate.setCourseName(courseName);
+        pendingCertificate.setImage(image);
+        mLocalDataSource.insertPendingCertificate(pendingCertificate);
     }
 }
 

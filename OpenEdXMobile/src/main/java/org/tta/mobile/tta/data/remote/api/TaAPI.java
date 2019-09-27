@@ -25,6 +25,7 @@ import org.tta.mobile.tta.data.model.feed.SuggestedUser;
 import org.tta.mobile.tta.data.model.library.CollectionConfigResponse;
 import org.tta.mobile.tta.data.model.library.CollectionItemsResponse;
 import org.tta.mobile.tta.data.model.library.ConfigModifiedDateResponse;
+import org.tta.mobile.tta.data.model.profile.AllCertificatesResponse;
 import org.tta.mobile.tta.data.model.profile.ChangePasswordResponse;
 import org.tta.mobile.tta.data.model.profile.FeedbackResponse;
 import org.tta.mobile.tta.data.model.profile.FollowStatus;
@@ -270,5 +271,9 @@ public class TaAPI {
 
     public Call<List<Certificate>> getPendingCertificates(int take, int skip){
         return taService.getPendingCertificates(take, skip);
+    }
+
+    public Call<AllCertificatesResponse> getAllCertificates(){
+        return taService.getAllCertificates();
     }
 }
