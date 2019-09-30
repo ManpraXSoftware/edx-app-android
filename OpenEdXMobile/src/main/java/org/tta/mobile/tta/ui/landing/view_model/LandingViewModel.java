@@ -243,6 +243,8 @@ public class LandingViewModel extends BaseViewModel {
         spt.MigrateConnectVideos();
 
         mDataManager.setContentIdForLegacyDownloads();
+        mDataManager.startNotificationService();
+        mDataManager.createPendingCertificatesNotification();
     }
 
     private void setToolTip() {

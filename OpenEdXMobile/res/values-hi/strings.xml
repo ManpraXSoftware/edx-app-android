@@ -254,4 +254,5 @@
     <string name="empty_pending_certs_message">आगामी सर्टिफ़िकेट उपलब्ध नहीं हैं</string>
     <string name="certificate_successful">आपका सर्टिफ़िकेट तैयार है</string>
     <string name="certificate_error">सर्टिफ़िकेट उत्पन्न करने में असफल</string>
+    <string name="certificate_eligible">बधाई हो! आप %s में  सर्टिफिकेट के हक़दार हैं।</string>
 </resources>

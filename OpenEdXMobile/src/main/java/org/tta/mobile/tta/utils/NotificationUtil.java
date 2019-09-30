@@ -6,10 +6,12 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
+
+import org.tta.mobile.R;
 
 public class NotificationUtil {
 
@@ -54,7 +56,8 @@ public class NotificationUtil {
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationBuilder = new Notification.Builder(context);
         setOngoing(false).setTitle(DEFAULT_NOTIFICATION_TITLE).setMessage(DEFAULT_NOTIFICATION_MESSAGE)
-                .setNotificationIcon(context.getApplicationInfo().icon);
+                .setSmallIcon(R.drawable.t_icon_notification)
+                .setLargeIcon(R.drawable.t_icon_notification);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel();
         }
@@ -86,8 +89,13 @@ public class NotificationUtil {
         return this;
     }
 
-    public NotificationUtil setNotificationIcon(int icon){
+    public NotificationUtil setSmallIcon(int icon){
         notificationBuilder.setSmallIcon(icon);
+        return this;
+    }
+
+    public NotificationUtil setLargeIcon(int icon){
+        notificationBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), icon));
         return this;
     }
 

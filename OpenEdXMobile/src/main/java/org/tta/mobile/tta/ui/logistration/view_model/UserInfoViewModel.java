@@ -191,6 +191,7 @@ public class UserInfoViewModel extends BaseViewModel {
     private void performBackgroundTasks(){
         mDataManager.refreshLocalDatabase();
         mDataManager.scheduleDeleteFeeds();
+        mDataManager.startNotificationService();
         mDataManager.updateFirebaseToken(getActivity());
         mDataManager.scheduleSyncAnalyticsJob();
     }

@@ -26,8 +26,10 @@ public class CertificatesViewModel extends BaseViewModel {
     private List<String> titles;
     public CertificatesPagerAdapter adapter;
     private TaBaseFragment tab1, tab2;
+    private int position;
 
     public ObservableInt initialPosition = new ObservableInt();
+    public ObservableInt tabPosition = new ObservableInt();
 
     public ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -50,8 +52,9 @@ public class CertificatesViewModel extends BaseViewModel {
         }
     };
 
-    public CertificatesViewModel(BaseVMActivity activity) {
+    public CertificatesViewModel(BaseVMActivity activity, int tabPosition) {
         super(activity);
+        position = tabPosition;
         fragments = new ArrayList<>();
         titles = new ArrayList<>();
         adapter = new CertificatesPagerAdapter(mActivity.getSupportFragmentManager());
@@ -77,8 +80,11 @@ public class CertificatesViewModel extends BaseViewModel {
             Logger.logCrashlytics(e, parameters);
             e.printStackTrace();
         }
-        initialPosition.set(0);
-        tab1.onPageShow();
+        tabPosition.set(position);
+        PageViewStateCallback callback = (PageViewStateCallback) fragments.get(position);
+        if (callback != null){
+            callback.onPageShow();
+        }
     }
 
     public class CertificatesPagerAdapter extends BasePagerAdapter {

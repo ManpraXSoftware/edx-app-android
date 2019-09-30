@@ -16,6 +16,7 @@ import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.deep_link.view_model.DeepLinkViewModel;
 import org.tta.mobile.tta.ui.logistration.SigninRegisterActivity;
 import org.tta.mobile.tta.ui.logistration.UserInfoActivity;
+import org.tta.mobile.tta.ui.profile.certificate.CertificatesActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 
@@ -110,6 +111,15 @@ public class DeepLinkActivity extends BaseVMActivity {
 
                 if (push_notification_extras.containsKey(EXTRA_TYPE)) {
                     type = push_notification_extras.getString(EXTRA_TYPE);
+                }
+
+                if (type != null && type.equals(Constants.CHANNEL_PENDING_CERTIFICATE_NOTIFICATION)){
+                    Bundle parameters = new Bundle();
+                    parameters.putBoolean(Constants.KEY_IS_PUSH, true);
+                    parameters.putInt(Constants.KEY_TAB_POSITION, 1);
+                    ActivityUtil.gotoPage(this, CertificatesActivity.class, parameters);
+                    finish();
+                    return;
                 }
 
                 if (type != null && path != null){

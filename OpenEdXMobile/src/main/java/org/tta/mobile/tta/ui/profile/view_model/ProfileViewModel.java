@@ -10,18 +10,15 @@ import org.tta.mobile.R;
 import org.tta.mobile.logger.Logger;
 import org.tta.mobile.model.api.ProfileModel;
 import org.tta.mobile.tta.Constants;
-import org.tta.mobile.tta.data.local.db.table.Certificate;
 import org.tta.mobile.tta.data.model.profile.AllCertificatesResponse;
 import org.tta.mobile.tta.data.model.search.FilterSection;
 import org.tta.mobile.tta.data.model.search.SearchFilter;
-import org.tta.mobile.tta.event.CertificateGeneratedEvent;
 import org.tta.mobile.tta.event.UserFollowingChangedEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.tta.mobile.tta.ui.profile.FollowersFragment;
 import org.tta.mobile.tta.ui.profile.FollowingFragment;
-import org.tta.mobile.tta.ui.profile.MyCertificatesFragment;
 import org.tta.mobile.tta.ui.profile.certificate.CertificatesActivity;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.user.Account;
@@ -386,22 +383,6 @@ public class ProfileViewModel extends BaseViewModel {
         profileModel.toggleFollowing(event.getUser().isFollowed());
         mDataManager.getLoginPrefs().setCurrentUserProfileInCache(profileModel);
         refreshFromLocal();
-    }
-
-    @SuppressWarnings("unused")
-    public void onEventMainThread(CertificateGeneratedEvent event) {
-        mDataManager.getCertificate(event.getCourseId(), new OnResponseCallback<Certificate>() {
-            @Override
-            public void onSuccess(Certificate data) {
-                nCertificates.set(String.valueOf(
-                        Integer.parseInt(nCertificates.get() == null ? "0" : nCertificates.get()) + 1));
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-
-            }
-        });
     }
 
     public void registerEventBus() {

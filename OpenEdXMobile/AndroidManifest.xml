@@ -578,6 +578,10 @@
             android:name=".tta.analytics.SyncAnalyticsJob"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
+        <service android:name=".tta.service.PendingCertificateNotificationService"
+            android:enabled="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
+
 
         <!-- Set the icon for notifications -->
         <!--        <meta-data

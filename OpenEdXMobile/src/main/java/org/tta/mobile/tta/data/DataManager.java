@@ -1,6 +1,8 @@
 package org.tta.mobile.tta.data;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.arch.persistence.room.Room;
@@ -111,6 +113,7 @@ import org.tta.mobile.tta.receiver.DeleteFeedsReceiver;
 import org.tta.mobile.tta.scorm.ContentType;
 import org.tta.mobile.tta.scorm.ScormBlockModel;
 import org.tta.mobile.tta.scorm.ScormStartResponse;
+import org.tta.mobile.tta.service.PendingCertificateNotificationService;
 import org.tta.mobile.tta.task.GetVersionUpdatedTask;
 import org.tta.mobile.tta.task.agenda.GetMyAgendaContentTask;
 import org.tta.mobile.tta.task.agenda.GetMyAgendaCountTask;
@@ -168,9 +171,11 @@ import org.tta.mobile.tta.task.profile.UpdateMyProfileTask;
 import org.tta.mobile.tta.task.search.GetSearchFilterTask;
 import org.tta.mobile.tta.task.search.SearchPeopleTask;
 import org.tta.mobile.tta.task.search.SearchTask;
+import org.tta.mobile.tta.ui.deep_link.DeepLinkActivity;
 import org.tta.mobile.tta.ui.otp.AppSignatureHelper;
 import org.tta.mobile.tta.utils.AlarmManagerUtil;
 import org.tta.mobile.tta.utils.FirebaseUtil;
+import org.tta.mobile.tta.utils.NotificationUtil;
 import org.tta.mobile.tta.utils.RxUtil;
 import org.tta.mobile.tta.utils.UrlUtil;
 import org.tta.mobile.tta.wordpress_client.data.db_command.DB_Commands;
@@ -210,6 +215,8 @@ import retrofit2.Call;
 
 import static android.content.Context.JOB_SCHEDULER_SERVICE;
 import static org.tta.mobile.tta.Constants.TA_DATABASE;
+import static org.tta.mobile.tta.ui.deep_link.DeepLinkActivity.EXTRA_ISPUSH;
+import static org.tta.mobile.tta.ui.deep_link.DeepLinkActivity.EXTRA_TYPE;
 
 /**
  * Created by Arjun on 2018/9/18.
@@ -380,6 +387,7 @@ public class DataManager extends BaseRoboInjector {
     public void logout() {
         syncAnalytics();
         unscheduleDeleteFeeds();
+        stopNotificationService();
         edxEnvironment.getRouter().performManualLogout(
                 context,
                 mDataManager.getEdxEnvironment().getAnalyticsRegistry(),
@@ -4416,11 +4424,7 @@ public class DataManager extends BaseRoboInjector {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             ComponentName componentName = new ComponentName(context, SyncAnalyticsJob.class);
             JobInfo.Builder builder = new JobInfo.Builder(12, componentName);
-            if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                builder.setPeriodic(Constants.INTERVAL_SYNC_ANALYTICS_JOB);
-            } else {
-                builder.setMinimumLatency(Constants.INTERVAL_SYNC_ANALYTICS_JOB);
-            }
+            builder.setMinimumLatency(Constants.INTERVAL_SYNC_ANALYTICS_JOB);
             JobInfo jobInfo = builder.build();
 
             JobScheduler jobScheduler = (JobScheduler) context.getSystemService(JOB_SCHEDULER_SERVICE);
@@ -4737,6 +4741,71 @@ public class DataManager extends BaseRoboInjector {
         pendingCertificate.setCourseName(courseName);
         pendingCertificate.setImage(image);
         mLocalDataSource.insertPendingCertificate(pendingCertificate);
+    }
+
+    public void startNotificationService(){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            ComponentName componentName = new ComponentName(context,
+                    PendingCertificateNotificationService.class);
+            JobInfo.Builder builder = new JobInfo.Builder(Constants.REQUEST_CODE_PENDING_CERTIFICATE_NOTIFICATION,
+                    componentName);
+            builder.setPersisted(true);
+            builder.setMinimumLatency(DateUtil.getComingTimeOfDay(8, 0,  0).getTime() -
+                    new Date().getTime());
+            JobInfo jobInfo = builder.build();
+
+            JobScheduler jobScheduler = (JobScheduler)context.getSystemService(JOB_SCHEDULER_SERVICE);
+            int resultCode = jobScheduler.schedule(jobInfo);
+            if (resultCode == JobScheduler.RESULT_SUCCESS) {
+                Log.d("_____TTA LOG_____", "PendingCertificateNotificationService scheduled!");
+            } else {
+                Log.d("_____TTA LOG_____", "PendingCertificateNotificationService not scheduled");
+            }
+        }
+    }
+
+    private void stopNotificationService() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            JobScheduler jobScheduler = (JobScheduler)context.getSystemService(JOB_SCHEDULER_SERVICE);
+            jobScheduler.cancel(Constants.REQUEST_CODE_PENDING_CERTIFICATE_NOTIFICATION);
+        }
+    }
+
+    public void createPendingCertificatesNotification(){
+        getAllCertificates(new OnResponseCallback<AllCertificatesResponse>() {
+            @Override
+            public void onSuccess(AllCertificatesResponse data) {
+                if (data != null && data.getPending() != null){
+                    for (PendingCertificate certificate: data.getPending()){
+
+                        Intent notificationIntent = new Intent(context, DeepLinkActivity.class);
+                        notificationIntent.putExtra(EXTRA_TYPE, Constants.CHANNEL_PENDING_CERTIFICATE_NOTIFICATION);
+                        notificationIntent.putExtra(EXTRA_ISPUSH, true);
+
+                        PendingIntent contentIntent = PendingIntent.getActivity(context,
+                                (int) System.currentTimeMillis(), notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                        new NotificationUtil(context, certificate.getCourseId().hashCode(),
+                                Constants.CHANNEL_PENDING_CERTIFICATE_NOTIFICATION,
+                                Constants.CHANNEL_PENDING_CERTIFICATE_NOTIFICATION,
+                                Constants.CHANNEL_PENDING_CERTIFICATE_NOTIFICATION,
+                                NotificationManager.IMPORTANCE_HIGH)
+                                .setTitle(context.getString(R.string.app_name))
+                                .setMessage(String.format(
+                                        context.getString(R.string.certificate_eligible),
+                                        certificate.getCourseName()))
+                                .setContentIntent(contentIntent)
+                                .setAutoCancel(true)
+                                .show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
     }
 }
 

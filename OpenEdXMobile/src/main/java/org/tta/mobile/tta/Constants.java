@@ -77,8 +77,11 @@ public class Constants {
     public static final String OTP_SOURCE_RESET_PASSWORD = "reset_password";
     public static final String INTENT_DELETE_FEEDS = "delete_feeds";
     public static final int REQUEST_CODE_DELETE_FEEDS = 1243;
-    public static final long INTERVAL_DELETE_FEEDS = 24*60*60*1000;
-    public static final long INTERVAL_SYNC_ANALYTICS_JOB = 60*1000;
+    public static final int REQUEST_CODE_PENDING_CERTIFICATE_NOTIFICATION = 543;
+    public static final long INTERVAL_DELETE_FEEDS = 24*60*60*1000;                       //1 day
+    public static final long INTERVAL_SYNC_ANALYTICS_JOB = 60*1000;                       //1 minute
+    public static final long INTERVAL_PENDING_CERTIFICATE_NOTIFICATION = 20*60*1000;   //20 minutes
+    public static final String CHANNEL_PENDING_CERTIFICATE_NOTIFICATION = "TTA pending certificate notifications";   //1 day
     public static final String EXTRA_NOTIFICATION = "notification";
     public static final String DELIMITER_TAG_CHUNKS = " ";
     public static final String DELIMITER_SECTION_TAG = "___";
