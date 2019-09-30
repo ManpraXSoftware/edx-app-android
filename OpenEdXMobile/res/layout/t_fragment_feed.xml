@@ -41,7 +41,7 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
-                app:srcCompat="@drawable/t_icon_notification"
+                app:srcCompat="@drawable/t_icon_bell"
                 android:onClick="@{()->viewModel.showNotifications()}"/>
 
         </RelativeLayout>
