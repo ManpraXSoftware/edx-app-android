@@ -280,6 +280,7 @@ public class DataManager extends BaseRoboInjector {
                     mDataManager = new DataManager(context, RetrofitServiceUtil.create(context, true),
                             new LocalDataSource(Room.databaseBuilder(context, TADatabase.class, TA_DATABASE)
                                     .addMigrations(TADatabase.MIGRATION_6_7)
+                                    .addMigrations(TADatabase.MIGRATION_7_8)
                                     .fallbackToDestructiveMigration()
                                     .build()));
                 }

@@ -51,7 +51,7 @@ import org.tta.mobile.user.Account;
                 StateContent.class,
                 PendingCertificate.class
         },
-        version = 7,
+        version = 8,
         exportSchema = false
 )
 @TypeConverters({DbTypeConverters.class})
@@ -75,8 +75,16 @@ public abstract class TADatabase extends RoomDatabase {
     public static final Migration MIGRATION_6_7 = new Migration(6, 7) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("CREATE TABLE `pending_certificate` (`course_id` TEXT, "
-                    + "`course_name` TEXT, `image` TEXT, `username` TEXT, PRIMARY KEY(`course_id`))");
+            database.execSQL("CREATE TABLE IF NOT EXISTS `pending_certificate` (`course_id` TEXT NOT NULL, "
+                    + "`course_name` TEXT, `image` TEXT, `username` TEXT NOT NULL, PRIMARY KEY(`course_id`))");
+        }
+    };
+
+    public static final Migration MIGRATION_7_8 = new Migration(7, 8) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE IF NOT EXISTS `pending_certificate` (`course_id` TEXT NOT NULL, "
+                    + "`course_name` TEXT, `image` TEXT, `username` TEXT NOT NULL, PRIMARY KEY(`course_id`))");
         }
     };
 }
