@@ -867,7 +867,8 @@
     <string name="pending_certificates">Pending Certificates</string>
     <string name="certificate_successful">Certificate generated successfully</string>
     <string name="certificate_error">Error occurred while generating certificate</string>
-    <string name="certificate_eligible">Congrats, you\'re eligible for certificate in %s</string>
+    <string name="certificate_eligible">Go to certificate page to view and download it</string>
+    <string name="certificate_available">Certificate is available</string>
 
     <string name="anonymous" translatable="false">Anonymous</string>
     <string name="privacy_policy_url" translatable="false">http://theteacherapp.org/privacy</string>

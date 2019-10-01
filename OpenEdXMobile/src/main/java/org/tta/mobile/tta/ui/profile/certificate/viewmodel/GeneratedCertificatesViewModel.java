@@ -124,11 +124,11 @@ public class GeneratedCertificatesViewModel extends BaseViewModel {
                 certificateBinding.contentTitle.setText(model.getCourse_name());
 
                 String imageUrl = model.getImage();
-                if (!imageUrl.startsWith(mDataManager.getConfig().getApiHostURL())){
+                if (imageUrl != null && !imageUrl.startsWith(mDataManager.getConfig().getApiHostURL())){
                     imageUrl = mDataManager.getConfig().getApiHostURL() + imageUrl;
                 }
                 Glide.with(getContext())
-                        .load(imageUrl)
+                        .load(imageUrl == null ? "" : imageUrl)
                         .placeholder(R.drawable.placeholder_course_card_image)
                         .into(certificateBinding.contentImage);
 

@@ -2700,7 +2700,12 @@ public class DataManager extends BaseRoboInjector {
                     super.onSuccess(certificateStatusResponse);
                     if (certificateStatusResponse != null) {
                         if (certificateStatusResponse.getStatus().equalsIgnoreCase(CertificateStatus.GENERATED.name())){
-                            mLocalDataSource.deletePendingCertificateByCourseId(courseId, loginPrefs.getUsername());
+                            new Thread(){
+                                @Override
+                                public void run() {
+                                    mLocalDataSource.deletePendingCertificateByCourseId(courseId, loginPrefs.getUsername());
+                                }
+                            }.start();
                         }
                         callback.onSuccess(certificateStatusResponse);
                     } else {
@@ -4736,12 +4741,17 @@ public class DataManager extends BaseRoboInjector {
     }
 
     public void addPendingCertificate(String courseId, String courseName, String image){
-        PendingCertificate pendingCertificate = new PendingCertificate();
-        pendingCertificate.setUsername(loginPrefs.getUsername());
-        pendingCertificate.setCourseId(courseId);
-        pendingCertificate.setCourseName(courseName);
-        pendingCertificate.setImage(image);
-        mLocalDataSource.insertPendingCertificate(pendingCertificate);
+        new Thread(){
+            @Override
+            public void run() {
+                PendingCertificate pendingCertificate = new PendingCertificate();
+                pendingCertificate.setUsername(loginPrefs.getUsername());
+                pendingCertificate.setCourseId(courseId);
+                pendingCertificate.setCourseName(courseName);
+                pendingCertificate.setImage(image);
+                mLocalDataSource.insertPendingCertificate(pendingCertificate);
+            }
+        }.start();
     }
 
     public void startNotificationService(){
@@ -4791,10 +4801,8 @@ public class DataManager extends BaseRoboInjector {
                                 Constants.CHANNEL_PENDING_CERTIFICATE_NOTIFICATION,
                                 Constants.CHANNEL_PENDING_CERTIFICATE_NOTIFICATION,
                                 NotificationManager.IMPORTANCE_HIGH)
-                                .setTitle(context.getString(R.string.app_name))
-                                .setMessage(String.format(
-                                        context.getString(R.string.certificate_eligible),
-                                        certificate.getCourseName()))
+                                .setTitle(context.getString(R.string.certificate_available))
+                                .setMessage(context.getString(R.string.certificate_eligible))
                                 .setContentIntent(contentIntent)
                                 .setAutoCancel(true)
                                 .show();
