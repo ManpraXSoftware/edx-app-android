@@ -251,9 +251,9 @@
     <string name="same_old_new_password">पुराना और नया पासवर्ड सामान नहीं हो सकता।</string>
     <string name="generated_certificates">मौजूदा सर्टिफ़िकेट</string>
     <string name="pending_certificates">आगामी सर्टिफ़िकेट</string>
-    <string name="empty_pending_certs_message">आगामी सर्टिफ़िकेट उपलब्ध नहीं हैं</string>
-    <string name="certificate_successful">आपका सर्टिफ़िकेट तैयार है</string>
-    <string name="certificate_error">सर्टिफ़िकेट उत्पन्न करने में असफल</string>
+    <string name="empty_pending_certs_message">आगामी सर्टिफ़िकेट उपलब्ध नहीं हैं।</string>
+    <string name="certificate_successful">आपका सर्टिफ़िकेट तैयार है।</string>
+    <string name="certificate_error">सर्टिफ़िकेट उत्पन्न करने में असफल।</string>
     <string name="certificate_eligible">इसे देखने और डाउनलोड करने के लिए सर्टिफ़िकेट पेज पर जाएं ।</string>
-    <string name="certificate_available">सर्टिफ़िकेट उपलब्ध हैं</string>
+    <string name="certificate_available">सर्टिफ़िकेट उपलब्ध हैं।</string>
 </resources>
