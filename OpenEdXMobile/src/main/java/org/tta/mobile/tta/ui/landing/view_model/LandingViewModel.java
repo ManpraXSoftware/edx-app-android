@@ -156,14 +156,16 @@ public class LandingViewModel extends BaseViewModel {
         super.onResume();
         onEventMainThread(new NetworkConnectivityChangeEvent());
 
-        if(mDataManager.checkUpdate()) {
+        if (mDataManager.checkUpdate()) {
             if (!Constants.IsUpdateDelay)
                 getAppUpdate();
-        }
-        else {
+        } else {
             UpdateResponse res = mDataManager.getLoginPrefs().getLatestAppInfo();
-            if (!Constants.IsUpdateDelay)
-                decideUpdateUI(res);
+            if (!Constants.IsUpdateDelay) {
+                if (res.getVersion_code() > mDataManager.getCurrent_vCode()) {
+                    decideUpdateUI(res);
+                }
+            }
         }
     }
 
@@ -411,8 +413,4 @@ public class LandingViewModel extends BaseViewModel {
         dialog.setCancelable(false);
         dialog.show();
     }
-
 }
-
-
-

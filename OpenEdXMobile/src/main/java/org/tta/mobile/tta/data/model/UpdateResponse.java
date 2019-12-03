@@ -6,8 +6,6 @@ public class UpdateResponse {
     public Long version_code;
     public String status;
 
-    public String type;
-
     public String getRelease_note() {
         if(release_note.isEmpty())
             return "";
@@ -27,19 +25,9 @@ public class UpdateResponse {
         return version_name;
     }
 
-    public String getType() {
-        if(type.isEmpty())
-            return "";
-        return type;
-    }
-
     public String getStatus() {
         if(status.isEmpty())
             return "";
         return status;
     }
-
-
-
-
 }
