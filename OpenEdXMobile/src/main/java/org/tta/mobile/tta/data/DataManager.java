@@ -417,6 +417,7 @@ public class DataManager extends BaseRoboInjector {
                         new Thread() {
                             @Override
                             public void run() {
+                                mLocalDataSource.deleteAllContentLists();
                                 mLocalDataSource.insertConfiguration(response);
                             }
                         }.start();

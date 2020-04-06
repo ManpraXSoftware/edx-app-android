@@ -156,7 +156,7 @@ public class LandingViewModel extends BaseViewModel {
         super.onResume();
         onEventMainThread(new NetworkConnectivityChangeEvent());
 
-        if (mDataManager.checkUpdate()) {
+        /*if (mDataManager.checkUpdate()) {
             if (!Constants.IsUpdateDelay)
                 getAppUpdate();
         } else {
@@ -166,7 +166,7 @@ public class LandingViewModel extends BaseViewModel {
                     decideUpdateUI(res);
                 }
             }
-        }
+        }*/
     }
 
     public void showLibrary() {

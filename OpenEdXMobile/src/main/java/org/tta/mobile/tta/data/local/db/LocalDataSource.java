@@ -121,6 +121,11 @@ public class LocalDataSource implements ILocalDataSource {
     }
 
     @Override
+    public void deleteAllContentLists() {
+        mAppDatabase.contentListDao().deleteAll();
+    }
+
+    @Override
     public List<Source> getSources() {
         return mAppDatabase.sourceDao().getAll();
     }

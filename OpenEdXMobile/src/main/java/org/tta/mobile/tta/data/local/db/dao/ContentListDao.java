@@ -33,4 +33,7 @@ public interface ContentListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<ContentList> contentLists);
 
+    @Query("Delete from content_list")
+    void deleteAll();
+
 }

@@ -50,6 +50,7 @@ public interface ILocalDataSource {
     List<ContentList> getContentListsByCategoryId(long categoryId);
     List<ContentList> getContentListsByCategoryIdAndMode(long categoryId, String mode);
     List<ContentList> getContentListsByRootCategory(String rootCategory);
+    void deleteAllContentLists();
 
     List<Source> getSources();
 
