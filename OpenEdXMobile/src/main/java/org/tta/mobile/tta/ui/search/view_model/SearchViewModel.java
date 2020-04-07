@@ -365,6 +365,7 @@ public class SearchViewModel extends BaseViewModel {
                            Source source, CollectionConfigResponse cr) {
         super(context, fragment);
         tags = new ArrayList<>();
+        users = new ArrayList<>();
         contents = new ArrayList<>();
         tempContents = new ArrayList<>();
         selectedCategory = category;
@@ -1183,15 +1184,18 @@ public class SearchViewModel extends BaseViewModel {
         firstLoadDone = true;
 
         if (changesMade){
-            this.contents = contents;
+            this.contents.clear();
             changesMade = false;
-        } else {
+        }
+
+        if (contents != null) {
             for (Content content: contents){
                 if (!this.contents.contains(content)) {
                     this.contents.add(content);
                 }
             }
         }
+
         contentsAdapter.setItems(this.contents);
         toggleEmptyVisibility();
     }
@@ -1199,15 +1203,18 @@ public class SearchViewModel extends BaseViewModel {
     private void populateUsers(List<SuggestedUser> users){
 
         if (changesMade){
-            this.users = users;
+            this.users.clear();
             changesMade = false;
-        } else {
+        }
+
+        if (users != null) {
             for (SuggestedUser user: users){
                 if (!this.users.contains(user)) {
                     this.users.add(user);
                 }
             }
         }
+
         usersAdapter.setItems(this.users);
         toggleEmptyVisibility();
 
