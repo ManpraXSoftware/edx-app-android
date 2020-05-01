@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <import type="android.view.View" />
@@ -16,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             recycler_adapter="@{viewModel.adapter}"
-            layout_manager="@{viewModel.layoutManager}"/>
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
