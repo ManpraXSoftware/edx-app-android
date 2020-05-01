@@ -213,10 +213,7 @@ public class LandingActivity extends BaseVMActivity{
             showUpdateProgress(state.bytesDownloaded(), state.totalBytesToDownload());
         } else if (state.installStatus() == InstallStatus.DOWNLOADED) {
             layoutUpdate.setVisibility(View.GONE);
-            unRegisterUpdateListener();
             requestInstallUpdate();
-        } else {
-            layoutUpdate.setVisibility(View.GONE);
             unRegisterUpdateListener();
         }
 
