@@ -2,20 +2,22 @@ package org.tta.mobile.tta.ui.landing;
 
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
-import com.google.android.play.core.install.InstallState;
 import com.google.android.play.core.install.InstallStateUpdatedListener;
+import com.google.android.play.core.install.model.ActivityResult;
 import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
@@ -29,21 +31,22 @@ import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.landing.view_model.LandingViewModel;
 import org.tta.mobile.tta.ui.search.SearchFragment;
 
-import java.io.IOException;
-
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Response;
-
 import static com.crashlytics.android.Crashlytics.log;
 
 public class LandingActivity extends BaseVMActivity{
 
+    private static final int REQUEST_IN_APP_UPDATE = 414;
+
     private LandingViewModel viewModel;
+
+    private LinearLayout layoutUpdate;
+    private TextView textUpdate;
+    private ProgressBar progressUpdate;
 
     public static boolean isAlreadyOpened;
     private AppPref mAppPref;
     AppUpdateManager appUpdateManager;
+    private boolean isUpdateListenerRegistered = false;
     private int MY_REQUEST_CODE = 100;
 
     @Override
@@ -51,6 +54,10 @@ public class LandingActivity extends BaseVMActivity{
         super.onCreate(savedInstanceState);
         viewModel = new LandingViewModel(this);
         binding(R.layout.t_activity_landing, viewModel);
+
+        layoutUpdate = findViewById(R.id.layout_update);
+        textUpdate = findViewById(R.id.text_update);
+        progressUpdate = findViewById(R.id.progress_update);
 
         mAppPref = new AppPref(this);
         BottomNavigationView view = findViewById(R.id.dashboard_bottom_nav);
@@ -61,6 +68,7 @@ public class LandingActivity extends BaseVMActivity{
 
         viewModel.registerEventBus();
 
+        checkInAppUpdate(true);
     }
 
     @Override
@@ -87,6 +95,8 @@ public class LandingActivity extends BaseVMActivity{
 //                        popupSnackbarForCompleteUpdate();
 //                    }
 //                });
+
+        checkInAppUpdate(false);
 
     }
 
@@ -164,9 +174,15 @@ public class LandingActivity extends BaseVMActivity{
                 // you can request to start the update again.
             }
 
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
+        } else if (requestCode == REQUEST_IN_APP_UPDATE) {
+            if (resultCode == ActivityResult.RESULT_IN_APP_UPDATE_FAILED) {
+                layoutUpdate.setVisibility(View.GONE);
+                unRegisterUpdateListener();
+                showIndefiniteSnack(getString(R.string.error_inapp_update));
+            }
         }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
 
@@ -187,5 +203,85 @@ public class LandingActivity extends BaseVMActivity{
 //        OkHttpClient okHttpClient = new OkHttpClient.Builder().addNetworkInterceptor(
 //        )
 //    }
+
+
+    //In app update start
+
+    private InstallStateUpdatedListener updatedListener = state -> {
+
+        if (state.installStatus() == InstallStatus.DOWNLOADING) {
+            showUpdateProgress(state.bytesDownloaded(), state.totalBytesToDownload());
+        } else if (state.installStatus() == InstallStatus.DOWNLOADED) {
+            layoutUpdate.setVisibility(View.GONE);
+            unRegisterUpdateListener();
+            requestInstallUpdate();
+        } else {
+            layoutUpdate.setVisibility(View.GONE);
+            unRegisterUpdateListener();
+        }
+
+    };
+
+    private void checkInAppUpdate(boolean requestIfAvailable) {
+
+        if (appUpdateManager == null) {
+            appUpdateManager = AppUpdateManagerFactory.create(this);
+        }
+
+        appUpdateManager.getAppUpdateInfo().addOnSuccessListener(appUpdateInfo -> {
+            if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                requestInstallUpdate();
+            } if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADING) {
+                if (!isUpdateListenerRegistered) {
+                    appUpdateManager.registerListener(updatedListener);
+                }
+            } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
+                    requestIfAvailable) {
+                requestFlexibleUpdate(appUpdateInfo);
+            }
+        });
+
+    }
+
+    private void requestFlexibleUpdate(AppUpdateInfo appUpdateInfo) {
+
+        try {
+            isUpdateListenerRegistered = true;
+            appUpdateManager.registerListener(updatedListener);
+            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.FLEXIBLE,
+                    this, REQUEST_IN_APP_UPDATE);
+        } catch (IntentSender.SendIntentException e) {
+            unRegisterUpdateListener();
+
+            Bundle parameters = new Bundle();
+            parameters.putString(Constants.KEY_CLASS_NAME, LandingActivity.class.getName());
+            parameters.putString(Constants.KEY_FUNCTION_NAME, "requestFlexibleUpdate");
+            Logger.logCrashlytics(e, parameters);
+            e.printStackTrace();
+        }
+
+    }
+
+    private void requestInstallUpdate() {
+        showIndefiniteSnack(getString(R.string.update_downloaded_restart),
+                getString(R.string.restart), v -> appUpdateManager.completeUpdate());
+    }
+
+    private void unRegisterUpdateListener() {
+        if (isUpdateListenerRegistered && appUpdateManager != null) {
+            appUpdateManager.unregisterListener(updatedListener);
+        }
+        isUpdateListenerRegistered = false;
+    }
+
+    private void showUpdateProgress(long bytesDownloaded, long totalBytesToDownload) {
+        long percent = bytesDownloaded * 100 / totalBytesToDownload;
+
+        layoutUpdate.setVisibility(View.VISIBLE);
+        textUpdate.setText(String.format(getString(R.string.downloading_update), percent));
+        progressUpdate.setProgress((int) percent);
+    }
+
+    //In app update end
 
 }

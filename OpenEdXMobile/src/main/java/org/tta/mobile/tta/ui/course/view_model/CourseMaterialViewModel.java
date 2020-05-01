@@ -1385,7 +1385,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
                                         itemBinding.itemStatus.setCompoundDrawablesRelativeWithIntrinsicBounds(
                                                 R.drawable.t_icon_refresh, 0, 0, 0
                                         );
-                                        itemBinding.itemStatus.setVisibility(View.VISIBLE);
+//                                        itemBinding.itemStatus.setVisibility(View.VISIBLE);
                                         break;
 
                                     case Completed:
@@ -1393,7 +1393,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
                                         itemBinding.itemStatus.setCompoundDrawablesRelativeWithIntrinsicBounds(
                                                 R.drawable.t_icon_done, 0, 0, 0
                                         );
-                                        itemBinding.itemStatus.setVisibility(View.VISIBLE);
+//                                        itemBinding.itemStatus.setVisibility(View.VISIBLE);
                                         break;
 
                                     default:

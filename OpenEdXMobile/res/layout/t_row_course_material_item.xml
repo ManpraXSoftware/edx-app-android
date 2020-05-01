@@ -91,7 +91,8 @@
                         android:layout_marginStart="@dimen/_44px"
                         android:drawablePadding="2dp"
                         android:fontFamily="@font/hind_regular"
-                        android:textSize="10sp" />
+                        android:textSize="10sp"
+                        android:visibility="gone"/>
 
                 </LinearLayout>
 
