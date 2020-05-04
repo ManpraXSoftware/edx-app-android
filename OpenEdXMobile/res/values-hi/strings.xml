@@ -256,4 +256,6 @@
     <string name="certificate_error">सर्टिफ़िकेट उत्पन्न करने में असफल।</string>
     <string name="certificate_eligible">इसे देखने और डाउनलोड करने के लिए सर्टिफ़िकेट पेज पर जाएं ।</string>
     <string name="certificate_available">सर्टिफ़िकेट उपलब्ध हैं।</string>
+    <string name="restart">पुनः आरंभ करें</string>
+    <string name="update_downloaded_restart">अपडेट डाउनलोड किया गया है। कृपया एप्लिकेशन पुनः आरंभ करें</string>
 </resources>

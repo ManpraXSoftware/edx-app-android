@@ -869,8 +869,8 @@
     <string name="certificate_error">Error occurred while generating certificate</string>
     <string name="certificate_eligible">Go to certificate page to view and download it</string>
     <string name="certificate_available">Certificate is available</string>
-    <string name="error_inapp_update">Error occurred while updating app</string>
-    <string name="downloading_update">Downloading update… %d%%</string>
+    <string name="error_inapp_update" translatable="false">Error occurred while updating app</string>
+    <string name="downloading_update" translatable="false">Downloading update… %d%%</string>
 
     <string name="anonymous" translatable="false">Anonymous</string>
     <string name="privacy_policy_url" translatable="false">http://theteacherapp.org/privacy</string>
