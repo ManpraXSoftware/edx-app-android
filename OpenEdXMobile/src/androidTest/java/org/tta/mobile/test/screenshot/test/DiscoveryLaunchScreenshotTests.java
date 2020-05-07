@@ -1,7 +1,5 @@
 package org.tta.mobile.test.screenshot.test;
 
-import org.tta.mobile.view.DiscoveryLaunchActivity;
-import org.tta.mobile.view.DiscoveryLaunchPresenter;
 import org.tta.mobile.view.PresenterActivityScreenshotTest;
 import org.junit.Test;
 

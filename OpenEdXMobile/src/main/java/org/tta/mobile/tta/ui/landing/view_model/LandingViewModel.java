@@ -2,12 +2,7 @@ package org.tta.mobile.tta.ui.landing.view_model;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
 import android.net.Uri;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -17,9 +12,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import org.tta.mobile.R;
 import org.tta.mobile.event.NetworkConnectivityChangeEvent;
-import org.tta.mobile.module.db.DbStructure;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.appupdate.model.UpdateType;
 import org.tta.mobile.tta.data.local.db.table.ContentStatus;
@@ -41,7 +41,6 @@ import org.tta.mobile.util.NetworkUtil;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;

@@ -2,23 +2,18 @@ package org.tta.mobile.tta.ui.profile;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.design.widget.CoordinatorLayout;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.tta.mobile.R;
-import org.tta.mobile.tta.data.pref.AppPref;
-import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.profile.view_model.ProfileViewModel;
-
-import java.util.Objects;
 
 public class ProfileOptionsBottomSheet extends BottomSheetDialogFragment {
     public static final String TAG = ProfileOptionsBottomSheet.class.getCanonicalName();

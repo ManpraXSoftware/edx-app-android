@@ -2,7 +2,8 @@ package org.tta.mobile.tta.firebase;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.google.inject.Inject;
 

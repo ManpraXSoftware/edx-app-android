@@ -16,18 +16,19 @@ import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.SystemClock;
-import android.support.annotation.CheckResult;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-import android.support.annotation.DimenRes;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextPaint;
 import android.util.LayoutDirection;
 import android.util.StateSet;
 import android.util.TypedValue;
 import android.view.View;
+
+import androidx.annotation.CheckResult;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DimenRes;
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.JELLY_BEAN_MR1;
@@ -538,7 +539,7 @@ public final class IconDrawable extends Drawable implements Animatable {
     private boolean needMirroring() {
         if (isAutoMirrored()) {
             if (SDK_INT >= M) {
-                return getLayoutDirection() == LayoutDirection.RTL;
+                return getLayoutDirection() == LAYOUT_DIRECTION_RTL;
             }
             // Since getLayoutDirection() is hidden prior to Marshmallow, we
             // will try to get the layout direction from the View, which we will

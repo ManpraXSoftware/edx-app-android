@@ -1,8 +1,9 @@
 package org.tta.mobile.view.custom;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatSpinner;
 import android.util.AttributeSet;
+
+import androidx.appcompat.widget.AppCompatSpinner;
 
 import org.tta.mobile.util.SoftKeyboardUtil;
 

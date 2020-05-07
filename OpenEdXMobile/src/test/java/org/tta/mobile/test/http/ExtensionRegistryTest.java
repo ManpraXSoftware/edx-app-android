@@ -1,6 +1,5 @@
 package org.tta.mobile.test.http;
 
-import org.tta.mobile.view.ExtensionRegistry;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

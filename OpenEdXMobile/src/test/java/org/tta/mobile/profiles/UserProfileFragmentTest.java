@@ -8,7 +8,6 @@ import org.tta.mobile.R;
 import org.tta.mobile.databinding.FragmentUserProfileBinding;
 import org.tta.mobile.util.images.ErrorUtils;
 import org.tta.mobile.view.PresenterFragmentTest;
-import org.tta.mobile.view.adapters.StaticFragmentPagerAdapter;
 import org.junit.Before;
 import org.junit.Test;
 

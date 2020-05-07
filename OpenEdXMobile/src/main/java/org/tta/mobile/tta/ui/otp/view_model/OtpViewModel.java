@@ -1,8 +1,6 @@
 package org.tta.mobile.tta.ui.otp.view_model;
 
 import android.content.Intent;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -11,6 +9,9 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+
 import com.google.android.gms.common.api.CommonStatusCodes;
 
 import org.tta.mobile.R;
@@ -18,7 +19,6 @@ import org.tta.mobile.authentication.AuthResponse;
 import org.tta.mobile.exception.AuthException;
 import org.tta.mobile.http.HttpResponseStatusException;
 import org.tta.mobile.logger.Logger;
-import org.tta.mobile.social.SocialFactory;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
 import org.tta.mobile.tta.analytics.analytics_enums.Page;
@@ -522,8 +522,7 @@ public class OtpViewModel extends BaseViewModel {
 
     private void register() {
         new RegisterTask(mActivity, getRegisterMeBundle(),
-                mDataManager.getLoginPrefs().getSocialLoginAccessToken(),
-                SocialFactory.SOCIAL_SOURCE_TYPE.fromString(mDataManager.getLoginPrefs().getSocialLoginProvider())){
+                mDataManager.getLoginPrefs().getSocialLoginAccessToken()){
 
             @Override
             protected void onSuccess(RegisterResponse registerResponse) throws Exception {

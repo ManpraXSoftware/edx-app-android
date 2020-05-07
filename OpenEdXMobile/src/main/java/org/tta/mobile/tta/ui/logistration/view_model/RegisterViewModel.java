@@ -1,14 +1,14 @@
 package org.tta.mobile.tta.ui.logistration.view_model;
 
-import android.Manifest;
 import android.content.Context;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
 
 import org.tta.mobile.R;
 import org.tta.mobile.http.HttpResponseStatusException;
@@ -23,7 +23,6 @@ import org.tta.mobile.tta.ui.otp.OtpActivity;
 import org.tta.mobile.tta.ui.otp.SmsModule;
 import org.tta.mobile.tta.utils.ActivityUtil;
 import org.tta.mobile.util.NetworkUtil;
-import org.tta.mobile.util.PermissionsUtil;
 
 public class RegisterViewModel extends BaseViewModel {
 

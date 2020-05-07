@@ -1,7 +1,8 @@
 package org.tta.mobile.view.common;
 
-import android.support.annotation.NonNull;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 public interface TaskProgressCallback {
     void startProcess();

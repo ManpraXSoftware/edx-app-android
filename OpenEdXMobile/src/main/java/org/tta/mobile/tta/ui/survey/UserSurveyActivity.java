@@ -2,7 +2,6 @@ package org.tta.mobile.tta.ui.survey;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -10,8 +9,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
 
 import org.tta.mobile.R;
 import org.tta.mobile.base.BaseFragmentActivity;

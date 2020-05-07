@@ -2,8 +2,9 @@ package org.tta.mobile.task;
 
 import android.content.Context;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.view.View;
+
+import androidx.annotation.Nullable;
 
 import com.google.inject.Inject;
 

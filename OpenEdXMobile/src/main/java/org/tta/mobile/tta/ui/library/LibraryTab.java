@@ -1,11 +1,12 @@
 package org.tta.mobile.tta.ui.library;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.tta.mobile.R;
 import org.tta.mobile.tta.Constants;
@@ -19,8 +20,6 @@ import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.interfaces.SearchPageOpenedListener;
 import org.tta.mobile.tta.ui.library.view_model.LibraryTabViewModel;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
-import org.tta.mobile.tta.utils.JsonUtil;
-import org.tta.mobile.util.PermissionsUtil;
 
 public class LibraryTab extends TaBaseFragment {
     private static final int RANK = 3;

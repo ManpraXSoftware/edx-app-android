@@ -1,6 +1,6 @@
 package org.tta.mobile.model.api;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import org.tta.mobile.interfaces.SectionItemInterface;
 import org.tta.mobile.model.course.BlockType;

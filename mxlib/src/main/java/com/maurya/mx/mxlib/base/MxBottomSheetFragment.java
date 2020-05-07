@@ -1,13 +1,14 @@
 package com.maurya.mx.mxlib.base;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
+
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.maurya.mx.mxlib.R;
 
 

@@ -1,12 +1,13 @@
 package org.tta.mobile.util.links;
 
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.inject.Inject;
 
@@ -94,7 +95,7 @@ public class DefaultActionListener implements URLInterceptorWebViewClient.Action
                                 new TaskProgressCallback.ProgressViewController(progressWheel)) {
                             @Override
                             protected void onResponse(@NonNull final EnrolledCoursesResponse course) {
-                                environment.getRouter().showCourseDashboardTabs(activity, course, false);
+//                                environment.getRouter().showCourseDashboardTabs(activity, course, false);
                             }
 
                             @Override
@@ -110,7 +111,7 @@ public class DefaultActionListener implements URLInterceptorWebViewClient.Action
                 final String pathId = helper.params.get(WebViewLink.Param.PATH_ID);
                 if (!TextUtils.isEmpty(pathId)) {
                     logger.debug("PathId" + pathId);
-                    environment.getRouter().showCourseInfo(activity, pathId);
+//                    environment.getRouter().showCourseInfo(activity, pathId);
                 }
                 break;
             }
@@ -161,8 +162,8 @@ public class DefaultActionListener implements URLInterceptorWebViewClient.Action
                                     @Override
                                     protected void onResponse(@NonNull final EnrolledCoursesResponse course) {
                                         enrollCallback.onResponse(course);
-                                        environment.getRouter().showMainDashboard(activity);
-                                        environment.getRouter().showCourseDashboardTabs(activity, course, false);
+//                                        environment.getRouter().showMainDashboard(activity);
+//                                        environment.getRouter().showCourseDashboardTabs(activity, course, false);
                                     }
 
                                     @Override

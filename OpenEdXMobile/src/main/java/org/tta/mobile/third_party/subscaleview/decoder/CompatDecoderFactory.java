@@ -1,6 +1,6 @@
 package org.tta.mobile.third_party.subscaleview.decoder;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Compatibility factory to instantiate decoders with empty public constructors.

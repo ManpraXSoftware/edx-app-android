@@ -9,7 +9,7 @@
             type="org.tta.mobile.tta.ui.profile.view_model.ProfileViewModel" />
     </data>
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/bgLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -144,5 +144,5 @@
 
         </LinearLayout>
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

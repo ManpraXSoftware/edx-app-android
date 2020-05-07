@@ -2,7 +2,8 @@ package org.tta.mobile.view;
 
 
 import android.app.Activity;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 import org.tta.mobile.base.RoboAppCompatActivity;
 import org.tta.mobile.interfaces.SnackbarStatusListener;

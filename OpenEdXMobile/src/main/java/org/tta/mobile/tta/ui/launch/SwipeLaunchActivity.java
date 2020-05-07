@@ -1,9 +1,11 @@
 package org.tta.mobile.tta.ui.launch;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
+
+import androidx.annotation.Nullable;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 
 import org.tta.mobile.R;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;

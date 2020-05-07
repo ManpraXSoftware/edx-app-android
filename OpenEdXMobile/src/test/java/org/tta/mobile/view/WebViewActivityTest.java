@@ -10,7 +10,6 @@ import android.webkit.WebView;
 
 import org.tta.mobile.R;
 import org.tta.mobile.test.BaseTestCase;
-import org.tta.mobile.view.dialog.WebViewActivity;
 import org.junit.Test;
 import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;

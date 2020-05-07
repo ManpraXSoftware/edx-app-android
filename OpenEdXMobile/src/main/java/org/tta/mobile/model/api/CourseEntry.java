@@ -1,21 +1,19 @@
 package org.tta.mobile.model.api;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
-import org.tta.mobile.social.SocialMember;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import org.tta.mobile.util.UnicodeCharacters;
 import org.tta.mobile.util.UrlUtil;
 import org.tta.mobile.util.images.CourseCardUtils;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("serial")
 public class CourseEntry implements Serializable {
-    private List<SocialMember> members_list;
 
     private LatestUpdateModel latest_updates;
     private String start; // start date
@@ -34,7 +32,6 @@ public class CourseEntry implements Serializable {
     private String id;
     private String number;
     private String discussion_url;
-    private SocialURLModel social_urls;
     private CoursewareAccess courseware_access;
     @Nullable private Map<String, String> course_sharing_utm_parameters;
 
@@ -157,12 +154,6 @@ public class CourseEntry implements Serializable {
         if (latest_updates == null)
             return false;
         return (latest_updates.getVideo() != null);
-    }
-
-    public List<SocialMember> getMembers_list() { return members_list; }
-
-    public void setMembers_list(List<SocialMember> members_list) {
-        this.members_list = members_list;
     }
 
     public String getCourse_about() {

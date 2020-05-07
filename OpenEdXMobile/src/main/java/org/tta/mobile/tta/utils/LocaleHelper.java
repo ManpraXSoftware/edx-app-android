@@ -1,14 +1,12 @@
 package org.tta.mobile.tta.utils;
 
 import android.annotation.TargetApi;
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.v7.view.ContextThemeWrapper;
 
 import java.util.Locale;
 

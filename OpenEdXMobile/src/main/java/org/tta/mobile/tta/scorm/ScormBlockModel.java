@@ -1,6 +1,6 @@
 package org.tta.mobile.tta.scorm;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import org.tta.mobile.model.course.BlockModel;
 import org.tta.mobile.model.course.CourseComponent;

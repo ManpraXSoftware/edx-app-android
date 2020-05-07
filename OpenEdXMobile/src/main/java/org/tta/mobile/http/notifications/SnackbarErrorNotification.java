@@ -1,13 +1,14 @@
 package org.tta.mobile.http.notifications;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.design.widget.BaseTransientBottomBar;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.joanzapata.iconify.Icon;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
@@ -15,8 +16,6 @@ import org.tta.mobile.R;
 import org.tta.mobile.base.MainApplication;
 import org.tta.mobile.interfaces.RefreshListener;
 import org.tta.mobile.util.NetworkUtil;
-
-import static android.support.design.widget.Snackbar.LENGTH_INDEFINITE;
 
 /**
  * A persistent Snackbar notification error message.
@@ -59,16 +58,11 @@ public class SnackbarErrorNotification extends ErrorNotification {
                           @StringRes final int actionTextResId,
                           @Nullable final View.OnClickListener actionListener) {
         if (snackbar == null) {
-            snackbar = Snackbar.make(view, errorResId, LENGTH_INDEFINITE);
+            snackbar = Snackbar.make(view, errorResId, Snackbar.LENGTH_INDEFINITE);
             if (actionTextResId != 0) {
                 // SnackBar automatically dimisses when the action item is pressed.
                 // This workaround has been implemented to by pass that behaviour.
-                snackbar.setAction(actionTextResId, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                });
+                snackbar.setAction(actionTextResId, actionListener);
             }
             snackbar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
                 @Override
@@ -79,8 +73,8 @@ public class SnackbarErrorNotification extends ErrorNotification {
             });
             // By applying the listener to the button like we have done below, the Snackbar
             // doesn't automatically dismiss and we have to manually dismiss it.
-            final Button actionButton = (Button) snackbar.getView().findViewById(android.support.design.R.id.snackbar_action);
-            actionButton.setOnClickListener(actionListener);
+//            final Button actionButton = (Button) snackbar.getView().findViewById(android.R.id.snackbar_action);
+//            actionButton.setOnClickListener(actionListener);
             snackbar.show();
         }
     }

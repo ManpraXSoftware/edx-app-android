@@ -3,8 +3,9 @@ package org.tta.mobile.tta.ui.deep_link;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import org.tta.mobile.R;
 import org.tta.mobile.event.NewVersionAvailableEvent;

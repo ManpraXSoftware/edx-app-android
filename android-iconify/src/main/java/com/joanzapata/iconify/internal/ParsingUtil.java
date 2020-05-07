@@ -3,15 +3,17 @@ package com.joanzapata.iconify.internal;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.support.annotation.CheckResult;
-import android.support.annotation.FloatRange;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.Size;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.util.TypedValue;
 import android.widget.TextView;
+
+import androidx.annotation.CheckResult;
+import androidx.annotation.FloatRange;
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.Size;
+
 import com.joanzapata.iconify.Icon;
 
 import java.util.List;

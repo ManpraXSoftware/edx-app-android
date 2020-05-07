@@ -36,7 +36,6 @@ import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -44,6 +43,8 @@ import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 import org.tta.mobile.third_party.subscaleview.decoder.CompatDecoderFactory;
 import org.tta.mobile.third_party.subscaleview.decoder.DecoderFactory;

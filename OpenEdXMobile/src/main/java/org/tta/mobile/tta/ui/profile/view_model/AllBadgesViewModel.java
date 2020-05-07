@@ -1,19 +1,17 @@
 package org.tta.mobile.tta.ui.profile.view_model;
 
 import android.content.Context;
-import android.databinding.ViewDataBinding;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.ViewDataBinding;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.maurya.mx.mxlib.core.MxInfiniteAdapter;
 import com.maurya.mx.mxlib.core.OnRecyclerItemClickListener;
 
-import org.tta.mobile.R;
 import org.tta.mobile.databinding.TRowAllBadgesBinding;
-import org.tta.mobile.databinding.TRowBadgeBinding;
 import org.tta.mobile.tta.data.enums.BadgeType;
 import org.tta.mobile.tta.data.local.db.table.Badge;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;

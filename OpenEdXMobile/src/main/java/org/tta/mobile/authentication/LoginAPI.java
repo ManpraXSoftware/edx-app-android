@@ -1,8 +1,8 @@
 package org.tta.mobile.authentication;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -33,18 +33,14 @@ import org.tta.mobile.tta.data.model.profile.UpdateMyProfileResponse;
 import org.tta.mobile.tta.data.model.profile.UserAddressResponse;
 import org.tta.mobile.tta.firebase.FirebaseUpdateTokenResponse;
 import org.tta.mobile.util.Config;
-import org.tta.mobile.util.observer.BasicObservable;
-import org.tta.mobile.util.observer.Observable;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static org.tta.mobile.http.util.CallUtil.executeStrict;
 
 @Singleton
@@ -64,9 +60,6 @@ public class LoginAPI {
 
     @NonNull
     private final NotificationDelegate notificationDelegate;
-
-    @NonNull
-    private final BasicObservable<LogInEvent> logInEvents = new BasicObservable<>();
 
     @NonNull
     private final Gson gson;
@@ -118,35 +111,6 @@ public class LoginAPI {
         return response.body();
     }
 
-    @NonNull
-    public AuthResponse logInUsingFacebook(String accessToken) throws Exception {
-        return finishSocialLogIn(accessToken, LoginPrefs.AuthBackend.FACEBOOK);
-    }
-
-    @NonNull
-    public AuthResponse logInUsingGoogle(String accessToken) throws Exception {
-        return finishSocialLogIn(accessToken, LoginPrefs.AuthBackend.GOOGLE);
-    }
-
-    @NonNull
-    private AuthResponse finishSocialLogIn(@NonNull String accessToken, @NonNull LoginPrefs.AuthBackend authBackend) throws Exception {
-        final String backend = ApiConstants.getOAuthGroupIdForAuthBackend(authBackend);
-        final Response<AuthResponse> response = loginService.exchangeAccessToken(accessToken, config.getOAuthClientId(), backend).execute();
-        if (response.code() == HttpURLConnection.HTTP_UNAUTHORIZED || response.code() == HTTP_BAD_REQUEST) {
-            // TODO: Introduce a more explicit error code to indicate that an account is not linked.
-            throw new AccountNotLinkedException(response.code());
-        }
-        if (!response.isSuccessful()) {
-            throw new HttpStatusException(response);
-        }
-        final AuthResponse data = response.body();
-        if (data.error != null && data.error.equals(Integer.toString(HttpURLConnection.HTTP_UNAUTHORIZED))) {
-            throw new AccountNotLinkedException(HttpURLConnection.HTTP_UNAUTHORIZED);
-        }
-        finishLogIn(data, authBackend, "");
-        return data;
-    }
-
     private void finishLogIn(@NonNull AuthResponse response, @NonNull LoginPrefs.AuthBackend authBackend, @NonNull String usernameUsedToLogIn) throws Exception {
         loginPrefs.storeAuthTokenResponse(response, authBackend);
         try {
@@ -174,7 +138,6 @@ public class LoginAPI {
             analyticsRegistry.trackUserLogin(backendKey);
         }
         notificationDelegate.resubscribeAll();
-        logInEvents.sendData(new LogInEvent());
     }
 
     public void logOut() {
@@ -184,53 +147,6 @@ public class LoginAPI {
                     currentAuth.refresh_token, ApiConstants.TOKEN_TYPE_REFRESH);
         }
     }
-
-    @NonNull
-    public AuthResponse registerUsingEmail(@NonNull Bundle parameters) throws Exception {
-        register(parameters);
-        return logInUsingEmail(parameters.getString("username"), parameters.getString("password"));
-    }
-
-    @NonNull
-    public AuthResponse registerUsingGoogle(@NonNull Bundle parameters, @NonNull String accessToken) throws Exception {
-        register(parameters);
-        return logInUsingGoogle(accessToken);
-    }
-
-    @NonNull
-    public AuthResponse registerUsingFacebook(@NonNull Bundle parameters, @NonNull String accessToken) throws Exception {
-        register(parameters);
-        return logInUsingFacebook(accessToken);
-    }
-
-    @NonNull
-    public Observable<LogInEvent> getLogInEvents() {
-        return logInEvents;
-    }
-
-    /*@NonNull
-    private void register(Bundle parameters) throws Exception {
-        final Map<String, String> parameterMap = new HashMap<>();
-        for (String key : parameters.keySet()) {
-            parameterMap.put(key, parameters.getString(key));
-        }
-        Response<ResponseBody> response = loginService.register(parameterMap).execute();
-        if (!response.isSuccessful()) {
-            final int errorCode = response.code();
-            final String errorBody = response.errorBody().string();
-            if ((errorCode == HttpStatus.BAD_REQUEST || errorCode == HttpStatus.CONFLICT) && !android.text.TextUtils.isEmpty(errorBody)) {
-                try {
-                    final FormFieldMessageBody body = gson.fromJson(errorBody, FormFieldMessageBody.class);
-                    if (body != null && body.size() > 0) {
-                        throw new RegistrationException(body);
-                    }
-                } catch (JsonSyntaxException ex) {
-                    // Looks like the response does not contain form validation errors.
-                }
-            }
-            throw new HttpStatusException(response);
-        }
-    }*/
 
     @NonNull
     private RegisterResponse register(Bundle parameters) throws Exception {

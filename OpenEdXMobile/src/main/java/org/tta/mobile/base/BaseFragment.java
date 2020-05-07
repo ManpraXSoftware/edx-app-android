@@ -2,17 +2,22 @@ package org.tta.mobile.base;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import org.tta.mobile.R;
 import org.tta.mobile.event.NewRelicEvent;
 import org.tta.mobile.util.PermissionsUtil;
 
 import de.greenrobot.event.EventBus;
-import roboguice.fragment.RoboFragment;
+import roboguice.RoboGuice;
 
-public class BaseFragment extends RoboFragment {
+public class BaseFragment extends Fragment {
     public interface PermissionListener {
         void onPermissionGranted(String[] permissions, int requestCode);
 
@@ -25,7 +30,14 @@ public class BaseFragment extends RoboFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        RoboGuice.getInjector(getActivity()).injectMembersWithoutViews(this);
         EventBus.getDefault().post(new NewRelicEvent(getClass().getSimpleName()));
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        RoboGuice.getInjector(getActivity()).injectViewMembers(this);
     }
 
     @Override

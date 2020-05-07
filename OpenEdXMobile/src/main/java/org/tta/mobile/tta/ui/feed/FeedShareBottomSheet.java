@@ -4,43 +4,37 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.design.widget.CoordinatorLayout;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.tta.mobile.R;
 import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
-import org.tta.mobile.tta.analytics.analytics_enums.Source;
 import org.tta.mobile.tta.data.enums.SourceName;
 import org.tta.mobile.tta.data.local.db.table.Feed;
 import org.tta.mobile.tta.utils.AppUtil;
-import org.tta.mobile.tta.utils.BreadcrumbUtil;
 import org.tta.mobile.tta.utils.Tools;
 import org.tta.mobile.util.ResourceUtil;
 import org.tta.mobile.util.images.ShareUtils;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.tta.mobile.util.BrowserUtil.config;

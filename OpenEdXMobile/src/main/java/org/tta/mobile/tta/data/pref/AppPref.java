@@ -1,11 +1,10 @@
 package org.tta.mobile.tta.data.pref;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import org.tta.mobile.module.prefs.PrefManager;
-
-import java.util.Date;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

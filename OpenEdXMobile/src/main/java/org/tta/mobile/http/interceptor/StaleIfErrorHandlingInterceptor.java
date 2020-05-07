@@ -1,10 +1,10 @@
 package org.tta.mobile.http.interceptor;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import org.tta.mobile.logger.Logger;
-import org.tta.mobile.tta.Constants;
 
 import java.io.IOException;
 import java.util.regex.Matcher;

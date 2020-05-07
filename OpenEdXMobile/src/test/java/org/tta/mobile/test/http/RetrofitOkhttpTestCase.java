@@ -2,7 +2,6 @@ package org.tta.mobile.test.http;
 
 import android.content.Context;
 
-import org.tta.mobile.http.interceptor.GzipRequestInterceptor;
 import org.tta.mobile.http.HttpStatus;
 import org.tta.mobile.http.interceptor.OauthHeaderRequestInterceptor;
 import org.tta.mobile.test.BaseTestCase;

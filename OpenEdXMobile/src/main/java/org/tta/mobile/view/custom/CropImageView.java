@@ -8,8 +8,9 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+
+import androidx.annotation.NonNull;
 
 import org.tta.mobile.R;
 import org.tta.mobile.third_party.subscaleview.SubsamplingScaleImageView;

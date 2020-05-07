@@ -1,6 +1,6 @@
 package org.tta.mobile.tta.data.model.feed;
 
-import android.arch.persistence.room.Embedded;
+import androidx.room.Embedded;
 
 import com.google.gson.annotations.SerializedName;
 

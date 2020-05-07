@@ -1,9 +1,10 @@
 package org.tta.mobile.tta.ui.course.discussion;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 
 import org.tta.mobile.R;
 import org.tta.mobile.discussion.DiscussionComment;

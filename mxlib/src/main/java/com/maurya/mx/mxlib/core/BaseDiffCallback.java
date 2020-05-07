@@ -1,6 +1,6 @@
 package com.maurya.mx.mxlib.core;
 
-import android.support.v7.util.DiffUtil;
+import androidx.recyclerview.widget.DiffUtil;
 
 import java.util.List;
 

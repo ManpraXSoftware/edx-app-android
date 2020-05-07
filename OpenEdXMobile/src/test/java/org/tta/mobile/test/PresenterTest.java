@@ -2,7 +2,6 @@ package org.tta.mobile.test;
 
 import android.support.annotation.NonNull;
 
-import org.tta.mobile.view.Presenter;
 import org.junit.After;
 
 import static org.mockito.Mockito.mock;

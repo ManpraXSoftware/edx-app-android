@@ -2,8 +2,6 @@ package org.tta.mobile.test;
 
 
 import org.tta.mobile.model.api.CourseEntry;
-import org.tta.mobile.module.notification.EdxLocalParseChannel;
-import org.tta.mobile.module.notification.NotificationPreference;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -10,13 +10,15 @@ import android.widget.Button;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatSpinner;
+
 import org.tta.mobile.R;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MultiSelectionSpinner extends android.support.v7.widget.AppCompatSpinner implements
+public class MultiSelectionSpinner extends AppCompatSpinner implements
         OnMultiChoiceClickListener {
 
     String[] _items = null;

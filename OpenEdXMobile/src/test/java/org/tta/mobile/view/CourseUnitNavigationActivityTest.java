@@ -26,8 +26,6 @@ import org.tta.mobile.model.course.HtmlBlockModel;
 import org.tta.mobile.model.course.VideoBlockModel;
 import org.tta.mobile.model.course.VideoData;
 import org.tta.mobile.model.course.VideoInfo;
-import org.tta.mobile.view.adapters.CourseUnitPagerAdapter;
-import org.tta.mobile.view.custom.DisableableViewPager;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;

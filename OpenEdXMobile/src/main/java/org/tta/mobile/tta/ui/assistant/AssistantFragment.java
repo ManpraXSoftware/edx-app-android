@@ -1,20 +1,19 @@
 package org.tta.mobile.tta.ui.assistant;
 
-import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.tta.mobile.R;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.ui.assistant.view_model.AssistantViewModel;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
-import org.tta.mobile.util.PermissionsUtil;
 
 public class AssistantFragment extends TaBaseFragment {
     public static final String TAG = AssistantFragment.class.getCanonicalName();

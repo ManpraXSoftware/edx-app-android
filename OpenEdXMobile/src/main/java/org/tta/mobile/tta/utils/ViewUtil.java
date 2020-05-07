@@ -1,21 +1,20 @@
 package org.tta.mobile.tta.utils;
 
 import android.graphics.Paint;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+
 import org.tta.mobile.R;
 import org.tta.mobile.module.registration.model.RegistrationOption;
-import org.tta.mobile.module.registration.view.RegistrationOptionSpinner;
 import org.tta.mobile.tta.ui.custom.FormEditText;
 import org.tta.mobile.tta.ui.custom.FormMultiSpinner;
 import org.tta.mobile.tta.ui.custom.FormSpinner;

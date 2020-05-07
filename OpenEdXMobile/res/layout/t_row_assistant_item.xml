@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_margin="@dimen/_10px"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -36,5 +36,5 @@
             app:mx_itemLayout="@layout/t_row_content"
             android:layout_width="match_parent"
             android:layout_height="200dp"/>
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -2,13 +2,14 @@ package org.tta.mobile.view;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Xml.Encoding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+
+import androidx.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;

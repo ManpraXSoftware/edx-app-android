@@ -24,7 +24,7 @@ public class Logger implements Serializable {
      * @param ex
      */
     public void error(Throwable ex) {
-        error(ex, false);
+        error(ex, true);
     }
 
     /**

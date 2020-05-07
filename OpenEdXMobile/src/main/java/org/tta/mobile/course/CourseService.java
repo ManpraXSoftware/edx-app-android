@@ -1,15 +1,15 @@
 package org.tta.mobile.course;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.inject.Inject;
 
 import org.tta.mobile.event.EnrolledInCourseEvent;
 import org.tta.mobile.http.callback.ErrorHandlingCallback;
 import org.tta.mobile.http.provider.RetrofitProvider;
-import org.tta.mobile.model.Page;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.model.api.SyncLastAccessedSubsectionResponse;
 import org.tta.mobile.model.api.VideoResponseModel;
@@ -25,7 +25,6 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
-import retrofit2.http.Headers;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -46,55 +45,11 @@ public interface CourseService {
     }
 
     /**
-     * @param username (optional):
-     *                 The username of the specified user whose visible courses we
-     *                 want to see. The username is not required only if the API is
-     *                 requested by an Anonymous user.
-     * @param mobile   (optional):
-     *                 If specified, only visible `CourseOverview` objects that are
-     *                 designated as mobile_available are returned.
-     * @param org      (optional):
-     *                 If specified, only courses with the relevant organization
-     *                 code are returned.
-     * @param page     (optional):
-     *                 Which page to fetch. If not given, defaults to page 1
-     */
-    @GET("/api/courses/v1/courses/")
-    Call<Page<CourseDetail>> getCourseList(@Query("username") final String username,
-                                           @Query("mobile") final boolean mobile,
-                                           @Query("org") final String org,
-                                           @Query("page") final int page);
-
-    /**
-     * @param courseId (optional):
-     *                 If specified, visible `CourseOverview` objects are filtered
-     *                 such that only those belonging to the organization with the
-     *                 provided org code (e.g., "HarvardX") are returned.
-     *                 Case-insensitive.
-     * @param username (optional):
-     *                 The username of the specified user whose visible courses we
-     *                 want to see. The username is not required only if the API is
-     *                 requested by an Anonymous user.
-     */
-    @GET("/api/courses/v1/courses/{course_id}")
-    Call<CourseDetail> getCourseDetail(@Path("course_id") final String courseId,
-                                       @Query("username") final String username);
-
-    /**
      * @return Enrolled courses of given user.
      */
     @GET("/api/mobile/v0.5/users/{username}/course_enrollments")
     Call<List<EnrolledCoursesResponse>> getEnrolledCourses(@Path("username") final String username,
                                                            @Query("org") final String org);
-
-    /**
-     * @return Enrolled courses of given user, only from the cache.
-     */
-    @Headers("Cache-Control: only-if-cached, max-stale")
-    @GET("/api/mobile/v0.5/users/{username}/course_enrollments")
-    Call<List<EnrolledCoursesResponse>> getEnrolledCoursesFromCache(
-            @Path("username") final String username,
-            @Query("org") final String org);
 
     /**
      * @return List of videos in a particular course.

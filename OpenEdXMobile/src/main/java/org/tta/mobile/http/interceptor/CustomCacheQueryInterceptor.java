@@ -1,7 +1,8 @@
 package org.tta.mobile.http.interceptor;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.google.inject.Inject;
 
@@ -20,8 +21,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.TlsVersion;
-import okhttp3.internal.http.CacheStrategy;
-import okhttp3.internal.http.HttpEngine;
+import okhttp3.internal.cache.CacheStrategy;
+import okhttp3.internal.http.HttpHeaders;
 import okhttp3.internal.http.HttpMethod;
 import roboguice.RoboGuice;
 
@@ -78,8 +79,8 @@ public class CustomCacheQueryInterceptor implements Interceptor {
                         .body(null)
                         .build();
                 final CacheStrategy cacheStrategy = new CacheStrategy.Factory(
-                        System.currentTimeMillis(), request, cacheResponse).get();
-                cacheResponse = cacheStrategy.cacheResponse;
+                        System.currentTimeMillis(), request, cacheResponse).compute();
+                cacheResponse = cacheStrategy.getCacheResponse();
                 if (cacheResponse != null) {
                     /* Either querying the server is forbidden by the Cache-Control headers (if
                      * there is no network response), or they require a conditional query
@@ -101,8 +102,8 @@ public class CustomCacheQueryInterceptor implements Interceptor {
                         response = response.newBuilder()
                                 .cacheResponse(cacheResponse)
                                 .build();
-                        if (HttpEngine.hasBody(response) &&
-                                HttpMethod.invalidatesCache(request.method())) {
+                        if (HttpHeaders.promisesBody(response) &&
+                                HttpMethod.INSTANCE.invalidatesCache(request.method())) {
                             cacheManager.remove(urlString);
                         }
                     }

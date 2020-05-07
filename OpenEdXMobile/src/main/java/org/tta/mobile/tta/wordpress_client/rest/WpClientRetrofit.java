@@ -1,12 +1,8 @@
 package org.tta.mobile.tta.wordpress_client.rest;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.util.Log;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import androidx.annotation.NonNull;
 
 import org.tta.mobile.R;
 import org.tta.mobile.tta.data.model.StatusResponse;
@@ -29,11 +25,9 @@ import org.tta.mobile.tta.wordpress_client.rest.interceptor.WPOauthRefreshTokenA
 import org.tta.mobile.tta.wordpress_client.util.ContentUtil;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -178,7 +172,7 @@ public class WpClientRetrofit {
 
     //get access token
     public void getAccessToken(@NonNull String username,
-                                               @NonNull String password , WordPressRestResponse<WpAuthResponse> callback) {
+                               @NonNull String password , WordPressRestResponse<WpAuthResponse> callback) {
         String grantType = "password";
         String clientID = config.getWPOAuthClientId();
         String clientSecret = config.getWPOAuthClientSecret();

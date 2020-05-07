@@ -1,9 +1,10 @@
 package org.tta.mobile.tta.data.local.db;
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.TypeConverters;
-import android.arch.persistence.room.migration.Migration;
+
+import androidx.room.Database;
+import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import org.tta.mobile.tta.data.local.db.dao.AccountDao;
 import org.tta.mobile.tta.data.local.db.dao.BookmarkDao;

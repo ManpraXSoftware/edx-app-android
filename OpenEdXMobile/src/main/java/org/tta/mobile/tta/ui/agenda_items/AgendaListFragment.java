@@ -2,14 +2,16 @@ package org.tta.mobile.tta.ui.agenda_items;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 
 import org.tta.mobile.R;
 import org.tta.mobile.logger.Logger;
@@ -25,7 +27,6 @@ import org.tta.mobile.view.common.PageViewStateCallback;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 public class AgendaListFragment extends TaBaseFragment {

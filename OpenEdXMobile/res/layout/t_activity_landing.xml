@@ -9,7 +9,8 @@
             name="viewModel"
             type="org.tta.mobile.tta.ui.landing.view_model.LandingViewModel" />
     </data>
-    <android.support.design.widget.CoordinatorLayout
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/cl_main">
@@ -63,22 +64,23 @@
 
         </LinearLayout>
 
-        <android.support.design.widget.BottomNavigationView
+        <com.google.android.material.bottomnavigation.BottomNavigationView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/dashboard_bottom_nav"
             android:minHeight="50dp"
             app:elevation="2dp"
             android:background="@drawable/bottom_bar_nav_background"
+            app:labelVisibilityMode="labeled"
+            app:itemHorizontalTranslationEnabled="false"
             app:menu="@menu/dashboard_bottom_nav_menu"
             app:itemTextColor="@color/dashboard_bottom_nav_item_color_selector"
             bottom_nav_item_selected_listener="@{viewModel.itemSelectedListener}"
-            bottom_nav_enable_shift_mode="@{viewModel.navShiftMode}"
             tool_tip="@{viewModel.libraryToolTip}"
             tool_tip_position="@{viewModel.toolTipPosition}"
             tool_tip_gravity="@{viewModel.toolTipGravity}"
             android:textSize="10sp" />
 
     </LinearLayout>
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -1,7 +1,8 @@
 package org.tta.mobile.http.interceptor;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import org.tta.mobile.logger.Logger;
 import org.tta.mobile.module.prefs.LoginPrefs;

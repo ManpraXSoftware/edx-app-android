@@ -1,13 +1,14 @@
 package org.tta.mobile.tta.ui.agenda.view_model;
 
 import android.content.Context;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
-import android.databinding.ViewDataBinding;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.databinding.ViewDataBinding;
 
 import com.maurya.mx.mxlib.core.MxFiniteAdapter;
 import com.maurya.mx.mxlib.core.OnRecyclerItemClickListener;

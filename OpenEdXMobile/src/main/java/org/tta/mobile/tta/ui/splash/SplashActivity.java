@@ -1,12 +1,12 @@
 package org.tta.mobile.tta.ui.splash;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 import org.tta.mobile.R;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
-import org.tta.mobile.tta.ui.otp.AppSignatureHelper;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
 
 public class SplashActivity extends BaseVMActivity {

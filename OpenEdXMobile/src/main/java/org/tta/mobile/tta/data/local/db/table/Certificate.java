@@ -1,12 +1,12 @@
 package org.tta.mobile.tta.data.local.db.table;
 
-import android.arch.persistence.room.Entity;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.room.Entity;
 
 @Entity(tableName = "certificate", primaryKeys = {"course_id", "username"})
 public class Certificate implements Parcelable {

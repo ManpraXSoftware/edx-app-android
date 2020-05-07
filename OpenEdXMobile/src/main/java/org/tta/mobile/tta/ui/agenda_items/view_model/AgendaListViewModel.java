@@ -2,11 +2,12 @@ package org.tta.mobile.tta.ui.agenda_items.view_model;
 
 import android.content.Context;
 
-import android.databinding.ObservableInt;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
+
+import androidx.databinding.ObservableInt;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.viewpager.widget.ViewPager;
 
 import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.Constants;

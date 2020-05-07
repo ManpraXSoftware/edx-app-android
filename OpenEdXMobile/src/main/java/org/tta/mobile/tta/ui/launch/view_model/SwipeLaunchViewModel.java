@@ -1,12 +1,13 @@
 package org.tta.mobile.tta.ui.launch.view_model;
 
 import android.content.Intent;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
+
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import org.tta.mobile.R;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;

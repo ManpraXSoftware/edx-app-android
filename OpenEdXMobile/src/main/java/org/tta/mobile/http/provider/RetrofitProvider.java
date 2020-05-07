@@ -1,6 +1,6 @@
 package org.tta.mobile.http.provider;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
@@ -14,7 +14,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public interface RetrofitProvider extends Provider<Retrofit> {
-    @NonNull Retrofit get();
+    @NonNull
+    Retrofit get();
     @NonNull Retrofit getWithOfflineCache();
     @NonNull Retrofit getNonOAuthBased();
 

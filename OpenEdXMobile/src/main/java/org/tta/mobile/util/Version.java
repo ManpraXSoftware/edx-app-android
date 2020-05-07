@@ -1,6 +1,6 @@
 package org.tta.mobile.util;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.text.ParseException;
 import java.util.Arrays;

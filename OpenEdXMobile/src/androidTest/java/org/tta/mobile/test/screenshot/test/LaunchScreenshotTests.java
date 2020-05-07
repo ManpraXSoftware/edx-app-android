@@ -6,7 +6,6 @@ import android.view.View;
 
 import com.facebook.testing.screenshot.Screenshot;
 
-import org.tta.mobile.view.LaunchActivity;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

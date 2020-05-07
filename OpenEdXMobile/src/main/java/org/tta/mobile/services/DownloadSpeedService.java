@@ -37,14 +37,8 @@ public class DownloadSpeedService extends RoboService {
 
     private static final String TAG = DownloadSpeedService.class.getCanonicalName();
     private static final long NS_PER_SEC = 1000000000;
-    private static final int BLOCK_SIZE = 4096;
 
     public static final String EXTRA_FILE_DESC = TAG + ".file_desc";
-    public static final String EXTRA_REPORT_PROGRESS = TAG + ".report_progress";
-    public static final String EXTRA_KBPS = TAG + ".kbps";
-    public static final String EXTRA_SECONDS = TAG + ".seconds";
-    public static final String EXTRA_ERROR = TAG + ".error";
-    public static final String ACTION_DOWNLOAD_DONE = TAG + ".download_done";
 
     private static final int RUN_SPEED_TEST_MESSAGE = 5555;
 

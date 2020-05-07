@@ -4,13 +4,10 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.core.CrashlyticsCore;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -29,8 +26,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import io.fabric.sdk.android.Kit;
 
 @Singleton
 public class Config {
@@ -56,7 +51,6 @@ public class Config {
     private static final String FACEBOOK = "FACEBOOK";
     private static final String GOOGLE = "GOOGLE";
     private static final String TWITTER = "TWITTER";
-    private static final String FABRIC = "FABRIC";
     private static final String NEW_RELIC = "NEW_RELIC";
     private static final String SEGMENT_IO = "SEGMENT_IO";
     private static final String FIREBASE = "FIREBASE";
@@ -274,120 +268,6 @@ public class Config {
 
         public String getHashTag() {
             return mHashTag;
-        }
-    }
-
-    public static class FabricConfig {
-        @SerializedName("ENABLED")
-        private boolean mEnabled;
-
-        @SerializedName("FABRIC_KEY")
-        private String mFabricKey;
-
-        @SerializedName("FABRIC_BUILD_SECRET")
-        private String mFabricBuildSecret;
-
-        @SerializedName("KITS")
-        private FabricKitsConfig mKitsConfig;
-
-        public boolean isEnabled() {
-            return mEnabled
-                    && !TextUtils.isEmpty(mFabricKey)
-//                    && !TextUtils.isEmpty(mFabricBuildSecret)
-                    && mKitsConfig != null && mKitsConfig.hasEnabledKits();
-        }
-
-        public String getFabricKey() {
-            return mFabricKey;
-        }
-
-        public String getFabricBuildSecret() {
-            return mFabricBuildSecret;
-        }
-
-        public FabricKitsConfig getKitsConfig() {
-            return mKitsConfig;
-        }
-    }
-
-    public static class FabricKitsConfig {
-        @SerializedName("CRASHLYTICS")
-        private boolean mCrashlyticsEnabled;
-
-        @SerializedName("ANSWERS")
-        private boolean mAnswersEnabled;
-
-        @SerializedName("BRANCH")
-        private FabricBranchConfig mBranchConfig;
-
-        public boolean isCrashlyticsEnabled() {
-            return mCrashlyticsEnabled;
-        }
-
-        public boolean isAnswersEnabled() {
-            return mAnswersEnabled;
-        }
-
-        public Kit[] getEnabledKits() {
-            List<Kit> fabricKits = new ArrayList<>();
-
-            if (isCrashlyticsEnabled()) {
-                fabricKits.add(new Crashlytics());
-            }
-
-            if (isAnswersEnabled()) {
-                fabricKits.add(new Answers());
-            }
-
-            return fabricKits.toArray(new Kit[fabricKits.size()]);
-        }
-
-        public boolean hasEnabledKits() {
-            return getEnabledKits().length != 0;
-        }
-
-        public FabricBranchConfig getBranchConfig() {
-            return mBranchConfig;
-        }
-    }
-
-    public static class FabricBranchConfig {
-        @SerializedName("ENABLED")
-        private boolean mEnabled;
-
-        @SerializedName("BRANCH_KEY")
-        private String mBranchKey;
-
-        @SerializedName("BRANCH_SECRET")
-        private String mBranchSecret;
-
-        public boolean isEnabled() {
-            return mEnabled;
-        }
-
-        public String getBranchKey() {
-            return mBranchKey;
-        }
-
-        public String getBranchSecret() {
-            return mBranchSecret;
-        }
-
-        /**
-         * Utility function to traverse through {@link FabricConfig} and tell if Branch is enabled.
-         *
-         * @param fabricConfig The Fabric config.
-         * @return <code>true</code> if Branch is enabled, <code>false</code> otherwise.
-         */
-        public static boolean isBranchEnabled(@NonNull FabricConfig fabricConfig) {
-            final FabricKitsConfig kitsConfig = fabricConfig.getKitsConfig();
-            if (kitsConfig != null) {
-                final FabricBranchConfig branchConfig = kitsConfig.getBranchConfig();
-                if (branchConfig != null) {
-                    return branchConfig.isEnabled();
-                }
-            }
-            return false;
         }
     }
 
@@ -694,11 +574,6 @@ public class Config {
     @NonNull
     public TwitterConfig getTwitterConfig() {
         return getObjectOrNewInstance(TWITTER, TwitterConfig.class);
-    }
-
-    @NonNull
-    public FabricConfig getFabricConfig() {
-        return getObjectOrNewInstance(FABRIC, FabricConfig.class);
     }
 
     @NonNull

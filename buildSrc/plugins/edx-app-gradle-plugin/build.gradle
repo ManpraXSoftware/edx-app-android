@@ -3,7 +3,7 @@ repositories {
 }
 
 dependencies {
-    compile localGroovy()
-    compile gradleApi()
-    compile 'org.yaml:snakeyaml:1.14'
+    implementation localGroovy()
+    implementation gradleApi()
+    implementation 'org.yaml:snakeyaml:1.14'
 }

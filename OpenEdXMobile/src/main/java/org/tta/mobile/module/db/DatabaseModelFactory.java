@@ -1,8 +1,9 @@
 package org.tta.mobile.module.db;
 
 import android.database.Cursor;
-import android.support.annotation.Nullable;
 import android.webkit.URLUtil;
+
+import androidx.annotation.Nullable;
 
 import org.tta.mobile.model.VideoModel;
 import org.tta.mobile.model.api.VideoResponseModel;

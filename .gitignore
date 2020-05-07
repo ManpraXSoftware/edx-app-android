@@ -56,7 +56,6 @@ build
 Test-Reports
 test-build
 *.keystore
-gradle.properties
 
 # reports directory
 /artifacts

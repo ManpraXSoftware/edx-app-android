@@ -1,8 +1,6 @@
 package org.tta.mobile.test;
 
 import org.tta.mobile.model.course.CourseComponent;
-import org.tta.mobile.services.ViewPagerDownloadManager;
-import org.tta.mobile.view.common.RunnableCourseComponent;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

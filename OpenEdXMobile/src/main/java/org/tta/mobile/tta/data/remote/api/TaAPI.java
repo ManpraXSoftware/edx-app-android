@@ -1,7 +1,8 @@
 package org.tta.mobile.tta.data.remote.api;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.google.inject.Singleton;
 

@@ -1,18 +1,18 @@
 package org.tta.mobile.base;
 
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import org.tta.mobile.R;
-import org.tta.mobile.view.AuthPanelUtils;
 import org.tta.mobile.view.common.MessageType;
 import org.tta.mobile.view.common.TaskProcessCallback;
 
@@ -62,12 +62,6 @@ public abstract class BaseSingleFragmentActivity extends BaseFragmentActivity im
     @LayoutRes
     protected int getToolbarLayoutId() {
         return R.layout.toolbar;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        AuthPanelUtils.configureAuthPanel(findViewById(R.id.auth_panel), environment);
     }
 
     @Override

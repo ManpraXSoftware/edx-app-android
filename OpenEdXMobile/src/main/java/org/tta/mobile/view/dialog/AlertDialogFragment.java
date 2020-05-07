@@ -3,20 +3,23 @@ package org.tta.mobile.view.dialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 
 import org.tta.mobile.R;
 
-import roboguice.fragment.RoboDialogFragment;
+import roboguice.RoboGuice;
 
 /**
  * Wrapper class to create a basic fragment dialog.
  */
-public class AlertDialogFragment extends RoboDialogFragment {
+public class AlertDialogFragment extends DialogFragment {
     protected static final String ARG_TITLE = "ARG_TITLE";
     protected static final String ARG_TITLE_RES = "ARG_TITLE_RES";
     protected static final String ARG_MESSAGE = "ARG_MESSAGE";
@@ -140,6 +143,7 @@ public class AlertDialogFragment extends RoboDialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        RoboGuice.getInjector(getActivity()).injectMembersWithoutViews(this);
         /*
          * TODO: Its a quick fix of a crash mentioned in LEARNER-1987, we have to fix it properly
          * which is explained and planned to implement in story LEARNER-2177
@@ -147,6 +151,12 @@ public class AlertDialogFragment extends RoboDialogFragment {
         if (savedInstanceState != null) {
             dismiss();
         }
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        RoboGuice.getInjector(getActivity()).injectViewMembers(this);
     }
 
     @NonNull

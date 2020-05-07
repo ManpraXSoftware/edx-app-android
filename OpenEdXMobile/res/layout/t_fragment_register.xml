@@ -37,7 +37,7 @@
                 android:textSize="15sp"
                 android:fontFamily="@font/hind_medium" />
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_54px"
@@ -47,7 +47,7 @@
                 app:hintTextAppearance="@style/TextColorHint"
                 android:theme="@style/TextAppearence.App.TextInputLayout">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/mobile_number"
@@ -61,9 +61,9 @@
                     text_changed_listener="@{viewModel.cellWatcher}"
                     android:paddingBottom="@dimen/_14px"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_40px"
@@ -75,7 +75,7 @@
                 password_toggle_enabled="@{viewModel.passToggleEnabled}"
                 password_toggle_drawable="@{viewModel.passDrawable}">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/password"
@@ -89,9 +89,9 @@
                     text_changed_listener="@{viewModel.passWatcher}"
                     android:paddingBottom="@dimen/_14px" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_40px"
@@ -103,7 +103,7 @@
                 password_toggle_enabled="@{viewModel.confirmPassToggleEnabled}"
                 password_toggle_drawable="@{viewModel.confirmPassDrawable}">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/confirm_password"
@@ -117,7 +117,7 @@
                     text_changed_listener="@{viewModel.ConfirmPassWatcher}"
                     android:paddingBottom="@dimen/_14px"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:layout_width="240dp"

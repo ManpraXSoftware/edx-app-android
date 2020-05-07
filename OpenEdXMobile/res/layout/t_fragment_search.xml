@@ -11,7 +11,7 @@
             type="org.tta.mobile.tta.ui.search.view_model.SearchViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true">
@@ -26,7 +26,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:visibility="@{viewModel.searchOptionsVisible?View.VISIBLE:View.GONE}">
 
-            <android.support.v7.widget.SearchView
+            <androidx.appcompat.widget.SearchView
                 on_query_text_listener="@{viewModel.queryTextListener}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -542,6 +542,6 @@
 
         </LinearLayout>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

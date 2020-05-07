@@ -1,14 +1,15 @@
 package org.tta.mobile.tta.ui.library.view_model;
 
 import android.content.Context;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Gravity;
+
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.viewpager.widget.ViewPager;
 
 import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.Constants;

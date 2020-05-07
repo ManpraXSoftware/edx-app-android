@@ -8,7 +8,7 @@
             type="org.tta.mobile.discussion.DiscussionThread" />
     </data>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="128dp"
@@ -20,12 +20,12 @@
         android:layout_marginStart="@dimen/_20px"
         android:layout_marginEnd="@dimen/_20px">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="128dp">
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:id="@+id/user_image"
@@ -42,7 +42,7 @@
                     android:id="@+id/rounded_user_image"
                     android:scaleType="fitXY"/>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:id="@+id/user_name"
@@ -109,8 +109,8 @@
                 android:textSize="12sp"
                 android:fontFamily="@font/hind_medium"/>
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 </layout>

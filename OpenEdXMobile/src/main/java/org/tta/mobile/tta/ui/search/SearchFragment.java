@@ -1,11 +1,12 @@
 package org.tta.mobile.tta.ui.search;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.tta.mobile.R;
 import org.tta.mobile.tta.analytics.analytics_enums.Nav;
@@ -16,7 +17,6 @@ import org.tta.mobile.tta.data.model.library.CollectionConfigResponse;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.search.view_model.SearchViewModel;
 import org.tta.mobile.tta.utils.BreadcrumbUtil;
-import org.tta.mobile.util.PermissionsUtil;
 
 import java.util.List;
 

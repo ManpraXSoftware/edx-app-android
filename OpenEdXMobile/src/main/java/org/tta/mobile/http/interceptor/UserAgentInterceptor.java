@@ -1,6 +1,6 @@
 package org.tta.mobile.http.interceptor;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.io.IOException;
 

@@ -20,7 +20,7 @@
             android:orientation="horizontal"
             android:background="@color/white">
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="0dp"
                 android:layout_height="50dp"

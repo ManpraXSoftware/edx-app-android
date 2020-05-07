@@ -1,15 +1,12 @@
 package org.tta.mobile.tta.ui.course;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -21,6 +18,9 @@ import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.tta.mobile.R;
 import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.Constants;
@@ -28,7 +28,6 @@ import org.tta.mobile.tta.analytics.Analytic;
 import org.tta.mobile.tta.scorm.JSInterfaceTincan;
 import org.tta.mobile.tta.tincan.Tincan;
 import org.tta.mobile.tta.tincan.model.Resume;
-import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.course.view_model.CourseScormViewModel;
 import org.tta.mobile.util.IOUtils;
 

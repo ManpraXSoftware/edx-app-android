@@ -1,11 +1,11 @@
 package org.tta.mobile.util.images;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+
 import org.tta.mobile.R;
-import org.tta.mobile.course.CourseDetail;
 import org.tta.mobile.model.api.CourseEntry;
 import org.tta.mobile.model.api.StartType;
 import org.tta.mobile.util.DateUtil;
@@ -76,15 +76,6 @@ public enum CourseCardUtils {
                 course.getEnd(),
                 course.getStartType(),
                 course.getStartDisplay());
-    }
-
-    public static String getFormattedDate(@NonNull Context context, @NonNull CourseDetail course) {
-        return CourseCardUtils.getFormattedDate(
-                context,
-                course.start,
-                course.end,
-                course.start_type,
-                course.start_display);
     }
 
     public static String getDescription(String org, String number, String formattedStartDate) {

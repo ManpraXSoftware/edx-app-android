@@ -46,11 +46,11 @@
 
         </RelativeLayout>
 
-        <android.support.design.widget.CoordinatorLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.design.widget.AppBarLayout
+            <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/app_background"
@@ -87,7 +87,7 @@
                     finite_recycler_adapter="@{viewModel.suggestedUsersAdapter}"
                     android:visibility="@{viewModel.suggestedUsersVisible?View.VISIBLE:View.GONE}"/>
 
-            </android.support.design.widget.AppBarLayout>
+            </com.google.android.material.appbar.AppBarLayout>
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -132,7 +132,7 @@
 
             </FrameLayout>
 
-        </android.support.design.widget.CoordinatorLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </LinearLayout>
 

@@ -1,7 +1,7 @@
 package org.tta.mobile.module.storage;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.tta.mobile.model.VideoModel;
 import org.tta.mobile.model.api.VideoResponseModel;

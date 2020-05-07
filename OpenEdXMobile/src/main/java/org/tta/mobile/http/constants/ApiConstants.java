@@ -1,31 +1,16 @@
 package org.tta.mobile.http.constants;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.StringDef;
-
-import org.tta.mobile.module.prefs.LoginPrefs;
-import org.tta.mobile.module.prefs.PrefManager;
+import androidx.annotation.StringDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 public class ApiConstants {
-    public static final String COURSE_ID = "courseId";
-    public static final String USER_NAME = "username";
     public static final String GROUP_ID = "groupId";
-    public static final String ORG_CODE = "org";
 
     public static final String URL_MY_USER_INFO ="api/mobile/v0.5/my_user_info";
 
-    public static final String URL_COURSE_ENROLLMENTS =
-        "api/mobile/v0.5/users/{username}/course_enrollments/?format=json";
-
-    public static final String URL_VIDEO_OUTLINE =
-        "api/mobile/v0.5/video_outlines/courses/{courseId}";
-
     public static final String URL_ACCESS_TOKEN = "oauth2/access_token/";
-
-    public static final String URL_PASSWORD_RESET = "password_reset/";
 
     public static final String URL_EXCHANGE_ACCESS_TOKEN = "oauth2/exchange_access_token/{" + GROUP_ID + "}/";
 
@@ -33,13 +18,7 @@ public class ApiConstants {
 
     public static final String URL_LOGIN = "oauth2/login/";
 
-    public static final String URL_LAST_ACCESS_FOR_COURSE ="api/mobile/v0.5/users/{username}/course_status_info/{courseId}";
-
     public static final String URL_REGISTRATION = "user_api/v1/account/registration/";
-
-    public static final String URL_ENROLLMENT = "api/enrollment/v1/enrollment";
-
-    public static final String URL_COURSE_OUTLINE = "api/courses/v1/blocks/?course_id={courseId}&username={username}&depth=all&requested_fields={requested_fields}&student_view_data={student_view_data}&block_counts={block_counts}&nav_depth=3";
 
     //TTA start
 
@@ -51,16 +30,9 @@ public class ApiConstants {
     public static final String URL_MX_RESET_FORGOTED_PASSWORD = "api/otp/reset_password/reset_password";
     //forgot password urls ::end
 
-    //Reset mobile number APIs::start
-    public static final String URL_MX_USER_RESET_SEND_OTP = "api/otp/update_username/send_otp";
-
-    public static final String URL_MX_VERIFY_OTP_AND_RESET_USERNAME = "api/otp/update_username/update_username";
-    //Reset mobile number APIs::end
-
     public static final String URL_MX_GENERATE_OTP = "api/otp/otp_api/";
     public static final String URL_MX_CUSTOM_FIELD_ATTRIBUTES= "api/otp/get-teacher-id-field-info/";
     public static final String URL_MX_VERIFY_OTP = "api/otp/otp_api/verify/";
-    public static final String URL_MX_REGISTER_ME = "user_api/v1/account/registration/";
     public static final String URL_MX_UPDATE_PROFILE = "api/otp/user_account/update/";
 
     public static final String URL_MX_GET_COLLECTION_CONFIG = "api/mx_catalog/v1/config/";
@@ -134,12 +106,6 @@ public class ApiConstants {
 
     public static final String URL_MX_FIREBASE_TOKEN_UPDATE = "api/teacherappAnalytics/android_token/";
 
-    //Analytic api url
-    public static final String URL_TA_ANALYTIC = "api/teacherappAnalytics/analytics/add/";
-
-    //Analytic batch api url
-    public static final String URL_TA_ANALYTIC_BATCH = "api/teacherappAnalytics/analytics/add-list/";
-
     //Analytic batch for seperate server
     public static final String URL_ANALYTIC_BATCH = "/analytics/add-list/";
 
@@ -180,18 +146,4 @@ public class ApiConstants {
 
     public static final String PARAM_PAGE_SIZE = "page_size=" + STANDARD_PAGE_SIZE;
 
-    @NonNull
-    public static String getOAuthGroupIdForAuthBackend(@NonNull LoginPrefs.AuthBackend authBackend) {
-        switch (authBackend) {
-            case FACEBOOK: {
-                return PrefManager.Value.BACKEND_FACEBOOK;
-            }
-            case GOOGLE: {
-                return PrefManager.Value.BACKEND_GOOGLE;
-            }
-            default: {
-                throw new IllegalArgumentException(authBackend.name());
-            }
-        }
-    }
 }

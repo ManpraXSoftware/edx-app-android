@@ -1,6 +1,6 @@
 package org.tta.mobile.model;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -8,7 +8,8 @@ public class PaginationData {
     private int count;
     private @SerializedName("num_pages") int numPages;
 
-    private @Nullable String previous;
+    private @Nullable
+    String previous;
     private @Nullable String next;
 
     public PaginationData(int count, int numPages,  @Nullable String previous, @Nullable String next) {

@@ -1,7 +1,6 @@
 package org.tta.mobile.tta.data.model.feed;
 
-import android.support.annotation.NonNull;
-
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;

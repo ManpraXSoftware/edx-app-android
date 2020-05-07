@@ -8,16 +8,16 @@ import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.multidex.MultiDexApplication;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.multidex.MultiDexApplication;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader;
 import com.bumptech.glide.load.model.GlideUrl;
-import com.crashlytics.android.Crashlytics;
 import com.evernote.android.state.StateSaver;
-import com.facebook.FacebookSdk;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.joanzapata.iconify.Iconify;
@@ -35,9 +35,6 @@ import org.tta.mobile.event.NewRelicEvent;
 import org.tta.mobile.http.provider.OkHttpClientProvider;
 import org.tta.mobile.logger.Logger;
 import org.tta.mobile.module.analytics.AnalyticsRegistry;
-import org.tta.mobile.module.analytics.AnswersAnalytics;
-import org.tta.mobile.module.analytics.FirebaseAnalytics;
-import org.tta.mobile.module.analytics.SegmentAnalytics;
 import org.tta.mobile.module.prefs.PrefManager;
 import org.tta.mobile.module.storage.IStorage;
 import org.tta.mobile.receivers.NetworkConnectivityReceiver;
@@ -45,18 +42,12 @@ import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.utils.LocaleHelper;
 import org.tta.mobile.util.BrowserUtil;
 import org.tta.mobile.util.Config;
-import org.tta.mobile.util.NetworkUtil;
-import org.tta.mobile.util.NotificationUtil;
 
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
-import io.branch.referral.Branch;
-import io.fabric.sdk.android.Fabric;
 import roboguice.RoboGuice;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -104,25 +95,6 @@ public abstract class MainApplication extends MultiDexApplication {
 
         LocaleHelper.setLocale(getApplicationContext(), "hi");
 
-        // initialize Fabric
-        /*if (config.getFabricConfig().isEnabled()) {
-
-//            Fabric.with(this, config.getFabricConfig().getKitsConfig().getEnabledKits());
-
-            if (config.getFabricConfig().getKitsConfig().isCrashlyticsEnabled()) {
-                EventBus.getDefault().register(new CrashlyticsCrashReportObserver());
-            }
-
-            if (config.getFabricConfig().getKitsConfig().isAnswersEnabled()) {
-                analyticsRegistry.addAnalyticsProvider(injector.getInstance(AnswersAnalytics.class));
-            }
-        }*/
-        final Fabric fabric = new Fabric.Builder(this)
-                .kits(new Crashlytics())
-                .debuggable(true)  // Enables Crashlytics debugger
-                .build();
-        Fabric.with(fabric);
-
         EventBus.getDefault().register(new CrashlyticsCrashReportObserver());
 
         if (config.getNewRelicConfig().isEnabled()) {
@@ -135,23 +107,6 @@ public abstract class MainApplication extends MultiDexApplication {
             NewRelic.withApplicationToken(config.getNewRelicConfig().getNewRelicKey())
                     .withCrashReportingEnabled(false)
                     .start(this);
-        }
-
-        // Add Segment as an analytics provider if enabled in the config
-        if (config.getSegmentConfig().isEnabled()) {
-            analyticsRegistry.addAnalyticsProvider(injector.getInstance(SegmentAnalytics.class));
-        }
-
-        // Add Firebase as an analytics provider if enabled in the config
-        if (config.getFirebaseConfig().isAnalyticsEnabled()) {
-            analyticsRegistry.addAnalyticsProvider(injector.getInstance(FirebaseAnalytics.class));
-        }
-
-        if (config.getFirebaseConfig().areNotificationsEnabled()) {
-            NotificationUtil.subscribeToTopics(config);
-        } else if (!config.getFirebaseConfig().areNotificationsEnabled() &&
-                config.getFirebaseConfig().isEnabled()) {
-            NotificationUtil.unsubscribeFromTopics(config);
         }
 
         registerReceiver(new NetworkConnectivityReceiver(), new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
@@ -168,26 +123,11 @@ public abstract class MainApplication extends MultiDexApplication {
                 .build()
         );
 
-        // Init Branch
-        if (Config.FabricBranchConfig.isBranchEnabled(config.getFabricConfig())) {
-            Branch.getAutoInstance(this);
-        }
-
         // Force Glide to use our version of OkHttp which now supports TLS 1.2 out-of-the-box for
         // Pre-Lollipop devices
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             Glide.get(this).register(GlideUrl.class, InputStream.class,
                     new OkHttpUrlLoader.Factory(injector.getInstance(OkHttpClientProvider.class).get()));
-        }
-
-        // Initialize Facebook SDK
-        boolean isOnZeroRatedNetwork = NetworkUtil.isOnZeroRatedNetwork(getApplicationContext(), config);
-        if (!isOnZeroRatedNetwork && config.getFacebookConfig().isEnabled()) {
-            // Facebook sdk should be initialized through AndroidManifest meta data declaration but
-            // we are generating the meta data through gradle script due to which it is necessary
-            // to manually initialize the sdk here.
-            FacebookSdk.setApplicationId(config.getFacebookConfig().getFacebookAppId());
-            FacebookSdk.sdkInitialize(getApplicationContext());
         }
 
         Bridge.initialize(this, new SavedStateHandler() {
@@ -241,23 +181,27 @@ public abstract class MainApplication extends MultiDexApplication {
     public static class CrashlyticsCrashReportObserver {
         @SuppressWarnings("unused")
         public void onEventMainThread(Logger.CrashReportEvent e) {
+            FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
             if (BrowserUtil.loginPrefs.isLoggedIn()) {
-                Crashlytics.setUserIdentifier(BrowserUtil.loginPrefs.getUsername());
+                crashlytics.setUserId(BrowserUtil.loginPrefs.getUsername());
             } else {
-                Crashlytics.setUserIdentifier("Logged out state");
+                crashlytics.setUserId("Logged out state");
             }
 
-            Crashlytics.setString(Constants.KEY_CLASS_NAME, null);
-            Crashlytics.setString(Constants.KEY_FUNCTION_NAME, null);
-            Crashlytics.setString(Constants.KEY_DATA, null);
+            crashlytics.setCustomKey(Constants.KEY_CLASS_NAME, "");
+            crashlytics.setCustomKey(Constants.KEY_FUNCTION_NAME, "");
+            crashlytics.setCustomKey(Constants.KEY_DATA, "");
 
             Bundle parameters = e.getParameters();
             if (parameters != null){
                 for (String key: parameters.keySet()){
-                    Crashlytics.setString(key, parameters.getString(key));
+                    String value = parameters.getString(key);
+                    if (value != null) {
+                        crashlytics.setCustomKey(key, value);
+                    }
                 }
             }
-            Crashlytics.logException(e.getError());
+            crashlytics.recordException(e.getError());
         }
     }
 

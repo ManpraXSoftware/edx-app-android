@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
-import android.arch.persistence.room.Room;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -17,11 +16,15 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.webkit.WebView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.room.Room;
+
+import com.google.inject.Inject;
 
 import org.tta.mobile.R;
 import org.tta.mobile.authentication.AuthResponse;
@@ -45,7 +48,6 @@ import org.tta.mobile.model.course.CourseStructureV1Model;
 import org.tta.mobile.model.course.HasDownloadEntry;
 import org.tta.mobile.model.db.DownloadEntry;
 import org.tta.mobile.module.db.DataCallback;
-import org.tta.mobile.module.db.DbStructure;
 import org.tta.mobile.module.db.impl.DbHelper;
 import org.tta.mobile.module.prefs.LoginPrefs;
 import org.tta.mobile.module.registration.model.RegistrationOption;
@@ -207,8 +209,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -229,19 +229,19 @@ public class DataManager extends BaseRoboInjector {
     private Context context;
     private IRemoteDataSource mRemoteDataSource;
     private ILocalDataSource mLocalDataSource;
-    @com.google.inject.Inject
+    @Inject
     private IEdxEnvironment edxEnvironment;
 
-    @com.google.inject.Inject
+    @Inject
     private Config config;
 
-    @com.google.inject.Inject
+    @Inject
     private CourseManager courseManager;
 
-    @com.google.inject.Inject
+    @Inject
     private CourseAPI courseApi;
 
-    @com.google.inject.Inject
+    @Inject
     private VideoDownloadHelper downloadManager;
 
     private WpClientRetrofit wpClientRetrofit;
@@ -309,11 +309,6 @@ public class DataManager extends BaseRoboInjector {
 
     public Config getConfig() {
         return config;
-    }
-
-    private <T> Observable<T> preProcess(Observable<BaseResponse<T>> observable) {
-        return observable.compose(RxUtil.applyScheduler())
-                .map(RxUtil.unwrapResponse(null));
     }
 
     private <T> Observable<T> preProcess(Observable<BaseResponse<T>> observable, Class<T> cls) {

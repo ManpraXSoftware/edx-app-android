@@ -2,9 +2,10 @@ package org.tta.mobile.util;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.inject.Inject;
 

@@ -1,6 +1,5 @@
 package org.tta.mobile.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -8,11 +7,12 @@ import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintJob;
 import android.print.PrintManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.view.View;
 import android.webkit.WebView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 
 import org.tta.mobile.http.HttpStatus;
 import org.tta.mobile.http.HttpStatusException;
@@ -20,7 +20,6 @@ import org.tta.mobile.http.notifications.FullScreenErrorNotification;
 import org.tta.mobile.http.provider.OkHttpClientProvider;
 import org.tta.mobile.interfaces.WebViewStatusListener;
 import org.tta.mobile.logger.Logger;
-import org.tta.mobile.tta.Constants;
 
 import java.io.IOException;
 

@@ -16,8 +16,8 @@
 
 package org.tta.mobile.discussion;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -260,7 +260,7 @@ public class DiscussionComment implements Serializable, IAuthorData, ProfileImag
     }
 
     @Override
-    public boolean equals(@androidx.annotation.Nullable Object obj) {
+    public boolean equals(@Nullable Object obj) {
         return (obj instanceof DiscussionComment) && (identifier.equals(((DiscussionComment) obj).identifier));
     }
 }

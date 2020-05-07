@@ -3,9 +3,10 @@ package org.tta.mobile.view.dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import org.tta.mobile.base.BaseSingleFragmentActivity;
 import org.tta.mobile.view.WebViewProgramFragment;

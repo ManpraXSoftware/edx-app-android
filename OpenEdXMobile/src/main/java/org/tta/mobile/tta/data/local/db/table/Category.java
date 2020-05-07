@@ -1,9 +1,10 @@
 package org.tta.mobile.tta.data.local.db.table;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 @Entity(tableName = "category")
 public class Category implements Comparable<Category>, Parcelable

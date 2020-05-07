@@ -4,13 +4,13 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import org.tta.mobile.logger.Logger;
 import org.tta.mobile.module.db.DbStructure;
 import org.tta.mobile.module.prefs.PrefManager;
 import org.tta.mobile.services.CourseManager;
-import org.tta.mobile.tta.Constants;
 
 import java.io.File;
 import java.util.ArrayList;

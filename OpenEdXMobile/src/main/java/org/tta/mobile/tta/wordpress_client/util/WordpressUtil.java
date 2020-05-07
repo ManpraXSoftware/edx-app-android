@@ -1,7 +1,8 @@
 package org.tta.mobile.tta.wordpress_client.util;
 
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;;
@@ -12,8 +13,6 @@ import org.tta.mobile.tta.wordpress_client.model.CustomFilterCache;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.tta.mobile.util.BrowserUtil.loginPrefs;
 
 /**
  * Created by KEPLER on 17-Sep-18.

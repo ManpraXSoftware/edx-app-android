@@ -5,14 +5,16 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
@@ -30,8 +32,6 @@ import org.tta.mobile.tta.data.pref.AppPref;
 import org.tta.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.tta.mobile.tta.ui.landing.view_model.LandingViewModel;
 import org.tta.mobile.tta.ui.search.SearchFragment;
-
-import static com.crashlytics.android.Crashlytics.log;
 
 public class LandingActivity extends BaseVMActivity{
 
@@ -111,7 +111,7 @@ public class LandingActivity extends BaseVMActivity{
     private void checkForAppUpdates() {
         InstallStateUpdatedListener listener = state -> {
             // Show module progress, log state, or install the update.
-            log("state of the app update : " + state);
+            Log.d("Update", "state of the app update : " + state);
         };
 
 
@@ -127,7 +127,7 @@ public class LandingActivity extends BaseVMActivity{
 //                 Request the update.
 
                 try {
-                    log("An update is available!!!");
+                    Log.d("Update", "An update is available!!!");
                     appUpdateManager.startUpdateFlowForResult(
                             // Pass the intent that is returned by 'getAppUpdateInfo()'.
                             appUpdateInfoTask.getResult(),
@@ -169,7 +169,7 @@ public class LandingActivity extends BaseVMActivity{
             builder.show();
 
             if (resultCode != RESULT_OK) {
-                log("Update flow failed! Result code: " + resultCode);
+                Log.d("Update", "Update flow failed! Result code: " + resultCode);
                 // If the update is cancelled or fails,
                 // you can request to start the update again.
             }

@@ -2,7 +2,6 @@ package org.tta.mobile.discussion;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.annotation.NonNull;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -15,6 +14,8 @@ import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.google.inject.Inject;
 

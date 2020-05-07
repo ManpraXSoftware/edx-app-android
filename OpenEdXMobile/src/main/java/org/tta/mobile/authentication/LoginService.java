@@ -1,15 +1,12 @@
 package org.tta.mobile.authentication;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.inject.Inject;
 
 import org.tta.mobile.http.constants.ApiConstants;
 import org.tta.mobile.http.constants.ApiConstants.TokenType;
 import org.tta.mobile.model.api.ProfileModel;
-import org.tta.mobile.model.api.ResetPasswordResponse;
-import org.tta.mobile.module.prefs.LoginPrefs;
-import org.tta.mobile.module.registration.model.RegistrationDescription;
 import org.tta.mobile.tta.data.model.authentication.FieldInfo;
 import org.tta.mobile.tta.data.model.authentication.MobileNumberVerificationResponse;
 import org.tta.mobile.tta.data.model.authentication.ResetForgotedPasswordResponse;
@@ -31,7 +28,6 @@ import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 
 import static org.tta.mobile.http.constants.ApiConstants.URL_MY_USER_INFO;
 
@@ -59,10 +55,6 @@ public interface LoginService {
     @POST(ApiConstants.URL_REGISTRATION)
     Call<ResponseBody> register(@FieldMap Map<String, String> parameters);
 
-    @NonNull
-    @GET(ApiConstants.URL_REGISTRATION)
-    Call<RegistrationDescription> getRegistrationForm();
-
     /**
      * Depending on the query parameters for this endpoint, a different action will be triggered
      * on the server side. In this case, we are sending a user and password to get the AuthResponse.
@@ -88,20 +80,6 @@ public interface LoginService {
 
 
     /**
-     * Authenticate with edX using an access token from a third party OAuth provider.
-     *
-     * @param accessToken access token retrieved from third party OAuth provider (i.e. Facebook, Google)
-     * @param clientId    edX OAuth client ID from config
-     * @param groupId     Group ID as returned from {@link ApiConstants#getOAuthGroupIdForAuthBackend(LoginPrefs.AuthBackend)}
-     */
-    @NonNull
-    @FormUrlEncoded
-    @POST(ApiConstants.URL_EXCHANGE_ACCESS_TOKEN)
-    Call<AuthResponse> exchangeAccessToken(@Field("access_token") String accessToken,
-                                           @Field("client_id") String clientId,
-                                           @Path(ApiConstants.GROUP_ID) String groupId);
-
-    /**
      * Revoke the specified refresh or access token, along with all other tokens based on the same
      * application grant.
      *
@@ -116,14 +94,6 @@ public interface LoginService {
     Call<ResponseBody> revokeAccessToken(@Field("client_id") String clientId,
                                          @Field("token") String token,
                                          @Field("token_type_hint") @TokenType String tokenTypeHint);
-
-    /**
-     * Reset password for account associated with an email address.
-     */
-    @NonNull
-    @FormUrlEncoded
-    @POST(ApiConstants.URL_PASSWORD_RESET)
-    Call<ResetPasswordResponse> resetPassword(@Field("email") String email);
 
     @POST(ApiConstants.URL_LOGIN)
     Call<RequestBody> login();

@@ -1,8 +1,9 @@
 package org.tta.mobile.services;
 
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

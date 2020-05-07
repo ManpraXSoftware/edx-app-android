@@ -15,7 +15,7 @@
         android:orientation="vertical"
         tools:context=".mx_views.MxCertificateActivity">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:id="@+id/toolbar"
@@ -41,7 +41,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/grey_act_background" />
 
-            <android.support.design.widget.FloatingActionButton
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/print_certificate_fab"
                 style="@style/ta_fab_style"
                 app:backgroundTint="@color/white"

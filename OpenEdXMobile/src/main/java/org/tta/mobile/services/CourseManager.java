@@ -1,8 +1,9 @@
 package org.tta.mobile.services;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.LruCache;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

@@ -1,11 +1,12 @@
 package org.tta.mobile.discussion;
 
 import android.content.Context;
-import android.support.annotation.StringRes;
-import android.support.v4.widget.TextViewCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.StringRes;
+import androidx.core.widget.TextViewCompat;
 
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;

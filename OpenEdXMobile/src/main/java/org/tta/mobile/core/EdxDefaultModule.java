@@ -1,7 +1,8 @@
 package org.tta.mobile.core;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;

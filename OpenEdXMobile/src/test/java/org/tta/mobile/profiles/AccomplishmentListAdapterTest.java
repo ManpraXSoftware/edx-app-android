@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.tta.mobile.test.BaseTestCase;
-import org.tta.mobile.view.adapters.LoadingViewHolder;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -18,7 +17,6 @@ import java.util.Collections;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
 
 public class AccomplishmentListAdapterTest extends BaseTestCase {
     private AccomplishmentListAdapter adapter;

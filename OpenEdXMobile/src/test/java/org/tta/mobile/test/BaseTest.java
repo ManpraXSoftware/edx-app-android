@@ -2,7 +2,6 @@ package org.tta.mobile.test;
 
 import android.support.annotation.NonNull;
 
-import org.tta.mobile.util.observer.MainThreadObservable;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;

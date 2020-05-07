@@ -2,7 +2,8 @@ package org.tta.mobile.util;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 import com.google.gson.internal.bind.util.ISO8601Utils;
 

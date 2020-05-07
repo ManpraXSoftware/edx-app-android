@@ -1,7 +1,7 @@
 package com.maurya.mx.mxlib.core;
 
-import android.databinding.ViewDataBinding;
-import android.support.v7.widget.RecyclerView;
+import androidx.databinding.ViewDataBinding;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by mukesh on 8/9/18.

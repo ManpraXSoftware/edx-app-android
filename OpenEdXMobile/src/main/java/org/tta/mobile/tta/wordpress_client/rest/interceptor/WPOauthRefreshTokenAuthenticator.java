@@ -2,11 +2,10 @@ package org.tta.mobile.tta.wordpress_client.rest.interceptor;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.widget.Toast;
 
-import com.google.inject.Inject;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.tta.mobile.R;
 import org.tta.mobile.authentication.AuthResponse;

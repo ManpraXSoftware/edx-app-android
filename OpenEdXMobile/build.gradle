@@ -7,7 +7,6 @@ buildscript {
         jcenter()
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        maven { url 'https://maven.fabric.io/public' }
 
         //Arjun for MVVM
         maven {
@@ -22,8 +21,7 @@ buildscript {
         //Included for NewRelic
         classpath "com.newrelic.agent.android:agent-gradle-plugin:5.4.1"
 
-        classpath 'com.facebook.testing.screenshot:plugin:0.8.0'
-        classpath 'com.google.gms:google-services:4.2.0'
+        classpath 'com.google.gms:google-services:4.3.3'
     }
 }
 
@@ -34,10 +32,9 @@ edx {
 
 apply plugin: 'com.android.application'
 apply plugin: 'newrelic'
-apply plugin: 'com.facebook.testing.screenshot'
 apply from: 'jacoco.gradle'
 
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.crashlytics'
 
 class AndroidHelper {
     static def saveProcessedConfig(project, config) {
@@ -117,8 +114,10 @@ def getVersionCode = { ->
     }
 }
 
-task(version) << {
-    println String.format('%s (%s)', getVersionName(), getVersionCode())
+task(version) {
+    doLast {
+        println String.format('%s (%s)', getVersionName(), getVersionCode())
+    }
 }
 
 dependencies {
@@ -148,7 +147,7 @@ dependencies {
     //implementation "com.squareup.retrofit2:adapter-rxjava2:${rxjava_retrofitVersion}"
     implementation "io.reactivex.rxjava2:rxjava:${rxjavaVersion}"
     implementation "io.reactivex.rxjava2:rxandroid:${rxandroidVersion}"
-    implementation "com.jakewharton:butterknife:${bkVersion}"
+    annotationProcessor "com.jakewharton:butterknife:${bkVersion}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${bkVersion}"
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
 
@@ -182,34 +181,35 @@ dependencies {
     // For the optional Nullable annotation
     implementation "com.android.support:support-annotations:${SUPPORT_LIBRARY_VERSION}"
 
-    implementation "com.google.android.gms:play-services-plus:15.0.1"
-    implementation "com.google.android.gms:play-services-analytics:16.0.1"
-    implementation "com.google.android.gms:play-services-auth:15.0.1"
-    implementation "com.google.android.gms:play-services-ads:15.0.1"
-    // Google Firebase
-    implementation "com.google.firebase:firebase-core:16.0.1"
-    implementation "com.google.firebase:firebase-messaging:17.1.0"
+    implementation "com.google.android.gms:play-services-plus:17.0.0"
+    implementation "com.google.android.gms:play-services-analytics:17.0.0"
+    implementation "com.google.android.gms:play-services-auth:18.0.0"
 
-    implementation 'com.facebook.android:facebook-login:4.36.0'
-    implementation 'com.google.code.gson:gson:2.7'
+    // Google Firebase
+    implementation "com.google.firebase:firebase-core:17.4.0"
+    implementation "com.google.firebase:firebase-messaging:20.1.6"
+    implementation 'com.google.firebase:firebase-analytics:17.4.0'
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0'
+
+    implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'de.greenrobot:eventbus:2.4.1'
     implementation 'com.squareup.phrase:phrase:1.1.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.0.1'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.0.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.2.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
     /* Exclude dependencies defined statically at the top-
      * level, to prevent them from being resolved to the
      * latest version as a result of dynamic version
      * definitions in the transitive dependencies.
      */
-    implementation ('com.squareup.retrofit2:retrofit:2.1.0') {
+    implementation ('com.squareup.retrofit2:retrofit:2.7.0') {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }
-    implementation ('com.squareup.retrofit2:converter-gson:2.1.0') {
+    implementation ('com.squareup.retrofit2:converter-gson:2.7.0') {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
         exclude group: 'com.google.code.gson', module: 'gson'
     }
     implementation 'com.android.support:multidex:1.0.3'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation ('com.github.bumptech.glide:okhttp3-integration:1.4.0'){
         exclude group: 'glide-parent'
@@ -222,11 +222,6 @@ dependencies {
 
     implementation('com.segment.analytics.android.integrations:google-analytics:1.0.0') {
         exclude module: 'play-services-analytics'
-        transitive = true
-    }
-
-    // Crashlytics Kit
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
         transitive = true
     }
 
@@ -250,16 +245,18 @@ dependencies {
     implementation 'com.newrelic.agent.android:android-agent:5.4.1'
 
     //Include DI framework
-    implementation 'org.roboguice:roboguice:3.0.1'
+    implementation ('org.roboguice:roboguice:3.0.1') {
+        exclude (group:'javax.inject', module:'javax.inject')
+    }
     compileOnly 'org.roboguice:roboblender:3.0.1'
 
     // test project configuration
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     testImplementation ("org.mockito:mockito-core:1.10.19"){
         exclude group: 'org.hamcrest'
     }
     testImplementation 'commons-lang:commons-lang:2.6'
-    testImplementation "org.robolectric:robolectric:3.8"
+    testImplementation "org.robolectric:robolectric:4.3"
     testImplementation "org.robolectric:shadows-supportv4:3.8"
     testImplementation "org.robolectric:shadows-multidex:3.8"
     testImplementation 'org.assertj:assertj-core:2.5.0'
@@ -277,10 +274,10 @@ dependencies {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }
 
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test:rules:1.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
     androidTestImplementation 'org.hamcrest:hamcrest-library:1.3'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     androidTestImplementation 'com.crittercism.dexmaker:dexmaker:1.4'
     androidTestImplementation 'com.crittercism.dexmaker:dexmaker-dx:1.4'
     androidTestImplementation 'com.crittercism.dexmaker:dexmaker-mockito:1.4'
@@ -296,16 +293,12 @@ dependencies {
 }
 
 configurations {
+    implementation.exclude group: 'javax.inject'
     androidTestImplementation.exclude group: 'javax.inject'
     androidTestImplementation.exclude group: 'javax.annotation'
 }
 
 def config = new TaskHelper().loadConfig(project)
-def firebase = config.get('FIREBASE')
-def firebaseEnabled = firebase?.get('ENABLED')
-if (firebaseEnabled?: false) {
-    apply plugin: 'com.google.gms.google-services'
-}
 
 android {
     signingConfigs {
@@ -362,8 +355,8 @@ android {
 
         for (task in project.gradle.startParameter.taskNames) {
             if (task.contains("ScreenshotTest")) {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("package", "org.tta.mobile.test.screenshot");
+                Map<String, String> map = new HashMap<String, String>()
+                map.put("package", "org.tta.mobile.test.screenshot")
                 setTestInstrumentationRunnerArguments map
             }
         }
@@ -392,46 +385,7 @@ android {
         }
         resValue "string", "phonetic_platform_name", phoneticPlatformName
 
-        def fabric = config.get('FABRIC')
-        if (fabric?.get('ENABLED')) {
-            def fabric_key = fabric?.get('FABRIC_KEY')
-            if (null == fabric_key) {
-                throw new GradleException("You must set FABRIC_KEY if Fabric is enabled")
-            } else {
-                resValue "string", "io.fabric.ApiKey", fabric_key
-                resValue "bool", "com.crashlytics.RequireBuildId", "false"
-            }
-        }
-        def branchKey = ""
-        if (fabric != null) {
-            def kits = fabric.get('KITS')
-            if (null != kits) {
-                def branch = kits.get('BRANCH')
-                if (branch != null && branch.get('ENABLED')) {
-                    branchKey = branch.get('BRANCH_KEY')
-                    if (null == branchKey) {
-                        throw new GradleException("You must set BRANCH_KEY if Branch is enabled")
-                    }
-                }
-            }
-        }
-
-        def facebookAppId = ""
-        def fbLoginProtocolScheme = ""
-        def facebook = config.get('FACEBOOK')
-        if (facebook?.get('ENABLED')) {
-            facebookAppId = facebook.get('FACEBOOK_APP_ID')
-            if (null == facebookAppId) {
-                throw new GradleException("You must set FACEBOOK_APP_ID if FACEBOOK is enabled")
-            }
-            fbLoginProtocolScheme = "fb"+facebookAppId
-        }
-
-        manifestPlaceholders = [supportsRtl:"false",
-                                firebaseEnabled: firebaseEnabled?: false,
-                                branchKey: branchKey,
-                                facebookAppId: facebookAppId,
-                                fbLoginProtocolScheme: fbLoginProtocolScheme]
+        manifestPlaceholders = [supportsRtl:"false",]
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -482,12 +436,6 @@ android {
         showAll true
         warning 'TypographyQuotes', 'InvalidPackage'
         error 'StopShip', 'ContentDescription'
-        /**
-         * This is a bug that is fixed in the up-coming Android Studio 2.4 release.
-         * Link to issue: https://issuetracker.google.com/issues/37630182
-         */
-        //TODO: Remove GradleCompatible after we upgrade to Android Studio 2.4
-        disable 'GradleCompatible'
     }
 
     productFlavors {
@@ -561,9 +509,11 @@ android {
 android.applicationVariants.all { variant ->
     def variantName = variant.name.capitalize()
     def taskName = "applyConfig" + variantName
-    def configureTask = project.task(taskName) << {
-        def helper = new AndroidHelper()
-        helper.saveProcessedConfig(project, config)
+    def configureTask = project.task(taskName) {
+        doLast {
+            def helper = new AndroidHelper()
+            helper.saveProcessedConfig(project, config)
+        }
     }
     def generateTask = project.tasks.getByName("generate" + variantName + "Resources")
     generateTask.dependsOn(configureTask)

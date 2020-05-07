@@ -1,7 +1,8 @@
 package org.tta.mobile.http.serialization;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.text.ParseException;

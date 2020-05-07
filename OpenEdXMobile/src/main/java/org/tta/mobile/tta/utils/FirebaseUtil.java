@@ -3,8 +3,10 @@ package org.tta.mobile.tta.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
@@ -34,13 +36,11 @@ public class FirebaseUtil {
                         loginPrefs.getFireBaseToken().isEmpty())
                 {
                     saveFirebaseToken(newToken);
-                    updateFirebaseTokenToServer(newToken);
                 }
                 else if(!loginPrefs.getFireBaseToken().trim().toLowerCase()
                         .equals(newToken.trim().toLowerCase()))
                 {
                     saveFirebaseToken(newToken);
-                    updateFirebaseTokenToServer(newToken);
                 }
                 updateFirebaseTokenToServer(newToken);
             }

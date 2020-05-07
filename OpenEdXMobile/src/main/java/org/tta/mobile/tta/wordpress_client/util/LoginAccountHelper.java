@@ -24,9 +24,6 @@ public class LoginAccountHelper extends BasePreferenceHelper {
     private static final int PREF_USER_PROFILE_PIC = R.string.pref_id_profile_pic;
     private static final int PREF_USER_ACC_TYPE = R.string.pref_id_acc_type;
 
-    public static final String ACC_TYPE_FACEBOOK = "facebook";
-    public static final String ACC_TYPE_GOOGLE = "google";
-
     private static LoginAccountHelper sInstance = null;
 
     public static LoginAccountHelper with(Context context) {

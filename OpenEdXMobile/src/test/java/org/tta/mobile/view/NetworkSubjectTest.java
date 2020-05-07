@@ -1,7 +1,6 @@
 package org.tta.mobile.view;
 
 import org.tta.mobile.base.BaseFragmentActivity;
-import org.tta.mobile.interfaces.NetworkObserver;
 import org.tta.mobile.interfaces.NetworkSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;

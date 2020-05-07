@@ -1,8 +1,6 @@
 package org.tta.mobile.tta.ui.custom;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
@@ -15,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
 
 public class FormMultiSpinner extends LinearLayout {
     private TViewFormMultiSpinnerBinding mBinding;

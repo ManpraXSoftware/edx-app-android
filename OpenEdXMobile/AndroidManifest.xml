@@ -52,109 +52,9 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="org.tta.mobile.view.SplashActivity"
-            android:label="@string/app_shortcut_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoDisplayTheme">
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <intent-filter>
-                <data android:scheme="edx" android:host="open" />
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>-->
-        </activity>
-
-        <activity
-            android:name="org.tta.mobile.view.LaunchActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Launch" />
-
-        <activity
-            android:name="org.tta.mobile.view.DiscoveryLaunchActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.LoginActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustNothing"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.RegisterActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.MainDashboardActivity"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.AccountActivity"
-            android:label="@string/title_account"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.CourseOutlineActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.CourseDiscussionTopicsActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.CourseDiscussionPostsActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/discussion_title"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.CourseDiscussionCommentsActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.CourseDiscussionResponsesActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
             android:name="org.tta.mobile.view.DiscussionAddPostActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/start_discussion"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.DiscussionAddResponseActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/discussion_add_response_title"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.DiscussionAddCommentActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/discussion_add_comment_title"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.CourseUnitNavigationActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name"
-            android:screenOrientation="user"
             android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
 
         <activity
@@ -163,100 +63,10 @@
             android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
 
         <activity
-            android:name="org.tta.mobile.view.WebViewFindCoursesActivity"
-            android:label="@string/label_discover"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.ViewSubjectsActivity"
-            android:label="@string/browse_by_subject"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.CourseInfoActivity"
-            android:label="@string/label_discover"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.CourseDetailActivity"
-            android:label="@string/label_find_courses"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.CourseHandoutActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.NativeFindCoursesActivity"
-            android:label="@string/label_find_courses"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.CourseAnnouncementsActivity"
-            android:label="@string/announcement_title"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.CertificateActivity"
-            android:label="@string/tab_label_certificate"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.SettingsActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.profiles.UserProfileActivity"
-            android:label="@string/profile_title"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.EditUserProfileActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.FormFieldActivity"
-            android:label=""
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
             android:name="org.tta.mobile.view.CropImageActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name="org.tta.mobile.whatsnew.WhatsNewActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.CourseTabsDashboardActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
-
-        <activity
-            android:name="org.tta.mobile.view.dialog.WebViewActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar">
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
-                <action android:name="android.intent.action.VIEW" />
-                <data android:scheme="org.tta.mobile.innerlinks" />
-            </intent-filter>
-        </activity>
 
         <activity
             android:name="org.tta.mobile.view.dialog.AuthenticatedWebViewActivity"
@@ -279,27 +89,6 @@
             </intent-filter>
         </receiver>
 
-        <!-- Setup Facebook -->
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="${facebookAppId}" />
-
-        <activity
-            android:name="com.facebook.FacebookActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
-        <activity
-            android:name="com.facebook.CustomTabActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="${fbLoginProtocolScheme}" />
-            </intent-filter>
-        </activity>
 
         <!-- TTA activities start -->
 
@@ -502,23 +291,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <!-- Setup Firebase -->
-        <meta-data
-            android:name="firebase_analytics_collection_enabled"
-            android:value="${firebaseEnabled}" />
-        <meta-data
-            android:name="firebase_messaging_auto_init_enabled"
-            android:value="${firebaseEnabled}" />
-
-        <meta-data
-            android:name="firebase_crashlytics_collection_enabled"
-            android:value="false" />
-
-        <!-- Branch -->
-        <meta-data
-            android:name="io.branch.sdk.BranchKey"
-            android:value="${branchKey}" />
-
         <receiver
             android:name="io.branch.referral.InstallListener"
             android:exported="true">
@@ -545,7 +317,7 @@
         </receiver>
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">

@@ -1,7 +1,6 @@
 package org.tta.mobile.login;
 
 import org.tta.mobile.R;
-import org.tta.mobile.view.LoginActivity;
 import org.tta.mobile.view.PresenterActivityTest;
 import org.tta.mobile.view.login.LoginPresenter;
 import org.junit.Before;

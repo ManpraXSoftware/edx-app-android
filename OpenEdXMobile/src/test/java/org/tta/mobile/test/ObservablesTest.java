@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import org.tta.mobile.util.observer.BasicObservable;
 import org.tta.mobile.util.observer.Func1;
 import org.tta.mobile.util.observer.Observable;
-import org.tta.mobile.util.observer.Observables;
 import org.tta.mobile.util.observer.Observer;
 import org.junit.Test;
 import static org.junit.Assert.*;

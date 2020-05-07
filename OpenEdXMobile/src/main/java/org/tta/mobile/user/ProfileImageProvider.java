@@ -1,6 +1,6 @@
 package org.tta.mobile.user;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 public interface ProfileImageProvider {
     @Nullable

@@ -1,6 +1,6 @@
 package org.tta.mobile.http.callback;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.tta.mobile.http.HttpStatusException;
 

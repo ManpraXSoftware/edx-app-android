@@ -3,10 +3,6 @@ package org.tta.mobile.view;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -17,6 +13,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.core.view.ViewCompat;
 
 import com.google.inject.Inject;
 

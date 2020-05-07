@@ -1,6 +1,6 @@
 package org.tta.mobile.model.api;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.tta.mobile.logger.Logger;
 import org.tta.mobile.util.InvalidLocaleException;

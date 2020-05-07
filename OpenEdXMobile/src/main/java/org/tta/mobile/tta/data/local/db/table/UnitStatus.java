@@ -1,7 +1,7 @@
 package org.tta.mobile.tta.data.local.db.table;
 
-import android.arch.persistence.room.Entity;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
 
 @Entity(tableName = "unit_status",
         primaryKeys = {"unit_id", "course_id", "username"})

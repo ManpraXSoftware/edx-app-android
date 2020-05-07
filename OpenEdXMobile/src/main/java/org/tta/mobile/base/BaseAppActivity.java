@@ -7,7 +7,6 @@ import org.tta.mobile.event.NewRelicEvent;
 import org.tta.mobile.tta.utils.LocaleHelper;
 
 import de.greenrobot.event.EventBus;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public abstract class BaseAppActivity extends RoboAppCompatActivity {
     @Override

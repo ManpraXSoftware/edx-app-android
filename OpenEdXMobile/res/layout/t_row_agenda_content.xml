@@ -8,7 +8,7 @@
             type="org.tta.mobile.tta.data.local.db.table.Content" />
     </data>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="170dp"
         app:cardCornerRadius="4dp"
@@ -81,6 +81,6 @@
 
         </RelativeLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 </layout>

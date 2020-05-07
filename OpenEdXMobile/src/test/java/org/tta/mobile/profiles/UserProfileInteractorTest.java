@@ -3,7 +3,6 @@ package org.tta.mobile.profiles;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import org.tta.mobile.event.AccountDataLoadedEvent;
 import org.tta.mobile.event.ProfilePhotoUpdatedEvent;
 import org.tta.mobile.model.api.ProfileModel;
 import org.tta.mobile.module.prefs.UserPrefs;

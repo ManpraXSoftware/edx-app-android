@@ -1,10 +1,11 @@
 package org.tta.mobile.tta.ui.profile.view_model;
 
 import android.content.Context;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
 import android.text.Editable;
 import android.text.TextWatcher;
+
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
 
 import org.tta.mobile.R;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;

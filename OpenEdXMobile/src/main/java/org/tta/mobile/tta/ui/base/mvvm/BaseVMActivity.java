@@ -1,9 +1,10 @@
 package org.tta.mobile.tta.ui.base.mvvm;
 
-import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 
 import org.tta.mobile.BR;
 import org.tta.mobile.tta.ui.base.TaBaseActivity;

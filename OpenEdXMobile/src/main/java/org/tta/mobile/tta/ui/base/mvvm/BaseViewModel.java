@@ -1,6 +1,5 @@
 package org.tta.mobile.tta.ui.base.mvvm;
 
-import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 
 import org.tta.mobile.tta.data.DataManager;
@@ -25,7 +24,7 @@ public class BaseViewModel {
     public BaseViewModel(Context context, TaBaseFragment fragment) {
         mActivity = (TaBaseActivity) context;
         mFragment = fragment;
-        mDataManager = DataManager.getInstance(context);
+        mDataManager = DataManager.getInstance(context.getApplicationContext());
     }
 
     public void onResume(){

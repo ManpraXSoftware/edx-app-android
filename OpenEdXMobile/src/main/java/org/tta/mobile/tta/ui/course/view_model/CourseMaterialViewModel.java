@@ -4,22 +4,23 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.Context;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.core.content.ContextCompat;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.databinding.ViewDataBinding;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.tta.mobile.R;
 import org.tta.mobile.databinding.TRowCourseMaterialFooterBinding;

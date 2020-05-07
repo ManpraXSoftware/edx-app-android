@@ -54,7 +54,7 @@
                 android:layout_marginEnd="@dimen/_20px"
                 android:orientation="horizontal">
 
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:layout_width="140dp"
                     android:layout_height="140dp"
                     app:cardCornerRadius="4dp"
@@ -68,7 +68,7 @@
                         android:scaleType="fitXY"
                         android:src="@{viewModel.userImageUrl}" />
 
-                </android.support.v7.widget.CardView>
+                </androidx.cardview.widget.CardView>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -434,7 +434,7 @@
                     android:textColor="@color/gray_5"
                     android:textSize="14sp" />
 
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="140dp"
                     android:layout_marginStart="@dimen/_20px"
@@ -490,7 +490,7 @@
 
                     </LinearLayout>
 
-                </android.support.v7.widget.CardView>
+                </androidx.cardview.widget.CardView>
 
             </LinearLayout>
 

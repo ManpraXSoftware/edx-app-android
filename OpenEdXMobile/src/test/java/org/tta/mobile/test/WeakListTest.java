@@ -1,6 +1,5 @@
 package org.tta.mobile.test;
 
-import org.tta.mobile.util.WeakList;
 import org.junit.Before;
 import org.junit.Test;
 

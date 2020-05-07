@@ -1,7 +1,8 @@
 package org.tta.mobile.http.provider;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -29,7 +30,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 public interface OkHttpClientProvider extends Provider<OkHttpClient> {
-    @NonNull OkHttpClient get();
+    @NonNull
+    OkHttpClient get();
     @NonNull OkHttpClient getWithOfflineCache();
     @NonNull OkHttpClient getNonOAuthBased();
 

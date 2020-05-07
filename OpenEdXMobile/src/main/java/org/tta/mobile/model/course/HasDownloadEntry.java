@@ -1,6 +1,6 @@
 package org.tta.mobile.model.course;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import org.tta.mobile.model.db.DownloadEntry;
 import org.tta.mobile.module.storage.IStorage;

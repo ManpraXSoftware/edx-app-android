@@ -2,8 +2,6 @@ package org.tta.mobile.tta.ui.custom;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.databinding.DataBindingUtil;
-import android.databinding.ObservableField;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -15,6 +13,8 @@ import org.tta.mobile.R;
 import org.tta.mobile.databinding.TViewFormEdittextBinding;
 
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ObservableField;
 
 public class FormEditText extends LinearLayout {
 

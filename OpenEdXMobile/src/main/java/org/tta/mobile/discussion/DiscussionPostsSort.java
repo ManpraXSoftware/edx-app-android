@@ -1,6 +1,6 @@
 package org.tta.mobile.discussion;
 
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 
 import org.tta.mobile.R;
 import org.tta.mobile.interfaces.TextResourceProvider;

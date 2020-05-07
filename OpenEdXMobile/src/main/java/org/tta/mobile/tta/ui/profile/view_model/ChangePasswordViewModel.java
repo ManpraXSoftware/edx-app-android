@@ -1,16 +1,15 @@
 package org.tta.mobile.tta.ui.profile.view_model;
 
 import android.content.Context;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+
 import org.tta.mobile.R;
 import org.tta.mobile.exception.AuthException;
-import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.model.profile.ChangePasswordResponse;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;

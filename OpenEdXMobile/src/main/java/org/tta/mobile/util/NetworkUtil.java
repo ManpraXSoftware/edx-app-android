@@ -5,8 +5,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.telephony.TelephonyManager;
+
+import androidx.annotation.Nullable;
 
 import org.tta.mobile.R;
 import org.tta.mobile.base.BaseFragmentActivity;

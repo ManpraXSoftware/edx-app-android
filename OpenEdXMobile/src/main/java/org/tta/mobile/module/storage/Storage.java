@@ -2,11 +2,11 @@ package org.tta.mobile.module.storage;
 
 import android.app.DownloadManager;
 import android.content.Context;
-import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -27,7 +27,6 @@ import org.tta.mobile.module.db.impl.DatabaseFactory;
 import org.tta.mobile.module.download.IDownloadManager;
 import org.tta.mobile.module.prefs.LoginPrefs;
 import org.tta.mobile.module.prefs.UserPrefs;
-import org.tta.mobile.module.prefs.VideoPrefs;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.AnalyticModel;
 import org.tta.mobile.tta.data.enums.DownloadType;
@@ -37,7 +36,6 @@ import org.tta.mobile.util.Config;
 import org.tta.mobile.util.FileUtil;
 import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.Sha1Util;
-import org.tta.mobile.view.BulkDownloadFragment;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -69,8 +67,6 @@ public class Storage implements IStorage {
     private LoginPrefs loginPrefs;
     @Inject
     private CourseAPI api;
-    @Inject
-    private VideoPrefs videoPrefs;
 
     private final Logger logger = new Logger(getClass().getName());
 
@@ -168,8 +164,6 @@ public class Storage implements IStorage {
 
         // anyways, we mark the video as DELETED
         int videosDeleted = db.deleteVideoByVideoId(model, null);
-        // Reset the state of Videos Bulk Download view whenever a delete happens
-        videoPrefs.setBulkDownloadSwitchState(BulkDownloadFragment.SwitchState.DEFAULT, model.getEnrollmentId());
         EventBus.getDefault().post(new DownloadedVideoDeletedEvent(model));
         return videosDeleted;
     }

@@ -8,18 +8,20 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.os.SystemClock;
-import android.support.annotation.CheckResult;
-import android.support.annotation.ColorInt;
-import android.support.annotation.FloatRange;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.Size;
 import android.text.TextDirectionHeuristic;
 import android.text.TextDirectionHeuristics;
 import android.text.method.PasswordTransformationMethod;
 import android.text.style.ReplacementSpan;
 import android.widget.TextView;
+
+import androidx.annotation.CheckResult;
+import androidx.annotation.ColorInt;
+import androidx.annotation.FloatRange;
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.Size;
+
 import com.joanzapata.iconify.Icon;
 
 import static android.os.Build.VERSION.SDK_INT;
@@ -70,10 +72,10 @@ public class CustomTypefaceSpan extends ReplacementSpan {
     private long spinStartTime;
 
     public CustomTypefaceSpan(@NonNull TextView view, @NonNull Icon icon,
-            @NonNull Typeface type, @Size float iconSizePx,
-            @FloatRange(from = -1f, to = 1f) float iconSizeRatio,
-            @ColorInt int iconColor, @NonNull Animation animation,
-            boolean baselineAligned) {
+                              @NonNull Typeface type, @Size float iconSizePx,
+                              @FloatRange(from = -1f, to = 1f) float iconSizeRatio,
+                              @ColorInt int iconColor, @NonNull Animation animation,
+                              boolean baselineAligned) {
         this.view = view;
         this.animation = animation;
         this.baselineAligned = baselineAligned;

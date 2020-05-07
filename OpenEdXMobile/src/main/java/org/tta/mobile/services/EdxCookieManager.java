@@ -2,9 +2,10 @@ package org.tta.mobile.services;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
+
+import androidx.annotation.NonNull;
 
 import com.google.inject.Inject;
 

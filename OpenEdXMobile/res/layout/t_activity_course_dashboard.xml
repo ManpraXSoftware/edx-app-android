@@ -16,7 +16,7 @@
         android:background="@color/app_background"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -30,12 +30,12 @@
             app:titleMarginStart="0dp"
             app:titleTextAppearance="@style/ta_toolbar_title_style" />
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <android.support.design.widget.TabLayout
+            <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
                 style="@style/ta_tab_style"
                 tab_position="@{viewModel.tabPosition}"
@@ -50,7 +50,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:visibility="@{viewModel.emptyVisible ? View.GONE : View.VISIBLE}"/>
 
-            <android.support.v4.view.ViewPager
+            <androidx.viewpager.widget.ViewPager
                 android:id="@+id/view_pager"
                 page_change_listener="@{viewModel.pageChangeListener}"
                 android:layout_width="match_parent"
@@ -92,7 +92,7 @@
 
             </LinearLayout>
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include
             layout="@layout/t_view_offline_bar"

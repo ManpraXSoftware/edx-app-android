@@ -1,14 +1,14 @@
 package org.tta.mobile.tta.ui.course.discussion.view_model;
 
 import android.content.Context;
-import android.databinding.ObservableBoolean;
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ViewDataBinding;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.maurya.mx.mxlib.core.MxFiniteAdapter;
@@ -22,13 +22,11 @@ import org.tta.mobile.discussion.DiscussionPostsSort;
 import org.tta.mobile.discussion.DiscussionRequestFields;
 import org.tta.mobile.discussion.DiscussionThread;
 import org.tta.mobile.discussion.DiscussionThreadPostedEvent;
-import org.tta.mobile.discussion.DiscussionTopic;
 import org.tta.mobile.discussion.DiscussionTopicDepth;
 import org.tta.mobile.model.api.EnrolledCoursesResponse;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.data.local.db.table.Content;
 import org.tta.mobile.tta.event.DiscussionThreadUpdateEvent;
-import org.tta.mobile.tta.event.ShowDiscussionTopicEvent;
 import org.tta.mobile.tta.interfaces.OnResponseCallback;
 import org.tta.mobile.tta.ui.base.TaBaseFragment;
 import org.tta.mobile.tta.ui.base.mvvm.BaseViewModel;

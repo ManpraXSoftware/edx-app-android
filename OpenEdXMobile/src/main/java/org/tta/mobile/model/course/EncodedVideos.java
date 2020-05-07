@@ -1,7 +1,7 @@
 package org.tta.mobile.model.course;
-
-import android.support.annotation.Nullable;
 import android.webkit.URLUtil;
+
+import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
