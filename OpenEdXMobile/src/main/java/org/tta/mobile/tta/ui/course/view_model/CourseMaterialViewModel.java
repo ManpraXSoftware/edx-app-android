@@ -364,6 +364,7 @@ public class CourseMaterialViewModel extends BaseViewModel {
             return;
         }
 
+
         Bundle parameters = new Bundle();
         String filePath = selectedScormForPlay.getDownloadEntry(mDataManager.getEdxEnvironment().getStorage()).getFilePath();
         if (selectedScormForPlay.getType().equals(BlockType.SCORM)) {
@@ -376,6 +377,8 @@ public class CourseMaterialViewModel extends BaseViewModel {
             parameters.putString(Constants.KEY_COURSE_ID, content.getSource_identity());
             parameters.putString(Constants.KEY_UNIT_ID, selectedScormForPlay.getId());
             parameters.putLong(Constants.KEY_CONTENT_ID, content.getId());
+            parameters.putString(Constants.KEY_ARTICULATE_TYPE, selectedScormForPlay.getArticulateType());
+
             ActivityUtil.gotoPage(mActivity, CourseScormViewActivity.class, parameters);
 
             startScorm(selectedScormForPlay.getId());
@@ -1038,10 +1041,6 @@ public class CourseMaterialViewModel extends BaseViewModel {
                     Source.Mobile, e.getEntry().videoId,
                     content.getSource_identity(), content.getId());
 
-            //first do count update then update local db
-            mActivity.analytic.addScromDownload_db(mActivity, e.getEntry(),
-                    content.getSource_identity(), content.getId());
-
             mDataManager.getdownloadedCourseContents(new OnResponseCallback<List<Content>>() {
                 @Override
                 public void onSuccess(List<Content> data) {
@@ -1087,10 +1086,6 @@ public class CourseMaterialViewModel extends BaseViewModel {
             //delete resume cache
             Tincan tincan=new Tincan();
             tincan.deleteResumePayload(content.getSource_identity(), e.getModel().getVideoId());
-
-            //analytic update for count update
-            mActivity.analytic.addScromCountAnalytic_db(mActivity);
-
         }
 
     }

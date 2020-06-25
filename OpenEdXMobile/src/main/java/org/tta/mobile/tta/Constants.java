@@ -69,6 +69,9 @@ public class Constants {
     public static final String KEY_TOOLBAR_DATA = "toolbar_data";
     public static final String KEY_TOPIC_DEPTH= "topic_depth";
 
+    public static final String KEY_ARTICULATE_TYPE= "articulate_type";
+
+
     //for app update
     public static final String VERSION_NAME = "version_name";
     public static final String VERSION_CODE = "version_code";

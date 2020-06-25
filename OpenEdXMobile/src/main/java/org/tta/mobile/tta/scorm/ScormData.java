@@ -15,6 +15,9 @@ public class ScormData extends BlockData {
     @SerializedName("scorm_image_url")
     public String scormImageUrl;
 
+    @SerializedName("articulate_type")
+    public String articulateType;
+
     @SerializedName("scorm_duration")
     public String scormDuration;
 

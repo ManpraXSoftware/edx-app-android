@@ -25,6 +25,7 @@ import org.tta.mobile.R;
 import org.tta.mobile.logger.Logger;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.Analytic;
+import org.tta.mobile.tta.scorm.ArticulateType;
 import org.tta.mobile.tta.scorm.JSInterfaceTincan;
 import org.tta.mobile.tta.tincan.Tincan;
 import org.tta.mobile.tta.tincan.model.Resume;
@@ -56,6 +57,7 @@ public class CourseScormViewActivity extends AppCompatActivity {
     private String courseRootId;
     private String courseId;
     private String unitId;
+    private String articulate_type;
     private long contentId;
 
     private Analytic analytic;
@@ -118,6 +120,7 @@ public class CourseScormViewActivity extends AppCompatActivity {
         courseId = parameters.getString(Constants.KEY_COURSE_ID);
         unitId = parameters.getString(Constants.KEY_UNIT_ID);
         contentId = parameters.getLong(Constants.KEY_CONTENT_ID);
+        articulate_type = parameters.getString(Constants.KEY_ARTICULATE_TYPE);
     }
 
     private File findFile(File aFile, String sDir, String toFind) {
@@ -304,7 +307,13 @@ public class CourseScormViewActivity extends AppCompatActivity {
     }
 
     public void ReceiveTinCanStatement(String statement) {
-        analytic.addTinCanAnalyticDB(statement, courseName, courseRootId, courseId, contentId);
+        /*stop reporting data if the articulate_type specified by publisher is
+        Scorm*/
+
+        if (articulate_type == null || articulate_type.toLowerCase().trim()
+                .equals(String.valueOf(ArticulateType.TINCAN).trim().toLowerCase()))
+            analytic.addTinCanAnalyticDB(statement, courseName, courseRootId, courseId, contentId);
+
         // Toast.makeText(CourseScormViewActivity.this, statement, Toast.LENGTH_LONG).show();
     }
 

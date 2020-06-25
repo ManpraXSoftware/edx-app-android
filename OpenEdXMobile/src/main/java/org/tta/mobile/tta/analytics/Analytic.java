@@ -57,6 +57,11 @@ public class Analytic {
     public void addMxAnalytics_db(String metadata, Action action, String page, Source source, String actionId) {
         String username = loginPrefs.getUsername();
 
+        if(!shouldISave(String.valueOf(action))) {
+            Log.e("Analytcs", "Not saving-->" + String.valueOf(action) + " Its a depricated action");
+            return;
+        }
+
         //save analytics to  local db first
         //download entry to db
         if (username != null) {
@@ -82,6 +87,12 @@ public class Analytic {
 
     public void addMxAnalytics_db(String metadata, Action action, String page, Source source,
                                   String actionId, String sourceIdentity, long contentId) {
+
+        if(!shouldISave(String.valueOf(action))) {
+            Log.e("Analytcs", "Not saving-->" + String.valueOf(action) + " Its a depricated action");
+            return;
+        }
+
         String username = loginPrefs.getUsername();
 
         //save analytics to  local db first
@@ -110,6 +121,12 @@ public class Analytic {
     }
 
     public void addMxAnalytics_db(String metadata, Action action, String page, Source source, String actionId, String nav) {
+
+        if(!shouldISave(String.valueOf(action))) {
+            Log.e("Analytcs", "Not saving-->" + String.valueOf(action) + " Its a depricated action");
+            return;
+        }
+
         String username = loginPrefs.getUsername();
 
         //save analytics to  local db first
@@ -137,6 +154,12 @@ public class Analytic {
 
     public void addMxAnalytics_db(String metadata, Action action, String page, Source source,
                                   String actionId, String nav, String sourceIdentity, long contentId) {
+
+        if(!shouldISave(String.valueOf(action))) {
+            Log.e("Analytcs", "Not saving-->" + String.valueOf(action) + " Its a depricated action");
+            return;
+        }
+
         String username = loginPrefs.getUsername();
 
         //save analytics to  local db first
@@ -161,35 +184,6 @@ public class Analytic {
             if (getAnalyticsCount() >= ANALYTICS_COUNT_FOR_SYNC){
                 syncAnalytics();
             }
-        }
-    }
-
-    public void addTinCanAnalyticDB(String tincan_obj, String course_name, String course_id) {
-        String username = loginPrefs.getUsername();
-
-        //save Tincan analytics to  local db first
-        //download entry to db
-        if (username == null || tincan_obj.isEmpty()) {
-            Log.d("TinCanDbEntry", "unable to add");
-            return;
-        }
-
-        AnalyticModel model = new AnalyticModel();
-        model.user_id = username;
-        model.action = String.valueOf(Action.TinCanObject);
-        model.metadata = tincan_obj;
-        //we are adding courseid to page in case of tincan
-        model.page = course_name;
-        model.source = String.valueOf(Source.Mobile);
-        model.nav = BreadcrumbUtil.getBreadcrumb();
-        model.action_id = course_id;
-        model.setEvent_date();
-        model.setStatus(0);
-
-        environment.getStorage().addAnalytic(model);
-
-        if (getAnalyticsCount() >= ANALYTICS_COUNT_FOR_SYNC){
-            syncAnalytics();
         }
     }
 
@@ -229,36 +223,7 @@ public class Analytic {
         environment.getStorage().removeAnalytics(getIds(analyticModelList), getINQueryParams(getIds(analyticModelList)));
     }
 
-    public void addScromDownload_db(Context mContext, final DownloadEntry model, String sourceIdentity, long contentId) {
-        GetAllDownloadedScromCountTask getAllDownloadedScromCountTask = new GetAllDownloadedScromCountTask(mContext) {
-            @Override
-            protected void onSuccess(Integer scromCount) throws Exception {
-                super.onSuccess(scromCount);
-                scromCount = scromCount + 1;
-                //update analytics
-                addMxAnalytics_db("" + scromCount, Action.OfflineSections,
-                        String.valueOf(Page.ProfilePage), Source.Mobile, null,
-                        sourceIdentity, contentId);
-
-                //download entry to db
-                environment.getStorage().addDownload(model);
-            }
-        };
-        getAllDownloadedScromCountTask.execute();
-    }
-
-    public void addScromCountAnalytic_db(Context mContext) {
-        GetAllDownloadedScromCountTask getAllDownloadedScromCountTask = new GetAllDownloadedScromCountTask(mContext) {
-            @Override
-            protected void onSuccess(Integer scromCount) throws Exception {
-                super.onSuccess(scromCount);
-                addMxAnalytics_db("" + scromCount, Action.OfflineSections,
-                        String.valueOf(Page.ProfilePage), Source.Mobile, null);
-            }
-        };
-        getAllDownloadedScromCountTask.execute();
-    }
-
+    //region:: utility functions
     private String getINQueryParams(String[] ids) {
         StringBuilder sb = new StringBuilder();
 
@@ -436,4 +401,55 @@ public class Analytic {
         };
         task.execute();
     }
+
+    private boolean shouldISave(String actionType) {
+        /*Stop below analytics to save in db.
+        Nav
+                DeleteSection
+        CertificateDownload
+                ViewCert
+        DBView
+                DBLike
+        DBComment
+                DBCommentlike
+        DBCommentReply
+                BookmarkPost
+        UnbookmarkPost
+                DeletePost
+        ChangeFilter
+                Search
+        ViewProfile
+                ViewPoints
+        ViewBadges
+                PostFeedback
+        OfflineSections
+                Share*/
+        boolean save = false;
+        if (actionType.trim().toLowerCase().equals("Nav".trim().toLowerCase()) ||
+                actionType.trim().toLowerCase().equals("DeleteSection".trim().toLowerCase()) ||
+                actionType.trim().toLowerCase().equals("CertificateDownload".trim().toLowerCase()) ||
+                actionType.trim().toLowerCase().equals("ViewCert".trim().toLowerCase()) ||
+                actionType.trim().toLowerCase().equals("DBView".trim().toLowerCase()) ||
+                actionType.trim().toLowerCase().equals("Share".trim().toLowerCase()) ||
+                actionType.trim().toLowerCase().equals("OfflineSections".trim().toLowerCase()) ||
+                actionType.trim().toLowerCase().equals("PostFeedback".trim().toLowerCase()) ||
+                actionType.trim().toLowerCase().equals("ViewBadges".trim().toLowerCase()) ||
+                actionType.trim().toLowerCase().equals("ViewPoints".trim().toLowerCase()) ||
+                actionType.trim().toLowerCase().equals("ViewProfile".trim().toLowerCase()) ||
+                actionType.trim().toLowerCase().equals("Search".trim().toLowerCase()) ||
+                actionType.trim().toLowerCase().equals("ChangeFilter".trim().toLowerCase()) ||
+                actionType.trim().toLowerCase().equals("DeletePost".trim().toLowerCase()) ||
+                actionType.trim().toLowerCase().equals("UnbookmarkPost".trim().toLowerCase()) ||
+                actionType.trim().toLowerCase().equals("BookmarkPost".trim().toLowerCase()) ||
+                actionType.trim().toLowerCase().equals("DBCommentReply".trim().toLowerCase()) ||
+                actionType.trim().toLowerCase().equals("DBCommentlike".trim().toLowerCase()) ||
+                actionType.trim().toLowerCase().equals("DBComment".trim().toLowerCase()) ||
+                actionType.trim().toLowerCase().equals("DBLike".trim().toLowerCase())) {
+            save = false;
+        } else {
+            save = true;
+        }
+        return save;
+    }
+    //endregion
 }
