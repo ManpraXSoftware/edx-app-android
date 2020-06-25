@@ -136,14 +136,6 @@ public class CourseDashboardViewModel extends BaseViewModel {
         fragments.add(CourseMaterialTab.newInstance(content, course, rootComponent));
         titles.add(mActivity.getString(R.string.course_material));
 
-        /*CourseDiscussionTopicsFragment discussionFragment = new CourseDiscussionTopicsFragment();
-        if (course != null) {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(Router.EXTRA_COURSE_DATA, course);
-            discussionFragment.setArguments(bundle);
-        }
-        discussionFragment.setRetainInstance(true);
-        fragments.add(discussionFragment);*/
         fragments.add(CourseDiscussionTab.newInstance(course, content));
         titles.add(mActivity.getString(R.string.discussion));
 
@@ -163,25 +155,6 @@ public class CourseDashboardViewModel extends BaseViewModel {
                 .build();
         fragments.add(AuthenticatedWebViewFragment.newInstance(uri.toString()));
         titles.add(mActivity.getString(R.string.about));
-
-        /*if (rootComponent != null) {
-            for (IBlock block: rootComponent.getChildren()){
-                CourseComponent comp = (CourseComponent) block;
-
-                if (comp.isContainer()) {
-                    for (IBlock childBlock : comp.getChildren()) {
-                        CourseComponent child = (CourseComponent) childBlock;
-
-                        if (child.getDisplayName().contains("कोर्स के बारे में")) {
-                            CourseComponent childComp = (CourseComponent) child.getChildren().get(0);
-                            fragments.add(AuthenticatedWebViewFragment.newInstance(childComp.getBlockUrl()));
-                            titles.add(mActivity.getString(R.string.about));
-                            break;
-                        }
-                    }
-                }
-            }
-        }*/
 
         try {
             adapter.setFragments(fragments, titles);

@@ -35,11 +35,11 @@
             android:layout_weight="1"
             android:background="@color/grey_act_background">
 
-            <org.tta.mobile.view.custom.EdxWebView
-                android:id="@+id/webview"
+            <org.tta.mobile.view.custom.AuthenticatedWebView
+                android:id="@+id/auth_webview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/grey_act_background" />
+                android:background="@color/white" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/print_certificate_fab"

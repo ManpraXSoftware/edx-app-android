@@ -92,7 +92,7 @@ public class AuthenticatedWebViewFragment extends BaseFragment implements PageVi
             final String javascript = getArguments().getString(ARG_JAVASCRIPT);
             final boolean isManuallyReloadable = getArguments().getBoolean(ARG_IS_MANUALLY_RELOADABLE);
 
-            authWebView.initWebView(getActivity(), false, isManuallyReloadable);
+            authWebView.initWebView(getActivity(), false, isManuallyReloadable, true);
             authWebView.loadUrlWithJavascript(true, url, javascript);
         }
     }

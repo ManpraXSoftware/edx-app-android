@@ -54,7 +54,7 @@ public class CourseUnitWebViewFragment extends CourseUnitFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        authWebView.initWebView(getActivity(), true, false);
+        authWebView.initWebView(getActivity(), true, false, true);
         authWebView.getWebViewClient().setPageStatusListener(new URLInterceptorWebViewClient.IPageStatusListener() {
             @Override
             public void onPageStarted() {

@@ -11,6 +11,8 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import com.google.inject.Inject;
+
 import org.tta.mobile.R;
 import org.tta.mobile.tta.Constants;
 import org.tta.mobile.tta.analytics.analytics_enums.Action;
@@ -22,6 +24,7 @@ import org.tta.mobile.tta.ui.certificate.view_model.CertificateViewModel;
 import org.tta.mobile.util.BrowserUtil;
 import org.tta.mobile.util.NetworkUtil;
 import org.tta.mobile.util.WebViewUtil;
+import org.tta.mobile.view.custom.AuthenticatedWebView;
 import org.tta.mobile.view.custom.URLInterceptorWebViewClient;
 
 public class CertificateActivity extends BaseVMActivity implements View.OnClickListener {
@@ -33,7 +36,7 @@ public class CertificateActivity extends BaseVMActivity implements View.OnClickL
     private CertificateViewModel viewModel;
 
     private Toolbar toolbar;
-    private WebView webview;
+    private AuthenticatedWebView authWebView;
     private FloatingActionButton printCertificateFab;
     private View loadingIndicator;
 
@@ -47,7 +50,7 @@ public class CertificateActivity extends BaseVMActivity implements View.OnClickL
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        webview = findViewById(R.id.webview);
+        authWebView = findViewById(R.id.auth_webview);
         printCertificateFab = findViewById(R.id.print_certificate_fab);
         loadingIndicator = findViewById(R.id.loading_indicator);
 
@@ -55,6 +58,7 @@ public class CertificateActivity extends BaseVMActivity implements View.OnClickL
                 certificate.getCourse_name(), Action.ViewCert, certificate.getCourse_name(),
                 Source.Mobile, certificate.getCourse_id(), certificate.getCourse_id(), 0);
 
+        printCertificateFab.setOnClickListener(this);
         initializeWebview();
     }
 
@@ -69,6 +73,9 @@ public class CertificateActivity extends BaseVMActivity implements View.OnClickL
     }
 
     private void initializeWebview(){
+
+        authWebView.initWebView(this, false, false, false);
+        WebView webview = authWebView.getWebView();
 
         //Zoom settings
         webview.setInitialScale(INITIAL_ZOOM_SCALE);
@@ -87,81 +94,49 @@ public class CertificateActivity extends BaseVMActivity implements View.OnClickL
         webview.getSettings().setAllowFileAccess( true );
         webview.getSettings().setAppCacheEnabled( true );
         webview.getSettings().setDomStorageEnabled(true);
-        webview.getSettings().setCacheMode( WebSettings.LOAD_DEFAULT ); // load online by default
+        webview.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK );
+        /*webview.getSettings().setCacheMode( WebSettings.LOAD_DEFAULT ); // load online by default
 
         if (!NetworkUtil.isConnected(this)) {
             // loading offline
             webview.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK );
-        }
+        }*/
 
+        authWebView.loadUrl(false,
+                viewModel.getDataManager().getConfig().getApiHostURL() + certificate.getDownload_url());
 
-        //add user agent
-        String userAgent = webview.getSettings().getUserAgentString() + "/" + BrowserUtil.getConfig().getUserAgent();
-        logD("User agent : " + userAgent);
-        webview.getSettings().setUserAgentString(userAgent);
-
-
-        URLInterceptorWebViewClient client = new URLInterceptorWebViewClient(this, webview);
-        client.setPageStatusListener(new URLInterceptorWebViewClient.IPageStatusListener() {
-            @Override
-            public void onPageStarted() {
-                loadingIndicator.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onPageFinished() {
-                printCertificateFab.setVisibility(View.VISIBLE);
-                printCertificateFab.setOnClickListener(CertificateActivity.this);
-                loadingIndicator.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onPageLoadError(WebView view, int errorCode, String description, String failingUrl) {
-                loadingIndicator.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onPageLoadError(WebView view, WebResourceRequest request,
-                                        WebResourceResponse errorResponse, boolean isMainRequestFailure) {
-                loadingIndicator.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onPageLoadProgressChanged(WebView webView, int progress) {
-
-            }
-        });
-
-        webview.loadUrl(viewModel.getDataManager().getConfig().getApiHostURL() + certificate.getDownload_url());
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        webview.onResume();
+        authWebView.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        webview.onPause();
+        authWebView.onPause();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        webview.destroy();
+        authWebView.onDestroy();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.print_certificate_fab:
-                analytic.addMxAnalytics_db(certificate.getCourse_id(), Action.CertificateDownload,
-                        String.valueOf(Page.CertificatePage), Source.Mobile, certificate.getCourse_id(),
-                        certificate.getCourse_id(), 0);
+                if (authWebView.isInitiated() && !authWebView.isShowingError()) {
+                    analytic.addMxAnalytics_db(certificate.getCourse_id(), Action.CertificateDownload,
+                            String.valueOf(Page.CertificatePage), Source.Mobile, certificate.getCourse_id(),
+                            certificate.getCourse_id(), 0);
 
-                WebViewUtil.createWebPrintJob(baseActivityContext, webview, certificate.getCourse_name());
+                    WebViewUtil.createWebPrintJob(baseActivityContext, authWebView.getWebView(),
+                            certificate.getCourse_name());
+                }
                 break;
         }
     }

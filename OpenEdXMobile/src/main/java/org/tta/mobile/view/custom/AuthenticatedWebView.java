@@ -71,6 +71,7 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
     private boolean pageIsLoaded;
     private boolean didReceiveError;
     private boolean isManuallyReloadable;
+    private boolean clearCache;
 
     private OnResponseCallback<String> htmlCallback;
     private boolean isInitiated = false;
@@ -107,19 +108,21 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
 
     /**
      * Initialize the webview (must call it before loading some url).
-     *
-     * @param fragmentActivity     Reference of fragment activity.
+     *  @param fragmentActivity     Reference of fragment activity.
      * @param isAllLinksExternal   A flag to treat every link as external link and open in external
      *                             web browser.
      * @param isManuallyReloadable A flag that decides if we should give showLoading/hideLoading reload button
-     *                             with full screen error.
+     * @param clearCache
      */
     @SuppressLint("SetJavaScriptEnabled")
     public void initWebView(@NonNull FragmentActivity fragmentActivity, boolean isAllLinksExternal,
-                            boolean isManuallyReloadable) {
+                            boolean isManuallyReloadable, boolean clearCache) {
         isInitiated = true;
         this.isManuallyReloadable = isManuallyReloadable;
-        webView.clearCache(true);
+        this.clearCache = clearCache;
+        if (clearCache) {
+            webView.clearCache(true);
+        }
         webView.getSettings().setJavaScriptEnabled(true);
 
 
@@ -134,7 +137,7 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
                 didReceiveError = true;
                 hideLoadingProgress();
                 pageIsLoaded = false;
-                showErrorMessage(R.string.network_error_message, FontAwesomeIcons.fa_exclamation_circle);
+                showErrorMessage(R.string.no_connection_exception, FontAwesomeIcons.fa_exclamation_circle);
                 super.onReceivedError(view, errorCode, description, failingUrl);
             }
 
@@ -157,14 +160,14 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
                             break;
                     }
                     pageIsLoaded = false;
-                    showErrorMessage(R.string.network_error_message, FontAwesomeIcons.fa_exclamation_circle);
+                    showErrorMessage(R.string.no_connection_exception, FontAwesomeIcons.fa_exclamation_circle);
                 }
                 super.onReceivedHttpError(view, request, errorResponse);
             }
 
             public void onPageFinished(WebView view, String url) {
                 if (!NetworkUtil.isConnected(getContext())) {
-                    showErrorView(getResources().getString(R.string.reset_no_network_message),
+                    showErrorView(getResources().getString(R.string.no_connection_exception),
                             FontAwesomeIcons.fa_wifi);
                     hideLoadingProgress();
                     pageIsLoaded = false;
@@ -249,7 +252,7 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
         }
 
         if (!NetworkUtil.isConnected(getContext())) {
-            showErrorMessage(R.string.reset_no_network_message, FontAwesomeIcons.fa_wifi);
+            showErrorMessage(R.string.no_connection_exception, FontAwesomeIcons.fa_wifi);
             return;
         }
 
@@ -333,7 +336,7 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
                 onRefresh();
             }
         } else {
-            showErrorMessage(R.string.reset_no_network_message, FontAwesomeIcons.fa_wifi);
+            showErrorMessage(R.string.no_connection_exception, FontAwesomeIcons.fa_wifi);
         }
     }
 
