@@ -53,4 +53,11 @@ public class ScormBlockModel extends CourseComponent implements HasDownloadEntry
         return data.lastModified;
     }
 
+    public String getArticulateType(){
+        if (data == null || data.articulateType==null|| data.articulateType.isEmpty()){
+            return null;
+        }
+        return data.articulateType;
+    }
+
 }
