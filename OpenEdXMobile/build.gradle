@@ -318,7 +318,7 @@ android {
         renderscriptSupportModeEnabled true
 
         vectorDrawables.useSupportLibrary = true
-
+        resConfigs "en", "US"
         // test configuration
         testApplicationId 'org.edx.mobile.test'
 
@@ -444,13 +444,14 @@ android {
     }
 
     lintOptions {
-        abortOnError true
+        abortOnError false
         showAll true
         warning 'TypographyQuotes', 'InvalidPackage'
         error 'StopShip', 'ContentDescription'
         warning 'MissingTranslation'
         warning 'ImpliedQuantity'
     }
+
 
     productFlavors {
         prod {

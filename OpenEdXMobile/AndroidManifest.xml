@@ -301,7 +301,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <action android:name="android.intent.action.VIEW" />
                 <data android:scheme="org.edx.mobile.innerlinks" />
-            </intent-filter>a
+            </intent-filter>
         </activity>
 
         <activity

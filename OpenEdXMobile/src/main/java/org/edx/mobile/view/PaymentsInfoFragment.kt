@@ -58,8 +58,8 @@ class PaymentsInfoFragment : BaseFragment() {
 
         tv_audit_access_expires_details.text = stringBuilder.toString()
 
-        val courseUpgradeData = arguments?.getParcelable(Router.EXTRA_COURSE_UPGRADE_DATA) as CourseUpgradeResponse
+        val courseUpgradeData = arguments?.getParcelable(Router.EXTRA_COURSE_UPGRADE_DATA) as CourseUpgradeResponse?
         PaymentsBannerFragment.loadPaymentsBannerFragment(R.id.fragment_container, courseData, null,
-                courseUpgradeData, false, childFragmentManager, false)
+                courseUpgradeData!!, false, childFragmentManager, false)
     }
 }

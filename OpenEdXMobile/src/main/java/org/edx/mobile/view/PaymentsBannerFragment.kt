@@ -77,8 +77,8 @@ class PaymentsBannerFragment : BaseFragment() {
     }
 
     private fun populateCourseUpgradeBanner(context: Context) {
-        val courseUpgradeData: CourseUpgradeResponse =
-                arguments?.getParcelable(Router.EXTRA_COURSE_UPGRADE_DATA) as CourseUpgradeResponse
+        val courseUpgradeData: CourseUpgradeResponse? =
+                arguments?.getParcelable(Router.EXTRA_COURSE_UPGRADE_DATA) as CourseUpgradeResponse?
         val courseData: EnrolledCoursesResponse =
                 arguments?.getSerializable(Router.EXTRA_COURSE_DATA) as EnrolledCoursesResponse
         val showInfoButton: Boolean = arguments?.getBoolean(EXTRA_SHOW_INFO_BUTTON) ?: false
@@ -86,12 +86,12 @@ class PaymentsBannerFragment : BaseFragment() {
         if (showInfoButton) {
             info.visibility = View.VISIBLE
             info.setOnClickListener {
-                environment?.router?.showPaymentsInfoActivity(context, courseData, courseUpgradeData)
+                environment?.router?.showPaymentsInfoActivity(context, courseData, courseUpgradeData!!)
             }
         } else {
             info.visibility = View.GONE
         }
-        if (!TextUtils.isEmpty(courseUpgradeData.price)) {
+        if (!TextUtils.isEmpty(courseUpgradeData!!.price)) {
             tv_upgrade_price.text = courseUpgradeData.price
         } else {
             tv_upgrade_price.visibility = View.GONE

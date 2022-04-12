@@ -28,4 +28,14 @@ public class CombinationOfSeachResult {
     private String tagName;
     private String programName;
     private String courseName;
+
+    public String getProgram_id() {
+        return program_id;
+    }
+
+    public void setProgram_id(String program_id) {
+        this.program_id = program_id;
+    }
+
+    private String program_id;
 }

@@ -63,6 +63,9 @@ public class DiscoveryCourseAdapter extends RecyclerView.Adapter<DiscoveryCourse
                     holder.itemBinding.courseStatus.setText("IN PROGRESS");
                 }
                 holder.itemBinding.cvCourseStatus.setVisibility(View.VISIBLE);
+            }else{
+                holder.itemBinding.shimmerLayoutStatus.stopShimmer();
+                holder.itemBinding.shimmerLayoutStatus.setVisibility(View.GONE);
             }
         } else {
             holder.itemBinding.cvCourseStatus.setVisibility(View.GONE);

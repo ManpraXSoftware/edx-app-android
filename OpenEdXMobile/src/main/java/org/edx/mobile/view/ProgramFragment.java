@@ -193,10 +193,12 @@ public class ProgramFragment extends BaseFragment implements OnRecyclerItemClick
                     if (binding.iconProgress.getVisibility() == View.VISIBLE) {
                         binding.enrollInProgram.setEnabled(false);
                         binding.unenrollFromProgram.setEnabled(false);
+                        if(getActivity()!=null)
                         Toast.makeText(getContext(), getActivity().getString(R.string.data_is_loading), Toast.LENGTH_SHORT).show();
                     } else {
                         binding.enrollInProgram.setEnabled(true);
                         binding.unenrollFromProgram.setEnabled(true);
+                        if(getActivity()!=null)
                         Toast.makeText(getContext(), getActivity().getString(R.string.data_loaded), Toast.LENGTH_SHORT).show();
                         handler.removeCallbacks(runnable);
                     }
@@ -598,33 +600,35 @@ public class ProgramFragment extends BaseFragment implements OnRecyclerItemClick
         MyCourseTask myCourseTask = new MyCourseTask(getContext(), loginPrefs.getUsername(), loginPrefs.getAuthorizationHeader()) {
             @Override
             public void onSuccess(@NonNull List<EnrolledCoursesResponse> result) {
-                enrolledCoursesResponses = new ArrayList<EnrolledCoursesResponse>(result);
-                if (!program_uuid.isEmpty()) {
-                    //boolean enroll = false;
-                    if (programResultLists != null && programResultLists.size() > 0) {
-                        for (EnrolledCoursesResponse enrolledCoursesResponse : enrolledCoursesResponses) {
-                            if (enrolledCoursesResponse.getCourse() != null) {
-                                for (ProgramCoursesList programCoursesList : programResultLists.get(0).getCourses()) {
-                                    if (programCoursesList.getCourseRuns() != null) {
-                                        for (CourseRuns courseRuns : programCoursesList.getCourseRuns()) {
-                                            if (courseRuns.getKey().equals(enrolledCoursesResponse.getCourse().getId())) {
-                                                courseRuns.setCourse_status(enrolledCoursesResponse.getCourse_status());
-                                                //enroll = true;
+                if (result!=null){
+                    enrolledCoursesResponses = new ArrayList<EnrolledCoursesResponse>(result);
+                    if (!program_uuid.isEmpty()) {
+                        //boolean enroll = false;
+                        if (programResultLists != null && programResultLists.size() > 0) {
+                            for (EnrolledCoursesResponse enrolledCoursesResponse : enrolledCoursesResponses) {
+                                if (enrolledCoursesResponse.getCourse() != null) {
+                                    for (ProgramCoursesList programCoursesList : programResultLists.get(0).getCourses()) {
+                                        if (programCoursesList.getCourseRuns() != null) {
+                                            for (CourseRuns courseRuns : programCoursesList.getCourseRuns()) {
+                                                if (courseRuns.getKey().equals(enrolledCoursesResponse.getCourse().getId())) {
+                                                    courseRuns.setCourse_status(enrolledCoursesResponse.getCourse_status());
+                                                    //enroll = true;
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
+                            List<CourseRuns> courseRuns = new ArrayList<>();
+                            for (ProgramCoursesList programCoursesList : programResultLists.get(0).getCourses()) {
+                                courseRuns.addAll(programCoursesList.getCourseRuns());
+                            }
+                            binding.shimmerLayoutCourse.setVisibility(View.GONE);
+                            discoveryCourseAdapter.setProgramCoursesLists(courseRuns, true, resumeCourse);
+                            binding.courseCount.setText(String.valueOf(courseRuns.size()) + " " +
+                                    context.getString(R.string.courses_available));
+                            binding.courseCount.setVisibility(View.VISIBLE);
                         }
-                        List<CourseRuns> courseRuns = new ArrayList<>();
-                        for (ProgramCoursesList programCoursesList : programResultLists.get(0).getCourses()) {
-                            courseRuns.addAll(programCoursesList.getCourseRuns());
-                        }
-                        binding.shimmerLayoutCourse.setVisibility(View.GONE);
-                        discoveryCourseAdapter.setProgramCoursesLists(courseRuns, true, resumeCourse);
-                        binding.courseCount.setText(String.valueOf(courseRuns.size()) + " " +
-                                context.getString(R.string.courses_available));
-                        binding.courseCount.setVisibility(View.VISIBLE);
                     }
                 }
                 binding.iconProgress.setVisibility(View.GONE);

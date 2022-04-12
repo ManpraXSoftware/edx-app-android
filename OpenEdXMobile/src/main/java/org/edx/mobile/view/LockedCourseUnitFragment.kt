@@ -42,9 +42,9 @@ class LockedCourseUnitFragment : CourseUnitFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val courseUpgradeData = arguments?.getParcelable(Router.EXTRA_COURSE_UPGRADE_DATA) as CourseUpgradeResponse
+        val courseUpgradeData = arguments?.getParcelable(Router.EXTRA_COURSE_UPGRADE_DATA) as CourseUpgradeResponse?
         val courseData = arguments?.getSerializable(Router.EXTRA_COURSE_DATA) as EnrolledCoursesResponse
-        loadPaymentBannerFragment(courseData, courseUpgradeData)
+        loadPaymentBannerFragment(courseData, courseUpgradeData!!)
         analyticsRegistry?.trackScreenView(Analytics.Screens.COURSE_UNIT_LOCKED)
     }
     private fun loadPaymentBannerFragment(courseData: EnrolledCoursesResponse,

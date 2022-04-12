@@ -162,6 +162,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                                             CombinationOfSeachResult combinationOfSeachResult = new CombinationOfSeachResult();
                                             combinationOfSeachResult.setCourseName(searchResultList.getTitle());
                                             combinationOfSeachResult.setProgramName(searchTags.getProgram_name());
+                                            combinationOfSeachResult.setProgram_id(searchTags.getProgram_id());
                                             combinationOfSeachResult.setTagName(tag);
                                             combinationOfSeachResults.add(combinationOfSeachResult);
                                         }
@@ -250,6 +251,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                                             CombinationOfSeachResult combinationOfSeachResult = new CombinationOfSeachResult();
                                             combinationOfSeachResult.setCourseName(searchResultList.getTitle());
                                             combinationOfSeachResult.setProgramName(searchTags.getProgram_name());
+                                            combinationOfSeachResult.setProgram_id(searchTags.getProgram_id());
                                             combinationOfSeachResult.setTagName(tag);
                                             combinationOfSeachResults.add(combinationOfSeachResult);
                                         }
@@ -321,7 +323,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
     public void onItemClick(View view, Object item) {
         if (item instanceof CombinationOfSeachResult) {
             CombinationOfSeachResult combinationOfSeachResult = (CombinationOfSeachResult) item;
-            environment.getRouter().showProgramsActivity(getActivity(), combinationOfSeachResult.getTagName(), "");
+            environment.getRouter().showProgramsActivity(getActivity(), combinationOfSeachResult.getTagName(), /*combinationOfSeachResult.getProgram_id()*/ "");
         }
     }
 }
