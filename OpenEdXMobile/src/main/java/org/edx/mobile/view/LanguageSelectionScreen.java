@@ -71,7 +71,7 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mEnglish.setSelected(true);
                     mNextButton.setSelected(true);
                     mNextButton.setTextColor(Color.parseColor("#464A50"));
-                    mNextButton.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+                    mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
                     mHindi.setSelected(false);
                     mKannada.setSelected(false);
                     mTamil.setSelected(false);
@@ -80,7 +80,7 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mEnglish.setSelected(false);
                     mNextButton.setSelected(false);
                     mNextButton.setTextColor(Color.parseColor("#ffffffff"));
-                    mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
+                  //  mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
                     mHindi.setSelected(false);
                     mKannada.setSelected(false);
                     mTamil.setSelected(false);
@@ -95,7 +95,7 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mHindi.setSelected(true);
                     mNextButton.setSelected(true);
                     mNextButton.setTextColor(Color.parseColor("#464A50"));
-                    mNextButton.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+                    mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
                     mEnglish.setSelected(false);
                     mKannada.setSelected(false);
                     mTamil.setSelected(false);
@@ -104,7 +104,7 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mHindi.setSelected(false);
                     mNextButton.setSelected(false);
                     mNextButton.setTextColor(Color.parseColor("#ffffffff"));
-                    mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
+                 //   mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
                     mEnglish.setSelected(false);
                     mKannada.setSelected(false);
                     mTamil.setSelected(false);
@@ -119,7 +119,7 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mKannada.setSelected(true);
                     mNextButton.setSelected(true);
                     mNextButton.setTextColor(Color.parseColor("#464A50"));
-                    mNextButton.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+                    mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
                     mHindi.setSelected(false);
                     mEnglish.setSelected(false);
                     mTamil.setSelected(false);
@@ -128,7 +128,7 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mKannada.setSelected(false);
                     mNextButton.setSelected(false);
                     mNextButton.setTextColor(Color.parseColor("#ffffffff"));
-                    mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
+                  //  mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
                     mHindi.setSelected(false);
                     mEnglish.setSelected(false);
                     mTamil.setSelected(false);
@@ -143,7 +143,7 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mTamil.setSelected(true);
                     mNextButton.setSelected(true);
                     mNextButton.setTextColor(Color.parseColor("#464A50"));
-                    mNextButton.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+                    mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
                     mHindi.setSelected(false);
                     mKannada.setSelected(false);
                     mEnglish.setSelected(false);
@@ -152,7 +152,7 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mTamil.setSelected(false);
                     mNextButton.setSelected(false);
                     mNextButton.setTextColor(Color.parseColor("#ffffffff"));
-                    mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
+                 //   mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
                     mHindi.setSelected(false);
                     mKannada.setSelected(false);
                     mEnglish.setSelected(false);

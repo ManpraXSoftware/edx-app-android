@@ -318,7 +318,7 @@ android {
         renderscriptSupportModeEnabled true
 
         vectorDrawables.useSupportLibrary = true
-        resConfigs "en", "US"
+        resConfigs "en", "US" , "hi" , "ta" , "kn"
         // test configuration
         testApplicationId 'org.edx.mobile.test'
 
