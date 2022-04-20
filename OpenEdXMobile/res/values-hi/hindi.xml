@@ -46,6 +46,7 @@
     <string name="only_hindi">Hindi</string>
     <string name="only_kannada">Kannada</string>
     <string name="only_tamil">Tamil</string>
+    <string name="only_bengali">Bengali</string>
     <string name="your_enrolled_programs">आपके नामांकित कार्यक्रम</string>
     <string name="view">दृश्य</string>
     <string name="from_your_dashboard">अपने डैशबोर्ड से</string>
@@ -116,6 +117,7 @@
     <string name="hindi">HINDI / हिंदी</string>
     <string name="kannada">KANNADA / ಕನ್ನಡ</string>
     <string name="tamil">TAMIL / தமிழ்</string>
+    <string name="bengali">Bengali / বাংলা</string>
     <string name="please_choose_language_of_preference">कृपया &quot;
 &quot;वरीयता की &quot;
 &quot;भाषा चुनें</string>

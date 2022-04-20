@@ -7,8 +7,7 @@
         <item>@id/cast_button_type_mute_toggle</item>
     </array>
     <string-array name="subject_colors_name">
-        <item>#69A8DB</item>
-        <item>#FFB700</item>
+        <item>#639BC8</item>
         <item>#F6CF8C</item>
         <item>#55C2BB</item>
         <item>#C8A1DE</item>

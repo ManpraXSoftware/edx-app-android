@@ -13,6 +13,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/ln_next"
+            android:importantForAccessibility="yes"
+            android:contentDescription="@string/welcome_screen_text"
             android:background="@drawable/welcome_screen"
             android:orientation="vertical">
 

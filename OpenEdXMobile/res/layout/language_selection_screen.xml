@@ -116,6 +116,46 @@
                 android:textColor="@color/language_text_color"
                 android:layout_gravity="center" />
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/bengali"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/tamil"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:gravity="center"
+            android:contentDescription="@string/only_bengali"
+            android:background="@drawable/language_card_selection">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bengali"
+                android:textSize="18sp"
+                android:textColor="@color/language_text_color"
+                android:layout_gravity="center" />
+        </LinearLayout>
+      <!--  <LinearLayout
+            android:id="@+id/bengali"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/tamil"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:gravity="center"
+            android:contentDescription="@string/only_bengali"
+            android:background="@drawable/language_card_selection">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bengali"
+                android:textSize="18sp"
+                android:textColor="@color/language_text_color"
+                android:layout_gravity="center" />
+        </LinearLayout>-->
     </RelativeLayout>
 
     <Button

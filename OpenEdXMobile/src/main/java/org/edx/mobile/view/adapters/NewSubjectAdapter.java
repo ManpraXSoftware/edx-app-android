@@ -22,6 +22,7 @@ public class NewSubjectAdapter extends RecyclerView.Adapter<NewSubjectAdapter.Ne
     private Context context;
     private List<DiscoverySubjectResult> discoverySubjectResults;
     private OnRecyclerItemClickListener listener;
+    private int count = 0;
 
     public NewSubjectAdapter(Context context, OnRecyclerItemClickListener listener) {
         this.context = context;
@@ -44,7 +45,15 @@ public class NewSubjectAdapter extends RecyclerView.Adapter<NewSubjectAdapter.Ne
             colors.add(newColor);
         }
         int rand = new Random().nextInt(colors.size());
-        Integer color = colors.get(rand);
+        Integer color;
+        if (count<=9){
+             color = colors.get(count);
+             count++;
+        }else{
+            count = 0;
+            color = colors.get(count);
+            count++;
+        }
         model.setCardColorName(color);
         holder.itemBinding.lnSubjects.setBackgroundColor(color);
         String sourceString = "<b>" + model.getName() + "</b> ";

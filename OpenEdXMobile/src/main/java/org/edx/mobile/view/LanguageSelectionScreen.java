@@ -32,6 +32,7 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
     private LinearLayout mHindi;
     private LinearLayout mKannada;
     private LinearLayout mTamil;
+    private LinearLayout mBengali;
     @Inject
     protected IEdxEnvironment environment;
     private String language = "";
@@ -57,6 +58,7 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
         mHindi = findViewById(R.id.hindi);
         mKannada = findViewById(R.id.kannada);
         mTamil = findViewById(R.id.tamil);
+        mBengali = findViewById(R.id.bengali);
         mBackArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,21 +71,23 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                 if (!mEnglish.isSelected()) {
                     language = "en";
                     mEnglish.setSelected(true);
-                    mNextButton.setSelected(true);
+                    mNextButton.setActivated(true);
                     mNextButton.setTextColor(Color.parseColor("#464A50"));
-                    mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
+                 // mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
                     mHindi.setSelected(false);
                     mKannada.setSelected(false);
                     mTamil.setSelected(false);
+                    mBengali.setSelected(false);
                 } else {
                     language = "";
                     mEnglish.setSelected(false);
-                    mNextButton.setSelected(false);
+                    mNextButton.setActivated(false);
                     mNextButton.setTextColor(Color.parseColor("#ffffffff"));
-                  //  mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
+                  //mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
                     mHindi.setSelected(false);
                     mKannada.setSelected(false);
                     mTamil.setSelected(false);
+                    mBengali.setSelected(false);
                 }
             }
         });
@@ -93,21 +97,23 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                 if (!mHindi.isSelected()) {
                     language = "hi";
                     mHindi.setSelected(true);
-                    mNextButton.setSelected(true);
+                    mNextButton.setActivated(true);
                     mNextButton.setTextColor(Color.parseColor("#464A50"));
-                    mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
+                 //   mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
                     mEnglish.setSelected(false);
                     mKannada.setSelected(false);
                     mTamil.setSelected(false);
+                    mBengali.setSelected(false);
                 } else {
                     language = "";
                     mHindi.setSelected(false);
-                    mNextButton.setSelected(false);
+                    mNextButton.setActivated(false);
                     mNextButton.setTextColor(Color.parseColor("#ffffffff"));
                  //   mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
                     mEnglish.setSelected(false);
                     mKannada.setSelected(false);
                     mTamil.setSelected(false);
+                    mBengali.setSelected(false);
                 }
             }
         });
@@ -117,21 +123,23 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                 if (!mKannada.isSelected()) {
                     language = "kn";
                     mKannada.setSelected(true);
-                    mNextButton.setSelected(true);
+                    mNextButton.setActivated(true);
                     mNextButton.setTextColor(Color.parseColor("#464A50"));
-                    mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
+               //     mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
                     mHindi.setSelected(false);
                     mEnglish.setSelected(false);
                     mTamil.setSelected(false);
+                    mBengali.setSelected(false);
                 } else {
                     language = "";
                     mKannada.setSelected(false);
-                    mNextButton.setSelected(false);
+                    mNextButton.setActivated(false);
                     mNextButton.setTextColor(Color.parseColor("#ffffffff"));
                   //  mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
                     mHindi.setSelected(false);
                     mEnglish.setSelected(false);
                     mTamil.setSelected(false);
+                    mBengali.setSelected(false);
                 }
             }
         });
@@ -141,18 +149,46 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                 if (!mTamil.isSelected()) {
                     language = "ta";
                     mTamil.setSelected(true);
-                    mNextButton.setSelected(true);
+                    mNextButton.setActivated(true);
                     mNextButton.setTextColor(Color.parseColor("#464A50"));
-                    mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
+              //      mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
+                    mHindi.setSelected(false);
+                    mKannada.setSelected(false);
+                    mEnglish.setSelected(false);
+                    mBengali.setSelected(false);
+                } else {
+                    language = "";
+                    mTamil.setSelected(false);
+                    mNextButton.setActivated(false);
+                    mNextButton.setTextColor(Color.parseColor("#ffffffff"));
+                 //   mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
+                    mHindi.setSelected(false);
+                    mKannada.setSelected(false);
+                    mEnglish.setSelected(false);
+                    mBengali.setSelected(false);
+                }
+            }
+        });
+        mBengali.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!mBengali.isSelected()) {
+                    language = "bn";
+                    mBengali.setSelected(true);
+                    mTamil.setSelected(false);
+                    mNextButton.setActivated(true);
+                    mNextButton.setTextColor(Color.parseColor("#464A50"));
+               //     mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
                     mHindi.setSelected(false);
                     mKannada.setSelected(false);
                     mEnglish.setSelected(false);
                 } else {
                     language = "";
+                    mBengali.setSelected(false);
                     mTamil.setSelected(false);
-                    mNextButton.setSelected(false);
+                    mNextButton.setActivated(false);
                     mNextButton.setTextColor(Color.parseColor("#ffffffff"));
-                 //   mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
+                    //   mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
                     mHindi.setSelected(false);
                     mKannada.setSelected(false);
                     mEnglish.setSelected(false);
@@ -163,7 +199,7 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
             @SuppressLint("WrongConstant")
             @Override
             public void onClick(View view) {
-                if (mNextButton.isSelected()) {
+                if (mNextButton.isActivated()) {
                     if (language != null) {
                         LocaleManager.setNewLocale(LanguageSelectionScreen.this, language);
                     } else {

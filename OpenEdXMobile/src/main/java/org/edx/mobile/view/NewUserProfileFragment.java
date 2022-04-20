@@ -151,18 +151,29 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
             viewHolder.hindi.setSelected(false);
             viewHolder.kannada.setSelected(false);
             viewHolder.tamil.setSelected(false);
+            viewHolder.bengali.setSelected(false);
         } else if (selectedLanguage.equals("hi")) {
             viewHolder.hindi.setSelected(true);
             viewHolder.english.setSelected(false);
             viewHolder.kannada.setSelected(false);
             viewHolder.tamil.setSelected(false);
+            viewHolder.bengali.setSelected(false);
         } else if (selectedLanguage.equals("kn")) {
             viewHolder.kannada.setSelected(true);
             viewHolder.hindi.setSelected(false);
             viewHolder.english.setSelected(false);
             viewHolder.tamil.setSelected(false);
+            viewHolder.bengali.setSelected(false);
+            viewHolder.bengali.setSelected(false);
         } else if (selectedLanguage.equals("ta")) {
             viewHolder.tamil.setSelected(true);
+            viewHolder.hindi.setSelected(false);
+            viewHolder.kannada.setSelected(false);
+            viewHolder.english.setSelected(false);
+            viewHolder.bengali.setSelected(false);
+        }else if (selectedLanguage.equals("bn")) {
+            viewHolder.bengali.setSelected(true);
+            viewHolder.tamil.setSelected(false);
             viewHolder.hindi.setSelected(false);
             viewHolder.kannada.setSelected(false);
             viewHolder.english.setSelected(false);
@@ -177,15 +188,11 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
                     viewHolder.hindi.setSelected(false);
                     viewHolder.kannada.setSelected(false);
                     viewHolder.tamil.setSelected(false);
+                    viewHolder.bengali.setSelected(false);
                     Intent intent
                             = new Intent(getActivity(), MainBottomDashboardFragment.class);
                     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
-                } /*else {
-                    viewHolder.english.setSelected(false);
-                    viewHolder.hindi.setSelected(false);
-                    viewHolder.kannada.setSelected(false);
-                    viewHolder.tamil.setSelected(false);
-                }*/
+                }
             }
         });
         viewHolder.hindi.setOnClickListener(new View.OnClickListener() {
@@ -198,16 +205,11 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
                     viewHolder.english.setSelected(false);
                     viewHolder.kannada.setSelected(false);
                     viewHolder.tamil.setSelected(false);
+                    viewHolder.bengali.setSelected(false);
                     Intent intent
                             = new Intent(getActivity(), MainBottomDashboardFragment.class);
                     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
-                } /*else {
-                    LocaleManager.setNewLocale(getContext(), "en");
-                    viewHolder.hindi.setSelected(false);
-                    viewHolder.english.setSelected(false);
-                    viewHolder.kannada.setSelected(false);
-                    viewHolder.tamil.setSelected(false);
-                }*/
+                }
             }
         });
         viewHolder.kannada.setOnClickListener(new View.OnClickListener() {
@@ -220,16 +222,11 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
                     viewHolder.hindi.setSelected(false);
                     viewHolder.english.setSelected(false);
                     viewHolder.tamil.setSelected(false);
+                    viewHolder.bengali.setSelected(false);
                     Intent intent
                             = new Intent(getActivity(), MainBottomDashboardFragment.class);
                     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
-                } /*else {
-                    LocaleManager.setNewLocale(getContext(), "en");
-                    viewHolder.kannada.setSelected(false);
-                    viewHolder.english.setSelected(false);
-                    viewHolder.hindi.setSelected(false);
-                    viewHolder.tamil.setSelected(false);
-                }*/
+                }
             }
         });
         viewHolder.tamil.setOnClickListener(new View.OnClickListener() {
@@ -242,16 +239,28 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
                     viewHolder.hindi.setSelected(false);
                     viewHolder.kannada.setSelected(false);
                     viewHolder.english.setSelected(false);
+                    viewHolder.bengali.setSelected(false);
                     Intent intent
                             = new Intent(getActivity(), MainBottomDashboardFragment.class);
                     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
-                }/* else {
-                    LocaleManager.setNewLocale(getContext(), "en");
+                }
+            }
+        });
+        viewHolder.bengali.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("WrongConstant")
+            @Override
+            public void onClick(View view) {
+                if (!viewHolder.bengali.isSelected()) {
+                    LocaleManager.setNewLocale(getContext(), "bn");
+                    viewHolder.bengali.setSelected(true);
                     viewHolder.tamil.setSelected(false);
                     viewHolder.hindi.setSelected(false);
                     viewHolder.kannada.setSelected(false);
                     viewHolder.english.setSelected(false);
-                }*/
+                    Intent intent
+                            = new Intent(getActivity(), MainBottomDashboardFragment.class);
+                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
             }
         });
         if (getUserType() != null) {

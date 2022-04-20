@@ -23,6 +23,7 @@ public class MyProgramListAdapter extends RecyclerView.Adapter<MyProgramListAdap
     private Context context;
     private List<MyProgramListModel> myProgramList;
     private OnRecyclerItemClickListener listener;
+    private int count = 0;
 
     public MyProgramListAdapter(Context context, OnRecyclerItemClickListener listener) {
         this.context = context;
@@ -45,7 +46,15 @@ public class MyProgramListAdapter extends RecyclerView.Adapter<MyProgramListAdap
             colors.add(newColor);
         }
         int rand = new Random().nextInt(colors.size());
-        Integer color = colors.get(rand);
+        Integer color;
+        if (count<=9){
+            color = colors.get(count);
+            count++;
+        }else{
+            count = 0;
+            color = colors.get(count);
+            count++;
+        }
         LayerDrawable layerDrawable = (LayerDrawable) context.getResources()
                 .getDrawable(R.drawable.tags_side_background);
         GradientDrawable gradientDrawable = (GradientDrawable) layerDrawable

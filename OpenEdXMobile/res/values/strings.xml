@@ -754,6 +754,7 @@
     <string name="hindi">HINDI / हिंदी</string>
     <string name="kannada">KANNADA / ಕನ್ನಡ</string>
     <string name="tamil">TAMIL / தமிழ்</string>
+    <string name="bengali">Bengali / বাংলা</string>
     <string name="next">NEXT</string>
     <string name="course_caps">COURSE</string>
     <string name="no_user_type">No user type</string>
@@ -790,6 +791,7 @@
     <string name="only_hindi">Hindi</string>
     <string name="only_kannada">Kannada</string>
     <string name="only_tamil">Tamil</string>
+    <string name="only_bengali">Bengali</string>
     <string name="no_program_found">No Program Found</string>
     <string name="no_course_found">No Course Found</string>
     <string name="no_enrolled_in_any_programs">No Enrolled In Any programs</string>
@@ -815,4 +817,6 @@
     <string name="status">Status</string>
     <string name="app_text">Subodha is a learning management system "\n"containing accessible
      resources for students with"\n" visual impairments and their educators.</string>
+ <string name="welcome_screen_text">Welcome to subodha , your language preference and other details
+  are saved and can be changed fro your account menu</string>
 </resources>

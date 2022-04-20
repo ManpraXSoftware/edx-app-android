@@ -61,6 +61,8 @@ import org.edx.mobile.view.adapters.ProgramModelAdapter;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -290,6 +292,12 @@ public class ProgramFragment extends BaseFragment implements OnRecyclerItemClick
                                         }
                                     }
                                 }
+                                Collections.sort(programResultLists, new Comparator<ProgramResultList>() {
+                                    @Override
+                                    public int compare(ProgramResultList lhs, ProgramResultList rhs) {
+                                        return lhs.getTitle().compareTo(rhs.getTitle());
+                                    }
+                                });
                                 programModelAdapter.setPrograms(programResultLists,
                                         programResultLists.get(0).getTitle());
                                 //Set Course
@@ -353,7 +361,13 @@ public class ProgramFragment extends BaseFragment implements OnRecyclerItemClick
                                         programResultList.setProgramEnroll(programEnroll);
                                     }
                                 }
-
+                                Log.d("number_of_programs",String.valueOf(responseBody.getProgramResultLists().size()));
+                                Collections.sort(responseBody.getProgramResultLists(), new Comparator<ProgramResultList>() {
+                                    @Override
+                                    public int compare(ProgramResultList lhs, ProgramResultList rhs) {
+                                        return lhs.getTitle().compareTo(rhs.getTitle());
+                                    }
+                                });
                                 programModelAdapter.setPrograms(responseBody.getProgramResultLists(),
                                         responseBody.getProgramResultLists().get(0).getTitle());
                             }

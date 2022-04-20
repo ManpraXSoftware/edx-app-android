@@ -9,6 +9,8 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
+import com.google.firebase.BuildConfig;
+
 import org.edx.mobile.R;
 import org.edx.mobile.base.BaseFragmentActivity;
 import org.edx.mobile.databinding.ActivityLaunchBinding;
@@ -23,6 +25,10 @@ public class LaunchActivity extends BaseFragmentActivity {
         // finally change the color
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.status_bar_color));
         final ActivityLaunchBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_launch);
+        /*String osVersionText = String.format("%s %s", getString(R.string.android_os_version), android.os.Build.VERSION.RELEASE);
+        String appVersionText = String.format("%s %s", getString(R.string.app_version), org.edx.mobile.BuildConfig.VERSION_NAME);
+        String appVersionText1 = String.format("%s %s", getString(R.string.app_version), org.edx.mobile.BuildConfig.VERSION_CODE);*/
+       // binding.signInTv.setText(appVersionText1);
         binding.signInTv.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

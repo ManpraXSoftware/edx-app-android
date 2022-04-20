@@ -389,6 +389,7 @@
     <string name="only_hindi">Hindi</string>
     <string name="only_kannada">Kannada</string>
     <string name="only_tamil">Tamil</string>
+    <string name="only_bengali">Bengali</string>
     <string name="your_enrolled_programs">ನಿಮ್ಮ ದಾಖಲಾದ ಕಾರ್ಯಕ್ರಮಗಳು</string>
     <string name="view">ನೋಟ</string>
     <string name="from_your_dashboard">ನಿಮ್ಮ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್‌ನಿಂದ</string>
@@ -451,6 +452,7 @@
     <string name="hindi">HINDI / हिंदी</string>
     <string name="kannada">KANNADA / ಕನ್ನಡ</string>
     <string name="tamil">TAMIL / தமிழ்</string>
+    <string name="bengali">Bengali / বাংলা</string>
     <string name="please_choose_language_of_preference">ದಯವಿಟ್ಟು &quot;
 &quot;ಪ್ರಾಶಸ್ತ್ಯದ &quot;
 &quot;ಭಾಷೆಯನ್ನು ಆರಿಸಿ</string>

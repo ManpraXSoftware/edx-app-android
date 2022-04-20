@@ -1,4 +1,4 @@
-API_HOST_URL: 'https://subodha-lms.visionempowertrust.org/' # localhost is 10.0.2.2 in Android
+API_HOST_URL: 'https://subodha-lms.visionempowertrust.org/' #'https://staging-lms.visionempowertrust.org/' #'https://subodha-lms.visionempowertrust.org/' # localhost is 10.0.2.2 in Android
 ENVIRONMENT_DISPLAY_NAME: 'Localhost'
 PLATFORM_NAME: 'Your platform name here'
 PLATFORM_DESTINATION_NAME: 'example.com'

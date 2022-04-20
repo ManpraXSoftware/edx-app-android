@@ -22,7 +22,7 @@
                 android:gravity="center"
                 android:padding="10dp"
                 android:textSize="20dp"
-                android:textColor="@color/seach_hint_color"
+                android:textColor="@color/black"
                 android:layout_gravity="center" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>

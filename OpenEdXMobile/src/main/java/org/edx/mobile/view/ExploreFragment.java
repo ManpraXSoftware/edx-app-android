@@ -39,6 +39,9 @@ import org.edx.mobile.view.adapters.NewSubjectAdapter;
 import org.edx.mobile.view.adapters.OnRecyclerItemClickListener;
 import org.edx.mobile.view.adapters.OrganisationAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import retrofit2.Call;
 
 import static android.app.Activity.RESULT_OK;
@@ -165,6 +168,14 @@ public class ExploreFragment extends BaseFragment implements OnRecyclerItemClick
                     LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                     binding.rvExploreCourse.setLayoutManager(mLayoutManager);
                     binding.rvExploreCourse.setAdapter(newSubjectAdapter);
+                    List<DiscoverySubjectResult> discoverySubjects = new ArrayList<>();
+                /*    discoverySubjects.addAll(responseBody.getResults());
+                    discoverySubjects.addAll(responseBody.getResults());
+                    discoverySubjects.addAll(responseBody.getResults());
+                    discoverySubjects.addAll(responseBody.getResults());
+                    discoverySubjects.addAll(responseBody.getResults());
+                    discoverySubjects.addAll(responseBody.getResults());
+                    discoverySubjects.addAll(responseBody.getResults());*/
                     newSubjectAdapter.setSubjects(responseBody.getResults());
                     binding.shimmerLayout.setVisibility(View.GONE);
                 }
