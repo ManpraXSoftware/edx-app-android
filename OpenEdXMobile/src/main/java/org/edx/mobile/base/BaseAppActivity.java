@@ -1,6 +1,7 @@
 package org.edx.mobile.base;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +25,14 @@ public abstract class BaseAppActivity extends RoboAppCompatActivity implements C
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+     //   super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
+            super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+        }
+        //Or implement this for api 29 and above
+        else {
+            super.attachBaseContext(newBase);
+        }
     }
 
     @Override
