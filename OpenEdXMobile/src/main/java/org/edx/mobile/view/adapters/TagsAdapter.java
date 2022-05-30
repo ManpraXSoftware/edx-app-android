@@ -63,7 +63,11 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
         }
         //  gradientDrawable.setColor(colorCode);
         holder.itemBinding.tagColorCode.setBackground(gradientDrawable);
-        holder.itemBinding.tagsName.setText(model.getTerm());
+        if (model.getConverted_term() != null && !model.getConverted_term().isEmpty()) {
+            holder.itemBinding.tagsName.setText(model.getConverted_term());
+        } else {
+            holder.itemBinding.tagsName.setText(model.getTerm());
+        }
         holder.itemBinding.tagCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -1,5 +1,7 @@
 package org.edx.mobile.programs;
 
+import java.util.HashMap;
+
 public class MyProgramListModel {
     public String getProgramName() {
         return programName;
@@ -27,7 +29,19 @@ public class MyProgramListModel {
 
     private String programName;
     private String tagName;
+
+    public String getConvertedTagName() {
+        return convertedTagName;
+    }
+
+    public void setConvertedTagName(String convertedTagName) {
+        this.convertedTagName = convertedTagName;
+    }
+
+    private String convertedTagName;
+
     private String programUUid;
+
 
     public ResumePrograms getResume_program() {
         return resume_program;

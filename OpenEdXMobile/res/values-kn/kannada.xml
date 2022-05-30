@@ -806,6 +806,9 @@
     <string name="are_you_sure_you_want_to_logout">ನೀವು ಲಾಗ್ ಔಟ್ ಮಾಡಲು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</string>
     <string name="logout_confirmation">ನಿರ್ಗಮನ ದೃಢೀಕರಣ</string>
     <string name="status">ಸ್ಥಿತಿ</string>
+    <string name="completed">ಪೂರ್ಣಗೊಂಡಿದೆ</string>
+    <string name="not_started">ಪ್ರಾರಂಭಿಸಲಾಗಿಲ್ಲ</string>
+    <string name="in_progress">ಪ್ರಗತಿಯಲ್ಲಿದೆ</string>
     <string name="program_is_successfully_added_to_dashboard">ಪ್ರೋಗ್ರಾಂ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್‌ಗೆ ಸೇರಿಸಲಾಗಿದೆ</string>
     <string name="program_is_successfully_removed_to_dashboard">ಪ್ರೋಗ್ರಾಂ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್‌ಗೆ ತೆಗೆದುಹಾಕಲಾಗಿದೆ</string>
 </resources>

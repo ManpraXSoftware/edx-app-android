@@ -29,9 +29,11 @@ import org.edx.mobile.logger.Logger;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
 import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.programs.MyProgramListModel;
+import org.edx.mobile.programs.MyProgramTags;
 import org.edx.mobile.programs.ProgramTask;
 import org.edx.mobile.programs.Programs;
 import org.edx.mobile.programs.ResumeCourse;
+import org.edx.mobile.util.LocaleManager;
 import org.edx.mobile.view.adapters.MyProgramListAdapter;
 import org.edx.mobile.view.adapters.OnRecyclerItemClickListener;
 
@@ -41,6 +43,7 @@ import java.util.List;
 import de.greenrobot.event.EventBus;
 
 import static org.edx.mobile.view.ProgramActivity.PROGRAM;
+import static org.edx.mobile.view.ProgramActivity.PROGRAM_CONVERTED;
 import static org.edx.mobile.view.ProgramActivity.PROGRAM_UUID;
 
 public class MyProgramListFragment extends OfflineSupportBaseFragment
@@ -135,7 +138,14 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     }
 
     private void getMyPrograms() throws Exception {
-        ProgramTask discoveryTask = new ProgramTask(getContext(), loginPrefs.getUsername()) {
+        String selectedLanguage = "en";
+        if (getActivity()!=null){
+            if (!LocaleManager.getLanguagePref(getActivity()).isEmpty()) {
+                selectedLanguage = LocaleManager.getLanguagePref(getActivity());
+            }
+        }
+        ProgramTask discoveryTask = new ProgramTask(getContext(), loginPrefs.getUsername(),
+                selectedLanguage) {
             @Override
             public void onSuccess(@NonNull List<Programs> result) {
                 binding.progressBar.setVisibility(View.GONE);
@@ -146,7 +156,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                     List<MyProgramListModel> newProgramsListforTeacher = new ArrayList<>();
                     List<MyProgramListModel> newProgramsListforStudent = new ArrayList<>();
                     List<MyProgramListModel> newProgramsListforBoth = new ArrayList<>();
-                    for (Programs programs : result) {
+                  /*  for (Programs programs : result) {
                         if (programs.getTags() != null) {
                             for (String tag : programs.getTags()) {
                                 if (tag.toLowerCase().contains("teacher")) {
@@ -175,17 +185,53 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                                 }
                             }
                         }
+                    }*/
+                    for (Programs programs : result){
+                        if (programs.getTags()!=null){
+                            for (MyProgramTags myProgramTags : programs.getTags()){
+                                if (myProgramTags.getTag_title()!=null && myProgramTags.getTag_title().toLowerCase().contains("teacher")) {
+                                    MyProgramListModel myProgramListModel = new MyProgramListModel();
+                                    myProgramListModel.setTagName(myProgramTags.getConverted_tag_title());
+                                    myProgramListModel.setConvertedTagName(myProgramTags.getTag_title());
+                                   // myProgramListModel.setProgramName(programs.getProgram_title());
+                                    myProgramListModel.setProgramName(programs.getConverted_program_title());
+                                    myProgramListModel.setProgramUUid(programs.getProgram_uuid());
+                                    myProgramListModel.setResume_program(programs.getResumePrograms());
+                                    newProgramsListforTeacher.add(myProgramListModel);
+                                }
+                                if (myProgramTags.getTag_title()!=null && myProgramTags.getTag_title().toLowerCase().contains("student")) {
+                                    MyProgramListModel myProgramListModel = new MyProgramListModel();
+                                    myProgramListModel.setTagName(myProgramTags.getConverted_tag_title());
+                                    myProgramListModel.setConvertedTagName(myProgramTags.getTag_title());
+                                    // myProgramListModel.setProgramName(programs.getProgram_title());
+                                    myProgramListModel.setProgramName(programs.getConverted_program_title());
+                                    myProgramListModel.setProgramUUid(programs.getProgram_uuid());
+                                    myProgramListModel.setResume_program(programs.getResumePrograms());
+                                    newProgramsListforStudent.add(myProgramListModel);
+                                }
+                                if (myProgramTags.getTag_title()!=null && !myProgramTags.getTag_title().toLowerCase().contains("student") && !myProgramTags.getTag_title().toLowerCase().contains("teacher")) {
+                                    MyProgramListModel myProgramListModel = new MyProgramListModel();
+                                    myProgramListModel.setTagName(myProgramTags.getConverted_tag_title());
+                                    myProgramListModel.setConvertedTagName(myProgramTags.getTag_title());
+                                    // myProgramListModel.setProgramName(programs.getProgram_title());
+                                    myProgramListModel.setProgramName(programs.getConverted_program_title());
+                                    myProgramListModel.setProgramUUid(programs.getProgram_uuid());
+                                    myProgramListModel.setResume_program(programs.getResumePrograms());
+                                    newProgramsListforBoth.add(myProgramListModel);
+                                }
+                            }
+                        }
                     }
                     if (userType != null) {
                         if (userType.contains("teacher")) {
                             myProgramListModels.addAll(newProgramsListforTeacher);
-                            newProgramsListforTeacher.addAll(newProgramsListforBoth);
+                            myProgramListModels.addAll(newProgramsListforBoth);
                         } else {
                             myProgramListModels.addAll(newProgramsListforStudent);
-                            newProgramsListforStudent.addAll(newProgramsListforBoth);
+                            myProgramListModels.addAll(newProgramsListforBoth);
                         }
                     } else {
-                        newProgramsListforStudent.addAll(newProgramsListforBoth);
+                        myProgramListModels.addAll(newProgramsListforBoth);
                     }
                     //myProgramListModels.clear();
                     resumeCourse = null;
@@ -197,7 +243,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                                     resumeCourse = new ResumeCourse();
                                     resumeCourse.setBlock_id(programListModel.getResume_program().getBlock_id());
                                     resumeCourse.setCourse_id(programListModel.getResume_program().getCourse_id());
-                                    resumeCourse.setCourse_name(programListModel.getResume_program().getCourse_name());
+                                    resumeCourse.setCourse_name(programListModel.getResume_program().getConverted_course_name());
                                     resumeCourse.setProgramName(programListModel.getProgramName());
                                     resumeCourse.setTagName(programListModel.getTagName());
                                 } else {
@@ -288,17 +334,16 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     public void onItemClick(View view, Object item) {
         if (item instanceof MyProgramListModel) {
             MyProgramListModel myProgramListModel = (MyProgramListModel) item;
-         /*   environment.getRouter().showProgramsActivity(getActivity(), myProgramListModel.getTagName(),
-                    myProgramListModel.getProgramUUid());*/
             MainBottomDashboardFragment.suodhaIcon().setVisibility(View.GONE);
             MainBottomDashboardFragment.backIcon().setVisibility(View.VISIBLE);
-            ProgramFragment programFragment = new ProgramFragment();
+            NewProgramFragment newProgramFragment = new NewProgramFragment();
             Bundle bundle1 = new Bundle();
-            bundle1.putString(PROGRAM, myProgramListModel.getTagName());
+            bundle1.putString(PROGRAM, myProgramListModel.getConvertedTagName());
+            bundle1.putString(PROGRAM_CONVERTED, myProgramListModel.getTagName());
             bundle1.putString(PROGRAM_UUID, myProgramListModel.getProgramUUid());
-            programFragment.setArguments(bundle1);
+            newProgramFragment.setArguments(bundle1);
             getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.main_fragment, programFragment, ProgramFragment.TAG).addToBackStack(ProgramFragment.TAG)
+                    .replace(R.id.main_fragment, newProgramFragment, NewProgramFragment.TAG).addToBackStack(NewProgramFragment.TAG)
                     .commit();
         }
     }

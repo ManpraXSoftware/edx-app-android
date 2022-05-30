@@ -69,6 +69,18 @@ public class ProgramResultList {
     @SerializedName("type")
     @Expose
     private String type;
+
+    public String getConverted_title() {
+        return converted_title;
+    }
+
+    public void setConverted_title(String converted_title) {
+        this.converted_title = converted_title;
+    }
+
+    @SerializedName("converted_title")
+    @Expose
+    private String converted_title;
     @SerializedName("courses")
     @Expose
     private List<ProgramCoursesList> courses;

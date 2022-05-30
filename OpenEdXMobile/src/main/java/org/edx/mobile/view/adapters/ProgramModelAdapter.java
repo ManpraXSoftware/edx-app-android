@@ -13,7 +13,8 @@ import org.edx.mobile.discovery.model.ProgramResultList;
 
 import java.util.List;
 
-public class ProgramModelAdapter extends RecyclerView.Adapter<ProgramModelAdapter.ProgramViewHolder> {
+public class
+ProgramModelAdapter extends RecyclerView.Adapter<ProgramModelAdapter.ProgramViewHolder> {
 
     private Context context;
     private OnRecyclerItemClickListener listener;

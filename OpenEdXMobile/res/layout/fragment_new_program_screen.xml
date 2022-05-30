@@ -93,24 +93,16 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
-                        <!--add  several shimmer placeholder layout -->
-
-                        <include layout="@layout/shimmer_row_program"></include>
-
-                        <include layout="@layout/shimmer_row_program"></include>
-
-                        <include layout="@layout/shimmer_row_program"></include>
-
-                        <include layout="@layout/shimmer_row_program"></include>
-
-                        <include layout="@layout/shimmer_row_program"></include>
-
-                        <include layout="@layout/shimmer_row_program"></include>
-
-                        <include layout="@layout/shimmer_row_program"></include>
-
+                        <TextView
+                            android:id="@+id/shimmer_program"
+                            android:layout_width="match_parent"
+                            android:layout_height="18dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:background="@color/shimmer_placeholder"
+                            android:textColor="@color/organisation_color" />
                     </LinearLayout>
                 </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -123,6 +115,7 @@
                     android:layout_marginLeft="20dp"
                     android:scrollbars="horizontal"
                     android:layout_marginRight="20dp"
+                    android:visibility="gone"
                     android:id="@+id/rv_program" />
 
                 <androidx.appcompat.widget.AppCompatSpinner
@@ -131,6 +124,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_gravity="start"
+                    android:visibility="gone"
+                    android:layout_marginRight="20dp"
                     android:layout_marginLeft="20dp" />
 
                 <LinearLayout
@@ -232,7 +227,7 @@
                             <LinearLayout
                                 android:id="@+id/course_status"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="48dp"
                                 android:layout_below="@+id/liner_program_name"
                                 android:orientation="vertical">
 

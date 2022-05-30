@@ -49,4 +49,16 @@ public class CourseRuns {
     }
 
     private String course_status;
+
+    public String getConverted_course_title() {
+        return converted_course_title;
+    }
+
+    public void setConverted_course_title(String converted_course_title) {
+        this.converted_course_title = converted_course_title;
+    }
+
+    @SerializedName("converted_course_title")
+    @Expose
+    private String converted_course_title;
 }

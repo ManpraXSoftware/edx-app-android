@@ -1,5 +1,8 @@
 package org.edx.mobile.programs;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.HashMap;
 import java.util.List;
 
 public class Programs {
@@ -32,13 +35,32 @@ public class Programs {
         this.program_uuid = program_uuid;
     }
 
-    private List<String> tags;
+    public String getConverted_program_title() {
+        return converted_program_title;
+    }
 
-    public List<String> getTags() {
+    public void setConverted_program_title(String converted_program_title) {
+        this.converted_program_title = converted_program_title;
+    }
+
+    public List<MyProgramTags> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(List<MyProgramTags> tags) {
         this.tags = tags;
     }
+
+    private List<MyProgramTags> tags;
+
+    public ResumePrograms getResume_program() {
+        return resume_program;
+    }
+
+    public void setResume_program(ResumePrograms resume_program) {
+        this.resume_program = resume_program;
+    }
+    @SerializedName("converted_program_title")
+    private String converted_program_title;
+
 }

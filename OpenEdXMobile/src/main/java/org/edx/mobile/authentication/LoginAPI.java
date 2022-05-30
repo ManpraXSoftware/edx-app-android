@@ -97,20 +97,20 @@ public class LoginAPI {
         String grantType = "client_credentials";
         String token_type = "jwt";
         /*staging client id*/
-      //  String clientID = "YmYDTBGdwNDnaxbhvi5VwFggPhYvDQMQIUY1c9qa";
+        String clientID = "YmYDTBGdwNDnaxbhvi5VwFggPhYvDQMQIUY1c9qa";
         /*staging client secret*/
-      //  String client_secret = "zrFONrV8sl5D1kWdfW1UKeL5WLHhhovP74DhVHnhsDOqYp6IMDhCWq8Ms3PdxNps5bJ7EWg4tiLBiONwl0D86OJCgUpjfngaEMi2NhvBhSmRgv9HYvtNNL0nQV2QC80m";
+        String client_secret = "zrFONrV8sl5D1kWdfW1UKeL5WLHhhovP74DhVHnhsDOqYp6IMDhCWq8Ms3PdxNps5bJ7EWg4tiLBiONwl0D86OJCgUpjfngaEMi2NhvBhSmRgv9HYvtNNL0nQV2QC80m";
 
         /*production client id*/
-         String clientID = "XT7PFJbrRg8TtdRzDlC3B6kgmJYLG8jDjq9u0i87";
+      //   String clientID = "XT7PFJbrRg8TtdRzDlC3B6kgmJYLG8jDjq9u0i87";
         /*production client id*/
-                                                                                                                                                                                                                                                                                                                         String client_secret = "mtzJ9vwJKQtoG81ChC4uhfOv5SVpO46srimGyF9k0TsbC1JN7tAJ0QcOgRXotTVPhu2kspKr7bgWXFRWuOLh4JAFeIxrmIkwDleK3dPQMnxpWGuxiWMlfgvAti99t7eB";
+      //  String client_secret = "mtzJ9vwJKQtoG81ChC4uhfOv5SVpO46srimGyF9k0TsbC1JN7tAJ0QcOgRXotTVPhu2kspKr7bgWXFRWuOLh4JAFeIxrmIkwDleK3dPQMnxpWGuxiWMlfgvAti99t7eB";
         return loginService.getAccessTokenJwt(grantType, clientID, token_type, client_secret).execute();
     }
 
     @NonNull
-    public Response<List<Programs>> getMyprograms(String username) throws IOException {
-        return loginService.getMyPrograms(username).execute();
+    public Response<List<Programs>> getMyprograms(String username,String langg) throws IOException {
+        return loginService.getMyPrograms(username,langg).execute();
     }
 
     @NonNull
@@ -163,8 +163,8 @@ public class LoginAPI {
     }
 
     @NonNull
-    public List<Programs> getMyPrograms(String username) throws Exception {
-        final Response<List<Programs>> responsePrograms = getMyprograms(username);
+    public List<Programs> getMyPrograms(String username,String lang) throws Exception {
+        final Response<List<Programs>> responsePrograms = getMyprograms(username,lang);
         return responsePrograms.body();
     }
 

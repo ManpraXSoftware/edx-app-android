@@ -462,6 +462,9 @@
     <string name="are_you_sure_you_want_to_logout">நிச்சயமாக வெளியேற விரும்புகிறீர்களா?</string>
     <string name="logout_confirmation">வெளியேறுதல் உறுதிப்படுத்தல்</string>
     <string name="status">நிலை</string>
+    <string name="completed">நிறைவு</string>
+    <string name="not_started">துவங்கவில்லை</string>
+    <string name="in_progress">செயல்பாட்டில் உள்ளது</string>
     <string name="program_is_successfully_added_to_dashboard">நிரல் வெற்றிகரமாக டாஷ்போர்டில் சேர்க்கப்பட்டது</string>
     <string name="program_is_successfully_removed_to_dashboard">நிரல் வெற்றிகரமாக டாஷ்போர்டில் அகற்றப்பட்டது</string>
 </resources>

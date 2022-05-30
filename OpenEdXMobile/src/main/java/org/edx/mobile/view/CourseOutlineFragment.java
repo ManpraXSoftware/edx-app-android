@@ -228,7 +228,6 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
                         getActivity().setTitle(courseComponent.getDisplayName());
                     }
                 }
-
             }
 
             @Override

@@ -22,6 +22,7 @@ public class ProgramActivity extends BaseSingleFragmentActivity {
     @com.google.inject.Inject
     LoginPrefs loginPrefs;
     public static final String PROGRAM = "program";
+    public static final String PROGRAM_CONVERTED = "program_converted";
     public static final String PROGRAM_UUID = "program_uuid";
     public static Intent newIntent(Context activity, @Nullable @ScreenDef String screenName,String program,String program_uuid) {
         final Intent intent = new Intent(activity, ProgramActivity.class);

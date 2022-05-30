@@ -54,13 +54,13 @@ public class DiscoveryCourseAdapter extends RecyclerView.Adapter<DiscoveryCourse
                 holder.itemBinding.shimmerLayoutStatus.setVisibility(View.GONE);
                 if (model.getCourse_status().toLowerCase().equals("completed")) {
                     holder.itemBinding.lnCourseStatus.setBackgroundColor(Color.parseColor("#7CCBB7"));
-                    holder.itemBinding.courseStatus.setText("COMPLETED");
+                    holder.itemBinding.courseStatus.setText(context.getString(R.string.completed));
                 } else if (model.getCourse_status().toLowerCase().equals("not_started")) {
                     holder.itemBinding.lnCourseStatus.setBackgroundColor(Color.parseColor("#C8A1DE"));
-                    holder.itemBinding.courseStatus.setText("NOT STARTED");
+                    holder.itemBinding.courseStatus.setText(context.getString(R.string.not_started));
                 } else {
                     holder.itemBinding.lnCourseStatus.setBackgroundColor(Color.parseColor("#F9E2A6"));
-                    holder.itemBinding.courseStatus.setText("IN PROGRESS");
+                    holder.itemBinding.courseStatus.setText(context.getString(R.string.in_progress));
                 }
                 holder.itemBinding.cvCourseStatus.setVisibility(View.VISIBLE);
             }else{
@@ -93,12 +93,22 @@ public class DiscoveryCourseAdapter extends RecyclerView.Adapter<DiscoveryCourse
                     holder.itemBinding.contnueButton.setVisibility(View.GONE);
                 }
             }
-            holder.itemBinding.courseNameEnrolled.setText(model.getTitle());
+            if(model.getConverted_course_title()!=null && !model.getConverted_course_title().isEmpty()){
+                holder.itemBinding.courseNameEnrolled.setText(model.getConverted_course_title());
+            }else{
+                holder.itemBinding.courseNameEnrolled.setText(model.getTitle());
+            }
         } else {
             holder.itemBinding.courseCardNotEnrolled.setVisibility(View.VISIBLE);
             holder.itemBinding.courseCardEnrolled.setVisibility(View.GONE);
-            holder.itemBinding.courseName.setText(model.getTitle());
+           // holder.itemBinding.courseName.setText(model.getTitle());
+            if(model.getConverted_course_title()!=null && !model.getConverted_course_title().isEmpty()){
+                holder.itemBinding.courseName.setText(model.getConverted_course_title());
+            }else{
+                holder.itemBinding.courseName.setText(model.getTitle());
+            }
         }
+
         holder.itemBinding.viewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

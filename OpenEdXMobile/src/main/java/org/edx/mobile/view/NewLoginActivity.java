@@ -263,7 +263,7 @@ public class NewLoginActivity extends PresenterActivity<LoginPresenter, LoginPre
             activityLoginBinding.emailEt.setEnabled(false);
             activityLoginBinding.passwordEt.setEnabled(false);
             activityLoginBinding.forgotPasswordTv.setEnabled(false);
-            // activityLoginBinding.endUserAgreementTv.setEnabled(false);
+            //activityLoginBinding.endUserAgreementTv.setEnabled(false);
 
             LoginTask logintask = new LoginTask(this, activityLoginBinding.emailEt.getText().toString().trim(),
                     activityLoginBinding.passwordEt.getText().toString()) {

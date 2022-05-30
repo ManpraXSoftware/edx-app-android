@@ -462,6 +462,9 @@
     <string name="are_you_sure_you_want_to_logout">क्या आप लॉग आउट करना चाहते हैं?</string>
     <string name="logout_confirmation">लॉगआउट पुष्टि</string>
     <string name="status">स्थिति</string>
+    <string name="completed">पूरा किया हुआ</string>
+    <string name="not_started">शुरू नही हुआ</string>
+    <string name="in_progress">चालू</string>
     <string name="program_is_successfully_added_to_dashboard">प्रोग्राम को सफलतापूर्वक डैशबोर्ड में जोड़ा गया</string>
     <string name="program_is_successfully_removed_to_dashboard">प्रोग्राम को सफलतापूर्वक डैशबोर्ड पर हटा दिया गया</string>
 </resources>

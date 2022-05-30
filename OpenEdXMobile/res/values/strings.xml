@@ -815,6 +815,9 @@
     <string name="program_is_successfully_added_to_dashboard">program successfully added to the dashboard</string>
     <string name="program_is_successfully_removed_to_dashboard">program successfully removed to the dashboard</string>
     <string name="status">Status</string>
+    <string name="completed">COMPLETED</string>
+    <string name="not_started">NOT STARTED</string>
+    <string name="in_progress">IN PROGRESS</string>
     <string name="app_text">Subodha is a learning management system "\n"containing accessible
      resources for students with"\n" visual impairments and their educators.</string>
  <string name="welcome_screen_text">Welcome to subodha , your language preference and other details

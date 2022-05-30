@@ -33,7 +33,7 @@
     <application
         android:name=".base.RuntimeApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/subodha_icon"
         android:label="@string/app_name"
         tools:replace="android:supportsRtl"
         android:supportsRtl="${supportsRtl}"

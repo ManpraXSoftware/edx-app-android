@@ -1,5 +1,7 @@
 package org.edx.mobile.programs;
 
+import com.google.gson.annotations.SerializedName;
+
 public class ResumePrograms {
     private String block_id;
 
@@ -30,4 +32,14 @@ public class ResumePrograms {
     }
 
     private String course_name;
+
+    public String getConverted_course_name() {
+        return converted_course_name;
+    }
+
+    public void setConverted_course_name(String converted_course_name) {
+        this.converted_course_name = converted_course_name;
+    }
+    @SerializedName("converted_course_name")
+    private String converted_course_name;
 }

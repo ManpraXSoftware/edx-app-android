@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -44,6 +45,7 @@ import retrofit2.Call;
 import static android.app.Activity.RESULT_OK;
 import static org.edx.mobile.util.links.WebViewLink.Param.PROGRAMS;
 import static org.edx.mobile.view.ProgramActivity.PROGRAM;
+import static org.edx.mobile.view.ProgramActivity.PROGRAM_CONVERTED;
 import static org.edx.mobile.view.ProgramActivity.PROGRAM_UUID;
 import static org.edx.mobile.view.TagsFragmentActivity.COLOR_CODE;
 import static org.edx.mobile.view.TagsFragmentActivity.SUBJECT;
@@ -221,7 +223,7 @@ public class TagsFragment extends BaseFragment implements OnRecyclerItemClickLis
                                     binding.errorMsgTv.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_ACCESSIBILITY_FOCUSED);
                                 }
                             }
-                        }else{
+                        } else {
                             tagsAdapter.setTags(accordingNoUserType, userType);
                             if (accordingNoUserType == null) {
                                 binding.errorMsgTv.setText(getString(R.string.no_program_found));
@@ -256,16 +258,22 @@ public class TagsFragment extends BaseFragment implements OnRecyclerItemClickLis
             TagTermResult tagTermResult = (TagTermResult) item;
             //environment.getRouter().showProgramsActivity(getActivity(), tagTermResult.getTerm(), "");
 
-       /*   MainBottomDashboardFragment.suodhaIcon().setVisibility(View.GONE);
-            MainBottomDashboardFragment.backIcon().setVisibility(View.VISIBLE);*/
-
-            ProgramFragment programFragment = new ProgramFragment();
+          /*  ProgramFragment programFragment = new ProgramFragment();
             Bundle bundle1 = new Bundle();
             bundle1.putString(PROGRAM, tagTermResult.getTerm());
             bundle1.putString(PROGRAM_UUID, "");
             programFragment.setArguments(bundle1);
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.main_fragment, programFragment, ProgramFragment.TAG).addToBackStack(ProgramFragment.TAG)
+                    .commit();*/
+            NewProgramFragment newProgramFragment = new NewProgramFragment();
+            Bundle bundle1 = new Bundle();
+            bundle1.putString(PROGRAM, tagTermResult.getTerm());
+            bundle1.putString(PROGRAM_CONVERTED, tagTermResult.getConverted_term());
+            bundle1.putString(PROGRAM_UUID, "");
+            newProgramFragment.setArguments(bundle1);
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.main_fragment, newProgramFragment, NewProgramFragment.TAG).addToBackStack(NewProgramFragment.TAG)
                     .commit();
         }
     }

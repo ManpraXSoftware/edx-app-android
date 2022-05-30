@@ -159,7 +159,7 @@ public interface LoginService {
 
     @NonNull
     @GET(URL_MY_PROGRAMS)
-    Call<List<Programs>> getMyPrograms(@Query("username") String username);
+    Call<List<Programs>> getMyPrograms(@Query("username") String username,@Query("accept_language") String lang);
 
     @NonNull
     @GET(URL_MY_COURSES)

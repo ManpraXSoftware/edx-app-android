@@ -28,6 +28,7 @@
                     android:layout_gravity="right"
                     android:layout_marginTop="20dp"
                     android:contentDescription="close"
+                    android:padding="10dp"
                     android:src="@drawable/ic_baseline_close_24" />
 
                 <TextView
@@ -71,7 +72,7 @@
                     <LinearLayout
                         android:id="@+id/english"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="48dp"
                         android:layout_weight="1"
                         android:contentDescription="@string/english"
                         android:layout_marginRight="5dp"
@@ -88,7 +89,7 @@
                     <LinearLayout
                         android:id="@+id/hindi"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="48dp"
                         android:layout_weight="1"
                         android:contentDescription="@string/only_hindi"
                         android:layout_marginLeft="5dp"
@@ -113,7 +114,7 @@
                     <LinearLayout
                         android:id="@+id/kannada"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="48dp"
                         android:layout_weight="1"
                         android:layout_marginRight="5dp"
                         android:contentDescription="@string/only_kannada"
@@ -130,7 +131,7 @@
                     <LinearLayout
                         android:id="@+id/tamil"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="48dp"
                         android:layout_weight="1"
                         android:layout_marginLeft="5dp"
                         android:contentDescription="@string/only_tamil"
@@ -154,7 +155,7 @@
                     <LinearLayout
                         android:id="@+id/bengali"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="48dp"
                         android:layout_weight="1"
                         android:layout_marginRight="5dp"
                         android:contentDescription="@string/only_bengali"

@@ -431,6 +431,10 @@
     <string name="app_shortcut_name" translatable="false"></string>
     <string name="phonetic_app_name" translatable="false"></string>
     <string name="hello"><b>হ্যালো</b></string>
-    <string name="explore_subjects"><b>বিষয় অন্বেষণ</b></string>
+    <string name="explore_subjects"><b>বিষয় অন্বেষণ</b></string>ayushi@123
+
     <string name="our_partners"><b>বিষয়বস্তু অংশীদার</b></string>
+    <string name="completed">সম্পূর্ণ</string>
+    <string name="not_started">শুরু না</string>
+    <string name="in_progress">চলমান</string>
 </resources>

@@ -18,15 +18,18 @@ public class ProgramTask extends Task<List<Programs>> {
 
     @NonNull
     private final String username;
+    @NonNull
+    private final String lang;
 
-    public ProgramTask(Context context, String username) {
+    public ProgramTask(Context context, String username, String lang) {
         super(context);
         this.username = username;
+        this.lang = lang;
     }
 
     @Override
     @NonNull
     public List<Programs> call() throws Exception {
-        return loginAPI.getMyPrograms(username);
+        return loginAPI.getMyPrograms(username, lang);
     }
 }
