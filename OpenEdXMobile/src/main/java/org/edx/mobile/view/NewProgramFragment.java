@@ -221,7 +221,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                 // silently fail...
             }
         }
-        if (getActivity()!=null){
+        if (getActivity() != null) {
             programAdapter = new ArrayAdapter<String>(getActivity(),
                     R.layout.edx_spinner_dropdown_item, programsNameLists) {
                 @Override
@@ -245,22 +245,23 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                     String filterTitle = (String) parent.getItemAtPosition(position);
                     binding.optionSpinnerPrograms.setSelection(position, true);
                     binding.optionSpinnerPrograms.setSelected(true);
+//                    (programResultList.getConverted_title() != null && !programResultList.getConverted_title().isEmpty()) ||
                     for (ProgramResultList programResultList : programResultLists) {
-                        if ((programResultList.getConverted_title() != null && !programResultList.getConverted_title().isEmpty()) || (programResultList.getTitle()).equals(filterTitle)) {
+                        if ( (programResultList.getConverted_title()).equals(filterTitle) || (programResultList.getTitle()).equals(filterTitle)) {
                             if (programResultList.isProgramEnroll()) {
                                 binding.unenrollFromProgram.setVisibility(View.VISIBLE);
                                 binding.enrollInProgram.setVisibility(View.GONE);
                                 binding.ivCheck.setVisibility(View.VISIBLE);
-                                if (topic_converted_name!=null && !topic_converted_name.isEmpty()){
-                                    if (programResultList.getConverted_title()!=null && !programResultList.getConverted_title().isEmpty()){
+                                if (topic_converted_name != null && !topic_converted_name.isEmpty()) {
+                                    if (programResultList.getConverted_title() != null && !programResultList.getConverted_title().isEmpty()) {
                                         binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
                                                 topic_converted_name + " " + programResultList.getConverted_title() + " " + getString(R.string.program));
-                                    }else{
+                                    } else {
                                         binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
                                                 topic_converted_name + " " + programResultList.getTitle() + " " + getString(R.string.program));
-                                    }
+                                }
 
-                                }else{
+                                } else {
                                     binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
                                             topic_name + " " + programResultList.getTitle() + " " + getString(R.string.program));
                                 }
@@ -279,9 +280,9 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                             program_selected_uuid = programResultList.getUuid();
                             binding.shimmerLayoutProgramName.setVisibility(View.GONE);
                             binding.linerProgramName.setVisibility(View.VISIBLE);
-                            if (programResultList.getConverted_title()!=null && !programResultList.getConverted_title().isEmpty()){
+                            if (programResultList.getConverted_title() != null && !programResultList.getConverted_title().isEmpty()) {
                                 binding.programNameInCard.setText(programResultList.getConverted_title());
-                            }else{
+                            } else {
                                 binding.programNameInCard.setText(programResultList.getTitle());
                             }
 
@@ -336,6 +337,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                                 binding.errorMsgTv.setVisibility(View.VISIBLE);
                                 binding.errorMsgTv.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_ACCESSIBILITY_FOCUSED);
                             }
+
                         }
                     }
                 }
@@ -409,7 +411,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
 
 
     private void createToken() throws Exception {
-        if (this.getActivity()!=null) {
+        if (this.getActivity() != null) {
             DiscoveryTask discoveryTask = new DiscoveryTask(this.getActivity()) {
                 @Override
                 public void onSuccess(@NonNull AuthResponseJwt result) {
@@ -480,7 +482,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
 
                                 if (programResultLists.get(0).getConverted_title() != null && !programResultLists.get(0).getConverted_title().isEmpty()) {
                                     binding.programNameInCard.setText(programResultLists.get(0).getConverted_title());
-                                }else{
+                                } else {
                                     binding.programNameInCard.setText(programResultLists.get(0).getTitle());
                                 }
                                 binding.linerProgramName.setVisibility(View.VISIBLE);
@@ -531,16 +533,16 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                                 programResultLists.clear();
                                 programResultLists = responseBody.getProgramResultLists();
 
-                                    for (ProgramResultList programResultList : programResultLists) {
-                                        if (programResultList.getConverted_title() != null && !programResultList.getConverted_title().isEmpty()) {
-                                            if (!programsNameLists.contains(programResultList.getConverted_title()))
-                                                programsNameLists.add(programResultList.getConverted_title());
-                                        } else {
-                                            if (!programsNameLists.contains(programResultList.getTitle()))
-                                                programsNameLists.add(programResultList.getTitle());
-                                        }
-                                        boolean programEnroll = false;
-                                        if (myProgramListModels != null && myProgramListModels.size() > 0) {
+                                for (ProgramResultList programResultList : programResultLists) {
+                                    if (programResultList.getConverted_title() != null && !programResultList.getConverted_title().isEmpty()) {
+                                        if (!programsNameLists.contains(programResultList.getConverted_title()))
+                                            programsNameLists.add(programResultList.getConverted_title());
+                                    } else {
+                                        if (!programsNameLists.contains(programResultList.getTitle()))
+                                            programsNameLists.add(programResultList.getTitle());
+                                    }
+                                    boolean programEnroll = false;
+                                    if (myProgramListModels != null && myProgramListModels.size() > 0) {
                                         for (MyProgramListModel myProgramListModel : myProgramListModels) {
                                             if (myProgramListModel.getProgramUUid().equals(programResultList.getUuid())) {
                                                 programEnroll = true;
@@ -599,10 +601,6 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                     getMyCourseList();
                     getMyPrograms(false);
                     if (dataCreation.getAction().equals("enroll")) {
-                     /*   Toast.makeText(getContext(), topic_name + " " +
-                                        binding.programNameInCard.getText().toString() + " " +
-                                        getString(R.string.added_to_the_dashboard_you_can_view_the_course_now),
-                                Toast.LENGTH_LONG).show();*/
                         programModelAdapter.setProgramEnroll(true, program_selected_uuid);
                         discoveryCourseAdapter.setEnroll(true);
                         binding.enrollInProgram.setVisibility(View.GONE);
@@ -612,7 +610,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                             binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
                                     topic_converted_name + " " + binding.programNameInCard.getText().toString() +
                                     " " + getString(R.string.program));
-                        }else{
+                        } else {
                             binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
                                     topic_name + " " + binding.programNameInCard.getText().toString() +
                                     " " + getString(R.string.program));
@@ -621,9 +619,6 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                         binding.courseDatailUnenroll.setVisibility(View.GONE);
                         enrolledStatus(getString(R.string.program_is_successfully_added_to_dashboard));
                     } else {
-                       /* Toast.makeText(getContext(), getString(R.string.removed) + " " +
-                                topic_name + " " + binding.programNameInCard.getText().toString() + " " +
-                                getString(R.string.from_your_dashboard), Toast.LENGTH_LONG).show();*/
                         programModelAdapter.setProgramEnroll(false, program_selected_uuid);
                         discoveryCourseAdapter.setEnroll(false);
                         binding.enrollInProgram.setVisibility(View.VISIBLE);
@@ -684,7 +679,6 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
             program_selected_uuid = programResultList.getUuid();
             binding.shimmerLayoutProgramName.setVisibility(View.GONE);
             binding.linerProgramName.setVisibility(View.VISIBLE);
-            binding.programNameInCard.setText(programResultList.getTitle());
 
             if (programResultList.getAuthoring_organizations() != null && programResultList.getAuthoring_organizations().size() > 0) {
                 authorising_organisation = "";
@@ -801,7 +795,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
             public void onSuccess(@NonNull List<EnrolledCoursesResponse> result) {
                 if (result != null) {
                     enrolledCoursesResponses = new ArrayList<EnrolledCoursesResponse>(result);
-
+                    Log.e("ResponseCompleteData", enrolledCoursesResponses + "");
                     if (!program_uuid.isEmpty()) {
                         //boolean enroll = false;
                         if (programResultLists != null && programResultLists.size() > 0) {
@@ -851,17 +845,18 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void getMyPrograms(boolean check) throws Exception {
         String selectedLanguage = "en";
-        if (getActivity()!=null){
+        if (getActivity() != null) {
             if (!LocaleManager.getLanguagePref(getActivity()).isEmpty()) {
                 selectedLanguage = LocaleManager.getLanguagePref(getActivity());
             }
         }
-        ProgramTask discoveryTask = new ProgramTask(getContext(), loginPrefs.getUsername(),selectedLanguage) {
+        ProgramTask discoveryTask = new ProgramTask(getContext(), loginPrefs.getUsername(), selectedLanguage) {
             @Override
             public void onSuccess(@NonNull List<Programs> result) throws Exception {
                 if (check) {
                     checkTokenExpire();
                 }
+                Log.e("getMyPrograms>>>>",result+"");
                 if (result != null) {
                     String userType = loginPrefs.getUserType();
                     List<MyProgramListModel> newProgramsListforTeacher = new ArrayList<>();
@@ -897,10 +892,10 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                             }
                         }
                     }*/
-                    for (Programs programs : result){
-                        if (programs.getTags()!=null){
-                            for (MyProgramTags myProgramTags : programs.getTags()){
-                                if (myProgramTags.getTag_title()!=null && myProgramTags.getTag_title().toLowerCase().contains("teacher")) {
+                    for (Programs programs : result) {
+                        if (programs.getTags() != null) {
+                            for (MyProgramTags myProgramTags : programs.getTags()) {
+                                if (myProgramTags.getTag_title() != null && myProgramTags.getTag_title().toLowerCase().contains("teacher")) {
                                     MyProgramListModel myProgramListModel = new MyProgramListModel();
                                     myProgramListModel.setTagName(myProgramTags.getConverted_tag_title());
                                     myProgramListModel.setProgramName(programs.getProgram_title());
@@ -908,7 +903,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                                     myProgramListModel.setResume_program(programs.getResumePrograms());
                                     newProgramsListforTeacher.add(myProgramListModel);
                                 }
-                                if (myProgramTags.getTag_title()!=null && myProgramTags.getTag_title().toLowerCase().contains("student")) {
+                                if (myProgramTags.getTag_title() != null && myProgramTags.getTag_title().toLowerCase().contains("student")) {
                                     MyProgramListModel myProgramListModel = new MyProgramListModel();
                                     myProgramListModel.setTagName(myProgramTags.getConverted_tag_title());
                                     myProgramListModel.setProgramName(programs.getProgram_title());
@@ -916,7 +911,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                                     myProgramListModel.setResume_program(programs.getResumePrograms());
                                     newProgramsListforStudent.add(myProgramListModel);
                                 }
-                                if (myProgramTags.getTag_title()!=null && !myProgramTags.getTag_title().toLowerCase().contains("student") && !myProgramTags.getTag_title().toLowerCase().contains("teacher")) {
+                                if (myProgramTags.getTag_title() != null && !myProgramTags.getTag_title().toLowerCase().contains("student") && !myProgramTags.getTag_title().toLowerCase().contains("teacher")) {
                                     MyProgramListModel myProgramListModel = new MyProgramListModel();
                                     myProgramListModel.setTagName(myProgramTags.getConverted_tag_title());
                                     myProgramListModel.setProgramName(programs.getProgram_title());
