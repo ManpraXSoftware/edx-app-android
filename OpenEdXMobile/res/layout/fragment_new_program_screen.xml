@@ -125,6 +125,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_gravity="start"
                     android:visibility="gone"
+                    android:contentDescription=""
                     android:layout_marginRight="20dp"
                     android:layout_marginLeft="20dp" />
 

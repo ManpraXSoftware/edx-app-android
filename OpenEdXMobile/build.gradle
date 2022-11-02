@@ -238,7 +238,7 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'de.hdodenhof:circleimageview:2.0.0'
-   // implementation 'uk.co.chrisjenx:calligraphy:2.1.0'
+    // implementation 'uk.co.chrisjenx:calligraphy:2.1.0'
     implementation 'uk.co.chrisjenx:calligraphy:2.1.0'
     implementation 'io.github.inflationx:viewpump:2.0.3'
     implementation 'io.github.inflationx:calligraphy3:3.1.1'
@@ -257,7 +257,7 @@ dependencies {
     //adding Room ORM for Database
     // database
     implementation 'android.arch.persistence.room:rxjava2:2.4.1'
-   // annotationProcessor 'android.arch.persistence.room:compiler:2.4.1'
+    // annotationProcessor 'android.arch.persistence.room:compiler:2.4.1'
 /*    implementation 'android.arch.persistence.room:runtime:1.0.0'
     annotationProcessor 'android.arch.persistence.room:compiler:1.0.0'*/
 
@@ -379,7 +379,7 @@ android {
         renderscriptSupportModeEnabled true
 
         vectorDrawables.useSupportLibrary = true
-        resConfigs "en", "US" , "hi" , "ta" , "kn" , "bn"
+        resConfigs "en", "US", "hi", "ta", "kn", "bn"
         // test configuration
         testApplicationId 'org.edx.mobile.test'
 
@@ -524,6 +524,8 @@ android {
 
     buildTypes {
         debug {
+            buildConfigField("String", "clientID", "\"YmYDTBGdwNDnaxbhvi5VwFggPhYvDQMQIUY1c9qa\"")
+            buildConfigField("String", "client_secret", "\"zrFONrV8sl5D1kWdfW1UKeL5WLHhhovP74DhVHnhsDOqYp6IMDhCWq8Ms3PdxNps5bJ7EWg4tiLBiONwl0D86OJCgUpjfngaEMi2NhvBhSmRgv9HYvtNNL0nQV2QC80m\"")
             testCoverageEnabled true
             pseudoLocalesEnabled true
             // Set device language to "en_XA" to test glyphs, or "ar_XB" to test RTL support
@@ -537,6 +539,9 @@ android {
         }
 
         release {
+
+            buildConfigField("String", "clientID", "\"XT7PFJbrRg8TtdRzDlC3B6kgmJYLG8jDjq9u0i87\"")
+            buildConfigField("String", "client_secret", "\"mtzJ9vwJKQtoG81ChC4uhfOv5SVpO46srimGyF9k0TsbC1JN7tAJ0QcOgRXotTVPhu2kspKr7bgWXFRWuOLh4JAFeIxrmIkwDleK3dPQMnxpWGuxiWMlfgvAti99t7eB\"")
             // Only apply release signing configurations if keystore.properties is available
             if (project.file('signing/keystore.properties').exists()) {
                 apply from: 'signing/signing.gradle'

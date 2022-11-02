@@ -4,11 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,10 +39,14 @@ import org.edx.mobile.view.adapters.SearchListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 
 import static android.app.Activity.RESULT_OK;
+import static org.edx.mobile.view.ProgramActivity.PROGRAM;
+import static org.edx.mobile.view.ProgramActivity.PROGRAM_CONVERTED;
+import static org.edx.mobile.view.ProgramActivity.PROGRAM_UUID;
 
 public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemClickListener {
     public static final String TAG = SeachScreenFragment.class.getCanonicalName();
@@ -95,10 +102,51 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                 getActivity().onBackPressed();
             }
         });
+
+        binding.editSearch.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (binding.editSearch.getText().toString().length() > 0) {
+                    binding.searchResults.setVisibility(View.VISIBLE);
+                    binding.shimmerLayout.setVisibility(View.VISIBLE);
+                    binding.searchResult.setVisibility(View.GONE);
+                    binding.searchCount.setVisibility(View.GONE);
+                    getSearchResult(binding.editSearch.getText().toString());
+                } else {
+                    Toast.makeText(getActivity(), "Nothing to search", Toast.LENGTH_LONG).show();
+                }
+                return true;
+            }
+            return false;
+        });
+        binding.editSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH){
+                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(binding.seachIcon.getWindowToken(), 0); //Do whatever you intend to do when user click on search button in keyboard.
+                    if (binding.editSearch.getText().toString().length() > 0) {
+
+                        binding.searchResults.setVisibility(View.VISIBLE);
+                        binding.shimmerLayout.setVisibility(View.VISIBLE);
+                        binding.searchResult.setVisibility(View.GONE);
+                        binding.searchCount.setVisibility(View.GONE);
+                        getSearchResult(binding.editSearch.getText().toString());
+                    } else {
+                        Toast.makeText(getActivity(), "Nothing to search", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                return true;
+            }
+
+        });
         binding.seachIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(binding.seachIcon.getWindowToken(), 0);
                 if (binding.editSearch.getText().toString().length() > 0) {
+
                     binding.searchResults.setVisibility(View.VISIBLE);
                     binding.shimmerLayout.setVisibility(View.VISIBLE);
                     binding.searchResult.setVisibility(View.GONE);
@@ -208,7 +256,8 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                 searchListAdapter.setSearchResult(newcombinationOfSeachResults);
                 binding.searchCount.setVisibility(View.VISIBLE);
                 binding.searchCount.setText(String.valueOf(searchListAdapter.getItemCount()) + " " + getString(R.string.results_for) + " " + binding.editSearch.getText().toString().trim());
-                binding.searchCount.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+//                binding.searchCount.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+                binding.seachIcon.setFocusable(true);
             }
 
             @Override
@@ -323,7 +372,18 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
     public void onItemClick(View view, Object item) {
         if (item instanceof CombinationOfSeachResult) {
             CombinationOfSeachResult combinationOfSeachResult = (CombinationOfSeachResult) item;
-            environment.getRouter().showProgramsActivity(getActivity(), combinationOfSeachResult.getTagName(), /*combinationOfSeachResult.getProgram_id()*/ "");
+            environment.getRouter().showProgramsActivity(getActivity(), combinationOfSeachResult.getTagName(), /*combinationOfSeachResult.getProgram_id()*/ combinationOfSeachResult.getProgram_id());
+
+//            NewProgramFragment newProgramFragment = new NewProgramFragment();
+//            Bundle bundle1 = new Bundle();
+//            bundle1.putString(PROGRAM, combinationOfSeachResult.getProgramName());
+//            bundle1.putString(PROGRAM_CONVERTED, combinationOfSeachResult.getTagName());
+//            bundle1.putString(PROGRAM_UUID, combinationOfSeachResult.getProgram_id());
+//            newProgramFragment.setArguments(bundle1);
+//            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.main_fragment, newProgramFragment, NewProgramFragment.TAG).addToBackStack(NewProgramFragment.TAG)
+//                    .commit();
+
         }
     }
 }

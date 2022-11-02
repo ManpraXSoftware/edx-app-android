@@ -8,5 +8,7 @@
     <integer name="speed_test_timeout_in_milliseconds">5000</integer>
     <integer name="threshold_kbps_for_video">9</integer>
     <integer name="delay_speed_test_in_milliseconds">10000</integer>
+    <string name="CLIENT_ID">YmYDTBGdwNDnaxbhvi5VwFggPhYvDQMQIUY1c9qa</string>
+    <string name="CLIENT_SECRET">zrFONrV8sl5D1kWdfW1UKeL5WLHhhovP74DhVHnhsDOqYp6IMDhCWq8Ms3PdxNps5bJ7EWg4tiLBiONwl0D86OJCgUpjfngaEMi2NhvBhSmRgv9HYvtNNL0nQV2QC80m</string>
     <string name="speed_test_url" translatable="false">http://bnotions.s3.amazonaws.com/128kb.file</string>
 </resources>

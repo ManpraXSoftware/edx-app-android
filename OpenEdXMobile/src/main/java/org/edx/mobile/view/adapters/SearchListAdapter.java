@@ -43,6 +43,12 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Se
                 listener.onItemClick(view,model);
             }
         });
+        holder.itemBinding.arrowRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onItemClick(view,model);
+            }
+        });
     }
 
     @Override

@@ -44,7 +44,8 @@
     <string name="no_course_info">பாடத் தகவல் இல்லை</string>
     <string name="continue_string">தொடரவும்</string>
     <string name="program_name">நிரல் பெயர்</string>
-    <string name="continue_learning">தொடர்ந்து கற்றல்</string>
+<!--    <string name="continue_learning">தொடர்ந்து கற்றல்</string>-->
+    <string name="continue_learning">சமீபத்தில் அணுகப்பட்ட படிப்பு</string>
     <string name="no_enrolled_in_any_programs">எந்த திட்டங்களிலும் பதிவு செய்யப்படவில்லை</string>
     <string name="no_course_found">பாடம் எதுவும் கிடைக்கவில்லை</string>
     <string name="no_program_found">நிரல் எதுவும் இல்லை</string>

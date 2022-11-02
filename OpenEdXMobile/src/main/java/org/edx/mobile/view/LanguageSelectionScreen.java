@@ -9,6 +9,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -27,7 +28,7 @@ import static org.edx.mobile.view.Router.EXTRA_SCREEN_NAME;
 
 public class LanguageSelectionScreen extends BaseFragmentActivity {
     private Button mNextButton;
-    private ImageView mBackArrow;
+    private TextView mBackArrow;
     private LinearLayout mEnglish;
     private LinearLayout mHindi;
     private LinearLayout mKannada;

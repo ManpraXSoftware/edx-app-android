@@ -162,7 +162,8 @@
     <string name="label_settings">Settings</string>
     <!-- Title of Account screen -->
     <string name="title_account">User Account Button</string>
-    <string name="search">Search Button</string>
+<!--    <string name="search">Search Button</string>-->
+    <string name="search">Search Course</string>
 
     <!-- Help Dialog Place Holder messages -->
     <!-- Reset password alert dialog title -->
@@ -738,7 +739,7 @@
     <string name="back">Back</string>
     <string name="email_editbox">email</string>
     <string name="password_editbox">password</string>
-    <string name="my_dashboard">MY"\n"DASHBOARD</string>
+    <string name="my_dashboard">MY DASHBOARD</string>
     <string name="explore_course">EXPLORE"\n"COURSES</string>
     <string name="explore_courses_without_second_line">EXPLORE COURSES</string>
     <string name="courses">Courses</string>
@@ -778,7 +779,8 @@
     <string name="enrolled_in">Enrolled in</string>
     <string name="program">Program</string>
     <string name="our_partners"><b>Content Partners</b></string>
-    <string name="search_subodha">Search Subodha</string>
+<!--    <string name="search_subodha">Search Subodha</string>-->
+    <string name="search_subodha">Type the course name</string>
     <string name="search_results"><b>Search Results</b></string>
     <string name="view_more_results">View More Results</string>
     <string name="organisations">Organisations</string>
@@ -795,7 +797,8 @@
     <string name="no_program_found">No Program Found</string>
     <string name="no_course_found">No Course Found</string>
     <string name="no_enrolled_in_any_programs">No Enrolled In Any programs</string>
-    <string name="continue_learning">CONTINUE LEARNING</string>
+<!--    <string name="continue_learning">CONTINUE LEARNING</string>-->
+    <string name="continue_learning">Recently accessed course</string>
     <string name="program_name">PROGRAM NAME</string>
     <string name="continue_string">CONTINUE</string>
     <string name="go_to_last_visit_section">go to last visit section</string>
@@ -812,8 +815,8 @@
     <string name="for_teacher">FOR TEACHERS</string>
     <string name="are_you_sure_you_want_to_logout">Are you sure you want to log out?</string>
     <string name="logout_confirmation">Logout confirmation</string>
-    <string name="program_is_successfully_added_to_dashboard">program successfully added to the dashboard</string>
-    <string name="program_is_successfully_removed_to_dashboard">program successfully removed to the dashboard</string>
+    <string name="program_is_successfully_added_to_dashboard">Program successfully added to the dashboard</string>
+    <string name="program_is_successfully_removed_to_dashboard">Program successfully removed from the dashboard</string>
     <string name="status">Status</string>
     <string name="completed">COMPLETED</string>
     <string name="not_started">NOT STARTED</string>
@@ -822,4 +825,6 @@
      resources for students with"\n" visual impairments and their educators.</string>
  <string name="welcome_screen_text">Welcome to subodha , your language preference and other details
   are saved and can be changed fro your account menu</string>
+ <string name="skip">Skip</string>
+ <string name="skip_language_preference">Skip Language Preference</string>
 </resources>

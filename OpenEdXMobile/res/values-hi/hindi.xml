@@ -39,7 +39,8 @@
     <string name="no_course_info">कोई पाठ्यक्रम जानकारी नहीं</string>
     <string name="continue_string">जारी रखें</string>
     <string name="program_name">कार्यक्रम का नाम</string>
-    <string name="continue_learning">सीखना जारी रखें</string>
+<!--    <string name="continue_learning">सीखना जारी रखें</string>-->
+    <string name="continue_learning">हाल ही में एक्सेस किया गया कोर्स</string>
     <string name="no_enrolled_in_any_programs">किसी भी कार्यक्रम में नामांकित नहीं</string>
     <string name="no_course_found">कोई कोर्स नहीं मिला</string>
     <string name="no_program_found">कोई कार्यक्रम नहीं मिला</string>

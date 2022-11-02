@@ -136,7 +136,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.announceForAccessibility("Programs Screen");
+//        view.announceForAccessibility("Programs Screen");
         mApp = new App();
         if (!program_uuid.isEmpty()) {
             binding.selectAProgram.setVisibility(View.GONE);
@@ -243,8 +243,8 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
                     String filterTitle = (String) parent.getItemAtPosition(position);
-                    binding.optionSpinnerPrograms.setSelection(position, true);
-                    binding.optionSpinnerPrograms.setSelected(true);
+//                    binding.optionSpinnerPrograms.setSelection(position, true);
+//                    binding.optionSpinnerPrograms.setSelected(true);
 //                    (programResultList.getConverted_title() != null && !programResultList.getConverted_title().isEmpty()) ||
                     for (ProgramResultList programResultList : programResultLists) {
                         if ( (programResultList.getConverted_title()).equals(filterTitle) || (programResultList.getTitle()).equals(filterTitle)) {
@@ -643,7 +643,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         //Setting message manually and performing action on button click
         builder.setMessage(msg)
                 .setCancelable(false)
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.label_ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
                     }
@@ -826,7 +826,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                     }
                 }
                 binding.iconProgress.setVisibility(View.GONE);
-                initSpinner();
+//                initSpinner();
                 programModelAdapter.notifyDataSetChanged();
             }
 

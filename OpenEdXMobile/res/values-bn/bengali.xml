@@ -23,7 +23,8 @@
     <string name="no_course_info">কোন কোর্স তথ্য</string>
     <string name="continue_string">চালিয়ে যান</string>
     <string name="program_name">অনুষ্ঠানের নাম</string>
-    <string name="continue_learning">শেখা চালিয়ে যান</string>
+<!--    <string name="continue_learning">শেখা চালিয়ে যান</string>-->
+    <string name="continue_learning">সম্প্রতি অ্যাক্সেস করা কোর্স</string>
     <string name="no_enrolled_in_any_programs">কোন প্রোগ্রামে নথিভুক্ত করা নেই</string>
     <string name="no_course_found">কোন কোর্স পাওয়া যায়নি</string>
     <string name="no_program_found">কোন প্রোগ্রাম পাওয়া যায়নি</string>

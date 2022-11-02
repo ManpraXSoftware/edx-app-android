@@ -55,6 +55,9 @@
                                 android:layout_marginStart="20dp"
                                 android:cursorVisible="false"
                                 android:background="@null"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:imeOptions="actionSearch"
                                 android:layout_centerVertical="true" />
 
                             <ImageView

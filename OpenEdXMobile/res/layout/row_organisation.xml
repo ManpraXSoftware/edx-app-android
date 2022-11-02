@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,8 +27,9 @@
                     android:scaleType="centerInside"
                     android:fitsSystemWindows="true"
                     android:padding="20dp"
-                    android:contentDescription="@string/organisations" />
+                    tools:ignore="ContentDescription" />
 
+<!--                android:contentDescription="@string/organisations"-->
                 <TextView
                     android:id="@+id/organisation_name"
                     android:layout_width="wrap_content"
