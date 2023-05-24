@@ -86,6 +86,7 @@ public class MyCoursesListFragment extends OfflineSupportBaseFragment
     }
 
     public MyCoursesListFragment setExploreButtonClick(OnExploreButtonClick answerChangeListener) {
+
         this.onExploreButtonClick = answerChangeListener;
         return this;
     }

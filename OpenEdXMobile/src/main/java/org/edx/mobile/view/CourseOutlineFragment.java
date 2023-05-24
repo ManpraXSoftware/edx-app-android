@@ -634,8 +634,11 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
         }
 
         if (!isOnCourseOutline) {
+            final Map<String, String> values = new HashMap<>();
+            values.put(Analytics.Keys.NAME, courseComponent.getInternalName());
+            values.put(Analytics.Keys.Uid, courseComponent.getCourseId());
             environment.getAnalyticsRegistry().trackScreenView(
-                    Analytics.Screens.SECTION_OUTLINE, courseData.getCourse().getId(), courseComponent.getInternalName());
+                    Analytics.Screens.SECTION_OUTLINE, courseData.getCourse().getId(), courseComponent.getInternalName(),values);
 
             // Update the last accessed item reference if we are in the course subsection view
             lastAccessManager.setLastAccessed(courseComponent.getCourseId(), courseComponent.getId());

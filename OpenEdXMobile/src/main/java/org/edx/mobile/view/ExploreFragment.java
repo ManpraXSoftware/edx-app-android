@@ -33,6 +33,7 @@ import org.edx.mobile.discovery.model.ResponseError;
 import org.edx.mobile.discovery.net.course.CourseApi;
 import org.edx.mobile.http.HttpStatus;
 import org.edx.mobile.http.HttpStatusException;
+import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.util.LocaleManager;
 import org.edx.mobile.view.adapters.NewSubjectAdapter;
@@ -40,7 +41,9 @@ import org.edx.mobile.view.adapters.OnRecyclerItemClickListener;
 import org.edx.mobile.view.adapters.OrganisationAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 
@@ -223,7 +226,10 @@ public class ExploreFragment extends BaseFragment implements OnRecyclerItemClick
     @Override
     public void onItemClick(View view, Object item) {
         if (item instanceof DiscoverySubjectResult) {
+
             DiscoverySubjectResult discoverySubjectResult = (DiscoverySubjectResult) item;
+            sendAnalyticsCourseDetail(discoverySubjectResult);
+
            /* environment.getRouter().showTagsActivity(getActivity(), discoverySubjectResult.getName(),
                     discoverySubjectResult.getCardColorName());*/
             MainBottomDashboardFragment.suodhaIcon().setVisibility(View.GONE);
@@ -237,5 +243,11 @@ public class ExploreFragment extends BaseFragment implements OnRecyclerItemClick
                     .replace(R.id.main_fragment, tagsFragment, TagsFragment.TAG).addToBackStack(TagsFragment.TAG)
                     .commit();
         }
+    }
+    void sendAnalyticsCourseDetail(DiscoverySubjectResult discoverySubjectResult){
+        final Map<String, String> values = new HashMap<>();
+        values.put(Analytics.Keys.NAME,discoverySubjectResult.getName());
+        values.put(Analytics.Keys.Uid,discoverySubjectResult.getUuid());
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.SUBJECT_SELECTED,null,null,values);
     }
 }

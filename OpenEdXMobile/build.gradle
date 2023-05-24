@@ -586,7 +586,7 @@ android.applicationVariants.all { variant ->
     generateTask.dependsOn(configureTask)
     // Task that generate google-services.json from the configs and execute before the
     // google-services.json validation
-    if (firebaseEnabled) {
+ /*   if (firebaseEnabled) {
         def serviceJsonTask = "generate$variantName" + "GoogleServicesJson"
         project.task(serviceJsonTask).doFirst {
             AndroidHelper.saveGoogleServicesJson(project, firebaseConfig)
@@ -594,7 +594,7 @@ android.applicationVariants.all { variant ->
         def googleServicesJsonValidationTask = "process$variantName" + "GoogleServices"
         tasks.getByName(googleServicesJsonValidationTask).dependsOn(serviceJsonTask)
     }
-
+*/
     // The task that generates auth_config.json for the config and executes for the Microsoft
     // authentication
     if (isMicrosoftEnabled) {

@@ -23,8 +23,12 @@ import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import org.edx.mobile.R;
 import org.edx.mobile.base.BaseFragmentActivity;
 import org.edx.mobile.deeplink.ScreenDef;
+import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.util.IntentFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.edx.mobile.view.Router.EXTRA_PATH_ID;
 import static org.edx.mobile.view.Router.EXTRA_SCREEN_NAME;
@@ -47,6 +51,7 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
     private LoginPrefs loginPrefs;
     private MainBottomDashboardFragment mainBottomDashboardFragment;
     private static ImageView back_arrow;
+    int i=1,ii=1;
 
     public static Intent newIntent(@Nullable @ScreenDef String screenName, @Nullable String pathId) {
         // These flags will make it so we only have a single instance of this activity,
@@ -96,6 +101,7 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
         iv_space_explore_course.setVisibility(View.INVISIBLE);
         ln_myDashboard.setSelected(true);
         ln_exploreCourse.setSelected(false);
+        sendAnalyticsCourseDetailDeshBoard();
       /*  getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_fragment, myCoursesListFragment, MyCoursesListFragment.TAG)
                 .commit();*/
@@ -113,6 +119,7 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
             @Override
             public void onClick(View view) {
 
+                sendAnalyticsCourseDetailDeshBoard();
                 suodhaIcon.setVisibility(View.VISIBLE);
                 back_arrow.setVisibility(View.GONE);
                 //   getSupportFragmentManager().popBackStack();
@@ -149,6 +156,8 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
             @Override
             public void onClick(View view) {
 
+
+                sendAnalyticsCourseDetailExplore_Cousre();
                 suodhaIcon.setVisibility(View.VISIBLE);
                 back_arrow.setVisibility(View.GONE);
               /*  for(int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); ++i) {
@@ -224,6 +233,7 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
         //  this.finish();
         //  final Fragment fragment = (Fragment) getSupportFragmentManager().findFragmentByTag("tag");
         // int count = getSupportFragmentManager().getBackStackEntryCount();
+
         if (getSupportFragmentManager() != null && getSupportFragmentManager().getBackStackEntryCount() == 1) {
             suodhaIcon.setVisibility(View.VISIBLE);
             back_arrow.setVisibility(View.GONE);
@@ -248,8 +258,20 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
         iv_space_my_dashboard.setVisibility(View.INVISIBLE);
         ln_exploreCourse.setSelected(true);
         ln_myDashboard.setSelected(false);
+
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_fragment, exploreBottomFragment, ExploreFragment.TAG)
                 .commit();
+    }
+    void sendAnalyticsCourseDetailExplore_Cousre(){
+
+
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.EXPLORE_COURSE,null,null,null);
+        i+=1;
+    }
+    void sendAnalyticsCourseDetailDeshBoard(){
+
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.MY_DASHBOARD,null,null,null);
+        ii+=1;
     }
 }

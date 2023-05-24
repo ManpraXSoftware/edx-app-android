@@ -24,6 +24,7 @@ import org.edx.mobile.R;
 import org.edx.mobile.core.IEdxEnvironment;
 import org.edx.mobile.databinding.NewUserProfileBinding;
 import org.edx.mobile.http.callback.Callback;
+import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.analytics.AnalyticsRegistry;
 import org.edx.mobile.module.prefs.UserPrefs;
 import org.edx.mobile.profiles.ScrollingPreferenceParent;
@@ -42,7 +43,9 @@ import org.edx.mobile.util.LocaleManager;
 import org.edx.mobile.view.adapters.PreferedLanguageAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.greenrobot.event.EventBus;
 import roboguice.RoboGuice;
@@ -133,6 +136,7 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
         viewHolder.closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 getActivity().finish();
             }
         });
@@ -183,7 +187,9 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
             @Override
             public void onClick(View view) {
                 if (!viewHolder.english.isSelected()) {
+
                     LocaleManager.setNewLocale(getContext(), "en");
+                    sendAnalyticsCourseDetail(getContext().getString(R.string.english));
                     viewHolder.english.setSelected(true);
                     viewHolder.hindi.setSelected(false);
                     viewHolder.kannada.setSelected(false);
@@ -201,6 +207,7 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
             public void onClick(View view) {
                 if (!viewHolder.hindi.isSelected()) {
                     LocaleManager.setNewLocale(getContext(), "hi");
+                    sendAnalyticsCourseDetail(getContext().getString(R.string.hindi));
                     viewHolder.hindi.setSelected(true);
                     viewHolder.english.setSelected(false);
                     viewHolder.kannada.setSelected(false);
@@ -218,6 +225,7 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
             public void onClick(View view) {
                 if (!viewHolder.kannada.isSelected()) {
                     LocaleManager.setNewLocale(getContext(), "kn");
+                    sendAnalyticsCourseDetail(getContext().getString(R.string.kannada));
                     viewHolder.kannada.setSelected(true);
                     viewHolder.hindi.setSelected(false);
                     viewHolder.english.setSelected(false);
@@ -235,6 +243,7 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
             public void onClick(View view) {
                 if (!viewHolder.tamil.isSelected()) {
                     LocaleManager.setNewLocale(getContext(), "ta");
+                    sendAnalyticsCourseDetail(getContext().getString(R.string.tamil));
                     viewHolder.tamil.setSelected(true);
                     viewHolder.hindi.setSelected(false);
                     viewHolder.kannada.setSelected(false);
@@ -252,6 +261,7 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
             public void onClick(View view) {
                 if (!viewHolder.bengali.isSelected()) {
                     LocaleManager.setNewLocale(getContext(), "bn");
+                    sendAnalyticsCourseDetail(getContext().getString(R.string.bengali));
                     viewHolder.bengali.setSelected(true);
                     viewHolder.tamil.setSelected(false);
                     viewHolder.hindi.setSelected(false);
@@ -501,4 +511,12 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
         alert.setTitle(R.string.logout_confirmation);
         alert.show();
     }
+    void sendAnalyticsCourseDetail(String Language){
+        final Map<String, String> values = new HashMap<>();
+        values.put(Analytics.Keys.LANGUAGE_CHANGED,Language);
+        values.put(Analytics.Keys.NAME,getUsername());
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.LANGUAGE_CHANGED,null,"Language Change",values);
+    }
+
+
 }

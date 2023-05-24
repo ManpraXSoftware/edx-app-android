@@ -19,12 +19,19 @@ public class EnrollAndUnenrollData {
         public String getProgram_uuid() {
             return program_uuid;
         }
+        public String getProgram_Name() {
+            return program_name;
+        }
 
         public void setProgram_uuid(String program_uuid) {
             this.program_uuid = program_uuid;
         }
+        public void setProgram_name(String program_name) {
+            this.program_name = program_name;
+        }
 
         private String program_uuid;
+        private String program_name;
         private String action;
         private String username;
 

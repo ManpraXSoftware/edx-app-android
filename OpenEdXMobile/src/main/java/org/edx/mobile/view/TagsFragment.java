@@ -26,19 +26,23 @@ import org.edx.mobile.base.BaseFragment;
 import org.edx.mobile.core.IEdxEnvironment;
 import org.edx.mobile.databinding.FragmentTagsScreenBinding;
 import org.edx.mobile.discovery.DiscoveryCallback;
+import org.edx.mobile.discovery.model.DiscoverySubjectResult;
 import org.edx.mobile.discovery.model.ResponseError;
 import org.edx.mobile.discovery.model.TagModel;
 import org.edx.mobile.discovery.model.TagTermResult;
 import org.edx.mobile.discovery.net.course.CourseApi;
 import org.edx.mobile.http.HttpStatus;
 import org.edx.mobile.http.HttpStatusException;
+import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.util.LocaleManager;
 import org.edx.mobile.view.adapters.OnRecyclerItemClickListener;
 import org.edx.mobile.view.adapters.TagsAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 
@@ -256,6 +260,7 @@ public class TagsFragment extends BaseFragment implements OnRecyclerItemClickLis
     public void onItemClick(View view, Object item) {
         if (item instanceof TagTermResult) {
             TagTermResult tagTermResult = (TagTermResult) item;
+            sendAnalyticsCourseDetail(tagTermResult);
             //environment.getRouter().showProgramsActivity(getActivity(), tagTermResult.getTerm(), "");
 
           /*  ProgramFragment programFragment = new ProgramFragment();
@@ -277,4 +282,11 @@ public class TagsFragment extends BaseFragment implements OnRecyclerItemClickLis
                     .commit();
         }
     }
+
+    void sendAnalyticsCourseDetail(TagTermResult tagTermResult){
+        final Map<String, String> values = new HashMap<>();
+        values.put(Analytics.Keys.NAME,tagTermResult.getTerm());
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.SELECT_BOARD,null,null,values);
+    }
+
 }

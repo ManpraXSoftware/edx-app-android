@@ -6,12 +6,16 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.inject.Inject;
 
 import org.edx.mobile.base.BaseSingleFragmentActivity;
 import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.util.Config;
 import org.edx.mobile.view.NewUserProfileFragment;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserProfileActivity extends BaseSingleFragmentActivity {
     public static final String EXTRA_USERNAME = "username";
@@ -43,4 +47,5 @@ public class UserProfileActivity extends BaseSingleFragmentActivity {
      //   return UserProfileFragment.newInstance(getIntent().getStringExtra(EXTRA_USERNAME));
         return NewUserProfileFragment.newInstance(getIntent().getStringExtra(EXTRA_USERNAME),getIntent().getStringExtra(EXTRA_USERTYPE));
     }
+
 }

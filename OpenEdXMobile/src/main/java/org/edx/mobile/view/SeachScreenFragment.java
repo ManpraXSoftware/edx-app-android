@@ -32,13 +32,16 @@ import org.edx.mobile.discovery.model.SearchResult;
 import org.edx.mobile.discovery.model.SearchResultList;
 import org.edx.mobile.discovery.model.SearchTags;
 import org.edx.mobile.discovery.net.course.CourseApi;
+import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.util.LocaleManager;
 import org.edx.mobile.view.adapters.OnRecyclerItemClickListener;
 import org.edx.mobile.view.adapters.SearchListAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -178,6 +181,9 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
     }
 
     private void getSearchResult(String query) {
+
+        sendAnalyticsCourseDetail(query);
+
         final String token = loginPrefs.getAuthorizationHeaderJwt();
         if (token != null) {
             Log.d("Token_JWT ", token);
@@ -213,6 +219,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                                             combinationOfSeachResult.setProgram_id(searchTags.getProgram_id());
                                             combinationOfSeachResult.setTagName(tag);
                                             combinationOfSeachResults.add(combinationOfSeachResult);
+
                                         }
                                     }
                                 }
@@ -385,5 +392,16 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
 //                    .commit();
 
         }
+    }
+    void sendAnalyticsCourseDetail(String search){
+        final Map<String, String> values = new HashMap<>();
+        values.put(Analytics.Keys.SEARCH_STRING,search);
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.COURSES_SEARCH,null,null,values);
+    }
+    void sendAnalyticsCourseDetail(SearchResultList searchResultList ){
+        final Map<String, String> values = new HashMap<>();
+        values.put(Analytics.Keys.NAME,searchResultList.getTitle());
+        values.put(Analytics.Keys.Uid,searchResultList.getUuid());
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.DISCOVERY_COURSES_SEARCH,null,null,values);
     }
 }

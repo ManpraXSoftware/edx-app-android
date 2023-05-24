@@ -39,6 +39,7 @@ import org.edx.mobile.databinding.FragmentProgrammeScreenBinding;
 import org.edx.mobile.discovery.DiscoveryCallback;
 import org.edx.mobile.discovery.model.AuthoringOrganisations;
 import org.edx.mobile.discovery.model.CourseRuns;
+import org.edx.mobile.discovery.model.DiscoverySubjectResult;
 import org.edx.mobile.discovery.model.EnrollAndUnenrollData;
 import org.edx.mobile.discovery.model.EnrollResponse;
 import org.edx.mobile.discovery.model.ProgramCoursesList;
@@ -53,6 +54,7 @@ import org.edx.mobile.loader.AsyncTaskResult;
 import org.edx.mobile.loader.CoursesAsyncLoader;
 import org.edx.mobile.logger.Logger;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
+import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.myCourse.MyCourseTask;
 import org.edx.mobile.programs.MyProgramListModel;
@@ -70,7 +72,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 
@@ -95,6 +99,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
     private IEdxEnvironment environment;
     private String authorising_organisation = "";
     private String program_selected_uuid = "";
+    private String program_selected_name="";
     private static String program_uuid = "";
     List<ProgramResultList> programResultLists = new ArrayList<>();
     private App mApp;
@@ -170,11 +175,14 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
             @Override
             public void onClick(View view) {
                 binding.enrollInProgram.setEnabled(false);
+
                 String strings = discoveryCourseAdapter.getProgramCoursesIds();
+
                 EnrollAndUnenrollData.DataCreation dataCreation = new EnrollAndUnenrollData.DataCreation();
                 dataCreation.setCourses(strings);
                 dataCreation.setAction("enroll");
                 dataCreation.setProgram_uuid(program_selected_uuid);
+                dataCreation.setProgram_name(program_selected_name);
                 dataCreation.setUsername(loginPrefs.getUsername());
                 try {
                     enrollcourse(dataCreation);
@@ -190,8 +198,10 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                 String strings = discoveryCourseAdapter.getProgramCoursesIds();
                 EnrollAndUnenrollData.DataCreation dataCreation = new EnrollAndUnenrollData.DataCreation();
                 dataCreation.setCourses(strings);
+
                 dataCreation.setAction("unenroll");
                 dataCreation.setProgram_uuid(program_selected_uuid);
+                dataCreation.setProgram_name(program_selected_name);
                 dataCreation.setUsername(loginPrefs.getUsername());
                 try {
                     enrollcourse(dataCreation);
@@ -243,11 +253,15 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
                     String filterTitle = (String) parent.getItemAtPosition(position);
+
+
 //                    binding.optionSpinnerPrograms.setSelection(position, true);
 //                    binding.optionSpinnerPrograms.setSelected(true);
 //                    (programResultList.getConverted_title() != null && !programResultList.getConverted_title().isEmpty()) ||
                     for (ProgramResultList programResultList : programResultLists) {
                         if ( (programResultList.getConverted_title()).equals(filterTitle) || (programResultList.getTitle()).equals(filterTitle)) {
+                            sendAnalyticsfilter(programResultList);
+
                             if (programResultList.isProgramEnroll()) {
                                 binding.unenrollFromProgram.setVisibility(View.VISIBLE);
                                 binding.enrollInProgram.setVisibility(View.GONE);
@@ -278,6 +292,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                             binding.lnEnrollInfo.setVisibility(View.VISIBLE);
                             binding.errorMsgTv.setVisibility(View.GONE);
                             program_selected_uuid = programResultList.getUuid();
+                            program_selected_name=programResultList.getTitle();
                             binding.shimmerLayoutProgramName.setVisibility(View.GONE);
                             binding.linerProgramName.setVisibility(View.VISIBLE);
                             if (programResultList.getConverted_title() != null && !programResultList.getConverted_title().isEmpty()) {
@@ -610,14 +625,20 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                             binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
                                     topic_converted_name + " " + binding.programNameInCard.getText().toString() +
                                     " " + getString(R.string.program));
+
+                            sendAnalyticsEnroll(enrollAndUnenrollData);
                         } else {
+
                             binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
                                     topic_name + " " + binding.programNameInCard.getText().toString() +
                                     " " + getString(R.string.program));
+                            sendAnalyticsEnroll(enrollAndUnenrollData);
                         }
                         binding.courseDatailEnroll.setVisibility(View.VISIBLE);
                         binding.courseDatailUnenroll.setVisibility(View.GONE);
                         enrolledStatus(getString(R.string.program_is_successfully_added_to_dashboard));
+
+
                     } else {
                         programModelAdapter.setProgramEnroll(false, program_selected_uuid);
                         discoveryCourseAdapter.setEnroll(false);
@@ -628,6 +649,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                         binding.courseDatailEnroll.setVisibility(View.GONE);
                         binding.courseDatailUnenroll.setVisibility(View.VISIBLE);
                         enrolledStatus(getString(R.string.program_is_successfully_removed_to_dashboard));
+                        sendAnalyticsUnroll(enrollAndUnenrollData);
                     }
                 }
             }
@@ -658,6 +680,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
     @Override
     public void onItemClick(View view, Object item) {
         if (item instanceof ProgramResultList) {
+
            /* ProgramResultList programResultList = (ProgramResultList) item;
             if (programResultList.isProgramEnroll()) {
                 binding.unenrollFromProgram.setVisibility(View.VISIBLE);
@@ -733,6 +756,8 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
             }*/
         } else {
             CourseRuns courseRuns = (CourseRuns) item;
+
+            sendAnalyticsCourseView(courseRuns);
             if (enrolledCoursesResponses != null) {
                 for (EnrolledCoursesResponse enrolledCoursesResponse : enrolledCoursesResponses) {
                     if (enrolledCoursesResponse.getCourse() != null) {
@@ -966,6 +991,34 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         };
         discoveryTask.execute();
     }
+
+    void sendAnalyticsfilter(ProgramResultList programResultList){
+        final Map<String, String> values = new HashMap<>();
+        values.put(Analytics.Keys.NAME,programResultList.getConverted_title());
+        values.put(Analytics.Keys.Uid,programResultList.getUuid());
+
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.SELECT_PROGRAM,null,null,values);
+    }
+    void sendAnalyticsEnroll(EnrollAndUnenrollData enrollAndUnenrollData){
+        final Map<String, String> values = new HashMap<>();
+        values.put(Analytics.Keys.NAME,enrollAndUnenrollData.getData().getProgram_Name());
+        values.put(Analytics.Keys.Uid,enrollAndUnenrollData.getData().getProgram_uuid());
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.Enroll_Program,null,null,values);
+    }
+    void sendAnalyticsUnroll(EnrollAndUnenrollData enrollAndUnenrollData){
+        final Map<String, String> values = new HashMap<>();
+        values.put(Analytics.Keys.NAME,enrollAndUnenrollData.getData().getProgram_Name());
+        values.put(Analytics.Keys.Uid,enrollAndUnenrollData.getData().getProgram_uuid());
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.Unroll_Program,null,null,values);
+    }
+    void sendAnalyticsCourseView(CourseRuns courseRuns ){
+        final Map<String, String> values = new HashMap<>();
+        values.put(Analytics.Keys.NAME,courseRuns.getConverted_course_title());
+        values.put(Analytics.Keys.Uid,courseRuns.getUuid());
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.View_Program,null,null,values);
+    }
+
+
 
 }
 

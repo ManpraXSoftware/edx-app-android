@@ -37,7 +37,9 @@ import org.edx.mobile.view.custom.ProgressWheel;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.widget.FrameLayout.LayoutParams;
 
@@ -96,8 +98,11 @@ public class CourseTabsDashboardFragment extends TabsBaseFragment {
             // The case where we have valid course data
             getActivity().setTitle(courseData.getCourse().getName());
             setHasOptionsMenu(courseData.getCourse().getCoursewareAccess().hasAccess());
+            final Map<String, String> values = new HashMap<>();
+            values.put(Analytics.Keys.NAME,courseData.getCourse().getName());
+            values.put(Analytics.Keys.Uid,courseData.getCourse().getId());
             environment.getAnalyticsRegistry().trackScreenView(
-                    Analytics.Screens.COURSE_DASHBOARD, courseData.getCourse().getId(), null);
+                    Analytics.Screens.COURSE_DASHBOARD, courseData.getCourse().getId(), null,values);
 
             if (!courseData.getCourse().getCoursewareAccess().hasAccess()) {
                 final boolean auditAccessExpired = courseData.getAuditAccessExpires() != null &&
@@ -251,8 +256,12 @@ public class CourseTabsDashboardFragment extends TabsBaseFragment {
                 new FragmentItemModel.FragmentStateListener() {
                     @Override
                     public void onFragmentSelected() {
+
+                        final Map<String, String> values = new HashMap<>();
+                        values.put(Analytics.Keys.NAME,courseData.getCourse().getName());
+                        values.put(Analytics.Keys.Uid,courseData.getCourse().getId());
                         environment.getAnalyticsRegistry().trackScreenView(Analytics.Screens.COURSE_OUTLINE,
-                                courseData.getCourse().getId(), null);
+                                courseData.getCourse().getId(), null,values);
                         setDownloadProgressMenuItemVisibility(true);
                     }
                 }));

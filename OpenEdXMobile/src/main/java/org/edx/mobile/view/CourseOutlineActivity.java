@@ -11,6 +11,9 @@ import org.edx.mobile.model.api.CourseUpgradeResponse;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
 import org.edx.mobile.module.analytics.Analytics;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import roboguice.inject.InjectExtra;
 
 import static org.edx.mobile.view.Router.EXTRA_BUNDLE;
@@ -54,9 +57,12 @@ public class CourseOutlineActivity extends BaseSingleFragmentActivity {
 
         if (courseComponentId == null) {
             EnrolledCoursesResponse courseData = (EnrolledCoursesResponse) courseBundle.getSerializable(EXTRA_COURSE_DATA);
+            final Map<String, String> values = new HashMap<>();
+            values.put(Analytics.Keys.NAME,courseData.getCourse().getName());
+            values.put(Analytics.Keys.Uid,courseData.getCourse().getId());
             environment.getAnalyticsRegistry().trackScreenView(
                     isVideoMode ? Analytics.Screens.VIDEOS_COURSE_VIDEOS : Analytics.Screens.COURSE_OUTLINE,
-                    courseData.getCourse().getId(), null);
+                    courseData.getCourse().getId(),null, values);
 
             setTitle(courseData.getCourse().getName());
         }

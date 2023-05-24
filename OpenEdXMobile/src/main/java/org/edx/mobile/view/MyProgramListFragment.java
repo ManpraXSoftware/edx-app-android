@@ -27,6 +27,7 @@ import org.edx.mobile.loader.AsyncTaskResult;
 import org.edx.mobile.loader.CoursesAsyncLoader;
 import org.edx.mobile.logger.Logger;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
+import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.programs.MyProgramListModel;
 import org.edx.mobile.programs.MyProgramTags;
@@ -38,7 +39,9 @@ import org.edx.mobile.view.adapters.MyProgramListAdapter;
 import org.edx.mobile.view.adapters.OnRecyclerItemClickListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.greenrobot.event.EventBus;
 
@@ -71,6 +74,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     }
 
     public MyProgramListFragment setExploreButtonClick(MyCoursesListFragment.OnExploreButtonClick answerChangeListener) {
+
         this.onExploreButtonClick = answerChangeListener;
         return this;
     }
@@ -342,6 +346,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
             bundle1.putString(PROGRAM_CONVERTED, myProgramListModel.getTagName());
             bundle1.putString(PROGRAM_UUID, myProgramListModel.getProgramUUid());
             newProgramFragment.setArguments(bundle1);
+            sendAnalyticsCourseDetail(myProgramListModel);
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.main_fragment, newProgramFragment, NewProgramFragment.TAG).addToBackStack(NewProgramFragment.TAG)
                     .commit();
@@ -400,4 +405,12 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     protected void loadData(boolean showProgress) {
         getLoaderManager().restartLoader(MY_COURSE_LOADER_ID, null, this);
     }
+    void sendAnalyticsCourseDetail( MyProgramListModel myProgramListModel){
+
+        final Map<String, String> values = new HashMap<>();
+        values.put("Program Name", myProgramListModel.getConvertedTagName());
+        values.put("Uid", myProgramListModel.getProgramUUid());
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.MY_PROGRAM, myProgramListModel.getProgramUUid(), "Click", values);
+    }
+
 }

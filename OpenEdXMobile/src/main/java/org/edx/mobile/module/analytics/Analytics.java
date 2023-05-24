@@ -433,7 +433,7 @@ public interface Analytics {
                                           @NonNull String playMedium);
 
     interface Keys {
-        String NAME = "name";
+        String NAME = "Name";
         String USER_ID = "user_id";
         String OLD_TIME = "old_time";
         String NEW_TIME = "new_time";
@@ -452,6 +452,8 @@ public interface Analytics {
         String NO_OF_VIDEOS = "number_of_videos";
         String FULLSCREEN = "settings.video.fullscreen";
         String LANGUAGE = "language";
+        String SELECT_LANGAUGE="Select language";
+        String LANGUAGE_CHANGED = "Language Change";
         String TARGET_URL = "target_url";
         String URL = "url";
         String CONTEXT = "context";
@@ -462,7 +464,7 @@ public interface Analytics {
         String PROVIDER = "provider";
         String BLOCK_ID = "block_id";
         String SUBSECTION_ID = "subsection_id";
-        String UNIT_ID = "unit_id";
+        String UNIT_ID = "Unit_Id";
         String SUPPORTED = "supported";
         String DEVICE_ORIENTATION = "device-orientation";
 
@@ -476,7 +478,7 @@ public interface Analytics {
         String CATEGORY = "category";
         String LABEL = "label";
         String ACTION = "action";
-        String SEARCH_STRING = "search_string";
+        String SEARCH_STRING = "Search_String";
         String TOPIC_ID = "topic_id";
         String THREAD_ID = "thread_id";
         String RESPONSE_ID = "response_id";
@@ -494,7 +496,7 @@ public interface Analytics {
         String TOTAL_DOWNLOADABLE_VIDEOS = "total_downloadable_videos";
         String REMAINING_DOWNLOADABLE_VIDEOS = "remaining_downloadable_videos";
         // Subjects
-        String SUBJECT_ID = "subject_id";
+        String SUBJECT_ID = "Subject_Id";
         // Firebase Remote Configs keys for A/A test
         // Ref: https://openedx.atlassian.net/browse/LEARNER-7394
         String EXPERIMENT = "experiment";
@@ -502,6 +504,8 @@ public interface Analytics {
         String AA_EXPERIMENT = "aa_experiment";
         // Video Play Medium
         String PLAY_MEDIUM = "play_medium";
+        String Uid="Uid";
+
     }
 
     interface Values {
@@ -678,6 +682,7 @@ public interface Analytics {
         String USER_LOGOUT = "User Logout";
         String BROWSER_LAUNCHED = "Browser Launched";
         String LANGUAGE_CLICKED = "Language Clicked";
+        String LANGUAGE_CHANGED = "Language Change";
         String SIGN_UP = "Sign up Clicked";
         String FIND_COURSES = "Find Courses Clicked";
         String CREATE_ACCOUNT_CLICKED = "Create Account Clicked";
@@ -686,6 +691,7 @@ public interface Analytics {
         String COURSE_ENROLL_SUCCESS = "Course Enroll Success";
         String COURSE_UPGRADE_SUCCESS = "Course Upgrade Success";
         String DISCOVERY_COURSES_SEARCH = "Discovery: Courses Search";
+        String COURSES_SEARCH = "Courses Search";
         String SPEED = "Connected Speed Report";
         String SOCIAL_CERTIFICATE_SHARED = "Shared a certificate";
         String SOCIAL_COURSE_DETAIL_SHARED = "Shared a course";
@@ -714,6 +720,9 @@ public interface Analytics {
         String BULK_DOWNLOAD_TOGGLE_ON = "Bulk Download Toggle On";
         String BULK_DOWNLOAD_TOGGLE_OFF = "Bulk Download Toggle Off";
         String SUBJECT_DISCOVERY = "Subject Discovery";
+        String SELECT_BOARD="SELECT BROAD";
+        String SUBJECT_SELECTED = "SUBJECT SELECTED";
+        String SELECT_PROGRAM="SELECT PROGRAM";
         // Settings events
         String DOWNLOAD_TO_SD_CARD_ON = "Download to sd-card On";
         String DOWNLOAD_TO_SD_CARD_OFF = "Download to sd-card Off";
@@ -724,6 +733,14 @@ public interface Analytics {
         String CAST_CONNECTED = "Cast: Connected";
         String CAST_DISCONNECTED = "Cast: Disconnected";
         String VIDEO_CASTED = "Cast: Video Casted";
+
+        String EXPLORE_COURSE="Explore Course";
+        String MY_DASHBOARD="MY Dashboard";
+        String MY_PROGRAM="MY PROGRAM";
+        String UNIT_SELECTED="Unit Selected";
+        String Enroll_Program="Enroll Program";
+        String Unroll_Program="Unroll Program";
+        String View_Program="View Program";
     }
 
     /**
