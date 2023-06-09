@@ -434,7 +434,7 @@ public interface Analytics {
 
     interface Keys {
         String NAME = "Name";
-        String USER_ID = "user_id";
+        String USER_ID = "User_Id";
         String OLD_TIME = "old_time";
         String NEW_TIME = "new_time";
         String NEW_SPEED = "new_speed";
@@ -452,7 +452,7 @@ public interface Analytics {
         String NO_OF_VIDEOS = "number_of_videos";
         String FULLSCREEN = "settings.video.fullscreen";
         String LANGUAGE = "language";
-        String SELECT_LANGAUGE="Select language";
+        String LANGAUGE_NAME="Language Name";
         String LANGUAGE_CHANGED = "Language Change";
         String TARGET_URL = "target_url";
         String URL = "url";
@@ -505,6 +505,25 @@ public interface Analytics {
         // Video Play Medium
         String PLAY_MEDIUM = "play_medium";
         String Uid="Uid";
+        String PROGRAM_NAME="PROGRAM NAME";
+        String ENROLL_PROGRAM_NAME="ENROLL PROGRAM NAME";
+        String ENROLL_PROGRAM_UID="ENROLL PROGRAM UID";
+        String UNROLL_PROGRAM_NAME="UNROLL PROGRAM NAME";
+        String UNROLL_PROGRAM_UID="UNROLL PROGRAM UID";
+        String TOPIC_NAME="TOPIC NAME";
+        String ProgramUUid="Program UUid";
+
+        String RECENT_PROGRAM_NAME="RECENT PROGRAM NAME";
+        String RECENT_TOPIC_NAME="RECENT TOPIC NAME";
+        String RECENT_PROGRAM_UID="RECENT PROGRAM UID";
+
+        String VIEW_PORGRAM_NAME="VIEW PROGRAM NAME";
+        String VIEW_PORGRAM_UID="PROGRAM UID";
+        String SECTION_OUTLINE_NAME = "SSECTION OUTLINE NAME";
+        String SECTION_OUTLINE_UID = "SECTION NAME UID";
+        String UNIT_NAME="UNIT NAME";
+        String UNIT_UID="UNIT UID";
+
 
     }
 
@@ -721,6 +740,7 @@ public interface Analytics {
         String BULK_DOWNLOAD_TOGGLE_OFF = "Bulk Download Toggle Off";
         String SUBJECT_DISCOVERY = "Subject Discovery";
         String SELECT_BOARD="SELECT BROAD";
+        String SELECTED_TOPIC="SELECTED TOPIC";
         String SUBJECT_SELECTED = "SUBJECT SELECTED";
         String SELECT_PROGRAM="SELECT PROGRAM";
         // Settings events
@@ -737,10 +757,12 @@ public interface Analytics {
         String EXPLORE_COURSE="Explore Course";
         String MY_DASHBOARD="MY Dashboard";
         String MY_PROGRAM="MY PROGRAM";
-        String UNIT_SELECTED="Unit Selected";
+        String RECENT_COURSE="RECENT COUSRE";
+        String YOUR_ENROLL_PROGRAM="Your Enroll Program";
         String Enroll_Program="Enroll Program";
         String Unroll_Program="Unroll Program";
         String View_Program="View Program";
+        String SELECTED_LANGAUGE="Select language";
     }
 
     /**

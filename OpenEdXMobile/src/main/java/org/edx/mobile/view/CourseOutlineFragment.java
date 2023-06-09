@@ -635,8 +635,8 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
 
         if (!isOnCourseOutline) {
             final Map<String, String> values = new HashMap<>();
-            values.put(Analytics.Keys.NAME, courseComponent.getInternalName());
-            values.put(Analytics.Keys.Uid, courseComponent.getCourseId());
+            values.put(Analytics.Keys.SECTION_OUTLINE_NAME, courseComponent.getInternalName());
+            values.put(Analytics.Keys.SECTION_OUTLINE_UID, courseComponent.getCourseId());
             environment.getAnalyticsRegistry().trackScreenView(
                     Analytics.Screens.SECTION_OUTLINE, courseData.getCourse().getId(), courseComponent.getInternalName(),values);
 

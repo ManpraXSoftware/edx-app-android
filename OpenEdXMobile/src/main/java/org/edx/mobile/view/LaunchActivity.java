@@ -23,6 +23,7 @@ public class LaunchActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // finally change the color
+        com.google.firebase.analytics.FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true);
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.status_bar_color));
         final ActivityLaunchBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_launch);
        /* String osVersionText = String.format("%s %s", getString(R.string.android_os_version), android.os.Build.VERSION.RELEASE);

@@ -163,7 +163,7 @@ public interface LoginService {
 
     @NonNull
     @GET(URL_MY_COURSES)
-    Call<List<EnrolledCoursesResponse>> getMyCourses(@Query("username") String username);
+    Call<List<EnrolledCoursesResponse>> getMyCourses(@Query("program_uuid") String program_uuid,@Query("username") String username);
 
     @NonNull
     @GET(URL_MY_COURSES_MULTILINGUAL_TRANSLATION)

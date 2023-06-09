@@ -513,9 +513,8 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
     }
     void sendAnalyticsCourseDetail(String Language){
         final Map<String, String> values = new HashMap<>();
-        values.put(Analytics.Keys.LANGUAGE_CHANGED,Language);
-        values.put(Analytics.Keys.NAME,getUsername());
-        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.LANGUAGE_CHANGED,null,"Language Change",values);
+        values.put(Analytics.Keys.LANGAUGE_NAME,Language);
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.SELECTED_LANGAUGE,null,"Language Change",values);
     }
 
 

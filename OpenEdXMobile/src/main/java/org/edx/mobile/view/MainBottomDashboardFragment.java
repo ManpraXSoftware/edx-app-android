@@ -75,6 +75,7 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // finally change the color
+        com.google.firebase.analytics.FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true);
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.status_bar_color));
         setContentView(R.layout.activity_main_bottom_dashboard_fragment);
         toolbar = findViewById(R.id.main_toolbar);
@@ -264,14 +265,16 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
                 .commit();
     }
     void sendAnalyticsCourseDetailExplore_Cousre(){
-
-
-        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.EXPLORE_COURSE,null,null,null);
+        final Map<String, String> values = new HashMap<>();
+        values.put(Analytics.Keys.USER_ID,environment.getLoginPrefs().getCurrentUserProfile().id.toString());
+        //environment.getLoginPrefs().getUsername()
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.EXPLORE_COURSE,null,null,values);
         i+=1;
     }
     void sendAnalyticsCourseDetailDeshBoard(){
-
-        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.MY_DASHBOARD,null,null,null);
+        final Map<String, String> values = new HashMap<>();
+        values.put(Analytics.Keys.USER_ID,environment.getLoginPrefs().getCurrentUserProfile().id.toString());
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.MY_DASHBOARD,null,null,values);
         ii+=1;
     }
 }

@@ -789,7 +789,7 @@ public class ProgramFragment extends BaseFragment implements OnRecyclerItemClick
     }
 
     private void getMyCourseList() throws Exception {
-        MyCourseTask myCourseTask = new MyCourseTask(getContext(), loginPrefs.getUsername(), loginPrefs.getAuthorizationHeader()) {
+        MyCourseTask myCourseTask = new MyCourseTask(getContext(),program_uuid, loginPrefs.getUsername(), loginPrefs.getAuthorizationHeader()) {
             @Override
             public void onSuccess(@NonNull List<EnrolledCoursesResponse> result) {
                 if (result != null) {

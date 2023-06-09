@@ -180,8 +180,8 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements
         setResult(RESULT_OK, resultData);
 
         final Map<String, String> values = new HashMap<>();
-        values.put(Analytics.Keys.NAME, selectedUnit.getInternalName());
-        values.put(Analytics.Keys.Uid,selectedUnit.getId());
+        values.put(Analytics.Keys.UNIT_NAME, selectedUnit.getInternalName());
+        values.put(Analytics.Keys.UNIT_UID,selectedUnit.getId());
         environment.getAnalyticsRegistry().trackScreenView(
                 Analytics.Screens.UNIT_DETAIL, null, selectedUnit.getInternalName(),values);
         environment.getAnalyticsRegistry().trackCourseComponentViewed(selectedUnit.getId(),

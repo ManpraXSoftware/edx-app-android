@@ -115,8 +115,8 @@ public class LoginAPI {
     }
 
     @NonNull
-    public Response<List<EnrolledCoursesResponse>> getMyCurses(String auth, String username) throws IOException {
-        return loginService.getMyCourses(username).execute();
+    public Response<List<EnrolledCoursesResponse>> getMyCurses(String auth, String program_uuid,String username) throws IOException {
+        return loginService.getMyCourses(program_uuid,username).execute();
     }
 
     @NonNull
@@ -170,8 +170,8 @@ public class LoginAPI {
     }
 
     @NonNull
-    public List<EnrolledCoursesResponse> getMyCourses(String auth, String username) throws Exception {
-        final Response<List<EnrolledCoursesResponse>> responsePrograms = getMyCurses(auth, username);
+    public List<EnrolledCoursesResponse> getMyCourses(String auth,String program_uuid, String username) throws Exception {
+        final Response<List<EnrolledCoursesResponse>> responsePrograms = getMyCurses(auth,program_uuid, username);
         return responsePrograms.body();
     }
 

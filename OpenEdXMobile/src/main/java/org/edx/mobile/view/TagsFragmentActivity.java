@@ -27,6 +27,7 @@ public class TagsFragmentActivity extends BaseSingleFragmentActivity {
     protected Logger logger = new Logger(getClass().getSimpleName());
     public static final String SUBJECT = "subject";
     public static final String COLOR_CODE = "color_code";
+    public static final String UID = "uid";
     @com.google.inject.Inject
     LoginPrefs loginPrefs;
 

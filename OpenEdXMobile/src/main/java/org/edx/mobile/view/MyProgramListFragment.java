@@ -108,6 +108,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                                 REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, null,
                                 resumeCourse.getBlock_id(), false);
                     }
+                    sendAnalyticsRecentCourseDetail();
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.no_course_info), Toast.LENGTH_LONG).show();
                 }
@@ -408,9 +409,20 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     void sendAnalyticsCourseDetail( MyProgramListModel myProgramListModel){
 
         final Map<String, String> values = new HashMap<>();
-        values.put("Program Name", myProgramListModel.getConvertedTagName());
-        values.put("Uid", myProgramListModel.getProgramUUid());
-        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.MY_PROGRAM, myProgramListModel.getProgramUUid(), "Click", values);
+        values.put(Analytics.Keys.PROGRAM_NAME, myProgramListModel.getProgramName());
+        values.put(Analytics.Keys.TOPIC_NAME, myProgramListModel.getConvertedTagName());
+        values.put(Analytics.Keys.ProgramUUid, myProgramListModel.getProgramUUid());
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.YOUR_ENROLL_PROGRAM, myProgramListModel.getProgramUUid(), "Click", values);
     }
+    void sendAnalyticsRecentCourseDetail(){
+
+        final Map<String, String> values = new HashMap<>();
+        values.put(Analytics.Keys.RECENT_PROGRAM_NAME, resumeCourse.getProgramName());
+        values.put(Analytics.Keys.RECENT_TOPIC_NAME,resumeCourse.getTagName());
+        values.put(Analytics.Keys.RECENT_PROGRAM_UID,resumeCourse.getCourse_id());
+        values.put("Try",resumeCourse.getBlock_id());
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.RECENT_COURSE,resumeCourse.getCourse_id(), "Click", values);
+    }
+
 
 }

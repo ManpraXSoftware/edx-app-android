@@ -99,7 +99,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
     private IEdxEnvironment environment;
     private String authorising_organisation = "";
     private String program_selected_uuid = "";
-    private String program_selected_name="";
+    private String program_selected_name = "";
     private static String program_uuid = "";
     List<ProgramResultList> programResultLists = new ArrayList<>();
     private App mApp;
@@ -130,7 +130,8 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @androidx.annotation.Nullable ViewGroup container, @androidx.annotation.Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @androidx.annotation.Nullable ViewGroup container,
+            @androidx.annotation.Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_program_screen, container,
                 false);
@@ -141,7 +142,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        view.announceForAccessibility("Programs Screen");
+        // view.announceForAccessibility("Programs Screen");
         mApp = new App();
         if (!program_uuid.isEmpty()) {
             binding.selectAProgram.setVisibility(View.GONE);
@@ -163,7 +164,8 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
 
         binding.tagName.setText(Html.fromHtml(sourceString));
         programModelAdapter = new ProgramModelAdapter(getActivity(), NewProgramFragment.this::onItemClick);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,
+                false);
         binding.rvProgram.setLayoutManager(mLayoutManager);
         binding.rvProgram.setAdapter(programModelAdapter);
 
@@ -214,6 +216,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
 
     private void initSpinner() {
         if (program_uuid.isEmpty()) {
+            System.out.println("optionSpinnerPrograms begin {" + program_uuid + "}");
             binding.optionSpinnerPrograms.setVisibility(View.VISIBLE);
             binding.shimmerLayoutProgram.setVisibility(View.GONE);
         }
@@ -223,7 +226,8 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                 popup.setAccessible(true);
 
                 // Get private mPopup member variable and try cast to ListPopupWindow
-                android.widget.ListPopupWindow popupWindow = (android.widget.ListPopupWindow) popup.get(binding.optionSpinnerPrograms);
+                android.widget.ListPopupWindow popupWindow = (android.widget.ListPopupWindow) popup
+                        .get(binding.optionSpinnerPrograms);
 
                 // Set popupWindow height to 500px
                 popupWindow.setHeight(500);
@@ -235,13 +239,13 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
             programAdapter = new ArrayAdapter<String>(getActivity(),
                     R.layout.edx_spinner_dropdown_item, programsNameLists) {
                 @Override
-                public boolean isEnabled(int position) {   //If question is school grade then disable user input
+                public boolean isEnabled(int position) { // If question is school grade then disable user input
                     return super.isEnabled(position);
                 }
 
                 @Override
                 public View getDropDownView(int position, View convertView,
-                                            ViewGroup parent) {
+                        ViewGroup parent) {
                     View view = super.getDropDownView(position, convertView, parent);
                     TextView tv = (TextView) view;
                     return view;
@@ -254,30 +258,41 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
                     String filterTitle = (String) parent.getItemAtPosition(position);
 
-
-//                    binding.optionSpinnerPrograms.setSelection(position, true);
-//                    binding.optionSpinnerPrograms.setSelected(true);
-//                    (programResultList.getConverted_title() != null && !programResultList.getConverted_title().isEmpty()) ||
+                    // binding.optionSpinnerPrograms.setSelection(position, true);
+                    // binding.optionSpinnerPrograms.setSelected(true);
+                    // (programResultList.getConverted_title() != null &&
+                    // !programResultList.getConverted_title().isEmpty()) ||
                     for (ProgramResultList programResultList : programResultLists) {
-                        if ( (programResultList.getConverted_title()).equals(filterTitle) || (programResultList.getTitle()).equals(filterTitle)) {
+                        if ((programResultList.getConverted_title()).equals(filterTitle)
+                                || (programResultList.getTitle()).equals(filterTitle)) {
                             sendAnalyticsfilter(programResultList);
 
+                            System.out.println("RRRRRRRRRRR optionSpinnerPrograms isProgramEnroll() {"
+                                    + programResultList.isProgramEnroll() + "}" + "{" + programResultList.getUuid()
+                                    + "}{" + programResultList.getTitle() + "} getCousreLength {"+programResultList.getCourses().size()+"}");
+
                             if (programResultList.isProgramEnroll()) {
+
                                 binding.unenrollFromProgram.setVisibility(View.VISIBLE);
                                 binding.enrollInProgram.setVisibility(View.GONE);
+
                                 binding.ivCheck.setVisibility(View.VISIBLE);
                                 if (topic_converted_name != null && !topic_converted_name.isEmpty()) {
-                                    if (programResultList.getConverted_title() != null && !programResultList.getConverted_title().isEmpty()) {
+                                    if (programResultList.getConverted_title() != null
+                                            && !programResultList.getConverted_title().isEmpty()) {
                                         binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
-                                                topic_converted_name + " " + programResultList.getConverted_title() + " " + getString(R.string.program));
+                                                topic_converted_name + " " + programResultList.getConverted_title()
+                                                + " " + getString(R.string.program));
                                     } else {
                                         binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
-                                                topic_converted_name + " " + programResultList.getTitle() + " " + getString(R.string.program));
-                                }
+                                                topic_converted_name + " " + programResultList.getTitle() + " "
+                                                + getString(R.string.program));
+                                    }
 
                                 } else {
                                     binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
-                                            topic_name + " " + programResultList.getTitle() + " " + getString(R.string.program));
+                                            topic_name + " " + programResultList.getTitle() + " "
+                                            + getString(R.string.program));
                                 }
 
                                 binding.courseDatailEnroll.setVisibility(View.VISIBLE);
@@ -292,27 +307,32 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                             binding.lnEnrollInfo.setVisibility(View.VISIBLE);
                             binding.errorMsgTv.setVisibility(View.GONE);
                             program_selected_uuid = programResultList.getUuid();
-                            program_selected_name=programResultList.getTitle();
+                            program_selected_name = programResultList.getTitle();
                             binding.shimmerLayoutProgramName.setVisibility(View.GONE);
                             binding.linerProgramName.setVisibility(View.VISIBLE);
-                            if (programResultList.getConverted_title() != null && !programResultList.getConverted_title().isEmpty()) {
+                            if (programResultList.getConverted_title() != null
+                                    && !programResultList.getConverted_title().isEmpty()) {
                                 binding.programNameInCard.setText(programResultList.getConverted_title());
                             } else {
                                 binding.programNameInCard.setText(programResultList.getTitle());
                             }
 
-                            if (programResultList.getAuthoring_organizations() != null && programResultList.getAuthoring_organizations().size() > 0) {
+                            if (programResultList.getAuthoring_organizations() != null
+                                    && programResultList.getAuthoring_organizations().size() > 0) {
                                 authorising_organisation = "";
                                 if (programResultList.getAuthoring_organizations().size() > 1) {
-                                    for (AuthoringOrganisations authoringOrganisations : programResultList.getAuthoring_organizations()) {
+                                    for (AuthoringOrganisations authoringOrganisations : programResultList
+                                            .getAuthoring_organizations()) {
                                         if (authorising_organisation.isEmpty()) {
                                             authorising_organisation = authoringOrganisations.getName();
                                         } else {
-                                            authorising_organisation = authoringOrganisations + "," + authoringOrganisations.getName();
+                                            authorising_organisation = authoringOrganisations + ","
+                                                    + authoringOrganisations.getName();
                                         }
                                     }
                                 } else {
-                                    authorising_organisation = programResultList.getAuthoring_organizations().get(0).getName();
+                                    authorising_organisation = programResultList.getAuthoring_organizations().get(0)
+                                            .getName();
                                 }
                             }
                             binding.shimmerLayoutOrganisation.setVisibility(View.GONE);
@@ -324,8 +344,10 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                                         for (ProgramCoursesList programCoursesList : programResultList.getCourses()) {
                                             if (programCoursesList.getCourseRuns() != null) {
                                                 for (CourseRuns courseRuns : programCoursesList.getCourseRuns()) {
-                                                    if (courseRuns.getKey().equals(enrolledCoursesResponse.getCourse().getId())) {
-                                                        courseRuns.setCourse_status(enrolledCoursesResponse.getCourse_status());
+                                                    if (courseRuns.getKey()
+                                                            .equals(enrolledCoursesResponse.getCourse().getId())) {
+                                                        courseRuns.setCourse_status(
+                                                                enrolledCoursesResponse.getCourse_status());
                                                         enroll = true;
                                                     }
                                                 }
@@ -335,22 +357,27 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                                 }
                             }
                             binding.shimmerLayoutCourseButton.setVisibility(View.GONE);
+
                             List<CourseRuns> courseRuns = new ArrayList<>();
                             for (ProgramCoursesList programCoursesList : programResultList.getCourses()) {
                                 courseRuns.addAll(programCoursesList.getCourseRuns());
                             }
+
                             binding.shimmerLayoutCourse.setVisibility(View.GONE);
-                            discoveryCourseAdapter.setProgramCoursesLists(courseRuns, programResultList.isProgramEnroll(), resumeCourse);
+                            discoveryCourseAdapter.setProgramCoursesLists(courseRuns,
+                                    programResultList.isProgramEnroll(), resumeCourse);
                             if (courseRuns == null) {
                                 binding.errorMsgTv.setText(getString(R.string.no_course_found));
                                 binding.lnEnrollInfo.setVisibility(View.GONE);
                                 binding.errorMsgTv.setVisibility(View.VISIBLE);
-                                binding.errorMsgTv.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_ACCESSIBILITY_FOCUSED);
+                                binding.errorMsgTv.sendAccessibilityEvent(
+                                        AccessibilityEvent.WINDOWS_CHANGE_ACCESSIBILITY_FOCUSED);
                             } else if (courseRuns.size() == 0) {
                                 binding.errorMsgTv.setText(getString(R.string.no_course_found));
                                 binding.lnEnrollInfo.setVisibility(View.GONE);
                                 binding.errorMsgTv.setVisibility(View.VISIBLE);
-                                binding.errorMsgTv.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_ACCESSIBILITY_FOCUSED);
+                                binding.errorMsgTv.sendAccessibilityEvent(
+                                        AccessibilityEvent.WINDOWS_CHANGE_ACCESSIBILITY_FOCUSED);
                             }
 
                         }
@@ -370,7 +397,9 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
     @Override
     public void onResume() {
         try {
-            getMyCourseList();
+            System.out.println("RRRRRRRRRRR onResume program_uuid {" + program_uuid + "}");
+
+
             handler.postDelayed(runnable = new Runnable() {
                 @Override
                 public void run() {
@@ -379,18 +408,22 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                         binding.enrollInProgram.setEnabled(false);
                         binding.unenrollFromProgram.setEnabled(false);
                         if (getActivity() != null)
-                            Toast.makeText(getContext(), getActivity().getString(R.string.data_is_loading), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getActivity().getString(R.string.data_is_loading),
+                                    Toast.LENGTH_SHORT).show();
                     } else {
                         binding.enrollInProgram.setEnabled(true);
                         binding.unenrollFromProgram.setEnabled(true);
                         if (getActivity() != null)
-                            Toast.makeText(getContext(), getActivity().getString(R.string.data_loaded), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getActivity().getString(R.string.data_loaded),
+                                    Toast.LENGTH_SHORT).show();
                         handler.removeCallbacks(runnable);
                     }
                 }
             }, delay);
             getMyPrograms(true);
-            //  loadData(true);
+            getMyCourseList();
+
+            // loadData(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -423,7 +456,6 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
             getPrograms();
         }
     }
-
 
     private void createToken() throws Exception {
         if (this.getActivity() != null) {
@@ -470,7 +502,8 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                                 for (ProgramResultList programResultList : responseBody.getProgramResultLists()) {
                                     if (programResultList.getUuid() != null) {
                                         if (programResultList.getUuid().equals(program_uuid)) {
-                                            if (programResultList.getConverted_title() != null && !programResultList.getConverted_title().isEmpty()) {
+                                            if (programResultList.getConverted_title() != null
+                                                    && !programResultList.getConverted_title().isEmpty()) {
                                                 if (!programsNameLists.contains(programResultList.getConverted_title()))
                                                     programsNameLists.add(programResultList.getConverted_title());
                                             } else {
@@ -492,10 +525,11 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                                 });
                                 programModelAdapter.setPrograms(programResultLists,
                                         programResultLists.get(0).getConverted_title());
-                                //Set Course
+                                // Set Course
                                 binding.shimmerLayoutProgramName.setVisibility(View.GONE);
 
-                                if (programResultLists.get(0).getConverted_title() != null && !programResultLists.get(0).getConverted_title().isEmpty()) {
+                                if (programResultLists.get(0).getConverted_title() != null
+                                        && !programResultLists.get(0).getConverted_title().isEmpty()) {
                                     binding.programNameInCard.setText(programResultLists.get(0).getConverted_title());
                                 } else {
                                     binding.programNameInCard.setText(programResultLists.get(0).getTitle());
@@ -504,15 +538,18 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                                 if (programResultLists.get(0).getAuthoring_organizations() != null) {
                                     authorising_organisation = "";
                                     if (programResultLists.get(0).getAuthoring_organizations().size() > 1) {
-                                        for (AuthoringOrganisations authoringOrganisations : programResultLists.get(0).getAuthoring_organizations()) {
+                                        for (AuthoringOrganisations authoringOrganisations : programResultLists.get(0)
+                                                .getAuthoring_organizations()) {
                                             if (authorising_organisation.isEmpty()) {
                                                 authorising_organisation = authoringOrganisations.getName();
                                             } else {
-                                                authorising_organisation = authoringOrganisations + "," + authoringOrganisations.getName();
+                                                authorising_organisation = authoringOrganisations + ","
+                                                        + authoringOrganisations.getName();
                                             }
                                         }
                                     } else {
-                                        authorising_organisation = programResultLists.get(0).getAuthoring_organizations().get(0).getName();
+                                        authorising_organisation = programResultLists.get(0)
+                                                .getAuthoring_organizations().get(0).getName();
                                     }
                                 }
                                 binding.shimmerLayoutOrganisation.setVisibility(View.GONE);
@@ -521,11 +558,14 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                                 if (enrolledCoursesResponses != null) {
                                     for (EnrolledCoursesResponse enrolledCoursesResponse : enrolledCoursesResponses) {
                                         if (enrolledCoursesResponse.getCourse() != null) {
-                                            for (ProgramCoursesList programCoursesList : programResultLists.get(0).getCourses()) {
+                                            for (ProgramCoursesList programCoursesList : programResultLists.get(0)
+                                                    .getCourses()) {
                                                 if (programCoursesList.getCourseRuns() != null) {
                                                     for (CourseRuns courseRuns : programCoursesList.getCourseRuns()) {
-                                                        if (courseRuns.getKey().equals(enrolledCoursesResponse.getCourse().getId())) {
-                                                            courseRuns.setCourse_status(enrolledCoursesResponse.getCourse_status());
+                                                        if (courseRuns.getKey()
+                                                                .equals(enrolledCoursesResponse.getCourse().getId())) {
+                                                            courseRuns.setCourse_status(
+                                                                    enrolledCoursesResponse.getCourse_status());
                                                             enroll = true;
                                                         }
                                                     }
@@ -534,7 +574,8 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                                         }
                                     }
                                     List<CourseRuns> courseRuns = new ArrayList<>();
-                                    for (ProgramCoursesList programCoursesList : programResultLists.get(0).getCourses()) {
+                                    for (ProgramCoursesList programCoursesList : programResultLists.get(0)
+                                            .getCourses()) {
                                         courseRuns.addAll(programCoursesList.getCourseRuns());
                                     }
                                     binding.shimmerLayoutCourse.setVisibility(View.GONE);
@@ -549,7 +590,8 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                                 programResultLists = responseBody.getProgramResultLists();
 
                                 for (ProgramResultList programResultList : programResultLists) {
-                                    if (programResultList.getConverted_title() != null && !programResultList.getConverted_title().isEmpty()) {
+                                    if (programResultList.getConverted_title() != null
+                                            && !programResultList.getConverted_title().isEmpty()) {
                                         if (!programsNameLists.contains(programResultList.getConverted_title()))
                                             programsNameLists.add(programResultList.getConverted_title());
                                     } else {
@@ -559,27 +601,51 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                                     boolean programEnroll = false;
                                     if (myProgramListModels != null && myProgramListModels.size() > 0) {
                                         for (MyProgramListModel myProgramListModel : myProgramListModels) {
-                                            if (myProgramListModel.getProgramUUid().equals(programResultList.getUuid())) {
+                                            if (myProgramListModel.getProgramUUid()
+                                                    .equals(programResultList.getUuid())) {
                                                 programEnroll = true;
                                             }
                                         }
                                         programResultList.setProgramEnroll(programEnroll);
                                     }
                                 }
-                                Log.d("number_of_programs", String.valueOf(responseBody.getProgramResultLists().size()));
-                                Collections.sort(responseBody.getProgramResultLists(), new Comparator<ProgramResultList>() {
-                                    @Override
-                                    public int compare(ProgramResultList lhs, ProgramResultList rhs) {
-                                        return lhs.getTitle().compareTo(rhs.getTitle());
-                                    }
-                                });
+                                Log.d("number_of_programs",
+                                        String.valueOf(responseBody.getProgramResultLists().size()));
+                                Collections.sort(responseBody.getProgramResultLists(),
+                                        new Comparator<ProgramResultList>() {
+                                            @Override
+                                            public int compare(ProgramResultList lhs, ProgramResultList rhs) {
+                                                return lhs.getTitle().compareTo(rhs.getTitle());
+                                            }
+                                        });
                                 Collections.sort(programsNameLists, new Comparator<String>() {
                                     @Override
                                     public int compare(String lhs, String rhs) {
                                         return lhs.compareTo(rhs);
                                     }
                                 });
+                                System.out.println(
+                                        "RRRRRRRRRRR responseBody.getProgramResultLists().get(0).getUuid() program_uuid {"
+                                                + responseBody.getProgramResultLists().get(0).getUuid() + "}");
+
+                                if (program_uuid.isEmpty()) {
+
+                                    System.out.println("RRRRRRRRRRR  program_uuid {" + program_uuid
+                                            + "}" + "isGetMyCourseListRun firstime{" + isGetMyCourseListRun + "}");
+                                    try {
+                                        if (programResultLists.get(0).isProgramEnroll()) {
+                                            if (isGetMyCourseListRun)
+                                                isEnroll = true;
+                                        }
+                                      //  getMyCourseList();
+                                        System.out.println("RRRRRRRRRRR  program_uuid ");
+                                    } catch (Exception e) {
+                                        System.out.println("RRRRRRR " + e);
+                                    }
+                                }
+
                                 initSpinner();
+
                                 programModelAdapter.setPrograms(responseBody.getProgramResultLists(),
                                         responseBody.getProgramResultLists().get(0).getTitle());
                             }
@@ -612,10 +678,11 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                 super.onSuccess(enrollResponse);
                 binding.unenrollFromProgram.setEnabled(true);
                 binding.unenrollFromProgram.setEnabled(true);
+                System.out.println("RRRRRRRRRRR EnrollInCourseTask program_uuid {" + program_uuid+"}");
                 if (enrollResponse.isStatus()) {
-                    getMyCourseList();
-                    getMyPrograms(false);
                     if (dataCreation.getAction().equals("enroll")) {
+                        getMyPrograms(false);
+                        //getMyCourseList();
                         programModelAdapter.setProgramEnroll(true, program_selected_uuid);
                         discoveryCourseAdapter.setEnroll(true);
                         binding.enrollInProgram.setVisibility(View.GONE);
@@ -638,7 +705,6 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                         binding.courseDatailUnenroll.setVisibility(View.GONE);
                         enrolledStatus(getString(R.string.program_is_successfully_added_to_dashboard));
 
-
                     } else {
                         programModelAdapter.setProgramEnroll(false, program_selected_uuid);
                         discoveryCourseAdapter.setEnroll(false);
@@ -659,10 +725,11 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
 
     private void enrolledStatus(String msg) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        //Uncomment the below code to Set the message and title from the strings.xml file
+        // Uncomment the below code to Set the message and title from the strings.xml
+        // file
         builder.setMessage(msg).setTitle(R.string.status);
 
-        //Setting message manually and performing action on button click
+        // Setting message manually and performing action on button click
         builder.setMessage(msg)
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.label_ok), new DialogInterface.OnClickListener() {
@@ -670,9 +737,9 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                         dialog.dismiss();
                     }
                 });
-        //Creating dialog box
+        // Creating dialog box
         AlertDialog alert = builder.create();
-        //Setting the title manually
+        // Setting the title manually
         alert.setTitle(R.string.status);
         alert.show();
     }
@@ -681,79 +748,94 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
     public void onItemClick(View view, Object item) {
         if (item instanceof ProgramResultList) {
 
-           /* ProgramResultList programResultList = (ProgramResultList) item;
-            if (programResultList.isProgramEnroll()) {
-                binding.unenrollFromProgram.setVisibility(View.VISIBLE);
-                binding.enrollInProgram.setVisibility(View.GONE);
-                binding.ivCheck.setVisibility(View.VISIBLE);
-                binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
-                        topic_name + " " + programResultList.getTitle() + " " + getString(R.string.program));
-                binding.courseDatailEnroll.setVisibility(View.VISIBLE);
-                binding.courseDatailUnenroll.setVisibility(View.GONE);
-            } else {
-                binding.enrollInProgram.setVisibility(View.VISIBLE);
-                binding.unenrollFromProgram.setVisibility(View.GONE);
-                binding.ivCheck.setVisibility(View.GONE);
-                binding.courseDatailEnroll.setVisibility(View.GONE);
-                binding.courseDatailUnenroll.setVisibility(View.VISIBLE);
-            }
-            binding.lnEnrollInfo.setVisibility(View.VISIBLE);
-            binding.errorMsgTv.setVisibility(View.GONE);
-            program_selected_uuid = programResultList.getUuid();
-            binding.shimmerLayoutProgramName.setVisibility(View.GONE);
-            binding.linerProgramName.setVisibility(View.VISIBLE);
-
-            if (programResultList.getAuthoring_organizations() != null && programResultList.getAuthoring_organizations().size() > 0) {
-                authorising_organisation = "";
-                if (programResultList.getAuthoring_organizations().size() > 1) {
-                    for (AuthoringOrganisations authoringOrganisations : programResultList.getAuthoring_organizations()) {
-                        if (authorising_organisation.isEmpty()) {
-                            authorising_organisation = authoringOrganisations.getName();
-                        } else {
-                            authorising_organisation = authoringOrganisations + "," + authoringOrganisations.getName();
-                        }
-                    }
-                } else {
-                    authorising_organisation = programResultList.getAuthoring_organizations().get(0).getName();
-                }
-            }
-            binding.shimmerLayoutOrganisation.setVisibility(View.GONE);
-            binding.organisations.setText(authorising_organisation);
-            boolean enroll = false;
-            if (enrolledCoursesResponses != null) {
-                for (EnrolledCoursesResponse enrolledCoursesResponse : enrolledCoursesResponses) {
-                    if (enrolledCoursesResponse.getCourse() != null) {
-                        for (ProgramCoursesList programCoursesList : programResultList.getCourses()) {
-                            if (programCoursesList.getCourseRuns() != null) {
-                                for (CourseRuns courseRuns : programCoursesList.getCourseRuns()) {
-                                    if (courseRuns.getKey().equals(enrolledCoursesResponse.getCourse().getId())) {
-                                        courseRuns.setCourse_status(enrolledCoursesResponse.getCourse_status());
-                                        enroll = true;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            binding.shimmerLayoutCourseButton.setVisibility(View.GONE);
-            List<CourseRuns> courseRuns = new ArrayList<>();
-            for (ProgramCoursesList programCoursesList : programResultList.getCourses()) {
-                courseRuns.addAll(programCoursesList.getCourseRuns());
-            }
-            binding.shimmerLayoutCourse.setVisibility(View.GONE);
-            discoveryCourseAdapter.setProgramCoursesLists(courseRuns, *//*enroll*//* programResultList.isProgramEnroll(), resumeCourse);
-            if (courseRuns == null) {
-                binding.errorMsgTv.setText(getString(R.string.no_course_found));
-                binding.lnEnrollInfo.setVisibility(View.GONE);
-                binding.errorMsgTv.setVisibility(View.VISIBLE);
-                binding.errorMsgTv.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_ACCESSIBILITY_FOCUSED);
-            } else if (courseRuns.size() == 0) {
-                binding.errorMsgTv.setText(getString(R.string.no_course_found));
-                binding.lnEnrollInfo.setVisibility(View.GONE);
-                binding.errorMsgTv.setVisibility(View.VISIBLE);
-                binding.errorMsgTv.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_ACCESSIBILITY_FOCUSED);
-            }*/
+            /*
+             * ProgramResultList programResultList = (ProgramResultList) item;
+             * if (programResultList.isProgramEnroll()) {
+             * binding.unenrollFromProgram.setVisibility(View.VISIBLE);
+             * binding.enrollInProgram.setVisibility(View.GONE);
+             * binding.ivCheck.setVisibility(View.VISIBLE);
+             * binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
+             * topic_name + " " + programResultList.getTitle() + " " +
+             * getString(R.string.program));
+             * binding.courseDatailEnroll.setVisibility(View.VISIBLE);
+             * binding.courseDatailUnenroll.setVisibility(View.GONE);
+             * } else {
+             * binding.enrollInProgram.setVisibility(View.VISIBLE);
+             * binding.unenrollFromProgram.setVisibility(View.GONE);
+             * binding.ivCheck.setVisibility(View.GONE);
+             * binding.courseDatailEnroll.setVisibility(View.GONE);
+             * binding.courseDatailUnenroll.setVisibility(View.VISIBLE);
+             * }
+             * binding.lnEnrollInfo.setVisibility(View.VISIBLE);
+             * binding.errorMsgTv.setVisibility(View.GONE);
+             * program_selected_uuid = programResultList.getUuid();
+             * binding.shimmerLayoutProgramName.setVisibility(View.GONE);
+             * binding.linerProgramName.setVisibility(View.VISIBLE);
+             * 
+             * if (programResultList.getAuthoring_organizations() != null &&
+             * programResultList.getAuthoring_organizations().size() > 0) {
+             * authorising_organisation = "";
+             * if (programResultList.getAuthoring_organizations().size() > 1) {
+             * for (AuthoringOrganisations authoringOrganisations :
+             * programResultList.getAuthoring_organizations()) {
+             * if (authorising_organisation.isEmpty()) {
+             * authorising_organisation = authoringOrganisations.getName();
+             * } else {
+             * authorising_organisation = authoringOrganisations + "," +
+             * authoringOrganisations.getName();
+             * }
+             * }
+             * } else {
+             * authorising_organisation =
+             * programResultList.getAuthoring_organizations().get(0).getName();
+             * }
+             * }
+             * binding.shimmerLayoutOrganisation.setVisibility(View.GONE);
+             * binding.organisations.setText(authorising_organisation);
+             * boolean enroll = false;
+             * if (enrolledCoursesResponses != null) {
+             * for (EnrolledCoursesResponse enrolledCoursesResponse :
+             * enrolledCoursesResponses) {
+             * if (enrolledCoursesResponse.getCourse() != null) {
+             * for (ProgramCoursesList programCoursesList : programResultList.getCourses())
+             * {
+             * if (programCoursesList.getCourseRuns() != null) {
+             * for (CourseRuns courseRuns : programCoursesList.getCourseRuns()) {
+             * if (courseRuns.getKey().equals(enrolledCoursesResponse.getCourse().getId()))
+             * {
+             * courseRuns.setCourse_status(enrolledCoursesResponse.getCourse_status());
+             * enroll = true;
+             * }
+             * }
+             * }
+             * }
+             * }
+             * }
+             * }
+             * binding.shimmerLayoutCourseButton.setVisibility(View.GONE);
+             * List<CourseRuns> courseRuns = new ArrayList<>();
+             * for (ProgramCoursesList programCoursesList : programResultList.getCourses())
+             * {
+             * courseRuns.addAll(programCoursesList.getCourseRuns());
+             * }
+             * binding.shimmerLayoutCourse.setVisibility(View.GONE);
+             * discoveryCourseAdapter.setProgramCoursesLists(courseRuns,
+             *//* enroll *//*
+                            * programResultList.isProgramEnroll(), resumeCourse);
+                            * if (courseRuns == null) {
+                            * binding.errorMsgTv.setText(getString(R.string.no_course_found));
+                            * binding.lnEnrollInfo.setVisibility(View.GONE);
+                            * binding.errorMsgTv.setVisibility(View.VISIBLE);
+                            * binding.errorMsgTv.sendAccessibilityEvent(AccessibilityEvent.
+                            * WINDOWS_CHANGE_ACCESSIBILITY_FOCUSED);
+                            * } else if (courseRuns.size() == 0) {
+                            * binding.errorMsgTv.setText(getString(R.string.no_course_found));
+                            * binding.lnEnrollInfo.setVisibility(View.GONE);
+                            * binding.errorMsgTv.setVisibility(View.VISIBLE);
+                            * binding.errorMsgTv.sendAccessibilityEvent(AccessibilityEvent.
+                            * WINDOWS_CHANGE_ACCESSIBILITY_FOCUSED);
+                            * }
+                            */
         } else {
             CourseRuns courseRuns = (CourseRuns) item;
 
@@ -777,7 +859,8 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
     }
 
     @Override
-    public void onLoadFinished(Loader<AsyncTaskResult<List<EnrolledCoursesResponse>>> asyncTaskResultLoader, AsyncTaskResult<List<EnrolledCoursesResponse>> result) {
+    public void onLoadFinished(Loader<AsyncTaskResult<List<EnrolledCoursesResponse>>> asyncTaskResultLoader,
+            AsyncTaskResult<List<EnrolledCoursesResponse>> result) {
         final Exception exception = result.getEx();
         if (exception != null) {
             if (exception instanceof AuthException) {
@@ -805,7 +888,6 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         }
     }
 
-
     @Override
     public void onLoaderReset(Loader<AsyncTaskResult<List<EnrolledCoursesResponse>>> asyncTaskResultLoader) {
     }
@@ -814,28 +896,42 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         getLoaderManager().restartLoader(MY_COURSE_LOADER_ID, null, this);
     }
 
+    private boolean isEnroll = false;
+    private boolean isGetMyCourseListRun = true;
+
     private void getMyCourseList() throws Exception {
-        MyCourseTask myCourseTask = new MyCourseTask(getContext(), loginPrefs.getUsername(), loginPrefs.getAuthorizationHeader()) {
+        System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRR getMyCourseList program_uuid {" + program_uuid + " }");
+        MyCourseTask myCourseTask = new MyCourseTask(getContext(), program_uuid, loginPrefs.getUsername(),
+                loginPrefs.getAuthorizationHeader()) {
             @Override
             public void onSuccess(@NonNull List<EnrolledCoursesResponse> result) {
                 if (result != null) {
                     enrolledCoursesResponses = new ArrayList<EnrolledCoursesResponse>(result);
                     Log.e("ResponseCompleteData", enrolledCoursesResponses + "");
-                    if (!program_uuid.isEmpty()) {
-                        //boolean enroll = false;
+                    if (!program_uuid.isEmpty() || isEnroll) {
+                        isEnroll = false;
+                        if (isGetMyCourseListRun) {
+                            isGetMyCourseListRun = false;
+                        }
+                        // boolean enroll = false;
                         if (programResultLists != null && programResultLists.size() > 0) {
                             for (EnrolledCoursesResponse enrolledCoursesResponse : enrolledCoursesResponses) {
                                 if (enrolledCoursesResponse.getCourse() != null) {
-                                    for (ProgramCoursesList programCoursesList : programResultLists.get(0).getCourses()) {
+                                    for (ProgramCoursesList programCoursesList : programResultLists.get(0)
+                                            .getCourses()) {
+                                        if(programCoursesList.isEnrolled()==true)
                                         if (programCoursesList.getCourseRuns() != null) {
                                             for (CourseRuns courseRuns : programCoursesList.getCourseRuns()) {
-                                                if (courseRuns.getKey().equals(enrolledCoursesResponse.getCourse().getId())) {
-                                                    courseRuns.setCourse_status(enrolledCoursesResponse.getCourse_status());
-                                                    //enroll = true;
+                                                if (courseRuns.getKey()
+                                                        .equals(enrolledCoursesResponse.getCourse().getId())) {
+                                                    courseRuns.setCourse_status(
+                                                            enrolledCoursesResponse.getCourse_status());
+                                                    // enroll = true;
                                                 }
                                             }
                                         }
                                     }
+
                                 }
                             }
                             List<CourseRuns> courseRuns = new ArrayList<>();
@@ -844,14 +940,14 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                             }
                             binding.shimmerLayoutCourse.setVisibility(View.GONE);
                             discoveryCourseAdapter.setProgramCoursesLists(courseRuns, true, resumeCourse);
-                            binding.courseCount.setText(String.valueOf(courseRuns.size()) + " " +
+                            binding.courseCount.setText(String.valueOf(courseRuns.size()) + " @@ " +
                                     context.getString(R.string.courses_available));
                             binding.courseCount.setVisibility(View.VISIBLE);
                         }
                     }
                 }
-                binding.iconProgress.setVisibility(View.GONE);
-//                initSpinner();
+
+                // initSpinner();
                 programModelAdapter.notifyDataSetChanged();
             }
 
@@ -881,46 +977,50 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                 if (check) {
                     checkTokenExpire();
                 }
-                Log.e("getMyPrograms>>>>",result+"");
+                Log.e("getMyPrograms>>>>", result + "");
                 if (result != null) {
                     String userType = loginPrefs.getUserType();
                     List<MyProgramListModel> newProgramsListforTeacher = new ArrayList<>();
                     List<MyProgramListModel> newProgramsListforStudent = new ArrayList<>();
                     List<MyProgramListModel> newProgramsListforBoth = new ArrayList<>();
-                    /*for (Programs programs : result) {
-                        if (programs.getTags() != null) {
-                            for (String tag : programs.getTags()) {
-                                if (tag.toLowerCase().contains("teacher")) {
-                                    MyProgramListModel myProgramListModel = new MyProgramListModel();
-                                    myProgramListModel.setTagName(tag);
-                                    myProgramListModel.setProgramName(programs.getProgram_title());
-                                    myProgramListModel.setProgramUUid(programs.getProgram_uuid());
-                                    myProgramListModel.setResume_program(programs.getResumePrograms());
-                                    newProgramsListforTeacher.add(myProgramListModel);
-                                }
-                                if (tag.toLowerCase().contains("student")) {
-                                    MyProgramListModel myProgramListModel = new MyProgramListModel();
-                                    myProgramListModel.setTagName(tag);
-                                    myProgramListModel.setProgramName(programs.getProgram_title());
-                                    myProgramListModel.setProgramUUid(programs.getProgram_uuid());
-                                    myProgramListModel.setResume_program(programs.getResumePrograms());
-                                    newProgramsListforStudent.add(myProgramListModel);
-                                }
-                                if (!tag.toLowerCase().contains("student") && !tag.toLowerCase().contains("teacher")) {
-                                    MyProgramListModel myProgramListModel = new MyProgramListModel();
-                                    myProgramListModel.setTagName(tag);
-                                    myProgramListModel.setProgramName(programs.getProgram_title());
-                                    myProgramListModel.setProgramUUid(programs.getProgram_uuid());
-                                    myProgramListModel.setResume_program(programs.getResumePrograms());
-                                    newProgramsListforBoth.add(myProgramListModel);
-                                }
-                            }
-                        }
-                    }*/
+                    /*
+                     * for (Programs programs : result) {
+                     * if (programs.getTags() != null) {
+                     * for (String tag : programs.getTags()) {
+                     * if (tag.toLowerCase().contains("teacher")) {
+                     * MyProgramListModel myProgramListModel = new MyProgramListModel();
+                     * myProgramListModel.setTagName(tag);
+                     * myProgramListModel.setProgramName(programs.getProgram_title());
+                     * myProgramListModel.setProgramUUid(programs.getProgram_uuid());
+                     * myProgramListModel.setResume_program(programs.getResumePrograms());
+                     * newProgramsListforTeacher.add(myProgramListModel);
+                     * }
+                     * if (tag.toLowerCase().contains("student")) {
+                     * MyProgramListModel myProgramListModel = new MyProgramListModel();
+                     * myProgramListModel.setTagName(tag);
+                     * myProgramListModel.setProgramName(programs.getProgram_title());
+                     * myProgramListModel.setProgramUUid(programs.getProgram_uuid());
+                     * myProgramListModel.setResume_program(programs.getResumePrograms());
+                     * newProgramsListforStudent.add(myProgramListModel);
+                     * }
+                     * if (!tag.toLowerCase().contains("student") &&
+                     * !tag.toLowerCase().contains("teacher")) {
+                     * MyProgramListModel myProgramListModel = new MyProgramListModel();
+                     * myProgramListModel.setTagName(tag);
+                     * myProgramListModel.setProgramName(programs.getProgram_title());
+                     * myProgramListModel.setProgramUUid(programs.getProgram_uuid());
+                     * myProgramListModel.setResume_program(programs.getResumePrograms());
+                     * newProgramsListforBoth.add(myProgramListModel);
+                     * }
+                     * }
+                     * }
+                     * }
+                     */
                     for (Programs programs : result) {
                         if (programs.getTags() != null) {
                             for (MyProgramTags myProgramTags : programs.getTags()) {
-                                if (myProgramTags.getTag_title() != null && myProgramTags.getTag_title().toLowerCase().contains("teacher")) {
+                                if (myProgramTags.getTag_title() != null
+                                        && myProgramTags.getTag_title().toLowerCase().contains("teacher")) {
                                     MyProgramListModel myProgramListModel = new MyProgramListModel();
                                     myProgramListModel.setTagName(myProgramTags.getConverted_tag_title());
                                     myProgramListModel.setProgramName(programs.getProgram_title());
@@ -928,7 +1028,8 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                                     myProgramListModel.setResume_program(programs.getResumePrograms());
                                     newProgramsListforTeacher.add(myProgramListModel);
                                 }
-                                if (myProgramTags.getTag_title() != null && myProgramTags.getTag_title().toLowerCase().contains("student")) {
+                                if (myProgramTags.getTag_title() != null
+                                        && myProgramTags.getTag_title().toLowerCase().contains("student")) {
                                     MyProgramListModel myProgramListModel = new MyProgramListModel();
                                     myProgramListModel.setTagName(myProgramTags.getConverted_tag_title());
                                     myProgramListModel.setProgramName(programs.getProgram_title());
@@ -936,7 +1037,9 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                                     myProgramListModel.setResume_program(programs.getResumePrograms());
                                     newProgramsListforStudent.add(myProgramListModel);
                                 }
-                                if (myProgramTags.getTag_title() != null && !myProgramTags.getTag_title().toLowerCase().contains("student") && !myProgramTags.getTag_title().toLowerCase().contains("teacher")) {
+                                if (myProgramTags.getTag_title() != null
+                                        && !myProgramTags.getTag_title().toLowerCase().contains("student")
+                                        && !myProgramTags.getTag_title().toLowerCase().contains("teacher")) {
                                     MyProgramListModel myProgramListModel = new MyProgramListModel();
                                     myProgramListModel.setTagName(myProgramTags.getConverted_tag_title());
                                     myProgramListModel.setProgramName(programs.getProgram_title());
@@ -992,33 +1095,32 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         discoveryTask.execute();
     }
 
-    void sendAnalyticsfilter(ProgramResultList programResultList){
+    void sendAnalyticsfilter(ProgramResultList programResultList) {
         final Map<String, String> values = new HashMap<>();
-        values.put(Analytics.Keys.NAME,programResultList.getConverted_title());
-        values.put(Analytics.Keys.Uid,programResultList.getUuid());
-
-        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.SELECT_PROGRAM,null,null,values);
-    }
-    void sendAnalyticsEnroll(EnrollAndUnenrollData enrollAndUnenrollData){
-        final Map<String, String> values = new HashMap<>();
-        values.put(Analytics.Keys.NAME,enrollAndUnenrollData.getData().getProgram_Name());
-        values.put(Analytics.Keys.Uid,enrollAndUnenrollData.getData().getProgram_uuid());
-        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.Enroll_Program,null,null,values);
-    }
-    void sendAnalyticsUnroll(EnrollAndUnenrollData enrollAndUnenrollData){
-        final Map<String, String> values = new HashMap<>();
-        values.put(Analytics.Keys.NAME,enrollAndUnenrollData.getData().getProgram_Name());
-        values.put(Analytics.Keys.Uid,enrollAndUnenrollData.getData().getProgram_uuid());
-        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.Unroll_Program,null,null,values);
-    }
-    void sendAnalyticsCourseView(CourseRuns courseRuns ){
-        final Map<String, String> values = new HashMap<>();
-        values.put(Analytics.Keys.NAME,courseRuns.getConverted_course_title());
-        values.put(Analytics.Keys.Uid,courseRuns.getUuid());
-        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.View_Program,null,null,values);
+        values.put(Analytics.Keys.PROGRAM_NAME, programResultList.getConverted_title());
+        values.put(Analytics.Keys.ProgramUUid, programResultList.getUuid());
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.SELECT_PROGRAM, null, null, values);
     }
 
+    void sendAnalyticsEnroll(EnrollAndUnenrollData enrollAndUnenrollData) {
+        final Map<String, String> values = new HashMap<>();
+        values.put(Analytics.Keys.ENROLL_PROGRAM_NAME, enrollAndUnenrollData.getData().getProgram_Name());
+        values.put(Analytics.Keys.ENROLL_PROGRAM_UID, enrollAndUnenrollData.getData().getProgram_uuid());
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.Enroll_Program, null, null, values);
+    }
 
+    void sendAnalyticsUnroll(EnrollAndUnenrollData enrollAndUnenrollData) {
+        final Map<String, String> values = new HashMap<>();
+        values.put(Analytics.Keys.UNROLL_PROGRAM_NAME, enrollAndUnenrollData.getData().getProgram_Name());
+        values.put(Analytics.Keys.UNROLL_PROGRAM_UID, enrollAndUnenrollData.getData().getProgram_uuid());
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.Unroll_Program, null, null, values);
+    }
+
+    void sendAnalyticsCourseView(CourseRuns courseRuns) {
+        final Map<String, String> values = new HashMap<>();
+        values.put(Analytics.Keys.VIEW_PORGRAM_NAME, courseRuns.getConverted_course_title());
+        values.put(Analytics.Keys.VIEW_PORGRAM_UID, courseRuns.getUuid());
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.View_Program, null, null, values);
+    }
 
 }
-

@@ -50,6 +50,7 @@ import retrofit2.Call;
 import static android.app.Activity.RESULT_OK;
 import static org.edx.mobile.view.TagsFragmentActivity.COLOR_CODE;
 import static org.edx.mobile.view.TagsFragmentActivity.SUBJECT;
+import static org.edx.mobile.view.TagsFragmentActivity.UID;
 
 public class ExploreFragment extends BaseFragment implements OnRecyclerItemClickListener {
     public static final String TAG = ExploreFragment.class.getCanonicalName();
@@ -238,6 +239,7 @@ public class ExploreFragment extends BaseFragment implements OnRecyclerItemClick
             Bundle bundle1 = new Bundle();
             bundle1.putString(SUBJECT, discoverySubjectResult.getName());
             bundle1.putString(COLOR_CODE, String.valueOf(discoverySubjectResult.getCardColorName()));
+            bundle1.putString(UID, String.valueOf(discoverySubjectResult.getUuid()));
             tagsFragment.setArguments(bundle1);
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.main_fragment, tagsFragment, TagsFragment.TAG).addToBackStack(TagsFragment.TAG)

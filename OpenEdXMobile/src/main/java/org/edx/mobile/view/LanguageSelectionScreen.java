@@ -19,9 +19,13 @@ import org.edx.mobile.R;
 import org.edx.mobile.base.BaseFragmentActivity;
 import org.edx.mobile.core.IEdxEnvironment;
 import org.edx.mobile.deeplink.ScreenDef;
+import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.util.IntentFactory;
 import org.edx.mobile.util.LocaleManager;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.edx.mobile.view.Router.EXTRA_PATH_ID;
 import static org.edx.mobile.view.Router.EXTRA_SCREEN_NAME;
@@ -63,6 +67,7 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
         mBackArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                sendAnalyticsCourseDetail(getApplicationContext().getString(R.string.english));
                 onBackPressed();
             }
         });
@@ -72,6 +77,7 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                 if (!mEnglish.isSelected()) {
                     language = "en";
                     mEnglish.setSelected(true);
+                    sendAnalyticsCourseDetail(getApplicationContext().getString(R.string.english));
                     mNextButton.setActivated(true);
                     mNextButton.setTextColor(Color.parseColor("#464A50"));
                  // mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
@@ -105,6 +111,7 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mKannada.setSelected(false);
                     mTamil.setSelected(false);
                     mBengali.setSelected(false);
+                    sendAnalyticsCourseDetail(getApplicationContext().getString(R.string.hindi));
                 } else {
                     language = "";
                     mHindi.setSelected(false);
@@ -131,6 +138,7 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mEnglish.setSelected(false);
                     mTamil.setSelected(false);
                     mBengali.setSelected(false);
+                    sendAnalyticsCourseDetail(getApplicationContext().getString(R.string.kannada));
                 } else {
                     language = "";
                     mKannada.setSelected(false);
@@ -157,6 +165,7 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mKannada.setSelected(false);
                     mEnglish.setSelected(false);
                     mBengali.setSelected(false);
+                    sendAnalyticsCourseDetail(getApplicationContext().getString(R.string.tamil));
                 } else {
                     language = "";
                     mTamil.setSelected(false);
@@ -183,6 +192,7 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mHindi.setSelected(false);
                     mKannada.setSelected(false);
                     mEnglish.setSelected(false);
+                    sendAnalyticsCourseDetail(getApplicationContext().getString(R.string.bengali));
                 } else {
                     language = "";
                     mBengali.setSelected(false);
@@ -204,6 +214,7 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     if (language != null) {
                         LocaleManager.setNewLocale(LanguageSelectionScreen.this, language);
                     } else {
+                        sendAnalyticsCourseDetail(getApplicationContext().getString(R.string.english));
                         LocaleManager.setNewLocale(LanguageSelectionScreen.this, "en");
                     }
                     loginPrefs.storeUserFirstTime("true");
@@ -212,5 +223,10 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                 }
             }
         });
+    }
+    void sendAnalyticsCourseDetail(String Language){
+        final Map<String, String> values = new HashMap<>();
+        values.put(Analytics.Keys.LANGAUGE_NAME,Language);
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.SELECTED_LANGAUGE,null,"Language Change",values);
     }
 }

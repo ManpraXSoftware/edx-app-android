@@ -65,6 +65,7 @@ public class TagsFragment extends BaseFragment implements OnRecyclerItemClickLis
     private FragmentTagsScreenBinding binding;
     private static String subject;
     private static String colorCode;
+    private static String uuid;
     private TagsAdapter tagsAdapter;
     @Inject
     protected IEdxEnvironment environment;
@@ -73,6 +74,7 @@ public class TagsFragment extends BaseFragment implements OnRecyclerItemClickLis
         final TagsFragment fragment = new TagsFragment();
         subject = bundle.getString(TagsFragmentActivity.SUBJECT);
         colorCode = bundle.getString(TagsFragmentActivity.COLOR_CODE);
+        uuid= bundle.getString(TagsFragmentActivity.UID);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -285,8 +287,8 @@ public class TagsFragment extends BaseFragment implements OnRecyclerItemClickLis
 
     void sendAnalyticsCourseDetail(TagTermResult tagTermResult){
         final Map<String, String> values = new HashMap<>();
-        values.put(Analytics.Keys.NAME,tagTermResult.getTerm());
-        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.SELECT_BOARD,null,null,values);
+        values.put(Analytics.Keys.TOPIC_NAME,tagTermResult.getTerm());
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.SELECTED_TOPIC,null,null,values);
     }
 
 }
