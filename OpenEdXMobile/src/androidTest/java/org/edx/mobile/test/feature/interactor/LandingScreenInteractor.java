@@ -15,7 +15,7 @@ public class LandingScreenInteractor {
 
     public LandingScreenInteractor observeLandingScreen() {
         // Look for launch_screen_logo view which (we assume) is only present on the landing screen
-        onView(withId(R.id.edx_logo)).check(matches(isCompletelyDisplayed()));
+        onView(withId(R.id.iv_edx_logo)).check(matches(isCompletelyDisplayed()));
         onRegistrationView().check(matches(isCompletelyDisplayed()));
         onLogInView().check(matches(isCompletelyDisplayed()));
         return this;

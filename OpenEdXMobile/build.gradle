@@ -13,24 +13,28 @@ buildscript {
         classpath 'org.yaml:snakeyaml:1.14'
 
         //Included for NewRelic
-        classpath "com.newrelic.agent.android:agent-gradle-plugin:5.4.1"
+        classpath "com.newrelic.agent.android:agent-gradle-plugin:+"
         //Screenshot testing library
-        classpath 'com.facebook.testing.screenshot:plugin:0.11.0'
-        classpath 'com.google.gms:google-services:4.2.0'
+        classpath 'com.facebook.testing.screenshot:plugin:0.8.0'
+        classpath 'com.google.gms:google-services:4.3.8'
     }
 }
 
 apply plugin: 'edxapp'
-apply plugin: 'kotlin-android-extensions'
+
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+/*apply plugin: 'kotlin-android'*/
 edx {
     platform = ANDROID
 }
 
 apply plugin: 'newrelic'
 apply plugin: 'com.facebook.testing.screenshot'
-apply from: 'jacoco.gradle'
+//apply plugin: 'jacoco'
 apply from: file('gradle_scripts/AndroidHelper.gradle')
 
 /**
@@ -256,7 +260,9 @@ dependencies {
     }
     //adding Room ORM for Database
     // database
-    implementation 'android.arch.persistence.room:rxjava2:2.4.1'
+    //implementation 'android.arch.persistence.room:rxjava2:2.4.0'
+    implementation 'androidx.room:room-rxjava2:2.4.0'
+
     // annotationProcessor 'android.arch.persistence.room:compiler:2.4.1'
 /*    implementation 'android.arch.persistence.room:runtime:1.0.0'
     annotationProcessor 'android.arch.persistence.room:compiler:1.0.0'*/
@@ -274,8 +280,9 @@ dependencies {
     }
 
     //New Relic Integration
-    implementation 'com.newrelic.agent.android:android-agent:5.4.1'
-
+    //implementation 'com.newrelic.agent.android:android-agent:6.8.0'
+    implementation 'com.newrelic.agent.android:android-agent:6.9.1'
+    //implementation 'com.newrelic.agent.android:android-agent:'
     // test project configuration
     testImplementation 'junit:junit:4.12'
     testImplementation("org.mockito:mockito-core:2.19.0") {
@@ -309,7 +316,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'org.hamcrest:hamcrest-library:1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation 'com.linkedin.dexmaker:dexmaker-mockito:2.12.1'
     androidTestImplementation('org.mockito:mockito-core:2.8.9') {
         exclude group: 'org.hamcrest'
@@ -419,7 +426,7 @@ android {
         if (fabric?.get('ENABLED')) {
             def fabric_key = fabric?.get('FABRIC_KEY')
             if (null == fabric_key) {
-                throw new GradleException("You must set FABRIC_KEY if Fabric is enabled")
+                throw  GradleException("You must set FABRIC_KEY if Fabric is enabled")
             } else {
                 resValue "string", "io.fabric.ApiKey", fabric_key
                 resValue "bool", "com.crashlytics.RequireBuildId", "false"
@@ -433,7 +440,7 @@ android {
                 if (branch != null && branch.get('ENABLED')) {
                     branchKey = branch.get('BRANCH_KEY')
                     if (null == branchKey) {
-                        throw new GradleException("You must set BRANCH_KEY if Branch is enabled")
+                        throw  GradleException("You must set BRANCH_KEY if Branch is enabled")
                     }
                 }
             }
@@ -445,7 +452,7 @@ android {
         if (facebook?.get('ENABLED')) {
             facebookAppId = facebook.get('FACEBOOK_APP_ID')
             if (null == facebookAppId) {
-                throw new GradleException("You must set FACEBOOK_APP_ID if FACEBOOK is enabled")
+                throw  GradleException("You must set FACEBOOK_APP_ID if FACEBOOK is enabled")
             }
             fbLoginProtocolScheme = "fb" + facebookAppId
         }
@@ -458,13 +465,13 @@ android {
                                 microsoftSignature   : microsoftSignature,
                                 fbLoginProtocolScheme: fbLoginProtocolScheme,
                                 sdCardEnabled        : config.get('DOWNLOAD_TO_SD_CARD_ENABLED') ?: true]
-
+/*
         javaCompileOptions {
 
             annotationProcessorOptions {
                 includeCompileClasspath false
             }
-        }
+        }*/
         testOptions.unitTests.includeAndroidResources = true
     }
     sourceSets {
@@ -565,15 +572,12 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
-    testOptions {
-        unitTests.all {
-            maxHeapSize '1g'
-        }
-    }
+
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+
     }
 }
 

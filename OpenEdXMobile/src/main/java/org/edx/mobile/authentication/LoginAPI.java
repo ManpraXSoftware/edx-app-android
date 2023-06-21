@@ -215,7 +215,7 @@ public class LoginAPI {
         return data;
     }
 
-    private void finishLogIn(@NonNull AuthResponse response, @NonNull AuthResponseJwt response_jwt, @NonNull LoginPrefs.AuthBackend authBackend, @NonNull String usernameUsedToLogIn) throws Exception {
+    private void finishLogIn(@NonNull AuthResponse response,AuthResponseJwt response_jwt, @NonNull LoginPrefs.AuthBackend authBackend, @NonNull String usernameUsedToLogIn) throws Exception {
         loginPrefs.storeAuthTokenResponse(response, response_jwt, authBackend);
         try {
             response.profile = getProfile();

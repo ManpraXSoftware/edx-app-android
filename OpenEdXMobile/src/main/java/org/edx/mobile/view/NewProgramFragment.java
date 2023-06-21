@@ -101,6 +101,8 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
     private String program_selected_uuid = "";
     private String program_selected_name = "";
     private static String program_uuid = "";
+
+    private  int selected_position=0;
     List<ProgramResultList> programResultLists = new ArrayList<>();
     private App mApp;
 
@@ -257,6 +259,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
                     String filterTitle = (String) parent.getItemAtPosition(position);
+                    selected_position=position;
 
                     // binding.optionSpinnerPrograms.setSelection(position, true);
                     // binding.optionSpinnerPrograms.setSelected(true);
@@ -398,7 +401,6 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
     public void onResume() {
         try {
             System.out.println("RRRRRRRRRRR onResume program_uuid {" + program_uuid + "}");
-
 
             handler.postDelayed(runnable = new Runnable() {
                 @Override
@@ -682,7 +684,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                 if (enrollResponse.isStatus()) {
                     if (dataCreation.getAction().equals("enroll")) {
                         getMyPrograms(false);
-                        //getMyCourseList();
+                        getMyCourseList();
                         programModelAdapter.setProgramEnroll(true, program_selected_uuid);
                         discoveryCourseAdapter.setEnroll(true);
                         binding.enrollInProgram.setVisibility(View.GONE);
@@ -940,15 +942,17 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                             }
                             binding.shimmerLayoutCourse.setVisibility(View.GONE);
                             discoveryCourseAdapter.setProgramCoursesLists(courseRuns, true, resumeCourse);
-                            binding.courseCount.setText(String.valueOf(courseRuns.size()) + " @@ " +
+                            binding.courseCount.setText(String.valueOf(courseRuns.size()) + " " +
                                     context.getString(R.string.courses_available));
                             binding.courseCount.setVisibility(View.VISIBLE);
                         }
                     }
                 }
-
+                binding.iconProgress.setVisibility(View.GONE);
                 // initSpinner();
-                programModelAdapter.notifyDataSetChanged();
+                //programModelAdapter.notifyDataSetChanged();
+                programModelAdapter.notifyItemChanged(selected_position);
+
             }
 
             @Override

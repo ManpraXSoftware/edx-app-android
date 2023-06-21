@@ -515,7 +515,7 @@ public class Router {
         StringBuilder body = new StringBuilder();
         body.append(String.format("%s %s", activity.getString(R.string.android_os_version), android.os.Build.VERSION.RELEASE))
                 .append(NEW_LINE)
-                .append(String.format("%s %s", activity.getString(R.string.app_version), BuildConfig.VERSION_NAME))
+                .append(String.format("%s %s", activity.getString(R.string.app_version),"1.0"))
                 .append(NEW_LINE)
                 .append(String.format("%s %s", activity.getString(R.string.android_device_model), Build.MODEL))
                 .append(NEW_LINE).append(NEW_LINE)

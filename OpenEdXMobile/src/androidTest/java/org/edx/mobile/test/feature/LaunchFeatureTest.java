@@ -1,5 +1,6 @@
 package org.edx.mobile.test.feature;
 
+import org.edx.mobile.authentication.AuthResponseJwt;
 import org.edx.mobile.authentication.LoginAPI;
 import org.edx.mobile.base.MainApplication;
 import org.edx.mobile.module.prefs.LoginPrefs;
@@ -28,7 +29,8 @@ public class LaunchFeatureTest extends FeatureTest {
 
     @Test
     public void whenAppLaunched_withInvalidAuthToken_logInScreenIsShown() {
-        environment.getLoginPrefs().storeAuthTokenResponse(TestValues.INVALID_AUTH_TOKEN_RESPONSE, LoginPrefs.AuthBackend.PASSWORD);
+        AuthResponseJwt response_jwt = new AuthResponseJwt();
+        environment.getLoginPrefs().storeAuthTokenResponse(TestValues.INVALID_AUTH_TOKEN_RESPONSE, response_jwt,LoginPrefs.AuthBackend.PASSWORD);
         environment.getLoginPrefs().storeUserProfile(TestValues.DUMMY_PROFILE);
         new AppInteractor()
                 .launchApp()
