@@ -48,6 +48,7 @@ import de.greenrobot.event.EventBus;
 import static org.edx.mobile.view.ProgramActivity.PROGRAM;
 import static org.edx.mobile.view.ProgramActivity.PROGRAM_CONVERTED;
 import static org.edx.mobile.view.ProgramActivity.PROGRAM_UUID;
+import static org.edx.mobile.view.ProgramActivity.TAGSCREENFLAG;
 
 public class MyProgramListFragment extends OfflineSupportBaseFragment
         implements RefreshListener, OnRecyclerItemClickListener,
@@ -346,6 +347,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
             bundle1.putString(PROGRAM, myProgramListModel.getConvertedTagName());
             bundle1.putString(PROGRAM_CONVERTED, myProgramListModel.getTagName());
             bundle1.putString(PROGRAM_UUID, myProgramListModel.getProgramUUid());
+            bundle1.putBoolean(TAGSCREENFLAG, false);
             newProgramFragment.setArguments(bundle1);
             sendAnalyticsCourseDetail(myProgramListModel);
             getActivity().getSupportFragmentManager().beginTransaction()

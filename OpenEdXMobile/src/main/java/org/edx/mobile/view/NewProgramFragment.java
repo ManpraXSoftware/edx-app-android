@@ -102,6 +102,8 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
     private String program_selected_name = "";
     private static String program_uuid = "";
 
+    private static boolean tag_screen_flag  = false;
+
     private  int selected_position=0;
     List<ProgramResultList> programResultLists = new ArrayList<>();
     private App mApp;
@@ -119,6 +121,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         topic_name = bundle.getString(ProgramActivity.PROGRAM);
         topic_converted_name = bundle.getString(ProgramActivity.PROGRAM_CONVERTED);
         program_uuid = bundle.getString(ProgramActivity.PROGRAM_UUID);
+        tag_screen_flag=bundle.getBoolean(ProgramActivity.TAGSCREENFLAG);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -129,6 +132,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         topic_name = getArguments().getString(ProgramActivity.PROGRAM);
         topic_converted_name = getArguments().getString(ProgramActivity.PROGRAM_CONVERTED);
         program_uuid = getArguments().getString(ProgramActivity.PROGRAM_UUID);
+        tag_screen_flag= getArguments().getBoolean(ProgramActivity.TAGSCREENFLAG);
     }
 
     @Override
@@ -258,132 +262,18 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
             binding.optionSpinnerPrograms.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
-                    String filterTitle = (String) parent.getItemAtPosition(position);
+                    filterTitle = (String) parent.getItemAtPosition(position);
                     selected_position=position;
 
                     // binding.optionSpinnerPrograms.setSelection(position, true);
                     // binding.optionSpinnerPrograms.setSelected(true);
                     // (programResultList.getConverted_title() != null &&
                     // !programResultList.getConverted_title().isEmpty()) ||
-                    for (ProgramResultList programResultList : programResultLists) {
-                        if ((programResultList.getConverted_title()).equals(filterTitle)
-                                || (programResultList.getTitle()).equals(filterTitle)) {
-                            sendAnalyticsfilter(programResultList);
-
-                            System.out.println("RRRRRRRRRRR optionSpinnerPrograms isProgramEnroll() {"
-                                    + programResultList.isProgramEnroll() + "}" + "{" + programResultList.getUuid()
-                                    + "}{" + programResultList.getTitle() + "} getCousreLength {"+programResultList.getCourses().size()+"}");
-
-                            if (programResultList.isProgramEnroll()) {
-
-                                binding.unenrollFromProgram.setVisibility(View.VISIBLE);
-                                binding.enrollInProgram.setVisibility(View.GONE);
-
-                                binding.ivCheck.setVisibility(View.VISIBLE);
-                                if (topic_converted_name != null && !topic_converted_name.isEmpty()) {
-                                    if (programResultList.getConverted_title() != null
-                                            && !programResultList.getConverted_title().isEmpty()) {
-                                        binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
-                                                topic_converted_name + " " + programResultList.getConverted_title()
-                                                + " " + getString(R.string.program));
-                                    } else {
-                                        binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
-                                                topic_converted_name + " " + programResultList.getTitle() + " "
-                                                + getString(R.string.program));
-                                    }
-
-                                } else {
-                                    binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
-                                            topic_name + " " + programResultList.getTitle() + " "
-                                            + getString(R.string.program));
-                                }
-
-                                binding.courseDatailEnroll.setVisibility(View.VISIBLE);
-                                binding.courseDatailUnenroll.setVisibility(View.GONE);
-                            } else {
-                                binding.enrollInProgram.setVisibility(View.VISIBLE);
-                                binding.unenrollFromProgram.setVisibility(View.GONE);
-                                binding.ivCheck.setVisibility(View.GONE);
-                                binding.courseDatailEnroll.setVisibility(View.GONE);
-                                binding.courseDatailUnenroll.setVisibility(View.VISIBLE);
-                            }
-                            binding.lnEnrollInfo.setVisibility(View.VISIBLE);
-                            binding.errorMsgTv.setVisibility(View.GONE);
-                            program_selected_uuid = programResultList.getUuid();
-                            program_selected_name = programResultList.getTitle();
-                            binding.shimmerLayoutProgramName.setVisibility(View.GONE);
-                            binding.linerProgramName.setVisibility(View.VISIBLE);
-                            if (programResultList.getConverted_title() != null
-                                    && !programResultList.getConverted_title().isEmpty()) {
-                                binding.programNameInCard.setText(programResultList.getConverted_title());
-                            } else {
-                                binding.programNameInCard.setText(programResultList.getTitle());
-                            }
-
-                            if (programResultList.getAuthoring_organizations() != null
-                                    && programResultList.getAuthoring_organizations().size() > 0) {
-                                authorising_organisation = "";
-                                if (programResultList.getAuthoring_organizations().size() > 1) {
-                                    for (AuthoringOrganisations authoringOrganisations : programResultList
-                                            .getAuthoring_organizations()) {
-                                        if (authorising_organisation.isEmpty()) {
-                                            authorising_organisation = authoringOrganisations.getName();
-                                        } else {
-                                            authorising_organisation = authoringOrganisations + ","
-                                                    + authoringOrganisations.getName();
-                                        }
-                                    }
-                                } else {
-                                    authorising_organisation = programResultList.getAuthoring_organizations().get(0)
-                                            .getName();
-                                }
-                            }
-                            binding.shimmerLayoutOrganisation.setVisibility(View.GONE);
-                            binding.organisations.setText(authorising_organisation);
-                            boolean enroll = false;
-                            if (enrolledCoursesResponses != null) {
-                                for (EnrolledCoursesResponse enrolledCoursesResponse : enrolledCoursesResponses) {
-                                    if (enrolledCoursesResponse.getCourse() != null) {
-                                        for (ProgramCoursesList programCoursesList : programResultList.getCourses()) {
-                                            if (programCoursesList.getCourseRuns() != null) {
-                                                for (CourseRuns courseRuns : programCoursesList.getCourseRuns()) {
-                                                    if (courseRuns.getKey()
-                                                            .equals(enrolledCoursesResponse.getCourse().getId())) {
-                                                        courseRuns.setCourse_status(
-                                                                enrolledCoursesResponse.getCourse_status());
-                                                        enroll = true;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            binding.shimmerLayoutCourseButton.setVisibility(View.GONE);
-
-                            List<CourseRuns> courseRuns = new ArrayList<>();
-                            for (ProgramCoursesList programCoursesList : programResultList.getCourses()) {
-                                courseRuns.addAll(programCoursesList.getCourseRuns());
-                            }
-
-                            binding.shimmerLayoutCourse.setVisibility(View.GONE);
-                            discoveryCourseAdapter.setProgramCoursesLists(courseRuns,
-                                    programResultList.isProgramEnroll(), resumeCourse);
-                            if (courseRuns == null) {
-                                binding.errorMsgTv.setText(getString(R.string.no_course_found));
-                                binding.lnEnrollInfo.setVisibility(View.GONE);
-                                binding.errorMsgTv.setVisibility(View.VISIBLE);
-                                binding.errorMsgTv.sendAccessibilityEvent(
-                                        AccessibilityEvent.WINDOWS_CHANGE_ACCESSIBILITY_FOCUSED);
-                            } else if (courseRuns.size() == 0) {
-                                binding.errorMsgTv.setText(getString(R.string.no_course_found));
-                                binding.lnEnrollInfo.setVisibility(View.GONE);
-                                binding.errorMsgTv.setVisibility(View.VISIBLE);
-                                binding.errorMsgTv.sendAccessibilityEvent(
-                                        AccessibilityEvent.WINDOWS_CHANGE_ACCESSIBILITY_FOCUSED);
-                            }
-
-                        }
+                    try {
+                        program_uuid = programResultLists.get(position).getUuid();
+                        getMyCourseList();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
                     }
                 }
 
@@ -394,6 +284,132 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
             });
         }
 
+    }
+    String filterTitle;
+    void onProgramSelection(){
+        for (ProgramResultList programResultList : programResultLists) {
+            if ((programResultList.getConverted_title()).equals(filterTitle)
+                    || (programResultList.getTitle()).equals(filterTitle)) {
+                sendAnalyticsfilter(programResultList);
+
+                System.out.println("RRRRRRRRRRR optionSpinnerPrograms isProgramEnroll() {"
+                        + programResultList.isProgramEnroll() + "}" + "{" + programResultList.getUuid()
+                        + "}{" + programResultList.getTitle() + "} getCousreLength {"+programResultList.getCourses().size()+"}");
+
+                if (programResultList.isProgramEnroll()) {
+
+                    binding.unenrollFromProgram.setVisibility(View.VISIBLE);
+                    binding.enrollInProgram.setVisibility(View.GONE);
+
+                    binding.ivCheck.setVisibility(View.VISIBLE);
+                    if (topic_converted_name != null && !topic_converted_name.isEmpty()) {
+                        if (programResultList.getConverted_title() != null
+                                && !programResultList.getConverted_title().isEmpty()) {
+                            binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
+                                    topic_converted_name + " " + programResultList.getConverted_title()
+                                    + " " + getString(R.string.program));
+                        } else {
+                            binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
+                                    topic_converted_name + " " + programResultList.getTitle() + " "
+                                    + getString(R.string.program));
+                        }
+
+                    } else {
+                        binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
+                                topic_name + " " + programResultList.getTitle() + " "
+                                + getString(R.string.program));
+                    }
+
+                    binding.courseDatailEnroll.setVisibility(View.VISIBLE);
+                    binding.courseDatailUnenroll.setVisibility(View.GONE);
+                } else {
+                    binding.enrollInProgram.setVisibility(View.VISIBLE);
+                    binding.unenrollFromProgram.setVisibility(View.GONE);
+                    binding.ivCheck.setVisibility(View.GONE);
+                    binding.courseDatailEnroll.setVisibility(View.GONE);
+                    binding.courseDatailUnenroll.setVisibility(View.VISIBLE);
+                }
+                binding.lnEnrollInfo.setVisibility(View.VISIBLE);
+                binding.errorMsgTv.setVisibility(View.GONE);
+                program_selected_uuid = programResultList.getUuid();
+                program_selected_name = programResultList.getTitle();
+                binding.shimmerLayoutProgramName.setVisibility(View.GONE);
+                binding.linerProgramName.setVisibility(View.VISIBLE);
+                if (programResultList.getConverted_title() != null
+                        && !programResultList.getConverted_title().isEmpty()) {
+                    binding.programNameInCard.setText(programResultList.getConverted_title());
+                } else {
+                    binding.programNameInCard.setText(programResultList.getTitle());
+                }
+
+                if (programResultList.getAuthoring_organizations() != null
+                        && programResultList.getAuthoring_organizations().size() > 0) {
+                    authorising_organisation = "";
+                    if (programResultList.getAuthoring_organizations().size() > 1) {
+                        for (AuthoringOrganisations authoringOrganisations : programResultList
+                                .getAuthoring_organizations()) {
+                            if (authorising_organisation.isEmpty()) {
+                                authorising_organisation = authoringOrganisations.getName();
+                            } else {
+                                authorising_organisation = authoringOrganisations + ","
+                                        + authoringOrganisations.getName();
+                            }
+                        }
+                    } else {
+                        authorising_organisation = programResultList.getAuthoring_organizations().get(0)
+                                .getName();
+                    }
+                }
+                binding.shimmerLayoutOrganisation.setVisibility(View.GONE);
+                binding.organisations.setText(authorising_organisation);
+                boolean enroll = false;
+                if (enrolledCoursesResponses != null) {
+                    for (EnrolledCoursesResponse enrolledCoursesResponse : enrolledCoursesResponses) {
+                        if (enrolledCoursesResponse.getCourse() != null) {
+                            for (ProgramCoursesList programCoursesList : programResultList.getCourses()) {
+                                if (programCoursesList.getCourseRuns() != null) {
+                                    for (CourseRuns courseRuns : programCoursesList.getCourseRuns()) {
+                                        if (courseRuns.getKey()
+                                                .equals(enrolledCoursesResponse.getCourse().getId())) {
+                                            courseRuns.setCourse_status(
+                                                    enrolledCoursesResponse.getCourse_status());
+                                            enroll = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                binding.shimmerLayoutCourseButton.setVisibility(View.GONE);
+
+                List<CourseRuns> courseRuns = new ArrayList<>();
+                for (ProgramCoursesList programCoursesList : programResultList.getCourses()) {
+                    courseRuns.addAll(programCoursesList.getCourseRuns());
+                }
+                binding.courseCount.setText(String.valueOf(courseRuns.size()) + " " +
+                        requireContext().getString(R.string.courses_available));
+                binding.courseCount.setVisibility(View.VISIBLE);
+
+                binding.shimmerLayoutCourse.setVisibility(View.GONE);
+                discoveryCourseAdapter.setProgramCoursesLists(courseRuns,
+                        programResultList.isProgramEnroll(), resumeCourse);
+                if (courseRuns == null) {
+                    binding.errorMsgTv.setText(getString(R.string.no_course_found));
+                    binding.lnEnrollInfo.setVisibility(View.GONE);
+                    binding.errorMsgTv.setVisibility(View.VISIBLE);
+                    binding.errorMsgTv.sendAccessibilityEvent(
+                            AccessibilityEvent.WINDOWS_CHANGE_ACCESSIBILITY_FOCUSED);
+                } else if (courseRuns.size() == 0) {
+                    binding.errorMsgTv.setText(getString(R.string.no_course_found));
+                    binding.lnEnrollInfo.setVisibility(View.GONE);
+                    binding.errorMsgTv.setVisibility(View.VISIBLE);
+                    binding.errorMsgTv.sendAccessibilityEvent(
+                            AccessibilityEvent.WINDOWS_CHANGE_ACCESSIBILITY_FOCUSED);
+                }
+
+            }
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -423,7 +439,8 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                 }
             }, delay);
             getMyPrograms(true);
-            getMyCourseList();
+            if(!program_uuid.isEmpty())
+              getMyCourseList();
 
             // loadData(true);
         } catch (Exception e) {
@@ -679,11 +696,11 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
             protected void onSuccess(EnrollResponse enrollResponse) throws Exception {
                 super.onSuccess(enrollResponse);
                 binding.unenrollFromProgram.setEnabled(true);
-                binding.unenrollFromProgram.setEnabled(true);
+                binding.enrollInProgram.setEnabled(true);
                 System.out.println("RRRRRRRRRRR EnrollInCourseTask program_uuid {" + program_uuid+"}");
                 if (enrollResponse.isStatus()) {
                     if (dataCreation.getAction().equals("enroll")) {
-                        getMyPrograms(false);
+                        //getMyPrograms(false);
                         getMyCourseList();
                         programModelAdapter.setProgramEnroll(true, program_selected_uuid);
                         discoveryCourseAdapter.setEnroll(true);
@@ -902,15 +919,47 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
     private boolean isGetMyCourseListRun = true;
 
     private void getMyCourseList() throws Exception {
+        if(tag_screen_flag) {
+        binding.rvCourses.setVisibility(View.GONE);
+        binding.courseCount.setVisibility(View.GONE);
+        binding.programNameInCard.setVisibility(View.GONE);
+        binding.linerProgramName.setVisibility(View.GONE);
+        binding.courseStatus.setVisibility(View.GONE);
+            binding.errorMsgTv.setVisibility(View.GONE);
+            //binding.shimmerLayoutOrganisation.setVisibility(View.VISIBLE);
+            //binding.shimmerLayoutProgram.setVisibility(View.VISIBLE);
+            binding.shimmerLayoutCourse.setVisibility(View.VISIBLE);
+            //binding.shimmerLayoutProgramName.setVisibility(View.VISIBLE);
+            //binding.shimmerLayoutCourseButton.setVisibility(View.VISIBLE);
+        }
+
+
         System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRR getMyCourseList program_uuid {" + program_uuid + " }");
         MyCourseTask myCourseTask = new MyCourseTask(getContext(), program_uuid, loginPrefs.getUsername(),
                 loginPrefs.getAuthorizationHeader()) {
             @Override
             public void onSuccess(@NonNull List<EnrolledCoursesResponse> result) {
+                if(tag_screen_flag) {
+                    binding.rvCourses.setVisibility(View.VISIBLE);
+                    binding.programNameInCard.setVisibility(View.VISIBLE);
+                    binding.linerProgramName.setVisibility(View.VISIBLE);
+                    binding.courseStatus.setVisibility(View.VISIBLE);
+                    binding.errorMsgTv.setVisibility(View.VISIBLE);
+                    binding.errorMsgTv.setVisibility(View.VISIBLE);
+
+
+                    // binding.shimmerLayoutOrganisation.setVisibility(View.GONE);
+                    //binding.shimmerLayoutProgram.setVisibility(View.GONE);
+                    binding.shimmerLayoutCourse.setVisibility(View.GONE);
+                    //binding.shimmerLayoutProgramName.setVisibility(View.GONE);
+                    //binding.shimmerLayoutCourseButton.setVisibility(View.GONE);
+                }
+
+
                 if (result != null) {
                     enrolledCoursesResponses = new ArrayList<EnrolledCoursesResponse>(result);
                     Log.e("ResponseCompleteData", enrolledCoursesResponses + "");
-                    if (!program_uuid.isEmpty() || isEnroll) {
+                    if (/*!program_uuid.isEmpty() ||*/ isEnroll) {
                         isEnroll = false;
                         if (isGetMyCourseListRun) {
                             isGetMyCourseListRun = false;
@@ -941,13 +990,14 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                                 courseRuns.addAll(programCoursesList.getCourseRuns());
                             }
                             binding.shimmerLayoutCourse.setVisibility(View.GONE);
-                            discoveryCourseAdapter.setProgramCoursesLists(courseRuns, true, resumeCourse);
                             binding.courseCount.setText(String.valueOf(courseRuns.size()) + " " +
                                     context.getString(R.string.courses_available));
                             binding.courseCount.setVisibility(View.VISIBLE);
+                            discoveryCourseAdapter.setProgramCoursesLists(courseRuns, true, resumeCourse);
                         }
                     }
                 }
+                onProgramSelection();
                 binding.iconProgress.setVisibility(View.GONE);
                 // initSpinner();
                 //programModelAdapter.notifyDataSetChanged();

@@ -92,6 +92,11 @@ public class DiscoveryCourseAdapter extends RecyclerView.Adapter<DiscoveryCourse
                     holder.itemBinding.viewButton.setVisibility(View.VISIBLE);
                     holder.itemBinding.contnueButton.setVisibility(View.GONE);
                 }
+
+            }
+            else {
+                holder.itemBinding.shimmerLayoutViewButton.stopShimmer();
+                holder.itemBinding.shimmerLayoutViewButton.setVisibility(View.GONE);
             }
             if(model.getConverted_course_title()!=null && !model.getConverted_course_title().isEmpty()){
                 holder.itemBinding.courseNameEnrolled.setText(model.getConverted_course_title());

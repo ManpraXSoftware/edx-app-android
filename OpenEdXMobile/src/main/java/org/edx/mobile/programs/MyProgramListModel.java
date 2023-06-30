@@ -3,6 +3,8 @@ package org.edx.mobile.programs;
 import java.util.HashMap;
 
 public class MyProgramListModel {
+
+
     public String getProgramName() {
         return programName;
     }

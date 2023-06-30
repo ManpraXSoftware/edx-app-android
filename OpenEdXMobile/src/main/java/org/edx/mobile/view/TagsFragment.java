@@ -51,6 +51,7 @@ import static org.edx.mobile.util.links.WebViewLink.Param.PROGRAMS;
 import static org.edx.mobile.view.ProgramActivity.PROGRAM;
 import static org.edx.mobile.view.ProgramActivity.PROGRAM_CONVERTED;
 import static org.edx.mobile.view.ProgramActivity.PROGRAM_UUID;
+import static org.edx.mobile.view.ProgramActivity.TAGSCREENFLAG;
 import static org.edx.mobile.view.TagsFragmentActivity.COLOR_CODE;
 import static org.edx.mobile.view.TagsFragmentActivity.SUBJECT;
 
@@ -278,6 +279,7 @@ public class TagsFragment extends BaseFragment implements OnRecyclerItemClickLis
             bundle1.putString(PROGRAM, tagTermResult.getTerm());
             bundle1.putString(PROGRAM_CONVERTED, tagTermResult.getConverted_term());
             bundle1.putString(PROGRAM_UUID, "");
+            bundle1.putBoolean(TAGSCREENFLAG, true);
             newProgramFragment.setArguments(bundle1);
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.main_fragment, newProgramFragment, NewProgramFragment.TAG).addToBackStack(NewProgramFragment.TAG)
