@@ -1,7 +1,7 @@
 package org.humana.mobile.tta.ui.reset_password.view_model;
 
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;

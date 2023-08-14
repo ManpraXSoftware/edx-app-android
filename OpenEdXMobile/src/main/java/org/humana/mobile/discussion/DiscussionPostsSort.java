@@ -1,6 +1,6 @@
 package org.humana.mobile.discussion;
 
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 
 import org.humana.mobile.R;
 import org.humana.mobile.interfaces.TextResourceProvider;

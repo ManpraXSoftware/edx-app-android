@@ -2,8 +2,8 @@ package org.humana.mobile.view.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,8 +20,9 @@ import org.humana.mobile.discussion.DiscussionTextUtils;
 import org.humana.mobile.discussion.DiscussionThread;
 import org.humana.mobile.util.ResourceUtil;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
-import uk.co.chrisjenx.calligraphy.TypefaceUtils;
+import io.github.inflationx.calligraphy3.CalligraphyUtils;
+import io.github.inflationx.calligraphy3.TypefaceUtils;
+
 
 public class DiscussionPostsAdapter extends BaseListAdapter<DiscussionThread> {
     @ColorInt

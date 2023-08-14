@@ -1,6 +1,6 @@
 package org.humana.mobile.view.common;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 
 public interface TaskProgressCallback {

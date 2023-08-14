@@ -1,6 +1,6 @@
 package org.humana.mobile.profiles;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.humana.mobile.interfaces.RefreshListener;
 import org.humana.mobile.module.analytics.AnalyticsRegistry;

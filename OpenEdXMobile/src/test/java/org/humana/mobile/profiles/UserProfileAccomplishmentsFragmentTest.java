@@ -2,9 +2,9 @@ package org.humana.mobile.profiles;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.humana.mobile.databinding.FragmentUserProfileAccomplishmentsBinding;
 import org.humana.mobile.view.PresenterFragmentTest;

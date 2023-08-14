@@ -2,7 +2,7 @@ package org.humana.mobile.view;
 
 
 import android.app.Activity;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import org.humana.mobile.base.RoboAppCompatActivity;
 import org.humana.mobile.interfaces.SnackbarStatusListener;

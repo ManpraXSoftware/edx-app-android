@@ -1,7 +1,7 @@
 package org.humana.mobile.tta.data.pref;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import org.humana.mobile.module.prefs.PrefManager;
 
 import javax.inject.Inject;

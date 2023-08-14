@@ -15,7 +15,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
     }
 
@@ -34,18 +34,18 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
-    implementation "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
-    implementation "com.android.support:cardview-v7:${SUPPORT_LIBRARY_VERSION}"
+    implementation "androidx.appcompat:appcompat:1.0.0"
+    implementation "com.google.android.material:material:1.0.0"
+    implementation "androidx.cardview:cardview:1.0.0"
 //    compile 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation "com.android.support:support-vector-drawable:${SUPPORT_LIBRARY_VERSION}"
+    implementation "androidx.vectordrawable:vectordrawable:1.0.0"
 //    testCompile 'junit:junit:4.12'
 //    androidTestCompile 'com.android.support.test:runner:1.0.2'
 //    androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
-    implementation ('com.romandanylyk:pageindicatorview:1.0.1@aar') {
+   /* implementation ('com.romandanylyk:pageindicatorview:1.0.1@aar') {
         exclude group: 'com.android.support'
-    }
+    }*/
     implementation ('com.github.bumptech.glide:glide:3.7.0') {
         exclude group: 'com.android.support'
     }

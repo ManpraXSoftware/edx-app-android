@@ -6,7 +6,7 @@
             name="viewModel"
             type="org.humana.mobile.tta.ui.programs.units.view_model.UnitCalendarViewModel" />
     </data>
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
@@ -199,5 +199,5 @@
         </GridView>
         </FrameLayout>
     </LinearLayout>
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

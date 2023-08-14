@@ -1,6 +1,6 @@
 package org.humana.mobile.tta.scorm;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import org.humana.mobile.model.course.BlockModel;
 import org.humana.mobile.model.course.CourseComponent;

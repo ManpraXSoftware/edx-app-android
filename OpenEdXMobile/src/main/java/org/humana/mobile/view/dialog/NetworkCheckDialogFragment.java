@@ -1,7 +1,7 @@
 package org.humana.mobile.view.dialog;
 
 import org.humana.mobile.R;
-import android.support.v4.app.DialogFragment;
+import androidx.fragment.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

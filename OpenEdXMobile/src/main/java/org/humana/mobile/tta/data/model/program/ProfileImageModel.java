@@ -1,6 +1,6 @@
 package org.humana.mobile.tta.data.model.program;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,6 +1,6 @@
 package org.humana.mobile.test.feature;
 
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.humana.mobile.base.MainApplication;
 import org.humana.mobile.core.EdxEnvironment;

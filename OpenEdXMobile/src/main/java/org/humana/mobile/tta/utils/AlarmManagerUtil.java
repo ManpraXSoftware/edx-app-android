@@ -42,7 +42,7 @@ public class AlarmManagerUtil {
     public boolean checkAlarmExist(Intent intent, int requestCode) {
         boolean isTrue = false;
 
-        PendingIntent pendingIntent = PendingIntent.getService(mContext, requestCode, intent, PendingIntent.FLAG_NO_CREATE);
+        PendingIntent pendingIntent = PendingIntent.getService(mContext, requestCode, intent, PendingIntent.FLAG_IMMUTABLE);
 
         if (pendingIntent != null) {
             isTrue = true;
@@ -61,7 +61,7 @@ public class AlarmManagerUtil {
      * @return
      */
     private PendingIntent getAlarmServiceIntent(Intent intent, int requestCode) {
-        PendingIntent pendingIntent = PendingIntent.getService(mContext, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getService(mContext, requestCode, intent, PendingIntent.FLAG_IMMUTABLE);
         return pendingIntent;
     }
 

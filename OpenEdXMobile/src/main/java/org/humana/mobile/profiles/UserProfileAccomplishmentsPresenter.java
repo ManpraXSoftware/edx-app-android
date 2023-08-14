@@ -1,6 +1,6 @@
 package org.humana.mobile.profiles;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.humana.mobile.http.callback.Callback;
 import org.humana.mobile.model.Page;

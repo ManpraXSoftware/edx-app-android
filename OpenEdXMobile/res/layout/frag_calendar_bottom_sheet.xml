@@ -7,7 +7,7 @@
             name="viewModel"
             type="org.humana.mobile.tta.ui.programs.units.view_model.CalendarBottomSheetViewModel" />
     </data>
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ProgressBar
@@ -19,7 +19,7 @@
             android:visibility="@{viewModel.progressVisible ? View.VISIBLE : View.GONE}"
             style="@style/edX.Widget.ProgressBar"/>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
@@ -41,7 +41,7 @@
             android:id="@+id/tray_button"
             android:background="@drawable/ic_keyboard_arrow_up_black_24dp"
             />
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -75,7 +75,7 @@
                 android:layout_gravity="center"
                 android:text="No event on this date"
                 android:textColor="@color/black" />
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
     <FrameLayout
     android:id="@+id/fl_unit"
@@ -93,5 +93,5 @@
 
 </FrameLayout>
     </LinearLayout>
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </layout>

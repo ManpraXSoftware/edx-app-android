@@ -1,17 +1,15 @@
 package org.humana.mobile.tta.ui.programs.selectprogram.viewmodel;
 
-import android.databinding.ObservableBoolean;
-import android.support.design.widget.BottomNavigationView;
+import androidx.databinding.ObservableBoolean;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.humana.mobile.R;
 import org.humana.mobile.event.NetworkConnectivityChangeEvent;
 import org.humana.mobile.tta.data.local.db.table.ContentStatus;
 import org.humana.mobile.tta.event.ContentStatusReceivedEvent;
-import org.humana.mobile.tta.ui.agenda.AgendaFragment;
 import org.humana.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.humana.mobile.tta.ui.base.mvvm.BaseViewModel;
 import org.humana.mobile.tta.ui.feed.FeedFragment;
-import org.humana.mobile.tta.ui.library.LibraryFragment;
 import org.humana.mobile.tta.ui.profile.ProfileFragment;
 import org.humana.mobile.tta.ui.programs.selectprogram.SelectProgramFragment;
 import org.humana.mobile.tta.ui.search.SearchFragment;

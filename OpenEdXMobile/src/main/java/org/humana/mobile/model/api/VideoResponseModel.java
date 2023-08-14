@@ -1,6 +1,6 @@
 package org.humana.mobile.model.api;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import org.humana.mobile.interfaces.SectionItemInterface;
 import org.humana.mobile.model.course.BlockType;

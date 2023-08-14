@@ -1,7 +1,7 @@
 package org.humana.mobile.util;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.humana.mobile.base.MainApplication;
 import org.humana.mobile.model.course.VideoData;

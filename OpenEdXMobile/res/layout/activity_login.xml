@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/cl_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -71,7 +71,7 @@
                         android:paddingStart="-4dp"
                         android:textColorHint="@color/grey_text">
 
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/email_et"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
 
                     </org.humana.mobile.view.custom.EdxTextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:passwordToggleDrawable="@drawable/view_password"
@@ -88,13 +88,13 @@
                         android:textColorHint="@color/grey_text"
                         app:passwordToggleTint="@color/colorAccent">
 
-                        <android.support.design.widget.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/password"
                             android:id="@+id/password_et"
                             android:inputType="textPassword"/>
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:visibility="gone"
@@ -165,5 +165,5 @@
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

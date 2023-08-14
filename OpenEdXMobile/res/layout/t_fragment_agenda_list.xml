@@ -14,7 +14,7 @@
         android:background="@color/app_background"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -26,7 +26,7 @@
             app:contentInsetStartWithNavigation="0dp"
             app:titleMarginStart="0dp" />
 
-        <android.support.design.widget.TabLayout
+        <com.google.android.material.tabs.TabLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:id="@+id/listing_tab_layout"
@@ -38,7 +38,7 @@
             app:tabMode="fixed"
             app:tabTextAppearance="@style/ta_tab_text_appearance" />
 
-        <android.support.v4.view.ViewPager
+        <androidx.viewpager.widget.ViewPager
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/listing_view_pager"

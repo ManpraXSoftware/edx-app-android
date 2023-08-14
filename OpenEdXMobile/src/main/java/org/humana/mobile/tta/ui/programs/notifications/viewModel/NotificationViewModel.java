@@ -1,15 +1,14 @@
 package org.humana.mobile.tta.ui.programs.notifications.viewModel;
 
 import android.content.Context;
-import android.databinding.ObservableBoolean;
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.maurya.mx.mxlib.core.MxInfiniteAdapter;
 import com.maurya.mx.mxlib.core.OnRecyclerItemClickListener;
@@ -24,10 +23,8 @@ import org.humana.mobile.tta.data.Notification;
 import org.humana.mobile.tta.data.NotificationResponse;
 import org.humana.mobile.tta.data.enums.SourceType;
 import org.humana.mobile.tta.data.local.db.table.Content;
-import org.humana.mobile.tta.data.local.db.table.Unit;
 import org.humana.mobile.tta.data.model.SuccessResponse;
 import org.humana.mobile.tta.data.model.program.EventNotificationCount;
-import org.humana.mobile.tta.event.ContentStatusReceivedEvent;
 import org.humana.mobile.tta.interfaces.OnResponseCallback;
 import org.humana.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.humana.mobile.tta.ui.base.mvvm.BaseViewModel;
@@ -39,8 +36,6 @@ import org.humana.mobile.util.NetworkUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 

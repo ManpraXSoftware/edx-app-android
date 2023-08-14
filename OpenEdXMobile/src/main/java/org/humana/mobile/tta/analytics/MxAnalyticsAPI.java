@@ -1,5 +1,5 @@
 package org.humana.mobile.tta.analytics;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

@@ -1,6 +1,6 @@
 package org.humana.mobile.view;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.humana.mobile.base.BaseAppActivity;
 import org.humana.mobile.test.BaseTestCase;

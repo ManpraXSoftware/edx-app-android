@@ -1,10 +1,10 @@
 package org.humana.mobile.view;
 
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
-import android.support.v4.widget.SwipeRefreshLayout;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +26,6 @@ import org.humana.mobile.interfaces.RefreshListener;
 import org.humana.mobile.loader.AsyncTaskResult;
 import org.humana.mobile.loader.CoursesAsyncLoader;
 import org.humana.mobile.logger.Logger;
-import org.humana.mobile.model.api.CourseEntry;
 import org.humana.mobile.model.api.EnrolledCoursesResponse;
 import org.humana.mobile.module.db.DataCallback;
 import org.humana.mobile.module.prefs.LoginPrefs;

@@ -2,8 +2,8 @@ package org.humana.mobile.tta.ui.reset_password;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.humana.mobile.R;
 import org.humana.mobile.tta.ui.base.mvvm.BaseVMActivity;

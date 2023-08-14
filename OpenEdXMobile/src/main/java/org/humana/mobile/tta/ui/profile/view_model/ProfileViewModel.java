@@ -1,8 +1,8 @@
 package org.humana.mobile.tta.ui.profile.view_model;
 
 import android.content.Context;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
 
 import org.humana.mobile.R;
 import org.humana.mobile.model.api.ProfileModel;

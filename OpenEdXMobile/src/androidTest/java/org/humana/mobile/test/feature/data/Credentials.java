@@ -1,6 +1,6 @@
 package org.humana.mobile.test.feature.data;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.humana.mobile.util.Config;
 import org.humana.mobile.util.ResourceUtil;

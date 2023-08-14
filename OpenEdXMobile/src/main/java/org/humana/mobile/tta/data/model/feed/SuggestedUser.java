@@ -1,6 +1,6 @@
 package org.humana.mobile.tta.data.model.feed;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import androidx.annotation.Nullable;
 

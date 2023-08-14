@@ -1,7 +1,7 @@
 package org.humana.mobile.services;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.LruCache;
 
 import com.google.inject.Inject;
@@ -11,7 +11,6 @@ import org.humana.mobile.course.CourseAPI;
 import org.humana.mobile.course.ScormBlockModel;
 import org.humana.mobile.logger.Logger;
 import org.humana.mobile.model.Filter;
-import org.humana.mobile.model.VideoModel;
 import org.humana.mobile.model.course.BlockModel;
 import org.humana.mobile.model.course.BlockType;
 import org.humana.mobile.model.course.CourseComponent;

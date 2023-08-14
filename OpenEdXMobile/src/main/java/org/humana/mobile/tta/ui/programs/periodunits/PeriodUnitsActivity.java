@@ -1,7 +1,7 @@
 package org.humana.mobile.tta.ui.programs.periodunits;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.MenuItem;
 
 import com.lib.mxcalendar.util.Builder;

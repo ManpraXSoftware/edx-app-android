@@ -1,6 +1,6 @@
 package org.humana.mobile.model.api;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.humana.mobile.logger.Logger;
 import org.humana.mobile.util.InvalidLocaleException;

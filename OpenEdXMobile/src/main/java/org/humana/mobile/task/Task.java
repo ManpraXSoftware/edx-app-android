@@ -2,7 +2,7 @@ package org.humana.mobile.task;
 
 import android.content.Context;
 import android.os.Handler;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 
 import com.google.inject.Inject;

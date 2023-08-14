@@ -3,7 +3,7 @@ package org.humana.mobile.util;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.google.gson.internal.bind.util.ISO8601Utils;
 

@@ -1,6 +1,6 @@
 package org.humana.mobile.module.db;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 public class ObservableDataCallback<T> extends DataCallback<T> {
 

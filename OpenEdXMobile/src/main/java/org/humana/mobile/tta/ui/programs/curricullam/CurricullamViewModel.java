@@ -1,14 +1,14 @@
 package org.humana.mobile.tta.ui.programs.curricullam;
 
 import android.content.Context;
-import android.databinding.ObservableBoolean;
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ViewDataBinding;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import com.maurya.mx.mxlib.core.MxInfiniteAdapter;
@@ -20,7 +20,6 @@ import org.humana.mobile.model.download.PDFDownloadModel;
 import org.humana.mobile.services.DownloadService;
 import org.humana.mobile.tta.data.local.db.table.CurricullamChaptersModel;
 import org.humana.mobile.tta.data.local.db.table.CurricullamModel;
-import org.humana.mobile.tta.data.local.db.table.Period;
 import org.humana.mobile.tta.interfaces.OnResponseCallback;
 import org.humana.mobile.tta.ui.base.TaBaseFragment;
 import org.humana.mobile.tta.ui.base.mvvm.BaseViewModel;

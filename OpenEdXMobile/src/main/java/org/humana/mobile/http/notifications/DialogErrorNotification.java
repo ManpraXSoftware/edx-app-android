@@ -1,11 +1,14 @@
 package org.humana.mobile.http.notifications;
 
 import android.content.DialogInterface;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
 import android.view.View;
+
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import com.joanzapata.iconify.Icon;
 
@@ -17,7 +20,7 @@ import org.humana.mobile.view.dialog.AlertDialogFragment;
  */
 public class DialogErrorNotification extends ErrorNotification {
     /**
-     * Reference of the {@link android.support.v4.app.Fragment} we will be displaying this error on.
+     * Reference of the {@link Fragment} we will be displaying this error on.
      */
     @NonNull
     private final BaseFragment baseFragment;
@@ -25,8 +28,8 @@ public class DialogErrorNotification extends ErrorNotification {
     /**
      * Construct a new instance of the notification.
      *
-     * @param baseFragment Reference of the {@link android.support.v4.app.Fragment} to use for
-     *                     displaying the {@link android.support.v4.app.DialogFragment}.
+     * @param baseFragment Reference of the {@link Fragment} to use for
+     *                     displaying the {@link DialogFragment}.
      */
     public DialogErrorNotification(@NonNull final BaseFragment baseFragment) {
         this.baseFragment = baseFragment;

@@ -113,7 +113,7 @@ public class TaFirebaseMessagingService extends FirebaseMessagingService {
 
         //**edit this line to put requestID as requestCode**
         PendingIntent contentIntent = PendingIntent.getActivity(this, requestID,
-                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
         int notificationId = 1;
         String channelId = "TheTeacherapp-Channel-01";

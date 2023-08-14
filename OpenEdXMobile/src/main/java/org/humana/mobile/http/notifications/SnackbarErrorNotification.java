@@ -1,10 +1,10 @@
 package org.humana.mobile.http.notifications;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.design.widget.BaseTransientBottomBar;
-import android.support.design.widget.Snackbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
 import android.widget.Button;
 
@@ -16,7 +16,7 @@ import org.humana.mobile.base.MainApplication;
 import org.humana.mobile.interfaces.RefreshListener;
 import org.humana.mobile.util.NetworkUtil;
 
-import static android.support.design.widget.Snackbar.LENGTH_INDEFINITE;
+import static com.google.android.material.snackbar.Snackbar.LENGTH_INDEFINITE;
 
 /**
  * A persistent Snackbar notification error message.
@@ -79,7 +79,7 @@ public class SnackbarErrorNotification extends ErrorNotification {
             });
             // By applying the listener to the button like we have done below, the Snackbar
             // doesn't automatically dismiss and we have to manually dismiss it.
-            final Button actionButton = (Button) snackbar.getView().findViewById(android.support.design.R.id.snackbar_action);
+            final Button actionButton = (Button) snackbar.getView().findViewById(R.id.snackbar_action);
             actionButton.setOnClickListener(actionListener);
             snackbar.show();
         }

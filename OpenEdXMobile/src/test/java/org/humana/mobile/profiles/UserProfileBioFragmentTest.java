@@ -1,6 +1,6 @@
 package org.humana.mobile.profiles;
 
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 
 import org.humana.mobile.databinding.FragmentUserProfileBioBinding;
 import org.humana.mobile.view.PresenterFragmentTest;

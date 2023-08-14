@@ -1,7 +1,7 @@
 package org.humana.mobile.util;
 
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.humana.mobile.logger.Logger;
 import org.humana.mobile.util.links.WebViewLink;

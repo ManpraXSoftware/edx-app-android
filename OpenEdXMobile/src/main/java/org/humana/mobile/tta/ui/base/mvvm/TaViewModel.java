@@ -1,8 +1,8 @@
 package org.humana.mobile.tta.ui.base.mvvm;
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.annotation.NonNull;
 
 import org.humana.mobile.tta.data.DataManager;
 

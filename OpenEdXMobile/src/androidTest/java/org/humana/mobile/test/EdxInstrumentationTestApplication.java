@@ -1,6 +1,6 @@
 package org.humana.mobile.test;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import org.humana.mobile.base.MainApplication;
 import org.humana.mobile.view.Presenter;

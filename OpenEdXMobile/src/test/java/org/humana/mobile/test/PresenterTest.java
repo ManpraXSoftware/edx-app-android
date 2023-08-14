@@ -1,6 +1,6 @@
 package org.humana.mobile.test;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.humana.mobile.view.Presenter;
 import org.junit.After;

@@ -2,7 +2,7 @@ package org.humana.mobile.tta.ui.profile.view_model;
 
 import android.Manifest;
 import android.content.Context;
-import android.databinding.ObservableBoolean;
+import androidx.databinding.ObservableBoolean;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;

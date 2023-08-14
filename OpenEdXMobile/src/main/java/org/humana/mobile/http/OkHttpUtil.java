@@ -2,7 +2,7 @@ package org.humana.mobile.http;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.humana.mobile.BuildConfig;
 import org.humana.mobile.R;

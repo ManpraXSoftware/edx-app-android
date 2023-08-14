@@ -2,7 +2,7 @@
 package org.humana.mobile.view;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.humana.mobile.test.BaseTestCase;
 import org.humana.mobile.test.GenericSuperclassUtils;

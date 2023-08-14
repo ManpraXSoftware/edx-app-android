@@ -1,8 +1,6 @@
 package org.humana.mobile.tta.wordpress_client.rest;
 
-import android.support.annotation.NonNull;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import androidx.annotation.NonNull;
 
 import org.humana.mobile.tta.wordpress_client.WordPressRestInterface;
 import org.humana.mobile.tta.wordpress_client.model.Comment;

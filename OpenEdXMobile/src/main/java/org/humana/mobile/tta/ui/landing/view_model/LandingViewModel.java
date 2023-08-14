@@ -2,12 +2,12 @@ package org.humana.mobile.tta.ui.landing.view_model;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
-import android.databinding.ObservableLong;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.databinding.ObservableLong;
 import android.net.Uri;
-import android.support.design.widget.BottomNavigationView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;

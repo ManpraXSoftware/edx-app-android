@@ -1,11 +1,10 @@
 package org.humana.mobile.http.constants;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.StringDef;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringDef;
 
 import org.humana.mobile.module.prefs.LoginPrefs;
 import org.humana.mobile.module.prefs.PrefManager;
-import org.humana.mobile.tta.data.constants.Constants;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

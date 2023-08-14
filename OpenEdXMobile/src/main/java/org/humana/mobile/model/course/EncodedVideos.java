@@ -1,6 +1,6 @@
 package org.humana.mobile.model.course;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.webkit.URLUtil;
 
 import com.google.gson.annotations.SerializedName;

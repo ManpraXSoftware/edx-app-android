@@ -1,9 +1,9 @@
 package org.humana.mobile.tta.ui.logistration.view_model;
 
-import android.databinding.ObservableInt;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
+import androidx.databinding.ObservableInt;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.viewpager.widget.ViewPager;
 
 import org.humana.mobile.R;
 import org.humana.mobile.tta.ui.base.BasePagerAdapter;

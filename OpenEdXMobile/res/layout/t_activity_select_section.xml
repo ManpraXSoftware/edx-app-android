@@ -7,10 +7,10 @@
             name="viewModel"
             type="org.humana.mobile.tta.ui.programs.selectSection.viewModel.SelectSectionViewModel" />
     </data>
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
             app:srcCompat="@drawable/t_icon_check_white"
             android:tint="@color/white" />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_prev"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -84,5 +84,5 @@
         </LinearLayout>
     </FrameLayout>
     </LinearLayout>
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

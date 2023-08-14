@@ -1,9 +1,9 @@
 package org.humana.mobile.tta.ui.custom;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -158,7 +158,7 @@ public class FormSpinner extends LinearLayout {
         adapter.notifyDataSetChanged();
     }
 
-    private void select(@android.support.annotation.Nullable String value) {
+    private void select(@androidx.annotation.Nullable String value) {
         if (adapter != null && value != null) {
             int pos = getAdapterPosition(value);
             if (pos >= 0) {
@@ -167,7 +167,7 @@ public class FormSpinner extends LinearLayout {
         }
     }
 
-    private int getAdapterPosition(@android.support.annotation.Nullable String input) {
+    private int getAdapterPosition(@androidx.annotation.Nullable String input) {
         int posiiton = -1;
         if (input != null && !input.equals("") && adapter != null) {
             for (int i = 0; i < adapter.getCount(); i++) {

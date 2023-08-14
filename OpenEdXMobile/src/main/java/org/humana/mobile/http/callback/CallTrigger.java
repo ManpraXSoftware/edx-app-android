@@ -1,6 +1,6 @@
 package org.humana.mobile.http.callback;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.humana.mobile.view.common.MessageType;
 

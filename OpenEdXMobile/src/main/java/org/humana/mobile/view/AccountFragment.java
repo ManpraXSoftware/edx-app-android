@@ -1,25 +1,21 @@
 package org.humana.mobile.view;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
-import android.databinding.ObservableLong;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
+import androidx.databinding.ObservableLong;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.appcompat.app.AlertDialog;
+
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.google.firebase.messaging.RemoteMessage;
 import com.google.inject.Inject;
-import com.lib.mxcalendar.models.Event;
 
 import org.humana.mobile.BuildConfig;
 import org.humana.mobile.R;
@@ -33,19 +29,15 @@ import org.humana.mobile.tta.data.local.db.table.Program;
 import org.humana.mobile.tta.data.local.db.table.Section;
 import org.humana.mobile.tta.data.model.program.EventNotificationCount;
 import org.humana.mobile.tta.data.model.program.NotificationCountResponse;
-import org.humana.mobile.tta.event.CourseEnrolledEvent;
 import org.humana.mobile.tta.interfaces.OnResponseCallback;
 import org.humana.mobile.tta.tutorials.MxTooltip;
-import org.humana.mobile.tta.ui.feed.NotificationsFragment;
 import org.humana.mobile.tta.ui.landing.LandingActivity;
 import org.humana.mobile.tta.ui.programs.notifications.NotificationActivity;
 import org.humana.mobile.tta.ui.programs.selectSection.SelectSectionActivity;
 import org.humana.mobile.tta.ui.programs.selectprogram.SelectProgramActivity;
 import org.humana.mobile.tta.utils.ActivityUtil;
-import org.humana.mobile.tta.utils.BottomNavigationViewHelper;
 import org.humana.mobile.util.Config;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;

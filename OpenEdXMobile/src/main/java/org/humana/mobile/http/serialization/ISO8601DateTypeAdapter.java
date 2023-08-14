@@ -1,6 +1,6 @@
 package org.humana.mobile.http.serialization;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.text.ParseException;

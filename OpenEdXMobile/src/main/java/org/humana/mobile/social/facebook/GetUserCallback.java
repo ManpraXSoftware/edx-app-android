@@ -1,6 +1,6 @@
 package org.humana.mobile.social.facebook;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;

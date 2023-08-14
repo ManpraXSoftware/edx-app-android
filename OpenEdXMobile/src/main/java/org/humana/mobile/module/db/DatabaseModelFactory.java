@@ -1,7 +1,7 @@
 package org.humana.mobile.module.db;
 
 import android.database.Cursor;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.webkit.URLUtil;
 
 import org.humana.mobile.model.VideoModel;

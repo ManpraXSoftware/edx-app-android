@@ -1,9 +1,9 @@
 package org.humana.mobile.tta.ui.programs.units;
 
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -20,7 +20,6 @@ import org.humana.mobile.tta.ui.programs.units.view_model.UnitCalendarViewModel;
 import org.humana.mobile.view.Router;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;

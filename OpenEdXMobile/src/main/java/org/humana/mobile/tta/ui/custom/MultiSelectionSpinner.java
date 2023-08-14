@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MultiSelectionSpinner extends android.support.v7.widget.AppCompatSpinner implements
+public class MultiSelectionSpinner extends androidx.appcompat.widget.AppCompatSpinner implements
         OnMultiChoiceClickListener {
 
     public interface OnMultipleItemsSelectedListener{

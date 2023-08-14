@@ -1,7 +1,7 @@
 package org.humana.mobile.util;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 import android.widget.Toast;
 import org.humana.mobile.R;
 import org.humana.mobile.logger.Logger;

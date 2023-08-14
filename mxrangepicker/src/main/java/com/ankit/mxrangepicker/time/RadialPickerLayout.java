@@ -24,7 +24,7 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.format.DateUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -40,11 +40,6 @@ import android.widget.FrameLayout;
 
 
 import com.ankit.mxrangepicker.R;
-import com.ankit.mxrangepicker.time.AmPmCirclesView;
-import com.ankit.mxrangepicker.time.CircleView;
-import com.ankit.mxrangepicker.time.RadialSelectorView;
-import com.ankit.mxrangepicker.time.RadialTextsView;
-import com.ankit.mxrangepicker.time.TimePickerDialog;
 
 import java.util.Calendar;
 

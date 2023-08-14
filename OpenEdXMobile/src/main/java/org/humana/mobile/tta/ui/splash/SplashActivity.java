@@ -1,9 +1,7 @@
 package org.humana.mobile.tta.ui.splash;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-
-import com.google.firebase.FirebaseApp;
+import androidx.annotation.Nullable;
 
 import org.humana.mobile.R;
 import org.humana.mobile.module.prefs.LoginPrefs;

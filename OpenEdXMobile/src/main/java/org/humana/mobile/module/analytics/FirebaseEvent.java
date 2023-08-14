@@ -2,8 +2,8 @@ package org.humana.mobile.module.analytics;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.humana.mobile.base.MainApplication;
 import org.humana.mobile.util.JavaUtil;

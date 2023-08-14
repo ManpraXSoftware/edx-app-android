@@ -1,9 +1,9 @@
 package org.humana.mobile.tta.ui.programs.units;
 
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 

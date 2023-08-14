@@ -9,13 +9,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.fragment.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
@@ -46,8 +45,6 @@ import org.humana.mobile.services.EdxCookieManager;
 import org.humana.mobile.tta.interfaces.OnResponseCallback;
 import org.humana.mobile.util.NetworkUtil;
 import org.humana.mobile.util.WebViewUtil;
-
-import java.sql.Date;
 
 import de.greenrobot.event.EventBus;
 import roboguice.RoboGuice;

@@ -1,13 +1,12 @@
 package org.humana.mobile.tta.ui.programs.selectprogram;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.humana.mobile.R;
 import org.humana.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.humana.mobile.tta.ui.programs.selectprogram.viewmodel.ProgramViewModel;
-import org.humana.mobile.tta.ui.programs.selectprogram.viewmodel.SelectProgramViewModel2;
 
 public class SelectProgramActivity extends BaseVMActivity {
 

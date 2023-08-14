@@ -2,10 +2,8 @@ package org.humana.mobile.base;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
+import androidx.annotation.NonNull;
 
-import org.humana.mobile.R;
 import org.humana.mobile.event.NewRelicEvent;
 import org.humana.mobile.util.PermissionsUtil;
 

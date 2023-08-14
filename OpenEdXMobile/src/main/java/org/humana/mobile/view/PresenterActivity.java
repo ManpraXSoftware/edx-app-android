@@ -1,8 +1,8 @@
 package org.humana.mobile.view;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.humana.mobile.base.BaseFragmentActivity;
 import org.humana.mobile.test.PresenterInjector;

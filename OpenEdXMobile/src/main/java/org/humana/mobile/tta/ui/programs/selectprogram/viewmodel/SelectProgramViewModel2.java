@@ -1,17 +1,15 @@
 package org.humana.mobile.tta.ui.programs.selectprogram.viewmodel;
 
 import android.content.Context;
-import android.databinding.ObservableBoolean;
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.maurya.mx.mxlib.core.MxInfiniteAdapter;
@@ -19,25 +17,16 @@ import com.maurya.mx.mxlib.core.OnRecyclerItemClickListener;
 
 import org.humana.mobile.R;
 import org.humana.mobile.databinding.TRowSelectProgSectionBinding;
-import org.humana.mobile.http.constants.ApiConstants;
 import org.humana.mobile.model.api.EnrolledCoursesResponse;
 import org.humana.mobile.tta.data.constants.Constants;
 import org.humana.mobile.tta.data.local.db.table.Program;
 import org.humana.mobile.tta.data.local.db.table.Section;
 import org.humana.mobile.tta.interfaces.OnResponseCallback;
 import org.humana.mobile.tta.ui.base.TaBaseFragment;
-import org.humana.mobile.tta.ui.base.mvvm.BaseVMActivity;
 import org.humana.mobile.tta.ui.base.mvvm.BaseViewModel;
-import org.humana.mobile.tta.ui.feed.FeedFragment;
 import org.humana.mobile.tta.ui.landing.LandingActivity;
-import org.humana.mobile.tta.ui.library.LibraryFragment;
-import org.humana.mobile.tta.ui.profile.ProfileFragment;
 import org.humana.mobile.tta.ui.programs.selectSection.SelectSectionActivity;
-import org.humana.mobile.tta.ui.search.SearchFragment;
 import org.humana.mobile.tta.utils.ActivityUtil;
-import org.humana.mobile.view.AccountFragment;
-import org.humana.mobile.view.MyCoursesListFragment;
-import org.humana.mobile.view.dialog.NativeFindCoursesFragment;
 
 
 import java.util.ArrayList;

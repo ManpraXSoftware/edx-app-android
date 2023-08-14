@@ -34,8 +34,11 @@
             android:id="@+id/text_title"
             android:textSize="16sp"
             android:text="@{period.title}"
-            android:drawableEnd="@drawable/sp_chevron_end"
+
             android:textColor="@color/gray_5"/>
+<!--
+        android:drawableEnd="@drawable/sp_chevron_end"
+-->
         <!--<ImageView-->
             <!--android:layout_width="0dp"-->
             <!--android:layout_height="match_parent"-->

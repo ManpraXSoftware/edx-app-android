@@ -8,9 +8,9 @@ import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.multidex.MultiDexApplication;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.multidex.MultiDexApplication;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader;
@@ -55,8 +55,10 @@ import javax.inject.Inject;
 import de.greenrobot.event.EventBus;
 import io.branch.referral.Branch;
 import io.fabric.sdk.android.Fabric;
+import io.github.inflationx.calligraphy3.CalligraphyConfig;
+import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
+import io.github.inflationx.viewpump.ViewPump;
 import roboguice.RoboGuice;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * This class initializes the modules of the app based on the configuration.
@@ -157,11 +159,13 @@ public abstract class MainApplication extends MultiDexApplication {
         // Register Font Awesome module in android-iconify library
         Iconify.with(new FontAwesomeModule());
 
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/OpenSans-Regular.ttf")
-                .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
+                ViewPump.init(ViewPump.builder()
+                        .addInterceptor(new CalligraphyInterceptor(
+                                new CalligraphyConfig.Builder()
+                                        .setDefaultFontPath("fonts/OpenSans-Regular.ttf")
+                                        .setFontAttrId(R.attr.fontPath)
+                                        .build()))
+                        .build());
 
         // Init Branch
         if (Config.FabricBranchConfig.isBranchEnabled(config.getFabricConfig())) {
@@ -197,7 +201,7 @@ public abstract class MainApplication extends MultiDexApplication {
             }
         });
 
-        sAnalytics = GoogleAnalytics.getInstance(this);
+      //  sAnalytics = GoogleAnalytics.getInstance(this);
 
     }
 

@@ -2,7 +2,7 @@ package org.humana.mobile.services;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 
 import org.humana.mobile.base.MainApplication;

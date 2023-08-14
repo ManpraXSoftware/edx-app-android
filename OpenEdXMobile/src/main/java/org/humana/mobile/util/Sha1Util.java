@@ -1,6 +1,6 @@
 package org.humana.mobile.util;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.humana.mobile.logger.Logger;
 

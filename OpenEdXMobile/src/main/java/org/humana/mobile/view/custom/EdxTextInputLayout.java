@@ -1,7 +1,7 @@
 package org.humana.mobile.view.custom;
 
 import android.content.Context;
-import android.support.design.widget.TextInputLayout;
+import com.google.android.material.textfield.TextInputLayout;
 import android.util.AttributeSet;
 
 import org.humana.mobile.R;

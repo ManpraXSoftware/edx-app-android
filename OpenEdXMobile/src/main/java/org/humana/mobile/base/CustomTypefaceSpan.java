@@ -3,7 +3,7 @@ package org.humana.mobile.base;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.support.v4.util.LruCache;
+import androidx.collection.LruCache;
 import android.text.Spannable;
 import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;

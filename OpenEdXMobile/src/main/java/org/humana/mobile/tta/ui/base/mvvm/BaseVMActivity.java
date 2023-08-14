@@ -1,9 +1,9 @@
 package org.humana.mobile.tta.ui.base.mvvm;
 
-import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import org.humana.mobile.BR;
 import org.humana.mobile.tta.ui.base.TaBaseActivity;

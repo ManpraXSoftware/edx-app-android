@@ -1,9 +1,9 @@
 package org.humana.mobile.tta.ui.profile.view_model;
 
 import android.content.Context;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
-import android.databinding.ObservableInt;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
 import android.text.Editable;
 import android.text.TextWatcher;
 

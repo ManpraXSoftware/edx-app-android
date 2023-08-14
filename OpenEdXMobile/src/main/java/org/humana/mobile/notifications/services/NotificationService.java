@@ -8,8 +8,7 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
-import android.util.Log;
+import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -18,7 +17,6 @@ import org.humana.mobile.R;
 import org.humana.mobile.base.MainApplication;
 import org.humana.mobile.core.IEdxEnvironment;
 import org.humana.mobile.logger.Logger;
-import org.humana.mobile.tta.firebase.FirebaseHelper;
 import org.humana.mobile.view.SplashActivity;
 
 
@@ -73,7 +71,7 @@ public class NotificationService extends FirebaseMessagingService {
                 this,
                 0 /* Request code */,
                 intent,
-                PendingIntent.FLAG_ONE_SHOT);
+                PendingIntent.FLAG_IMMUTABLE);
 
         final Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         // Build out the Notification and set the intent to direct the user to the application

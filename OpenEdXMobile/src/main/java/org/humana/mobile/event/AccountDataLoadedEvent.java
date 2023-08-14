@@ -1,6 +1,6 @@
 package org.humana.mobile.event;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.humana.mobile.user.Account;
 

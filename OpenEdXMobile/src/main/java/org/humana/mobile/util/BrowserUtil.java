@@ -2,7 +2,7 @@ package org.humana.mobile.util;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 import android.text.TextUtils;
 
 import com.google.inject.Inject;

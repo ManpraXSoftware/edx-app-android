@@ -1,7 +1,7 @@
 package org.humana.mobile.tta.ui.programs.notifications;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import org.humana.mobile.R;
 import org.humana.mobile.model.api.EnrolledCoursesResponse;

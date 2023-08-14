@@ -1,7 +1,7 @@
 package org.humana.mobile.http.interceptor;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.humana.mobile.logger.Logger;
 import org.humana.mobile.module.prefs.LoginPrefs;

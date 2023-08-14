@@ -1,10 +1,10 @@
 package org.humana.mobile.tta.data.local.db;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.TypeConverters;
-import android.arch.persistence.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+import androidx.room.Database;
+import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
+import androidx.room.migration.Migration;
 
 import org.humana.mobile.tta.data.local.db.dao.CategoryDao;
 import org.humana.mobile.tta.data.local.db.dao.CertificateDao;
@@ -28,7 +28,6 @@ import org.humana.mobile.tta.data.local.db.table.Content;
 import org.humana.mobile.tta.data.local.db.table.ContentList;
 import org.humana.mobile.tta.data.local.db.table.ContentStatus;
 import org.humana.mobile.tta.data.local.db.table.CurricullamChaptersModel;
-import org.humana.mobile.tta.data.local.db.table.CurricullamModel;
 import org.humana.mobile.tta.data.local.db.table.DownloadPeriodDesc;
 import org.humana.mobile.tta.data.local.db.table.Feed;
 import org.humana.mobile.tta.data.local.db.table.Notification;
@@ -39,8 +38,6 @@ import org.humana.mobile.tta.data.local.db.table.Source;
 import org.humana.mobile.tta.data.local.db.table.Unit;
 import org.humana.mobile.tta.data.local.db.table.UnitStatus;
 import org.humana.mobile.tta.data.local.db.table.User;
-
-import java.io.IOException;
 
 @Database(
         entities = {

@@ -1,7 +1,7 @@
 package org.humana.mobile.profiles;
 
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.humana.mobile.event.AccountDataLoadedEvent;
 import org.humana.mobile.event.ProfilePhotoUpdatedEvent;

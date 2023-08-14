@@ -1,6 +1,6 @@
 package org.humana.mobile.tta.analytics;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
@@ -11,8 +11,6 @@ import org.humana.mobile.core.EdxEnvironment;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static org.humana.mobile.util.BrowserUtil.loginPrefs;
 
 
 /**

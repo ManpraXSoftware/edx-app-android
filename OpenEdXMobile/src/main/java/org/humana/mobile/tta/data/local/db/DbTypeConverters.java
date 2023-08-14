@@ -1,6 +1,6 @@
 package org.humana.mobile.tta.data.local.db;
 
-import android.arch.persistence.room.TypeConverter;
+import androidx.room.TypeConverter;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

@@ -8,8 +8,8 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -23,17 +23,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.google.inject.Inject;
-
 import org.humana.mobile.R;
-import org.humana.mobile.core.IEdxEnvironment;
 import org.humana.mobile.event.NetworkConnectivityChangeEvent;
 import org.humana.mobile.tta.analytics.Analytic;
 import org.humana.mobile.tta.scorm.JSInterfaceTincan;
 import org.humana.mobile.tta.tincan.Tincan;
 import org.humana.mobile.tta.tincan.model.Resume;
-import org.humana.mobile.util.BrowserUtil;
-import org.humana.mobile.util.Config;
 import org.humana.mobile.util.IOUtils;
 import org.humana.mobile.util.NetworkUtil;
 
@@ -87,7 +82,7 @@ public class CourseScormViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scorm_view);
+        setContentView(R.layout.t_activity_course_scorm_view);
 
         analytic = new Analytic(getApplicationContext());
         tincan = new Tincan();

@@ -9,12 +9,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import com.google.android.material.tabs.TabLayout;
+import androidx.core.view.GestureDetectorCompat;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -226,10 +226,10 @@ public class ConnectDashboardActivity extends BaseVMActivity {
 
         //setting store webpage in cache
 
-        webView.getSettings().setAppCacheMaxSize(5 * 1024 * 1024); // 5MB
-        webView.getSettings().setAppCachePath(getApplicationContext().getCacheDir().getAbsolutePath());
+       // webView.getSettings().setAppCacheMaxSize(5 * 1024 * 1024); // 5MB
+        // webView.getSettings().setAppCachePath(getApplicationContext().getCacheDir().getAbsolutePath());
         webView.getSettings().setAllowFileAccess(true);
-        webView.getSettings().setAppCacheEnabled(true);
+       // webView.getSettings().setAppCacheEnabled(true);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
 

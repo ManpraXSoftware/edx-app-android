@@ -2,8 +2,8 @@ package org.humana.mobile.tta.ui.custom;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.databinding.DataBindingUtil;
-import android.databinding.ObservableField;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ObservableField;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
