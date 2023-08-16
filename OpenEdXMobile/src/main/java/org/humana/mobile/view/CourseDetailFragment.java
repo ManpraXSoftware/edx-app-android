@@ -200,7 +200,7 @@ public class CourseDetailFragment extends BaseFragment {
         Glide.with(CourseDetailFragment.this)
                 .load(headerImageUrl)
                 .placeholder(R.drawable.placeholder_course_card_image)
-                .transform(new TopAnchorFillWidthTransformation(getActivity()))
+                .transform(new TopAnchorFillWidthTransformation())
                 .into(mHeaderImageView);
     }
 

@@ -1205,7 +1205,7 @@ public class CourseOutlineAdapter extends BaseAdapter {
         Glide.with(context)
                 .load(headerImageUrl)
                 .placeholder(R.drawable.placeholder_course_card_image)
-                .transform(new TopAnchorFillWidthTransformation(context))
+                .transform(new TopAnchorFillWidthTransformation())
                 .into(headerImageView);
 
         courseTextName.setText(courseData.getCourse().getName());

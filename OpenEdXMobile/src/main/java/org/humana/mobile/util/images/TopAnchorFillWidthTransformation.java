@@ -7,8 +7,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 
+import androidx.annotation.NonNull;
+
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+
+import java.security.MessageDigest;
 
 /**
  * Transformation for anchoring the image to the top of the container, and
@@ -17,16 +21,10 @@ import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
  * layer.
  */
 public class TopAnchorFillWidthTransformation extends BitmapTransformation {
+    private static final String ID = "org.edx.mobile.util.images.CenterCrop";
+    private static final byte[] ID_BYTES = ID.getBytes(CHARSET);
     private final Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
 
-    public TopAnchorFillWidthTransformation(Context context) {
-        super(context);
-    }
-
-    @Override
-    public String getId() {
-        return "TOP_ANCHOR_FILL_WIDTH";
-    }
 
     @Override
     protected Bitmap transform(BitmapPool pool, Bitmap toTransform,
@@ -73,5 +71,10 @@ public class TopAnchorFillWidthTransformation extends BitmapTransformation {
         }
         canvas.drawBitmap(toTransform, 0, 0, paint);
         return newBitmap;
+    }
+
+    @Override
+    public void updateDiskCacheKey(@NonNull MessageDigest messageDigest) {
+        messageDigest.update(ID_BYTES);
     }
 }

@@ -256,9 +256,9 @@ public class StudentsViewModel extends BaseViewModel {
                 if (model.profileImage != null) {
 
 
-                    Glide.with(mActivity).load(
+                    Glide.with(mActivity).asBitmap().load(
                             mDataManager.getEdxEnvironment().getConfig().getApiHostURL() +
-                                    model.profileImage.getImageUrlFull()).asBitmap().centerCrop()
+                                    model.profileImage.getImageUrlFull()).centerCrop()
                             .placeholder(R.drawable.profile_photo_placeholder)
                             .centerCrop()
                             .into(new BitmapImageViewTarget(itemBinding.userImage) {

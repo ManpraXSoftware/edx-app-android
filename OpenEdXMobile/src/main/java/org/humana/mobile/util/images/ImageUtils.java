@@ -16,6 +16,7 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import org.humana.mobile.R;
@@ -126,22 +127,11 @@ public class ImageUtils {
         }
         return true;
     }
-
     public static void setRoundedCornerImage(@NonNull ImageView imageView,
                                              @DrawableRes int drawableRes) {
         final Context context = imageView.getContext();
-        final float cornerRadius = context.getResources().getDimension(R.dimen.subject_item_corner_radius);
-        Glide.with(context)
-                .load(drawableRes)
-                .asBitmap()
-                .into(new BitmapImageViewTarget(imageView) {
-                    @Override
-                    protected void setResource(Bitmap resource) {
-                        final RoundedBitmapDrawable circularBitmapDrawable =
-                                RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                        circularBitmapDrawable.setCornerRadius(cornerRadius); // radius for corners
-                        view.setImageDrawable(circularBitmapDrawable);
-                    }
-                });
+        final int cornerRadius = context.getResources().getDimensionPixelSize(R.dimen.subject_item_corner_radius);
+        Glide.with(context).load(drawableRes).transform(new RoundedCorners(cornerRadius)).into(imageView);
     }
+
 }
