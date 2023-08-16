@@ -185,7 +185,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-plus:15.0.1"
     implementation "com.google.android.gms:play-services-analytics:16.0.1"
     implementation "com.google.android.gms:play-services-auth:15.0.1"
-    implementation "com.google.android.gms:play-services-ads:15.0.1"
+   // implementation "com.google.android.gms:play-services-ads:15.0.1"
     // Google Firebase
     implementation "com.google.firebase:firebase-core:16.0.1"
     implementation "com.google.firebase:firebase-messaging:17.1.0"
@@ -221,7 +221,7 @@ dependencies {
     implementation 'io.github.inflationx:calligraphy3:3.1.1'
     implementation 'io.github.inflationx:viewpump:2.0.3'
     // Segment Library
-    implementation 'com.segment.analytics.android:analytics:4.2.6'
+    implementation 'com.segment.analytics.android:analytics:4.10.4'
 
     implementation('com.segment.analytics.android.integrations:google-analytics:1.0.0') {
         exclude module: 'play-services-analytics'
