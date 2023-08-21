@@ -1,6 +1,8 @@
 package org.edx.mobile.view;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
@@ -17,7 +20,12 @@ import com.google.inject.Inject;
 
 import org.edx.mobile.R;
 import org.edx.mobile.core.IEdxEnvironment;
+import org.edx.mobile.course.EnrollInCourseTask;
 import org.edx.mobile.databinding.FragmentProgramListBinding;
+import org.edx.mobile.discovery.model.CourseRuns;
+import org.edx.mobile.discovery.model.EnrollAndUnenrollData;
+import org.edx.mobile.discovery.model.EnrollResponse;
+import org.edx.mobile.discovery.model.ProgramCoursesList;
 import org.edx.mobile.event.NetworkConnectivityChangeEvent;
 import org.edx.mobile.exception.AuthException;
 import org.edx.mobile.http.HttpStatus;
@@ -29,6 +37,7 @@ import org.edx.mobile.logger.Logger;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
 import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.prefs.LoginPrefs;
+import org.edx.mobile.myCourse.MyCourseTask;
 import org.edx.mobile.programs.MyProgramListModel;
 import org.edx.mobile.programs.MyProgramTags;
 import org.edx.mobile.programs.ProgramTask;
@@ -37,6 +46,7 @@ import org.edx.mobile.programs.ResumeCourse;
 import org.edx.mobile.util.LocaleManager;
 import org.edx.mobile.view.adapters.MyProgramListAdapter;
 import org.edx.mobile.view.adapters.OnRecyclerItemClickListener;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -354,6 +364,18 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                     .replace(R.id.main_fragment, newProgramFragment, NewProgramFragment.TAG).addToBackStack(NewProgramFragment.TAG)
                     .commit();
         }
+        else {
+            EnrollAndUnenrollData.DataCreation dataCreation = (EnrollAndUnenrollData.DataCreation) item;
+            dataCreation.setUsername(loginPrefs.getUsername());
+            try {
+                enrollcourse(dataCreation);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+
+        }
     }
 
     @Override
@@ -408,6 +430,34 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     protected void loadData(boolean showProgress) {
         getLoaderManager().restartLoader(MY_COURSE_LOADER_ID, null, this);
     }
+
+    private void enrollcourse(EnrollAndUnenrollData.DataCreation dataCreation) throws JSONException {
+        EnrollAndUnenrollData enrollAndUnenrollData = new EnrollAndUnenrollData();
+        enrollAndUnenrollData.setData(dataCreation);
+        final String token = loginPrefs.getAuthorizationHeaderJwt();
+        if (token != null) {
+            Log.d("Token_JWT ", token);
+        }
+        EnrollAndUnenrollData enrollAndUnenrollData1 = new EnrollAndUnenrollData();
+        enrollAndUnenrollData1.setData(dataCreation);
+
+        EnrollInCourseTask enrollInCourseTask = new EnrollInCourseTask(enrollAndUnenrollData1, getContext()) {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            protected void onSuccess(EnrollResponse enrollResponse) throws Exception {
+                super.onSuccess(enrollResponse);
+                if (enrollResponse.isStatus()) {
+                    {
+
+                    }
+                }
+            }
+        };
+        enrollInCourseTask.execute();
+    }
+
+
+
     void sendAnalyticsCourseDetail( MyProgramListModel myProgramListModel){
 
         final Map<String, String> values = new HashMap<>();
@@ -422,7 +472,6 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
         values.put(Analytics.Keys.RECENT_PROGRAM_NAME, resumeCourse.getProgramName());
         values.put(Analytics.Keys.RECENT_TOPIC_NAME,resumeCourse.getTagName());
         values.put(Analytics.Keys.RECENT_PROGRAM_UID,resumeCourse.getCourse_id());
-        values.put("Try",resumeCourse.getBlock_id());
         environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.RECENT_COURSE,resumeCourse.getCourse_id(), "Click", values);
     }
 

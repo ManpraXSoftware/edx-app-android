@@ -156,12 +156,16 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
             viewHolder.kannada.setSelected(false);
             viewHolder.tamil.setSelected(false);
             viewHolder.bengali.setSelected(false);
+            viewHolder.malayalam.setSelected(false);
+            viewHolder.odia.setSelected(false);
         } else if (selectedLanguage.equals("hi")) {
             viewHolder.hindi.setSelected(true);
             viewHolder.english.setSelected(false);
             viewHolder.kannada.setSelected(false);
             viewHolder.tamil.setSelected(false);
             viewHolder.bengali.setSelected(false);
+            viewHolder.malayalam.setSelected(false);
+            viewHolder.odia.setSelected(false);
         } else if (selectedLanguage.equals("kn")) {
             viewHolder.kannada.setSelected(true);
             viewHolder.hindi.setSelected(false);
@@ -169,18 +173,42 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
             viewHolder.tamil.setSelected(false);
             viewHolder.bengali.setSelected(false);
             viewHolder.bengali.setSelected(false);
+            viewHolder.malayalam.setSelected(false);
+            viewHolder.odia.setSelected(false);
         } else if (selectedLanguage.equals("ta")) {
             viewHolder.tamil.setSelected(true);
             viewHolder.hindi.setSelected(false);
             viewHolder.kannada.setSelected(false);
             viewHolder.english.setSelected(false);
             viewHolder.bengali.setSelected(false);
+            viewHolder.malayalam.setSelected(false);
+            viewHolder.odia.setSelected(false);
         }else if (selectedLanguage.equals("bn")) {
             viewHolder.bengali.setSelected(true);
             viewHolder.tamil.setSelected(false);
             viewHolder.hindi.setSelected(false);
             viewHolder.kannada.setSelected(false);
             viewHolder.english.setSelected(false);
+            viewHolder.malayalam.setSelected(false);
+            viewHolder.odia.setSelected(false);
+        }
+        else if (selectedLanguage.equals("ml")) {
+            viewHolder.bengali.setSelected(false);
+            viewHolder.tamil.setSelected(false);
+            viewHolder.hindi.setSelected(false);
+            viewHolder.kannada.setSelected(false);
+            viewHolder.english.setSelected(false);
+            viewHolder.malayalam.setSelected(true);
+            viewHolder.odia.setSelected(false);
+        }
+        else if (selectedLanguage.equals("or")) {
+            viewHolder.bengali.setSelected(false);
+            viewHolder.tamil.setSelected(false);
+            viewHolder.hindi.setSelected(false);
+            viewHolder.kannada.setSelected(false);
+            viewHolder.english.setSelected(false);
+            viewHolder.malayalam.setSelected(false);
+            viewHolder.odia.setSelected(true);
         }
         viewHolder.english.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("WrongConstant")
@@ -195,6 +223,8 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
                     viewHolder.kannada.setSelected(false);
                     viewHolder.tamil.setSelected(false);
                     viewHolder.bengali.setSelected(false);
+                    viewHolder.malayalam.setSelected(false);
+                    viewHolder.odia.setSelected(false);
                     Intent intent
                             = new Intent(getActivity(), MainBottomDashboardFragment.class);
                     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -213,6 +243,8 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
                     viewHolder.kannada.setSelected(false);
                     viewHolder.tamil.setSelected(false);
                     viewHolder.bengali.setSelected(false);
+                    viewHolder.malayalam.setSelected(false);
+                    viewHolder.odia.setSelected(false);
                     Intent intent
                             = new Intent(getActivity(), MainBottomDashboardFragment.class);
                     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -231,6 +263,8 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
                     viewHolder.english.setSelected(false);
                     viewHolder.tamil.setSelected(false);
                     viewHolder.bengali.setSelected(false);
+                    viewHolder.malayalam.setSelected(false);
+                    viewHolder.odia.setSelected(false);
                     Intent intent
                             = new Intent(getActivity(), MainBottomDashboardFragment.class);
                     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -249,6 +283,8 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
                     viewHolder.kannada.setSelected(false);
                     viewHolder.english.setSelected(false);
                     viewHolder.bengali.setSelected(false);
+                    viewHolder.malayalam.setSelected(false);
+                    viewHolder.odia.setSelected(false);
                     Intent intent
                             = new Intent(getActivity(), MainBottomDashboardFragment.class);
                     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -263,6 +299,48 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
                     LocaleManager.setNewLocale(getContext(), "bn");
                     sendAnalyticsCourseDetail(getContext().getString(R.string.bengali));
                     viewHolder.bengali.setSelected(true);
+                    viewHolder.tamil.setSelected(false);
+                    viewHolder.hindi.setSelected(false);
+                    viewHolder.kannada.setSelected(false);
+                    viewHolder.english.setSelected(false);
+                    Intent intent
+                            = new Intent(getActivity(), MainBottomDashboardFragment.class);
+                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            }
+        });
+        viewHolder.malayalam.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("WrongConstant")
+            @Override
+            public void onClick(View view) {
+                if (!viewHolder.malayalam.isSelected()) {
+                    LocaleManager.setNewLocale(getContext(), "ml");
+                    sendAnalyticsCourseDetail(getContext().getString(R.string.malayalam));
+
+                    viewHolder.malayalam.setSelected(true);
+                    viewHolder.odia.setSelected(false);
+                    viewHolder.bengali.setSelected(false);
+                    viewHolder.bengali.setSelected(true);
+                    viewHolder.tamil.setSelected(false);
+                    viewHolder.hindi.setSelected(false);
+                    viewHolder.kannada.setSelected(false);
+                    viewHolder.english.setSelected(false);
+                    Intent intent
+                            = new Intent(getActivity(), MainBottomDashboardFragment.class);
+                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            }
+        });
+        viewHolder.odia.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("WrongConstant")
+            @Override
+            public void onClick(View view) {
+                if (!viewHolder.odia.isSelected()) {
+                    LocaleManager.setNewLocale(getContext(), "or");
+                    sendAnalyticsCourseDetail(getContext().getString(R.string.odia));
+                    viewHolder.odia.setSelected(true);
+                    viewHolder.malayalam.setSelected(false);
+                    viewHolder.bengali.setSelected(false);
                     viewHolder.tamil.setSelected(false);
                     viewHolder.hindi.setSelected(false);
                     viewHolder.kannada.setSelected(false);

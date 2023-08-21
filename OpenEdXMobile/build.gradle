@@ -11,9 +11,8 @@ buildscript {
 
     dependencies {
         classpath 'org.yaml:snakeyaml:1.14'
-
         //Included for NewRelic
-        classpath "com.newrelic.agent.android:agent-gradle-plugin:+"
+        //classpath "com.newrelic.agent.android:agent-gradle-plugin:6.3.1"
         //Screenshot testing library
         classpath 'com.facebook.testing.screenshot:plugin:0.8.0'
         classpath 'com.google.gms:google-services:4.3.8'
@@ -32,7 +31,6 @@ edx {
     platform = ANDROID
 }
 
-apply plugin: 'newrelic'
 apply plugin: 'com.facebook.testing.screenshot'
 //apply plugin: 'jacoco'
 apply from: file('gradle_scripts/AndroidHelper.gradle')
@@ -281,7 +279,7 @@ dependencies {
 
     //New Relic Integration
     //implementation 'com.newrelic.agent.android:android-agent:6.8.0'
-    implementation 'com.newrelic.agent.android:android-agent:6.9.1'
+    //implementation 'com.newrelic.agent.android:android-agent:6.3.1'
     //implementation 'com.newrelic.agent.android:android-agent:'
     // test project configuration
     testImplementation 'junit:junit:4.12'

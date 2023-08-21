@@ -15,9 +15,9 @@ import java.util.Locale;
 
 public class LocaleManager {
     @Retention(RetentionPolicy.SOURCE)
-    @StringDef({ ENGLISH, HINDI,KANNADA,TAMIL})
+    @StringDef({ ENGLISH, HINDI,KANNADA,TAMIL,MALAYALAM,ODIA})
     public @interface LocaleDef {
-        String[] SUPPORTED_LOCALES = { ENGLISH, HINDI,KANNADA,TAMIL};
+        String[] SUPPORTED_LOCALES = { ENGLISH, HINDI,KANNADA,TAMIL,MALAYALAM,ODIA};
     }
 
     public static final String ENGLISH = "en";
@@ -26,6 +26,9 @@ public class LocaleManager {
     public static final String MARATHI = "mr";
     public static final String KANNADA = "kn";
     public static final String TELUGU = "te";
+
+    public static final String MALAYALAM = "ml";
+    public static final String ODIA = "or";
     public static final String TAMIL = "ta";
     public static final String Empty = "";
     /**

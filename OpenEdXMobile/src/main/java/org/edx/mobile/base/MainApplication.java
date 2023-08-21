@@ -22,7 +22,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
-import com.newrelic.agent.android.NewRelic;
+
 
 import org.edx.mobile.BuildConfig;
 import org.edx.mobile.R;
@@ -120,17 +120,17 @@ public abstract class MainApplication extends MultiDexApplication {
             }
         }
 
-        if (config.getNewRelicConfig().isEnabled()) {
-            EventBus.getDefault().register(new NewRelicObserver());
-        }
+       // if (config.getNewRelicConfig().isEnabled()) {
+            //EventBus.getDefault().register(new NewRelicObserver());
+        //}
 
         // initialize NewRelic with crash reporting disabled
-        if (config.getNewRelicConfig().isEnabled()) {
+       /* if (config.getNewRelicConfig().isEnabled()) {
             //Crash reporting for new relic has been disabled
-            NewRelic.withApplicationToken(config.getNewRelicConfig().getNewRelicKey())
+            /*NewRelic.withApplicationToken(config.getNewRelicConfig().getNewRelicKey())
                     .withCrashReportingEnabled(false)
-                    .start(this);
-        }
+                    .start(this);*/
+        //}
 
         // Add Segment as an analytics provider if enabled in the config
         if (config.getSegmentConfig().isEnabled()) {
@@ -238,12 +238,12 @@ public abstract class MainApplication extends MultiDexApplication {
         }
     }
 
-    public static class NewRelicObserver {
+    /*public static class NewRelicObserver {
         @SuppressWarnings("unused")
         public void onEventMainThread(NewRelicEvent e) {
-            NewRelic.setInteractionName("Display " + e.getScreenName());
+            //NewRelic.setInteractionName("Display " + e.getScreenName());
         }
-    }
+    }*/
 
     public Injector getInjector() {
         return injector;

@@ -5,7 +5,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/tag_card"
         android:layout_width="match_parent"
-        android:layout_height="85dp"
+        android:layout_height="100dp"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="22dp"
         android:layout_marginRight="22dp"
@@ -15,20 +15,28 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="85dp"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="48dp"
-                android:layout_height="85dp"
                 android:id="@+id/programColorCode"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
                 android:background="@drawable/tags_side_background"
                 android:orientation="horizontal" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginTop="8dp"
                 android:layout_gravity="center"
+                >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
                 android:orientation="vertical">
 
                 <TextView
@@ -50,7 +58,7 @@
                     android:layout_marginLeft="20dp"
                     android:id="@+id/programName"
                     android:text="Mathemativcs"
-                    android:layout_marginTop="10dp"
+
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:layout_marginRight="20dp"
@@ -58,6 +66,37 @@
                     android:textSize="16dp"
                     android:gravity="start" />
             </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginRight="22dp"
+                        android:layout_marginBottom="10dp"
+                        android:paddingHorizontal="5dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/bg_enroll_in_program">
+                        <Button
+                            android:id="@+id/unenrollButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/unenroll_from_program"
+                            android:textColor="@color/seach_hint_color"
+                            android:layout_gravity="center"
+                            android:contentDescription="@string/go_to_last_visit_section"
+                            android:textSize="12dp"
+                            android:ellipsize="end"
+                            android:gravity="start" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>
