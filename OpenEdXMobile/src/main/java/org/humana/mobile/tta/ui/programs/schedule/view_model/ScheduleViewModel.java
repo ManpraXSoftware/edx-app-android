@@ -246,7 +246,7 @@ public class ScheduleViewModel extends BaseViewModel implements DatePickerDialog
 
                             } else {
                                 Uri uri = Uri.parse(item.getAbout_url());
-                                DownloadService.openDownloadedFile(uri, mActivity);
+                                new DownloadService().openDownloadedFile(uri, mActivity);
                             }
                         } else {
                             item.setDownloadStatus(mActivity.getString(R.string.downloading));

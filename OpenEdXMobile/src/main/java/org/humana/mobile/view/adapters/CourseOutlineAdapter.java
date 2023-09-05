@@ -1586,6 +1586,7 @@ public class CourseOutlineAdapter extends BaseAdapter {
 
     public void doDownload(CourseComponent unit, final ViewHolder tag,boolean bool) {
 
+
         final CourseOutlineActivity activity = (CourseOutlineActivity) context;
 
         if (selectedUnit != null) {
@@ -1594,6 +1595,7 @@ public class CourseOutlineAdapter extends BaseAdapter {
                     unit.getDisplayName(), Action.StartScormDownload,
                     unit.getRoot().getDisplayName(), Source.Mobile);
         }
+
 
         showWaitingDialog();
 

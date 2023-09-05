@@ -1,5 +1,7 @@
 package org.humana.mobile.login;
 
+import android.view.View;
+
 import org.humana.mobile.R;
 import org.humana.mobile.view.LoginActivity;
 import org.humana.mobile.view.PresenterActivityTest;
@@ -19,30 +21,40 @@ public class LoginActivityTest extends PresenterActivityTest<LoginActivity, Logi
     @Test
     public void testSetSocialLoginButtons_withFacebookEnabled_facebookButtonIsVisible() {
         view.setSocialLoginButtons(false, true);
-        assertThat(activity.findViewById(R.id.panel_login_social)).isVisible();
-        assertThat(activity.findViewById(R.id.google_button)).isNotVisible();
-        assertThat(activity.findViewById(R.id.facebook_button)).isVisible();
+        View panel_login_social = activity.findViewById(R.id.panel_login_social);
+        assertThat(panel_login_social).isVisible();
+        View google_button = activity.findViewById(R.id.google_button);
+        assertThat(google_button).isNotVisible();
+        View facebook_button = activity.findViewById(R.id.facebook_button);
+        assertThat(facebook_button).isVisible();
     }
 
     @Test
     public void testSetSocialLoginButtons_withGoogleEnabled_googleButtonIsVisible() {
         view.setSocialLoginButtons(true, false);
-        assertThat(activity.findViewById(R.id.panel_login_social)).isVisible();
-        assertThat(activity.findViewById(R.id.google_button)).isVisible();
-        assertThat(activity.findViewById(R.id.facebook_button)).isNotVisible();
+        View panel_login_social = activity.findViewById(R.id.panel_login_social);
+        assertThat(panel_login_social).isVisible();
+        View google_button = activity.findViewById(R.id.google_button);
+        assertThat(google_button).isVisible();
+        View facebook_button = activity.findViewById(R.id.facebook_button);
+        assertThat(facebook_button).isNotVisible();
     }
 
     @Test
     public void testSetSocialLoginButtons_withSocialLoginEnabled_socialLoginButtonsAreVisible() {
         view.setSocialLoginButtons(true, true);
-        assertThat(activity.findViewById(R.id.panel_login_social)).isVisible();
-        assertThat(activity.findViewById(R.id.google_button)).isVisible();
-        assertThat(activity.findViewById(R.id.facebook_button)).isVisible();
+        View panel_login_social = activity.findViewById(R.id.panel_login_social);
+        assertThat(panel_login_social).isVisible();
+        View google_button = activity.findViewById(R.id.google_button);
+        assertThat(google_button).isVisible();
+        View facebook_button = activity.findViewById(R.id.facebook_button);
+        assertThat(facebook_button).isVisible();
     }
 
     @Test
     public void testSetSocialLoginButtons_withSocialLoginNotEnabled_socialLoginButtonsNotVisible() {
         view.setSocialLoginButtons(false, false);
-        assertThat(activity.findViewById(R.id.panel_login_social)).isNotVisible();
+        View panel_login_social = activity.findViewById(R.id.panel_login_social);
+        assertThat(panel_login_social).isNotVisible();
     }
 }

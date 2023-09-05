@@ -51,7 +51,7 @@ public abstract class PresenterActivityScreenshotTest<ActivityT extends Presente
     @Before
     public void before() {
         this.presenter = mock(getPresenterType());
-        ((EdxInstrumentationTestApplication) InstrumentationRegistry.getTargetContext().getApplicationContext()).setNextPresenter(presenter);
+        ((EdxInstrumentationTestApplication) InstrumentationRegistry.getInstrumentation().getTargetContext().getApplicationContext()).setNextPresenter(presenter);
         this.activity = mActivityRule.launchActivity(null);
         // To simplify tests, we automatically execute view methods on the application's UI thread.
         this.view = UiThreadInvocationHandler.newProxyInstance(uiThreadTestRule, activity.view, getViewType());

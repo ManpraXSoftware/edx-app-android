@@ -437,18 +437,23 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
 
                     if (comp.getType()== BlockType.SCORM || comp.getType()==BlockType.PDF)
                     {
+
                         adapter.selectedUnit = comp;
 
                         ////ToDo need to optimise here Arjun
 
                         if(comp.getType()==BlockType.PDF )//&& scormManager.hasPdf(comp.getId())
                         {
-                            //anlaytic hit for scrom view
-                            aHelper.addMxAnalytics_db(loginPrefs.getUsername()
-                                    , adapter.selectedUnit.getDisplayName(), Action.ViewUnit,
-                                    adapter.selectedUnit.getRoot().getDisplayName(), Source.Mobile);
-                            pdfManager manager=new pdfManager();
-                            manager.viewPDF(getActivity(),scormManager.getPdf(comp.getId()));
+
+                            if(comp.getType()==BlockType.PDF && scormManager.has(comp.getId())) {
+
+                                //anlaytic hit for scrom view
+                                aHelper.addMxAnalytics_db(loginPrefs.getUsername()
+                                        , adapter.selectedUnit.getDisplayName(), Action.ViewUnit,
+                                        adapter.selectedUnit.getRoot().getDisplayName(), Source.Mobile);
+                                pdfManager manager = new pdfManager();
+                                manager.viewPDF(getActivity(), scormManager.getPdf(comp.getId()));
+                            }
                       /*      try {
 
                                 PDFBlockModel model = comp.getPDFs().get(0);
@@ -725,7 +730,7 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
 
                     final Snackbar snackbar = Snackbar.make(listView,
                             getResources().getQuantityString(R.plurals.delete_video_snackbar_msg, totalVideos, totalVideos),
-                            SNACKBAR_SHOWTIME_MS);
+                            Snackbar.LENGTH_LONG);
                     snackbar.setAction(R.string.label_undo, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

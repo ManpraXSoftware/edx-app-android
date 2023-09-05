@@ -8,11 +8,15 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.core.content.FileProvider;
+
+import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -23,6 +27,8 @@ import org.humana.mobile.tta.data.local.db.table.Period;
 import org.humana.mobile.tta.data.local.db.table.CurricullamChaptersModel;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class DownloadService extends IntentService {
@@ -93,6 +99,7 @@ public class DownloadService extends IntentService {
         startDownload(downloadPath, title);
     }
 
+
     private void startDownload(String downloadPath, String title) {
         mDataManager = DataManager.getInstance(this);
         edxEnvironment = mDataManager.getEdxEnvironment();
@@ -105,8 +112,20 @@ public class DownloadService extends IntentService {
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);  // This will show notification on top when downloading the file.
         request.setTitle(title); // Title for notification.
         request.setVisibleInDownloadsUi(true);
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, uri.getLastPathSegment());// Storage directory path
+       String originalFilename= uri.getLastPathSegment();
+        if (originalFilename.contains(":") || originalFilename.contains("+") || originalFilename.contains("@")) {
+            originalFilename = originalFilename
+                    .replace(":", "_")
+                    .replace("+", "_")
+                    .replace("@", "_");
+
+            Log.d("Filename", "Modified Filename: " + originalFilename);
+        } else {
+            Log.d("Filename", "Original Filename: " + originalFilename);
+        }
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, originalFilename);// Storage directory path
         downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+
         // This will start downloading
         if (isCurriculamm){
             downloadId = downloadManager.enqueue(request);
@@ -134,7 +153,6 @@ public class DownloadService extends IntentService {
             checkStatus(cursor);
         }
     }
-
 
     BroadcastReceiver onComplete = new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent intent) {
@@ -189,9 +207,51 @@ public class DownloadService extends IntentService {
     }
 
 
-    public static void openDownloadedFile(Uri uri, Context context){
+    public  void openDownloadedFile(Uri uri, Context context){
+
+        /*StorageManager storageManager = (StorageManager) context.getSystemService(STORAGE_SERVICE);
+        List<StorageVolume> storageVolumeList = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            storageVolumeList = storageManager.getStorageVolumes();
+        }
+        StorageVolume storageVolumeInternal = storageVolumeList.get(0);
+        File fileListDownloadDir = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            fileListDownloadDir = new File(storageVolumeInternal.getDirectory().getPath() + "/"+Environment.DIRECTORY_DOWNLOADS);
+        }
+        File[] fileList = fileListDownloadDir.listFiles();
+        long longCountFiles = 0;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            longCountFiles = Arrays.stream(fileList).count();
+        }
+        String stringOutput = "Total count is: " + Long.toString(longCountFiles) + "\n\n";
+        File file1 = null;
+
+        System.out.println("uri.getLastPathSegment() "+uri.getLastPathSegment());
+
+        for (int i=0; i<longCountFiles; i++){
+            stringOutput += fileList[i].getName().toString() + "\n";
+            if(fileList[i].getName().contains("pdf") ) {
+                if (fileList[i].getName().equals("asset-v1_Humana+NT101+GP+type@asset+block@List_of_Content_12_Subjects.pdf")) {
+                    file1 = fileList[i];
+
+                }
+            }
+        }*/
+        String originalFilename = uri.getLastPathSegment();
+        if (originalFilename.contains(":") || originalFilename.contains("+") || originalFilename.contains("@")) {
+            originalFilename = originalFilename
+                    .replace(":", "_")
+                    .replace("+", "_")
+                    .replace("@", "_");
+
+            Log.d("Filename", "Modified Filename: " + originalFilename);
+        } else {
+            Log.d("Filename", "Original Filename: " + originalFilename);
+        }
+
         File file = new File(Environment.getExternalStorageDirectory()+"/"+
-                Environment.DIRECTORY_DOWNLOADS,uri.getLastPathSegment());
+                Environment.DIRECTORY_DOWNLOADS,originalFilename);
         MimeTypeMap map = MimeTypeMap.getSingleton();
         String ext = MimeTypeMap.getFileExtensionFromUrl(file.getName());
         String type = map.getMimeTypeFromExtension(ext);
@@ -201,12 +261,16 @@ public class DownloadService extends IntentService {
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
         Uri data = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", file);;
 
         intent.setDataAndType(data, type);
         context.startActivity(intent);
     }
+    //asset-v1_Humana+NT101+GP+type@asset+block@List_of_Content_12_Subjects.pdf
+    //asset-v1:Humana+NT101+GP+type@asset+block@List_of_Content_12_Subjects.pdf
 
     public void checkStatus(Cursor cursor) {
 

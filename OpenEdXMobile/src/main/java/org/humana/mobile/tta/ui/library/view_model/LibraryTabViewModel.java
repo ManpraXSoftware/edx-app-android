@@ -265,6 +265,8 @@ public class LibraryTabViewModel extends BaseViewModel {
                 listBinding.contentFiniteList.setmMoreButtonVisible(true);
                 listBinding.contentFiniteList.setOnMoreButtonClickListener(v -> {
 
+
+
                     int rank = BreadcrumbUtil.getCurrentRank() + 1;
                     mActivity.logD("TTA Nav ======> " +
                             BreadcrumbUtil.setBreadcrumb(rank, model.getInternal_name()));

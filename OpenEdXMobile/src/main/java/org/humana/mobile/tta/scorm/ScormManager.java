@@ -2,19 +2,24 @@ package org.humana.mobile.tta.scorm;
 
 import android.content.Context;
 import android.os.Environment;
+import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
 import android.text.TextUtils;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import org.humana.mobile.logger.Logger;
+import org.humana.mobile.util.BrowserUtil;
 import org.humana.mobile.util.Sha1Util;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
+import static android.content.Context.STORAGE_SERVICE;
 import static org.humana.mobile.util.BrowserUtil.loginPrefs;
 
 @Singleton
@@ -88,7 +93,6 @@ public class ScormManager {
 
     public void deleteUnit(String path) {
         setfolderPath();
-
         boolean deleted = deleteRecursive(new File(path));
     }
 
@@ -120,6 +124,9 @@ public class ScormManager {
         file= new File(file, hash+".pdf");
         return file;
     }
+
+
+
 
     /**
      * This function is used to saved contents of a String to a file
@@ -200,14 +207,19 @@ public class ScormManager {
      * @throws UnsupportedEncodingException
      */
     public void startScormDownload(final ScormBlockModel download, final DownloadListener downloadListener) {
+
+
         //Uri target = Uri.fromFile(new File(transcriptFolder, Sha1Util.SHA1(downloadLink)));
         setfolderPath();
+
+
 
         if (download == null || download.getData() == null || TextUtils.isEmpty(download.getData().scormData)) {
 
             downloadListener.handle(null);
             return;
         }
+
 
         String hash = Sha1Util.SHA1(download.getId());
 
@@ -236,7 +248,7 @@ public class ScormManager {
         //If file is not present in the Folder, then start downloading
         if (!has(download.getId()) || !hasPdf(download.getId())) {
 
-            ScormDownloader td = new ScormDownloader(context, download.getData().scormData, file.getAbsolutePath()) {
+            ScormDownloader td = new ScormDownloader(context, BrowserUtil.config.getApiHostURL()+download.getData().scormData, file.getAbsolutePath()) {
 
                 @Override
                 public void onDownloadComplete(String response) {

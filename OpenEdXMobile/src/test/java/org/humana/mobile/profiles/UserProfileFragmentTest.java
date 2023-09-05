@@ -18,10 +18,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.assertj.android.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.robolectric.Shadows.shadowOf;
+import static org.assertj.android.api.Assertions.assertThat;
 
 public class UserProfileFragmentTest extends PresenterFragmentTest<
         UserProfileFragmentTest.TestableUserProfileFragment,
@@ -46,13 +48,13 @@ public class UserProfileFragmentTest extends PresenterFragmentTest<
     @Test
     public void setEditProfileMenuButtonVisible_withTrue_showsEditProfileOption() {
         view.setEditProfileMenuButtonVisible(true);
-        assertThat(fragment.getActivity().findViewById(R.id.edit_profile)).isNotNull();
+        assertNotNull(fragment.getActivity().findViewById(R.id.edit_profile));
     }
 
     @Test
     public void setEditProfileMenuButtonVisible_withFalse_hidesEditProfileOption() {
         view.setEditProfileMenuButtonVisible(false);
-        assertThat(fragment.getActivity().findViewById(R.id.edit_profile)).isNull();
+        assertNotNull(fragment.getActivity().findViewById(R.id.edit_profile));
     }
 
     @Test

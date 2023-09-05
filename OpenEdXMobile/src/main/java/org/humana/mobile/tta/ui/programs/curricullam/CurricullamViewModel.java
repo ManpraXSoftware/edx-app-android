@@ -69,7 +69,7 @@ public class CurricullamViewModel extends BaseViewModel {
 
                     } else {
                         Uri uri = Uri.parse(item.getUrl());
-                        DownloadService.openDownloadedFile(uri, mActivity);
+                        new DownloadService().openDownloadedFile(uri, mActivity.getApplicationContext());
                     }
                 } else {
                     item.setDownloadStatus(mActivity.getString(R.string.downloading));
@@ -250,3 +250,6 @@ public class CurricullamViewModel extends BaseViewModel {
         }
     }
 }
+
+
+// /static/TW_T25_F1.pdf
