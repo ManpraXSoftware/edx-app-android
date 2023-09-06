@@ -269,8 +269,7 @@ public class DownloadService extends IntentService {
         intent.setDataAndType(data, type);
         context.startActivity(intent);
     }
-    //asset-v1_Humana+NT101+GP+type@asset+block@List_of_Content_12_Subjects.pdf
-    //asset-v1:Humana+NT101+GP+type@asset+block@List_of_Content_12_Subjects.pdf
+
 
     public void checkStatus(Cursor cursor) {
 
