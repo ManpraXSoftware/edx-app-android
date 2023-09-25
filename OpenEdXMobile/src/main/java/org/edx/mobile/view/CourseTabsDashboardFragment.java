@@ -99,8 +99,8 @@ public class CourseTabsDashboardFragment extends TabsBaseFragment {
             getActivity().setTitle(courseData.getCourse().getName());
             setHasOptionsMenu(courseData.getCourse().getCoursewareAccess().hasAccess());
             final Map<String, String> values = new HashMap<>();
-            values.put(Analytics.Keys.NAME,courseData.getCourse().getName());
-            values.put(Analytics.Keys.Uid,courseData.getCourse().getId());
+            values.put(Analytics.Keys.COUSRE_NAME,courseData.getCourse().getName());
+            values.put(Analytics.Keys.COURSE_UID,courseData.getCourse().getId());
             environment.getAnalyticsRegistry().trackScreenView(
                     Analytics.Screens.COURSE_DASHBOARD, courseData.getCourse().getId(), null,values);
 

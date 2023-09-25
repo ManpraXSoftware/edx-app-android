@@ -4,7 +4,7 @@
   <string name="app_shortcut_name" translatable="false">@string/shortcut_name</string>
   <string name="phonetic_app_name" translatable="false">@string/phonetic_platform_name</string>-->
 
- <string name="app_name" translatable="false">Subodha</string>
+ <!--<string name="app_name" translatable="false">Subodha</string>-->
  <string name="app_shortcut_name" translatable="false"></string>
  <string name="phonetic_app_name" translatable="false"></string>
 

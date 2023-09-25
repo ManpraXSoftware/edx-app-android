@@ -511,7 +511,8 @@ public interface Analytics {
         String UNROLL_PROGRAM_NAME="UNROLL PROGRAM NAME";
         String UNROLL_PROGRAM_UID="UNROLL PROGRAM UID";
         String TOPIC_NAME="TOPIC NAME";
-        String ProgramUUid="Program UUid";
+        String LINKED_TOPIC_NAME="LINKED TOPIC NAME";
+        String PROGRAM_UUID ="Program UUid";
 
         String RECENT_PROGRAM_NAME="RECENT PROGRAM NAME";
         String RECENT_TOPIC_NAME="RECENT TOPIC NAME";
@@ -523,6 +524,13 @@ public interface Analytics {
         String SECTION_OUTLINE_UID = "SECTION NAME UID";
         String UNIT_NAME="UNIT NAME";
         String UNIT_UID="UNIT UID";
+
+        String COUSRE_NAME="COURSE NAME";
+        String COURSE_UID="COURSE UID";
+
+        String  SUBJECT_NAME="SUBJECT NAME";
+        String SUBJECT_UID="SUBJECT UID";
+        String LINKED_PROGRAM_NAME="LINKED PROGRAM NAME";
 
 
     }
@@ -762,6 +770,8 @@ public interface Analytics {
         String Enroll_Program="Enroll Program";
         String Unroll_Program="Unroll Program";
         String View_Program="View Program";
+
+        String View_Cousre="View Cousre";
         String SELECTED_LANGAUGE="Select language";
     }
 

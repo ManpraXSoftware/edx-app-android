@@ -519,11 +519,25 @@ android {
     }
 
 
-    productFlavors {
+    /*productFlavors {
         prod {
             if (project.hasProperty('APPLICATION_ID')) {
                 applicationId APPLICATION_ID
             }
+        }
+    }*/
+
+    flavorDimensions "env"
+    productFlavors {
+        prod {
+            dimension "env"
+            resValue "string", "app_name", "Subodha"
+        }
+        stage {
+            dimension "env"
+            applicationIdSuffix ".stage"
+            versionNameSuffix "-stage"
+            resValue "string", "app_name", "Subodha (Stage)"
         }
     }
 
@@ -545,7 +559,6 @@ android {
         }
 
         release {
-
             buildConfigField("String", "clientID", "\"XT7PFJbrRg8TtdRzDlC3B6kgmJYLG8jDjq9u0i87\"")
             buildConfigField("String", "client_secret", "\"mtzJ9vwJKQtoG81ChC4uhfOv5SVpO46srimGyF9k0TsbC1JN7tAJ0QcOgRXotTVPhu2kspKr7bgWXFRWuOLh4JAFeIxrmIkwDleK3dPQMnxpWGuxiWMlfgvAti99t7eB\"")
             // Only apply release signing configurations if keystore.properties is available
@@ -589,15 +602,15 @@ android.applicationVariants.all { variant ->
     generateTask.dependsOn(configureTask)
     // Task that generate google-services.json from the configs and execute before the
     // google-services.json validation
- /*   if (firebaseEnabled) {
-        def serviceJsonTask = "generate$variantName" + "GoogleServicesJson"
-        project.task(serviceJsonTask).doFirst {
-            AndroidHelper.saveGoogleServicesJson(project, firebaseConfig)
-        }
-        def googleServicesJsonValidationTask = "process$variantName" + "GoogleServices"
-        tasks.getByName(googleServicesJsonValidationTask).dependsOn(serviceJsonTask)
-    }
-*/
+    /*   if (firebaseEnabled) {
+           def serviceJsonTask = "generate$variantName" + "GoogleServicesJson"
+           project.task(serviceJsonTask).doFirst {
+               AndroidHelper.saveGoogleServicesJson(project, firebaseConfig)
+           }
+           def googleServicesJsonValidationTask = "process$variantName" + "GoogleServices"
+           tasks.getByName(googleServicesJsonValidationTask).dependsOn(serviceJsonTask)
+       }
+   */
     // The task that generates auth_config.json for the config and executes for the Microsoft
     // authentication
     if (isMicrosoftEnabled) {
