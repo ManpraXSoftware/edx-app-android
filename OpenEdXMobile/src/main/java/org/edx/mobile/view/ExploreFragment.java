@@ -248,8 +248,8 @@ public class ExploreFragment extends BaseFragment implements OnRecyclerItemClick
     }
     void sendAnalyticsCourseDetail(DiscoverySubjectResult discoverySubjectResult){
         final Map<String, String> values = new HashMap<>();
-        values.put(Analytics.Keys.NAME,discoverySubjectResult.getName());
-        values.put(Analytics.Keys.Uid,discoverySubjectResult.getUuid());
+        values.put(Analytics.Keys.SUBJECT_NAME,discoverySubjectResult.getName());
+        values.put(Analytics.Keys.SUBJECT_UID,discoverySubjectResult.getUuid());
         environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.SUBJECT_SELECTED,null,null,values);
     }
 }

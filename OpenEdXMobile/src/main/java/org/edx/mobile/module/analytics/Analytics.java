@@ -518,6 +518,8 @@ public interface Analytics {
         String RECENT_TOPIC_NAME="RECENT TOPIC NAME";
         String RECENT_PROGRAM_UID="RECENT PROGRAM UID";
 
+        String RECENT_COUSRE_UID="RECENT COUSRE UID";
+        String RECENT_COUSRE_NAME="RECENT COUSRE NAME";
         String VIEW_PORGRAM_NAME="VIEW PROGRAM NAME";
         String VIEW_PORGRAM_UID="PROGRAM UID";
         String SECTION_OUTLINE_NAME = "SSECTION OUTLINE NAME";
@@ -531,6 +533,7 @@ public interface Analytics {
         String  SUBJECT_NAME="SUBJECT NAME";
         String SUBJECT_UID="SUBJECT UID";
         String LINKED_PROGRAM_NAME="LINKED PROGRAM NAME";
+        String LINKED_PROGRAM_UUID ="LINKED PROGRAM UUID";
 
 
     }

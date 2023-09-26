@@ -4,22 +4,16 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.edx.mobile.R;
 import org.edx.mobile.databinding.RowProgramEnrolledItemBinding;
-import org.edx.mobile.discovery.model.EnrollAndUnenrollData;
-import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.programs.MyProgramListModel;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +25,6 @@ public class MyProgramListAdapter extends RecyclerView.Adapter<MyProgramListAdap
     private OnRecyclerItemClickListener listener;
     private int count = 0;
 
-    @Inject
-    LoginPrefs loginPrefs;
-
     public MyProgramListAdapter(Context context, OnRecyclerItemClickListener listener) {
         this.context = context;
         this.listener = listener;
@@ -42,7 +33,6 @@ public class MyProgramListAdapter extends RecyclerView.Adapter<MyProgramListAdap
     @NonNull
     @Override
     public ProgramViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-
         return new MyProgramListAdapter.ProgramViewHolder(RowProgramEnrolledItemBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false));
     }
 
@@ -73,21 +63,6 @@ public class MyProgramListAdapter extends RecyclerView.Adapter<MyProgramListAdap
         holder.itemBinding.programColorCode.setBackground(gradientDrawable);
         holder.itemBinding.tagsName.setText(model.getTagName());
         holder.itemBinding.programName.setText(model.getProgramName());
-
-
-        holder.itemBinding.unenrollButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                holder.itemBinding.unenrollButton.setEnabled(false);
-                String strings = "course-v1:VisionEmpower+VE_TIK_G10_MATH_P2_CH11+2021,course-v1:VisionEmpower+VE_TIK_G10_MATH_P2_CH12+2021,course-v1:VisionEmpower+VE_TIK_MATH_G10_P1_CH07+2021,course-v1:VisionEmpower+VE_TIK_MATH_G10_P2_CH09+2021,course-v1:VisionEmpower+VE_TIK_MATH_G10_P2_CH10+2021,course-v1:VisionEmpower+VE_TIK_MATH_G10_P2_CH13+2021,course-v1:VisionEmpower+VE_TIK_M_G10_P1_CH08+2020,course-v1:VisionEmpower+VE_TIK_M_G10_P1_CH1+2021,course-v1:VisionEmpower+VE_TIK_M_G10_P1_CH2+2021,course-v1:VisionEmpower+VE_TIK_M_G10_P1_CH3+2021,course-v1:VisionEmpower+VE_TIK_M_G10_P1_CH6+2021,course-v1:VisionEmpower+VE_TIK_M_G10_P2-CH15+2021,course-v1:VisionEmpower+VE_TIK_M_G10_P2_CH14+2021,course-v1:VisionEmpower+VE_TIK_M_G9_P1_CH04+2020,course-v1:VisionEmpower+VE_TIK_M_G9_P1_CH05+2020";
-                EnrollAndUnenrollData.DataCreation dataCreation = new EnrollAndUnenrollData.DataCreation();
-                dataCreation.setCourses(strings);
-                dataCreation.setAction("unenroll");
-                dataCreation.setProgram_uuid(model.getProgramUUid());
-                dataCreation.setProgram_name(model.getProgramName());
-                listener.onItemClick(view,dataCreation);
-
-            }
-        });
         holder.itemBinding.tagCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,8 +75,6 @@ public class MyProgramListAdapter extends RecyclerView.Adapter<MyProgramListAdap
         this.myProgramList = myProgramList;
         notifyDataSetChanged();
     }
-
-
 
     @Override
     public int getItemCount() {

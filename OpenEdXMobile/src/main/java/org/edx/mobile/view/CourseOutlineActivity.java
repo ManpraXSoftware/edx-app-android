@@ -58,8 +58,8 @@ public class CourseOutlineActivity extends BaseSingleFragmentActivity {
         if (courseComponentId == null) {
             EnrolledCoursesResponse courseData = (EnrolledCoursesResponse) courseBundle.getSerializable(EXTRA_COURSE_DATA);
             final Map<String, String> values = new HashMap<>();
-            values.put(Analytics.Keys.NAME,courseData.getCourse().getName());
-            values.put(Analytics.Keys.Uid,courseData.getCourse().getId());
+            values.put(Analytics.Keys.COUSRE_NAME,courseData.getCourse().getName());
+            values.put(Analytics.Keys.COURSE_UID,courseData.getCourse().getId());
             environment.getAnalyticsRegistry().trackScreenView(
                     isVideoMode ? Analytics.Screens.VIDEOS_COURSE_VIDEOS : Analytics.Screens.COURSE_OUTLINE,
                     courseData.getCourse().getId(),null, values);

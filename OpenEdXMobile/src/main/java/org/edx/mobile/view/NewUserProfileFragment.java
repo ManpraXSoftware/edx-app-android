@@ -192,7 +192,7 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
             viewHolder.malayalam.setSelected(false);
             viewHolder.odia.setSelected(false);
         }
-        else if (selectedLanguage.equals("ml")) {
+        else if (selectedLanguage.equals("ml-IN")) {
             viewHolder.bengali.setSelected(false);
             viewHolder.tamil.setSelected(false);
             viewHolder.hindi.setSelected(false);
@@ -316,11 +316,10 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
                 if (!viewHolder.malayalam.isSelected()) {
                     LocaleManager.setNewLocale(getContext(), "ml");
                     sendAnalyticsCourseDetail(getContext().getString(R.string.malayalam));
-
                     viewHolder.malayalam.setSelected(true);
                     viewHolder.odia.setSelected(false);
                     viewHolder.bengali.setSelected(false);
-                    viewHolder.bengali.setSelected(true);
+                    viewHolder.bengali.setSelected(false);
                     viewHolder.tamil.setSelected(false);
                     viewHolder.hindi.setSelected(false);
                     viewHolder.kannada.setSelected(false);
