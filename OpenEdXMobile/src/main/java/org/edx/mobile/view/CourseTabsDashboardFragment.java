@@ -258,8 +258,8 @@ public class CourseTabsDashboardFragment extends TabsBaseFragment {
                     public void onFragmentSelected() {
 
                         final Map<String, String> values = new HashMap<>();
-                        values.put(Analytics.Keys.NAME,courseData.getCourse().getName());
-                        values.put(Analytics.Keys.Uid,courseData.getCourse().getId());
+                        values.put(Analytics.Keys.COUSRE_NAME,courseData.getCourse().getName());
+                        values.put(Analytics.Keys.COURSE_UID,courseData.getCourse().getId());
                         environment.getAnalyticsRegistry().trackScreenView(Analytics.Screens.COURSE_OUTLINE,
                                 courseData.getCourse().getId(), null,values);
                         setDownloadProgressMenuItemVisibility(true);

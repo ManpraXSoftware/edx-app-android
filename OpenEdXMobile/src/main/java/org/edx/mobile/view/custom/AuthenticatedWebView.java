@@ -213,10 +213,18 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
                 return false;
             }
         });
-        webView.getSettings().setAppCacheMaxSize(1024 * 1024 * 8);
-        webView.getSettings().setAppCachePath(getContext().getApplicationContext().getCacheDir().getAbsolutePath());
-        webView.getSettings().setAppCacheEnabled(true);
-        webView.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
+        WebSettings webSettings = webView.getSettings();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        } else {
+//            webSettings.setAppCacheMaxSize(1024 * 1024 * 8);
+//            webSettings.setAppCachePath(getContext().getApplicationContext().getCacheDir().getAbsolutePath());
+//            webSettings.setAppCacheEnabled(true);
+            webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        }
+
+
         //add user agent
         String userAgent = webView.getSettings().getUserAgentString() + "/" + BrowserUtil.config.getUserAgent();
         webView.getSettings().setUserAgentString(userAgent);

@@ -766,7 +766,7 @@ public interface Analytics {
         String VIDEO_CASTED = "Cast: Video Casted";
 
         String EXPLORE_COURSE="Explore Course";
-        String MY_DASHBOARD="MY Dashboard";
+        String MY_DASHBOARD="My Dashboard";
         String MY_PROGRAM="MY PROGRAM";
         String RECENT_COURSE="RECENT COUSRE";
         String YOUR_ENROLL_PROGRAM="Your Enroll Program";
