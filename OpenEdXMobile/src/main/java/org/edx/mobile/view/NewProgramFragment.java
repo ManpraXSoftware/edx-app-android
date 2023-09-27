@@ -212,7 +212,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                 if(!tag_screen_flag){
 
                     dataCreation.setProgram_uuid(program_uuid);
-                    enrolledStatus2("Do you want to unenroll from this program",dataCreation);
+                    enrolledStatus2("Do you want to unenroll from this program?",dataCreation);
                 }
                 else {
                     dataCreation.setProgram_uuid(program_selected_uuid);
@@ -820,15 +820,15 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         builder.setMessage(message)
                 .setTitle(titleResource)
                 .setCancelable(false)
-                .setPositiveButton(getString(R.string.label_yes), positiveClickListener)
-                .setNegativeButton(getString(R.string.label_no), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.label_no),new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         binding.unenrollFromProgram.setEnabled(true);
                         binding.enrollInProgram.setEnabled(true);
                     }
-                });
+                })
+                .setNegativeButton(getString(R.string.label_yes),positiveClickListener) ;
 
         // Creating dialog box
         AlertDialog alert = builder.create();
