@@ -812,27 +812,16 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         alert.setTitle(R.string.status);
         alert.show();
     }
-    private void enrolledStatus2(String msg,EnrollAndUnenrollData.DataCreation dataCreation) {
+
+    private void showConfirmationDialog(String message, int titleResource, DialogInterface.OnClickListener positiveClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // Uncomment the below code to Set the message and title from the strings.xml
-        // file
-        builder.setMessage(msg).setTitle(R.string.status);
 
-        // Setting message manually and performing action on button click
-        builder.setMessage(msg)
+        // Set the message and title from resources
+        builder.setMessage(message)
+                .setTitle(titleResource)
                 .setCancelable(false)
-
-                .setPositiveButton(getString(R.string.label_yes), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                        try {
-                            enrollcourse(dataCreation);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }) .setNegativeButton(getString(R.string.label_no), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.label_yes), positiveClickListener)
+                .setNegativeButton(getString(R.string.label_no), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -840,12 +829,27 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                         binding.enrollInProgram.setEnabled(true);
                     }
                 });
+
         // Creating dialog box
         AlertDialog alert = builder.create();
-        // Setting the title manually
-        alert.setTitle(R.string.status);
+        // Setting the title from resources
         alert.show();
     }
+
+    // To show the dialog with "Yes" on the left and "No" on the right.
+    private void enrolledStatus2(String msg, EnrollAndUnenrollData.DataCreation dataCreation) {
+        showConfirmationDialog(msg, R.string.status, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+                try {
+                    enrollcourse(dataCreation);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
 
 
     @Override
