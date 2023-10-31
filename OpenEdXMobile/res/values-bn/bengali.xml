@@ -438,4 +438,5 @@
     <string name="completed">সম্পূর্ণ</string>
     <string name="not_started">শুরু না</string>
     <string name="in_progress">চলমান</string>
+    <string name="unroll_app_dialog_message">আপনি কি এই প্রোগ্রাম থেকে অনরোল করতে চান?</string>
 </resources>

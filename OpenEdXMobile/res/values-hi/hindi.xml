@@ -468,4 +468,5 @@
     <string name="in_progress">चालू</string>
     <string name="program_is_successfully_added_to_dashboard">प्रोग्राम को सफलतापूर्वक डैशबोर्ड में जोड़ा गया</string>
     <string name="program_is_successfully_removed_to_dashboard">प्रोग्राम को सफलतापूर्वक डैशबोर्ड पर हटा दिया गया</string>
+    <string name="unroll_app_dialog_message">क्या आप इस प्रोग्राम से अनरोल करना चाहते हैं?</string>
 </resources>

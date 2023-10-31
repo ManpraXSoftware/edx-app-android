@@ -812,4 +812,5 @@
     <string name="in_progress">ಪ್ರಗತಿಯಲ್ಲಿದೆ</string>
     <string name="program_is_successfully_added_to_dashboard">ಪ್ರೋಗ್ರಾಂ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್‌ಗೆ ಸೇರಿಸಲಾಗಿದೆ</string>
     <string name="program_is_successfully_removed_to_dashboard">ಪ್ರೋಗ್ರಾಂ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್‌ಗೆ ತೆಗೆದುಹಾಕಲಾಗಿದೆ</string>
+    <string name="unroll_app_dialog_message">ಈ ಪ್ರೋಗ್ರಾಮದಿಂದ ಅನ್‌ರೋಲ್ ಮಾಡಲು ನೀವು ಇಚ್ಛಿಸುತ್ತೀರಾ?</string>
 </resources>

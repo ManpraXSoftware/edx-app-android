@@ -831,4 +831,7 @@
   are saved and can be changed fro your account menu</string>
  <string name="skip">Skip</string>
  <string name="skip_language_preference">Skip Language Preference</string>
+ <string name="unroll_app_dialog_message">Do you want to unroll from this program? </string>
+
+
 </resources>

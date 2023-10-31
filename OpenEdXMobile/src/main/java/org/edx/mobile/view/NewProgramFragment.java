@@ -212,7 +212,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                 if(!tag_screen_flag){
 
                     dataCreation.setProgram_uuid(program_uuid);
-                    enrolledStatus2("Do you want to unenroll from this program?",dataCreation);
+                    enrolledStatus2(getString(R.string.unroll_app_dialog_message),dataCreation);
                 }
                 else {
                     dataCreation.setProgram_uuid(program_selected_uuid);
