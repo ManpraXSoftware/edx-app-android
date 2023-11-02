@@ -365,6 +365,11 @@ android {
         enabled = true
     }
 
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
     dexOptions {
         javaMaxHeapSize "2g"
     }
