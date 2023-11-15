@@ -425,5 +425,8 @@
     <string name="program_is_successfully_added_to_dashboard">ഡാഷ്‌ബോർഡിലേക്ക് പ്രോഗ്രാം വിജയകരമായി ചേർത്തു</string>
     <string name="program_is_successfully_removed_to_dashboard">ഡാഷ്‌ബോർഡിൽ നിന്ന് പ്രോഗ്രാം നീക്കം ചെയ്തു</string>
     <string name="unroll_app_dialog_message">ഈ പരിപrogramത്തിൽന്‌റെടുക്കാൻ ആഗ്രഹിക്കുന്നുണ്ടോ?</string>
+    <string name="label_no">അല്ല</string>
+    <string name="label_yes">ശരി</string>
+    <string name="label_ok">ശരി</string>
 
 </resources>

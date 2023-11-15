@@ -426,5 +426,8 @@
     <string name="program_is_successfully_added_to_dashboard">ଡ୍ୟାସବୋର୍ଡରେ ପ୍ରୋଗ୍ରାମ ସଫଳତାର ସହ ଯୋଡାଯାଇଛି !</string>
     <string name="program_is_successfully_removed_to_dashboard">ଡ୍ୟାସବୋର୍ଡରୁ ପ୍ରୋଗ୍ରାମ୍ ସଫଳତାର ସହ ଅପସାରଣ ହୋଇଛି !</string>
     <string name="unroll_app_dialog_message">ଆପଣଙ୍କ ଏହି ପ୍ରୋଗ୍ରାମରୁ ଆଣତୁ କି?</string>
+    <string name="label_no">ନାହିଁ</string>
+    <string name="label_yes">ହଁ</string>
+    <string name="label_ok">ଠିକ୍‌ ଅଛି</string>
 
 </resources>

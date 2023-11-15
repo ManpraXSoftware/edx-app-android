@@ -37,6 +37,10 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
     private LinearLayout mHindi;
     private LinearLayout mKannada;
     private LinearLayout mTamil;
+
+    private LinearLayout mMalayalam;
+
+    private LinearLayout mOdia;
     private LinearLayout mBengali;
     @Inject
     protected IEdxEnvironment environment;
@@ -63,7 +67,10 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
         mHindi = findViewById(R.id.hindi);
         mKannada = findViewById(R.id.kannada);
         mTamil = findViewById(R.id.tamil);
+        mMalayalam=findViewById(R.id.malayalam);
+        mOdia=findViewById(R.id.odia);
         mBengali = findViewById(R.id.bengali);
+
         mBackArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,6 +91,8 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mHindi.setSelected(false);
                     mKannada.setSelected(false);
                     mTamil.setSelected(false);
+                    mMalayalam.setSelected(false);
+                    mOdia.setSelected(false);
                     mBengali.setSelected(false);
                 } else {
                     language = "";
@@ -94,6 +103,8 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mHindi.setSelected(false);
                     mKannada.setSelected(false);
                     mTamil.setSelected(false);
+                    mMalayalam.setSelected(false);
+                    mOdia.setSelected(false);
                     mBengali.setSelected(false);
                 }
             }
@@ -110,6 +121,8 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mEnglish.setSelected(false);
                     mKannada.setSelected(false);
                     mTamil.setSelected(false);
+                    mMalayalam.setSelected(false);
+                    mOdia.setSelected(false);
                     mBengali.setSelected(false);
                     sendAnalyticsCourseDetail(getApplicationContext().getString(R.string.hindi));
                 } else {
@@ -121,6 +134,8 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mEnglish.setSelected(false);
                     mKannada.setSelected(false);
                     mTamil.setSelected(false);
+                    mMalayalam.setSelected(false);
+                    mOdia.setSelected(false);
                     mBengali.setSelected(false);
                 }
             }
@@ -137,6 +152,8 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mHindi.setSelected(false);
                     mEnglish.setSelected(false);
                     mTamil.setSelected(false);
+                    mMalayalam.setSelected(false);
+                    mOdia.setSelected(false);
                     mBengali.setSelected(false);
                     sendAnalyticsCourseDetail(getApplicationContext().getString(R.string.kannada));
                 } else {
@@ -148,6 +165,8 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mHindi.setSelected(false);
                     mEnglish.setSelected(false);
                     mTamil.setSelected(false);
+                    mMalayalam.setSelected(false);
+                    mOdia.setSelected(false);
                     mBengali.setSelected(false);
                 }
             }
@@ -164,6 +183,8 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mHindi.setSelected(false);
                     mKannada.setSelected(false);
                     mEnglish.setSelected(false);
+                    mMalayalam.setSelected(false);
+                    mOdia.setSelected(false);
                     mBengali.setSelected(false);
                     sendAnalyticsCourseDetail(getApplicationContext().getString(R.string.tamil));
                 } else {
@@ -175,6 +196,72 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     mHindi.setSelected(false);
                     mKannada.setSelected(false);
                     mEnglish.setSelected(false);
+                    mMalayalam.setSelected(false);
+                    mOdia.setSelected(false);
+                    mBengali.setSelected(false);
+                }
+            }
+        });
+
+        mMalayalam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!mMalayalam.isSelected()) {
+                    language = "ml";
+                    mMalayalam.setSelected(true);
+                    mOdia.setSelected(false);
+                    mTamil.setSelected(false);
+                    mNextButton.setActivated(true);
+                    mNextButton.setTextColor(Color.parseColor("#464A50"));
+                    //      mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
+                    mHindi.setSelected(false);
+                    mKannada.setSelected(false);
+                    mEnglish.setSelected(false);
+                    mBengali.setSelected(false);
+                    sendAnalyticsCourseDetail(getApplicationContext().getString(R.string.malayalam));
+                } else {
+                    language = "";
+                    mTamil.setSelected(false);
+                    mNextButton.setActivated(false);
+                    mNextButton.setTextColor(Color.parseColor("#ffffffff"));
+                    //   mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
+                    mHindi.setSelected(false);
+                    mKannada.setSelected(false);
+                    mEnglish.setSelected(false);
+                    mMalayalam.setSelected(false);
+                    mOdia.setSelected(false);
+                    mBengali.setSelected(false);
+                }
+            }
+        });
+
+        mOdia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!mOdia.isSelected()) {
+                    language = "or";
+                    mOdia.setSelected(true);
+                    mNextButton.setActivated(true);
+                    mNextButton.setTextColor(Color.parseColor("#464A50"));
+                    //      mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
+                    mHindi.setSelected(false);
+                    mKannada.setSelected(false);
+                    mEnglish.setSelected(false);
+                    mTamil.setSelected(false);
+                    mMalayalam.setSelected(false);
+                    mBengali.setSelected(false);
+                    sendAnalyticsCourseDetail(getApplicationContext().getString(R.string.odia));
+                } else {
+                    language = "";
+                    mTamil.setSelected(false);
+                    mNextButton.setActivated(false);
+                    mNextButton.setTextColor(Color.parseColor("#ffffffff"));
+                    //   mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
+                    mHindi.setSelected(false);
+                    mKannada.setSelected(false);
+                    mEnglish.setSelected(false);
+                    mMalayalam.setSelected(false);
+                    mOdia.setSelected(false);
                     mBengali.setSelected(false);
                 }
             }
@@ -185,6 +272,8 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                 if (!mBengali.isSelected()) {
                     language = "bn";
                     mBengali.setSelected(true);
+                    mMalayalam.setSelected(false);
+                    mOdia.setSelected(false);
                     mTamil.setSelected(false);
                     mNextButton.setActivated(true);
                     mNextButton.setTextColor(Color.parseColor("#464A50"));
@@ -202,6 +291,8 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
                     //   mNextButton.sendAccessibilityEvent(AccessibilityEvent.WINDOWS_CHANGE_REMOVED);
                     mHindi.setSelected(false);
                     mKannada.setSelected(false);
+                    mMalayalam.setSelected(false);
+                    mOdia.setSelected(false);
                     mEnglish.setSelected(false);
                 }
             }

@@ -469,4 +469,7 @@
     <string name="program_is_successfully_added_to_dashboard">நிரல் வெற்றிகரமாக டாஷ்போர்டில் சேர்க்கப்பட்டது</string>
     <string name="program_is_successfully_removed_to_dashboard">நிரல் வெற்றிகரமாக டாஷ்போர்டில் அகற்றப்பட்டது</string>
     <string name="unroll_app_dialog_message">இந்த நிர்வாகிக்கு அன்‌ரோல் செய்ய விரும்புகிறீர்களா?</string>
+    <string name="label_no">இல்லை</string>
+    <string name="label_yes">ஆம்</string>
+    <string name="label_ok">சரி</string>
 </resources>

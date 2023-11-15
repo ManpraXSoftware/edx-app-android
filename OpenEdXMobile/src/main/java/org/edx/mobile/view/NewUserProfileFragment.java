@@ -566,7 +566,7 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
         //Setting message manually and performing action on button click
         builder.setMessage(R.string.are_you_sure_you_want_to_logout)
                 .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.label_yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         /*Toast.makeText(getApplicationContext(),"you choose yes action for alertbox",
                                 Toast.LENGTH_SHORT).show();*/
@@ -574,7 +574,7 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
                                 environment.getAnalyticsRegistry(), environment.getNotificationDelegate());
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.label_no), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //  Action for 'NO' Button
                         dialog.cancel();

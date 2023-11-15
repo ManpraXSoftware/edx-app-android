@@ -439,4 +439,7 @@
     <string name="not_started">শুরু না</string>
     <string name="in_progress">চলমান</string>
     <string name="unroll_app_dialog_message">আপনি কি এই প্রোগ্রাম থেকে অনরোল করতে চান?</string>
+    <string name="label_no">না</string>
+    <string name="label_yes">হ্যাঁ</string>
+    <string name="label_ok">ঠিক আছে</string>
 </resources>
