@@ -654,9 +654,9 @@ public interface Analytics {
     interface Screens {
         String COURSE_INFO_SCREEN = "Course Info";
         String PROGRAM_INFO_SCREEN = "Program Info";
-        String LAUNCH_ACTIVITY = "Launch";
+        String LAUNCH_SCREEN = "Launch Screen";
         String REGISTER = "Register";
-        String LOGIN = "Login";
+        String LOGIN_SCREEN = "Login Screen";
         String COURSE_DASHBOARD = "Course Dashboard";
         String COURSE_OUTLINE = "Course Outline";
         String COURSE_HANDOUTS = "Course Handouts";
@@ -768,14 +768,18 @@ public interface Analytics {
         String EXPLORE_COURSE="Explore Course";
         String MY_DASHBOARD="My Dashboard";
         String MY_PROGRAM="MY PROGRAM";
-        String RECENT_COURSE="RECENT COUSRE";
+        String RECENT_COURSE="RECENT COURSE";
         String YOUR_ENROLL_PROGRAM="Your Enroll Program";
         String Enroll_Program="Enroll Program";
         String Unroll_Program="Unroll Program";
         String View_Program="View Program";
 
-        String View_Cousre="View Cousre";
-        String SELECTED_LANGAUGE="Select language";
+        String VIEW_COURSE ="View Course";
+        String SELECT_LANGUAGE ="Select language";
+        String VIEW_LOGIN_SCREEN_BUTTON_CLICK="View Login Screen Button Click";
+
+        String USER_LOGIN_UNSUCCESSFUL="User Login Unsuccessful";
+        String USER_LOGIN_SUCCESSFUL="User Login Successful";
     }
 
     /**

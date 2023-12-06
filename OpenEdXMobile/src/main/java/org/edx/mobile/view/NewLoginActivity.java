@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.accessibility.AccessibilityEvent;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -137,7 +135,7 @@ public class NewLoginActivity extends PresenterActivity<LoginPresenter, LoginPre
       /*  activityLoginBinding.endUserAgreementTv.setMovementMethod(LinkMovementMethod.getInstance());
         activityLoginBinding.endUserAgreementTv.setText(TextUtils.generateLicenseText(getResources(), R.string.by_signing_in));
 */
-        environment.getAnalyticsRegistry().trackScreenView(Analytics.Screens.LOGIN);
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Screens.LOGIN_SCREEN);
 
         // enable login buttons at launch
         tryToSetUIInteraction(true);
@@ -397,7 +395,7 @@ public class NewLoginActivity extends PresenterActivity<LoginPresenter, LoginPre
 
     public void onUserLoginFailure(Exception ex, String accessToken, String backend) {
         tryToSetUIInteraction(true);
-
+        sendAnalyticsUserLoginUnsuccessful();
         if (ex != null && ex instanceof LoginException) {
             LoginErrorMessage errorMessage = (((LoginException) ex).getLoginErrorMessage());
             showAlertDialog(
@@ -445,5 +443,12 @@ public class NewLoginActivity extends PresenterActivity<LoginPresenter, LoginPre
         //  activityLoginBinding.endUserAgreementTv.setEnabled(enable);
 
         return true;
+    }
+
+    void sendAnalyticsUserLoginSuccessful(){
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.USER_LOGIN_UNSUCCESSFUL,null,null,null);
+    }
+    void sendAnalyticsUserLoginUnsuccessful(){
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.USER_LOGIN_UNSUCCESSFUL,null,null,null);
     }
 }

@@ -1291,7 +1291,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         values.put(Analytics.Keys.COUSRE_NAME, enrolledCoursesResponse.getCourse().getName());
         values.put(Analytics.Keys.COURSE_UID, enrolledCoursesResponse.getCourse().getId());
         values.put(Analytics.Keys.LINKED_PROGRAM_UUID,program_Uid);
-        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.View_Cousre, null, null, values);
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.VIEW_COURSE, null, null, values);
     }
 
 }

@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.view.accessibility.AccessibilityEvent;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -318,6 +316,6 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
     void sendAnalyticsCourseDetail(String Language){
         final Map<String, String> values = new HashMap<>();
         values.put(Analytics.Keys.LANGAUGE_NAME,Language);
-        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.SELECTED_LANGAUGE,null,"Language Change",values);
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.SELECT_LANGUAGE,null,"Language Change",values);
     }
 }

@@ -402,7 +402,7 @@ public class SegmentAnalytics implements Analytics {
             aEvent.data.putValue(Keys.METHOD, method);
         }
 
-        trackSegmentEvent(Events.USER_LOGIN, aEvent.properties);
+        trackSegmentEvent(Events.USER_LOGIN_SUCCESSFUL, aEvent.properties);
     }
 
     /**

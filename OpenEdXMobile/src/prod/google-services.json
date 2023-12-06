@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "456310365616",
-    "project_id": "subodha-stage-7c1b3",
-    "storage_bucket": "subodha-stage-7c1b3.appspot.com"
+    "project_number": "797463322664",
+    "project_id": "subodha-live-89e20",
+    "storage_bucket": "subodha-live-89e20.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:456310365616:android:61a3a62ab97918fc9eca75",
+        "mobilesdk_app_id": "1:797463322664:android:fb0dd19964c75da6fa551d",
         "android_client_info": {
           "package_name": "com.mx.subodha"
         }
       },
       "oauth_client": [
         {
-          "client_id": "456310365616-b824udi3vbm45iq3pai5prj590gfaqg5.apps.googleusercontent.com",
+          "client_id": "797463322664-s9d6gkpbi7bodmn3evlg63lbmufm0e59.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB2xuyR6xTzg0RyT5LY8IhecYo8j_A6Mx8"
+          "current_key": "AIzaSyALIEucS3AcfbhY7SC1Ppp5PnBEqFqwst8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "456310365616-b824udi3vbm45iq3pai5prj590gfaqg5.apps.googleusercontent.com",
+              "client_id": "797463322664-s9d6gkpbi7bodmn3evlg63lbmufm0e59.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -35,6 +35,5 @@
       }
     }
   ],
-  "configuration_version": "1",
-  "analytics_enabled": true
+  "configuration_version": "1"
 }

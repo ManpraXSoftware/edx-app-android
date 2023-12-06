@@ -3,12 +3,10 @@ package org.edx.mobile.view;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,7 +21,6 @@ import com.google.inject.Injector;
 import org.edx.mobile.R;
 import org.edx.mobile.core.IEdxEnvironment;
 import org.edx.mobile.databinding.NewUserProfileBinding;
-import org.edx.mobile.http.callback.Callback;
 import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.analytics.AnalyticsRegistry;
 import org.edx.mobile.module.prefs.UserPrefs;
@@ -49,8 +46,6 @@ import java.util.Map;
 
 import de.greenrobot.event.EventBus;
 import roboguice.RoboGuice;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class NewUserProfileFragment extends PresenterFragment<UserProfilePresenter, UserProfilePresenter.ViewInterface>
         implements ScrollingPreferenceParent, PreferedLanguageAdapter.OnUpdateLanguage {
@@ -591,7 +586,7 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
     void sendAnalyticsCourseDetail(String Language){
         final Map<String, String> values = new HashMap<>();
         values.put(Analytics.Keys.LANGAUGE_NAME,Language);
-        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.SELECTED_LANGAUGE,null,"Language Change",values);
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.SELECT_LANGUAGE,null,"Language Change",values);
     }
 
 

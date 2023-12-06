@@ -9,8 +9,6 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
-import com.google.firebase.BuildConfig;
-
 import org.edx.mobile.R;
 import org.edx.mobile.base.BaseFragmentActivity;
 import org.edx.mobile.databinding.ActivityLaunchBinding;
@@ -33,6 +31,7 @@ public class LaunchActivity extends BaseFragmentActivity {
         binding.signInTv.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendAnalyticsCourseDetail();
                 startActivity(environment.getRouter().getLogInIntent());
             }
         });
@@ -43,7 +42,7 @@ public class LaunchActivity extends BaseFragmentActivity {
                 startActivity(environment.getRouter().getRegisterIntent());
             }
         });*/
-        environment.getAnalyticsRegistry().trackScreenView(Analytics.Screens.LAUNCH_ACTIVITY);
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Screens.LAUNCH_SCREEN);
     }
 
     @Override
@@ -53,5 +52,9 @@ public class LaunchActivity extends BaseFragmentActivity {
             finish();
             environment.getRouter().showMainDashboard(this);
         }
+    }
+
+    void sendAnalyticsCourseDetail(){
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.VIEW_LOGIN_SCREEN_BUTTON_CLICK,null,null,null);
     }
 }

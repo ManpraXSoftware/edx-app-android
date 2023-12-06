@@ -113,7 +113,7 @@ public class LoginActivity
         activityLoginBinding.endUserAgreementTv.setMovementMethod(LinkMovementMethod.getInstance());
         activityLoginBinding.endUserAgreementTv.setText(TextUtils.generateLicenseText(getResources(), R.string.by_signing_in));
 
-        environment.getAnalyticsRegistry().trackScreenView(Analytics.Screens.LOGIN);
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Screens.LOGIN_SCREEN);
 
         // enable login buttons at launch
         tryToSetUIInteraction(true);
