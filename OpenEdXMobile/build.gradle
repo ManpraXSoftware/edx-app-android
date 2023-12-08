@@ -385,6 +385,7 @@ android {
 
         versionCode getVersionCode()
         versionName getVersionName()
+        archivesBaseName = "Subodha $versionCode $versionName"
 
         renderscriptTargetApi 22
         renderscriptSupportModeEnabled true
