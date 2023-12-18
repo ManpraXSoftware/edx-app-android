@@ -1,19 +1,17 @@
 package org.edx.mobile.discovery.net.course;
 
 import com.google.inject.Inject;
-import com.squareup.okhttp.RequestBody;
 
-import org.edx.mobile.authentication.AuthResponse;
 import org.edx.mobile.discovery.DiscoveryBaseApi;
 import org.edx.mobile.discovery.DiscoveryRetrofitProvider;
 import org.edx.mobile.discovery.model.DiscoverySubject;
-import org.edx.mobile.discovery.model.EnrollAndUnenrollData;
+import org.edx.mobile.discovery.model.ResponseEnrollmentModel;
 import org.edx.mobile.discovery.model.OrganisationList;
-import org.edx.mobile.discovery.model.OrganisationModel;
 import org.edx.mobile.discovery.model.ProgramModel;
+import org.edx.mobile.discovery.model.ProgramResponseModel;
+import org.edx.mobile.discovery.model.ResponseCourseModel;
 import org.edx.mobile.discovery.model.SearchResult;
 import org.edx.mobile.discovery.model.TagModel;
-import org.json.JSONObject;
 
 import retrofit2.Call;
 
@@ -48,6 +46,18 @@ public class CourseApi extends DiscoveryBaseApi {
     public Call<ProgramModel> getProgramsWithTopicName(String auth_token, String lang, String topic_name) {
         return courseService.getProgramsWithTopicName(auth_token, lang, topic_name);
     }
+    public Call<ProgramResponseModel> getProgramResponseWithTopicName(String auth_token, String lang, String topic_name) {
+        return courseService.getProgramResponseWithTopicName(auth_token, lang, topic_name);
+    }
+
+    public Call<ResponseCourseModel> getCourseResponse(String auth_token,String programId, String lang) {
+        return courseService.getCourse(auth_token, programId,lang);
+    }
+    public Call<ResponseEnrollmentModel> getEnrollResponse(String auth_token, String programId) {
+        return courseService.getEnrollment(auth_token, programId);
+    }
+
+
    /* public Call<AuthResponse> getEnroll(String auth_token,JSONObject data) {
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),data.toString());
         return courseService.getEnroll(auth_token,body);

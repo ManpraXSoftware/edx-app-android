@@ -75,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/course_card_background">
+            android:background="@drawable/course_card_enrolled">
 
             <TextView
                 android:layout_width="wrap_content"

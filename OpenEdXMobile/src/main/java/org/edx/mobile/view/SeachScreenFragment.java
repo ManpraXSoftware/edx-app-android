@@ -102,7 +102,10 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         binding.backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().onBackPressed();
+                //getActivity().onBackPressed();
+                Intent intent
+                        = new Intent(getActivity(), MainBottomDashboardFragment.class);
+                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
 

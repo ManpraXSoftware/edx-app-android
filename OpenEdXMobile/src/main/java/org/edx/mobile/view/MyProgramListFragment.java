@@ -45,6 +45,7 @@ import java.util.Map;
 
 import de.greenrobot.event.EventBus;
 
+import static org.edx.mobile.view.ProgramActivity.MYPROGRAMFLAG;
 import static org.edx.mobile.view.ProgramActivity.PROGRAM;
 import static org.edx.mobile.view.ProgramActivity.PROGRAM_CONVERTED;
 import static org.edx.mobile.view.ProgramActivity.PROGRAM_UUID;
@@ -135,6 +136,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     @Override
     public void onResume() {
         super.onResume();
+
     }
 
     @Override
@@ -346,6 +348,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
             bundle1.putString(PROGRAM, myProgramListModel.getConvertedTagName());
             bundle1.putString(PROGRAM_CONVERTED, myProgramListModel.getTagName());
             bundle1.putString(PROGRAM_UUID, myProgramListModel.getProgramUUid());
+            bundle1.putBoolean(MYPROGRAMFLAG,true);
             newProgramFragment.setArguments(bundle1);
             sendAnalyticsCourseDetail(myProgramListModel);
             getActivity().getSupportFragmentManager().beginTransaction()

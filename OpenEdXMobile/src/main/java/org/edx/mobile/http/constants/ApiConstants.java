@@ -18,6 +18,11 @@ public class ApiConstants {
     public static final String URL_MY_USER_INFO = "/api/mobile/v0.5/my_user_info";
     public static final String URL_MY_PROGRAMS = "/explore-courses/enrolled-programs/";
     public static final String URL_MY_COURSES = "/explore-courses/enrolled-courses/";
+
+    public static final String URL_ENROLL_CHECK="/explore-courses/get-program-enrollment/";
+    public static final String URL_COURSES = "/extandedapi/getprogramcoursesdetail/";
+
+    public static final String URL_ENROLLMENTS = "/api/program_enrollments/v1/programs/{programUuid}/enrollments/";
     public static final String URL_MY_COURSES_MULTILINGUAL_TRANSLATION = "/mx-translations/multilingual/translations/";
 
     public static final String URL_ACCESS_TOKEN = "/oauth2/access_token/";

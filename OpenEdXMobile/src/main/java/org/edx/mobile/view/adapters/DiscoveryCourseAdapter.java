@@ -15,6 +15,7 @@ import org.edx.mobile.databinding.RowDiscoveryCourseBinding;
 import org.edx.mobile.discovery.model.CourseRuns;
 import org.edx.mobile.programs.ResumeCourse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DiscoveryCourseAdapter extends RecyclerView.Adapter<DiscoveryCourseAdapter.DiscoveryCourseViewHolder> {
@@ -38,8 +39,10 @@ public class DiscoveryCourseAdapter extends RecyclerView.Adapter<DiscoveryCourse
                 inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false));
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);*/
-        return new DiscoveryCourseAdapter.DiscoveryCourseViewHolder(RowDiscoveryCourseBinding.
+        DiscoveryCourseViewHolder viewHolder = new DiscoveryCourseViewHolder(RowDiscoveryCourseBinding.
                 inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false));
+        currentViewHolders.add(viewHolder);
+        return viewHolder;
     }
 
     @Override
@@ -52,6 +55,7 @@ public class DiscoveryCourseAdapter extends RecyclerView.Adapter<DiscoveryCourse
             if (model.getCourse_status() != null) {
                 holder.itemBinding.shimmerLayoutStatus.stopShimmer();
                 holder.itemBinding.shimmerLayoutStatus.setVisibility(View.GONE);
+
                 if (model.getCourse_status().toLowerCase().equals("completed")) {
                     holder.itemBinding.lnCourseStatus.setBackgroundColor(Color.parseColor("#7CCBB7"));
                     holder.itemBinding.courseStatus.setText(context.getString(R.string.completed));
@@ -92,11 +96,6 @@ public class DiscoveryCourseAdapter extends RecyclerView.Adapter<DiscoveryCourse
                     holder.itemBinding.viewButton.setVisibility(View.VISIBLE);
                     holder.itemBinding.contnueButton.setVisibility(View.GONE);
                 }
-
-            }
-            else {
-                holder.itemBinding.shimmerLayoutViewButton.stopShimmer();
-                holder.itemBinding.shimmerLayoutViewButton.setVisibility(View.GONE);
             }
             if(model.getConverted_course_title()!=null && !model.getConverted_course_title().isEmpty()){
                 holder.itemBinding.courseNameEnrolled.setText(model.getConverted_course_title());
@@ -106,7 +105,7 @@ public class DiscoveryCourseAdapter extends RecyclerView.Adapter<DiscoveryCourse
         } else {
             holder.itemBinding.courseCardNotEnrolled.setVisibility(View.VISIBLE);
             holder.itemBinding.courseCardEnrolled.setVisibility(View.GONE);
-           // holder.itemBinding.courseName.setText(model.getTitle());
+            // holder.itemBinding.courseName.setText(model.getTitle());
             if(model.getConverted_course_title()!=null && !model.getConverted_course_title().isEmpty()){
                 holder.itemBinding.courseName.setText(model.getConverted_course_title());
             }else{
@@ -162,6 +161,10 @@ public class DiscoveryCourseAdapter extends RecyclerView.Adapter<DiscoveryCourse
         return listOfCourseIds;
     }
 
+    private List<DiscoveryCourseViewHolder> currentViewHolders = new ArrayList<>();
+
+
+
     public class DiscoveryCourseViewHolder extends RecyclerView.ViewHolder {
         private RowDiscoveryCourseBinding itemBinding;
 
@@ -169,6 +172,28 @@ public class DiscoveryCourseAdapter extends RecyclerView.Adapter<DiscoveryCourse
             super(rowDiscoveryCourseBinding.getRoot());
             this.itemBinding = rowDiscoveryCourseBinding;
         }
+        public void setCourseStatusVisibility(boolean visible) {
+            if (visible) {
+                itemBinding.cvCourseStatus.setVisibility(View.VISIBLE);
+            } else {
+                itemBinding.cvCourseStatus.setVisibility(View.GONE);
+            }
+        }
 
     }
+    public void clearProgramCoursesLists() {
+        if (programCoursesLists != null) {
+            programCoursesLists.clear();
+            notifyDataSetChanged();
+            for (DiscoveryCourseViewHolder holder : currentViewHolders) {
+                holder.setCourseStatusVisibility(false);
+                holder.itemBinding.courseCardNotEnrolled.setVisibility(View.GONE);
+                holder.itemBinding.courseCardEnrolled.setVisibility(View.GONE);
+                holder.itemBinding.viewButton.setVisibility(View.GONE);
+                holder.itemBinding.contnueButton.setVisibility(View.GONE);
+            }
+
+        }
+    }
+
 }

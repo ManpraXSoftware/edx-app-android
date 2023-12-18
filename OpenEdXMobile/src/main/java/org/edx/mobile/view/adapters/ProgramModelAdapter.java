@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.edx.mobile.databinding.RowProgramBinding;
-import org.edx.mobile.discovery.model.ProgramResultList;
+import org.edx.mobile.discovery.model.ProgramResponseModel;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ ProgramModelAdapter extends RecyclerView.Adapter<ProgramModelAdapter.ProgramView
 
     private Context context;
     private OnRecyclerItemClickListener listener;
-    private List<ProgramResultList> programResultLists;
+    private List<ProgramResponseModel.Program> programResultLists;
     private String progamNameselect;
 
     public ProgramModelAdapter(Context context, OnRecyclerItemClickListener listener) {
@@ -34,7 +34,7 @@ ProgramModelAdapter extends RecyclerView.Adapter<ProgramModelAdapter.ProgramView
 
     @Override
     public void onBindViewHolder(@NonNull ProgramViewHolder holder, int position) {
-        final ProgramResultList model = programResultLists.get(position);
+        final ProgramResponseModel.Program model = programResultLists.get(position);
         holder.itemBinding.programName.setText(model.getTitle());
         if (progamNameselect != null) {
             if (progamNameselect.equals(holder.itemBinding.programName.getText().toString())) {
@@ -58,16 +58,16 @@ ProgramModelAdapter extends RecyclerView.Adapter<ProgramModelAdapter.ProgramView
 
     }
 
-    public void setPrograms(List<ProgramResultList> programResultLists, String selectedProgram) {
+    public void setPrograms(List<ProgramResponseModel.Program> programResultLists, String selectedProgram) {
         this.programResultLists = programResultLists;
         this.progamNameselect = selectedProgram;
         notifyDataSetChanged();
     }
     public void setProgramEnroll(boolean enroll,String programSelectedUid){
         if (programSelectedUid!=null){
-            for (ProgramResultList programResultList : programResultLists){
+            for (ProgramResponseModel.Program programResultList : programResultLists){
                 if (programResultList.getUuid().equals(programSelectedUid)){
-                    programResultList.setProgramEnroll(enroll);
+                    //programResultList.setProgramEnroll(enroll);
                 }
             }
         }

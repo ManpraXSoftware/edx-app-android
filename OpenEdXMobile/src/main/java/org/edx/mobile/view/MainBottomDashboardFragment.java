@@ -51,7 +51,6 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
     private LoginPrefs loginPrefs;
     private MainBottomDashboardFragment mainBottomDashboardFragment;
     private static ImageView back_arrow;
-    int i=1,ii=1;
 
     public static Intent newIntent(@Nullable @ScreenDef String screenName, @Nullable String pathId) {
         // These flags will make it so we only have a single instance of this activity,
@@ -267,14 +266,12 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
     void sendAnalyticsCourseDetailExplore_Cousre(){
         final Map<String, String> values = new HashMap<>();
         values.put(Analytics.Keys.USER_ID,environment.getLoginPrefs().getCurrentUserProfile().id.toString());
-        //environment.getLoginPrefs().getUsername()
         environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.EXPLORE_COURSE,null,null,values);
-        i+=1;
+
     }
     void sendAnalyticsCourseDetailDeshBoard(){
         final Map<String, String> values = new HashMap<>();
         values.put(Analytics.Keys.USER_ID,environment.getLoginPrefs().getCurrentUserProfile().id.toString());
         environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.MY_DASHBOARD,null,null,values);
-        ii+=1;
     }
 }

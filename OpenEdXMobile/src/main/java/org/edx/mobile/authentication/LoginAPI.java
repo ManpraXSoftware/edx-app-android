@@ -13,6 +13,7 @@ import com.google.inject.Singleton;
 import org.edx.mobile.coursemultilingual.CourseMultilingualModel;
 import org.edx.mobile.discovery.model.EnrollAndUnenrollData;
 import org.edx.mobile.discovery.model.EnrollResponse;
+import org.edx.mobile.discovery.model.ResponseEnrollmentModel;
 import org.edx.mobile.http.HttpStatus;
 import org.edx.mobile.http.HttpStatusException;
 import org.edx.mobile.http.constants.ApiConstants;
@@ -52,7 +53,7 @@ public class LoginAPI {
     private final LoginService loginService;
 
     @NonNull
-    private final Config config;
+    public final Config config;
 
     @NonNull
     private final LoginPrefs loginPrefs;
@@ -120,6 +121,17 @@ public class LoginAPI {
     }
 
     @NonNull
+    public Response<ResponseEnrollmentModel> getEnrollCheckResponse(String auth, String program_uuid,String username) throws IOException {
+        return loginService.getEnrollCheck(username,program_uuid).execute();
+    }
+
+    @NonNull
+    public Response<ResponseEnrollmentModel> getCoursesData(String auth, String program_uuid,String username) throws IOException {
+        return loginService.getEnrollments(program_uuid).execute();
+    }
+
+
+    @NonNull
     public Response<List<CourseMultilingualModel>> getMyCoursesMultilingualTranslations(String courseId) throws IOException {
         return loginService.getMyCoursesMultilingualTranslation(courseId).execute();
     }
@@ -172,6 +184,18 @@ public class LoginAPI {
     @NonNull
     public List<EnrolledCoursesResponse> getMyCourses(String auth,String program_uuid, String username) throws Exception {
         final Response<List<EnrolledCoursesResponse>> responsePrograms = getMyCurses(auth,program_uuid, username);
+        return responsePrograms.body();
+    }
+
+    @NonNull
+    public ResponseEnrollmentModel getEnrollCheck(String auth, String program_uuid, String username) throws Exception {
+        final Response<ResponseEnrollmentModel> responsePrograms = getEnrollCheckResponse(auth,program_uuid, username);
+        return responsePrograms.body();
+    }
+
+    @NonNull
+    public ResponseEnrollmentModel getCourses(String auth, String program_uuid, String username) throws Exception {
+        final Response<ResponseEnrollmentModel> responsePrograms = getCoursesData(auth,program_uuid, username);
         return responsePrograms.body();
     }
 

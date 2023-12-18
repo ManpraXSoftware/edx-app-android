@@ -6,9 +6,10 @@ import androidx.annotation.RawRes;
 import com.google.inject.Inject;
 
 import org.edx.mobile.coursemultilingual.CourseMultilingualModel;
-import org.edx.mobile.discovery.DiscoveryConstants;
 import org.edx.mobile.discovery.model.EnrollAndUnenrollData;
 import org.edx.mobile.discovery.model.EnrollResponse;
+import org.edx.mobile.discovery.model.ResponseCourseModel;
+import org.edx.mobile.discovery.model.ResponseEnrollmentModel;
 import org.edx.mobile.http.constants.ApiConstants;
 import org.edx.mobile.http.constants.ApiConstants.TokenType;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
@@ -36,6 +37,9 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
+import static org.edx.mobile.http.constants.ApiConstants.URL_COURSES;
+import static org.edx.mobile.http.constants.ApiConstants.URL_ENROLLMENTS;
+import static org.edx.mobile.http.constants.ApiConstants.URL_ENROLL_CHECK;
 import static org.edx.mobile.http.constants.ApiConstants.URL_MY_COURSES;
 import static org.edx.mobile.http.constants.ApiConstants.URL_MY_COURSES_MULTILINGUAL_TRANSLATION;
 import static org.edx.mobile.http.constants.ApiConstants.URL_MY_PROGRAMS;
@@ -164,6 +168,17 @@ public interface LoginService {
     @NonNull
     @GET(URL_MY_COURSES)
     Call<List<EnrolledCoursesResponse>> getMyCourses(@Query("program_uuid") String program_uuid,@Query("username") String username);
+
+    @NonNull
+    @GET(URL_ENROLL_CHECK)
+    Call<ResponseEnrollmentModel> getEnrollCheck(@Query("username") String username,@Query("program_uuid") String program_uuid);
+
+    @NonNull
+    @GET(URL_ENROLLMENTS)
+    Call<ResponseEnrollmentModel> getEnrollments(
+            @Path("programUuid") String programUuid
+    );
+
 
     @NonNull
     @GET(URL_MY_COURSES_MULTILINGUAL_TRANSLATION)

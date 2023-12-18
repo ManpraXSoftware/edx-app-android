@@ -9,6 +9,9 @@ import org.edx.mobile.discovery.model.EnrollAndUnenrollData;
 import org.edx.mobile.discovery.model.OrganisationList;
 import org.edx.mobile.discovery.model.OrganisationModel;
 import org.edx.mobile.discovery.model.ProgramModel;
+import org.edx.mobile.discovery.model.ProgramResponseModel;
+import org.edx.mobile.discovery.model.ResponseCourseModel;
+import org.edx.mobile.discovery.model.ResponseEnrollmentModel;
 import org.edx.mobile.discovery.model.SearchResult;
 import org.edx.mobile.discovery.model.TagModel;
 import org.edx.mobile.http.constants.ApiConstants;
@@ -37,6 +40,17 @@ public interface CourseService {
     @GET("api/v1/search/programs/details/")
     Call<ProgramModel> getProgramsWithTopicName(@Header(DiscoveryConstants.AUTHORIZATION) String authorization ,@Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("program_topics") String subjectName);
 
+    @GET("api/v1/search/programs/")
+    Call<ProgramResponseModel> getProgramResponseWithTopicName(@Header(DiscoveryConstants.AUTHORIZATION) String authorization , @Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("program_topics") String subjectName);
+
+    @GET("extandedapi/getprogramcoursesdetail/")
+    Call<ResponseCourseModel> getCourse(@Header(DiscoveryConstants.AUTHORIZATION) String authorization , @Query("program_uuid") String subjectName, @Query("language") String lang);
+
+    @GET("api/program_enrollments/v1/programs/{programUuid}/enrollments/")
+    Call<ResponseEnrollmentModel> getEnrollment(
+            @Header(DiscoveryConstants.AUTHORIZATION) String authorization,
+            @Path("programUuid") String programUuid
+    );
     @GET("/extandedapi/custom-course-search/")
     Call<SearchResult> getSearch(@Header(DiscoveryConstants.AUTHORIZATION) String authorization ,@Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("page_size") String page, @Query("q") String query);
 
