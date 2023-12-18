@@ -5,7 +5,7 @@ PLATFORM_DESTINATION_NAME: "subodha-lms.visionempowertrust.org"
 FEEDBACK_EMAIL_ADDRESS: "support@example.com"
 DISCOVERY_BASE_URL: "https://subodha-courses.visionempowertrust.org/"
 FIREBASE:
-  { ENABLED: true, ANiALYTICS_ENABLED: true, ANALYTICS_SOURCE: "firebase" }
+  { ENABLED: true, ANALYTICS_ENABLED: true, ANALYTICS_SOURCE: "firebase" }
 # API_HOST_URL: 'https://staging-lms.visionempowertrust.org/' #'https://subodha-lms.visionempowertrust.org/' #'https://subodha-lms.visionempowertrust.org/' # localhost is 10.0.2.2 in Android
 # ENVIRONMENT_DISPLAY_NAME: 'Localhost'
 # PLATFORM_NAME: 'Your platform name here'
