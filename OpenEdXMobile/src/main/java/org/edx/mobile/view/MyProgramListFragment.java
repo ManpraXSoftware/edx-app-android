@@ -1,39 +1,73 @@
 package org.edx.mobile.view;
 
+import android.Manifest;
+import android.accessibilityservice.AccessibilityService;
+import android.accessibilityservice.AccessibilityServiceInfo;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ServiceInfo;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.media.SoundPool;
 import android.os.Bundle;
+import android.os.Handler;
+import android.speech.RecognizerIntent;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.inject.Inject;
 
+import org.edx.mobile.BuildConfig;
+import org.edx.mobile.Chatbot.IntentClassifier.IntentProgramClassifier;
+import org.edx.mobile.Chatbot.SpeechToTextHelper.SpeechToTextHelper;
+import org.edx.mobile.Chatbot.SpeechToTextHelper.SpeechToTextListener;
+import org.edx.mobile.comparator.TalkBackDetector.MyAccessibilityCallback;
+import org.edx.mobile.comparator.TalkBackDetector.MyAccessibilityService;
+import org.edx.mobile.Chatbot.TextToSpeechHelper.TextToSpeechHelper;
 import org.edx.mobile.R;
+import org.edx.mobile.authentication.LoginAPI;
+import org.edx.mobile.clipboard.ClipboardService;
+import org.edx.mobile.clipboard.ClipboardServiceHolder;
 import org.edx.mobile.core.IEdxEnvironment;
 import org.edx.mobile.databinding.FragmentProgramListBinding;
 import org.edx.mobile.event.NetworkConnectivityChangeEvent;
-import org.edx.mobile.exception.AuthException;
 import org.edx.mobile.http.HttpStatus;
 import org.edx.mobile.http.HttpStatusException;
+import org.edx.mobile.interfaces.ActivityProvider;
+import org.edx.mobile.interfaces.OnNavigateListener;
 import org.edx.mobile.interfaces.RefreshListener;
-import org.edx.mobile.loader.AsyncTaskResult;
-import org.edx.mobile.loader.CoursesAsyncLoader;
+import org.edx.mobile.interfaces.TalkBackListener;
 import org.edx.mobile.logger.Logger;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
 import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.prefs.LoginPrefs;
+import org.edx.mobile.myCourse.ParticularCourseTask;
 import org.edx.mobile.programs.MyProgramListModel;
 import org.edx.mobile.programs.MyProgramTags;
 import org.edx.mobile.programs.ProgramTask;
 import org.edx.mobile.programs.Programs;
 import org.edx.mobile.programs.ResumeCourse;
+import org.edx.mobile.util.GestureListener;
 import org.edx.mobile.util.LocaleManager;
 import org.edx.mobile.view.adapters.MyProgramListAdapter;
 import org.edx.mobile.view.adapters.OnRecyclerItemClickListener;
@@ -45,20 +79,34 @@ import java.util.Map;
 
 import de.greenrobot.event.EventBus;
 
+import static android.app.Activity.RESULT_OK;
+import static com.facebook.FacebookSdk.getApplicationContext;
+import static org.edx.mobile.view.ProgramActivity.CHATBOTFLAG;
 import static org.edx.mobile.view.ProgramActivity.MYPROGRAMFLAG;
 import static org.edx.mobile.view.ProgramActivity.PROGRAM;
 import static org.edx.mobile.view.ProgramActivity.PROGRAM_CONVERTED;
 import static org.edx.mobile.view.ProgramActivity.PROGRAM_UUID;
 
 public class MyProgramListFragment extends OfflineSupportBaseFragment
-        implements RefreshListener, OnRecyclerItemClickListener,
-        LoaderManager.LoaderCallbacks<AsyncTaskResult<List<EnrolledCoursesResponse>>> {
+        implements RefreshListener, OnRecyclerItemClickListener, SpeechToTextListener, MyAccessibilityCallback, ActivityProvider, OnNavigateListener, TalkBackListener  /*,
+        LoaderManager.LoaderCallbacks<AsyncTaskResult<List<EnrolledCoursesResponse>>>*/ {
     public static final String TAG = MyCoursesListFragment.class.getCanonicalName();
     private FragmentProgramListBinding binding;
     private MyProgramListAdapter myProgramListAdapter;
     private static final int REQUEST_SHOW_COURSE_UNIT_DETAIL = 0;
+    private SpeechToTextHelper speechToTextHelper;
+
+    private MyAccessibilityService mAccessibilityService;
+    IntentProgramClassifier classifier;
+    private TextToSpeechHelper textToSpeechHelper;
+
+    List<MyProgramListModel> myProgramListData;
     @Inject
     LoginPrefs loginPrefs;
+
+
+    @Inject
+    LoginAPI loginAPI;
     private MyCoursesListFragment.OnExploreButtonClick onExploreButtonClick;
     @Inject
     protected IEdxEnvironment environment;
@@ -68,6 +116,22 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     ArrayList<EnrolledCoursesResponse> enrolledCoursesResponses = new ArrayList<>();
     private static final int MY_COURSE_LOADER_ID = 0x905000;
     private EnrolledCoursesResponse courseData;
+
+    private ClipboardService clipboardService;
+    MenuItem menuItem;
+
+    ActivityProvider activityProvider;
+
+    GestureListener gestureListener ;
+
+    // Create a gesture detector
+    GestureDetector gestureDetector;
+
+     View menuItemView ;
+
+    private SoundPool soundPool;
+    private int soundId;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,9 +148,16 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_program_list, container, false);
+        clipboardService = ClipboardServiceHolder.getClipboardService(getActivity().getApplicationContext());
+
         binding.hello.setText(getString(R.string.hello) + " " + loginPrefs.getUsername());
+
+
         binding.progressBar.setVisibility(View.VISIBLE);
         binding.exploreCourse.setVisibility(View.GONE);
+
+        speechToTextHelper = new SpeechToTextHelper(getActivity().getApplicationContext(), this, getActivity());
+        textToSpeechHelper = new TextToSpeechHelper(getActivity().getApplicationContext(), getActivity(),this::onDoneTalkBackListener);
         binding.btnExploreCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,11 +171,14 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                    /* environment.getRouter().showCourseUnitDetail(MyProgramListFragment.this,
                             REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, null,resumeCourse.getBlock_id(), false);*/
                     //   final CourseComponent component = adapter.getItem(position).component;
+
                     if (resumeCourse.getBlock_id().contains("sequential")) {
+
                         environment.getRouter().showCourseContainerOutline(MyProgramListFragment.this,
                                 REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, null,
                                 resumeCourse.getBlock_id(), null, false);
                     } else {
+
                         environment.getRouter().showCourseUnitDetail(MyProgramListFragment.this,
                                 REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, null,
                                 resumeCourse.getBlock_id(), false);
@@ -115,17 +189,129 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                 }
             }
         });
-        myProgramListAdapter = new MyProgramListAdapter(getActivity(), MyProgramListFragment.this::onItemClick);
+        // Create a gesture listener
+      //  gestureListener = new GestureListener();
+
+        // Create a gesture detector
+      //  gestureDetector = new GestureDetector(getContext(), gestureListener);
+        myProgramListAdapter = new MyProgramListAdapter(getActivity(), MyProgramListFragment.this::onItemClick,this::navigateToAnotherScreen);
+        activityProvider=this::getSupportFragmentManager;
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         binding.myProgramList.setLayoutManager(mLayoutManager);
         binding.myProgramList.setAdapter(myProgramListAdapter);
+
+
+        binding.resumeCourseContinueShimmer.startShimmer();
+        binding.resumeCourseContinue.setVisibility(View.GONE);
+
+
+        if (menuItem != null) {
+            menuItem.setVisible(true);
+
+            //setFocusOnMic();
+        }
+
+
+        setHasOptionsMenu(true);
+        soundPool = new SoundPool.Builder().build();
+        soundId = soundPool.load(getContext(), R.raw.beep_sound_2, 1);
+        // Initialize AccessibilityService and TextViews
+        // Bind to the accessibility service (check if it's running first)
+
+        boolean enabled = isAccessibilityServiceEnabled(getContext(), MyAccessibilityService.class);
+
+        // Bind to the accessibility service (check if it's running first)
+
+
+        gestureListener = new GestureListener(binding.hello,null,getContext(),this::navigateToAnotherScreen);
+
+        // Create a gesture detector
+        gestureDetector = new GestureDetector(getContext(), gestureListener);
+
+
+        copyTextDataByLongPress();
+
+        soundPool = new SoundPool.Builder().build();
+        soundId = soundPool.load(getContext(), R.raw.beep_sound_2, 1);
+
+        if(checkDialogBox()){
+            showDialog();
+        }
+
+
+
+
         return binding.getRoot();
+    }
+
+    private boolean checkDialogBox() {
+        int currentVersion=BuildConfig.VERSION_CODE;
+        int storedVersion =loginPrefs.getUserVoiceDialogEnabled();
+
+        if(currentVersion>storedVersion){
+            loginPrefs.storeUserVoiceDialogEnabled(BuildConfig.VERSION_CODE);
+            return true;
+        }
+        return true;
+    }
+
+
+    public static boolean isAccessibilityServiceEnabled(Context context, Class<? extends AccessibilityService> service) {
+        AccessibilityManager am = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+        List<AccessibilityServiceInfo> enabledServices = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK);
+        for (AccessibilityServiceInfo enabledService : enabledServices) {
+            ServiceInfo enabledServiceInfo = enabledService.getResolveInfo().serviceInfo;
+            if (enabledServiceInfo.packageName.equals(context.getPackageName()) && enabledServiceInfo.name.equals(service.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.menu_item_voice);
+        menuItem = item;
+        menuItemView= menuItem.getActionView();
+        if(myProgramListData==null) {
+            item.setVisible(false);
+
+        }
+        else {
+            setFocusOnMic();
+
+        }
+
+
+        /*if (menuItemView != null) {
+            menuItemView.findViewById(R.id.action_view_icon).setVisibility(View.GONE);
+            menuItemView.findViewById(R.id.action_view_icon).setFocusable(true);
+            menuItemView.findViewById(R.id.action_view_icon).setFocusableInTouchMode(true);
+            menuItemView.findViewById(R.id.action_view_icon).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setFocusOnMic();
+                }
+            });
+        }*/
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_voice:
+
+                onMicButtonClick();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item); // Let the activity handle other items
+        }
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        loadData(false);
+        //loadData(false);
         try {
             getMyPrograms();
         } catch (Exception e) {
@@ -133,10 +319,36 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
         }
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
+        if(menuItem!=null){
 
+            menuItem.setVisible(true);
+            menuItem.getActionView().findViewById(R.id.action_view_icon).setVisibility(View.VISIBLE);
+        }
+        else {
+
+        }
+        if (!loginPrefs.getUserVoicePermissionEnabled()) {
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+                loginPrefs.storeUserVoicePermissionEnabled(true);
+                if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.main_fragment,new MyProgramListFragment(), MyProgramListFragment.TAG).
+                            addToBackStack(MyProgramListFragment.TAG)
+                            .commit();
+                } else {
+                    for (int i = 1; i < getSupportFragmentManager().getBackStackEntryCount(); ++i) {
+                        getSupportFragmentManager().popBackStack();
+                    }
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.main_fragment, new MyProgramListFragment(), MyProgramListFragment.TAG)
+                            .commit();
+                }
+            }
+        }
     }
 
     @Override
@@ -145,8 +357,11 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     }
 
     private void getMyPrograms() throws Exception {
+       // menuItem.setVisible(false);
+        //View menuItemView = menuItem.getActionView();
+        //menuItemView.findViewById(R.id.action_view_icon).setVisibility(View.GONE);
         String selectedLanguage = "en";
-        if (getActivity()!=null){
+        if (getActivity() != null) {
             if (!LocaleManager.getLanguagePref(getActivity()).isEmpty()) {
                 selectedLanguage = LocaleManager.getLanguagePref(getActivity());
             }
@@ -193,10 +408,10 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                             }
                         }
                     }*/
-                    for (Programs programs : result){
-                        if (programs.getTags()!=null){
-                            for (MyProgramTags myProgramTags : programs.getTags()){
-                                if (myProgramTags.getTag_title()!=null && myProgramTags.getTag_title().toLowerCase().contains("teacher")) {
+                    for (Programs programs : result) {
+                        if (programs.getTags() != null) {
+                            for (MyProgramTags myProgramTags : programs.getTags()) {
+                                if (myProgramTags.getTag_title() != null && myProgramTags.getTag_title().toLowerCase().contains("teacher")) {
                                     MyProgramListModel myProgramListModel = new MyProgramListModel();
                                     myProgramListModel.setTagName(myProgramTags.getConverted_tag_title());
                                     myProgramListModel.setConvertedTagName(myProgramTags.getTag_title());
@@ -206,7 +421,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                                     myProgramListModel.setResume_program(programs.getResumePrograms());
                                     newProgramsListforTeacher.add(myProgramListModel);
                                 }
-                                if (myProgramTags.getTag_title()!=null && myProgramTags.getTag_title().toLowerCase().contains("student")) {
+                                if (myProgramTags.getTag_title() != null && myProgramTags.getTag_title().toLowerCase().contains("student")) {
                                     MyProgramListModel myProgramListModel = new MyProgramListModel();
                                     myProgramListModel.setTagName(myProgramTags.getConverted_tag_title());
                                     myProgramListModel.setConvertedTagName(myProgramTags.getTag_title());
@@ -216,7 +431,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                                     myProgramListModel.setResume_program(programs.getResumePrograms());
                                     newProgramsListforStudent.add(myProgramListModel);
                                 }
-                                if (myProgramTags.getTag_title()!=null && !myProgramTags.getTag_title().toLowerCase().contains("student") && !myProgramTags.getTag_title().toLowerCase().contains("teacher")) {
+                                if (myProgramTags.getTag_title() != null && !myProgramTags.getTag_title().toLowerCase().contains("student") && !myProgramTags.getTag_title().toLowerCase().contains("teacher")) {
                                     MyProgramListModel myProgramListModel = new MyProgramListModel();
                                     myProgramListModel.setTagName(myProgramTags.getConverted_tag_title());
                                     myProgramListModel.setConvertedTagName(myProgramTags.getTag_title());
@@ -248,24 +463,18 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                             if (programListModel.getResume_program() != null) {
                                 if (resumeCourse == null) {
                                     resumeCourse = new ResumeCourse();
+
+                                   /* resumeCourse.setBlock_id("block-v1%3AVisionEmpower%2BG3_MAT_NCERT_Ch01%2B2021%2Btype%40sequential%2Bblock%40c5034a5f601e40849d6a7a9868bf8c03");
+                                    resumeCourse.setCourse_id("course-v1:VisionEmpower+G3_MAT_NCERT_Ch01+2021");
+                                    resumeCourse.setCourse_name(programListModel.getResume_program().getConverted_course_name());
+                                    resumeCourse.setProgramName(programListModel.getProgramName());
+                                    resumeCourse.setTagName(programListModel.getTagName());*/
+
                                     resumeCourse.setBlock_id(programListModel.getResume_program().getBlock_id());
                                     resumeCourse.setCourse_id(programListModel.getResume_program().getCourse_id());
                                     resumeCourse.setCourse_name(programListModel.getResume_program().getConverted_course_name());
                                     resumeCourse.setProgramName(programListModel.getProgramName());
                                     resumeCourse.setTagName(programListModel.getTagName());
-                                } else {
-                                    if (resumeCourse.getBlock_id().equals(resumeCourse.getBlock_id())) {
-                                        String programName = resumeCourse.getProgramName();
-                                        if (!programName.contains(programListModel.getProgramName())) {
-                                            programName = programName + ", " + programListModel.getProgramName();
-                                        }
-                                        resumeCourse.setProgramName(programName);
-                                        String tagNme = resumeCourse.getTagName();
-                                        if (!tagNme.contains(programListModel.getTagName())) {
-                                            tagNme = tagNme + ", " + programListModel.getTagName();
-                                        }
-                                        resumeCourse.setTagName(tagNme);
-                                    }
                                 }
                             }
                         }
@@ -276,23 +485,21 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                                     resumeCourse.getProgramName());
                             binding.courseName.setText(resumeCourse.getCourse_name());
                             binding.lnResumeCourse.setVisibility(View.VISIBLE);
-                            if (enrolledCoursesResponses != null) {
-                                for (EnrolledCoursesResponse enrolledCoursesResponse : enrolledCoursesResponses) {
-                                    if (enrolledCoursesResponse.getCourse() != null) {
-                                        if (enrolledCoursesResponse.getCourse().getId() != null) {
-                                            if (enrolledCoursesResponse.getCourse().getId().equals(resumeCourse.getCourse_id())) {
-                                                courseData = enrolledCoursesResponse;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                            getParticularCourse(resumeCourse.getCourse_id());
+
                         }
                     }
                     if (myProgramListModels != null) {
                         binding.myProgramList.setVisibility(View.VISIBLE);
                     }
                     myProgramListAdapter.setMyProgramList(myProgramListModels);
+                    initializeIntentData(myProgramListModels);
+                    if(menuItem!=null) {
+                        menuItem.setVisible(true);
+                    }
+                    if(!checkDialogBox()){
+                        setFocusOnMic();
+                    }
                     if (myProgramListModels == null) {
                         binding.exploreCourse.setVisibility(View.VISIBLE);
                         binding.myProgramList.setVisibility(View.GONE);
@@ -318,6 +525,40 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
         discoveryTask.execute();
     }
 
+    private void setFocusOnMic(){
+        if (menuItem != null) {
+
+            if (menuItemView != null) {
+                menuItemView.findViewById(R.id.action_view_icon).setVisibility(View.VISIBLE);
+                menuItemView.findViewById(R.id.action_view_icon).setFocusable(true);
+                menuItemView.findViewById(R.id.action_view_icon).setFocusableInTouchMode(true);
+
+                menuItemView.findViewById(R.id.action_view_icon).requestFocus();
+                menuItemView.findViewById(R.id.action_view_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_HOVER_ENTER);
+                menuItemView.findViewById(R.id.action_view_icon).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onMicButtonClick();
+                    }
+                });
+
+                //menuItemView.requestFocus();
+                //  menuItemView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+            } else {
+
+                Log.e(TAG, "Action view for menu item is null");
+            }
+            /*if (myProgramListData == null||myProgramListData.isEmpty()) {
+                menuItem.setVisible(false);
+                menuItemView.findViewById(R.id.action_view_icon).setVisibility(View.GONE);
+            }*/
+        } else {
+
+            Log.e(TAG, "Menu item not found");
+        }
+
+    }
+
 
     @Override
     protected boolean isShowingFullScreenError() {
@@ -341,28 +582,16 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     public void onItemClick(View view, Object item) {
         if (item instanceof MyProgramListModel) {
             MyProgramListModel myProgramListModel = (MyProgramListModel) item;
-            MainBottomDashboardFragment.suodhaIcon().setVisibility(View.GONE);
-            MainBottomDashboardFragment.backIcon().setVisibility(View.VISIBLE);
-            NewProgramFragment newProgramFragment = new NewProgramFragment();
-            Bundle bundle1 = new Bundle();
-            bundle1.putString(PROGRAM, myProgramListModel.getConvertedTagName());
-            bundle1.putString(PROGRAM_CONVERTED, myProgramListModel.getTagName());
-            bundle1.putString(PROGRAM_UUID, myProgramListModel.getProgramUUid());
-            bundle1.putBoolean(MYPROGRAMFLAG,true);
-            newProgramFragment.setArguments(bundle1);
-            sendAnalyticsCourseDetail(myProgramListModel);
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.main_fragment, newProgramFragment, NewProgramFragment.TAG).addToBackStack(NewProgramFragment.TAG)
-                    .commit();
+            navigateToAnotherScreen(myProgramListModel);
         }
     }
-
+/*
     @Override
     public Loader<AsyncTaskResult<List<EnrolledCoursesResponse>>> onCreateLoader(int i, Bundle bundle) {
         return new CoursesAsyncLoader(getActivity());
-    }
+    }*/
 
-    @Override
+  /*  @Override
     public void onLoadFinished(Loader<AsyncTaskResult<List<EnrolledCoursesResponse>>> asyncTaskResultLoader, AsyncTaskResult<List<EnrolledCoursesResponse>> result) {
         final Exception exception = result.getEx();
         if (exception != null) {
@@ -409,23 +638,287 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     protected void loadData(boolean showProgress) {
         getLoaderManager().restartLoader(MY_COURSE_LOADER_ID, null, this);
     }
+*/
+
+    public void getParticularCourse(String courseId) {
+        try {
+            ParticularCourseTask particularCourseTask = new ParticularCourseTask(getContext(), loginPrefs.getUsername(),
+                    courseId) {
+                @Override
+                public void onSuccess(@NonNull ArrayList<EnrolledCoursesResponse> result) {
+                    try {
+                        if (result != null) {
+                            // Handle successful response
+                            ArrayList<EnrolledCoursesResponse> data = result;
+                            if (data != null) {
+                                enrolledCoursesResponses = data;
+                                if (enrolledCoursesResponses != null) {
+                                    for (EnrolledCoursesResponse enrolledCoursesResponse : enrolledCoursesResponses) {
+                                        if (enrolledCoursesResponse.getCourse() != null) {
+                                            if (enrolledCoursesResponse.getCourse().getId() != null) {
+                                                // if (enrolledCoursesResponse.getCourse().getId().equals(resumeCourse.getCourse_id())) {
+                                                courseData = enrolledCoursesResponse;
+                                                binding.resumeCourseContinueShimmer.stopShimmer();
+                                                binding.resumeCourseContinueShimmerLayout.setVisibility(View.GONE);
+                                                binding.resumeCourseContinue.setVisibility(View.VISIBLE);
+                                                // resumeCourse.setCourse_name(enrolledCoursesResponse.getCourse().getName());
+                                                //}
+                                            }
+                                        }
+                                    }
+                                }
+                                Log.d("enrolledCoursesResponses", enrolledCoursesResponses.get(0).getCourse().getId() + "" + enrolledCoursesResponses.get(0).getCourse().getName());
+                            } else {
+                                Log.e("enrolledCoursesResponses", "Response body is null");
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e("enrolledCoursesResponses", "Exception in onResponse", e);
+                    }
+                }
+
+                @Override
+                public void onException(Exception ex) {
+                    if (ex instanceof HttpStatusException &&
+                            ((HttpStatusException) ex).getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                    } else {
+
+                    }
+                }
+            };
+            particularCourseTask.execute();
 
 
-    void sendAnalyticsCourseDetail( MyProgramListModel myProgramListModel){
+        } catch (Exception e) {
+            Log.e("enrolledCoursesResponses", "Exception in getParticularCourse", e);
+        }
+    }
+
+
+    void sendAnalyticsCourseDetail(MyProgramListModel myProgramListModel) {
         final Map<String, String> values = new HashMap<>();
         values.put(Analytics.Keys.PROGRAM_NAME, myProgramListModel.getProgramName());
         values.put(Analytics.Keys.LINKED_TOPIC_NAME, myProgramListModel.getConvertedTagName());
         values.put(Analytics.Keys.PROGRAM_UUID, myProgramListModel.getProgramUUid());
         environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.View_Program, null, "Click", values);
     }
-    void sendAnalyticsRecentCourseDetail(){
+
+    void sendAnalyticsRecentCourseDetail() {
         final Map<String, String> values = new HashMap<>();
         values.put(Analytics.Keys.LINKED_PROGRAM_NAME, resumeCourse.getProgramName());
-        values.put(Analytics.Keys.LINKED_TOPIC_NAME,resumeCourse.getTagName());
-        values.put(Analytics.Keys.RECENT_COUSRE_UID,resumeCourse.getCourse_id());
-        values.put(Analytics.Keys.RECENT_COUSRE_NAME,resumeCourse.getCourse_name());
-        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.RECENT_COURSE,null, "Click", values);
+        values.put(Analytics.Keys.LINKED_TOPIC_NAME, resumeCourse.getTagName());
+        values.put(Analytics.Keys.RECENT_COUSRE_UID, resumeCourse.getCourse_id());
+        values.put(Analytics.Keys.RECENT_COUSRE_NAME, resumeCourse.getCourse_name());
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.RECENT_COURSE, null, "Click", values);
+    }
+    void copyTextDataByLongPress() {
+
+        setGestureListeners(binding.hello);
+        setGestureListeners(binding.recentlyAccessedCourse);
+        setGestureListeners(binding.tagName);
+        setGestureListeners(binding.programName);
+        setGestureListeners(binding.courseName);
+        setGestureListeners(binding.txtYourEnrolledProgram);
+    }
+
+    private void setGestureListeners(TextView textView) {
+        GestureListener gestureListener = new GestureListener( textView,null,getContext(),this::navigateToAnotherScreen);
+        GestureDetector gestureDetector = new GestureDetector(getContext(), gestureListener);
+        textView.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
     }
 
 
+    @Override
+    public void onSpeechResult(String text) {
+
+
+        Map<String, String> result = classifier.classifyIntent(text);
+        System.out.println(result);
+        String keyToSpeak = "message";
+        String valueToSpeak = result.get(keyToSpeak);
+        textToSpeechHelper.speakText(valueToSpeak);
+
+        String keyToIntent = "Intent";
+        String valueToIntent = result.get(keyToIntent);
+
+        String keyToAction = "action";
+        String valueToAction = result.get(keyToAction);
+        if (valueToAction.equals("true")) {
+            for (MyProgramListModel myProgramListModel : myProgramListData) {
+                String tagName = myProgramListModel.getTagName();
+
+                if (tagName != null && !tagName.isEmpty()) {
+                    if (tagName.equals(valueToIntent)) {
+                        navigateToAnotherScreen(myProgramListModel);
+                        break;
+                    }
+
+                }
+
+                String term = myProgramListModel.getProgramName();
+                if (term != null && !term.isEmpty()) {
+                    if (term.equals(valueToIntent)) {
+                        navigateToAnotherScreen(myProgramListModel,true);
+                        break;
+                    }
+                }
+
+
+            }
+        }
+    }
+
+    public void onMicButtonClick() {
+        soundPool.play(soundId, 1.0f, 1.0f, 0, 0, 1.0f);
+        textToSpeechHelper.stop();
+
+          speechToTextHelper.startSpeechRecognition();
+    }
+
+
+    @Override
+    public void onSpeechError(String error) {
+        Toast.makeText(getContext(), "Error code "+error, Toast.LENGTH_SHORT).show();
+    }
+
+    public void initializeIntentData(List<MyProgramListModel> myProgramList) {
+        myProgramListData = myProgramList;
+        List<String> tags = new ArrayList<>();
+        for (MyProgramListModel myProgramListModel : myProgramList) {
+            String term = myProgramListModel.getProgramName();
+            if (term != null && !term.isEmpty()) {
+                tags.add(term);
+            }
+            String TagName = myProgramListModel.getConvertedTagName();
+            if (TagName != null && !TagName.isEmpty()) {
+                tags.add(TagName);
+            }
+        }
+        String selectedLanguage = "en";
+        if (getActivity() != null) {
+            if (!LocaleManager.getLanguagePref(getActivity()).isEmpty()) {
+                selectedLanguage = LocaleManager.getLanguagePref(getActivity());
+            }
+        }
+        classifier = new IntentProgramClassifier(tags, selectedLanguage,getContext());
+    }
+
+    @Override
+    public void onTextView1LongPressed() {
+
+    }
+
+    @Override
+    public void onTextView2LongPressed() {
+
+    }
+
+    @Override
+    public FragmentManager getSupportFragmentManager() {
+        return super.getActivity().getSupportFragmentManager();
+    }
+
+    @Override
+    public void navigateToAnotherScreen(Object item) {
+         if (item instanceof MyProgramListModel) {
+            MyProgramListModel myProgramListModel = (MyProgramListModel) item;
+        MainBottomDashboardFragment.suodhaIcon().setVisibility(View.GONE);
+        MainBottomDashboardFragment.backIcon().setVisibility(View.VISIBLE);
+        NewProgramFragment newProgramFragment = new NewProgramFragment();
+        Bundle bundle1 = new Bundle();
+        bundle1.putString(PROGRAM, myProgramListModel.getConvertedTagName());
+        bundle1.putString(PROGRAM_CONVERTED, myProgramListModel.getTagName());
+        bundle1.putString(PROGRAM_UUID, myProgramListModel.getProgramUUid());
+        bundle1.putBoolean(MYPROGRAMFLAG, true);
+        newProgramFragment.setArguments(bundle1);
+        sendAnalyticsCourseDetail(myProgramListModel);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_fragment, newProgramFragment, NewProgramFragment.TAG).addToBackStack(NewProgramFragment.TAG)
+                .commit();
+    }
+    }
+    public void navigateToAnotherScreen(Object item,boolean chatBotFlagProgram) {
+        if (item instanceof MyProgramListModel) {
+            MyProgramListModel myProgramListModel = (MyProgramListModel) item;
+            MainBottomDashboardFragment.suodhaIcon().setVisibility(View.GONE);
+            MainBottomDashboardFragment.backIcon().setVisibility(View.VISIBLE);
+            NewProgramFragment newProgramFragment = new NewProgramFragment();
+            Bundle bundle1 = new Bundle();
+            bundle1.putString(PROGRAM, myProgramListModel.getConvertedTagName());
+            bundle1.putString(PROGRAM_CONVERTED, myProgramListModel.getTagName());
+            bundle1.putString(PROGRAM_UUID, myProgramListModel.getProgramUUid());
+            bundle1.putBoolean(MYPROGRAMFLAG, true);
+            bundle1.putBoolean(CHATBOTFLAG,chatBotFlagProgram);
+            newProgramFragment.setArguments(bundle1);
+            sendAnalyticsCourseDetail(myProgramListModel);
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.main_fragment, newProgramFragment, NewProgramFragment.TAG).addToBackStack(NewProgramFragment.TAG)
+                    .commit();
+        }
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+        if (result != null && !result.isEmpty()) {
+            String recognizedText = result.get(0);
+            // Pass the recognized text to your SpeechToTextHelper's onSpeechResult() method
+
+            onSpeechResult(recognizedText);
+        }
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+            speechToTextHelper.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void onDoneTalkBackListener() {
+
+    }
+
+
+    private void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        // Inflate a layout for the dialog
+        View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.custom_dialog_voice_layout, null);
+
+        builder.setView(dialogView);
+
+        AlertDialog alert = builder.create();
+        alert.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alert.getWindow().getDecorView().setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+
+        // Set onCancelListener to handle dismissal when the user clicks outside
+        alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                alert.dismiss();
+
+                setFocusOnMic();
+                // Execute your function when the user clicks outside the dialog
+               // onMicButtonClick();
+            }
+        });
+
+        LinearLayout linearLayout=dialogView.findViewById(R.id.text_dialog_layout);
+
+        linearLayout.requestFocus();
+        linearLayout.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_HOVER_ENTER);
+
+        TextView titleTextButton = dialogView.findViewById(R.id.dialog_close_button);
+        titleTextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                alert.dismiss();
+                setFocusOnMic();
+            }
+        });
+
+        alert.show();
+    }
+
 }
+

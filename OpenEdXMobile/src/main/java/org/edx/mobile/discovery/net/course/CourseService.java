@@ -38,10 +38,13 @@ public interface CourseService {
     Call<TagModel> getTopics(@Header(DiscoveryConstants.AUTHORIZATION) String authorization,@Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("subject_name") String subjectName);
 
     @GET("api/v1/search/programs/details/")
-    Call<ProgramModel> getProgramsWithTopicName(@Header(DiscoveryConstants.AUTHORIZATION) String authorization ,@Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("program_topics") String subjectName);
+    Call<ProgramModel> getProgramsWithTopicName(@Header(DiscoveryConstants.AUTHORIZATION) String authorization ,@Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("program_topics") String programTopics);
 
     @GET("api/v1/search/programs/")
-    Call<ProgramResponseModel> getProgramResponseWithTopicName(@Header(DiscoveryConstants.AUTHORIZATION) String authorization , @Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("program_topics") String subjectName);
+    Call<ProgramResponseModel> getProgramResponseWithTopicName(@Header(DiscoveryConstants.AUTHORIZATION) String authorization , @Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("program_topics") String programTopics);
+
+    @GET("api/v1/search/programs/")
+    Call<ProgramResponseModel> getProgramResponseWithOrganisationName(@Header(DiscoveryConstants.AUTHORIZATION) String authorization , @Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("org_name") String organisationName);
 
     @GET("extandedapi/getprogramcoursesdetail/")
     Call<ResponseCourseModel> getCourse(@Header(DiscoveryConstants.AUTHORIZATION) String authorization , @Query("program_uuid") String subjectName, @Query("language") String lang);

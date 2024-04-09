@@ -20,6 +20,8 @@ public class ApiConstants {
     public static final String URL_MY_COURSES = "/explore-courses/enrolled-courses/";
 
     public static final String URL_ENROLL_CHECK="/explore-courses/get-program-enrollment/";
+
+    public static final String URL_PARTICULAR_COURSE="explore-courses/{userId}/get_course_enrollments/";
     public static final String URL_COURSES = "/extandedapi/getprogramcoursesdetail/";
 
     public static final String URL_ENROLLMENTS = "/api/program_enrollments/v1/programs/{programUuid}/enrollments/";

@@ -23,12 +23,14 @@ import org.edx.mobile.R;
 import org.edx.mobile.course.CourseAPI;
 import org.edx.mobile.databinding.FragmentDashboardErrorLayoutBinding;
 import org.edx.mobile.deeplink.ScreenDef;
+import org.edx.mobile.launcher.WhatsAppLauncher;
 import org.edx.mobile.logger.Logger;
 import org.edx.mobile.model.FragmentItemModel;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
 import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.analytics.AnalyticsRegistry;
 import org.edx.mobile.module.db.DataCallback;
+import org.edx.mobile.util.Config;
 import org.edx.mobile.util.DateUtil;
 import org.edx.mobile.util.NetworkUtil;
 import org.edx.mobile.util.UiUtil;
@@ -82,6 +84,7 @@ public class CourseTabsDashboardFragment extends TabsBaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.course_dashboard_menu, menu);
+        menu.findItem(R.id.menu_item_whatsapp).setVisible(true);
         if (environment.getConfig().isCourseSharingEnabled()) {
             menu.findItem(R.id.menu_item_share).setVisible(true);
         } else {
@@ -153,6 +156,9 @@ public class CourseTabsDashboardFragment extends TabsBaseFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_item_whatsapp:
+                openWhatsAppLink();
+                return true;
             case R.id.menu_item_share:
                 ShareUtils.showCourseShareMenu(getActivity(), getActivity().findViewById(R.id.menu_item_share),
                         courseData, analyticsRegistry, environment);
@@ -250,7 +256,7 @@ public class CourseTabsDashboardFragment extends TabsBaseFragment {
         }
         ArrayList<FragmentItemModel> items = new ArrayList<>();
         // Add course outline tab
-        items.add(new FragmentItemModel(CourseOutlineFragment.class, courseData.getCourse().getName(),
+        items.add(new FragmentItemModel(CourseOutlineFragment.class, courseData.getCourse().getName()/*+" Course Outline"*/,
                 FontAwesomeIcons.fa_list_alt,
                 CourseOutlineFragment.makeArguments(courseData, null, null, false),
                 new FragmentItemModel.FragmentStateListener() {
@@ -331,6 +337,16 @@ public class CourseTabsDashboardFragment extends TabsBaseFragment {
                 if (downloadsMenuItem != null) {
                     downloadsMenuItem.setVisible(false);
                 }
+            }
+        }
+    }
+
+    void openWhatsAppLink() {
+        String groupLink= Config.getGroupLinkUrl();
+        if(getActivity()!=null) {
+            if(getActivity().getApplicationContext()!=null) {
+                WhatsAppLauncher launcher = new WhatsAppLauncher(getActivity().getApplicationContext());
+                launcher.openWhatsAppGroup(groupLink);
             }
         }
     }

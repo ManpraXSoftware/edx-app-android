@@ -9,6 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -23,11 +26,13 @@ import org.edx.mobile.coursemultilingual.MyCourseMultilingualtask;
 import org.edx.mobile.event.CourseUpgradedEvent;
 import org.edx.mobile.http.HttpStatus;
 import org.edx.mobile.http.HttpStatusException;
+import org.edx.mobile.launcher.WhatsAppLauncher;
 import org.edx.mobile.logger.Logger;
 import org.edx.mobile.model.course.BlockType;
 import org.edx.mobile.model.course.CourseComponent;
 import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.services.LastAccessManager;
+import org.edx.mobile.util.Config;
 import org.edx.mobile.util.LocaleManager;
 import org.edx.mobile.view.adapters.CourseUnitPagerAdapter;
 import org.edx.mobile.view.custom.DisableableViewPager;
@@ -121,6 +126,28 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.course_dashboard_menu, menu);
+        menu.findItem(R.id.menu_item_whatsapp).setVisible(true);
+        if (environment.getConfig().isCourseSharingEnabled()) {
+            menu.findItem(R.id.menu_item_share).setVisible(true);
+        } else {
+            menu.findItem(R.id.menu_item_share).setVisible(false);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_whatsapp:
+                openWhatsAppLink();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item); // Let the activity handle other items
+        }
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         /*
          * If the youtube player is not in a proper state then it throws the IllegalStateException.
@@ -199,6 +226,8 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements
                 if (result != null) {
                     if (courseComponent.getDisplayName() != null) {
                         String selectedLanguage = LocaleManager.getLanguagePref(context);
+
+
                         for (CourseMultilingualModel courseMultilingualModel : result) {
                             if (courseMultilingualModel.getText() != null) {
                                 if (courseMultilingualModel.getText().toLowerCase().equals(courseComponent.getDisplayName().toLowerCase())) {
@@ -228,6 +257,7 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements
                     }
                     courseMultilingualModels = result;
                 }
+
                 if (courseComponent.getDisplayName() != null) {
                     if (text.isEmpty()) {
                         setTitle(courseComponent.getDisplayName());
@@ -387,5 +417,15 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements
 
     public void onEvent(CourseUpgradedEvent event) {
         finish();
+    }
+
+    void openWhatsAppLink() {
+        String groupLink= Config.getGroupLinkUrl();
+
+            if(getApplicationContext()!=null) {
+                WhatsAppLauncher launcher = new WhatsAppLauncher(getApplicationContext());
+                launcher.openWhatsAppGroup(groupLink);
+            }
+
     }
 }

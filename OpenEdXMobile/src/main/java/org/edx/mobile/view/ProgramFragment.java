@@ -162,7 +162,7 @@ public class ProgramFragment extends BaseFragment implements OnRecyclerItemClick
         binding.rvProgram.setLayoutManager(mLayoutManager);
         binding.rvProgram.setAdapter(programModelAdapter);
 
-        discoveryCourseAdapter = new DiscoveryCourseAdapter(getActivity(), ProgramFragment.this::onItemClick);
+        //discoveryCourseAdapter = new DiscoveryCourseAdapter(getActivity(), ProgramFragment.this::onItemClick);
         LinearLayoutManager mLayoutManager1 = new LinearLayoutManager(getContext());
         binding.rvCourses.setLayoutManager(mLayoutManager1);
         binding.rvCourses.setAdapter(discoveryCourseAdapter);
@@ -798,7 +798,7 @@ public class ProgramFragment extends BaseFragment implements OnRecyclerItemClick
     }
 
     private void getMyCourseList() throws Exception {
-        MyCourseTask myCourseTask = new MyCourseTask(getContext(),program_uuid, loginPrefs.getUsername(), loginPrefs.getAuthorizationHeader()) {
+        MyCourseTask myCourseTask = new MyCourseTask(getContext(),program_uuid, loginPrefs.getUsername(), loginPrefs.getAuthorizationHeader(),"en") {
             @Override
             public void onSuccess(@NonNull List<EnrolledCoursesResponse> result) {
                 if (result != null) {

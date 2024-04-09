@@ -2,6 +2,7 @@ package org.edx.mobile.view.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -43,6 +44,13 @@ public class OrganisationAdapter extends RecyclerView.Adapter<OrganisationAdapte
                     .placeholder(R.drawable.v_e_logo).dontAnimate()
                     .into(holder.itemBinding.ivImageview);
     //    }
+
+        holder.itemBinding.organisationLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onItemClick(view, model);
+            }
+        });
     }
 
     public void setOrganisation(List<OrganisationModel> organisationModels) {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,8 @@ import com.google.inject.Inject;
 import org.edx.mobile.R;
 import org.edx.mobile.annotation.Nullable;
 import org.edx.mobile.base.BaseFragment;
+import org.edx.mobile.clipboard.ClipboardService;
+import org.edx.mobile.clipboard.ClipboardServiceHolder;
 import org.edx.mobile.core.IEdxEnvironment;
 import org.edx.mobile.databinding.FragmentSearchScreenBinding;
 import org.edx.mobile.discovery.DiscoveryCallback;
@@ -32,8 +35,10 @@ import org.edx.mobile.discovery.model.SearchResult;
 import org.edx.mobile.discovery.model.SearchResultList;
 import org.edx.mobile.discovery.model.SearchTags;
 import org.edx.mobile.discovery.net.course.CourseApi;
+import org.edx.mobile.interfaces.OnNavigateListener;
 import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.prefs.LoginPrefs;
+import org.edx.mobile.util.GestureListener;
 import org.edx.mobile.util.LocaleManager;
 import org.edx.mobile.view.adapters.OnRecyclerItemClickListener;
 import org.edx.mobile.view.adapters.SearchListAdapter;
@@ -51,7 +56,7 @@ import static org.edx.mobile.view.ProgramActivity.PROGRAM;
 import static org.edx.mobile.view.ProgramActivity.PROGRAM_CONVERTED;
 import static org.edx.mobile.view.ProgramActivity.PROGRAM_UUID;
 
-public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemClickListener {
+public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemClickListener, OnNavigateListener {
     public static final String TAG = SeachScreenFragment.class.getCanonicalName();
     private FragmentSearchScreenBinding binding;
     @Inject
@@ -62,7 +67,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
     private int page = 1;
     @Inject
     protected IEdxEnvironment environment;
-
+    ClipboardService clipboardService;
     public static SeachScreenFragment newInstance(@Nullable Bundle bundle) {
         final SeachScreenFragment fragment = new SeachScreenFragment();
         fragment.setArguments(bundle);
@@ -86,6 +91,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        clipboardService = ClipboardServiceHolder.getClipboardService(getActivity().getApplicationContext());
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search_screen, container,
                 false);
         return binding.getRoot();
@@ -170,11 +176,14 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
             }
         });
 
-        searchListAdapter = new SearchListAdapter(getActivity(), SeachScreenFragment.this::onItemClick);
+        searchListAdapter = new SearchListAdapter(getActivity(), SeachScreenFragment.this::onItemClick,this::navigateToAnotherScreen);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         binding.searchResult.setLayoutManager(mLayoutManager);
         binding.searchResult.setAdapter(searchListAdapter);
+        copyTextDataByLongPress();
     }
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -382,8 +391,9 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
     public void onItemClick(View view, Object item) {
         if (item instanceof CombinationOfSeachResult) {
             CombinationOfSeachResult combinationOfSeachResult = (CombinationOfSeachResult) item;
-            environment.getRouter().showProgramsActivity(getActivity(), combinationOfSeachResult.getTagName(), /*combinationOfSeachResult.getProgram_id()*/ combinationOfSeachResult.getProgram_id());
 
+            environment.getRouter().showProgramsActivity(getActivity(), combinationOfSeachResult.getTagName(), /*combinationOfSeachResult.getProgram_id()*/ combinationOfSeachResult.getProgram_id());
+            sendAnalyticsCourseDetail(combinationOfSeachResult);
 //            NewProgramFragment newProgramFragment = new NewProgramFragment();
 //            Bundle bundle1 = new Bundle();
 //            bundle1.putString(PROGRAM, combinationOfSeachResult.getProgramName());
@@ -401,10 +411,37 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         values.put(Analytics.Keys.SEARCH_STRING,search);
         environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.COURSES_SEARCH,null,null,values);
     }
-    void sendAnalyticsCourseDetail(SearchResultList searchResultList ){
+    void sendAnalyticsCourseDetail(CombinationOfSeachResult combinationOfSeachResult ){
         final Map<String, String> values = new HashMap<>();
-        values.put(Analytics.Keys.NAME,searchResultList.getTitle());
-        values.put(Analytics.Keys.Uid,searchResultList.getUuid());
+        values.put(Analytics.Keys.NAME,combinationOfSeachResult.getProgramName());
+        values.put(Analytics.Keys.Uid,combinationOfSeachResult.getProgram_id());
         environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.DISCOVERY_COURSES_SEARCH,null,null,values);
+    }
+    void copyTextDataByLongPress(){
+        setGestureListeners(binding.searchResults);
+        setGestureListeners(binding.searchCount);
+        binding.searchCount.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = binding.searchCount.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+    }
+    private void setGestureListeners(TextView textView) {
+        GestureListener gestureListener = new GestureListener( textView,null,getContext(),this::navigateToAnotherScreen);
+        GestureDetector gestureDetector = new GestureDetector(getContext(), gestureListener);
+        textView.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
+    }
+    @Override
+    public void navigateToAnotherScreen(Object item) {
+        if (item instanceof CombinationOfSeachResult) {
+            CombinationOfSeachResult combinationOfSeachResult = (CombinationOfSeachResult) item;
+
+            environment.getRouter().showProgramsActivity(getActivity(), combinationOfSeachResult.getTagName(), /*combinationOfSeachResult.getProgram_id()*/ combinationOfSeachResult.getProgram_id());
+            sendAnalyticsCourseDetail(combinationOfSeachResult);
+        }
     }
 }

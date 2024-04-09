@@ -4,23 +4,26 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.inject.Inject;
-
+import org.edx.mobile.comparator.TalkBackDetector.CustomAccessibilityDelegate;
 import org.edx.mobile.R;
+import org.edx.mobile.clipboard.ClipboardService;
+import org.edx.mobile.clipboard.ClipboardServiceHolder;
 import org.edx.mobile.databinding.RowTagsBinding;
 import org.edx.mobile.discovery.model.TagTermResult;
-import org.edx.mobile.module.prefs.LoginPrefs;
+import org.edx.mobile.interfaces.OnNavigateListener;
+import org.edx.mobile.util.GestureListener;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder> {
 
@@ -29,16 +32,21 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
     private List<TagTermResult> tagTermResults;
     private OnRecyclerItemClickListener listener;
     String userType;
+    ClipboardService clipboardService;
 
-    public TagsAdapter(Context context, OnRecyclerItemClickListener listener, int colorCode) {
+    OnNavigateListener onNavigateListener;
+
+    public TagsAdapter(Context context, OnRecyclerItemClickListener listener, int colorCode,OnNavigateListener onNavigateListener) {
         this.context = context;
         this.listener = listener;
         this.colorCode = colorCode;
+        this.onNavigateListener=onNavigateListener;
     }
 
     @NonNull
     @Override
     public TagsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        clipboardService = ClipboardServiceHolder.getClipboardService(context.getApplicationContext());
         return new TagsAdapter.TagsViewHolder(RowTagsBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false));
     }
 
@@ -74,6 +82,28 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.TagsViewHolder
                 listener.onItemClick(view, model);
             }
         });
+        setGestureListeners(holder.itemBinding.tagsName,model);
+       /* holder.itemBinding.tagsName.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                listener.onItemClick(view, model);
+            }
+        });
+        holder.itemBinding.tagsName.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = holder.itemBinding.tagsName.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(context.getApplicationContext(), context.getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
+    }
+
+    private void setGestureListeners(TextView textView, Object object) {
+        ViewCompat.setAccessibilityDelegate(textView, new CustomAccessibilityDelegate(object,onNavigateListener));
+        GestureListener gestureListener = new GestureListener(textView,object,context,onNavigateListener);
+        GestureDetector gestureDetector = new GestureDetector(context, gestureListener);
+        textView.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
     }
 
     @Override

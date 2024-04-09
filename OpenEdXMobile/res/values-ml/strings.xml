@@ -428,5 +428,9 @@
     <string name="label_no">അല്ല</string>
     <string name="label_yes">ശരി</string>
     <string name="label_ok">ശരി</string>
-
+    <string name="option">തിരഞ്ഞെടുപ്പ്</string>
+    <string name="user_intent_topic_found">തിരയൽ നമ്പർ  %1$s വിഷയം കണ്ടെത്തി</string>
+    <string name="user_intent_program_found">തെരഞ്ഞെടുപ്പ് %1$s പ്രോഗ്രാം കണ്ടെത്തി</string>
+    <string name="user_intent_course_found">തെരഞ്ഞെടുപ്പ് %1$s കോഴ്സ് കണ്ടെത്തി</string>
+    <string name="user_intent_program_message">%1$s പദ്ധതിയുമായി ബന്ധപ്പെട്ട ഒരു ഉപയോക്താവിന്റെ ഉദ്ദേശം ഉണ്ട്</string>
 </resources>

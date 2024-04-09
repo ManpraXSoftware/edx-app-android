@@ -28,6 +28,7 @@ public class TagsFragmentActivity extends BaseSingleFragmentActivity {
     public static final String SUBJECT = "subject";
     public static final String COLOR_CODE = "color_code";
     public static final String UID = "uid";
+    public static final String chatBotFlag = "chatBotFlag";
     @com.google.inject.Inject
     LoginPrefs loginPrefs;
 

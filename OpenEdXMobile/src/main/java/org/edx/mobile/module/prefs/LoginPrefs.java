@@ -15,6 +15,7 @@ import org.edx.mobile.model.api.ProfileModel;
 import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.services.EdxCookieManager;
 import org.edx.mobile.user.ProfileImage;
+import org.edx.mobile.user.UserInfo;
 import org.edx.mobile.util.VideoPlaybackSpeed;
 
 import javax.inject.Inject;
@@ -58,6 +59,18 @@ public class LoginPrefs {
 
     public void storeUserType(@NonNull String userType) {
         pref.put(PrefManager.Key.USER_TYPE, userType);
+    }
+
+    public void storeUserVoiceDialogEnabled(@NonNull int userVoiceDialogEnabled) {
+        pref.put(PrefManager.Key.USER_VOICE_DIALOG_ENABLED, userVoiceDialogEnabled);
+    }
+
+    public void storeUserVoicePermissionEnabled(@NonNull boolean userVoiceDialogEnabled) {
+        pref.put(PrefManager.Key.USER_VOICE_PERMISSION_ENABLED, userVoiceDialogEnabled);
+    }
+
+    public void storeUserInfoJson(@NonNull UserInfo userInfo) {
+        pref.put(PrefManager.Key.USER_INFO_JSON, gson.toJson(userInfo));
     }
 
     public void storeUserFirstTime(@NonNull String first_time) {
@@ -178,6 +191,18 @@ public class LoginPrefs {
     }
 
     @Nullable
+    public int getUserVoiceDialogEnabled() {
+        return pref.getInt(PrefManager.Key.USER_VOICE_DIALOG_ENABLED);
+    }
+
+    @Nullable
+    public Boolean getUserVoicePermissionEnabled() {
+        return pref.getBoolean(PrefManager.Key.USER_VOICE_PERMISSION_ENABLED, false);
+    }
+
+
+
+    @Nullable
     public String getselectedlanguage() {
         return pref.getString(PrefManager.Key.SELECTED_LANGUAGE);
     }
@@ -207,6 +232,15 @@ public class LoginPrefs {
             return null;
         }
         return gson.fromJson(json, ProfileModel.class);
+    }
+
+    @Nullable
+    public UserInfo getCurrentUserInfo() {
+        final String json = pref.getString(PrefManager.Key.USER_INFO_JSON);
+        if (json == null) {
+            return null;
+        }
+        return gson.fromJson(json, UserInfo.class);
     }
 
     @Nullable

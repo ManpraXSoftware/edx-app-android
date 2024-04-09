@@ -19,6 +19,7 @@ import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.module.registration.model.RegistrationDescription;
 import org.edx.mobile.programs.Programs;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +45,7 @@ import static org.edx.mobile.http.constants.ApiConstants.URL_MY_COURSES;
 import static org.edx.mobile.http.constants.ApiConstants.URL_MY_COURSES_MULTILINGUAL_TRANSLATION;
 import static org.edx.mobile.http.constants.ApiConstants.URL_MY_PROGRAMS;
 import static org.edx.mobile.http.constants.ApiConstants.URL_MY_USER_INFO;
+import static org.edx.mobile.http.constants.ApiConstants.URL_PARTICULAR_COURSE;
 
 public interface LoginService {
 
@@ -164,10 +166,14 @@ public interface LoginService {
     @NonNull
     @GET(URL_MY_PROGRAMS)
     Call<List<Programs>> getMyPrograms(@Query("username") String username,@Query("accept_language") String lang);
+    @NonNull
+    @GET(URL_PARTICULAR_COURSE)
+    Call<ArrayList<EnrolledCoursesResponse>> getParticularCourseTask(@Path("userId") String userId,
+                                                                     @Query("course_id") String courseId);
 
     @NonNull
     @GET(URL_MY_COURSES)
-    Call<List<EnrolledCoursesResponse>> getMyCourses(@Query("program_uuid") String program_uuid,@Query("username") String username);
+    Call<List<EnrolledCoursesResponse>> getMyCourses(@Query("program_uuid") String program_uuid,@Query("username") String username,@Query("accept_language") String language);
 
     @NonNull
     @GET(URL_ENROLL_CHECK)

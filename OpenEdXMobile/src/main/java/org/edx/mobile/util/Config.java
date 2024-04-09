@@ -88,9 +88,16 @@ public class Config {
     private static final String WHATS_NEW_ENABLED = "WHATS_NEW_ENABLED";
     private static final String COURSE_VIDEOS_ENABLED = "COURSE_VIDEOS_ENABLED";
     private static final String DOWNLOAD_TO_SD_CARD_ENABLED = "DOWNLOAD_TO_SD_CARD_ENABLED";
+
+    private static final String GROUP_LINK="https://chat.whatsapp.com/DPOTmpW3S4L7wDxMmHLA1u";
     //Discourse and Analytics
     public String getDiscoveryBaseUrl() {
         return getString(DISCOVERY_BASE_URL);
+    }
+
+
+    public static String getGroupLinkUrl() {
+        return GROUP_LINK;
     }
 
     //User agent for webview.

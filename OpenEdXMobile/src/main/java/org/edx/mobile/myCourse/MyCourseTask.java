@@ -23,15 +23,19 @@ public class MyCourseTask extends Task<List<EnrolledCoursesResponse>> {
     @NonNull
     private final String username;
 
-    public MyCourseTask(Context context, String program_uuid,String username,String token) {
+    @NonNull
+    private final String language;
+
+    public MyCourseTask(Context context, String program_uuid,String username,String token,String language) {
         super(context);
         this.program_uuid = program_uuid;
         this.token = token;
         this.username=username;
+        this.language=language;
     }
 
     @Override
     public List<EnrolledCoursesResponse> call() throws Exception {
-        return loginAPI.getMyCourses(token,program_uuid,username);
+        return loginAPI.getMyCourses(token,program_uuid,username,language);
     }
 }

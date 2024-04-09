@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -100,34 +101,37 @@
                               android:textSize="18dp" />-->
 
                         <TextView
+                            android:id="@+id/enter_your_email_below_txt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/enter_your_email_below"
-                            android:layout_marginTop="35dp"
                             android:layout_marginLeft="10dp"
+                            android:layout_marginTop="35dp"
                             android:layout_marginRight="10dp"
+                            android:text="@string/enter_your_email_below"
                             android:textColor="@color/grey_text"
-                            android:textSize="12dp" />
+                            android:textSize="12dp"
+                            tools:ignore="TextSizeCheck" />
 
                         <EditText
                             android:id="@+id/email_et"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:layout_marginTop="10dp"
                             android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
                             android:layout_marginRight="10dp"
-                            android:contentDescription="@string/email_editbox"
                             android:background="@drawable/white_roundedbg" />
 
                         <TextView
+                            android:id="@+id/enter_your_password_below_txt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/enter_your_password_below"
-                            android:layout_marginTop="30dp"
                             android:layout_marginLeft="10dp"
+                            android:layout_marginTop="30dp"
                             android:layout_marginRight="10dp"
+                            android:text="@string/enter_your_password_below"
                             android:textColor="@color/grey_text"
-                            android:textSize="12dp" />
+                            android:textSize="12dp"
+                            tools:ignore="TextSizeCheck" />
 
                         <EditText
                             android:id="@+id/password_et"
@@ -137,7 +141,6 @@
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:inputType="textPassword"
-                            android:contentDescription="@string/password_editbox"
                             android:background="@drawable/white_roundedbg" />
 
                         <!--<org.edx.mobile.view.custom.EdxTextInputLayout
@@ -265,9 +268,9 @@
                               android:layout_width="match_parent"
                               android:layout_height="wrap_content"
                               android:text="@string/by_signing_in" />
-      --> <TextView
-
+      -->               <TextView
                         style="@style/regular_text"
+                        android:id="@+id/create_a_new_account_txt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
@@ -280,6 +283,7 @@
 
                         <TextView
                             style="@style/regular_text"
+                            android:id="@+id/gmail_txt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
@@ -300,10 +304,7 @@
                              android:textSize="10sp"
                              android:visibility="invisible" />-->
                     </LinearLayout>
-
                 </LinearLayout>
-
-
             </RelativeLayout>
         </ScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

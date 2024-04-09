@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +15,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.AccessibilityDelegateCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.databinding.DataBindingUtil;
 
 import com.google.inject.Inject;
@@ -21,6 +25,8 @@ import com.google.inject.Inject;
 import org.edx.mobile.R;
 import org.edx.mobile.authentication.AuthResponse;
 import org.edx.mobile.authentication.LoginTask;
+import org.edx.mobile.clipboard.ClipboardService;
+import org.edx.mobile.clipboard.ClipboardServiceHolder;
 import org.edx.mobile.databinding.ActivitySubodhaLoginBinding;
 import org.edx.mobile.deeplink.DeepLink;
 import org.edx.mobile.deeplink.DeepLinkManager;
@@ -46,6 +52,9 @@ import org.edx.mobile.util.images.ErrorUtils;
 import org.edx.mobile.view.dialog.ResetPasswordDialogFragment;
 import org.edx.mobile.view.login.LoginPresenter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class NewLoginActivity extends PresenterActivity<LoginPresenter, LoginPresenter.LoginViewInterface>
         implements SocialLoginDelegate.MobileLoginCallback {
     private SocialLoginDelegate socialLoginDelegate;
@@ -59,6 +68,7 @@ public class NewLoginActivity extends PresenterActivity<LoginPresenter, LoginPre
     @Inject
     private UserService userService;
     private Toolbar toolbar;
+    ClipboardService clipboardService;
 
     @NonNull
     public static Intent newIntent(@Nullable DeepLink deepLink) {
@@ -88,7 +98,9 @@ public class NewLoginActivity extends PresenterActivity<LoginPresenter, LoginPre
         // finally change the color
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.status_bar_color));
         activityLoginBinding = DataBindingUtil.setContentView(this, R.layout.activity_subodha__login);
+        clipboardService = ClipboardServiceHolder.getClipboardService(getApplicationContext());
         hideSoftKeypad();
+        //copyTextDataByLongPress();
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -129,6 +141,29 @@ public class NewLoginActivity extends PresenterActivity<LoginPresenter, LoginPre
                 } else {
                     showAlertDialog(getString(R.string.reset_no_network_title), getString(R.string.network_not_connected));
                 }
+            }
+        });
+        ViewCompat.setAccessibilityDelegate(activityLoginBinding.emailEt, new AccessibilityDelegateCompat() {
+            @Override
+            public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfoCompat info) {
+                super.onInitializeAccessibilityNodeInfo(host, info);
+                host.setLongClickable(false);
+                info.setContentDescription("");
+            }
+        });
+        ViewCompat.setAccessibilityDelegate(activityLoginBinding.passwordEt, new AccessibilityDelegateCompat() {
+            @Override
+            public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfoCompat info) {
+                super.onInitializeAccessibilityNodeInfo(host, info);
+                host.setLongClickable(false);
+                info.setContentDescription("");
+            }
+        });
+        activityLoginBinding.loginBtnTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Check for Validation˜
+                callServerForLogin();
             }
         });
 
@@ -260,6 +295,7 @@ public class NewLoginActivity extends PresenterActivity<LoginPresenter, LoginPre
         } else {
             activityLoginBinding.emailEt.setEnabled(false);
             activityLoginBinding.passwordEt.setEnabled(false);
+
             activityLoginBinding.forgotPasswordTv.setEnabled(false);
             //activityLoginBinding.endUserAgreementTv.setEnabled(false);
 
@@ -320,7 +356,8 @@ public class NewLoginActivity extends PresenterActivity<LoginPresenter, LoginPre
                 UserInfo userInfo = responseBody;
                 if (userInfo != null) {
                     loginPrefs.storeUserType(userInfo.getUser_type());
-                   // loginPrefs.storeUserType(null);
+                    loginPrefs.storeUserInfoJson(userInfo);
+                    sendAnalyticsUserLoginSuccessful();
                 }
             }
 
@@ -367,7 +404,6 @@ public class NewLoginActivity extends PresenterActivity<LoginPresenter, LoginPre
     @SuppressLint("WrongConstant")
     public void onUserLoginSuccess(ProfileModel profile) {
         setResult(RESULT_OK);
-
         final DeepLink deepLink = getIntent().getParcelableExtra(Router.EXTRA_DEEP_LINK);
         if (deepLink != null) {
             DeepLinkManager.onDeepLinkReceived(this, deepLink);
@@ -445,10 +481,89 @@ public class NewLoginActivity extends PresenterActivity<LoginPresenter, LoginPre
         return true;
     }
 
+    String checkValueAvailable(String checkValue){
+        return checkValue != null ? checkValue : "not_available";
+    }
+
     void sendAnalyticsUserLoginSuccessful(){
-        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.USER_LOGIN_UNSUCCESSFUL,null,null,null);
+        UserInfo userInfo = loginPrefs.getCurrentUserInfo();
+
+        Map<String, String> values = new HashMap<>();
+        values.put(Analytics.Keys.USER_TYPE,checkValueAvailable(userInfo.getUser_type()));
+        values.put(Analytics.Keys.EDUCATION_BROAD, checkValueAvailable(userInfo.getEducation_board()));
+        values.put(Analytics.Keys.SCHOOL_NAME, checkValueAvailable(userInfo.getSchool()));
+        values.put(Analytics.Keys.GRADE, checkValueAvailable(userInfo.getGrade()));
+        values.put(Analytics.Keys.LOCATION, checkValueAvailable(userInfo.getLocation()));
+        values.put(Analytics.Keys.VI_SIGHTED, checkValueAvailable(userInfo.getVi_sighted()));
+        environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.USER_LOGIN_SUCCESSFUL,null,null,values);
     }
     void sendAnalyticsUserLoginUnsuccessful(){
         environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.USER_LOGIN_UNSUCCESSFUL,null,null,null);
+    }
+
+    void copyTextDataByLongPress(){
+        activityLoginBinding.appText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = activityLoginBinding.appText.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        activityLoginBinding.enterYourEmailBelowTxt.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = activityLoginBinding.enterYourEmailBelowTxt.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        activityLoginBinding.enterYourPasswordBelowTxt.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = activityLoginBinding.enterYourPasswordBelowTxt.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        activityLoginBinding.loginBtnTv.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = activityLoginBinding.loginBtnTv.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        activityLoginBinding.forgotPasswordTv.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = activityLoginBinding.forgotPasswordTv.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        activityLoginBinding.createANewAccountTxt.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = activityLoginBinding.createANewAccountTxt.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        /*activityLoginBinding.gmailTxt.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = activityLoginBinding.gmailTxt.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
     }
 }

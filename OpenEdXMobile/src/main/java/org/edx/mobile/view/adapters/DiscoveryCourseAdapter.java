@@ -2,18 +2,25 @@ package org.edx.mobile.view.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.SystemClock;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.edx.mobile.comparator.TalkBackDetector.CustomAccessibilityDelegate;
 import org.edx.mobile.R;
+import org.edx.mobile.clipboard.ClipboardService;
+import org.edx.mobile.clipboard.ClipboardServiceHolder;
 import org.edx.mobile.databinding.RowDiscoveryCourseBinding;
 import org.edx.mobile.discovery.model.CourseRuns;
+import org.edx.mobile.interfaces.OnNavigateListener;
 import org.edx.mobile.programs.ResumeCourse;
+import org.edx.mobile.util.GestureListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +33,15 @@ public class DiscoveryCourseAdapter extends RecyclerView.Adapter<DiscoveryCourse
     private OnRecyclerItemClickListener listener;
     private long lastClickTime;
 
-    public DiscoveryCourseAdapter(Context context, OnRecyclerItemClickListener listener) {
+    ClipboardService clipboardService;
+
+    OnNavigateListener onNavigateListener;
+
+    public DiscoveryCourseAdapter(Context context, OnRecyclerItemClickListener listener,OnNavigateListener onNavigateListener) {
         this.context = context;
         this.listener = listener;
         this.lastClickTime = 0;
+        this.onNavigateListener=onNavigateListener;
     }
 
     @NonNull
@@ -39,6 +51,7 @@ public class DiscoveryCourseAdapter extends RecyclerView.Adapter<DiscoveryCourse
                 inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false));
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);*/
+        clipboardService = ClipboardServiceHolder.getClipboardService(context.getApplicationContext());
         DiscoveryCourseViewHolder viewHolder = new DiscoveryCourseViewHolder(RowDiscoveryCourseBinding.
                 inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false));
         currentViewHolders.add(viewHolder);
@@ -113,18 +126,82 @@ public class DiscoveryCourseAdapter extends RecyclerView.Adapter<DiscoveryCourse
             }
         }
 
-        holder.itemBinding.viewButton.setOnClickListener(new View.OnClickListener() {
+        setGestureListeners(holder.itemBinding.viewButton,model);
+
+      /*  holder.itemBinding.viewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 listener.onItemClick(view, model);
             }
-        });
-        holder.itemBinding.contnueButton.setOnClickListener(new View.OnClickListener() {
+        });*/
+
+        setGestureListeners(holder.itemBinding.contnueButton,model);
+      /*  holder.itemBinding.contnueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 listener.onItemClick(view, model);
             }
-        });
+        });*/
+        setGestureListeners(holder.itemBinding.courseStatus,null);
+       /*holder.itemBinding.courseStatus.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = holder.itemBinding.courseStatus.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(context.getApplicationContext(), context.getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
+
+     /*   holder.itemBinding.contnueButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = holder.itemBinding.contnueButton.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(context.getApplicationContext(), context.getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
+        /*holder.itemBinding.viewButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = holder.itemBinding.viewButton.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(context.getApplicationContext(), context.getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
+
+        setGestureListeners(holder.itemBinding.course,null);
+        /*holder.itemBinding.course.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = holder.itemBinding.course.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(context.getApplicationContext(), context.getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
+        setGestureListeners(holder.itemBinding.courseNameEnrolled,null);
+        setGestureListeners(holder.itemBinding.courseName, null);
+        /*holder.itemBinding.courseNameEnrolled.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = holder.itemBinding.courseNameEnrolled.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(context.getApplicationContext(), context.getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
+    }
+
+    private void setGestureListeners(TextView textView, Object object) {
+        if(object!=null) {
+            ViewCompat.setAccessibilityDelegate(textView, new CustomAccessibilityDelegate(object, onNavigateListener));
+        }
+        GestureListener gestureListener = new GestureListener(textView,object,context,onNavigateListener);
+        GestureDetector gestureDetector = new GestureDetector(context, gestureListener);
+        textView.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
     }
 
     @Override

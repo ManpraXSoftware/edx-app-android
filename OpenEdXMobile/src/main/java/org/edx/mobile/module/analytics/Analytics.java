@@ -435,6 +435,20 @@ public interface Analytics {
     interface Keys {
         String NAME = "Name";
         String USER_ID = "User_Id";
+
+        String USER_TYPE = "User_type";
+
+        String EDUCATION_BROAD = "Education_broad";
+
+        String SCHOOL_NAME = "School_name";
+
+        String GRADE = "Grade";
+
+        String LOCATION = "Location";
+
+        String VISION = "Vision";
+
+        String VI_SIGHTED="VI_SIGHTED";
         String OLD_TIME = "old_time";
         String NEW_TIME = "new_time";
         String NEW_SPEED = "new_speed";

@@ -275,6 +275,11 @@ public class PrefManager {
         public static final String AUTH_JSON = "auth_json";
         public static final String AUTH_JWT_JSON = "auth_jwt_json";
         public static final String USER_TYPE = "user_type";
+
+        public static final String USER_VOICE_DIALOG_ENABLED= "user_voice_dialog_enabled";
+
+        public static final String USER_VOICE_PERMISSION_ENABLED= "user_voice_permission_enabled";
+        public static final String USER_INFO_JSON = "user_info_json";
         public static final String USER_FIRST_TIME = "user_first_time";
         public static final String AUTH_EMAIL = "email";
         public static final String PROFILE_IMAGE = "profile_image";

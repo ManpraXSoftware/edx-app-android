@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +19,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 
+import org.edx.mobile.BuildConfig;
 import org.edx.mobile.R;
+import org.edx.mobile.clipboard.ClipboardService;
+import org.edx.mobile.clipboard.ClipboardServiceHolder;
 import org.edx.mobile.core.IEdxEnvironment;
 import org.edx.mobile.databinding.NewUserProfileBinding;
 import org.edx.mobile.module.analytics.Analytics;
@@ -57,6 +61,8 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
     @Inject
     private UserService userService;
     private UserInfo userInfo;
+
+    ClipboardService clipboardService;
 
     @Override
     public void onChildScrollingPreferenceChanged() {
@@ -111,6 +117,7 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        clipboardService = ClipboardServiceHolder.getClipboardService(getActivity().getApplicationContext());
         return DataBindingUtil.inflate(inflater, R.layout.new_user_profile, container,
                 false).getRoot();
     }
@@ -122,6 +129,7 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
     protected UserProfilePresenter.ViewInterface createView() {
         viewHolder = DataBindingUtil.getBinding(getView());
         String selectedLanguage = "en";
+        copyTextDataByLongPress();
         if (!LocaleManager.getLanguagePref(getActivity()).isEmpty()) {
             selectedLanguage = LocaleManager.getLanguagePref(getActivity());
         }
@@ -145,6 +153,9 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
                 logoutConfirmation();
             }
         });
+
+        String version= "VERSION "+BuildConfig.VERSION_CODE;
+        viewHolder.versionTxt.setText(version);
         if (selectedLanguage.equals("en")) {
             viewHolder.english.setSelected(true);
             viewHolder.hindi.setSelected(false);
@@ -226,6 +237,28 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
                 }
             }
         });
+
+        viewHolder.englishText.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("WrongConstant")
+            @Override
+            public void onClick(View view) {
+                if (!viewHolder.english.isSelected()) {
+
+                    LocaleManager.setNewLocale(getContext(), "en");
+                    sendAnalyticsCourseDetail(getContext().getString(R.string.english));
+                    viewHolder.english.setSelected(true);
+                    viewHolder.hindi.setSelected(false);
+                    viewHolder.kannada.setSelected(false);
+                    viewHolder.tamil.setSelected(false);
+                    viewHolder.bengali.setSelected(false);
+                    viewHolder.malayalam.setSelected(false);
+                    viewHolder.odia.setSelected(false);
+                    Intent intent
+                            = new Intent(getActivity(), MainBottomDashboardFragment.class);
+                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            }
+        });
         viewHolder.hindi.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("WrongConstant")
             @Override
@@ -246,6 +279,29 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
                 }
             }
         });
+
+        viewHolder.hindiText.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("WrongConstant")
+            @Override
+            public void onClick(View view) {
+                if (!viewHolder.hindi.isSelected()) {
+                    LocaleManager.setNewLocale(getContext(), "hi");
+                    sendAnalyticsCourseDetail(getContext().getString(R.string.hindi));
+                    viewHolder.hindi.setSelected(true);
+                    viewHolder.english.setSelected(false);
+                    viewHolder.kannada.setSelected(false);
+                    viewHolder.tamil.setSelected(false);
+                    viewHolder.bengali.setSelected(false);
+                    viewHolder.malayalam.setSelected(false);
+                    viewHolder.odia.setSelected(false);
+                    Intent intent
+                            = new Intent(getActivity(), MainBottomDashboardFragment.class);
+                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            }
+        });
+
+
         viewHolder.kannada.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("WrongConstant")
             @Override
@@ -266,7 +322,50 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
                 }
             }
         });
+
+        viewHolder.kannadaText.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("WrongConstant")
+            @Override
+            public void onClick(View view) {
+                if (!viewHolder.kannada.isSelected()) {
+                    LocaleManager.setNewLocale(getContext(), "kn");
+                    sendAnalyticsCourseDetail(getContext().getString(R.string.kannada));
+                    viewHolder.kannada.setSelected(true);
+                    viewHolder.hindi.setSelected(false);
+                    viewHolder.english.setSelected(false);
+                    viewHolder.tamil.setSelected(false);
+                    viewHolder.bengali.setSelected(false);
+                    viewHolder.malayalam.setSelected(false);
+                    viewHolder.odia.setSelected(false);
+                    Intent intent
+                            = new Intent(getActivity(), MainBottomDashboardFragment.class);
+                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            }
+        });
+
         viewHolder.tamil.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("WrongConstant")
+            @Override
+            public void onClick(View view) {
+                if (!viewHolder.tamil.isSelected()) {
+                    LocaleManager.setNewLocale(getContext(), "ta");
+                    sendAnalyticsCourseDetail(getContext().getString(R.string.tamil));
+                    viewHolder.tamil.setSelected(true);
+                    viewHolder.hindi.setSelected(false);
+                    viewHolder.kannada.setSelected(false);
+                    viewHolder.english.setSelected(false);
+                    viewHolder.bengali.setSelected(false);
+                    viewHolder.malayalam.setSelected(false);
+                    viewHolder.odia.setSelected(false);
+                    Intent intent
+                            = new Intent(getActivity(), MainBottomDashboardFragment.class);
+                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            }
+        });
+
+        viewHolder.tamilText.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("WrongConstant")
             @Override
             public void onClick(View view) {
@@ -304,6 +403,27 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
                 }
             }
         });
+
+        viewHolder.bengaliText.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("WrongConstant")
+            @Override
+            public void onClick(View view) {
+                if (!viewHolder.bengali.isSelected()) {
+                    LocaleManager.setNewLocale(getContext(), "bn");
+                    sendAnalyticsCourseDetail(getContext().getString(R.string.bengali));
+                    viewHolder.bengali.setSelected(true);
+                    viewHolder.tamil.setSelected(false);
+                    viewHolder.hindi.setSelected(false);
+                    viewHolder.kannada.setSelected(false);
+                    viewHolder.english.setSelected(false);
+                    Intent intent
+                            = new Intent(getActivity(), MainBottomDashboardFragment.class);
+                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            }
+        });
+
+
         viewHolder.malayalam.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("WrongConstant")
             @Override
@@ -325,7 +445,49 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
                 }
             }
         });
+
+        viewHolder.malayalamText.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("WrongConstant")
+            @Override
+            public void onClick(View view) {
+                if (!viewHolder.malayalam.isSelected()) {
+                    LocaleManager.setNewLocale(getContext(), "ml");
+                    sendAnalyticsCourseDetail(getContext().getString(R.string.malayalam));
+                    viewHolder.malayalam.setSelected(true);
+                    viewHolder.odia.setSelected(false);
+                    viewHolder.bengali.setSelected(false);
+                    viewHolder.bengali.setSelected(false);
+                    viewHolder.tamil.setSelected(false);
+                    viewHolder.hindi.setSelected(false);
+                    viewHolder.kannada.setSelected(false);
+                    viewHolder.english.setSelected(false);
+                    Intent intent
+                            = new Intent(getActivity(), MainBottomDashboardFragment.class);
+                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            }
+        });
         viewHolder.odia.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("WrongConstant")
+            @Override
+            public void onClick(View view) {
+                if (!viewHolder.odia.isSelected()) {
+                    LocaleManager.setNewLocale(getContext(), "or");
+                    sendAnalyticsCourseDetail(getContext().getString(R.string.odia));
+                    viewHolder.odia.setSelected(true);
+                    viewHolder.malayalam.setSelected(false);
+                    viewHolder.bengali.setSelected(false);
+                    viewHolder.tamil.setSelected(false);
+                    viewHolder.hindi.setSelected(false);
+                    viewHolder.kannada.setSelected(false);
+                    viewHolder.english.setSelected(false);
+                    Intent intent
+                            = new Intent(getActivity(), MainBottomDashboardFragment.class);
+                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            }
+        });
+        viewHolder.odiaText.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("WrongConstant")
             @Override
             public void onClick(View view) {
@@ -587,6 +749,149 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
         final Map<String, String> values = new HashMap<>();
         values.put(Analytics.Keys.LANGAUGE_NAME,Language);
         environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.SELECT_LANGUAGE,null,"Language Change",values);
+    }
+
+    void copyTextDataByLongPress(){
+        viewHolder.accountSetting.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = viewHolder.accountSetting.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        viewHolder.userName.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = viewHolder.userName.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        viewHolder.preferedLanguage.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = viewHolder.preferedLanguage.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
+        viewHolder.englishText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = viewHolder.englishText.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        viewHolder.hindiText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = viewHolder.hindiText.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        viewHolder.kannadaText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = viewHolder.kannadaText.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        viewHolder.tamilText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = viewHolder.tamilText.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        viewHolder.malayalamText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = viewHolder.malayalamText.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        viewHolder.odiaText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = viewHolder.odiaText.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        viewHolder.bengaliText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = viewHolder.bengaliText.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        viewHolder.txtUserAccountType.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = viewHolder.txtUserAccountType.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
+        viewHolder.noUserType.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = viewHolder.noUserType.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        viewHolder.teacher.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = viewHolder.teacherText.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        viewHolder.student.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = viewHolder.studentText.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
+        viewHolder.logout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = viewHolder.logoutText.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
+
     }
 
 

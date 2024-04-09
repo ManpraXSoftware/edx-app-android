@@ -472,4 +472,8 @@
     <string name="label_no">இல்லை</string>
     <string name="label_yes">ஆம்</string>
     <string name="label_ok">சரி</string>
+    <string name="user_intent_topic_found">தேடலின் எண் %1$s தலைப்புகள் கிடைக்கப்பட்டன</string>
+    <string name="user_intent_program_found">தேடல் %1$s நிரல் கிடைக்கப்பட்டது</string>
+    <string name="user_intent_course_found">தேடல் %1$s பாடநெறி கிடைக்கப்பட்டது</string>
+    <string name="user_intent_program_message">%1$s நிரலுடன் தொடர்பு உள்ள நிரலாளரின் உத்திக்கு ஒரு செயல் உள்ளது</string>
 </resources>

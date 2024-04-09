@@ -12,9 +12,15 @@ import androidx.annotation.Nullable;
 import com.google.android.material.appbar.AppBarLayout;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+
+import android.view.GestureDetector;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.accessibility.AccessibilityEvent;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -39,6 +45,9 @@ import org.edx.mobile.view.dialog.AlertDialogFragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.core.view.AccessibilityDelegateCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import de.greenrobot.event.EventBus;
 import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
 import uk.co.chrisjenx.calligraphy.TypefaceUtils;
@@ -54,6 +63,9 @@ public abstract class BaseFragmentActivity extends BaseAppActivity
     @Inject
     protected IEdxEnvironment environment;
     private List<NetworkObserver> networkObservers = new ArrayList<>();
+
+    static TextView textViewHeading;
+
 
     public void registerNetworkObserver(NetworkObserver observer) {
         if (observer != null && !networkObservers.contains(observer)) {
@@ -88,8 +100,31 @@ public abstract class BaseFragmentActivity extends BaseAppActivity
 
     protected void setToolbarAsActionBar() {
         final View toolbar = findViewById(R.id.toolbar);
+        textViewHeading=findViewById(R.id.heading);
+
+        //backButton=findViewById(R.id.back_arrow);
+
+
         if (toolbar != null && toolbar instanceof Toolbar) {
             setSupportActionBar((Toolbar) toolbar);
+            textViewHeading=findViewById(R.id.heading);
+
+            // Set a custom content description for the navigation icon
+     //       ((Toolbar) toolbar).setNavigationContentDescription("Double tap to activate");
+
+// Optionally, you can also set a listener to handle accessibility events
+       /*     ((Toolbar) toolbar).setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Handle navigation icon click
+                }
+            });*/
+           // ((Toolbar*) toolbar).setNavigationIcon(R.drawable.ic_baseline_arrow_back_24_black); // replace with your own navigation icon
+            // Set the content description for the navigation icon
+           // ((Toolbar) toolbar).setNavigationContentDescription("Double tap to activate Oh Ya");
+          //  toolbar.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);// replace with your own description
+
+
             configureActionBar();
             setToolBarFont();
             setToolbarShadowBasedOnOS();
@@ -101,6 +136,10 @@ public abstract class BaseFragmentActivity extends BaseAppActivity
      * <br/>
      * TODO: Remove this function when this issue gets resolved: https://github.com/chrisjenx/Calligraphy/issues/295
      */
+
+    public static TextView  getHeadingText(){
+        return textViewHeading;
+    }
     private void setToolBarFont() {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         for (int i = 0; i < toolbar.getChildCount(); i++) {
@@ -144,6 +183,7 @@ public abstract class BaseFragmentActivity extends BaseAppActivity
             bar.setDisplayShowHomeEnabled(true);
             bar.setDisplayHomeAsUpEnabled(true);
             bar.setIcon(android.R.color.transparent);
+            bar.setHomeButtonEnabled(true);
             bar.setHomeActionContentDescription(getString(R.string.back));
         }
     }
@@ -472,3 +512,5 @@ public abstract class BaseFragmentActivity extends BaseAppActivity
         super.onActivityResult(requestCode, resultCode, data);
     }
 }
+
+

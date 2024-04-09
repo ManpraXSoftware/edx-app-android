@@ -2,11 +2,17 @@ package org.edx.mobile.view;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,8 +21,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,6 +53,7 @@ import org.edx.mobile.course.CourseAPI;
 import org.edx.mobile.coursemultilingual.CourseMultilingualModel;
 import org.edx.mobile.coursemultilingual.CourseTranslation;
 import org.edx.mobile.coursemultilingual.MyCourseMultilingualtask;
+import org.edx.mobile.discovery.model.DiscoverySubjectResult;
 import org.edx.mobile.event.CourseDashboardRefreshEvent;
 import org.edx.mobile.event.CourseUpgradedEvent;
 import org.edx.mobile.event.MediaStatusChangeEvent;
@@ -51,7 +62,9 @@ import org.edx.mobile.exception.CourseContentNotValidException;
 import org.edx.mobile.http.HttpStatus;
 import org.edx.mobile.http.HttpStatusException;
 import org.edx.mobile.http.notifications.FullScreenErrorNotification;
+import org.edx.mobile.interfaces.OnNavigateListener;
 import org.edx.mobile.interfaces.RefreshListener;
+import org.edx.mobile.launcher.WhatsAppLauncher;
 import org.edx.mobile.loader.AsyncTaskResult;
 import org.edx.mobile.loader.CourseOutlineAsyncLoader;
 import org.edx.mobile.logger.Logger;
@@ -71,12 +84,14 @@ import org.edx.mobile.services.CourseManager;
 import org.edx.mobile.services.EdxCookieManager;
 import org.edx.mobile.services.LastAccessManager;
 import org.edx.mobile.services.VideoDownloadHelper;
+import org.edx.mobile.util.Config;
 import org.edx.mobile.util.ConfigUtil;
 import org.edx.mobile.util.LocaleManager;
 import org.edx.mobile.util.NetworkUtil;
 import org.edx.mobile.util.PermissionsUtil;
 import org.edx.mobile.util.UiUtil;
 import org.edx.mobile.view.adapters.CourseOutlineAdapter;
+import org.edx.mobile.view.adapters.OnRecyclerItemClickListener;
 import org.edx.mobile.view.common.TaskProgressCallback;
 
 import java.util.HashMap;
@@ -88,8 +103,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static org.edx.mobile.view.Router.EXTRA_COURSE_DATA;
+
 public class CourseOutlineFragment extends OfflineSupportBaseFragment
-        implements LastAccessManager.LastAccessManagerCallback, RefreshListener,
+        implements LastAccessManager.LastAccessManagerCallback, RefreshListener, OnRecyclerItemClickListener, OnNavigateListener,
         VideoDownloadHelper.DownloadManagerCallback,
         LoaderManager.LoaderCallbacks<AsyncTaskResult<CourseComponent>>, BaseFragment.PermissionListener {
     private final Logger logger = new Logger(getClass().getName());
@@ -187,6 +204,12 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
         // Track CourseOutline for A/A test
         trackAATestCourseOutline();
         getCourseUpgradeFirebaseConfig();
+        setHasOptionsMenu(true);
+        if (CourseOutlineActivity.headingTextView() != null){
+            if (courseData != null) {
+                CourseOutlineActivity.headingTextView().setText(courseData.getCourse().getName());
+            }
+    }
         return view;
     }
 
@@ -214,21 +237,51 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
                     courseMultilingualModels = result;
                     adapter.setCourseMultilingualData(courseMultilingualModels);
                 }
+
+
+
+
+                //TextView titleTextView = getActivity().findViewById(R.id.my_title_text_view); // Replace with your view ID
+
+                /*SpannableString titleSpan = new SpannableString("My Title ");
+
+                Drawable iconDrawable = getResources().getDrawable(R.drawable.baseline_whatsapp_24);
+                iconDrawable.setBounds(0, 0, iconDrawable.getIntrinsicWidth(), iconDrawable.getIntrinsicHeight());
+
+                ImageSpan iconSpan = new ImageSpan(iconDrawable);
+                titleSpan.setSpan(iconSpan, titleSpan.length() - 1, titleSpan.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
+                getActivity().setTitle(titleSpan);*/
+
+
                 if (courseComponent != null) {
                     if (text != null) {
                         if (text.isEmpty()) {
-                            if (getActivity()!=null)
-                            getActivity().setTitle(courseComponent.getDisplayName());
+                            if (getActivity()!=null) {
+                                getActivity().setTitle(courseComponent.getDisplayName());
+                            }
+                            if(CourseOutlineActivity.headingTextView()!=null) {
+                            //    CourseOutlineActivity.headingTextView().setText(courseComponent.getDisplayName());
+                            }
                         } else {
                             if (getActivity()!=null)
                             getActivity().setTitle(text);
+                            if(CourseOutlineActivity.headingTextView()!=null) {
+                                //  CourseOutlineActivity.headingTextView().setText(courseComponent.getDisplayName());
+                            }
+
                         }
                     } else {
                         if (getActivity()!=null)
                         getActivity().setTitle(courseComponent.getDisplayName());
+                        if(CourseOutlineActivity.headingTextView()!=null) {
+                            //    CourseOutlineActivity.headingTextView().setText(courseComponent.getDisplayName());
+                        }
+
                     }
                 }
             }
+
 
             @Override
             public void onException(Exception ex) {
@@ -239,9 +292,29 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
                 }
             }
         };
+
         myCourseMultilingualtask.execute();
     }
-
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.course_dashboard_menu, menu);
+        menu.findItem(R.id.menu_item_whatsapp).setVisible(true);
+        if (environment.getConfig().isCourseSharingEnabled()) {
+            menu.findItem(R.id.menu_item_share).setVisible(true);
+        } else {
+            menu.findItem(R.id.menu_item_share).setVisible(false);
+        }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_whatsapp:
+                openWhatsAppLink();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item); // Let the activity handle other items
+        }
+    }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -403,24 +476,15 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (deleteMode != null) {
-                    deleteMode.finish();
-                }
-                listView.clearChoices();
-                final CourseComponent component = adapter.getItem(position).component;
-                if (component.isContainer()) {
-                    environment.getRouter().showCourseContainerOutline(CourseOutlineFragment.this,
-                            REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, courseUpgradeData, component.getId(), null, isVideoMode);
-                } else {
-                    environment.getRouter().showCourseUnitDetail(CourseOutlineFragment.this,
-                            REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, courseUpgradeData, component.getId(), isVideoMode);
-                }
+
+                navigateToAnotherScreen(position);
             }
         });
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
                 final IconImageView bulkDownloadIcon = (IconImageView) view.findViewById(R.id.bulk_download);
                 if (bulkDownloadIcon != null && bulkDownloadIcon.getIcon() == FontAwesomeIcons.fa_check) {
                     ((AppCompatActivity) getActivity()).startSupportActionMode(deleteModelCallback);
@@ -430,6 +494,36 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
                 return false;
             }
         });
+    }
+
+    void navigateToAnotherScreen(int position){
+        if (deleteMode != null) {
+            deleteMode.finish();
+        }
+        listView.clearChoices();
+        final CourseComponent component = adapter.getItem(position).component;
+        if (component.isContainer()) {
+            environment.getRouter().showCourseContainerOutline(CourseOutlineFragment.this,
+                    REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, courseUpgradeData, component.getId(), null, isVideoMode);
+        } else {
+            environment.getRouter().showCourseUnitDetail(CourseOutlineFragment.this,
+                    REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, courseUpgradeData, component.getId(), isVideoMode);
+        }
+    }
+
+    void navigateToAnotherScreenByCourseComponent(CourseComponent component){
+        if (deleteMode != null) {
+            deleteMode.finish();
+        }
+        listView.clearChoices();
+
+        if (component.isContainer()) {
+            environment.getRouter().showCourseContainerOutline(CourseOutlineFragment.this,
+                    REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, courseUpgradeData, component.getId(), null, isVideoMode);
+        } else {
+            environment.getRouter().showCourseUnitDetail(CourseOutlineFragment.this,
+                    REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, courseUpgradeData, component.getId(), isVideoMode);
+        }
     }
 
     private void initAdapter() {
@@ -458,7 +552,7 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
                 }
             };
             adapter = new CourseOutlineAdapter(getActivity(), courseData, environment, downloadListener,
-                    isVideoMode, isOnCourseOutline);
+                    isVideoMode, isOnCourseOutline, CourseOutlineFragment.this::onItemClick,this::navigateToAnotherScreen);
         }
     }
 
@@ -622,6 +716,9 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
         if (!isOnCourseOutline) {
             // We only need to set the title of Course Outline screen, where we show a subsection's units
             getActivity().setTitle(courseComponent.getDisplayName());
+            if(CourseOutlineActivity.headingTextView()!=null) {
+                //  CourseOutlineActivity.headingTextView().setText(courseComponent.getDisplayName());
+            }
         }
         adapter.setData(courseComponent);
         if (adapter.hasCourseData()) {
@@ -807,6 +904,7 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
                             } else {
                                 for (int i = outlinePathSize + 1; i < leafPathSize - 1; i += 2) {
                                     final CourseComponent nextComp = leafPath.get(i);
+
                                     environment.getRouter().showCourseContainerOutline(
                                             CourseOutlineFragment.this,
                                             REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, courseUpgradeData,
@@ -992,6 +1090,33 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
         if (getCourseUpgradeStatus != null) {
             getCourseUpgradeStatus.cancel();
             getCourseUpgradeStatus = null;
+        }
+    }
+
+    void openWhatsAppLink() {
+        String groupLink= Config.getGroupLinkUrl();
+        if(getActivity()!=null) {
+            if(getActivity().getApplicationContext()!=null) {
+                WhatsAppLauncher launcher = new WhatsAppLauncher(getActivity().getApplicationContext());
+                launcher.openWhatsAppGroup(groupLink);
+            }
+        }
+    }
+
+    @Override
+    public void onItemClick(View view, Object item) {
+        if (item instanceof CourseComponent) {
+
+            CourseComponent courseComponent=(CourseComponent)(item);
+            navigateToAnotherScreenByCourseComponent(courseComponent);
+        }
+    }
+
+    @Override
+    public void navigateToAnotherScreen(Object item) {
+        if (item instanceof CourseComponent) {
+            CourseComponent courseComponent=(CourseComponent)(item);
+            navigateToAnotherScreenByCourseComponent(courseComponent);
         }
     }
 }

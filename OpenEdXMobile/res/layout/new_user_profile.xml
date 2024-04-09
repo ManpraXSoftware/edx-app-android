@@ -36,6 +36,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="50dp"
                     android:textSize="15dp"
+                    android:id="@+id/account_setting"
                     android:text="@string/account_settings"
                     android:textColor="@color/grey_text" />
 
@@ -59,6 +60,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="40dp"
                     android:textSize="12dp"
+                    android:id="@+id/prefered_language"
                     android:text="@string/prefered_language"
                     android:textColor="@color/grey_text" />
 
@@ -82,7 +84,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center|center_vertical"
+                            android:id="@+id/english_text"
                             android:textColor="@color/language_text_color"
+                            android:importantForAccessibility="no"
                             android:text="@string/english" />
                     </LinearLayout>
 
@@ -96,10 +100,12 @@
                         android:background="@drawable/profile_language_card_selection">
 
                         <TextView
+                            android:id="@+id/hindi_text"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center|center_vertical"
                             android:textColor="@color/language_text_color"
+                            android:importantForAccessibility="no"
                             android:text="@string/hindi" />
                     </LinearLayout>
                 </LinearLayout>
@@ -121,9 +127,11 @@
                         android:background="@drawable/profile_language_card_selection">
 
                         <TextView
+                            android:id="@+id/kannada_text"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center|center_vertical"
+                            android:importantForAccessibility="no"
                             android:textColor="@color/language_text_color"
                             android:text="@string/kannada" />
                     </LinearLayout>
@@ -138,9 +146,11 @@
                         android:background="@drawable/profile_language_card_selection">
 
                         <TextView
+                            android:id="@+id/tamil_text"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center|center_vertical"
+                            android:importantForAccessibility="no"
                             android:textColor="@color/language_text_color"
                             android:text="@string/tamil" />
                     </LinearLayout>
@@ -162,9 +172,11 @@
                         android:background="@drawable/profile_language_card_selection">
 
                         <TextView
+                            android:id="@+id/malayalam_text"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center|center_vertical"
+                            android:importantForAccessibility="no"
                             android:textColor="@color/language_text_color"
                             android:text="@string/malayalam" />
                     </LinearLayout>
@@ -179,9 +191,11 @@
                         android:background="@drawable/profile_language_card_selection">
 
                         <TextView
+                            android:id="@+id/odia_text"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center|center_vertical"
+                            android:importantForAccessibility="no"
                             android:textColor="@color/language_text_color"
                             android:text="@string/odia" />
                     </LinearLayout>
@@ -203,9 +217,11 @@
                         android:background="@drawable/profile_language_card_selection">
 
                         <TextView
+                            android:id="@+id/bengali_text"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center|center_vertical"
+                            android:importantForAccessibility="no"
                             android:textColor="@color/language_text_color"
                             android:text="@string/bengali" />
                     </LinearLayout>
@@ -268,6 +284,7 @@
                         android:background="@drawable/profile_language_card_selection">
 
                         <TextView
+                            android:id="@+id/teacher_text"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center|center_vertical"
@@ -283,6 +300,7 @@
                         android:background="@drawable/profile_language_card_selection">
 
                         <TextView
+                            android:id="@+id/student_text"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center|center_vertical"
@@ -297,11 +315,12 @@
                     android:layout_height="40dp"
                     android:layout_weight="1"
                     android:layout_marginTop="30dp"
-                    android:layout_marginBottom="30dp"
+                    android:layout_marginBottom="25dp"
                     android:layout_marginLeft="5dp"
                     android:background="@drawable/logout_background">
 
                     <TextView
+                        android:id="@+id/logout_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center|center_vertical"
@@ -310,6 +329,18 @@
                         android:textSize="13dp"
                         android:text="@string/caps_logout" />
                 </LinearLayout>
+
+                <TextView
+                    style="@style/regular_text"
+                    android:id="@+id/version_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center_horizontal"
+                    android:text="@string/label_version"
+                    android:textColor="@color/transparent_black_80"
+                    android:textSize="12sp"
+                    android:visibility="visible" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

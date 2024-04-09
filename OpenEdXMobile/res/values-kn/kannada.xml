@@ -816,4 +816,9 @@
     <string name="label_no">ಇಲ್ಲ</string>
     <string name="label_yes">ಹೌದು</string>
     <string name="label_ok">ಸರಿ</string>
+    <string name="option">ಆಯ್ಕೆ</string>
+    <string name="user_intent_program_message">%1$s ಕಾರ್ಯಕ್ರಮದ ಸಂಬಂಧವಾಗಿ ಬಳಸಿಕೊಳ್ಳುವ ಬಳಕೆದಾರನ ಉದ್ದೇಶವಿದೆ</string>
+    <string name="user_intent_topic_found">ಹುಡುಕಾಟದ ಸಂಖ್ಯೆ  %1$s ವಿಷಯ ಸಿಗಿದಿದೆ</string>
+    <string name="user_intent_program_found">ಹುಡುಕಾಟ %1$s ಪ್ರೋಗ್ರಾಂ ಸಿಗಿತು</string>
+    <string name="user_intent_course_found">ಹುಡುಕಾಟ %1$s ಕೋರ್ಸು ಸಿಗಿತು</string>
 </resources>

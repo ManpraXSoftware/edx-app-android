@@ -27,6 +27,7 @@
 
                     <TextView
                         android:layout_width="250dp"
+                        android:id="@+id/explore_subject"
                         android:layout_height="wrap_content"
                         android:text="@string/explore_subjects"
                         android:textColor="@color/grey_text"

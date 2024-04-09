@@ -61,6 +61,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="24dp"
                     android:textSize="14dp"
+                    android:id="@+id/recently_Accessed_Course"
                     android:layout_marginLeft="22dp"
                     android:layout_marginTop="20dp"
                     android:textAllCaps="true"
@@ -118,6 +119,30 @@
                             android:ellipsize="end"
                             android:textColor="@color/seach_hint_color" />
 
+                        <RelativeLayout
+                            android:layout_width="73dp"
+                            android:layout_height="48dp"
+                            android:layout_gravity="right"
+                            android:id="@+id/resume_course_continue_shimmer_layout"
+                            android:layout_marginRight="22dp"
+                            android:layout_marginBottom="30dp">
+
+                            <com.facebook.shimmer.ShimmerFrameLayout
+                                android:id="@+id/resume_course_continue_shimmer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <LinearLayout
+                                    android:orientation="vertical"
+
+                                    android:layout_width="73dp"
+                                    android:layout_height="48dp"
+                                    android:background="@color/shimmer_placeholder"/>
+
+                            </com.facebook.shimmer.ShimmerFrameLayout>
+
+                        </RelativeLayout>
+
                         <Button
                             android:id="@+id/resume_course_continue"
                             android:layout_width="73dp"
@@ -129,7 +154,9 @@
                             android:layout_marginBottom="30dp"
                             android:contentDescription="@string/go_to_last_visit_section"
                             android:background="@drawable/continue_bg"
+                            android:visibility="gone"
                             android:textSize="12dp" />
+
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>

@@ -472,5 +472,9 @@
     <string name="label_no">नहीं</string>
     <string name="label_yes">हाँ</string>
     <string name="label_ok">ठीक है</string>
-
+    <string name="option">विकल्प</string>
+    <string name="user_intent_program_message">%1$s संबंधित कार्यक्रम के साथ उपयोगकर्ता का इरादा है</string>
+    <string name="user_intent_topic_found">खोज के नंबर %1$s विषय मिले</string>
+    <string name="user_intent_program_found">खोज के %1$s प्रोग्राम मिले</string>
+    <string name="user_intent_course_found">खोज के %1$s कोर्स मिले</string>
 </resources>

@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -48,6 +50,7 @@ public abstract class BaseSingleFragmentActivity extends BaseFragmentActivity im
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.status_bar_color));
         setContentView(R.layout.activity_single_fragment_base);
         addToolbar();
+
         super.setToolbarAsActionBar();
     }
 
@@ -79,9 +82,16 @@ public abstract class BaseSingleFragmentActivity extends BaseFragmentActivity im
 
     }
 
+    public static TextView getHeadingTexView(){
+        return  getHeadingText();
+    }
+
     @LayoutRes
     protected int getToolbarLayoutId() {
         return R.layout.toolbar;
+    }
+    public void backButtonPressed(){
+        onBackPressed();
     }
 
     @Override

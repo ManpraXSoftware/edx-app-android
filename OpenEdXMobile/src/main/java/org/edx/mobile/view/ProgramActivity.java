@@ -26,6 +26,9 @@ public class ProgramActivity extends BaseSingleFragmentActivity {
     public static final String PROGRAM_UUID = "program_uuid";
     public static final String TAGSCREENFLAG = "tag_screen_flag";
 
+    public static final String CHATBOTFLAG = "chat_bot_flag";
+    public static final String ORGANISATION_SCREEN_FLAG = "organisation_screen_flag";
+
     public static final String MYPROGRAMFLAG = "my_program_flag";
 
     public static final String tagName="tagName";

@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/menu_item_voice"
+        android:title="@string/voice_menu_item"
+        android:icon="@drawable/baseline_keyboard_voice_24"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/menu_item_search"
         android:title="@string/search"
         android:icon="@drawable/ic_baseline_search_24"
@@ -10,5 +16,11 @@
     <item
         android:id="@+id/menu_item_account"
         android:title="@string/title_account"
+        android:icon="@drawable/ic_person_foreground"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_item_whatsapp"
+        android:title="@string/whatsapp"
+        android:icon="@drawable/baseline_whatsapp_24"
         app:showAsAction="always" />
 </menu>

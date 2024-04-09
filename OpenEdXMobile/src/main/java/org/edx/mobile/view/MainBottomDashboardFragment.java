@@ -3,11 +3,15 @@ package org.edx.mobile.view;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -16,15 +20,20 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.inject.Inject;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
 import org.edx.mobile.R;
 import org.edx.mobile.base.BaseFragmentActivity;
+import org.edx.mobile.clipboard.ClipboardService;
+import org.edx.mobile.clipboard.ClipboardServiceHolder;
 import org.edx.mobile.deeplink.ScreenDef;
+import org.edx.mobile.launcher.WhatsAppLauncher;
 import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.prefs.LoginPrefs;
+import org.edx.mobile.util.Config;
 import org.edx.mobile.util.IntentFactory;
 
 import java.util.HashMap;
@@ -32,8 +41,6 @@ import java.util.Map;
 
 import static org.edx.mobile.view.Router.EXTRA_PATH_ID;
 import static org.edx.mobile.view.Router.EXTRA_SCREEN_NAME;
-import static org.edx.mobile.view.TagsFragmentActivity.COLOR_CODE;
-import static org.edx.mobile.view.TagsFragmentActivity.SUBJECT;
 
 public class MainBottomDashboardFragment extends BaseFragmentActivity implements MyCoursesListFragment.OnExploreButtonClick {
     private BottomNavigationView bottomNavView;
@@ -41,6 +48,10 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
     private LinearLayout ln_exploreCourse;
     private ImageView iv_space_my_dashboard;
     private ImageView iv_space_explore_course;
+
+    private TextView myDashboard;
+
+    private TextView myExplore;
     private ExploreFragment exploreBottomFragment;
     private MyCoursesListFragment myCoursesListFragment;
     private MyProgramListFragment myProgramListFragment;
@@ -51,6 +62,13 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
     private LoginPrefs loginPrefs;
     private MainBottomDashboardFragment mainBottomDashboardFragment;
     private static ImageView back_arrow;
+
+    FloatingActionButton floatingActionButton;
+
+    private ClipboardService clipboardService ;
+
+
+
 
     public static Intent newIntent(@Nullable @ScreenDef String screenName, @Nullable String pathId) {
         // These flags will make it so we only have a single instance of this activity,
@@ -73,6 +91,8 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        clipboardService = ClipboardServiceHolder.getClipboardService(getApplicationContext());
         // finally change the color
         com.google.firebase.analytics.FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true);
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.status_bar_color));
@@ -84,6 +104,8 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
         iv_space_my_dashboard = findViewById(R.id.space_my_dashboard);
         iv_space_explore_course = findViewById(R.id.space_explore_course);
         suodhaIcon = findViewById(R.id.subodha_icon);
+        myDashboard=findViewById(R.id.my_dashboard);
+        myExplore=findViewById(R.id.explore_course);
       /*  suodhaIcon.setVisibility(View.GONE);
         back_arrow.setVisibility(View.VISIBLE);*/
         back_arrow.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +123,8 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
         iv_space_explore_course.setVisibility(View.INVISIBLE);
         ln_myDashboard.setSelected(true);
         ln_exploreCourse.setSelected(false);
-        sendAnalyticsCourseDetailDeshBoard();
+        sendAnalyticsCourseDetailDashBoard();
+        floatingActionButton = findViewById(R.id.voice_search);
       /*  getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_fragment, myCoursesListFragment, MyCoursesListFragment.TAG)
                 .commit();*/
@@ -118,70 +141,30 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
         ln_myDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                sendAnalyticsCourseDetailDeshBoard();
-                suodhaIcon.setVisibility(View.VISIBLE);
-                back_arrow.setVisibility(View.GONE);
-                //   getSupportFragmentManager().popBackStack();
-                /*  for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); ++i) {
-                    getSupportFragmentManager().popBackStack();
-                }*/
-                iv_space_my_dashboard.setVisibility(View.VISIBLE);
-                iv_space_explore_course.setVisibility(View.INVISIBLE);
-                ln_myDashboard.setSelected(true);
-                ln_exploreCourse.setSelected(false);
-                //  showFragmentWithoutBackstack(myCoursesListFragment, MyCoursesListFragment.TAG);
-                //  showFragmentWithoutBackstack(myProgramListFragment, MyProgramListFragment.TAG);
-              /*  getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.main_fragment, myProgramListFragment, MyProgramListFragment.TAG).
-                        addToBackStack(MyProgramListFragment.TAG)
-                        .commit();*/
-                if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.main_fragment, myProgramListFragment, MyProgramListFragment.TAG).
-                            addToBackStack(MyProgramListFragment.TAG)
-                            .commit();
-                } else {
-                    for (int i = 1; i < getSupportFragmentManager().getBackStackEntryCount(); ++i) {
-                        getSupportFragmentManager().popBackStack();
-                    }
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.main_fragment, myProgramListFragment, MyProgramListFragment.TAG)
-                            .commit();
-                }
+                navigateToDashBroad();
             }
         });
 
         ln_exploreCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-                sendAnalyticsCourseDetailExplore_Cousre();
-                suodhaIcon.setVisibility(View.VISIBLE);
-                back_arrow.setVisibility(View.GONE);
-              /*  for(int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); ++i) {
-                    getSupportFragmentManager().popBackStack();
-                }*/
-
-                iv_space_my_dashboard.setVisibility(View.INVISIBLE);
-                iv_space_explore_course.setVisibility(View.VISIBLE);
-                ln_myDashboard.setSelected(false);
-                ln_exploreCourse.setSelected(true);
-                if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.main_fragment, exploreBottomFragment, ExploreFragment.TAG).addToBackStack(ExploreFragment.TAG)
-                            .commit();
-                } else {
-                    for (int i = 1; i < getSupportFragmentManager().getBackStackEntryCount(); ++i) {
-                        getSupportFragmentManager().popBackStack();
-                    }
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.main_fragment, exploreBottomFragment, ExploreFragment.TAG)
-                            .commit();
-                }
+                navigateToExplore();
             }
         });
+        myDashboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToDashBroad();
+            }
+        });
+        myExplore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToExplore();
+            }
+        });
+        copyTextDataByLongPress();
+
     }
 
     private void setTitleAndSubtitle(String title) {
@@ -193,14 +176,33 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.my_courses, menu);
+
+        menu.findItem(R.id.menu_item_voice).setVisible(true);
         menu.findItem(R.id.menu_item_account).setVisible(true);
         menu.findItem(R.id.menu_item_search).setVisible(true);
+        menu.findItem(R.id.menu_item_whatsapp).setVisible(true);
+
+        MenuItem whatsappMenuItem = menu.findItem(R.id.menu_item_voice);
+
+        // Set custom action view for voice menu item
+        whatsappMenuItem.setActionView(R.layout.custom_action_view);
+        View voiceActionView = whatsappMenuItem.getActionView();
+        voiceActionView.findViewById(R.id.action_view_icon).setVisibility(View.VISIBLE);
+
+        menu.findItem(R.id.menu_item_voice).setIcon(
+                new IconDrawable(this, FontAwesomeIcons.fa_microphone)
+                        .colorRes(this, R.color.black)
+                        .actionBarSize(this));
         menu.findItem(R.id.menu_item_search).setIcon(
                 new IconDrawable(this, FontAwesomeIcons.fa_search)
                         .colorRes(this, R.color.black)
                         .actionBarSize(this));
         menu.findItem(R.id.menu_item_account).setIcon(
                 new IconDrawable(this, FontAwesomeIcons.fa_user)
+                        .colorRes(this, R.color.black)
+                        .actionBarSize(this));
+        menu.findItem(R.id.menu_item_whatsapp).setIcon(
+                new IconDrawable(this, FontAwesomeIcons.fa_whatsapp)
                         .colorRes(this, R.color.black)
                         .actionBarSize(this));
         return super.onCreateOptionsMenu(menu);
@@ -221,11 +223,30 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
                         .commit();*/
                 return true;
             }
+
+            case R.id.menu_item_whatsapp:{
+                openWhatsAppLink();
+                return true;
+            }
             default: {
                 return super.onOptionsItemSelected(item);
             }
         }
     }
+
+
+
+
+
+
+    void openWhatsAppLink() {
+        String groupLink= Config.getGroupLinkUrl();
+        WhatsAppLauncher launcher = new WhatsAppLauncher(getApplicationContext());
+        launcher.openWhatsAppGroup(groupLink);
+    }
+
+
+
 
     @Override
     public void onBackPressed() {
@@ -263,15 +284,98 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
                 .replace(R.id.main_fragment, exploreBottomFragment, ExploreFragment.TAG)
                 .commit();
     }
-    void sendAnalyticsCourseDetailExplore_Cousre(){
+    void sendAnalyticsCourseDetailExplore_Course(){
         final Map<String, String> values = new HashMap<>();
         values.put(Analytics.Keys.USER_ID,environment.getLoginPrefs().getCurrentUserProfile().id.toString());
         environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.EXPLORE_COURSE,null,null,values);
 
     }
-    void sendAnalyticsCourseDetailDeshBoard(){
+    void sendAnalyticsCourseDetailDashBoard(){
         final Map<String, String> values = new HashMap<>();
         values.put(Analytics.Keys.USER_ID,environment.getLoginPrefs().getCurrentUserProfile().id.toString());
         environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.MY_DASHBOARD,null,null,values);
+    }
+
+    void copyTextDataByLongPress(){
+     /*   myDashboard.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = myDashboard.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
+        myExplore.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = myExplore.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
+
+    }
+    void navigateToDashBroad(){
+        sendAnalyticsCourseDetailDashBoard();
+        suodhaIcon.setVisibility(View.VISIBLE);
+        back_arrow.setVisibility(View.GONE);
+        floatingActionButton.hide();
+        //   getSupportFragmentManager().popBackStack();
+                /*  for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); ++i) {
+                    getSupportFragmentManager().popBackStack();
+                }*/
+        iv_space_my_dashboard.setVisibility(View.VISIBLE);
+        iv_space_explore_course.setVisibility(View.INVISIBLE);
+        ln_myDashboard.setSelected(true);
+        ln_exploreCourse.setSelected(false);
+        //  showFragmentWithoutBackstack(myCoursesListFragment, MyCoursesListFragment.TAG);
+        //  showFragmentWithoutBackstack(myProgramListFragment, MyProgramListFragment.TAG);
+              /*  getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.main_fragment, myProgramListFragment, MyProgramListFragment.TAG).
+                        addToBackStack(MyProgramListFragment.TAG)
+                        .commit();*/
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.main_fragment, myProgramListFragment, MyProgramListFragment.TAG).
+                    addToBackStack(MyProgramListFragment.TAG)
+                    .commit();
+        } else {
+            for (int i = 1; i < getSupportFragmentManager().getBackStackEntryCount(); ++i) {
+                getSupportFragmentManager().popBackStack();
+            }
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.main_fragment, myProgramListFragment, MyProgramListFragment.TAG)
+                    .commit();
+        }
+    }
+
+    void navigateToExplore(){
+        sendAnalyticsCourseDetailExplore_Course();
+        floatingActionButton.hide();
+        suodhaIcon.setVisibility(View.VISIBLE);
+        back_arrow.setVisibility(View.GONE);
+              /*  for(int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); ++i) {
+                    getSupportFragmentManager().popBackStack();
+                }*/
+
+        iv_space_my_dashboard.setVisibility(View.INVISIBLE);
+        iv_space_explore_course.setVisibility(View.VISIBLE);
+        ln_myDashboard.setSelected(false);
+        ln_exploreCourse.setSelected(true);
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.main_fragment, exploreBottomFragment, ExploreFragment.TAG).addToBackStack(ExploreFragment.TAG)
+                    .commit();
+        } else {
+            for (int i = 1; i < getSupportFragmentManager().getBackStackEntryCount(); ++i) {
+                getSupportFragmentManager().popBackStack();
+            }
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.main_fragment, exploreBottomFragment, ExploreFragment.TAG)
+                    .commit();
+        }
     }
 }

@@ -429,5 +429,9 @@
     <string name="label_no">ନାହିଁ</string>
     <string name="label_yes">ହଁ</string>
     <string name="label_ok">ଠିକ୍‌ ଅଛି</string>
-
+    <string name="option">ବିକଳ୍ପ</string>
+    <string name="user_intent_topic_found">ଖୋଜର ସଂଖ୍ୟା %1$s ବିଷୟ ପାଇପାରିବେ</string>
+    <string name="user_intent_program_found">ଖୋଜ %1$s ପ୍ରୋଗ୍ରାମ ପାଇଲେ</string>
+    <string name="user_intent_course_found">ଖୋଜର %1$s କୋର୍ସ ପାଇଲେ</string>
+    <string name="user_intent_program_message">%1$s ପ୍ରୋଗ୍ରାମ ସହ ଏକ ଉପଭୋକ୍ତାଙ୍କ ଉଦ୍ଦେଶ୍ୟ ରହିଛି</string>
 </resources>

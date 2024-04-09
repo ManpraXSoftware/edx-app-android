@@ -3,17 +3,22 @@ package org.edx.mobile.view.adapters;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.TextUtils;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityEvent;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.AccessibilityDelegateCompat;
 import androidx.core.view.ViewCompat;
 
 import com.bumptech.glide.Glide;
@@ -21,10 +26,14 @@ import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.internal.Animation;
 import com.joanzapata.iconify.widget.IconImageView;
 
+import org.edx.mobile.comparator.TalkBackDetector.CustomAccessibilityDelegate;
 import org.edx.mobile.R;
+import org.edx.mobile.clipboard.ClipboardService;
+import org.edx.mobile.clipboard.ClipboardServiceHolder;
 import org.edx.mobile.core.IEdxEnvironment;
 import org.edx.mobile.coursemultilingual.CourseMultilingualModel;
 import org.edx.mobile.coursemultilingual.CourseTranslation;
+import org.edx.mobile.interfaces.OnNavigateListener;
 import org.edx.mobile.logger.Logger;
 import org.edx.mobile.model.api.AuthorizationDenialReason;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
@@ -43,6 +52,7 @@ import org.edx.mobile.module.storage.IStorage;
 import org.edx.mobile.util.Config;
 import org.edx.mobile.util.DateUtil;
 import org.edx.mobile.util.FileUtil;
+import org.edx.mobile.util.GestureListener;
 import org.edx.mobile.util.LocaleManager;
 import org.edx.mobile.util.MemoryUtil;
 import org.edx.mobile.util.ResourceUtil;
@@ -58,6 +68,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import de.greenrobot.event.EventBus;
 
 public class CourseOutlineAdapter extends BaseAdapter {
@@ -86,9 +97,15 @@ public class CourseOutlineAdapter extends BaseAdapter {
     private boolean isVideoMode;
     private List<CourseMultilingualModel> courseMultilingualModels;
 
+
+    ClipboardService clipboardService;
+
+    private OnRecyclerItemClickListener clickListenerForList;
+
+    private OnNavigateListener onNavigateListener;
     public CourseOutlineAdapter(final Context context, final EnrolledCoursesResponse courseData,
                                 final IEdxEnvironment environment, DownloadListener listener,
-                                boolean isVideoMode, boolean isOnCourseOutline) {
+                                boolean isVideoMode, boolean isOnCourseOutline,OnRecyclerItemClickListener clickListenerForList,OnNavigateListener onNavigateListener) {
         this.context = context;
         this.environment = environment;
         this.config = environment.getConfig();
@@ -97,6 +114,8 @@ public class CourseOutlineAdapter extends BaseAdapter {
         this.courseData = courseData;
         this.downloadListener = listener;
         this.isVideoMode = isVideoMode;
+        this.clickListenerForList=clickListenerForList;
+        this.onNavigateListener=onNavigateListener;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         adapterData = new ArrayList();
         if (isOnCourseOutline && !isVideoMode) {
@@ -160,6 +179,7 @@ public class CourseOutlineAdapter extends BaseAdapter {
     @Override
     public final View getView(int position, View convertView, ViewGroup parent) {
         final int type = getItemViewType(position);
+        clipboardService = ClipboardServiceHolder.getClipboardService(context.getApplicationContext());
 
         // FIXME: Revisit better DB communication and code improvements in [MA-1640]
         // INITIALIZATION
@@ -238,11 +258,11 @@ public class CourseOutlineAdapter extends BaseAdapter {
                         CourseComponent child = (CourseComponent) childBlock;
                         if (isVideoMode && child.getVideos().size() == 0)
                             continue;
-                        SectionRow row = new SectionRow(SectionRow.ITEM, false, child);
+                        SectionRow row = new SectionRow(SectionRow.ITEM, false, child,null);
                         adapterData.add(row);
                     }
                 } else {
-                    SectionRow row = new SectionRow(SectionRow.ITEM, true, comp);
+                    SectionRow row = new SectionRow(SectionRow.ITEM, true, comp,null);
                     adapterData.add(row);
                 }
             }
@@ -322,14 +342,14 @@ public class CourseOutlineAdapter extends BaseAdapter {
         viewHolder.numOfVideoAndDownloadArea.setVisibility(View.GONE);
 
         if (component.isContainer()) {
-            getRowViewForContainer(viewHolder, row);
+            getRowViewForContainer(convertView,viewHolder, row);
         } else {
-            getRowViewForLeaf(viewHolder, row);
+            getRowViewForLeaf(convertView,viewHolder, row);
         }
         return convertView;
     }
 
-    private void getRowViewForLeaf(ViewHolder viewHolder, final SectionRow row) {
+    private void getRowViewForLeaf(View convertView,ViewHolder viewHolder, final SectionRow row) {
         final CourseComponent unit = row.component;
         viewHolder.rowType.setVisibility(View.VISIBLE);
         viewHolder.rowSubtitleIcon.setVisibility(View.GONE);
@@ -359,6 +379,26 @@ public class CourseOutlineAdapter extends BaseAdapter {
         } else {
             viewHolder.rowTitle.setText(unit.getDisplayName());
         }
+
+        setGestureListeners(viewHolder.rowTitle,unit);
+       /* viewHolder.rowTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                clickListenerForList.onItemClick(convertView,unit);
+                //v.setOnClickListener(row.clickListener);
+            }
+        });
+       viewHolder.rowTitle.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                String textToCopy = viewHolder.rowTitle.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(context.getApplicationContext(), context.getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
 
         //  viewHolder.rowTitle.setText(unit.getDisplayName());
 
@@ -399,6 +439,24 @@ public class CourseOutlineAdapter extends BaseAdapter {
             viewHolder.rowSubtitlePanel.setVisibility(View.VISIBLE);
             viewHolder.rowSubtitle.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void setGestureListeners(TextView textView,Object object) {
+        ViewCompat.setAccessibilityDelegate(textView, new CustomAccessibilityDelegate(object,onNavigateListener));
+
+        GestureListener gestureListener = new GestureListener(textView,object,context,onNavigateListener);
+        GestureDetector gestureDetector = new GestureDetector(context, gestureListener);
+        textView.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
+        /*if(object==null){
+            ViewCompat.setAccessibilityDelegate(textView, new AccessibilityDelegateCompat() {
+                @Override
+                public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfoCompat info) {
+                    super.onInitializeAccessibilityNodeInfo(host, info);
+                    host.setEnabled(true);
+                    info.setContentDescription(textView.getText());
+                }
+            });
+        }*/
     }
 
     private void checkAccessStatus(boolean isDenialFeatureBasedEnrolments, final ViewHolder viewHolder, final CourseComponent unit) {
@@ -519,7 +577,7 @@ public class CourseOutlineAdapter extends BaseAdapter {
         };
     }
 
-    private void getRowViewForContainer(ViewHolder holder,
+    private void getRowViewForContainer(View convertView,ViewHolder holder,
                                         final SectionRow row) {
         final CourseComponent component = row.component;
         String courseId = component.getCourseId();
@@ -550,6 +608,26 @@ public class CourseOutlineAdapter extends BaseAdapter {
         } else {
             holder.rowTitle.setText(component.getDisplayName());
         }
+
+      /* holder.rowTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                clickListenerForList.onItemClick(convertView,component);
+            }
+        });*/
+
+        setGestureListeners(holder.rowTitle,component);
+        /*holder.rowTitle.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                String textToCopy = holder.rowTitle.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(context.getApplicationContext(), context.getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
 
         holder.numOfVideoAndDownloadArea.setVisibility(View.VISIBLE);
         if (component.isGraded()) {
@@ -694,6 +772,24 @@ public class CourseOutlineAdapter extends BaseAdapter {
         } else {
             titleView.setText(row.component.getDisplayName());
         }
+        setGestureListeners(titleView,null);
+       /* titleView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //v.setOnClickListener(row.clickListener);
+            }
+        });*/
+       /* titleView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                String textToCopy = titleView.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(context.getApplicationContext(), context.getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
 
         if (position == 0) {
             separator.setVisibility(View.GONE);
@@ -743,6 +839,18 @@ public class CourseOutlineAdapter extends BaseAdapter {
             courseTextName.setText(courseData.getCourse().getName());
         }
 
+        setGestureListeners(courseTextName,null);
+
+        /*courseTextName.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                String textToCopy = courseTextName.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(context.getApplicationContext(), context.getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
         courseTextDetails.setText(CourseCardUtils.getFormattedDate(context, courseData));
 
         return view;
@@ -757,7 +865,8 @@ public class CourseOutlineAdapter extends BaseAdapter {
     private View getLastAccessedView(int position, View convertView) {
         final SectionRow sectionRow = getItem(position);
         final TextView lastAccessTextView = (TextView) convertView.findViewById(R.id.last_accessed_text);
-        final View viewButton = convertView.findViewById(R.id.last_accessed_button);
+        final TextView lastAccessedTextView = (TextView) convertView.findViewById(R.id.last_accessed_txt);
+        final Button viewButton = convertView.findViewById(R.id.last_accessed_button);
       //  lastAccessTextView.setText(sectionRow.component.getDisplayName());
         if (courseMultilingualModels != null) {
             String text = "";
@@ -781,7 +890,58 @@ public class CourseOutlineAdapter extends BaseAdapter {
         } else {
             lastAccessTextView.setText(sectionRow.component.getDisplayName());
         }
+
+       // lastAccessTextView.setOnClickListener(sectionRow.clickListener);
+        setGestureListeners(lastAccessTextView,null);
+        setGestureListeners(lastAccessedTextView,null);
+       /*lastAccessTextView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                String textToCopy = lastAccessTextView.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(context.getApplicationContext(), context.getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
+      /*  lastAccessedTextView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                String textToCopy = lastAccessedTextView.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(context.getApplicationContext(), context.getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
+        /*viewButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = viewButton.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(context.getApplicationContext(), context.getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
         viewButton.setOnClickListener(sectionRow.clickListener);
+        /*ViewCompat.setAccessibilityDelegate(viewButton, new AccessibilityDelegateCompat() {
+            @Override
+            public boolean dispatchPopulateAccessibilityEvent(View host, AccessibilityEvent event) {
+                super.dispatchPopulateAccessibilityEvent(host, event);
+                event.getText().add(context.getString(R.string.back));
+                return true;
+
+            }
+
+            @Override
+            public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfoCompat info) {
+                super.onInitializeAccessibilityNodeInfo(host, info);
+                info.addAction(AccessibilityNodeInfoCompat.ACTION_CLICK);
+                host.setClickable(true);
+                host.setLongClickable(false);
+                info.setContentDescription(context.getString(R.string.back));
+            }
+        });*/
         return convertView;
     }
 

@@ -3,8 +3,21 @@ package org.edx.mobile.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.accessibility.AccessibilityEvent;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toolbar;
+
+import androidx.core.view.AccessibilityDelegateCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.fragment.app.Fragment;
 
+import org.edx.mobile.R;
 import org.edx.mobile.base.BaseSingleFragmentActivity;
 import org.edx.mobile.event.CourseUpgradedEvent;
 import org.edx.mobile.model.api.CourseUpgradeResponse;
@@ -33,6 +46,9 @@ public class CourseOutlineActivity extends BaseSingleFragmentActivity {
     @InjectExtra(EXTRA_IS_VIDEOS_MODE)
     private boolean isVideoMode = false;
 
+
+    static TextView headingTexView;
+
     public static Intent newIntent(Activity activity,
                                    EnrolledCoursesResponse courseData,
                                    CourseUpgradeResponse courseUpgradeData,
@@ -54,7 +70,7 @@ public class CourseOutlineActivity extends BaseSingleFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        headingTexView=getHeadingTexView();
         if (courseComponentId == null) {
             EnrolledCoursesResponse courseData = (EnrolledCoursesResponse) courseBundle.getSerializable(EXTRA_COURSE_DATA);
             final Map<String, String> values = new HashMap<>();
@@ -65,8 +81,12 @@ public class CourseOutlineActivity extends BaseSingleFragmentActivity {
                     courseData.getCourse().getId(),null, values);
 
             setTitle(courseData.getCourse().getName());
+
         }
+
+
     }
+
 
     @Override
     public Fragment getFirstFragment() {
@@ -78,4 +98,10 @@ public class CourseOutlineActivity extends BaseSingleFragmentActivity {
     public void onEvent(CourseUpgradedEvent event) {
         finish();
     }
+
+    public static TextView headingTextView(){
+        headingTexView=getHeadingTexView();
+        return  headingTexView;
+    }
+
 }

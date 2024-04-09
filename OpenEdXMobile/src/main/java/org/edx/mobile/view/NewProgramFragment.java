@@ -2,18 +2,23 @@ package org.edx.mobile.view;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +29,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.inject.Inject;
 
+import org.edx.mobile.Chatbot.IntentClassifier.IntentProgramClassifier;
+import org.edx.mobile.Chatbot.SpeechToTextHelper.SpeechToTextHelper;
+import org.edx.mobile.Chatbot.SpeechToTextHelper.SpeechToTextListener;
+import org.edx.mobile.Chatbot.TextToSpeechHelper.TextToSpeechHelper;
 import org.edx.mobile.R;
 import org.edx.mobile.annotation.Nullable;
 import org.edx.mobile.app.App;
@@ -32,6 +41,8 @@ import org.edx.mobile.authentication.AuthResponseJwt;
 import org.edx.mobile.authentication.DiscoveryTask;
 import org.edx.mobile.authentication.LoginAPI;
 import org.edx.mobile.base.BaseFragment;
+import org.edx.mobile.clipboard.ClipboardService;
+import org.edx.mobile.clipboard.ClipboardServiceHolder;
 import org.edx.mobile.core.IEdxEnvironment;
 import org.edx.mobile.authentication.ApiNewLmsClient;
 import org.edx.mobile.course.EnrollInCourseTask;
@@ -49,6 +60,8 @@ import org.edx.mobile.discovery.model.ResponseError;
 import org.edx.mobile.discovery.net.course.CourseApi;
 import org.edx.mobile.http.HttpStatus;
 import org.edx.mobile.http.HttpStatusException;
+import org.edx.mobile.interfaces.OnNavigateListener;
+import org.edx.mobile.interfaces.TalkBackListener;
 import org.edx.mobile.logger.Logger;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
 import org.edx.mobile.module.analytics.Analytics;
@@ -56,6 +69,7 @@ import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.myCourse.MyCourseTask;
 import org.edx.mobile.programs.MyProgramListModel;
 import org.edx.mobile.programs.ResumeCourse;
+import org.edx.mobile.util.GestureListener;
 import org.edx.mobile.util.LocaleManager;
 import org.edx.mobile.view.adapters.DiscoveryCourseAdapter;
 import org.edx.mobile.view.adapters.OnRecyclerItemClickListener;
@@ -77,10 +91,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NewProgramFragment extends BaseFragment implements OnRecyclerItemClickListener {
+public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemClickListener, SpeechToTextListener, OnNavigateListener, TalkBackListener {
 
     public static final String TAG = NewProgramFragment.class.getCanonicalName();
     private static final int MY_COURSE_LOADER_ID = 0x905000;
+
+
+    private SpeechToTextHelper speechToTextHelper;
+
+    IntentProgramClassifier classifier;
+
+    //private FloatingActionButton floatingActionButton;
+
+    private TextToSpeechHelper textToSpeechHelper;
     @Inject
     LoginPrefs loginPrefs;
     @Inject
@@ -108,7 +131,10 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
 
     private static boolean tag_screen_flag  = false;
 
+    private static boolean organisation_screen_flag  = false;
     private static boolean is_my_program_flag=false;
+
+    private static boolean chatBotFlagProgram=false;
 
     private  int selected_position=0;
     List<ProgramResponseModel.Program> programResultLists = new ArrayList<>();
@@ -122,13 +148,22 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
     private ArrayAdapter<String> programAdapter;
     private List<String> programsNameLists = new ArrayList<>();
 
+    ClipboardService clipboardService;
+
+    private SoundPool soundPool;
+    private int soundId;
+
+    MenuItem menuItem;
+
     public static NewProgramFragment newInstance(@Nullable Bundle bundle) {
         final NewProgramFragment fragment = new NewProgramFragment();
         topic_name = bundle.getString(ProgramActivity.PROGRAM);
         topic_converted_name = bundle.getString(ProgramActivity.PROGRAM_CONVERTED);
         program_uuid = bundle.getString(ProgramActivity.PROGRAM_UUID);
         tag_screen_flag=bundle.getBoolean(ProgramActivity.TAGSCREENFLAG);
+        organisation_screen_flag=bundle.getBoolean(ProgramActivity.ORGANISATION_SCREEN_FLAG);
         is_my_program_flag=bundle.getBoolean(ProgramActivity.MYPROGRAMFLAG);
+        chatBotFlagProgram=bundle.getBoolean(ProgramActivity.CHATBOTFLAG,false);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -140,9 +175,9 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         topic_converted_name = getArguments().getString(ProgramActivity.PROGRAM_CONVERTED);
         program_uuid = getArguments().getString(ProgramActivity.PROGRAM_UUID);
         is_my_program_flag=getArguments().getBoolean(ProgramActivity.MYPROGRAMFLAG);
-
         tag_screen_flag= getArguments().getBoolean(ProgramActivity.TAGSCREENFLAG);
-
+        organisation_screen_flag=getArguments().getBoolean(ProgramActivity.ORGANISATION_SCREEN_FLAG);
+        chatBotFlagProgram=getArguments().getBoolean(ProgramActivity.CHATBOTFLAG,false);
     }
 
     @Override
@@ -151,7 +186,43 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_program_screen, container,
                 false);
+        speechToTextHelper = new SpeechToTextHelper(getActivity().getApplicationContext(), this,getActivity());
+        textToSpeechHelper = new TextToSpeechHelper(getActivity().getApplicationContext(),getActivity(),this::onDoneTalkBackListener);
+        clipboardService = ClipboardServiceHolder.getClipboardService(getActivity().getApplicationContext());
+        copyTextDataByLongPress();
+        setHasOptionsMenu(true);
+        if(menuItem!=null&&program_uuid.isEmpty()){
+            menuItem.setVisible(true);
+        }
+
+        soundPool = new SoundPool.Builder().build();
+        soundId = soundPool.load(getContext(), R.raw.beep_sound_2, 1);
         return binding.getRoot();
+    }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item=menu.findItem(R.id.menu_item_voice);
+        menuItem=item;
+
+        if(programResultLists==null||tag_screen_flag==false &&is_my_program_flag==true) {
+            item.setVisible(false);
+        }
+       /* else{
+            if(tag_screen_flag &&!is_my_program_flag) {
+                setFocusOnMic();
+            }
+        }*/
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_voice:
+
+                onMicButtonClick();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item); // Let the activity handle other items
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -160,6 +231,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         super.onViewCreated(view, savedInstanceState);
         // view.announceForAccessibility("Programs Screen");
         mApp = new App();
+
         if (!program_uuid.isEmpty()) {
             binding.selectAProgram.setVisibility(View.GONE);
             binding.shimmerLayoutProgram.setVisibility(View.GONE);
@@ -178,13 +250,16 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         }
 
         binding.tagName.setText(Html.fromHtml(sourceString));
+        binding.tagName.setFocusable(true);
+
+
         programModelAdapter = new ProgramModelAdapter(getActivity(), NewProgramFragment.this::onItemClick);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL,
                 false);
         binding.rvProgram.setLayoutManager(mLayoutManager);
         binding.rvProgram.setAdapter(programModelAdapter);
 
-        discoveryCourseAdapter = new DiscoveryCourseAdapter(getActivity(), NewProgramFragment.this::onItemClick);
+        discoveryCourseAdapter = new DiscoveryCourseAdapter(getActivity(), NewProgramFragment.this::onItemClick,this::navigateToAnotherScreen);
         LinearLayoutManager mLayoutManager1 = new LinearLayoutManager(getContext());
         binding.rvCourses.setLayoutManager(mLayoutManager1);
         binding.rvCourses.setAdapter(discoveryCourseAdapter);
@@ -243,6 +318,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         catch (Exception e){
 
         }
+
     }
 
     private void initSpinner() {
@@ -290,12 +366,15 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
             programAdapter = new ArrayAdapter<>(getActivity(), R.layout.edx_spinner_dropdown_item, programsNameLists);
             programAdapter.setDropDownViewResource(R.layout.edx_spinner_dropdown_item);
             binding.optionSpinnerPrograms.setAdapter(programAdapter);
+
             binding.optionSpinnerPrograms.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
                     filterTitle = (String) parent.getItemAtPosition(position);
 
                     selected_position = position;
+
+
 
 
                     try {
@@ -353,11 +432,12 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
 
         try {
             for (ProgramResponseModel.Program programResultList : programResultLists) {
+
                 if ((programResultList.getTitle()).equals(filterTitle)
                         || (programResultList.getTitle()).equals(filterTitle) || !tag_screen_flag & !is_my_program_flag & programResultList.getUuid().equals(program_uuid)) {
 
+                    sendAnalyticsFilter(programResultList);
 
-                    sendAnalyticsfilter(programResultList);
                     if (true) {
                         binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
                                 topic_name + " " + programResultList.getTitle() + " "
@@ -423,7 +503,6 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
     Boolean flag=false;
 
     void responseDataUiSet(){
-
         List<CourseRuns> courseRuns = new ArrayList<>();
         courseRuns.clear();
         if (responseCourseModel != null) {
@@ -459,10 +538,17 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                 }
             }
             catch (Exception e){
-                System.out.println("Data is fetches yet");
+
             }
             discoveryCourseAdapter.setProgramCoursesLists(courseRuns,flag
                     /*programResultList.isProgramEnroll()*/, resumeCourse);
+            if(chatBotCourseFlag){
+
+                 chatBotTalkCourse(courseRuns);
+            }
+            else{
+
+            }
             if(!flag) {
                 binding.shimmerLayoutCourseButton.setVisibility(View.GONE);
             }
@@ -470,9 +556,14 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                 for (ProgramCoursesList programCoursesList : programResultList.getCourses()) {
                     courseRuns.addAll(programCoursesList.getCourseRuns());
                 }*/
-            binding.courseCount.setText(String.valueOf(courseRuns.size()) + " " +
-                    requireContext().getString(R.string.courses_available));
-            binding.courseCount.setVisibility(View.VISIBLE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if(requireContext()!=null)
+                if(requireContext().isUiContext()){
+                            binding.courseCount.setText(String.valueOf(courseRuns.size()) + " " +
+                                   getString(R.string.courses_available));
+                            binding.courseCount.setVisibility(View.VISIBLE);
+                }
+            }
 
             binding.shimmerLayoutCourse.setVisibility(View.GONE);
 
@@ -505,9 +596,6 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
 //                    binding.courseDatailUnenroll.setVisibility(View.GONE);
 //                }
             }
-
-
-
         }
     }
 
@@ -539,8 +627,10 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
             binding.courseCount.setVisibility(View.VISIBLE);
 
             binding.shimmerLayoutCourse.setVisibility(View.GONE);
-
-
+            if(is_my_program_flag && !tag_screen_flag&&chatBotFlagProgram) {
+                chatBotTalkCourseFormDashboard(courseRuns);
+                chatBotFlagProgram=false;
+            }
             if (courseRuns == null) {
                 binding.errorMsgTv.setText(getString(R.string.no_course_found));
                 binding.lnEnrollInfo.setVisibility(View.GONE);
@@ -656,36 +746,80 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                 selectedLanguage = LocaleManager.getLanguagePref(getActivity());
             }
         }
-        Call<ProgramResponseModel> programResponseModel = courseApi.getProgramResponseWithTopicName(token, selectedLanguage, topic_name);
-        programResponseModel.enqueue(new DiscoveryCallback<ProgramResponseModel>() {
-            @Override
-            protected void onResponse(@NonNull ProgramResponseModel responseBody) {
-                if (responseBody != null && responseBody.getPrograms() != null) {
-                    programResultLists.clear();
-                    programResultLists = responseBody.getPrograms();
+        if(organisation_screen_flag) {
+            Call<ProgramResponseModel> programResponseModel = courseApi.getProgramResponseWithOrganisationName(token, selectedLanguage, topic_name);
+            programResponseModel.enqueue(new DiscoveryCallback<ProgramResponseModel>() {
+                @Override
+                protected void onResponse(@NonNull ProgramResponseModel responseBody) {
+                    if (responseBody != null && responseBody.getPrograms() != null) {
+                        programResultLists.clear();
+                        programResultLists = responseBody.getPrograms();
+                        initializeIntentData();
 
-                    if (!program_uuid.isEmpty()) {
-
-                        updateSingleProgram(programResultLists);
-                    } else {
-                        updateProgramList(programResultLists);
+                        if (program_uuid.isEmpty()) {
+                        /*if (floatingActionButton != null) {
+                            floatingActionButton.show();
+                        }*/
+                        }
+                        if (!program_uuid.isEmpty()) {
+                            updateSingleProgram(programResultLists);
+                        } else {
+                            updateProgramList(programResultLists);
+                        }
                     }
                 }
-            }
-            @Override
-            protected void onFailure(ResponseError responseError, @NonNull Throwable error) {
-                super.onFailure(responseError, error);
-            }
 
-        });
+                @Override
+                protected void onFailure(ResponseError responseError, @NonNull Throwable error) {
+                    super.onFailure(responseError, error);
+                }
+
+            });
+
+        }
+        else {
+            Call<ProgramResponseModel> programResponseModel = courseApi.getProgramResponseWithTopicName(token, selectedLanguage, topic_name);
+            programResponseModel.enqueue(new DiscoveryCallback<ProgramResponseModel>() {
+                @Override
+                protected void onResponse(@NonNull ProgramResponseModel responseBody) {
+                    if (responseBody != null && responseBody.getPrograms() != null) {
+                        programResultLists.clear();
+                        programResultLists = responseBody.getPrograms();
+                        initializeIntentData();
+                       // setFocusOnMic();
+                        if(chatBotFlagProgram&&tag_screen_flag){
+                            chatBotTalkProgram();
+                        }
+                        if (program_uuid.isEmpty()) {
+                        /*if (floatingActionButton != null) {
+                            floatingActionButton.show();
+                        }*/
+                        }
+                        if (!program_uuid.isEmpty()) {
+                            updateSingleProgram(programResultLists);
+                        } else {
+                            updateProgramList(programResultLists);
+                        }
+                    }
+                }
+
+                @Override
+                protected void onFailure(ResponseError responseError, @NonNull Throwable error) {
+                    super.onFailure(responseError, error);
+                }
+
+            });
+        }
     }
 
 
     private void updateSingleProgram(List<ProgramResponseModel.Program> programResultLists) {
+
         for (ProgramResponseModel.Program programResultList : programResultLists) {
             if (programResultList.getUuid() != null && programResultList.getUuid().equals(program_uuid)) {
                 program_selected_name=programResultList.getTitle();
                 program_selected_uuid=programResultList.getUuid();
+
                 updateProgramList(Collections.singletonList(programResultList));
                 break;
             }
@@ -698,6 +832,9 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
             handleProgramLists(programResultLists);
             if(program_uuid.isEmpty()) {
                 initSpinner();
+                if(menuItem!=null) {
+                    menuItem.setVisible(true);
+                }
             }
             programModelAdapter.setPrograms(programResultLists,
                     programResultLists.get(0).getTitle());
@@ -828,7 +965,10 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         List<CourseRuns> courseRuns = new ArrayList<>();
 
         for (ProgramCoursesList programCoursesList : programResultList.getCourses()) {
-            if (programCoursesList.getCourseRuns() != null) {
+            if (programCoursesList.getCourseRuns() != null)
+
+
+            {
                 courseRuns.addAll(programCoursesList.getCourseRuns());
             }
         }
@@ -975,11 +1115,6 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                 .setPositiveButton(getString(R.string.label_ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
-//                        if(!tag_screen_flag) {
-//                            Intent intent
-//                                    = new Intent(getActivity(), MainBottomDashboardFragment.class);
-//                            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
-//                        }
                     }
                 });
         // Creating dialog box
@@ -1125,28 +1260,35 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
              */
         } else {
             CourseRuns courseRuns = (CourseRuns) item;
-            String program_Uid="";
-            if(tag_screen_flag)
-            {
-                program_Uid=program_selected_uuid;
-            }
-            else {
-                program_Uid=program_uuid;
-            }
-
-
-            if (enrolledCoursesResponses != null) {
-                for (EnrolledCoursesResponse enrolledCoursesResponse : enrolledCoursesResponses) {
-                    if (enrolledCoursesResponse.getCourse() != null) {
-                        if (courseRuns.getKey().equals(enrolledCoursesResponse.getCourse().getId())) {
-                            sendAnalyticsCourseView(enrolledCoursesResponse,program_Uid);
-                            environment.getRouter().showCourseDashboardTabs(getActivity(), enrolledCoursesResponse,
-                                    false);
-                        }
-                    }
-                }
-            }
+            navigateToAnotherScreen(courseRuns);
         }
+    }
+
+    boolean chatBotCourseFlag=false;
+    void changeDropdown(ProgramResponseModel.Program program){
+
+// Suppose you want to select a program with a specific title
+        String desiredProgramTitle = program.getTitle();
+
+// Find the position of the desired program in the programsNameLists
+        int desiredProgramPosition = programsNameLists.indexOf(desiredProgramTitle);
+// Check if the desired program is found in the list
+        if (desiredProgramPosition != -1) {
+            // Set the selected item in the Spinner
+            binding.optionSpinnerPrograms.setSelection(desiredProgramPosition);
+
+            // Optionally, you can trigger the item selection logic programmatically
+            // (similar to what happens when a user manually selects an item)
+            binding.optionSpinnerPrograms.setSelection(desiredProgramPosition, true);
+            chatBotCourseFlag=true;
+            // Now, the onItemSelected callback will be triggered
+            // with the selected program set to desiredProgramTitle.
+        } else {
+            // Handle the case when the desired program is not found in the list
+            // You may show a toast, log an error, or handle it as appropriate
+            System.err.println("Desired program not found in the list");
+        }
+
     }
 /*
     @Override
@@ -1212,7 +1354,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
             }
 
             MyCourseTask myCourseTask = new MyCourseTask(getContext(), program_uuid,
-                    loginPrefs.getUsername(), loginPrefs.getAuthorizationHeader()) {
+                    loginPrefs.getUsername(), loginPrefs.getAuthorizationHeader(),selectedLanguage) {
                 @Override
                 public void onSuccess(@NonNull List<EnrolledCoursesResponse> result) {
                     try {
@@ -1220,7 +1362,6 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
                             showViewsForTagScreen();
                             hideShimmerLayoutForTagScreen();
                         }
-
                         enrolledCoursesResponses = new ArrayList<>(result);
                         onProgramSelection();
                         binding.iconProgress.setVisibility(View.GONE);
@@ -1253,6 +1394,38 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         CheckEnrollResponseTask checkEnrollResponseTask = new CheckEnrollResponseTask(completedTasks, totalTasks);
         checkEnrollResponseTask.execute();
     }
+
+    @Override
+    public void navigateToAnotherScreen(Object item) {
+        if (item instanceof CourseRuns) {
+            CourseRuns courseRuns = (CourseRuns) item;
+            String program_Uid = "";
+            if (tag_screen_flag) {
+                program_Uid = program_selected_uuid;
+            } else {
+                program_Uid = program_uuid;
+            }
+
+
+            if (enrolledCoursesResponses != null) {
+                for (EnrolledCoursesResponse enrolledCoursesResponse : enrolledCoursesResponses) {
+                    if (enrolledCoursesResponse.getCourse() != null) {
+                        if (courseRuns.getKey().equals(enrolledCoursesResponse.getCourse().getId())) {
+                            sendAnalyticsCourseView(enrolledCoursesResponse, program_Uid);
+                            environment.getRouter().showCourseDashboardTabs(getActivity(), enrolledCoursesResponse,
+                                    false);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onDoneTalkBackListener() {
+          //  setFocusOnMic();
+    }
+
 
     private class GetCourseListTask extends AsyncTask<Void, Void, ResponseCourseModel> {
 
@@ -1351,15 +1524,19 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
 
         try {
             Call<ResponseCourseModel> programResponseModel = courseApi.getCourseResponse(token, program_uuid, selectedLanguage);
-            retrofit2.Response<ResponseCourseModel> response = programResponseModel.execute();
+            Response<ResponseCourseModel> response = programResponseModel.execute();
 
             if (response.isSuccessful()) {
                 ResponseCourseModel responseBody = response.body();
-
-
                 return responseBody;
             } else {
-                Toast.makeText(getContext(), "Failed to get course list", Toast.LENGTH_SHORT).show();
+                if(getActivity()!=null) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        if(getActivity().getApplicationContext().isUiContext()) {
+                            Toast.makeText(getActivity().getApplicationContext(), "Failed to get course list", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -1369,12 +1546,11 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
     }
 
     private ResponseEnrollmentModel checkEnrollResponse() {
-        System.out.println("FFFFFFFFFFFFFFFFFFF checkEnrollResponse");
         final ResponseEnrollmentModel[] responseEnrollmentModel = {null};
         ApiNewLmsClient apiNewLmsClient=new ApiNewLmsClient(loginAPI.config);
         ApiLmsService apiService = apiNewLmsClient.getClient().create(ApiLmsService.class);
 
-        Call<ResponseEnrollmentModel> call = apiService.ApiMethod(
+        Call<ResponseEnrollmentModel> call = apiService.unrollCheck(
                 loginPrefs.getAuthorizationHeader(),
                 loginPrefs.getUsername(),
                 program_uuid
@@ -1419,6 +1595,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
             @Override
             public void onFailure(Call<ResponseEnrollmentModel> call, Throwable t) {
                 // Handle failure
+
                 Log.e("ResponseEnrollmentModel", "Request failed", t);
             }
         });
@@ -1443,33 +1620,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         }, 30000);
     }
 
-    private void checkEnrollResponse1() {
 
-        final String token = loginPrefs.getAuthorizationHeaderJwt();
-        if (token != null) {
-            Log.d("Token_JWT ", token);
-        }
-        Call<ResponseEnrollmentModel> responseEnrollmentModel = courseApi.getEnrollResponse(token,program_uuid);
-        responseEnrollmentModel.enqueue(new DiscoveryCallback<ResponseEnrollmentModel>() {
-            @Override
-            protected void onResponse(@NonNull ResponseEnrollmentModel responseBody) {
-                if (responseBody != null) {
-                    if(responseBody.getEnrollmentStatus().equals("enrolled")){
-                       // getMyCourseList();
-                       // isEnroll=true;
-                    }else {
-                        isEnroll=false;
-                       // getCourseList();
-                    }
-                }
-            }
-            @Override
-            protected void onFailure(ResponseError responseError, @NonNull Throwable error) {
-                super.onFailure(responseError, error);
-            }
-
-        });
-    }
 
     private void hideViewsForTagScreen() {
         binding.rvCourses.setVisibility(View.GONE);
@@ -1638,7 +1789,7 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         discoveryTask.execute();*/
     }
 
-    void sendAnalyticsfilter(ProgramResponseModel.Program programResponseModel) {
+    void sendAnalyticsFilter(ProgramResponseModel.Program programResponseModel) {
         final Map<String, String> values = new HashMap<>();
         values.put(Analytics.Keys.PROGRAM_NAME, programResponseModel.getTitle());
         values.put(Analytics.Keys.PROGRAM_UUID, programResponseModel.getUuid());
@@ -1667,4 +1818,290 @@ public class NewProgramFragment extends BaseFragment implements OnRecyclerItemCl
         environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.VIEW_COURSE, null, null, values);
     }
 
+    @Override
+    public void onSpeechResult(String text) {
+
+        Map<String,String> result = classifier.classifyIntent(text);
+
+        String keyToSpeak = "message";
+        String valueToSpeak = result.get(keyToSpeak);
+        textToSpeechHelper.speakText(valueToSpeak);
+
+        String keyToIntent = "Intent";
+        String valueToIntent = result.get(keyToIntent);
+
+        String keyToAction = "action";
+        String valueToAction = result.get(keyToAction);
+        if(valueToAction.equals("true"))
+            for (ProgramResponseModel.Program program : programResultLists) {
+                if(program.getTitle().equals(valueToIntent))
+                {
+                    changeDropdown(program);
+                    break;
+                }
+            }
+    }
+
+    @Override
+    public void onSpeechError(String error) {
+
+    }
+
+    public void onMicButtonClick() {
+        soundPool.play(soundId, 1.0f, 1.0f, 0, 0, 1.0f);
+        textToSpeechHelper.stop();
+        speechToTextHelper.startSpeechRecognition();
+
+    }
+    private void setFocusOnMic(){
+
+        if(!tag_screen_flag && !program_uuid.isEmpty() ){
+            binding.tagName.setFocusable(true);
+            binding.tagName.setFocusableInTouchMode(true);
+            binding.tagName.requestFocus();
+            binding.tagName.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_HOVER_ENTER);
+        }
+       else if (menuItem != null) {
+            View menuItemView = menuItem.getActionView();
+
+            if (menuItemView != null) {
+
+                // Move UI operations to the main thread using runOnUiThread
+                menuItemView.findViewById(R.id.action_view_icon).setVisibility(View.VISIBLE);
+                menuItemView.findViewById(R.id.action_view_icon).setFocusable(true);
+                menuItemView.findViewById(R.id.action_view_icon).setFocusableInTouchMode(true);
+                menuItemView.findViewById(R.id.action_view_icon).requestFocus();
+                menuItemView.findViewById(R.id.action_view_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_HOVER_ENTER);
+                menuItemView.findViewById(R.id.action_view_icon).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onMicButtonClick();
+                    }
+                });
+
+
+            } else {
+
+                Log.e(TAG, "Action view for menu item is null");
+            }
+            if (programResultLists == null||programResultLists.isEmpty()) {
+                menuItem.setVisible(false);
+                menuItemView.findViewById(R.id.action_view_icon).setVisibility(View.GONE);
+            }
+        } else {
+
+            Log.e(TAG, "Menu item not found");
+        }
+
+    }
+    public void initializeIntentData() {
+        if (!programResultLists.isEmpty()) {
+            setFocusOnMic();
+            List<String> tags = new ArrayList<>();
+            for (ProgramResponseModel.Program program : programResultLists) {
+                String title = program.getTitle();
+                if (title != null && !title.isEmpty()) {
+                    tags.add(title);
+                }
+            }
+            String selectedLanguage = "en";
+            if (getActivity() != null) {
+                if (!LocaleManager.getLanguagePref(getActivity()).isEmpty()) {
+                    selectedLanguage = LocaleManager.getLanguagePref(getActivity());
+                }
+            }
+            classifier = new IntentProgramClassifier(tags, selectedLanguage,getContext());
+        }
+    }
+    void copyTextDataByLongPress(){
+
+        setGestureListeners(binding.organisations);
+
+
+        /*binding.organisations.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy =  binding.organisations.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
+        setGestureListeners(binding.programNameInCard);
+        /*binding.programNameInCard.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = binding.programNameInCard.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
+        setGestureListeners(binding.tagName);
+        /*binding.tagName.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = binding.tagName.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
+        setGestureListeners(binding.selectAProgram);
+        /*binding.selectAProgram.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = binding.selectAProgram.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
+        binding.optionSpinnerPrograms.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                int selectedItemPosition = binding.optionSpinnerPrograms.getSelectedItemPosition();
+                // Get the selected item text
+                String selectedItem = (String) binding.optionSpinnerPrograms.getItemAtPosition(selectedItemPosition);
+                clipboardService.copyText(selectedItem);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        setGestureListeners(binding.courseCount);
+        /*binding.courseCount.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = binding.courseCount.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
+        setGestureListeners(binding.courseCount);
+        /*binding.courseCount.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = binding.courseCount.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
+        setGestureListeners(binding.errorMsgTv);
+        /*binding.errorMsgTv.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = binding.errorMsgTv.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
+       // setGestureListeners(binding.enrollInProgram);
+        /*binding.enrollInProgram.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = binding.enrollInProgram.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
+        //setGestureListeners(binding.unenrollFromProgram);
+        /*binding.unenrollFromProgram.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = binding.unenrollFromProgram.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });*/
+    }
+
+    private void setGestureListeners(TextView textView) {
+        GestureListener gestureListener = new GestureListener( textView,null,getContext(),this::navigateToAnotherScreen);
+        GestureDetector gestureDetector = new GestureDetector(getContext(), gestureListener);
+        textView.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
+    }
+
+    private void setGestureListeners2(TextView textView) {
+        GestureListener gestureListener = new GestureListener( textView,null,getContext(),this::navigateToAnotherScreen);
+        GestureDetector gestureDetector = new GestureDetector(getContext(), gestureListener);
+        textView.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
+    }
+
+    public void chatBotTalkCourse(List<CourseRuns> courseRuns){
+
+        String selectedLanguage = "en";
+        if (getActivity() != null) {
+            if (!LocaleManager.getLanguagePref(getActivity()).isEmpty()) {
+                selectedLanguage = LocaleManager.getLanguagePref(getActivity());
+            }
+        }
+       // textToSpeechHelper.stop();
+        chatBotCourseFlag=false;
+        String program="";
+        if(!is_my_program_flag && tag_screen_flag) {
+            program = binding.optionSpinnerPrograms.getSelectedItem().toString();
+        }
+        else {
+            program = binding.tagName.getText().toString();
+        }
+        String valueToSpeak = checkMessageLanguageCourse(courseRuns.size(),selectedLanguage);
+        String baseString = getResources().getString(R.string.user_intent_program_message);
+
+        String formattedString = baseString.replace("%1$s", String.valueOf(program));
+        String completeString=formattedString+" "+valueToSpeak;
+
+        textToSpeechHelper.speakText(completeString);
+
+    }
+
+    public void chatBotTalkCourseFormDashboard(List<CourseRuns> courseRuns){
+
+        String selectedLanguage = "en";
+        if (getActivity() != null) {
+            if (!LocaleManager.getLanguagePref(getActivity()).isEmpty()) {
+                selectedLanguage = LocaleManager.getLanguagePref(getActivity());
+            }
+        }
+        // textToSpeechHelper.stop();
+        chatBotCourseFlag=false;
+
+        String valueToSpeak = checkMessageLanguageCourse(courseRuns.size(),selectedLanguage);
+        String baseString = getResources().getString(R.string.user_intent_program_message);
+
+        textToSpeechHelper.speakText(valueToSpeak);
+
+    }
+
+    public void chatBotTalkProgram(){
+        String selectedLanguage = "en";
+        if (getActivity() != null) {
+            if (!LocaleManager.getLanguagePref(getActivity()).isEmpty()) {
+                selectedLanguage = LocaleManager.getLanguagePref(getActivity());
+            }
+        }
+        textToSpeechHelper.stop();
+        String valueToSpeak =checkMessageLanguageProgram(programResultLists.size(),selectedLanguage);
+        textToSpeechHelper.speakText(valueToSpeak);
+    }
+
+    private String checkMessageLanguageCourse(int messageCode,String selectedLanguage) {
+
+        String baseString = getResources().getString(R.string.user_intent_course_found);
+
+        String formattedString = baseString.replace("%1$s", String.valueOf(messageCode));
+        return formattedString;
+
+    }
+    private String checkMessageLanguageProgram(int messageCode,String selectedLanguage) {
+        String baseString = getResources().getString(R.string.user_intent_program_found);
+
+        String formattedString = baseString.replace("%1$s", String.valueOf(messageCode));
+        return formattedString;
+
+    }
 }

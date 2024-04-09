@@ -9,6 +9,27 @@ public class UserInfo {
     private String user;
     private String user_type;
 
+    private String location;
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getVi_sighted() {
+        return vi_sighted;
+    }
+
+    public void setVi_sighted(String vi_sighted) {
+        this.vi_sighted = vi_sighted;
+    }
+
+    private String vi_sighted;
+
+
     public String getGrade() {
         return grade;
     }
@@ -50,7 +71,7 @@ public class UserInfo {
     }
 
     public String getSchool() {
-        return school;
+        return school ;
     }
 
     public void setSchool(String school) {

@@ -25,6 +25,7 @@
 
             <TextView
                 style="@style/bold_edx_brand_primary_base_text"
+                android:id="@+id/last_accessed_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/last_accessed_header_unit_vertical_margin"
@@ -43,7 +44,7 @@
                 tools:text="Course Name" />
         </LinearLayout>
 
-        <TextView
+        <Button
             android:id="@+id/last_accessed_button"
             style="@style/bold_text"
             android:layout_width="wrap_content"
@@ -54,6 +55,8 @@
             android:padding="@dimen/last_accessed_button_padding"
             android:textAllCaps="true"
             android:text="@string/view_button_text"
+            android:clickable="true"
+            android:focusable="true"
             android:textColor="@color/edx_brand_primary_base"
             android:textSize="@dimen/last_accessed_button_text_size" />
 

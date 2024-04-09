@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +43,7 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
+import retrofit2.http.Query;
 
 import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static org.edx.mobile.http.util.CallUtil.executeStrict;
@@ -111,13 +113,17 @@ public class LoginAPI {
     }
 
     @NonNull
-    public Response<List<Programs>> getMyprograms(String username,String langg) throws IOException {
-        return loginService.getMyPrograms(username,langg).execute();
+    public Response<List<Programs>> getMyprograms(String username,String lang) throws IOException {
+        return loginService.getMyPrograms(username,lang).execute();
+    } 
+    @NonNull
+    public Response< ArrayList<EnrolledCoursesResponse>> getParticularCourse(String userId, String courseId) throws IOException {
+        return loginService.getParticularCourseTask(userId,courseId).execute();
     }
 
     @NonNull
-    public Response<List<EnrolledCoursesResponse>> getMyCurses(String auth, String program_uuid,String username) throws IOException {
-        return loginService.getMyCourses(program_uuid,username).execute();
+    public Response<List<EnrolledCoursesResponse>> getMyCurses(String auth, String program_uuid,String username,String language) throws IOException {
+        return loginService.getMyCourses(program_uuid,username,language).execute();
     }
 
     @NonNull
@@ -180,10 +186,15 @@ public class LoginAPI {
         final Response<List<Programs>> responsePrograms = getMyprograms(username,lang);
         return responsePrograms.body();
     }
+    @NonNull
+    public ArrayList<EnrolledCoursesResponse> getParticularCourseTask(String userId, String courseId) throws Exception {
+        final Response< ArrayList<EnrolledCoursesResponse>> responsePrograms = getParticularCourse(userId,courseId);
+        return responsePrograms.body();
+    }
 
     @NonNull
-    public List<EnrolledCoursesResponse> getMyCourses(String auth,String program_uuid, String username) throws Exception {
-        final Response<List<EnrolledCoursesResponse>> responsePrograms = getMyCurses(auth,program_uuid, username);
+    public List<EnrolledCoursesResponse> getMyCourses(String auth,String program_uuid, String username,String language) throws Exception {
+        final Response<List<EnrolledCoursesResponse>> responsePrograms = getMyCurses(auth,program_uuid, username,language);
         return responsePrograms.body();
     }
 

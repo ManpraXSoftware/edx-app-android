@@ -428,6 +428,7 @@
     <string name="course_details_view_cert_button">প্রশংসাপত্র দেখ বা দেখুন</string>
     <string name="course_details_earned_cert">আপনি কোর্স পাস করেছেন.</string>
     <string name="course_details_congratulations">অভিনন্দন!</string>
+    <string name="option">বিকল্প</string>
     <string name="app_name" translatable="false">Subodha</string>
     <string name="app_shortcut_name" translatable="false"></string>
     <string name="phonetic_app_name" translatable="false"></string>
@@ -442,4 +443,8 @@
     <string name="label_no">না</string>
     <string name="label_yes">হ্যাঁ</string>
     <string name="label_ok">ঠিক আছে</string>
+    <string name="user_intent_topic_found">অনুসন্ধানের সংখ্যা  %1$s টি বিষয় পাওয়া গেছে</string>
+    <string name="user_intent_program_found">অনুসন্ধানের %1$s প্রোগ্রাম পাওয়া গেছে</string>
+    <string name="user_intent_course_found">অনুসন্ধানের %1$s কোর্স পাওয়া গেছে</string>
+    <string name="user_intent_program_message">%1$s প্রোগ্রামের সাথে সংশ্লিষ্ট একটি ইচ্ছুক ব্যবহারকারীর উদ্দেশ্য রয়েছে</string>
 </resources>

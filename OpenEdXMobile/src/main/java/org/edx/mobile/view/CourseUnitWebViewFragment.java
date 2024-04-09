@@ -103,8 +103,13 @@ public class CourseUnitWebViewFragment extends CourseUnitFragment {
         if (getActivity()!=null){
             String selectedLanguage = "en";
             selectedLanguage = LocaleManager.getLanguagePref(getActivity());
+
+
             if(selectedLanguage.equals("hi")||selectedLanguage.equals("ta")){
                 selectedLanguage = selectedLanguage + "-IN";
+            }
+            if(selectedLanguage.equals("en")){
+                selectedLanguage="";
             }
             Log.d("webview_url" , unit.getBlockUrl() + "?language=" + selectedLanguage);
             if (authWebView != null) {
@@ -117,6 +122,25 @@ public class CourseUnitWebViewFragment extends CourseUnitFragment {
             }
         }
     }
+
+    public String checkLanguage(String selectedLanguage) {
+        switch (selectedLanguage) {
+            case "en":
+                return "";
+            case "hi":
+            case "kn":
+            case "ta":
+            case "bn":
+            case "or":
+                return selectedLanguage;
+            case "ml":
+                return "";
+            default:
+                return "";
+        }
+    }
+
+
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {

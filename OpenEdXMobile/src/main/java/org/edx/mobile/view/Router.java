@@ -8,7 +8,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.databinding.library.baseAdapters.BuildConfig;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.core.app.TaskStackBuilder;
@@ -16,6 +15,7 @@ import androidx.core.app.TaskStackBuilder;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import org.edx.mobile.BuildConfig;
 import org.edx.mobile.R;
 import org.edx.mobile.authentication.LoginAPI;
 import org.edx.mobile.core.IEdxEnvironment;
@@ -409,6 +409,7 @@ public class Router {
         forceLogout(context, analyticsRegistry, delegate);
         SecurityUtil.clearUserData(context);
         loginPrefs.storeUserFirstTime("true");
+        loginPrefs.storeUserVoiceDialogEnabled(BuildConfig.VERSION_CODE);
     }
 
     public void showHandouts(Activity activity, EnrolledCoursesResponse courseData) {

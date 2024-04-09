@@ -832,6 +832,18 @@
  <string name="skip">Skip</string>
  <string name="skip_language_preference">Skip Language Preference</string>
  <string name="unroll_app_dialog_message">Do you want to unroll from this program? </string>
-
-
+ <string name="whatsapp">Whatsapp</string>
+ <string name="voice_menu_item">Voice Search</string>
+ <string name="option">Option</string>
+ <string name="text_copied">Selected text copied!</string>
+ <string name="user_intent_subject_message"> User has an intent related to the subject being %1$s</string>
+ <string name="user_intent_program_message">User has an intent related to the program being %1$s</string>
+ <string name="user_multiple_intent_message">User has an intent related to the multiples of %1$s program being %2$s. Please clarify</string>
+ <string name="user_intent_topic_found">Number of search %1$s topic Found</string>
+ <string name="user_intent_program_found">Number of search %1$s program Found</string>
+ <string name="user_intent_course_found">Number of search %1$s course found</string>
+ <string name="message_voice_text">Now you can search your program through voice command and navigate from any page to Whatsapp discussion group.\nTap on the button to activate it.</string>
+ <string name="title_voice_text"> New features added.</string>
+ <string name="alert">Alert</string>
+ <string name="dailog_feature">Alert  New features added. Now you can search your program through voice command and navigate from any page to Whatsapp discussion group.\nTap on the button to activate it.</string>
 </resources>

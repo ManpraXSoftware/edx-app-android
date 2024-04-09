@@ -4,10 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.edx.mobile.R;
+import org.edx.mobile.clipboard.ClipboardService;
+import org.edx.mobile.clipboard.ClipboardServiceHolder;
 import org.edx.mobile.databinding.RowProgramBinding;
 import org.edx.mobile.discovery.model.ProgramResponseModel;
 
@@ -20,7 +24,7 @@ ProgramModelAdapter extends RecyclerView.Adapter<ProgramModelAdapter.ProgramView
     private OnRecyclerItemClickListener listener;
     private List<ProgramResponseModel.Program> programResultLists;
     private String progamNameselect;
-
+    ClipboardService clipboardService;
     public ProgramModelAdapter(Context context, OnRecyclerItemClickListener listener) {
         this.context = context;
         this.listener = listener;
@@ -29,6 +33,7 @@ ProgramModelAdapter extends RecyclerView.Adapter<ProgramModelAdapter.ProgramView
     @NonNull
     @Override
     public ProgramViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        clipboardService = ClipboardServiceHolder.getClipboardService(context.getApplicationContext());
         return new ProgramModelAdapter.ProgramViewHolder(RowProgramBinding.inflate(LayoutInflater.from(viewGroup.getContext()), viewGroup, false));
     }
 
@@ -53,6 +58,17 @@ ProgramModelAdapter extends RecyclerView.Adapter<ProgramModelAdapter.ProgramView
                     progamNameselect = holder.itemBinding.programName.getText().toString();
                     notifyDataSetChanged();
                 }
+            }
+        });
+
+        holder.itemBinding.programName.setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+                String textToCopy = holder.itemBinding.programName.getText().toString();
+                clipboardService.copyText(textToCopy);
+                Toast.makeText(context.getApplicationContext(), context.getString(R.string.text_copied), Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
 
