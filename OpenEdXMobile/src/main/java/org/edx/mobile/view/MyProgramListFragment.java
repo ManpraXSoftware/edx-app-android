@@ -247,12 +247,11 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     private boolean checkDialogBox() {
         int currentVersion=BuildConfig.VERSION_CODE;
         int storedVersion =loginPrefs.getUserVoiceDialogEnabled();
-
         if(currentVersion>storedVersion){
             loginPrefs.storeUserVoiceDialogEnabled(BuildConfig.VERSION_CODE);
             return true;
         }
-        return true;
+        return false;
     }
 
 
