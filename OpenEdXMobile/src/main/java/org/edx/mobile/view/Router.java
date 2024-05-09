@@ -34,12 +34,16 @@ import org.edx.mobile.module.notification.NotificationDelegate;
 import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.module.storage.IStorage;
 import org.edx.mobile.profiles.UserProfileActivity;
+import org.edx.mobile.programs.NotificationModel;
 import org.edx.mobile.util.Config;
 import org.edx.mobile.util.EmailUtil;
 import org.edx.mobile.util.ResourceUtil;
 import org.edx.mobile.util.SecurityUtil;
 import org.edx.mobile.util.links.WebViewLink;
 import org.edx.mobile.whatsnew.WhatsNewActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
@@ -261,6 +265,8 @@ public class Router {
         fragment.startActivityForResult(courseDetail, requestCode);
     }
 
+
+
     public void showCourseUnitDetail(Fragment fragment, int requestCode, EnrolledCoursesResponse model,
                                      CourseUpgradeResponse courseUpgradeData,
                                      String courseComponentId, boolean isVideosMode) {
@@ -477,6 +483,10 @@ public class Router {
 
     public void showSeachActivity(@NonNull Activity activity) {
         activity.startActivity(SeachScreenActivity.newIntent(activity, null));
+    }
+
+    public void showNotificationActivity(@NonNull Activity activity, NotificationModel notificationModel) {
+        activity.startActivity(NotificationActivity.newIntent(activity,notificationModel));
     }
 
     public void showProgramsActivity(@NonNull Activity activity, String programName, String program_uuid) {

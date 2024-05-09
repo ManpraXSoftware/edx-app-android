@@ -5,13 +5,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-    <ImageView
+    <ImageButton
         android:id="@+id/action_view_icon"
         android:layout_width="28dp"
         android:layout_height="28dp"
         android:focusable="true"
-        android:visibility="gone"
-
+        android:visibility="invisible"
+        android:background="@color/white"
+        android:scaleType="fitCenter"
         android:src="@drawable/baseline_keyboard_voice_24"
         android:contentDescription="@string/voice_menu_item" />
 </LinearLayout>

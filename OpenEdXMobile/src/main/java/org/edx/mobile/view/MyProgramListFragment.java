@@ -25,12 +25,16 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.view.AccessibilityDelegateCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -59,11 +63,13 @@ import org.edx.mobile.interfaces.RefreshListener;
 import org.edx.mobile.interfaces.TalkBackListener;
 import org.edx.mobile.logger.Logger;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
+import org.edx.mobile.model.notification.NotificationTask;
 import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.myCourse.ParticularCourseTask;
 import org.edx.mobile.programs.MyProgramListModel;
 import org.edx.mobile.programs.MyProgramTags;
+import org.edx.mobile.programs.NotificationModel;
 import org.edx.mobile.programs.ProgramTask;
 import org.edx.mobile.programs.Programs;
 import org.edx.mobile.programs.ResumeCourse;
@@ -76,6 +82,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import de.greenrobot.event.EventBus;
 
@@ -95,8 +104,6 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     private MyProgramListAdapter myProgramListAdapter;
     private static final int REQUEST_SHOW_COURSE_UNIT_DETAIL = 0;
     private SpeechToTextHelper speechToTextHelper;
-
-    private MyAccessibilityService mAccessibilityService;
     IntentProgramClassifier classifier;
     private TextToSpeechHelper textToSpeechHelper;
 
@@ -119,6 +126,10 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
 
     private ClipboardService clipboardService;
     MenuItem menuItem;
+
+    MenuItem menuItemNotification;
+
+    NotificationModel notificationModelData;
 
     ActivityProvider activityProvider;
 
@@ -207,8 +218,6 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
 
         if (menuItem != null) {
             menuItem.setVisible(true);
-
-            //setFocusOnMic();
         }
 
 
@@ -237,9 +246,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
         if(checkDialogBox()){
             showDialog();
         }
-
-
-
+        getNotification();
 
         return binding.getRoot();
     }
@@ -278,9 +285,15 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
         }
         else {
             setFocusOnMic();
+        }
+        MenuItem itemNotification = menu.findItem(R.id.menu_item_notification);
+        menuItemNotification=itemNotification;
+        if(notificationModelData!=null){
+            enableNotification(notificationModelData);
+        }
+        else{
 
         }
-
 
         /*if (menuItemView != null) {
             menuItemView.findViewById(R.id.action_view_icon).setVisibility(View.GONE);
@@ -525,15 +538,13 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     }
 
     private void setFocusOnMic(){
-        if (menuItem != null) {
+       /* if (menuItem != null) {
 
             if (menuItemView != null) {
                 menuItemView.findViewById(R.id.action_view_icon).setVisibility(View.VISIBLE);
                 menuItemView.findViewById(R.id.action_view_icon).setFocusable(true);
                 menuItemView.findViewById(R.id.action_view_icon).setFocusableInTouchMode(true);
-
-                menuItemView.findViewById(R.id.action_view_icon).requestFocus();
-                menuItemView.findViewById(R.id.action_view_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_HOVER_ENTER);
+                menuItemView.findViewById(R.id.action_view_icon).setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
                 menuItemView.findViewById(R.id.action_view_icon).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -541,20 +552,20 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                     }
                 });
 
-                //menuItemView.requestFocus();
-                //  menuItemView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+//                 menuItemView.findViewById(R.id.action_view_icon).requestFocus();
+//                 menuItemView.findViewById(R.id.action_view_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_HOVER_ENTER);
+
+                menuItemView.findViewById(R.id.action_view_icon).requestFocus();
+                menuItemView.findViewById(R.id.action_view_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
             } else {
 
                 Log.e(TAG, "Action view for menu item is null");
             }
-            /*if (myProgramListData == null||myProgramListData.isEmpty()) {
-                menuItem.setVisible(false);
-                menuItemView.findViewById(R.id.action_view_icon).setVisibility(View.GONE);
-            }*/
+
         } else {
 
             Log.e(TAG, "Menu item not found");
-        }
+        }*/
 
     }
 
@@ -890,16 +901,15 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
         alert.getWindow().getDecorView().setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
 
         // Set onCancelListener to handle dismissal when the user clicks outside
-        alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+        /*alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                alert.dismiss();
-
                 setFocusOnMic();
+                alert.dismiss();
                 // Execute your function when the user clicks outside the dialog
                // onMicButtonClick();
             }
-        });
+        });*/
 
         LinearLayout linearLayout=dialogView.findViewById(R.id.text_dialog_layout);
 
@@ -910,13 +920,99 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
         titleTextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                alert.getWindow().getDecorView().setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS);
                 alert.dismiss();
-                setFocusOnMic();
+
+                Runnable task = new Runnable() {
+                    @Override
+                    public void run() {
+                        setFocusOnMic();
+                    }
+                };
+                final ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor();
+                worker.schedule(task, 1, TimeUnit.SECONDS);
             }
         });
 
         alert.show();
+    }
+
+
+
+    public void getNotification() {
+
+
+        try {
+            NotificationTask particularTask = new NotificationTask(getContext(),1) {
+                @Override
+                public void onSuccess(@NonNull NotificationModel result) {
+                    try {
+                        if (result != null) {
+                            // Handle successful response
+                            NotificationModel data = result;
+                            notificationModelData=data;
+                            if (data != null) {
+                                enableNotification(data);
+                                Log.d("NotificationModel",data.toString() );
+                            } else {
+                                Log.e("NotificationModel", "Response body is null");
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e("NotificationModel", "Exception in onResponse", e);
+                    }
+                }
+
+                @Override
+                public void onException(Exception ex) {
+                    if (ex instanceof HttpStatusException &&
+                            ((HttpStatusException) ex).getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                    } else {
+
+                    }
+                }
+            };
+            particularTask.execute();
+
+
+        } catch (Exception e) {
+            Log.e("enrolledCoursesResponses", "Exception in getParticularCourse", e);
+        }
+    }
+
+    void enableNotification(NotificationModel notificationModel){
+
+        if(menuItemNotification!=null) {
+            menuItemNotification.setActionView(R.layout.custum_notification_menu_icon);
+            View notificationMenuItemView = menuItemNotification.getActionView();
+            if(!notificationModel.getData().isEmpty()){
+                notificationMenuItemView.findViewById(R.id.bell_icon).requestFocus();
+                notificationMenuItemView.findViewById(R.id.bell_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+            }
+
+            RelativeLayout relativeLayoutNotification= notificationMenuItemView.findViewById(R.id.custom_notification_bell_icon_relativeLayout);
+
+            ViewCompat.setAccessibilityDelegate(relativeLayoutNotification, new AccessibilityDelegateCompat() {
+                @Override
+                public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfoCompat info) {
+                    super.onInitializeAccessibilityNodeInfo(host, info);
+                    host.setLongClickable(false);
+                    String notificationButton=getString(R.string.notification_button);
+                    info.setContentDescription(notificationButton+" "+notificationModel.getUnreadCount());
+
+                }
+            });
+            notificationMenuItemView.findViewById(R.id.bell_icon).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    environment.getRouter().showNotificationActivity(getActivity(), notificationModel);
+                }
+            });
+            notificationMenuItemView.findViewById(R.id.bell_icon).setVisibility(View.VISIBLE);
+            notificationMenuItemView.findViewById(R.id.notification_count).setVisibility(View.VISIBLE);
+            TextView notificationCount= notificationMenuItemView.findViewById(R.id.notification_count);
+            notificationCount.setText(String.valueOf(notificationModel.getUnreadCount()));
+        }
     }
 
 }

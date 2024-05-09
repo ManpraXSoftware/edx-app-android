@@ -1,5 +1,8 @@
 package org.edx.mobile.view;
 
+import android.app.Activity;
+import android.app.Notification;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
@@ -21,6 +25,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
@@ -30,13 +35,21 @@ import org.edx.mobile.base.BaseFragmentActivity;
 import org.edx.mobile.clipboard.ClipboardService;
 import org.edx.mobile.clipboard.ClipboardServiceHolder;
 import org.edx.mobile.deeplink.ScreenDef;
+import org.edx.mobile.http.HttpStatus;
+import org.edx.mobile.http.HttpStatusException;
 import org.edx.mobile.launcher.WhatsAppLauncher;
+import org.edx.mobile.model.api.EnrolledCoursesResponse;
+import org.edx.mobile.model.notification.NotificationTask;
 import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.prefs.LoginPrefs;
+import org.edx.mobile.myCourse.ParticularCourseTask;
+import org.edx.mobile.programs.NotificationModel;
 import org.edx.mobile.util.Config;
 import org.edx.mobile.util.IntentFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.edx.mobile.view.Router.EXTRA_PATH_ID;
@@ -66,6 +79,9 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
     FloatingActionButton floatingActionButton;
 
     private ClipboardService clipboardService ;
+    NotificationModel notificationModel;
+
+    MenuItem menuItemNotification;
 
 
 
@@ -164,6 +180,7 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
             }
         });
         copyTextDataByLongPress();
+       // getNotification();
 
     }
 
@@ -178,6 +195,7 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
         getMenuInflater().inflate(R.menu.my_courses, menu);
 
         menu.findItem(R.id.menu_item_voice).setVisible(true);
+        menu.findItem(R.id.menu_item_notification).setVisible(true);
         menu.findItem(R.id.menu_item_account).setVisible(true);
         menu.findItem(R.id.menu_item_search).setVisible(true);
         menu.findItem(R.id.menu_item_whatsapp).setVisible(true);
@@ -189,6 +207,18 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
         View voiceActionView = whatsappMenuItem.getActionView();
         voiceActionView.findViewById(R.id.action_view_icon).setVisibility(View.VISIBLE);
 
+        MenuItem notificationMenuItem = menu.findItem(R.id.menu_item_notification);
+
+        menuItemNotification=notificationMenuItem;
+
+        // Set custom action view for voice menu item
+        notificationMenuItem.setActionView(R.layout.custum_notification_menu_icon);
+        View notificationMenuItemView = notificationMenuItem.getActionView();
+        notificationMenuItemView.findViewById(R.id.bell_icon).setVisibility(View.GONE);
+        notificationMenuItemView.findViewById(R.id.notification_count).setVisibility(View.GONE);
+
+
+
         menu.findItem(R.id.menu_item_voice).setIcon(
                 new IconDrawable(this, FontAwesomeIcons.fa_microphone)
                         .colorRes(this, R.color.black)
@@ -197,10 +227,12 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
                 new IconDrawable(this, FontAwesomeIcons.fa_search)
                         .colorRes(this, R.color.black)
                         .actionBarSize(this));
+
         menu.findItem(R.id.menu_item_account).setIcon(
                 new IconDrawable(this, FontAwesomeIcons.fa_user)
                         .colorRes(this, R.color.black)
                         .actionBarSize(this));
+
         menu.findItem(R.id.menu_item_whatsapp).setIcon(
                 new IconDrawable(this, FontAwesomeIcons.fa_whatsapp)
                         .colorRes(this, R.color.black)
@@ -221,6 +253,10 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.main_fragment, seachScreenFragment, SeachScreenFragment.TAG).addToBackStack(SeachScreenFragment.TAG)
                         .commit();*/
+                return true;
+            }
+            case R.id.menu_item_notification:{
+                environment.getRouter().showNotificationActivity(this,notificationModel);
                 return true;
             }
 
@@ -272,6 +308,8 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
                 .replace(R.id.main_fragment, fragment, tag)
                 .commit();
     }
+
+
 
     @Override
     public void onClick() {

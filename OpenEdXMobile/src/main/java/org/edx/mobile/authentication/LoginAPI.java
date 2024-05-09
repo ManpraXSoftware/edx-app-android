@@ -24,6 +24,8 @@ import org.edx.mobile.model.api.RegisterResponseFieldError;
 import org.edx.mobile.module.analytics.AnalyticsRegistry;
 import org.edx.mobile.module.notification.NotificationDelegate;
 import org.edx.mobile.module.prefs.LoginPrefs;
+import org.edx.mobile.programs.NotificationModel;
+import org.edx.mobile.programs.NotificationReadModel;
 import org.edx.mobile.programs.Programs;
 import org.edx.mobile.util.Config;
 import org.edx.mobile.util.observer.BasicObservable;
@@ -122,6 +124,16 @@ public class LoginAPI {
     }
 
     @NonNull
+    public Response<NotificationModel> getNotification(int pageIndex) throws IOException {
+        return loginService.getNotificationTask(String.valueOf(pageIndex)).execute();
+    }
+
+    @NonNull
+    public Response<NotificationReadModel> getReadNotification(int id) throws IOException {
+        return loginService.getNotificationReadTask(String.valueOf(id)).execute();
+    }
+
+    @NonNull
     public Response<List<EnrolledCoursesResponse>> getMyCurses(String auth, String program_uuid,String username,String language) throws IOException {
         return loginService.getMyCourses(program_uuid,username,language).execute();
     }
@@ -191,6 +203,19 @@ public class LoginAPI {
         final Response< ArrayList<EnrolledCoursesResponse>> responsePrograms = getParticularCourse(userId,courseId);
         return responsePrograms.body();
     }
+
+    @NonNull
+    public NotificationModel getNotificationTask(int pageIndex) throws Exception {
+        final Response<NotificationModel> responsePrograms = getNotification(pageIndex);
+        return responsePrograms.body();
+    }
+
+    @NonNull
+    public NotificationReadModel getNotificationReadTask(int id) throws Exception {
+        final Response<NotificationReadModel> responsePrograms = getReadNotification(id);
+        return responsePrograms.body();
+    }
+
 
     @NonNull
     public List<EnrolledCoursesResponse> getMyCourses(String auth,String program_uuid, String username,String language) throws Exception {

@@ -17,6 +17,8 @@ import org.edx.mobile.model.api.ProfileModel;
 import org.edx.mobile.model.api.ResetPasswordResponse;
 import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.module.registration.model.RegistrationDescription;
+import org.edx.mobile.programs.NotificationModel;
+import org.edx.mobile.programs.NotificationReadModel;
 import org.edx.mobile.programs.Programs;
 
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -45,6 +48,8 @@ import static org.edx.mobile.http.constants.ApiConstants.URL_MY_COURSES;
 import static org.edx.mobile.http.constants.ApiConstants.URL_MY_COURSES_MULTILINGUAL_TRANSLATION;
 import static org.edx.mobile.http.constants.ApiConstants.URL_MY_PROGRAMS;
 import static org.edx.mobile.http.constants.ApiConstants.URL_MY_USER_INFO;
+import static org.edx.mobile.http.constants.ApiConstants.URL_NOTIFICATION;
+import static org.edx.mobile.http.constants.ApiConstants.URL_NOTIFICATION_READ;
 import static org.edx.mobile.http.constants.ApiConstants.URL_PARTICULAR_COURSE;
 
 public interface LoginService {
@@ -170,6 +175,14 @@ public interface LoginService {
     @GET(URL_PARTICULAR_COURSE)
     Call<ArrayList<EnrolledCoursesResponse>> getParticularCourseTask(@Path("userId") String userId,
                                                                      @Query("course_id") String courseId);
+
+    @NonNull
+    @GET(URL_NOTIFICATION)
+    Call<NotificationModel> getNotificationTask(@Query("p") String courseId);
+
+    @NonNull
+    @PUT(URL_NOTIFICATION_READ)
+    Call<NotificationReadModel> getNotificationReadTask(@Path("iD") String iD);
 
     @NonNull
     @GET(URL_MY_COURSES)
