@@ -538,7 +538,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     }
 
     private void setFocusOnMic(){
-       /* if (menuItem != null) {
+       if (menuItem != null) {
 
             if (menuItemView != null) {
                 menuItemView.findViewById(R.id.action_view_icon).setVisibility(View.VISIBLE);
@@ -555,8 +555,8 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
 //                 menuItemView.findViewById(R.id.action_view_icon).requestFocus();
 //                 menuItemView.findViewById(R.id.action_view_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_HOVER_ENTER);
 
-                menuItemView.findViewById(R.id.action_view_icon).requestFocus();
-                menuItemView.findViewById(R.id.action_view_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+     //           menuItemView.findViewById(R.id.action_view_icon).requestFocus();
+  //              menuItemView.findViewById(R.id.action_view_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
             } else {
 
                 Log.e(TAG, "Action view for menu item is null");
@@ -565,7 +565,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
         } else {
 
             Log.e(TAG, "Menu item not found");
-        }*/
+        }
 
     }
 
@@ -985,9 +985,11 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
         if(menuItemNotification!=null) {
             menuItemNotification.setActionView(R.layout.custum_notification_menu_icon);
             View notificationMenuItemView = menuItemNotification.getActionView();
-            if(!notificationModel.getData().isEmpty()){
-                notificationMenuItemView.findViewById(R.id.bell_icon).requestFocus();
-                notificationMenuItemView.findViewById(R.id.bell_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+            System.out.println("HIHIHIHIHI ");
+            if(notificationModel.getUnreadCount()>0){
+                System.out.println("Oye oye");
+                notificationMenuItemView.findViewById(R.id.custom_notification_bell_icon_relativeLayout).requestFocus();
+                notificationMenuItemView.findViewById(R.id.custom_notification_bell_icon_relativeLayout).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
             }
 
             RelativeLayout relativeLayoutNotification= notificationMenuItemView.findViewById(R.id.custom_notification_bell_icon_relativeLayout);
@@ -998,14 +1000,20 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                     super.onInitializeAccessibilityNodeInfo(host, info);
                     host.setLongClickable(false);
                     String notificationButton=getString(R.string.notification_button);
-                    info.setContentDescription(notificationButton+" "+notificationModel.getUnreadCount());
+                    info.setContentDescription(notificationButton+" "+notificationModel.getUnreadCount()+", . , . , , "+"Unread");
 
+                }
+            });
+            notificationMenuItemView.findViewById(R.id.custom_notification_bell_icon_relativeLayout).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    environment.getRouter().showNotificationActivity(getActivity(), notificationModel, loginPrefs.getUsername());
                 }
             });
             notificationMenuItemView.findViewById(R.id.bell_icon).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    environment.getRouter().showNotificationActivity(getActivity(), notificationModel);
+                    environment.getRouter().showNotificationActivity(getActivity(), notificationModel, loginPrefs.getUsername());
                 }
             });
             notificationMenuItemView.findViewById(R.id.bell_icon).setVisibility(View.VISIBLE);

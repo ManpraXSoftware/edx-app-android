@@ -38,6 +38,7 @@
                 android:contentDescription="@string/label_close"
                 android:padding="@dimen/widget_margin"
                 android:text="{fa-close}"
+                android:importantForAccessibility="yes"
                 android:textColor="@color/white"
                 android:textSize="@dimen/edx_x_large" />
         </FrameLayout>

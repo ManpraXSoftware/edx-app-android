@@ -3,6 +3,7 @@
     android:layout_width="wrap_content"
     android:id="@+id/custom_notification_bell_icon_relativeLayout"
     android:importantForAccessibility="yes"
+    android:padding="10dp"
     android:layout_height="wrap_content">
 
     <ImageButton

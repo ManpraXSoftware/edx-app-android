@@ -2,6 +2,8 @@ package org.edx.mobile.programs;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.edx.mobile.model.api.EnrolledCoursesResponse;
+
 import java.util.List;
 
 public class NotificationModel {
@@ -73,6 +75,9 @@ public class NotificationModel {
         @SerializedName("course_id")
         private String courseId;
 
+        @SerializedName("course")
+        EnrolledCoursesResponse enrolledCoursesResponse;
+
         public int getId() {
             return id;
         }
@@ -121,9 +126,19 @@ public class NotificationModel {
             this.createdAt = createdAt;
         }
 
-        public String getCourse() {
+        public String getCourseId() {
             return courseId;
         }
+
+        public EnrolledCoursesResponse getEnrolledCoursesResponse(){
+            return enrolledCoursesResponse;
+        }
+
+        public void setEnrolledCoursesResponse(EnrolledCoursesResponse enrolledCoursesResponse){
+            this.enrolledCoursesResponse=enrolledCoursesResponse;
+        }
+
+
 
         public void setCourse(String courseId) {
             this.courseId = courseId;

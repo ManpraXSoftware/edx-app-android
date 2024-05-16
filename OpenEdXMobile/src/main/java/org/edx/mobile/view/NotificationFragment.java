@@ -1,17 +1,21 @@
 
 package org.edx.mobile.view;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.inject.Inject;
 
@@ -24,19 +28,19 @@ import org.edx.mobile.model.api.CourseUpgradeResponse;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
 import org.edx.mobile.model.notification.NotificationReadTask;
 import org.edx.mobile.model.notification.NotificationTask;
-import org.edx.mobile.module.prefs.LoginPrefs;
-import org.edx.mobile.myCourse.ParticularCourseTask;
-import org.edx.mobile.programs.MyProgramListModel;
 import org.edx.mobile.programs.NotificationModel;
 import org.edx.mobile.programs.NotificationReadModel;
 import org.edx.mobile.util.GestureListener;
 import org.edx.mobile.view.adapters.NotificationAdapter;
+import org.edx.mobile.view.custom.IconProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.AccessibilityDelegateCompat;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.accessibility.AccessibilityManagerCompat;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -60,26 +64,39 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
     private NotificationAdapter notificationAdapterOlder;
     NotificationModel notificationModel;
 
+
     ImageButton imageCloseButton;
 
-    LinearLayout linearLayout;
+    LinearLayout linearLayoutViewMoreNotification;
+
+    LinearLayout linearLayoutViewPreviousNotification;
+
+    LinearLayout linearLayoutNew;
+
+    LinearLayout linearLayoutViewed;
 
     TextView textViewNotification;
+
+    IconProgressBar iconProgressBarNotification;
 
     @Inject
     protected IEdxEnvironment environment;
 
-    @Inject
-    LoginPrefs loginPrefs;
+    boolean clickEnableFlag=true;
+
+    private Handler handler = new Handler();
+
+    String username;
 
     ArrayList<EnrolledCoursesResponse> enrolledCoursesResponses = new ArrayList<>();
 
     private static final int REQUEST_SHOW_COURSE_UNIT_DETAIL = 0;
 
-    int pageIndex=0;
+    int pageIndex=2;
 
-    NotificationFragment(NotificationModel notificationModel){
+    NotificationFragment(NotificationModel notificationModel,String username){
         this.notificationModel=notificationModel;
+        this.username=username;
     }
 
     @Nullable
@@ -88,9 +105,13 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
         notificationRecyclerViewNew = view.findViewById(R.id.notificationRecyclerNew);
         notificationRecyclerViewOlder = view.findViewById(R.id.notificationRecyclerViewOlder);
-        imageCloseButton=view.findViewById(R.id.close_btn);
+        imageCloseButton=view.findViewById(R.id.notification_close_btn);
         textViewNotification=view.findViewById(R.id.textview_notification);
-        linearLayout=view.findViewById(R.id.notification_more_linear_layout);
+        linearLayoutViewMoreNotification =view.findViewById(R.id.notification_more_linear_layout);
+        linearLayoutViewPreviousNotification=view.findViewById(R.id.notification_previous_linear_layout);
+        iconProgressBarNotification=view.findViewById(R.id.icon_progress_notification);
+        linearLayoutNew=view.findViewById(R.id.new_layout);
+        linearLayoutViewed=view.findViewById(R.id.viewed_layout);
         return view;
     }
 
@@ -105,21 +126,34 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
                 getActivity().finish();
             }
         });
+        buttonVisibilityCheck();
 
-        linearLayout.setOnClickListener(new View.OnClickListener() {
+        linearLayoutViewMoreNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(notificationModel.isNext()){
-                    getNotification();
+                if(notificationModel.isNext()&&clickEnableFlag){
+                    pageIndex+=1;
+                    clickEnableFlag=false;
+                    getNotification(pageIndex);
                 }
             }
         });
-        ViewCompat.setAccessibilityDelegate(linearLayout, new AccessibilityDelegateCompat() {
+        linearLayoutViewPreviousNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(notificationModel.isPrevious()&&clickEnableFlag){
+                    pageIndex-=1;
+                    clickEnableFlag=false;
+                    getNotification(pageIndex);
+                }
+            }
+        });
+        ViewCompat.setAccessibilityDelegate(linearLayoutViewMoreNotification, new AccessibilityDelegateCompat() {
             @Override
             public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfoCompat info) {
                 super.onInitializeAccessibilityNodeInfo(host, info);
                 host.setLongClickable(false);
-                info.setContentDescription("button");
+                info.setContentDescription(getString(R.string.view_more_notification)+" button");
             }
         });
 
@@ -128,9 +162,30 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
             public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfoCompat info) {
                 super.onInitializeAccessibilityNodeInfo(host, info);
                 host.setLongClickable(false);
-                info.setContentDescription(textViewNotification.getText()+" heading");
+                info.setContentDescription(textViewNotification.getText()+ " Heading");
             }
         });
+        notificationRecyclerViewNew.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+        notificationRecyclerViewOlder.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+        textViewNotification.requestFocus();
+        textViewNotification.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Context context = getActivity().getApplicationContext();
+
+                AccessibilityManager accessibilityManager = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+                if (accessibilityManager != null) {
+                    System.out.println("COOOOOLLLLLLLLLLLLLLLLLLLLLLLLL");
+                    accessibilityManager.interrupt();
+                }
+                textViewNotification.requestFocus();
+                textViewNotification.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+                notificationRecyclerViewNew.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
+                notificationRecyclerViewOlder.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
+
+            }
+        }, 1500);
         setGestureListeners(textViewNotification);
 
         notificationAdapterNew = new NotificationAdapter(getContext(),this::navigateToAnotherScreen);
@@ -141,6 +196,7 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
         notificationRecyclerViewOlder.setLayoutManager(new LinearLayoutManager(requireContext()));
         notificationRecyclerViewOlder.setAdapter(notificationAdapterOlder);
 
+        iconProgressBarNotification.setVisibility(View.GONE);
         setAdapterData(notificationModel);
 
     }
@@ -157,6 +213,19 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
             else {
                 notificationDataViewed.add(notificationData);
             }
+        }
+        if(notificationDataNew.isEmpty()) {
+            linearLayoutNew.setVisibility(View.GONE);
+
+        }
+        else{
+            linearLayoutNew.setVisibility(View.VISIBLE);
+        }
+        if (notificationDataViewed.isEmpty()){
+            linearLayoutViewed.setVisibility(View.GONE);
+        }
+        else{
+            linearLayoutViewed.setVisibility(View.VISIBLE);
         }
         notificationAdapterNew.setNotifications(notificationDataNew);
         notificationAdapterOlder.setNotifications(notificationDataViewed);
@@ -176,12 +245,13 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
     }
 
     void checkTypeNotification(NotificationModel.NotificationData notificationData){
+        System.out.println("HIHIHIHIHIHIHIHIHIH checkTypeNotification");
         if(notificationData.getNotificationType().equals("general")){
             enrolledStatus(notificationData);
         }
         else {
-
-            getParticularCourse(notificationData);
+            markNotificationRead(notificationData,true);
+           // getParticularCourse(notificationData);
         }
     }
 
@@ -195,7 +265,7 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.label_ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        markNotificationRead(notificationData.getId());
+                        markNotificationRead(notificationData,false);
                         dialog.dismiss();
                     }
                 });
@@ -206,13 +276,15 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
         alert.show();
     }
 
-    public void getParticularCourse(NotificationModel.NotificationData notificationData) {
-        String courseId="course-v1:VisionEmpower+VE_TIK_Math_G1-02+2019";
+    /*public void getParticularCourse(NotificationModel.NotificationData notificationData) {
+        System.out.println("HIHIHIHIHIHIHIHIHIH getParticularCourse");
+        iconProgressBarNotification.setVisibility(View.VISIBLE);
         try {
-            ParticularCourseTask particularCourseTask = new ParticularCourseTask(getActivity().getApplicationContext(),"sushant@gmail.com",
-                    courseId) {
+            ParticularCourseTask particularCourseTask = new ParticularCourseTask(getActivity().getApplicationContext(), username,
+                    notificationData.getCourse() ) {
                 @Override
                 public void onSuccess(@NonNull ArrayList<EnrolledCoursesResponse> result) {
+                    iconProgressBarNotification.setVisibility(View.GONE);
                     try {
                         if (result != null) {
                             ArrayList<EnrolledCoursesResponse> data = result;
@@ -221,14 +293,13 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
                                 if (enrolledCoursesResponses != null) {
                                     for (EnrolledCoursesResponse enrolledCoursesResponse : enrolledCoursesResponses) {
                                         if (enrolledCoursesResponse.getCourse() != null) {
-                                            if (enrolledCoursesResponse.getCourse().getId().equals(courseId)) {
+                                            if (enrolledCoursesResponse.getCourse().getId().equals(notificationData.getCourse())) {
                                                 markNotificationRead(notificationData.getId());
                                                 courseNavigation(notificationData,enrolledCoursesResponse);
                                             }
                                         }
                                     }
                                 }
-                                Log.d("enrolledCoursesResponses", enrolledCoursesResponses.get(0).getCourse().getId() + "" + enrolledCoursesResponses.get(0).getCourse().getName());
                             } else {
                                 Log.e("enrolledCoursesResponses", "Response body is null");
                             }
@@ -251,34 +322,39 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
 
 
         } catch (Exception e) {
+            iconProgressBarNotification.setVisibility(View.GONE);
             Log.e("enrolledCoursesResponses", "Exception in getParticularCourse", e);
         }
-    }
+    }*/
 
-    public void getNotification() {
+    public void getNotification(int pageIndex) {
+
         try {
             NotificationTask particularTask = new NotificationTask(getActivity().getApplicationContext(),pageIndex) {
                 @Override
                 public void onSuccess(@NonNull NotificationModel result) {
                     try {
                         if (result != null) {
+                            clickEnableFlag=true;
                             NotificationModel data = result;
                             notificationModel=data;
-                            pageIndex+=1;
                             if (data != null) {
+                                buttonVisibilityCheck();
                                 setAdapterData(data);
-                                Log.d("enrolledCoursesResponses",data.toString() );
+                                Log.d("NotificationModel",data.toString() );
                             } else {
-                                Log.e("enrolledCoursesResponses", "Response body is null");
+                                Log.e("NotificationModel", "Response body is null");
                             }
                         }
                     } catch (Exception e) {
-                        Log.e("enrolledCoursesResponses", "Exception in onResponse", e);
+                        clickEnableFlag=true;
+                        Log.e("NotificationModel", "Exception in onResponse", e);
                     }
                 }
 
                 @Override
                 public void onException(Exception ex) {
+                    clickEnableFlag=true;
                     if (ex instanceof HttpStatusException &&
                             ((HttpStatusException) ex).getStatusCode() == HttpStatus.UNAUTHORIZED) {
                     } else {
@@ -290,24 +366,64 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
 
 
         } catch (Exception e) {
-            Log.e("enrolledCoursesResponses", "Exception in getParticularCourse", e);
+            Log.e("NotificationModel", "Exception in getParticularCourse", e);
         }
     }
 
+    void buttonVisibilityCheck(){
+        if(notificationModel.isNext()){
+            linearLayoutViewMoreNotification.setVisibility(View.VISIBLE);
+        }
+        else {
+            linearLayoutViewMoreNotification.setVisibility(View.GONE);
+        }
+        if(notificationModel.isPrevious()){
+            linearLayoutViewPreviousNotification.setVisibility(View.VISIBLE);
+        }
+        else {
+            linearLayoutViewPreviousNotification.setVisibility(View.GONE);
+        }
+    }
 
-    public void markNotificationRead(int id) {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("JOJOJOJOJOJOJOJOJOJOJOJOJO");
+        if(notificationModel!=null){
+            System.out.println("MOMOMOMOMOMOMOMOMOMOMOMOMOMOMO");
+            setAdapterData(notificationModel);
+        }
 
+    }
+
+
+
+    public void markNotificationRead(NotificationModel.NotificationData notificationDataModel,boolean navigateToWebView) {
             try {
-                NotificationReadTask particularTask = new NotificationReadTask(getActivity().getApplicationContext(),id) {
+                NotificationReadTask particularTask = new NotificationReadTask(getActivity().getApplicationContext(),notificationDataModel.getId()) {
                     @Override
                     public void onSuccess(@NonNull NotificationReadModel result) {
                         try {
+                            System.out.println(result+" HEYEYEYYEYEYEYEYE "+navigateToWebView);
                             if (result != null) {
                                 // Handle successful response
                                 NotificationReadModel data = result;
-
+                                int unReadCount=notificationModel.getUnreadCount()-1;
+                                if(unReadCount<0){
+                                    unReadCount=0;
+                                }
+                                for(NotificationModel.NotificationData notificationDataMark:notificationModel.getData()){
+                                    if(notificationDataMark.getCourseId()==notificationDataModel.getCourseId()){
+                                        notificationDataMark.setRead(true);
+                                        break;
+                                    }
+                                }
+                                notificationModel.setUnreadCount(unReadCount);
                                 if (data != null) {
-
+                                    if(navigateToWebView) {
+                                        courseNavigation(notificationDataModel);
+                                    }
                                     Log.d("NotificationReadModel",data.toString() );
                                 } else {
                                     Log.e("NotificationReadModel", "Response body is null");
@@ -320,6 +436,7 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
 
                     @Override
                     public void onException(Exception ex) {
+                        Log.e("NotificationReadModel", "Exception in onResponse", ex);
                         if (ex instanceof HttpStatusException &&
                                 ((HttpStatusException) ex).getStatusCode() == HttpStatus.UNAUTHORIZED) {
                         } else {
@@ -333,18 +450,21 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
             } catch (Exception e) {
                 Log.e("NotificationReadModel", "Exception in getParticularCourse", e);
             }
-        }
+        System.out.println("KOKOKO end");
 
-        public void courseNavigation(NotificationModel.NotificationData notificationData,EnrolledCoursesResponse enrolledCoursesResponses){
-        if (notificationData.getCourse().contains("sequential")) {
+    }
+
+        public void courseNavigation(NotificationModel.NotificationData notificationData){
+        System.out.println("SPSSOSOOSOSOS courseNavigation "+notificationData.getEnrolledCoursesResponse());
+        if (notificationData.getCourseId().contains("sequential")) {
                 showCourseContainerOutline(NotificationFragment.this,
-                        REQUEST_SHOW_COURSE_UNIT_DETAIL, enrolledCoursesResponses, null,
-                        notificationData.getCourse(), null, false);
+                        REQUEST_SHOW_COURSE_UNIT_DETAIL, notificationData.getEnrolledCoursesResponse(), null,
+                        notificationData.getCourseId(), null, false);
             } else {
 
                 showCourseUnitDetail(NotificationFragment.this,
-                        REQUEST_SHOW_COURSE_UNIT_DETAIL,enrolledCoursesResponses, null,
-                        notificationData.getCourse(), false);
+                        REQUEST_SHOW_COURSE_UNIT_DETAIL, notificationData.getEnrolledCoursesResponse(), null,
+                        notificationData.getCourseId(), false);
             }
 
     }

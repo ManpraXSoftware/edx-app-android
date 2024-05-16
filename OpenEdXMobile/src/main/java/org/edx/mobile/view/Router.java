@@ -485,8 +485,8 @@ public class Router {
         activity.startActivity(SeachScreenActivity.newIntent(activity, null));
     }
 
-    public void showNotificationActivity(@NonNull Activity activity, NotificationModel notificationModel) {
-        activity.startActivity(NotificationActivity.newIntent(activity,notificationModel));
+    public void showNotificationActivity(@NonNull Activity activity, NotificationModel notificationModel,String username) {
+        activity.startActivity(NotificationActivity.newIntent(activity,notificationModel,username));
     }
 
     public void showProgramsActivity(@NonNull Activity activity, String programName, String program_uuid) {

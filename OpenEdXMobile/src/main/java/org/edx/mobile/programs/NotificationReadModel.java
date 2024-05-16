@@ -6,12 +6,12 @@ import java.util.List;
 
 public class NotificationReadModel {
         @SerializedName("message")
-        private int message;
-        public int getId() {
+        private String message;
+        public String getMessage() {
             return message;
         }
 
-        public void setId(int message) {
+        public void setMessage(String message) {
             this.message = message;
         }
 }

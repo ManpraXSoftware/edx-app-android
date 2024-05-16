@@ -383,8 +383,8 @@ android {
         minSdkVersion MIN_SDK_VERSION
         targetSdkVersion TARGET_SDK_VERSION
 
-        versionCode 7000005/*getVersionCode()*/
-        versionName "7.0.2"/*getVersionName()*/
+        versionCode 7000007/*getVersionCode()*/
+        versionName "7.0.3"/*getVersionName()*/
         archivesBaseName = "Subodha $versionCode $versionName"
 
         renderscriptTargetApi 22

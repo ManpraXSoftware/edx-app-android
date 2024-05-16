@@ -255,10 +255,7 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
                         .commit();*/
                 return true;
             }
-            case R.id.menu_item_notification:{
-                environment.getRouter().showNotificationActivity(this,notificationModel);
-                return true;
-            }
+
 
             case R.id.menu_item_whatsapp:{
                 openWhatsAppLink();

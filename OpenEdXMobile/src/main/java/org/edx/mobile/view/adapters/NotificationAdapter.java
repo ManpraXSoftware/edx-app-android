@@ -47,7 +47,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.notificationTitleTextView.setText(notification.getTitle());
         holder.notificationDescriptionTextView.setText(notification.getMessage());
 
-        String notificationCardString=notification.getTitle()+" "+notification.getMessage();
+        String notificationCardString=notification.getTitle()+", . , . , , "+notification.getMessage();
 
         holder.notificationCardCardView.setContentDescription(notificationCardString);
 
@@ -58,7 +58,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             }
         });
 
-        /*holder.notificationTitleTextView.setOnClickListener(new View.OnClickListener() {
+        holder.notificationTitleTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onNavigateListener.navigateToAnotherScreen(notification);
@@ -69,7 +69,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             public void onClick(View view) {
                 onNavigateListener.navigateToAnotherScreen(notification);
             }
-        });*/
+        });
     }
 
     @Override

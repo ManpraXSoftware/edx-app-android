@@ -849,5 +849,7 @@
  <string name="alert">Alert</string>
  <string name="dailog_feature">Alert  New features added. Now you can search your program through voice command and navigate from any page to Whatsapp discussion group.\nTap on the button to activate it.</string>
  <string name="view_more_notification">View More Notification</string>
+ <string name="view_previous_notification">View Previous Notifications</string>
  <string name="notification_button">Notification Button</string>
+ <string name="new_string">New</string>
 </resources>

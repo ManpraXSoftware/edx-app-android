@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
-
+    android:background="@color/white"
+    android:orientation="vertical"
+   >
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:importantForAccessibility="no"
+        android:fillViewport="true">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,12 +26,13 @@
             android:orientation="vertical">
 
             <ImageButton
-                android:id="@+id/close_btn"
+                android:id="@+id/notification_close_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:layout_marginTop="20dp"
                 android:background="@color/white"
+                android:importantForAccessibility="yes"
                 android:contentDescription="close"
                 android:padding="10dp"
                 android:src="@drawable/ic_baseline_close_24" />
@@ -40,7 +48,19 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_height="wrap_content">
+            <org.edx.mobile.view.custom.IconProgressBar
+                android:id="@+id/icon_progress_notification"
+                android:layout_width="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/new_layout"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -53,7 +73,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="new"
+                        android:text="@string/new_string"
                         android:textColor="@color/grey_text"
                         android:textSize="15dp" />
                 </LinearLayout>
@@ -73,6 +93,7 @@
                 </LinearLayout>
             </LinearLayout>
 
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/notificationRecyclerNew"
                 android:layout_width="match_parent"
@@ -81,6 +102,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/viewed_layout"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -120,27 +142,62 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/notification_more_linear_layout"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="25dp"
-            android:layout_weight="1"
-            android:background="@drawable/logout_background">
 
-            <TextView
-                android:id="@+id/notification_more_text"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|center_vertical"
-                android:text="@string/view_more_notification"
-                android:textColor="@color/language_text_color"
-                android:textSize="13dp"
-                android:textStyle="bold" />
-        </LinearLayout>
 
     </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp"
+        >
+    <!-- View Previous Notifications -->
+    <LinearLayout
+        android:id="@+id/notification_previous_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/logout_background"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-</androidx.core.widget.NestedScrollView>
+        <TextView
+            android:id="@+id/notification_previous_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/view_previous_notification"
+            android:textColor="@color/language_text_color"
+            android:textSize="13sp"
+            android:paddingVertical="8dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- View More Notifications -->
+    <LinearLayout
+        android:id="@+id/notification_more_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/logout_background"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/notification_more_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingVertical="8dp"
+            android:text="@string/view_more_notification"
+            android:textColor="@color/language_text_color"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

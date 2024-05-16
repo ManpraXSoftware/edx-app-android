@@ -18,10 +18,12 @@ import static org.edx.mobile.view.Router.EXTRA_SCREEN_NAME;
 
 public class NotificationActivity extends AppCompatActivity {
     static NotificationModel notificationModel;
+    static String username;
 
-    public static Intent newIntent(Context activity, NotificationModel notificationModelIntent) {
+    public static Intent newIntent(Context activity, NotificationModel notificationModelIntent,String usernameIntent) {
         final Intent intent = new Intent(activity, NotificationActivity.class);
         notificationModel=notificationModelIntent;
+        username=usernameIntent;
         return intent;
     }
 
@@ -30,7 +32,7 @@ public class NotificationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.notificationFragmentContainer, new NotificationFragment(notificationModel))
+                .replace(R.id.notificationFragmentContainer, new NotificationFragment(notificationModel,username))
                 .commit();
     }
 }
