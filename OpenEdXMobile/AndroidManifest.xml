@@ -296,6 +296,11 @@
             android:label="User Account Screen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.NotificationActivity"
+            android:label="Notification Screen"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.TranslucentStatusBar" />
 
         <activity
             android:name=".view.EditUserProfileActivity"

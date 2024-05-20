@@ -778,6 +778,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
 
         }
         else {
+            System.out.println(selectedLanguage+" JOJOJOJOJOJOJOJOJOJO "+topic_name);
             Call<ProgramResponseModel> programResponseModel = courseApi.getProgramResponseWithTopicName(token, selectedLanguage, topic_name);
             programResponseModel.enqueue(new DiscoveryCallback<ProgramResponseModel>() {
                 @Override
