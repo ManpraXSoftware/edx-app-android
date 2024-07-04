@@ -100,6 +100,7 @@ public abstract  class CourseBaseActivity  extends BaseFragmentActivity
         super.onSaveInstanceState(outState);
         outState.putSerializable(Router.EXTRA_COURSE_DATA, courseData);
         outState.putString(Router.EXTRA_COURSE_COMPONENT_ID, courseComponentId);
+
     }
 
     protected void restore(Bundle savedInstanceState) {

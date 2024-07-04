@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Xml.Encoding;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,7 @@ import org.humana.mobile.view.custom.URLInterceptorWebViewClient;
 
 import de.greenrobot.event.EventBus;
 import okhttp3.Request;
+import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectView;
 
 public class CourseHandoutFragment extends BaseFragment
@@ -45,7 +47,7 @@ public class CourseHandoutFragment extends BaseFragment
 
     protected final Logger logger = new Logger(getClass().getName());
 
-//    @InjectExtra(Router.EXTRA_COURSE_DATA)
+    //@InjectExtra(Router.EXTRA_COURSE_DATA)
     private EnrolledCoursesResponse courseData;
 
     @Inject

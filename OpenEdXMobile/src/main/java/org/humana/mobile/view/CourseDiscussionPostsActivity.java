@@ -35,7 +35,7 @@ public class CourseDiscussionPostsActivity extends BaseSingleFragmentActivity {
     @InjectExtra(value = Router.EXTRA_DISCUSSION_TOPIC, optional = true)
     private DiscussionTopic discussionTopic;
 
-    @InjectExtra(Router.EXTRA_COURSE_DATA)
+    //@InjectExtra(Router.EXTRA_COURSE_DATA)
     private EnrolledCoursesResponse courseData;
 
     @Override
@@ -61,6 +61,10 @@ public class CourseDiscussionPostsActivity extends BaseSingleFragmentActivity {
             }
             values.put(Analytics.Keys.TOPIC_ID, topicId);
         }
+
+        if (getIntent() != null && getIntent().getSerializableExtra(Router.EXTRA_COURSE_DATA) != null) {
+            courseData = (EnrolledCoursesResponse) getIntent().getSerializableExtra(Router.EXTRA_COURSE_DATA);
+        }
         environment.getAnalyticsRegistry().trackScreenView(screenName, courseData.getCourse().getId(),
                 actionItem, values);
     }
@@ -76,7 +80,9 @@ public class CourseDiscussionPostsActivity extends BaseSingleFragmentActivity {
 
         // TODO: Move argument setting logic to base class
         // Currently RoboGuice doesn't allowing injecting arguments of a Fragment
+
         if (fragment.getArguments() == null) {
+
             Bundle args = new Bundle();
             args.putSerializable(Router.EXTRA_COURSE_DATA, courseData);
             args.putBoolean(CourseDiscussionPostsThreadFragment.ARG_DISCUSSION_HAS_TOPIC_NAME,

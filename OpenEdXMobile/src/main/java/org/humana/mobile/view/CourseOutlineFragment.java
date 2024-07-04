@@ -260,8 +260,8 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
             final Bundle bundle = savedInstanceState.getBundle(Router.EXTRA_BUNDLE);
             courseData = (EnrolledCoursesResponse) bundle.getSerializable(Router.EXTRA_COURSE_DATA);
             courseComponentId = bundle.getString(Router.EXTRA_COURSE_COMPONENT_ID);
+
             isVideoMode = savedInstanceState.getBoolean(Router.EXTRA_IS_VIDEOS_MODE);
-            isSingleVideoDownload = savedInstanceState.getBoolean("isSingleVideoDownload");
             if (savedInstanceState.containsKey(Router.EXTRA_IS_ON_COURSE_OUTLINE)) {
                 isOnCourseOutline = savedInstanceState.getBoolean(Router.EXTRA_IS_ON_COURSE_OUTLINE);
             } else {
@@ -271,6 +271,7 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
     }
 
     protected CourseComponent getCourseComponent(){
+
         return courseManager.getComponentById(courseData.getCourse().getId(), courseComponentId);
     }
 
@@ -427,9 +428,17 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
                             REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, comp.getId(), null);
 
                     // for analytics update
+                    String displayName="";
+                    if(adapter.selectedUnit!=null){
+                        displayName=adapter.selectedUnit.getDisplayName();
+                    }
+                    String displayNameRoot="";
+                    if(adapter.selectedUnit!=null){
+                        displayNameRoot=adapter.selectedUnit.getRoot().getDisplayName();
+                    }
                     aHelper.addMxAnalytics_db(loginPrefs.getUsername(),
-                            adapter.selectedUnit.getDisplayName(), Action.ViewUnit,
-                            adapter.selectedUnit.getRoot().getDisplayName(), Source.Mobile);
+                            displayName, Action.ViewUnit,
+                            displayNameRoot, Source.Mobile);
 
                 }
                 else
@@ -872,8 +881,10 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
         final Bundle bundle = new Bundle();
         if (courseData != null)
             bundle.putSerializable(Router.EXTRA_COURSE_DATA, courseData);
-        if (courseComponentId != null)
+        if (courseComponentId != null) {
             bundle.putString(Router.EXTRA_COURSE_COMPONENT_ID, courseComponentId);
+
+        }
         outState.putBundle(Router.EXTRA_BUNDLE, bundle);
         outState.putBoolean(Router.EXTRA_IS_VIDEOS_MODE, isVideoMode);
         outState.putBoolean("isSingleVideoDownload", isSingleVideoDownload);
@@ -913,6 +924,7 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
                         final CourseComponent outlineComp = courseManager.getComponentByIdFromAppLevelCache(
                                 courseData.getCourse().getId(), courseComponentId);
                         final String leafCompId = (String) data.getSerializableExtra(Router.EXTRA_COURSE_COMPONENT_ID);
+
                         final CourseComponent leafComp = courseManager.getComponentByIdFromAppLevelCache(
                                 courseData.getCourse().getId(), leafCompId);
                         final BlockPath outlinePath = outlineComp.getPath();

@@ -53,7 +53,7 @@ public class CourseDiscussionTopicsFragment extends OfflineSupportBaseFragment
     @InjectView(R.id.discussion_topics_listview)
     private ListView discussionTopicsListView;
 
-//    @InjectExtra(Router.EXTRA_COURSE_DATA)
+    //@InjectExtra(Router.EXTRA_COURSE_DATA)
     private EnrolledCoursesResponse courseData;
 
     @Inject
@@ -80,6 +80,7 @@ public class CourseDiscussionTopicsFragment extends OfflineSupportBaseFragment
         if (getArguments() != null) {
             courseData = (EnrolledCoursesResponse) getArguments().getSerializable(Router.EXTRA_COURSE_DATA);
         }
+
     }
 
     @Nullable
@@ -142,6 +143,7 @@ public class CourseDiscussionTopicsFragment extends OfflineSupportBaseFragment
         discussionTopicsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 router.showCourseDiscussionPostsForDiscussionTopic(
                         getActivity(),
                         ((DiscussionTopicDepth) parent.getItemAtPosition(position)).getDiscussionTopic(),
@@ -153,6 +155,7 @@ public class CourseDiscussionTopicsFragment extends OfflineSupportBaseFragment
     }
 
     private void getTopicList() {
+
         if (courseData == null){
             return;
         }

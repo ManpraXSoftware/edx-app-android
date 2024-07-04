@@ -3620,7 +3620,7 @@ public class DataManager extends BaseRoboInjector {
                 @Override
                 protected void onSuccess(List<Program> programs) throws Exception {
                     super.onSuccess(programs);
-                    if (programs == null || programs.isEmpty()) {
+                    if (programs == null || programs.isEmpty()){
                         callback.onFailure(new TaException("No programs available"));
                         return;
                     }
@@ -3743,7 +3743,6 @@ public class DataManager extends BaseRoboInjector {
     }
 
     private void getProgramsFromLocal(OnResponseCallback<List<Program>> callback, Exception e) {
-
         new Task<List<Program>>(context) {
             @Override
             public List<Program> call() {

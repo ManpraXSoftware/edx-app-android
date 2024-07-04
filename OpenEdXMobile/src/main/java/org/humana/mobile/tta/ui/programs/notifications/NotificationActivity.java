@@ -3,6 +3,8 @@ package org.humana.mobile.tta.ui.programs.notifications;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.MenuItem;
 
 
@@ -27,15 +29,20 @@ public class NotificationActivity extends BaseVMActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getIntent().getExtras() != null){
-            getBundledData(getIntent().getExtras());
-        } else if (savedInstanceState != null){
-            getBundledData(savedInstanceState);
+        Bundle bundle = null;
+        if (getIntent().getExtras() != null) {
+            bundle = getIntent().getExtras();
+        } else if (savedInstanceState != null) {
+            bundle = savedInstanceState;
         }
 
-
-        savedInstanceState = getIntent().getExtras();
-        assert savedInstanceState != null;
+        if (bundle != null) {
+            getBundledData(bundle);
+        } else {
+            // Handle the case where both getIntent().getExtras() and savedInstanceState are null
+            // For example, you can log an error or provide default behavior
+            Log.e("NotificationActivity", "No data available in Intent extras or savedInstanceState.");
+        }
 
         viewModel = new NotificationViewModel(this);
         binding(R.layout.t_fragment_notifications, viewModel);

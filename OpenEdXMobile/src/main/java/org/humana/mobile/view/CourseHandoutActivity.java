@@ -6,6 +6,8 @@ import org.humana.mobile.R;
 import org.humana.mobile.base.BaseSingleFragmentActivity;
 
 public class CourseHandoutActivity extends BaseSingleFragmentActivity {
+
+
     private Fragment fragment;
 
     @Override
@@ -16,6 +18,8 @@ public class CourseHandoutActivity extends BaseSingleFragmentActivity {
 
     @Override
     public Fragment getFirstFragment() {
-        return new CourseHandoutFragment();
+        CourseHandoutFragment fragment = new CourseHandoutFragment();
+        fragment.setArguments(getIntent().getExtras());
+        return fragment;
     }
 }
