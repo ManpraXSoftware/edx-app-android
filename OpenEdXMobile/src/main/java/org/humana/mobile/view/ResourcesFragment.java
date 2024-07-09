@@ -52,6 +52,7 @@ public class ResourcesFragment extends OfflineSupportBaseFragment {
             @Override
             public void onClick(View v) {
                 if (courseData != null) {
+
                     environment.getRouter().showHandouts(getActivity(), courseData);
                 }
             }

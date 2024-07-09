@@ -204,11 +204,15 @@ public class CourseTabsDashboardFragment extends TabsBaseFragment {
         // Add discussion tab
         if (environment.getConfig().isDiscussionsEnabled() &&
                 !TextUtils.isEmpty(courseData.getCourse().getDiscussionUrl())) {
+            Bundle fragmentArguments = new Bundle();
+
+            fragmentArguments.putSerializable("course_data", courseData);
             items.add(new FragmentItemModel(CourseDiscussionTopicsFragment.class,
-                    getResources().getString(R.string.discussion_title), FontAwesomeIcons.fa_comments_o,
+                    getResources().getString(R.string.discussion_title), FontAwesomeIcons.fa_comments_o,fragmentArguments,
                     new FragmentItemModel.FragmentStateListener() {
                         @Override
                         public void onFragmentSelected() {
+
                             environment.getAnalyticsRegistry().trackScreenView(Analytics.Screens.FORUM_VIEW_TOPICS,
                                     courseData.getCourse().getId(), null, null);
                             setDownloadProgressMenuItemVisibility(false);

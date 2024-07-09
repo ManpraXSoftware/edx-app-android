@@ -204,6 +204,7 @@ public class Router {
         Bundle courseBundle = new Bundle();
         courseBundle.putSerializable(EXTRA_COURSE_DATA, model);
         courseBundle.putSerializable(EXTRA_COURSE_COMPONENT_ID, courseComponentId);
+
         courseBundle.putString(EXTRA_Unit_TYPE, type);
         courseBundle.putString(EXTRA_TITLE, title);
 
@@ -331,6 +332,7 @@ public class Router {
 
     public void showCourseDiscussionPostsForSearchQuery(Activity activity, String query, EnrolledCoursesResponse courseData) {
         Intent showDiscussionPostsIntent = new Intent(activity, CourseDiscussionPostsActivity.class);
+
         showDiscussionPostsIntent.putExtra(EXTRA_COURSE_DATA, courseData);
         showDiscussionPostsIntent.putExtra(EXTRA_SEARCH_QUERY, query);
         showDiscussionPostsIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -339,6 +341,7 @@ public class Router {
 
     public void showCourseDiscussionPostsForDiscussionTopic(Activity activity, DiscussionTopic topic, EnrolledCoursesResponse courseData) {
         Intent showDiscussionPostsIntent = new Intent(activity, CourseDiscussionPostsActivity.class);
+
         showDiscussionPostsIntent.putExtra(EXTRA_COURSE_DATA, courseData);
         showDiscussionPostsIntent.putExtra(EXTRA_DISCUSSION_TOPIC, topic);
         showDiscussionPostsIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -412,6 +415,7 @@ public class Router {
 
     public void showHandouts(Activity activity, EnrolledCoursesResponse courseData) {
         Intent handoutIntent = new Intent(activity, CourseHandoutActivity.class);
+
         handoutIntent.putExtra(EXTRA_COURSE_DATA, courseData);
         handoutIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         activity.startActivity(handoutIntent);

@@ -198,7 +198,12 @@ public class CourseManager {
         CourseComponent component = courseComponent.find(new Filter<CourseComponent>() {
             @Override
             public boolean apply(CourseComponent courseComponent) {
-                return componentId.equals(courseComponent.getId());
+                if(componentId!=null) {
+                    return componentId.equals(courseComponent.getId());
+                }
+                else {
+                   return false;
+                }
             }
         });
         if (component == null)

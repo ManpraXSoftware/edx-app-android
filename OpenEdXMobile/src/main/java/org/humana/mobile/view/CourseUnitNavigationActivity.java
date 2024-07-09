@@ -206,6 +206,7 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements 
 
         Intent resultData = new Intent();
         resultData.putExtra(Router.EXTRA_COURSE_COMPONENT_ID, courseComponentId);
+
         setResult(RESULT_OK, resultData);
 
         environment.getSegment().trackScreenView(

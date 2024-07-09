@@ -3,50 +3,34 @@ package org.humana.mobile.tta.utils;
 import com.google.android.material.bottomnavigation.BottomNavigationItemView;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import androidx.core.content.ContextCompat;
+import com.google.android.material.bottomnavigation.LabelVisibilityMode;
+import android.annotation.SuppressLint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-
 import org.humana.mobile.R;
-
-import java.lang.reflect.Field;
 
 public class BottomNavigationViewHelper {
     private static TextView notificationBadge;
     private static View badge;
+    @SuppressLint("RestrictedApi")
     static BottomNavigationItemView item;
+    @SuppressLint("RestrictedApi")
     static BottomNavigationMenuView menuView;
 
     public static void disableShiftMode(BottomNavigationView view) {
-        BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);
-        try {
-            Field shiftingMode = menuView.getClass().getDeclaredField("mShiftingMode");
-            shiftingMode.setAccessible(true);
-            shiftingMode.setBoolean(menuView, false);
-            shiftingMode.setAccessible(false);
-            for (int i = 0; i < menuView.getChildCount(); i++) {
-                BottomNavigationItemView item = (BottomNavigationItemView) menuView.getChildAt(i);
-                //noinspection RestrictedApi
-                item.setShifting(false);
-                // set once again checked value, so view will be updated
-                //noinspection RestrictedApi
-                item.setChecked(item.getItemData().isChecked());
-            }
-        } catch (NoSuchFieldException e) {
-            Log.e("BNVHelper", "Unable to get shift mode field", e);
-        } catch (IllegalAccessException e) {
-            Log.e("BNVHelper", "Unable to change value of shift mode", e);
-        }
+        view.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
+        view.setItemHorizontalTranslationEnabled(false);
     }
 
+    @SuppressLint("RestrictedApi")
     public static void addBadgeToBottomNav(BottomNavigationView view, int position, long count) {
-        if (count!=0) {
+        if (count != 0) {
             menuView = (BottomNavigationMenuView) view.getChildAt(0);
             item = (BottomNavigationItemView) menuView.getChildAt(position);
 
-            if(item==null)
+            if (item == null)
                 return;
 
             badge = LayoutInflater.from(view.getContext())
@@ -61,12 +45,9 @@ public class BottomNavigationViewHelper {
         }
     }
 
-    public static void removeBadgeFromBottomNav(){
-
-        if (item!=null) {
+    public static void removeBadgeFromBottomNav() {
+        if (item != null) {
             item.removeView(badge);
         }
-
-//            badge.setVisibility(GONE);
     }
 }

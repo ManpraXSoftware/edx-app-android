@@ -64,7 +64,7 @@ public class ProgramViewModel extends BaseViewModel {
 
     public ProgramViewModel(BaseVMActivity activity) {
         super(activity);
-        mDataManager.setWpProfileCache();
+        //mDataManager.setWpProfileCache();
         navShiftMode.set(false);
         selectedId = R.id.action_library;
         showLibrary();

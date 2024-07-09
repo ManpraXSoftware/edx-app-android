@@ -97,12 +97,11 @@ public class LandingViewModel extends BaseViewModel {
 
     public LandingViewModel(BaseVMActivity activity) {
         super(activity);
-        mDataManager.setWpProfileCache();
+        //mDataManager.setWpProfileCache();
         navShiftMode.set(false);
         selectedId = R.id.action_library;
         showLibrary();
         mActivity.showLoading();
-
 //        if (!mDataManager.getLoginPrefs().isScheduleTootipSeen()) {
 //            setToolTip();
 //        }

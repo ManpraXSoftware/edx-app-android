@@ -251,7 +251,7 @@ public class SelectProgramViewModel2 extends BaseViewModel {
 
 
                 Glide.with(mActivity)
-                        .load(mDataManager.getEdxEnvironment().getConfig().getApiHostURL() + model.getImage())
+                        .load(model.getImage())
                         .placeholder(ContextCompat.getDrawable(mActivity, R.drawable.placeholder_course_card_image))
                         .into(itemBinding.image);
 
