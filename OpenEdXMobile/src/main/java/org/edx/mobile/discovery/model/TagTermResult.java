@@ -28,18 +28,6 @@ public class TagTermResult {
     @Expose
     private String converted_term;
 
-    @SerializedName("original_term")
-    @Expose
-    private String original_term;
-
-    public String getOriginal_term() {
-        return original_term;
-    }
-
-    public void setOriginal_term(String original_term) {
-        this.original_term = original_term;
-    }
-
     @SerializedName("count")
     @Expose
     private int count;

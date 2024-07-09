@@ -486,8 +486,11 @@ public class NewLoginActivity extends PresenterActivity<LoginPresenter, LoginPre
     }
 
     void sendAnalyticsUserLoginSuccessful(){
+        if(environment.getLoginPrefs().getCurrentUserProfile()!=null) {
+            String user_Id = environment.getLoginPrefs().getCurrentUserProfile().id.toString();
+            environment.getAnalyticsRegistry().identifyUser(user_Id, null, null);
+        }
         UserInfo userInfo = loginPrefs.getCurrentUserInfo();
-
         Map<String, String> values = new HashMap<>();
         values.put(Analytics.Keys.USER_TYPE,checkValueAvailable(userInfo.getUser_type()));
         values.put(Analytics.Keys.EDUCATION_BROAD, checkValueAvailable(userInfo.getEducation_board()));

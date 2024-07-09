@@ -583,8 +583,8 @@ public class TagsFragment extends BaseFragment implements OnRecyclerItemClickLis
             sendAnalyticsCourseDetail(tagTermResult);
             NewProgramFragment newProgramFragment = new NewProgramFragment();
             Bundle bundle1 = new Bundle();
-            bundle1.putString(PROGRAM,tagTermResult.getOriginal_term() );
-            bundle1.putString(PROGRAM_CONVERTED, tagTermResult.getTerm());
+            bundle1.putString(PROGRAM, tagTermResult.getTerm());
+            bundle1.putString(PROGRAM_CONVERTED, tagTermResult.getConverted_term());
             bundle1.putString(PROGRAM_UUID, "");
             bundle1.putBoolean(TAGSCREENFLAG, true);
             newProgramFragment.setArguments(bundle1);
@@ -600,8 +600,8 @@ public class TagsFragment extends BaseFragment implements OnRecyclerItemClickLis
             sendAnalyticsCourseDetail(tagTermResult);
             NewProgramFragment newProgramFragment = new NewProgramFragment();
             Bundle bundle1 = new Bundle();
-            bundle1.putString(PROGRAM,tagTermResult.getOriginal_term() );
-            bundle1.putString(PROGRAM_CONVERTED, tagTermResult.getTerm());
+            bundle1.putString(PROGRAM, tagTermResult.getTerm());
+            bundle1.putString(PROGRAM_CONVERTED, tagTermResult.getConverted_term());
             bundle1.putString(PROGRAM_UUID, "");
             bundle1.putBoolean(TAGSCREENFLAG, true);
             bundle1.putBoolean(CHATBOTFLAG,chatBotFlag);
@@ -640,10 +640,10 @@ public class TagsFragment extends BaseFragment implements OnRecyclerItemClickLis
 
     private String checkMessageLanguage(int messageCode,String selectedLanguage) {
 
-            String baseString = getResources().getString(R.string.user_intent_topic_found);
+        String baseString = getResources().getString(R.string.user_intent_topic_found);
 
-            String formattedString = baseString.replace("%1$s", String.valueOf(messageCode));
-            return formattedString;
+        String formattedString = baseString.replace("%1$s", String.valueOf(messageCode));
+        return formattedString;
 
     }
 

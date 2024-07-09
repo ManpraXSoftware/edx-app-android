@@ -195,7 +195,7 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
         getMenuInflater().inflate(R.menu.my_courses, menu);
 
         menu.findItem(R.id.menu_item_voice).setVisible(true);
-        menu.findItem(R.id.menu_item_notification).setVisible(true);
+        //menu.findItem(R.id.menu_item_notification).setVisible(true);
         menu.findItem(R.id.menu_item_account).setVisible(true);
         menu.findItem(R.id.menu_item_search).setVisible(true);
         menu.findItem(R.id.menu_item_whatsapp).setVisible(true);
@@ -207,15 +207,15 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
         View voiceActionView = whatsappMenuItem.getActionView();
         voiceActionView.findViewById(R.id.action_view_icon).setVisibility(View.VISIBLE);
 
-        MenuItem notificationMenuItem = menu.findItem(R.id.menu_item_notification);
-
-        menuItemNotification=notificationMenuItem;
-
-        // Set custom action view for voice menu item
-        notificationMenuItem.setActionView(R.layout.custum_notification_menu_icon);
-        View notificationMenuItemView = notificationMenuItem.getActionView();
-        notificationMenuItemView.findViewById(R.id.bell_icon).setVisibility(View.GONE);
-        notificationMenuItemView.findViewById(R.id.notification_count).setVisibility(View.GONE);
+//        MenuItem notificationMenuItem = menu.findItem(R.id.menu_item_notification);
+//
+//        menuItemNotification=notificationMenuItem;
+//
+//        // Set custom action view for voice menu item
+//        notificationMenuItem.setActionView(R.layout.custum_notification_menu_icon);
+//        View notificationMenuItemView = notificationMenuItem.getActionView();
+//        notificationMenuItemView.findViewById(R.id.bell_icon).setVisibility(View.GONE);
+//        notificationMenuItemView.findViewById(R.id.notification_count).setVisibility(View.GONE);
 
 
 
@@ -320,12 +320,21 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
                 .commit();
     }
     void sendAnalyticsCourseDetailExplore_Course(){
+        if(environment.getLoginPrefs().getCurrentUserProfile()!=null) {
+            String user_Id = environment.getLoginPrefs().getCurrentUserProfile().id.toString();
+            environment.getAnalyticsRegistry().identifyUser(user_Id, null, null);
+        }
         final Map<String, String> values = new HashMap<>();
+
         values.put(Analytics.Keys.USER_ID,environment.getLoginPrefs().getCurrentUserProfile().id.toString());
         environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.EXPLORE_COURSE,null,null,values);
 
     }
     void sendAnalyticsCourseDetailDashBoard(){
+        if(environment.getLoginPrefs().getCurrentUserProfile()!=null) {
+            String user_Id = environment.getLoginPrefs().getCurrentUserProfile().id.toString();
+            environment.getAnalyticsRegistry().identifyUser(user_Id, null, null);
+        }
         final Map<String, String> values = new HashMap<>();
         values.put(Analytics.Keys.USER_ID,environment.getLoginPrefs().getCurrentUserProfile().id.toString());
         environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.MY_DASHBOARD,null,null,values);

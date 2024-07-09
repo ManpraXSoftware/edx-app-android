@@ -172,18 +172,10 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Context context = getActivity().getApplicationContext();
-
-                AccessibilityManager accessibilityManager = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-                if (accessibilityManager != null) {
-                    System.out.println("COOOOOLLLLLLLLLLLLLLLLLLLLLLLLL");
-                    accessibilityManager.interrupt();
-                }
                 textViewNotification.requestFocus();
                 textViewNotification.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
                 notificationRecyclerViewNew.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
                 notificationRecyclerViewOlder.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
-
             }
         }, 1500);
         setGestureListeners(textViewNotification);
@@ -245,7 +237,7 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
     }
 
     void checkTypeNotification(NotificationModel.NotificationData notificationData){
-        System.out.println("HIHIHIHIHIHIHIHIHIH checkTypeNotification");
+
         if(notificationData.getNotificationType().equals("general")){
             enrolledStatus(notificationData);
         }
@@ -277,7 +269,7 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
     }
 
     /*public void getParticularCourse(NotificationModel.NotificationData notificationData) {
-        System.out.println("HIHIHIHIHIHIHIHIHIH getParticularCourse");
+
         iconProgressBarNotification.setVisibility(View.VISIBLE);
         try {
             ParticularCourseTask particularCourseTask = new ParticularCourseTask(getActivity().getApplicationContext(), username,
@@ -389,9 +381,9 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
     @Override
     public void onResume() {
         super.onResume();
-        System.out.println("JOJOJOJOJOJOJOJOJOJOJOJOJO");
+
         if(notificationModel!=null){
-            System.out.println("MOMOMOMOMOMOMOMOMOMOMOMOMOMOMO");
+
             setAdapterData(notificationModel);
         }
 
@@ -405,7 +397,7 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
                     @Override
                     public void onSuccess(@NonNull NotificationReadModel result) {
                         try {
-                            System.out.println(result+" HEYEYEYYEYEYEYEYE "+navigateToWebView);
+
                             if (result != null) {
                                 // Handle successful response
                                 NotificationReadModel data = result;
@@ -450,12 +442,12 @@ public class NotificationFragment extends Fragment implements OnNavigateListener
             } catch (Exception e) {
                 Log.e("NotificationReadModel", "Exception in getParticularCourse", e);
             }
-        System.out.println("KOKOKO end");
+
 
     }
 
         public void courseNavigation(NotificationModel.NotificationData notificationData){
-        System.out.println("SPSSOSOOSOSOS courseNavigation "+notificationData.getEnrolledCoursesResponse());
+
         if (notificationData.getCourseId().contains("sequential")) {
                 showCourseContainerOutline(NotificationFragment.this,
                         REQUEST_SHOW_COURSE_UNIT_DETAIL, notificationData.getEnrolledCoursesResponse(), null,

@@ -129,7 +129,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
 
     MenuItem menuItemNotification;
 
-    NotificationModel notificationModelData;
+    //NotificationModel notificationModelData;
 
     ActivityProvider activityProvider;
 
@@ -246,7 +246,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
         if(checkDialogBox()){
             showDialog();
         }
-        getNotification();
+       // getNotification();
 
         return binding.getRoot();
     }
@@ -281,19 +281,18 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
         menuItemView= menuItem.getActionView();
         if(myProgramListData==null) {
             item.setVisible(false);
-
         }
         else {
             setFocusOnMic();
         }
-        MenuItem itemNotification = menu.findItem(R.id.menu_item_notification);
-        menuItemNotification=itemNotification;
-        if(notificationModelData!=null){
-            enableNotification(notificationModelData);
-        }
-        else{
-
-        }
+        //MenuItem itemNotification = menu.findItem(R.id.menu_item_notification);
+        //menuItemNotification=itemNotification;
+//        if(notificationModelData!=null){
+//            enableNotification(notificationModelData);
+//        }
+//        else{
+//
+//        }
 
         /*if (menuItemView != null) {
             menuItemView.findViewById(R.id.action_view_icon).setVisibility(View.GONE);
@@ -552,8 +551,8 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                     }
                 });
 
-//                 menuItemView.findViewById(R.id.action_view_icon).requestFocus();
-//                 menuItemView.findViewById(R.id.action_view_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_HOVER_ENTER);
+                menuItemView.findViewById(R.id.action_view_icon).requestFocus();
+                 menuItemView.findViewById(R.id.action_view_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_HOVER_ENTER);
 
      //           menuItemView.findViewById(R.id.action_view_icon).requestFocus();
   //              menuItemView.findViewById(R.id.action_view_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
@@ -781,14 +780,13 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     public void onMicButtonClick() {
         soundPool.play(soundId, 1.0f, 1.0f, 0, 0, 1.0f);
         textToSpeechHelper.stop();
-
-          speechToTextHelper.startSpeechRecognition();
+        speechToTextHelper.startSpeechRecognition();
     }
 
 
     @Override
     public void onSpeechError(String error) {
-        Toast.makeText(getContext(), "Error code "+error, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "Please click on Voice Search button again", Toast.LENGTH_SHORT).show();
     }
 
     public void initializeIntentData(List<MyProgramListModel> myProgramList) {
@@ -939,89 +937,86 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
 
 
 
-    public void getNotification() {
+//    public void getNotification() {
+//
+//
+//        try {
+//            NotificationTask particularTask = new NotificationTask(getContext(),1) {
+//                @Override
+//                public void onSuccess(@NonNull NotificationModel result) {
+//                    try {
+//                        if (result != null) {
+//                            // Handle successful response
+//                            NotificationModel data = result;
+//                            notificationModelData=data;
+//                            if (data != null) {
+//                                enableNotification(data);
+//                                Log.d("NotificationModel",data.toString() );
+//                            } else {
+//                                Log.e("NotificationModel", "Response body is null");
+//                            }
+//                        }
+//                    } catch (Exception e) {
+//                        Log.e("NotificationModel", "Exception in onResponse", e);
+//                    }
+//                }
+//
+//                @Override
+//                public void onException(Exception ex) {
+//                    if (ex instanceof HttpStatusException &&
+//                            ((HttpStatusException) ex).getStatusCode() == HttpStatus.UNAUTHORIZED) {
+//                    } else {
+//
+//                    }
+//                }
+//            };
+//            particularTask.execute();
+//
+//
+//        } catch (Exception e) {
+//            Log.e("enrolledCoursesResponses", "Exception in getParticularCourse", e);
+//        }
+//    }
 
-
-        try {
-            NotificationTask particularTask = new NotificationTask(getContext(),1) {
-                @Override
-                public void onSuccess(@NonNull NotificationModel result) {
-                    try {
-                        if (result != null) {
-                            // Handle successful response
-                            NotificationModel data = result;
-                            notificationModelData=data;
-                            if (data != null) {
-                                enableNotification(data);
-                                Log.d("NotificationModel",data.toString() );
-                            } else {
-                                Log.e("NotificationModel", "Response body is null");
-                            }
-                        }
-                    } catch (Exception e) {
-                        Log.e("NotificationModel", "Exception in onResponse", e);
-                    }
-                }
-
-                @Override
-                public void onException(Exception ex) {
-                    if (ex instanceof HttpStatusException &&
-                            ((HttpStatusException) ex).getStatusCode() == HttpStatus.UNAUTHORIZED) {
-                    } else {
-
-                    }
-                }
-            };
-            particularTask.execute();
-
-
-        } catch (Exception e) {
-            Log.e("enrolledCoursesResponses", "Exception in getParticularCourse", e);
-        }
-    }
-
-    void enableNotification(NotificationModel notificationModel){
-
-        if(menuItemNotification!=null) {
-            menuItemNotification.setActionView(R.layout.custum_notification_menu_icon);
-            View notificationMenuItemView = menuItemNotification.getActionView();
-            System.out.println("HIHIHIHIHI ");
-            if(notificationModel.getUnreadCount()>0){
-                System.out.println("Oye oye");
-                notificationMenuItemView.findViewById(R.id.custom_notification_bell_icon_relativeLayout).requestFocus();
-                notificationMenuItemView.findViewById(R.id.custom_notification_bell_icon_relativeLayout).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
-            }
-
-            RelativeLayout relativeLayoutNotification= notificationMenuItemView.findViewById(R.id.custom_notification_bell_icon_relativeLayout);
-
-            ViewCompat.setAccessibilityDelegate(relativeLayoutNotification, new AccessibilityDelegateCompat() {
-                @Override
-                public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfoCompat info) {
-                    super.onInitializeAccessibilityNodeInfo(host, info);
-                    host.setLongClickable(false);
-                    String notificationButton=getString(R.string.notification_button);
-                    info.setContentDescription(notificationButton+" "+notificationModel.getUnreadCount()+", . , . , , "+"Unread");
-
-                }
-            });
-            notificationMenuItemView.findViewById(R.id.custom_notification_bell_icon_relativeLayout).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    environment.getRouter().showNotificationActivity(getActivity(), notificationModel, loginPrefs.getUsername());
-                }
-            });
-            notificationMenuItemView.findViewById(R.id.bell_icon).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    environment.getRouter().showNotificationActivity(getActivity(), notificationModel, loginPrefs.getUsername());
-                }
-            });
-            notificationMenuItemView.findViewById(R.id.bell_icon).setVisibility(View.VISIBLE);
-            notificationMenuItemView.findViewById(R.id.notification_count).setVisibility(View.VISIBLE);
-            TextView notificationCount= notificationMenuItemView.findViewById(R.id.notification_count);
-            notificationCount.setText(String.valueOf(notificationModel.getUnreadCount()));
-        }
-    }
+//    void enableNotification(NotificationModel notificationModel){
+//        if(menuItemNotification!=null) {
+//            menuItemNotification.setActionView(R.layout.custum_notification_menu_icon);
+//            View notificationMenuItemView = menuItemNotification.getActionView();
+//            if(notificationModel.getUnreadCount()>0){
+//                notificationMenuItemView.findViewById(R.id.custom_notification_bell_icon_relativeLayout).requestFocus();
+//                notificationMenuItemView.findViewById(R.id.custom_notification_bell_icon_relativeLayout).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+//            }
+//
+//            RelativeLayout relativeLayoutNotification= notificationMenuItemView.findViewById(R.id.custom_notification_bell_icon_relativeLayout);
+//
+//            ViewCompat.setAccessibilityDelegate(relativeLayoutNotification, new AccessibilityDelegateCompat() {
+//                @Override
+//                public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfoCompat info) {
+//                    super.onInitializeAccessibilityNodeInfo(host, info);
+//                    host.setLongClickable(false);
+//                    String notificationButton=getString(R.string.notification_button);
+//                    info.setContentDescription(notificationButton+" "+notificationModel.getUnreadCount()+", . , . , , "+"Unread");
+//
+//                }
+//            });
+//            notificationMenuItemView.findViewById(R.id.custom_notification_bell_icon_relativeLayout).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    environment.getRouter().showNotificationActivity(getActivity(), notificationModel, loginPrefs.getUsername());
+//                }
+//            });
+//            notificationMenuItemView.findViewById(R.id.bell_icon).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    environment.getRouter().showNotificationActivity(getActivity(), notificationModel, loginPrefs.getUsername());
+//                }
+//            });
+//            notificationMenuItemView.findViewById(R.id.bell_icon).setVisibility(View.VISIBLE);
+//            notificationMenuItemView.findViewById(R.id.notification_count).setVisibility(View.VISIBLE);
+//            TextView notificationCount= notificationMenuItemView.findViewById(R.id.notification_count);
+//            notificationCount.setText(String.valueOf(notificationModel.getUnreadCount()));
+//        }
+//    }
 
 }
 
