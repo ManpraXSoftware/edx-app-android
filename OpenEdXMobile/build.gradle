@@ -361,8 +361,8 @@ android {
         minSdkVersion MIN_SDK_VERSION
         targetSdkVersion TARGET_SDK_VERSION
 
-        versionCode getVersionCode()
-        versionName getVersionName()
+        versionCode 1000059/*getVersionCode()*/
+        versionName "1.0.8"/*getVersionName()*/
 
         renderscriptTargetApi 22
         renderscriptSupportModeEnabled true
