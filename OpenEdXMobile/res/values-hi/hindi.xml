@@ -39,7 +39,7 @@
     <string name="no_course_info">कोई पाठ्यक्रम जानकारी नहीं</string>
     <string name="continue_string">जारी रखें</string>
     <string name="program_name">कार्यक्रम का नाम</string>
-<!--    <string name="continue_learning">सीखना जारी रखें</string>-->
+    <!--    <string name="continue_learning">सीखना जारी रखें</string>-->
     <string name="continue_learning">हाल ही में एक्सेस किया गया कोर्स</string>
     <string name="no_enrolled_in_any_programs">किसी भी कार्यक्रम में नामांकित नहीं</string>
     <string name="no_course_found">कोई कोर्स नहीं मिला</string>
@@ -360,9 +360,9 @@
     <string name="label_expired">कोर्स का एक्सेस खत्म हो गया है {date}</string>
     <string name="label_expires_on">कोर्स की एक्सेस {date} को खत्म हो रही है</string>
     <string name="label_expires">कोर्स का ऐक्सेस खत्म होने की तारीख {date}</string>
-    <string name="label_ending">समाप्त होने की तारीख}</string>
-    <string name="label_ended">समाप्त {दिनांक}</string>
-    <string name="label_starting">शुरू करने की तिथि - शुरू होने की तिथि - रवाना होने की तिथि}</string>
+    <string name="label_ending">समाप्त होने की {date}</string>
+    <string name="label_ended">समाप्त {date}</string>
+    <string name="label_starting">शुरू करने की तिथि - शुरू होने की तिथि - रवाना होने की तिथि{date}</string>
     <string name="new_course_content">नई पाठ्यक्रम सामग्री</string>
     <string name="course_name">कोर्स का नाम</string>
     <string name="course_dates_subtitle">समय सीमा का ध्यान रखें और ट्रैक पर रहें</string>

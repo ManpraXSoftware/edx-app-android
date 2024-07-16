@@ -44,7 +44,7 @@
     <string name="no_course_info">பாடத் தகவல் இல்லை</string>
     <string name="continue_string">தொடரவும்</string>
     <string name="program_name">நிரல் பெயர்</string>
-<!--    <string name="continue_learning">தொடர்ந்து கற்றல்</string>-->
+    <!--    <string name="continue_learning">தொடர்ந்து கற்றல்</string>-->
     <string name="continue_learning">சமீபத்தில் அணுகப்பட்ட படிப்பு</string>
     <string name="no_enrolled_in_any_programs">எந்த திட்டங்களிலும் பதிவு செய்யப்படவில்லை</string>
     <string name="no_course_found">பாடம் எதுவும் கிடைக்கவில்லை</string>
@@ -360,7 +360,7 @@
     <string name="label_expires">படிப்புக்கான அணுகல் {date} அன்று காலாவதியாகிறது</string>
     <string name="label_ending">முடிவு {date}</string>
     <string name="label_ended">முடிவு {date}</string>
-    <string name="label_starting">தொடக்க நாள்}</string>
+    <string name="label_starting">தொடக்க நாள் {date}</string>
     <string name="new_course_content">புதிய பாடநெறி உள்ளடக்கம்</string>
     <string name="course_name">படிப்பின் பெயர்</string>
     <string name="course_dates_subtitle">காலக்கெடுவைக் கண்காணித்து, தொடர்ந்து கண்காணிக்கவும்</string>

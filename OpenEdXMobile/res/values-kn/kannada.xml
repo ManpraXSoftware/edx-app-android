@@ -382,7 +382,7 @@
     <string name="no_course_info">ಯಾವುದೇ ಕೋರ್ಸ್ ಮಾಹಿತಿ ಇಲ್ಲ</string>
     <string name="continue_string">ಮುಂದುವರಿಸಿ</string>
     <string name="program_name">ಕಾರ್ಯಕ್ರಮದ ಹೆಸರು</string>
-<!--    <string name="continue_learning">ಕಲಿಕೆಯನ್ನು ಮುಂದುವರಿಸಿ</string>-->
+    <!--    <string name="continue_learning">ಕಲಿಕೆಯನ್ನು ಮುಂದುವರಿಸಿ</string>-->
     <string name="continue_learning">ಇತ್ತೀಚೆಗೆ ಪ್ರವೇಶಿಸಿದ ಕೋರ್ಸ್</string>
     <string name="no_enrolled_in_any_programs">ಯಾವುದೇ ಕಾರ್ಯಕ್ರಮಗಳಲ್ಲಿ ದಾಖಲಾಗಿಲ್ಲ</string>
     <string name="no_course_found">ಯಾವುದೇ ಕೋರ್ಸ್ ಕಂಡುಬಂದಿಲ್ಲ</string>
@@ -697,7 +697,7 @@
     <string name="label_expires">ಕೋರ್ಸ್ ಪ್ರವೇಶವು {date} ರಂದು ಮುಕ್ತಾಯಗೊಳ್ಳುತ್ತದೆ</string>
     <string name="label_ending">ಮುಕ್ತಾಯ {date}</string>
     <string name="label_ended">{date} ರಂದು ಮುಕ್ತಾಯಗೊಂಡಿದೆ</string>
-    <string name="label_starting">ಆರಂಭಿಕ ದಿನ}</string>
+    <string name="label_starting">ಆರಂಭಿಕ {date}</string>
     <string name="new_course_content">ಹೊಸ ಕೋರ್ಸ್ ವಿಷಯ</string>
     <string name="course_name">ಕೋರ್ಸ್ ಹೆಸರು</string>
     <string name="course_dates_subtitle">ಗಡುವನ್ನು ಟ್ರ್ಯಾಕ್ ಮಾಡಿ ಮತ್ತು ಟ್ರ್ಯಾಕ್‌ನಲ್ಲಿ ಇರಿ</string>
