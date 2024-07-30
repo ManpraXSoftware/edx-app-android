@@ -1,5 +1,6 @@
 package org.edx.mobile.view.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.Gravity;
@@ -49,12 +50,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     }
 
     public void addMessage(Message message) {
-
         if ( message.isResponse() && messages.size() > 2) {
-
             Message lastMessage = messages.get(messages.size() - 1);
-
-
             if (lastMessage.isSimmerActive()) {
                 messages.set(messages.size() - 1, message);
                 notifyItemChanged(messages.size() - 1);
@@ -64,8 +61,42 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             // Notify the adapter that a new item has been inserted
             notifyItemInserted(messages.size() - 1);
         }
-        scrollToBottom();
+        //scrollToBottom();
     }
+
+    int gab = 1;
+
+    public void setOnPositionListener() {
+        int currentPosition = selectedPosition + gab;
+        if (currentPosition != RecyclerView.NO_POSITION && currentPosition < messages.size()) {
+            Message message = messages.get(currentPosition);
+            try {
+
+                listener.onItemClick(null, message);
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+        }
+        // Ensure the remaining code runs on the main thread
+        ((Activity) context).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                int previousPosition = selectedPosition;
+                selectedPosition = currentPosition;
+                notifyItemChanged(previousPosition); // Refresh previously selected item
+                notifyItemChanged(selectedPosition); // Refresh newly selected item
+
+                recyclerView.smoothScrollToPosition(selectedPosition);
+            }
+        });
+
+    }
+
+
+
+
 
     private void scrollToBottom() {
         if (recyclerView != null) {
@@ -89,32 +120,37 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     public void onBindViewHolder(@NonNull ChatViewHolder holder, int position) {
         Message message = messages.get(position);
         holder.textView.setVisibility(View.GONE);
-        holder.textView.setVisibility(View.GONE);
+        holder.webView.setVisibility(View.GONE);
         holder.bind(message);
         if (message.isSimmerActive()) {
+            holder.shimmerFrameLayout.setVisibility(View.VISIBLE);
             holder.shimmerFrameLayout.startShimmer();
             holder.lisenOn.setVisibility(View.VISIBLE);
             holder.lisenOff.setVisibility(View.GONE);
+            holder.webView.setVisibility(View.GONE);
+
             holder.linearLayout.setBackgroundResource(R.drawable.chatbackground);
+            //holder.setLinearLayoutHeightToWrapContent(holder.linearLayout);
+            holder.setLinearLayoutHeight(holder.linearLayout,250);
+            //holder.setLinearLayoutWidthToMatchContent(holder.linearLayout);
+            //message.setSimmerActive(false);
         } else {
             holder.shimmerFrameLayout.stopShimmer();
             holder.shimmerFrameLayout.setVisibility(View.GONE);
             holder.textView.setVisibility(View.GONE);
+            holder.lisenOff.setVisibility(View.GONE);
+            holder.stopAnimation(holder.lisenOff);
+            holder.lisenOn.setVisibility(View.VISIBLE);
             if (selectedPosition == position) {
                 holder.lisenOff.setVisibility(View.VISIBLE);
                 holder.startAnimation(holder.lisenOff);
                 holder.lisenOn.setVisibility(View.GONE);
-            } else {
-                holder.lisenOff.setVisibility(View.GONE);
-                holder.stopAnimation(holder.lisenOff);
-                holder.lisenOn.setVisibility(View.VISIBLE);
             }
             if (position < 2) {
                 holder.makeResponseUIForStaticResponse(message);
             } else {
-
                 if (message.isUser()) {
-                    //holder.webView.setVisibility(View.GONE);
+                    holder.webView.setVisibility(View.GONE);
                     holder.textView.setText(holder.capitalizeFirstLetter(message.getText()));
                     holder.textView.setVisibility(View.VISIBLE);
                 } else {
@@ -193,10 +229,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                         // Update the selected position and refresh the RecyclerView
                         int previousPosition = selectedPosition;
                         selectedPosition = currentPosition;
-
                         notifyItemChanged(previousPosition); // Refresh previously selected item
-                        notifyItemChanged(selectedPosition); // Refresh newly selected item
-
+                        notifyItemChanged(selectedPosition);// Refresh newly selected item
+                        gab=1;
                         listener.onItemClick(view, message);
 
                     }
@@ -262,8 +297,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         void makeResponseUIForStaticResponse(Message message) {
             textView.setText(capitalizeFirstLetter(message.getText()));
             textView.setVisibility(View.VISIBLE);
-           // webView.setVisibility(View.GONE);
+            webView.setVisibility(View.GONE);
             linearLayout.setBackgroundResource(R.drawable.chatbackground);
+            setLinearLayoutHeightToWrapContent(linearLayout);
+            setLinearLayoutWidthToWrapContent(linearLayout);
             linearLayoutMessageOutter.setGravity(Gravity.START);
             linearLayoutMessageOutter.setPadding(8, 8, 8, 8); // Align to the left
         }

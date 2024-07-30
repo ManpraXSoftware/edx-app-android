@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@color/white"
+    android:theme="@style/AppTheme.NoActionBar"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -151,7 +153,7 @@
                 android:layout_margin="4dp"
                 android:layout_gravity="center"
                 android:visibility="visible"
-                android:background="@drawable/circle_background_white"
+                android:background="@drawable/circle_background_yellow_circle"
                 android:scaleType="fitCenter"
                 android:elevation="4dp"
                 android:src="@drawable/baseline_keyboard_voice_24"
@@ -176,11 +178,28 @@
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
                 android:elevation="4dp"
-                android:background="@drawable/circle_background_white"
+                android:contentDescription="@string/send_item"
+                android:background="@drawable/circle_background_yellow_circle"
                 android:src="@drawable/ic_send"
                 android:visibility="gone" />
         </LinearLayout>
     </FrameLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="85dp"
+        android:contentDescription="@string/down"
+        android:src="@drawable/baseline_keyboard_arrow_down_24"
+        app:fabCustomSize="48dp"
+        app:maxImageSize="24dp"
+        app:backgroundTint="@color/transparent"
+        android:visibility="gone" />
+
 
 
 </RelativeLayout>

@@ -1,5 +1,7 @@
 package org.edx.mobile.view;
 
+import static java.security.AccessController.getContext;
+
 import android.Manifest;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
@@ -19,6 +21,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -30,9 +33,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.inject.Inject;
 
 import org.edx.mobile.Chatbot.SpeechToTextHelper.SpeechToTextHelper;
@@ -41,11 +46,15 @@ import org.edx.mobile.Chatbot.TextToSpeechHelper.TextToSpeechHelper;
 import org.edx.mobile.R;
 import org.edx.mobile.authentication.ApiLmsService;
 import org.edx.mobile.authentication.ApiNewLmsClient;
+import org.edx.mobile.authentication.AuthResponseJwt;
+import org.edx.mobile.authentication.DiscoveryTask;
 import org.edx.mobile.comparator.TalkBackDetector.MyAccessibilityService;
 import org.edx.mobile.discovery.model.DiscoverySubjectResult;
 import org.edx.mobile.discovery.model.ProgramResponseModel;
 import org.edx.mobile.discovery.model.ResponseEnrollmentModel;
 import org.edx.mobile.discovery.net.course.CourseApi;
+import org.edx.mobile.http.HttpStatus;
+import org.edx.mobile.http.HttpStatusException;
 import org.edx.mobile.http.constants.ApiConstants;
 import org.edx.mobile.interfaces.OnNavigateListener;
 import org.edx.mobile.interfaces.RefreshListener;
@@ -83,12 +92,14 @@ public class ChatbotActivity extends AppCompatActivity implements SpeechToTextLi
     private int soundId;
     @Inject
     LoginPrefs loginPrefs;
-    @Inject
-    CourseApi courseApi;
+
+    private FloatingActionButton fab;
+    private boolean isScrollingUp = false;
+
+    String accessToken = "";
 
     @NonNull
     public Config config;
-
 
 
     @Override
@@ -98,12 +109,14 @@ public class ChatbotActivity extends AppCompatActivity implements SpeechToTextLi
         recyclerView = findViewById(R.id.recyclerView);
         editTextMessage = findViewById(R.id.editTextMessage);
         buttonSend = findViewById(R.id.buttonSend);
-        voiceIconButton=findViewById(R.id.voiceIconButton);
-        backArrow=findViewById(R.id.back_arrow);
+        voiceIconButton = findViewById(R.id.voiceIconButton);
+        backArrow = findViewById(R.id.back_arrow);
+        fab = findViewById(R.id.fab);
+        fab.setBackgroundTintList(ContextCompat.getColorStateList(this, android.R.color.white));
         initializeChatBot();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new ChatAdapter(this,ChatbotActivity.this::onItemClick,this::navigateToAnotherScreen,recyclerView);
+        adapter = new ChatAdapter(this, ChatbotActivity.this::onItemClick, this::navigateToAnotherScreen, recyclerView);
         recyclerView.setAdapter(adapter);
 
         voiceIconButtonLayout = findViewById(R.id.voiceIconButtonLayout);
@@ -119,7 +132,8 @@ public class ChatbotActivity extends AppCompatActivity implements SpeechToTextLi
 
         editTextMessage.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -135,7 +149,8 @@ public class ChatbotActivity extends AppCompatActivity implements SpeechToTextLi
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         // Detect when the keyboard is opened
@@ -178,6 +193,28 @@ public class ChatbotActivity extends AppCompatActivity implements SpeechToTextLi
         });
 
 
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy < 0 && !isScrollingUp) {
+                    isScrollingUp = true;
+                    fab.show();
+                } else if (dy > 0 && isScrollingUp) {
+                    isScrollingUp = false;
+                    fab.hide();
+                }
+            }
+        });
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+            }
+        });
+
+
     }
 
     public static boolean isAccessibilityServiceEnabled(Context context, Class<? extends AccessibilityService> service) {
@@ -192,12 +229,12 @@ public class ChatbotActivity extends AppCompatActivity implements SpeechToTextLi
         return false;
     }
 
-    void stopAnimation(){
+    void stopAnimation() {
         voiceIconButtonLayout.clearAnimation();
         voiceIconButtonLayout.setBackground(null);
     }
 
-    void startAnimation(){
+    void startAnimation() {
         voiceIconButtonLayout.setBackgroundResource(R.drawable.circle_background_blue);
         voiceIconButtonLayout.startAnimation(breathingAnimation);
 
@@ -219,34 +256,91 @@ public class ChatbotActivity extends AppCompatActivity implements SpeechToTextLi
     @Override
     public void onResume() {
         super.onResume();
-        if(textToSpeechHelper!=null) {
+        if (textToSpeechHelper != null) {
             textToSpeechHelper.stop();
         }
     }
 
-    void staticText(){
+    void staticText() {
         chatbotReply(getString(R.string.static_text_chatbot1));
         String selectedLanguage = "en";
-            if (!LocaleManager.getLanguagePref(getApplicationContext()).isEmpty()) {
-                selectedLanguage = LocaleManager.getLanguagePref(getApplicationContext());
-            }
+        if (!LocaleManager.getLanguagePref(getApplicationContext()).isEmpty()) {
+            selectedLanguage = LocaleManager.getLanguagePref(getApplicationContext());
+        }
         String fullLanguageName = LocaleManager.getFullLanguageName(selectedLanguage);
         chatbotReply(getString(R.string.static_text_chatbot2, fullLanguageName));
     }
 
-    void chatProcess(String message){
-        adapter.addMessage(new Message(message, true,false,false,true));
+    void chatProcess(String message) {
+        adapter.addMessage(new Message(message, true, false, false, false));
         editTextMessage.setText("");
+        closeKeyboard();
 
-        fetchData(message);
-        //localData();
+        localData();
         recyclerView.smoothScrollToPosition(adapter.getItemCount() - 1);
 
     }
 
-    void localData(){
+    private void closeKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    void checkJwtTokenAndFetchData(String queryText) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                checkJwtToken(queryText);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void checkJwtToken(String queryText) throws Exception {
+
+        if (accessToken.isEmpty()) {
+            createToken(queryText);
+        } else {
+            fetchDataAIResponse(queryText);
+        }
+//        AuthResponseJwt responseJwt = loginPrefs.getCurrentAuthJwt();
+//        long millis = System.currentTimeMillis();
+//        long tokenTime = millis - responseJwt.creation_time;
+//        if (tokenTime > responseJwt.expires_in) {
+//            createToken(queryText);
+//        } else {
+//            fetchDataAIResponse(queryText);
+//        }
+    }
+
+    private void createToken(String queryText) throws Exception {
+
+        DiscoveryTask discoveryTask = new DiscoveryTask(getApplicationContext()) {
+            @Override
+            public void onSuccess(@NonNull AuthResponseJwt result) {
+                accessToken = result.access_token;
+                fetchDataAIResponse(queryText);
+            }
+
+            @Override
+            public void onException(Exception ex) {
+                if (ex instanceof HttpStatusException &&
+                        ((HttpStatusException) ex).getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                } else {
+
+                }
+            }
+        };
+        discoveryTask.execute();
+    }
+
+    void localData() {
         chatbotShimmer();
-        chatbotReply( "<body style='background-color: transparent;'>"+"<h2>Welcome!</h2>\n" +
+        chatbotReply("<body style='background-color: transparent;'>" + "<h2>Welcome!</h2>\n" +
                 "<p>This is an <b>example</b> message with <i>HTML</i> content.</p>\n" +
                 "<ul>\n" +
                 "    <li>Item 1</li>\n" +
@@ -260,96 +354,105 @@ public class ChatbotActivity extends AppCompatActivity implements SpeechToTextLi
                 "<p>Visit <a href=\"https://www.example.com\">this link</a> for more information.</p>\n </body>");
     }
 
-    void chatbotReply(String textReply){
+    void chatbotReply(String textReply) {
         voiceIconButton.clearFocus();
         // Simulate bot response
         recyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                adapter.addMessage(new Message(textReply, false,false,true,true));
-                recyclerView.smoothScrollToPosition(adapter.getItemCount()-1);
+                adapter.addMessage(new Message(textReply, false, false, true, true));
+                recyclerView.smoothScrollToPosition(adapter.getItemCount() - 1);
 
                 // Clear focus from other views
                 voiceIconButton.clearFocus();
                 editTextMessage.clearFocus();
-                Log.d("recyclerView recyclerView Pre", "New size: "+ adapter.getItemCount() );
 
-                recyclerView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        View lastItem = recyclerView.getLayoutManager().findViewByPosition(adapter.getItemCount() - 1);
-                        if (lastItem != null) {
-                            AutoResizeWebView webView = lastItem.findViewById(R.id.webViewMessage);
-                            if (webView != null) {
-                                webView.setFocusable(true);
-                                webView.requestFocus();
-                                webView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+                // Ensure recyclerView has children before trying to access them
+                if (recyclerView.getChildCount() > 0) {
+                    // Use ViewTreeObserver to wait for layout to complete
+                    recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+                            // Remove the listener to prevent multiple calls
+                            recyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                            // Now you can safely access child views
+                            if (recyclerView.getChildCount() > 0) {
+                                View firstChild = recyclerView.getChildAt(0);
+                                if (firstChild != null) {
+                                    firstChild.requestFocus();
+                                    firstChild.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+                                }
                             }
                         }
-                    }
-                }, 500);
+                    });
+                }
+                Log.d("recyclerView recyclerView Pre", "New size: " + adapter.getItemCount());
+
+
             }
-        }, 1000);
-    }
-    void chatbotShimmer(){
-        adapter.addMessage(new Message("", false,true,false,true));
+        }, 1500);
     }
 
-    void fetchData(String text){
-        String sessionId="";
+    void chatbotShimmer() {
+        adapter.addMessage(new Message("", false, true, false, true));
+    }
+
+    void fetchDataAIResponse(String text) {
+        String sessionId = "";
         chatbotShimmer();
-            if(chatbotModal!=null){
-                if(chatbotModal.sessionid!=null){
-                    sessionId="sessionid="+chatbotModal.sessionid;
+        if (chatbotModal != null) {
+            if (chatbotModal.sessionid != null) {
+                sessionId = "sessionid=" + chatbotModal.sessionid;
+            }
+        }
+        ApiNewLmsClient apiNewLmsClient = new ApiNewLmsClient(ApiConstants.chatBotBaseUrl);
+        ApiLmsService apiService = apiNewLmsClient.getClient().create(ApiLmsService.class);
+
+        ChatBotRequestBody chatBotRequestBody = new ChatBotRequestBody(text);
+
+        String tokenJWT = "jwt " + accessToken; //loginPrefs.getCurrentAuthJwt().access_token;
+        Call<ChatbotModal> call = apiService.openaiChat(
+                tokenJWT,
+                sessionId,
+                chatBotRequestBody
+        );
+
+        call.enqueue(new Callback<ChatbotModal>() {
+            @Override
+            public void onResponse(Call<ChatbotModal> call, Response<ChatbotModal> response) {
+                Log.d("ChatbotModal", " data " + response.body().toString());
+                if (response.isSuccessful()) {
+                    // Handle successful response
+                    chatbotModal = response.body();
+                    if (chatbotModal != null) {
+                        chatbotReply(chatbotModal.data);
+                        Log.d("ChatbotModal", " data " + " " + chatbotModal.data + " " + response.body().toString());
+                    } else {
+                        Log.e("ChatbotModal", "Response body is null");
+                    }
+                } else {
+                    // Handle error response
+                    Log.e("ChatbotModal", "Error response: " + response.code());
                 }
             }
-            ApiNewLmsClient apiNewLmsClient=new ApiNewLmsClient(ApiConstants.chatBotBaseUrl);
-            ApiLmsService apiService = apiNewLmsClient.getClient().create(ApiLmsService.class);
 
-            ChatBotRequestBody chatBotRequestBody= new ChatBotRequestBody(text);
+            @Override
+            public void onFailure(Call<ChatbotModal> call, Throwable t) {
+                // Handle failure
 
-            String tokenJWT="";
-            Call<ChatbotModal> call = apiService.openaiChat(
-                    tokenJWT,
-                    sessionId,
-                    chatBotRequestBody
-            );
+                Log.e("ChatbotModal", "Request failed", t);
+            }
+        });
 
-            call.enqueue(new Callback<ChatbotModal>() {
-                @Override
-                public void onResponse(Call<ChatbotModal> call, Response<ChatbotModal> response) {
-                    Log.d("ChatbotModal", " data "+response.body().toString());
-                    if (response.isSuccessful()) {
-                        // Handle successful response
-                        chatbotModal = response.body();
-                        if (chatbotModal != null) {
-                            chatbotReply(chatbotModal.data);
-                            Log.d("ChatbotModal", " data "+" "+chatbotModal.data+" "+response.body().toString());
-                        } else {
-                            Log.e("ChatbotModal", "Response body is null");
-                        }
-                    } else {
-                        // Handle error response
-                        Log.e("ChatbotModal", "Error response: " + response.code());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ChatbotModal> call, Throwable t) {
-                    // Handle failure
-
-                    Log.e("ChatbotModal", "Request failed", t);
-                }
-            });
-
-             // Replace with your actual return value
+        // Replace with your actual return value
 
 
     }
 
-    void initializeChatBot(){
-        speechToTextHelper = new SpeechToTextHelper(getApplicationContext().getApplicationContext(), this,ChatbotActivity.this);
-        textToSpeechHelper = new TextToSpeechHelper(getApplicationContext(),ChatbotActivity.this,this::onDoneTalkBackListener);
+    void initializeChatBot() {
+        speechToTextHelper = new SpeechToTextHelper(getApplicationContext().getApplicationContext(), this, ChatbotActivity.this);
+        textToSpeechHelper = new TextToSpeechHelper(getApplicationContext(), ChatbotActivity.this, this::onDoneTalkBackListener);
         soundPool = new SoundPool.Builder().build();
         soundId = soundPool.load(getApplicationContext(), R.raw.beep_sound_2, 1);
     }
@@ -362,14 +465,13 @@ public class ChatbotActivity extends AppCompatActivity implements SpeechToTextLi
         }
 
         soundPool.play(soundId, 1.0f, 1.0f, 0, 0, 1.0f);
-        if(speechToTextHelper==null) {
+        if (speechToTextHelper == null) {
             speechToTextHelper = new SpeechToTextHelper(getApplicationContext(), this, ChatbotActivity.this);
         }
         textToSpeechHelper.stop();
         //speechToTextHelper.stopSpeechRecognition();
         speechToTextHelper.startSpeechRecognition();
     }
-
 
 
     @Override
@@ -382,10 +484,9 @@ public class ChatbotActivity extends AppCompatActivity implements SpeechToTextLi
     public void onSpeechError(String error) {
         stopAnimation();
     }
-
     @Override
     public void onDoneTalkBackListener() {
-
+        adapter.setOnPositionListener();
     }
 
     @Override
@@ -395,6 +496,7 @@ public class ChatbotActivity extends AppCompatActivity implements SpeechToTextLi
             Spanned spannedText = Html.fromHtml(messageOb.getText(), Html.FROM_HTML_MODE_LEGACY);
             String plainText = spannedText.toString();
             textToSpeechHelper.speakText(plainText);
+            // Get the position of the clicked item
         }
     }
 
@@ -403,4 +505,5 @@ public class ChatbotActivity extends AppCompatActivity implements SpeechToTextLi
     public void navigateToAnotherScreen(Object item) {
         textToSpeechHelper.stop();
     }
+
 }

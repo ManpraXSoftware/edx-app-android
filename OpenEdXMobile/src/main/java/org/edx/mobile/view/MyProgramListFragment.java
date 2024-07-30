@@ -187,8 +187,10 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                 floatingActionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(getActivity(), ChatbotActivity.class);
-                        startActivity(intent);
+                        if(getContext()!=null) {
+                            Intent intent = new Intent(getContext(), ChatbotActivity.class);
+                            startActivity(intent);
+                        }
 
                     }
                 });

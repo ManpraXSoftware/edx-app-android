@@ -863,5 +863,7 @@
     <string name="static_text_chatbot1">Welcome to Subodha AI</string>
     <string name="static_text_chatbot2">How can I assist you today? Please ask your questions in %1$s.</string>
     <string name="lisen">Tap to Lisen </string>
+    <string name="send_item">Send</string>
+    <string name="down">down</string>
     <string name="lisen_off">Tap to Turn Off Lisen </string>
 </resources>
