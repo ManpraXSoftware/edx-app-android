@@ -1,5 +1,6 @@
 package org.edx.mobile.view;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
@@ -16,7 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
+import android.view.animation.BounceInterpolator;
 import android.widget.ActionMenuView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,6 +27,7 @@ import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.inject.Inject;
 
 import org.edx.mobile.Chatbot.IntentClassifier.IntentSubjectClassifier;
@@ -102,6 +106,8 @@ public class ExploreFragment extends BaseFragment implements OnRecyclerItemClick
     @Inject
     protected IEdxEnvironment environment;
 
+    ImageView floatingActionButton;
+
     DiscoverySubject responseBodyDiscoverySubject=null;
     private ClipboardService clipboardService ;
 
@@ -144,6 +150,41 @@ public class ExploreFragment extends BaseFragment implements OnRecyclerItemClick
         setHasOptionsMenu(true);
         soundPool = new SoundPool.Builder().build();
         soundId = soundPool.load(getContext(), R.raw.beep_sound_2, 1);
+
+        if(getActivity()!=null){
+            floatingActionButton = getActivity().findViewById(R.id.chatbot_button);
+            if(floatingActionButton!=null) {
+                floatingActionButton.setVisibility(View.VISIBLE);
+                floatingActionButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), ChatbotActivity.class);
+                        startActivity(intent);
+
+                    }
+                });
+            }
+            ObjectAnimator flipAnim = ObjectAnimator.ofFloat(floatingActionButton, "rotationY", 0f, 360f);
+            flipAnim.setDuration(2500);
+            flipAnim.setInterpolator(new android.view.animation.DecelerateInterpolator());
+            flipAnim.setRepeatCount(0);
+            flipAnim.setRepeatMode(ObjectAnimator.RESTART);
+            flipAnim.start();
+
+            TextView textView = getActivity().findViewById(R.id.chatbot_text);
+            textView.setVisibility(View.VISIBLE);
+
+            // Create the bounce animation with a slower duration
+            ObjectAnimator bounceAnim = ObjectAnimator.ofFloat(textView, "translationY", 0, -40, 0);
+            bounceAnim.setDuration(2500); // Increase the duration to make it smoother
+            bounceAnim.setInterpolator(new BounceInterpolator());
+            bounceAnim.setRepeatCount(0); // Runs three times (original + 2 repeats)
+            bounceAnim.setRepeatMode(ObjectAnimator.RESTART);
+
+            // Start the animation
+            bounceAnim.start();
+
+        }
 
         return binding.getRoot();
     }
@@ -468,6 +509,12 @@ public class ExploreFragment extends BaseFragment implements OnRecyclerItemClick
     @Override
     public void navigateToAnotherScreen(Object item) {
       if (item instanceof DiscoverySubjectResult) {
+
+          if(floatingActionButton!=null) {
+              floatingActionButton.setVisibility(View.GONE);
+              getActivity().findViewById(R.id.chatbot_text).setVisibility(View.GONE);
+          }
+
           navigateToAnotherScreen(item,false);
            /* DiscoverySubjectResult discoverySubjectResult = (DiscoverySubjectResult) item;
             sendAnalyticsCourseDetail(discoverySubjectResult);
@@ -487,7 +534,10 @@ public class ExploreFragment extends BaseFragment implements OnRecyclerItemClick
     }
     public void navigateToAnotherScreen(Object item,Boolean chatBotFlagValue) {
         if (item instanceof DiscoverySubjectResult) {
-
+            if(floatingActionButton!=null) {
+                floatingActionButton.setVisibility(View.GONE);
+                getActivity().findViewById(R.id.chatbot_text).setVisibility(View.GONE);
+            }
 
             DiscoverySubjectResult discoverySubjectResult = (DiscoverySubjectResult) item;
             sendAnalyticsCourseDetail(discoverySubjectResult);

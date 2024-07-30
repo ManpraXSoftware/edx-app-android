@@ -334,9 +334,9 @@
     <string name="label_expired">কোর্স অ্যাক্সেসের মেয়াদ শেষ {date}</string>
     <string name="label_expires_on">কোর্স অ্যাক্সেসের মেয়াদ {date} তারিখে শেষ হবে</string>
     <string name="label_expires">কোর্স অ্যাক্সেসের মেয়াদ শেষ হবে {date}</string>
-    <string name="label_ending">শেষ হচ্ছে {তারিখ}</string>
-    <string name="label_ended">শেষ {তারিখ}</string>
-    <string name="label_starting">শুরু তারিখ}</string>
+    <string name="label_ending" >শেষ হচ্ছে {date}</string>
+    <string name="label_ended">শেষ {date}</string>
+    <string name="label_starting">শুরু {date}</string>
     <string name="new_course_content">নতুন কোর্সের বিষয়বস্তু</string>
     <string name="course_name">কোর্সের নাম</string>
     <string name="course_dates_subtitle">সময়সীমার উপর নজর রাখুন এবং ট্র্যাকে থাকুন</string>

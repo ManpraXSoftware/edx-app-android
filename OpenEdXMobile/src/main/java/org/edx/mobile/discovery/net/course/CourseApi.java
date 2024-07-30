@@ -12,6 +12,7 @@ import org.edx.mobile.discovery.model.ProgramResponseModel;
 import org.edx.mobile.discovery.model.ResponseCourseModel;
 import org.edx.mobile.discovery.model.SearchResult;
 import org.edx.mobile.discovery.model.TagModel;
+import org.edx.mobile.model.ChatbotModal;
 
 import retrofit2.Call;
 
@@ -49,6 +50,11 @@ public class CourseApi extends DiscoveryBaseApi {
     public Call<ProgramResponseModel> getProgramResponseWithTopicName(String auth_token, String lang, String topic_name) {
         return courseService.getProgramResponseWithTopicName(auth_token, lang, topic_name);
     }
+
+    public Call<ChatbotModal> getChatBotData(String auth_token, String topic_name) {
+        return courseService.getChatBotData(auth_token, topic_name);
+    }
+
 
     public Call<ProgramResponseModel> getProgramResponseWithOrganisationName(String auth_token, String lang, String topic_name) {
         return courseService.getProgramResponseWithOrganisationName(auth_token, lang, topic_name);

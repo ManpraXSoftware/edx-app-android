@@ -15,6 +15,7 @@ import org.edx.mobile.discovery.model.ResponseEnrollmentModel;
 import org.edx.mobile.discovery.model.SearchResult;
 import org.edx.mobile.discovery.model.TagModel;
 import org.edx.mobile.http.constants.ApiConstants;
+import org.edx.mobile.model.ChatbotModal;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -43,6 +44,7 @@ public interface CourseService {
     @GET("api/v1/search/programs/")
     Call<ProgramResponseModel> getProgramResponseWithTopicName(@Header(DiscoveryConstants.AUTHORIZATION) String authorization , @Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("program_topics") String programTopics);
 
+
     @GET("api/v1/search/programs/")
     Call<ProgramResponseModel> getProgramResponseWithOrganisationName(@Header(DiscoveryConstants.AUTHORIZATION) String authorization , @Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("org_name") String organisationName);
 
@@ -69,4 +71,11 @@ public interface CourseService {
     @FormUrlEncoded
     @POST("explore-courses/course-bulk/")
     Call<AuthResponse> getUnenroll(@Header(DiscoveryConstants.AUTHORIZATION) String authorization,@Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Field("unenroll") EnrollAndUnenrollData data);
+
+
+    @NonNull
+    @FormUrlEncoded
+    @POST("/openai_chat/")
+    Call<ChatbotModal> getChatBotData(@Header(DiscoveryConstants.AUTHORIZATION) String authorization, @Field("text") String text);
+
 }

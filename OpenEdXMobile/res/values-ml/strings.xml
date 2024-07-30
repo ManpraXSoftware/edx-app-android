@@ -317,9 +317,9 @@
     <string name="label_expired">കോഴ്സിന്റെ ലഭ്യതാ  കാലാവധി തീര്‍ന്നു  {date}</string>
     <string name="label_expires_on">കോഴ്സിന്റെ ലഭ്യതാ  കാലാവധി തീരുന്നത്  {date} </string>
     <string name="label_expires">കോഴ്സിന്റെ ലഭ്യതാ  കാലാവധി തീരുന്നു  {date}</string>
-    <string name="label_ending">അവസാനിക്കുന്നു </string>
+    <string name="label_ending">അവസാനിക്കുന്നു {date}</string>
     <string name="label_ended">അവസാനിച്ചു  {date}</string>
-    <string name="label_starting">തുടങ്ങുന്നു </string>
+    <string name="label_starting">തുടങ്ങുന്നു {date} </string>
     <string name="new_course_content">പുതിയ കോഴ്സിന്റെ ഉള്ളടക്കം </string>
     <string name="course_name">കോഴ്സിന്റെ പേര് </string>
     <string name="course_dates_subtitle">സമയപരിധികളുടെ ട്രാക്ക് സൂക്ഷിക്കുകയും ട്രാക്കിൽ തുടരുകയും ചെയ്യുക </string>

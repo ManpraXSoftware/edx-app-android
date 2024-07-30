@@ -1547,7 +1547,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
 
     private ResponseEnrollmentModel checkEnrollResponse() {
         final ResponseEnrollmentModel[] responseEnrollmentModel = {null};
-        ApiNewLmsClient apiNewLmsClient=new ApiNewLmsClient(loginAPI.config);
+        ApiNewLmsClient apiNewLmsClient=new ApiNewLmsClient(loginAPI.config.getApiHostURL());
         ApiLmsService apiService = apiNewLmsClient.getClient().create(ApiLmsService.class);
 
         Call<ResponseEnrollmentModel> call = apiService.unrollCheck(

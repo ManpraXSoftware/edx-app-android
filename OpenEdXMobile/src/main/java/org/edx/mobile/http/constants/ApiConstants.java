@@ -10,6 +10,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 public class ApiConstants {
+
+    public static final String chatBotBaseUrl="http://3.108.54.137:8000/openai_chat/";
     public static final String COURSE_ID = "courseId";
     public static final String USER_NAME = "username";
     public static final String GROUP_ID = "groupId";

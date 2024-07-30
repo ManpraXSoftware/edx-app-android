@@ -16,15 +16,16 @@ public class ApiNewLmsClient {
 
     private static Retrofit retrofit;
 
-    private Config config;
+    //private Config config;
+    String apiHostURL;
 
     @Inject
-    public ApiNewLmsClient(Config config) {
-        this.config = config;
+    public ApiNewLmsClient(String apiHostURL) {
+        this.apiHostURL = apiHostURL;
     }
 
     public Retrofit getClient() {
-        String clientBase = config.getApiHostURL();
+        String clientBase = apiHostURL;
         if (retrofit == null) {
             OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();

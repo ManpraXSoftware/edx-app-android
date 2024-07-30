@@ -320,7 +320,7 @@
     <string name="label_expires">ପାଠ୍ୟକ୍ରମ ଆକସେସ୍ ସମୟ ସୀମା ସମାପ୍ତ ହୋଇଛି {date}</string>
     <string name="label_ending">ଶେଷ ହେଲା {date}</string>
     <string name="label_ended">ଶେଷ ହୋଇଛି {date}</string>
-    <string name="label_starting">ଆରମ୍ଭ ହେଉଛି </string>
+    <string name="label_starting">ଆରମ୍ଭ ହେଉଛି {date} </string>
     <string name="new_course_content">ନୂତନ ପାଠ୍ୟକ୍ରମ ବିଷୟବସ୍ତୁ ।</string>
     <string name="course_name">ପାଠ୍ୟକ୍ରମର ନାମ[ସମ୍ପାଦନା] </string>
     <string name="course_dates_subtitle">ଡେଡଲାଇନ୍ ଉପରେ ନଜର ରଖନ୍ତୁ ଏବଂ ଟ୍ରାକ୍ ରେ ରୁହନ୍ତୁ ।</string>

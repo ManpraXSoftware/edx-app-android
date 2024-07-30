@@ -697,7 +697,7 @@
     <string name="label_expires">ಕೋರ್ಸ್ ಪ್ರವೇಶವು {date} ರಂದು ಮುಕ್ತಾಯಗೊಳ್ಳುತ್ತದೆ</string>
     <string name="label_ending">ಮುಕ್ತಾಯ {date}</string>
     <string name="label_ended">{date} ರಂದು ಮುಕ್ತಾಯಗೊಂಡಿದೆ</string>
-    <string name="label_starting">ಆರಂಭಿಕ ದಿನ}</string>
+    <string name="label_starting">ಆರಂಭಿಕ {date}</string>
     <string name="new_course_content">ಹೊಸ ಕೋರ್ಸ್ ವಿಷಯ</string>
     <string name="course_name">ಕೋರ್ಸ್ ಹೆಸರು</string>
     <string name="course_dates_subtitle">ಗಡುವನ್ನು ಟ್ರ್ಯಾಕ್ ಮಾಡಿ ಮತ್ತು ಟ್ರ್ಯಾಕ್‌ನಲ್ಲಿ ಇರಿ</string>

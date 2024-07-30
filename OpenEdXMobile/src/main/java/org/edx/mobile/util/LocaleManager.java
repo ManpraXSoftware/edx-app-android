@@ -11,7 +11,9 @@ import androidx.annotation.StringDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class LocaleManager {
     @Retention(RetentionPolicy.SOURCE)
@@ -31,6 +33,24 @@ public class LocaleManager {
     public static final String ODIA = "or";
     public static final String TAMIL = "ta";
     public static final String Empty = "";
+
+    private static final Map<String, String> LANGUAGE_MAP = new HashMap<>();
+
+    static {
+        LANGUAGE_MAP.put(ENGLISH, "English");
+        LANGUAGE_MAP.put(HINDI, "Hindi");
+        LANGUAGE_MAP.put(SPANISH, "Spanish");
+        LANGUAGE_MAP.put(MARATHI, "Marathi");
+        LANGUAGE_MAP.put(KANNADA, "Kannada");
+        LANGUAGE_MAP.put(TELUGU, "Telugu");
+        LANGUAGE_MAP.put(MALAYALAM, "Malayalam");
+        LANGUAGE_MAP.put(ODIA, "Odia");
+        LANGUAGE_MAP.put(TAMIL, "Tamil");
+    }
+
+    public static String getFullLanguageName(String languageCode) {
+        return LANGUAGE_MAP.getOrDefault(languageCode, "Unknown Language");
+    }
     /**
      * SharedPreferences Key
      */

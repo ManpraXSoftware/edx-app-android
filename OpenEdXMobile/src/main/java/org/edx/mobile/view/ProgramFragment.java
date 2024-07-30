@@ -864,7 +864,6 @@ public class ProgramFragment extends BaseFragment implements OnRecyclerItemClick
                 if (check) {
                     checkTokenExpire();
                 }
-                Log.e("getMyPrograms>>>>",result+"");
                 if (result != null) {
                     String userType = loginPrefs.getUserType();
                     List<MyProgramListModel> newProgramsListforTeacher = new ArrayList<>();

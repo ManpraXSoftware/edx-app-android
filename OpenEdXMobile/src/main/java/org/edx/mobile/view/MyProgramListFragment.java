@@ -3,6 +3,7 @@ package org.edx.mobile.view;
 import android.Manifest;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,6 +25,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
+import android.view.animation.BounceInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,6 +42,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.inject.Inject;
 
 import org.edx.mobile.BuildConfig;
@@ -142,6 +146,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
 
     private SoundPool soundPool;
     private int soundId;
+    ImageView floatingActionButton;
 
 
     @Override
@@ -175,6 +180,42 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                 onExploreButtonClick.onClick();
             }
         });
+        if(getActivity()!=null){
+            floatingActionButton = getActivity().findViewById(R.id.chatbot_button);
+            if(floatingActionButton!=null) {
+                floatingActionButton.setVisibility(View.VISIBLE);
+                floatingActionButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), ChatbotActivity.class);
+                        startActivity(intent);
+
+                    }
+                });
+            }
+
+            ObjectAnimator flipAnim = ObjectAnimator.ofFloat(floatingActionButton, "rotationY", 0f, 360f);
+            flipAnim.setDuration(2500);
+            flipAnim.setInterpolator(new android.view.animation.DecelerateInterpolator());
+            flipAnim.setRepeatCount(0);
+            flipAnim.setRepeatMode(ObjectAnimator.RESTART);
+
+            // Start the animation
+            flipAnim.start();
+
+
+            TextView textView = getActivity().findViewById(R.id.chatbot_text);
+            textView.setVisibility(View.VISIBLE);
+            ObjectAnimator bounceAnim = ObjectAnimator.ofFloat(textView, "translationY", 0, -40, 0);
+            bounceAnim.setDuration(2500);
+            bounceAnim.setInterpolator(new BounceInterpolator());
+            bounceAnim.setRepeatCount(0);
+            bounceAnim.setRepeatMode(ObjectAnimator.RESTART);
+
+            // Start the animation
+            bounceAnim.start();
+
+        }
         binding.resumeCourseContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -742,7 +783,6 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
 
 
         Map<String, String> result = classifier.classifyIntent(text);
-        System.out.println(result);
         String keyToSpeak = "message";
         String valueToSpeak = result.get(keyToSpeak);
         textToSpeechHelper.speakText(valueToSpeak);
@@ -829,7 +869,12 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     @Override
     public void navigateToAnotherScreen(Object item) {
          if (item instanceof MyProgramListModel) {
-            MyProgramListModel myProgramListModel = (MyProgramListModel) item;
+
+             if(floatingActionButton!=null) {
+                 floatingActionButton.setVisibility(View.GONE);
+                 getActivity().findViewById(R.id.chatbot_text).setVisibility(View.GONE);
+             }
+             MyProgramListModel myProgramListModel = (MyProgramListModel) item;
         MainBottomDashboardFragment.suodhaIcon().setVisibility(View.GONE);
         MainBottomDashboardFragment.backIcon().setVisibility(View.VISIBLE);
         NewProgramFragment newProgramFragment = new NewProgramFragment();
@@ -847,6 +892,10 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     }
     public void navigateToAnotherScreen(Object item,boolean chatBotFlagProgram) {
         if (item instanceof MyProgramListModel) {
+            if(floatingActionButton!=null) {
+                floatingActionButton.setVisibility(View.GONE);
+                getActivity().findViewById(R.id.chatbot_text).setVisibility(View.GONE);
+            }
             MyProgramListModel myProgramListModel = (MyProgramListModel) item;
             MainBottomDashboardFragment.suodhaIcon().setVisibility(View.GONE);
             MainBottomDashboardFragment.backIcon().setVisibility(View.VISIBLE);
@@ -867,16 +916,20 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        try {
+            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            if (result != null && !result.isEmpty()) {
+                String recognizedText = result.get(0);
+                // Pass the recognized text to your SpeechToTextHelper's onSpeechResult() method
 
-        ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-        if (result != null && !result.isEmpty()) {
-            String recognizedText = result.get(0);
-            // Pass the recognized text to your SpeechToTextHelper's onSpeechResult() method
-
-            onSpeechResult(recognizedText);
+                onSpeechResult(recognizedText);
+            }
+            if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+                speechToTextHelper.onActivityResult(requestCode, resultCode, data);
+            }
         }
-        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
-            speechToTextHelper.onActivityResult(requestCode, resultCode, data);
+        catch (Exception e){
+
         }
     }
 

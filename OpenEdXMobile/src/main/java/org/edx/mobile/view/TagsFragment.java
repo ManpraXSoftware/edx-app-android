@@ -139,14 +139,7 @@ public class TagsFragment extends BaseFragment implements OnRecyclerItemClickLis
                 false);
         clipboardService = ClipboardServiceHolder.getClipboardService(getActivity().getApplicationContext());
         speechToTextHelper = new SpeechToTextHelper(getActivity().getApplicationContext(), this,getActivity());
-        /*floatingActionButton = getActivity().findViewById(R.id.voice_search);
-        floatingActionButton.hide();
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onMicButtonClick();
-            }
-        });*/
+
         if(menuItem!=null){
             menuItem.setVisible(true);
         }

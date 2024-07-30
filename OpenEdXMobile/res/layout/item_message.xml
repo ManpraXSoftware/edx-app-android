@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/linearLayoutMessageOutter"
+    >
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:id="@+id/linearLayoutViewMessage"
+    android:paddingBottom="4dp"
+    android:paddingRight="4dp"
+    android:paddingTop="4dp">
+    <ImageButton
+        android:id="@+id/lisen_on"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:focusable="true"
+        android:padding="8dp"
+        android:visibility="gone"
+        android:background="@color/transparent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/baseline_volume_up_24"
+        android:contentDescription="@string/lisen" />
+
+    <ImageButton
+        android:id="@+id/lisen_off"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:focusable="true"
+        android:padding="8dp"
+        android:visibility="visible"
+        android:background="@drawable/volume_icon_background"
+        android:scaleType="fitCenter"
+        android:importantForAccessibility="yes"
+        android:src="@drawable/baseline_pause_circle_outline_24"
+        android:contentDescription="@string/lisen_off" />
+
+    <TextView
+        android:id="@+id/textViewMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text=""
+        android:background="@color/transparent"
+        android:textSize="16sp"
+        android:textColor="@color/language_text_color"
+        />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/textViewMessage_shimmer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:background="@color/shimmer_placeholder"
+                android:layout_marginBottom="5dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:background="@color/shimmer_placeholder"
+                android:layout_marginBottom="5dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:background="@color/shimmer_placeholder"
+                android:layout_marginBottom="5dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:background="@color/shimmer_placeholder"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:background="@color/shimmer_placeholder"
+                android:layout_marginBottom="5dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:background="@color/shimmer_placeholder"
+                android:layout_marginBottom="5dp"/>
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <org.edx.mobile.util.AutoResizeWebView
+        android:id="@+id/webViewMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:importantForAccessibility="yes"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:contentDescription="Response WebView"
+        android:accessibilityLiveRegion="polite"
+        android:background="@color/language_not_select_border"
+        android:padding="8dp" />
+</LinearLayout>
+</LinearLayout>

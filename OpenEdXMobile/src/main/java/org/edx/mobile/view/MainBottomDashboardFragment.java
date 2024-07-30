@@ -76,7 +76,7 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
     private MainBottomDashboardFragment mainBottomDashboardFragment;
     private static ImageView back_arrow;
 
-    FloatingActionButton floatingActionButton;
+    //FloatingActionButton floatingActionButton;
 
     private ClipboardService clipboardService ;
     NotificationModel notificationModel;
@@ -140,7 +140,7 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
         ln_myDashboard.setSelected(true);
         ln_exploreCourse.setSelected(false);
         sendAnalyticsCourseDetailDashBoard();
-        floatingActionButton = findViewById(R.id.voice_search);
+        //floatingActionButton = findViewById(R.id.chatbot_button);
       /*  getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_fragment, myCoursesListFragment, MyCoursesListFragment.TAG)
                 .commit();*/
@@ -179,6 +179,14 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
                 navigateToExplore();
             }
         });
+//        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(MainBottomDashboardFragment.this, ChatbotActivity.class);
+//                startActivity(intent);
+//
+//            }
+//        });
         copyTextDataByLongPress();
        // getNotification();
 
@@ -366,7 +374,7 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
         sendAnalyticsCourseDetailDashBoard();
         suodhaIcon.setVisibility(View.VISIBLE);
         back_arrow.setVisibility(View.GONE);
-        floatingActionButton.hide();
+       // floatingActionButton.show();
         //   getSupportFragmentManager().popBackStack();
                 /*  for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); ++i) {
                     getSupportFragmentManager().popBackStack();
@@ -398,7 +406,7 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
 
     void navigateToExplore(){
         sendAnalyticsCourseDetailExplore_Course();
-        floatingActionButton.hide();
+       // floatingActionButton.hide();
         suodhaIcon.setVisibility(View.VISIBLE);
         back_arrow.setVisibility(View.GONE);
               /*  for(int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); ++i) {

@@ -71,7 +71,6 @@ public class TextToSpeechHelper extends UtteranceProgressListener {
     public void speakText(String text) {
         HashMap<String, String> params = new HashMap<String, String>();
         params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, text);
-
         textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "utteranceId");
     }
 

@@ -91,7 +91,7 @@ public class NativeAppDriver extends RemoteWebDriver {
 			}
 
 		} catch (Throwable e) {
-			System.out.println(">> Error while initiating Driver " + deviceOS);
+
 			throw e;
 		}
 

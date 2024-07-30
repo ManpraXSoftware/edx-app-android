@@ -1,13 +1,17 @@
 package org.edx.mobile.authentication;
 
 import org.edx.mobile.discovery.model.ResponseEnrollmentModel;
+import org.edx.mobile.model.ChatBotRequestBody;
+import org.edx.mobile.model.ChatbotModal;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
 
 import java.util.ArrayList;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -28,4 +32,13 @@ public interface ApiLmsService {
             @Path("userId") String userId,
             @Query("course_id") String courseId
     );
+
+    @POST("/openai_chat/")
+    Call<ChatbotModal> openaiChat(
+            @Header("Authorization") String authorizationHeader,
+            @Header("Cookie") String cookie,
+            @Body ChatBotRequestBody body
+            );
+
+
 }

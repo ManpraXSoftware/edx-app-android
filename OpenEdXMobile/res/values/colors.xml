@@ -8,6 +8,7 @@
     <color name="edx_white">#fafafa</color>
 
     <color name="white">@android:color/white</color>
+    <color name="transparent">#00000000</color>
     <color name="black">@android:color/black</color>
     <color name="transparent_black">#90000000</color>
     <color name="transparent_black_80">#CC000000</color>
@@ -43,7 +44,9 @@
 
     <color name="crop_circle_border_color">@color/white</color>
     <color name="crop_circle_overlay_color">#c8000000</color>
-
+    <color name="com_smart_login_code">#3C6499</color>
+    <color name="com_smart_login_code_light_1">#708ABC</color>
+    <color name="com_smart_login_code_light_2">#A3B1D7</color>
     <color name="hint_grey_text">#8c8e90</color>
     <color name="last_accessed_row_blue">#E5F5FC</color>
 
@@ -87,6 +90,7 @@
     <color name="language_not_select_border">#707070</color>
     <color name="language_card_selection_color">#FADA8A</color>
     <color name="language_card_after_selection_color">#F3C54D</color>
+    <color name="language_card_lighter_shade">#F9E2A6</color>
     <color name="no_enrolled_course_card_color">#F6F6F6</color>
     <color name="status_bar_color">#9E9E9E</color>
     <color name="enroll_in_program_text_color">#F3C54F</color>
