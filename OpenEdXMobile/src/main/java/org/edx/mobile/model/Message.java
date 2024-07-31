@@ -1,37 +1,48 @@
 package org.edx.mobile.model;
 
 public class Message {
+    private long id;
     private String text;
-    private boolean isUser=false;
-    private boolean isSimmerActive=false;
-    private boolean isResponse=false;
-    private boolean isScrollingEnable=false;
+    private boolean isUser;
+    private boolean isSimmerActive;
+    private boolean isResponse;
+    private boolean isScrollingEnable;
 
-    public Message(String text, boolean isUser,boolean isSimmerActive,boolean isResponse,boolean isScrollingEnable) {
+    public Message(long id, String text, boolean isUser, boolean isSimmerActive, boolean isResponse, boolean isScrollingEnable) {
+        this.id = id;
         this.text = text;
         this.isUser = isUser;
-        this.isSimmerActive=isSimmerActive;
-        this.isResponse=isResponse;
-        this.isScrollingEnable=isScrollingEnable;
+        this.isSimmerActive = isSimmerActive;
+        this.isResponse = isResponse;
+        this.isScrollingEnable = isScrollingEnable;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getText() {
         return text;
     }
 
-    public boolean isUser() {
-        return isUser;
-    }
-    public boolean isSimmerActive() {
-        return isSimmerActive;
-    }
-
     public void setText(String text) {
         this.text = text;
     }
 
+    public boolean isUser() {
+        return isUser;
+    }
+
     public void setUser(boolean user) {
         isUser = user;
+    }
+
+    public boolean isSimmerActive() {
+        return isSimmerActive;
     }
 
     public void setSimmerActive(boolean simmerActive) {

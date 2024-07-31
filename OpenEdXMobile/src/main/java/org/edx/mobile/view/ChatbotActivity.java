@@ -272,7 +272,8 @@ public class ChatbotActivity extends AppCompatActivity implements SpeechToTextLi
     }
 
     void chatProcess(String message) {
-        adapter.addMessage(new Message(message, true, false, false, false));
+        long messageId = System.currentTimeMillis();
+        adapter.addMessage(new Message(messageId,message, true, false, false, false));
         editTextMessage.setText("");
         closeKeyboard();
 
@@ -360,7 +361,10 @@ public class ChatbotActivity extends AppCompatActivity implements SpeechToTextLi
         recyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                adapter.addMessage(new Message(textReply, false, false, true, true));
+
+                long messageId = System.currentTimeMillis();
+
+                adapter.addMessage(new Message(messageId, textReply, false, false, true, true));
                 recyclerView.smoothScrollToPosition(adapter.getItemCount() - 1);
 
                 // Clear focus from other views
@@ -388,14 +392,12 @@ public class ChatbotActivity extends AppCompatActivity implements SpeechToTextLi
                     });
                 }
                 Log.d("recyclerView recyclerView Pre", "New size: " + adapter.getItemCount());
-
-
             }
         }, 1500);
     }
-
     void chatbotShimmer() {
-        adapter.addMessage(new Message("", false, true, false, true));
+        long messageId = System.currentTimeMillis();
+        adapter.addMessage(new Message(messageId,"", false, true, false, true));
     }
 
     void fetchDataAIResponse(String text) {

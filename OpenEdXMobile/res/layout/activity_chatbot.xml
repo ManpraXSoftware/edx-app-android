@@ -196,7 +196,7 @@
         android:contentDescription="@string/down"
         android:src="@drawable/baseline_keyboard_arrow_down_24"
         app:fabCustomSize="48dp"
-        app:maxImageSize="24dp"
+        app:maxImageSize="32dp"
         app:backgroundTint="@color/transparent"
         android:visibility="gone" />
 
