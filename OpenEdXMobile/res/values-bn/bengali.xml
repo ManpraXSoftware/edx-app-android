@@ -447,4 +447,19 @@
     <string name="user_intent_program_found">অনুসন্ধানের %1$s প্রোগ্রাম পাওয়া গেছে</string>
     <string name="user_intent_course_found">অনুসন্ধানের %1$s কোর্স পাওয়া গেছে</string>
     <string name="user_intent_program_message">%1$s প্রোগ্রামের সাথে সংশ্লিষ্ট একটি ইচ্ছুক ব্যবহারকারীর উদ্দেশ্য রয়েছে</string>
+
+    <string name="subodha_ai">সুবোধ এআই</string>
+    <string name="subodha_ai_floating_action_button">সুবোধ এআই ভাসমান ক্রিয়া বোতাম</string>
+    <string name="how_may_i_assist_you">আমি কিভাবে আপনার সহায়তা করতে পারি?</string>
+    <string name="type_a_message">একটি বার্তা টাইপ করুন</string>
+    <string name="static_text_chatbot1">সুবোধ এআই তে স্বাগতম</string>
+    <string name="static_text_chatbot2">আমি আজ আপনাকে কিভাবে সাহায্য করতে পারি? দয়া করে আপনার প্রশ্নগুলি %1$s তে জিজ্ঞাসা করুন।</string>
+    <string name="listen">শোনার জন্য ট্যাপ করুন</string>
+    <string name="send_item">পাঠান</string>
+    <string name="down">নিচে</string>
+    <string name="data_is_loading_please_wait">তথ্য লোড হচ্ছে, দয়া করে অপেক্ষা করুন</string>
+    <string name="listen_off">শোনার বন্ধ করতে ট্যাপ করুন</string>
+    <string name="something_went_wrong">অপস! দয়া করে আপনার প্রশ্নটি আবার জিজ্ঞাসা করুন।</string>
+
+
 </resources>

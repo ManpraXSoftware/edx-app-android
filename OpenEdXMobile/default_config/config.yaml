@@ -5,6 +5,7 @@
 #FEEDBACK_EMAIL_ADDRESS: "support@example.com"
 #DISCOVERY_BASE_URL: "https://subodha-courses.visionempowertrust.org/"
 #FIREBASE:
+# SUBODHA_AI_BASE_URL: "https://ai.subodha-lms.visionempowertrust.org/"
 #  { ENABLED: true, ANALYTICS_ENABLED: true, ANALYTICS_SOURCE: "firebase" }
  API_HOST_URL: 'https://staging-lms.visionempowertrust.org/' #'https://subodha-lms.visionempowertrust.org/' #'https://subodha-lms.visionempowertrust.org/' # localhost is 10.0.2.2 in Android
  ENVIRONMENT_DISPLAY_NAME: 'Localhost'
@@ -12,4 +13,5 @@
  PLATFORM_DESTINATION_NAME: 'example.com'
  FEEDBACK_EMAIL_ADDRESS: 'support@example.com'
  DISCOVERY_BASE_URL: 'https://staging-courses.visionempowertrust.org/'#'https://subodha-courses.visionempowertrust.org/'
+ SUBODHA_AI_BASE_URL: 'https://ai.staging-lms.visionempowertrust.org'
  FIREBASE: {ENABLED: true, ANALYTICS_ENABLED: true, ANALYTICS_SOURCE: 'firebase'}

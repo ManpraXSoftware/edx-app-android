@@ -856,14 +856,18 @@
     <string name="new_string">New</string>
 
     <string name="chatbot">Chatbot</string>
+
     <string name="subodha_ai">Subodha AI</string>
     <string name="subodha_ai_floating_action_button">Subodha AI floating action button</string>
     <string name="how_may_i_assist_you">How may I assist you?</string>
     <string name="type_a_message">Type a message</string>
     <string name="static_text_chatbot1">Welcome to Subodha AI</string>
     <string name="static_text_chatbot2">How can I assist you today? Please ask your questions in %1$s.</string>
-    <string name="lisen">Tap to Lisen </string>
+    <string name="listen">Tap to Listen </string>
     <string name="send_item">Send</string>
     <string name="down">down</string>
-    <string name="lisen_off">Tap to Turn Off Lisen </string>
+    <string name="data_is_loading_please_wait">data is loading please wait</string>
+    <string name="listen_off">Tap to Turn Off Listen </string>
+    <string name="something_went_wrong">Oops! Please ask your question again.</string>
+
 </resources>

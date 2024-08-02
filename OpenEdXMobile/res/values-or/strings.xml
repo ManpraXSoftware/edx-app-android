@@ -434,4 +434,19 @@
     <string name="user_intent_program_found">ଖୋଜ %1$s ପ୍ରୋଗ୍ରାମ ପାଇଲେ</string>
     <string name="user_intent_course_found">ଖୋଜର %1$s କୋର୍ସ ପାଇଲେ</string>
     <string name="user_intent_program_message">%1$s ପ୍ରୋଗ୍ରାମ ସହ ଏକ ଉପଭୋକ୍ତାଙ୍କ ଉଦ୍ଦେଶ୍ୟ ରହିଛି</string>
+
+    <string name="subodha_ai">ସୁବୋଧ ଏଆଇ</string>
+    <string name="subodha_ai_floating_action_button">ସୁବୋଧ ଏଆଇ ଭସ୍ମ ଆକ୍ସନ ବଟନ୍</string>
+    <string name="how_may_i_assist_you">ମୁଁ କେମିତି ଆପଣଙ୍କୁ ସହାୟତା କରିପାରିବି?</string>
+    <string name="type_a_message">ଏକ ଅନୁବାଦ ଟାଇପ କରନ୍ତୁ</string>
+    <string name="static_text_chatbot1">ସୁବୋଧ ଏଆଇ କୁ ସ୍ବାଗତ</string>
+    <string name="static_text_chatbot2">ଆଜି ମୁଁ ଆପଣଙ୍କୁ କିପରି ସହାୟତା କରିପାରିବି? ଦୟାକରି ଆପଣଙ୍କର ପ୍ରଶ୍ନଗୁଡ଼ିକୁ %1$s ରେ ପଚାରନ୍ତୁ।</string>
+    <string name="listen">ସୁଣିବା ପାଇଁ ଟାପ୍ କରନ୍ତୁ</string>
+    <string name="send_item">ପଠାଇବା</string>
+    <string name="down">ତଳେ</string>
+    <string name="data_is_loading_please_wait">ଡାଟା ଲୋଡିଂ ହେଉଛି, ଦୟାକରି ଅପେକ୍ଷା କରନ୍ତୁ</string>
+    <string name="listen_off">ସୁଣିବା ବନ୍ଦ କରିବାକୁ ଟାପ୍ କରନ୍ତୁ</string>
+    <string name="something_went_wrong">ଓହ! ଦୟାକରି ଆପଣଙ୍କର ପ୍ରଶ୍ନଟି ପୁନରାବୃତି କରନ୍ତୁ।</string>
+
+
 </resources>

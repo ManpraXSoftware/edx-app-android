@@ -17,9 +17,9 @@ import java.util.Map;
 
 public class LocaleManager {
     @Retention(RetentionPolicy.SOURCE)
-    @StringDef({ ENGLISH, HINDI,KANNADA,TAMIL,MALAYALAM,ODIA})
+    @StringDef({ ENGLISH, HINDI,KANNADA,TAMIL,MALAYALAM,ODIA,BENGALI})
     public @interface LocaleDef {
-        String[] SUPPORTED_LOCALES = { ENGLISH, HINDI,KANNADA,TAMIL,MALAYALAM,ODIA};
+        String[] SUPPORTED_LOCALES = { ENGLISH, HINDI,KANNADA,TAMIL,MALAYALAM,ODIA,BENGALI};
     }
 
     public static final String ENGLISH = "en";
@@ -33,19 +33,21 @@ public class LocaleManager {
     public static final String ODIA = "or";
     public static final String TAMIL = "ta";
     public static final String Empty = "";
+    public static final String BENGALI="bn";
 
     private static final Map<String, String> LANGUAGE_MAP = new HashMap<>();
 
     static {
-        LANGUAGE_MAP.put(ENGLISH, "English");
-        LANGUAGE_MAP.put(HINDI, "Hindi");
-        LANGUAGE_MAP.put(SPANISH, "Spanish");
-        LANGUAGE_MAP.put(MARATHI, "Marathi");
-        LANGUAGE_MAP.put(KANNADA, "Kannada");
-        LANGUAGE_MAP.put(TELUGU, "Telugu");
-        LANGUAGE_MAP.put(MALAYALAM, "Malayalam");
-        LANGUAGE_MAP.put(ODIA, "Odia");
-        LANGUAGE_MAP.put(TAMIL, "Tamil");
+        LANGUAGE_MAP.put(ENGLISH, "English"); // English remains the same
+        LANGUAGE_MAP.put(HINDI, "हिन्दी"); // Hindi in Devanagari script
+        LANGUAGE_MAP.put(SPANISH, "Español"); // Spanish in native script
+        LANGUAGE_MAP.put(MARATHI, "मराठी"); // Marathi in Devanagari script
+        LANGUAGE_MAP.put(KANNADA, "ಕನ್ನಡ"); // Kannada in Kannada script
+        LANGUAGE_MAP.put(TELUGU, "తెలుగు"); // Telugu in Telugu script
+        LANGUAGE_MAP.put(MALAYALAM, "മലയാളം"); // Malayalam in Malayalam script
+        LANGUAGE_MAP.put(ODIA, "ଓଡ଼ିଆ"); // Odia in Odia script
+        LANGUAGE_MAP.put(TAMIL, "தமிழ்"); // Tamil in Tamil script
+        LANGUAGE_MAP.put(BENGALI, "বাংলা"); // Bengali in Bengali script
     }
 
     public static String getFullLanguageName(String languageCode) {

@@ -476,4 +476,20 @@
     <string name="user_intent_program_found">தேடல் %1$s நிரல் கிடைக்கப்பட்டது</string>
     <string name="user_intent_course_found">தேடல் %1$s பாடநெறி கிடைக்கப்பட்டது</string>
     <string name="user_intent_program_message">%1$s நிரலுடன் தொடர்பு உள்ள நிரலாளரின் உத்திக்கு ஒரு செயல் உள்ளது</string>
+
+
+    <string name="subodha_ai">சுபோதா ஏஐ</string>
+    <string name="subodha_ai_floating_action_button">சுபோதா ஏஐ மிதக்கும் செயல்பாட்டு பொத்தான்</string>
+    <string name="how_may_i_assist_you">நான் உங்களுக்கு எப்படி உதவ முடியுமா?</string>
+    <string name="type_a_message">ஒரு செய்தியை குறியிடவும்</string>
+    <string name="static_text_chatbot1">சுபோதா ஏஐ-க்கு வரவேற்கிறோம்</string>
+    <string name="static_text_chatbot2">நான் இன்று உங்களுக்கு எப்படி உதவ முடியும்? தயவுசெய்து உங்கள் கேள்விகளை %1$s இல் கேளுங்கள்.</string>
+    <string name="listen">ஈகைக்கு தட்டவும்</string>
+    <string name="send_item">அனுப்பவும்</string>
+    <string name="down">கீழே</string>
+    <string name="data_is_loading_please_wait">தரவை ஏற்றுகிறது தயவுசெய்து காத்திருங்கள்</string>
+    <string name="listen_off">ஈகையை நிறுத்த தட்டவும்</string>
+    <string name="something_went_wrong">ஓஹோ! தயவுசெய்து உங்கள் கேள்வியை மீண்டும் கேளுங்கள்.</string>
+
+
 </resources>

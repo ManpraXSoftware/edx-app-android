@@ -433,4 +433,19 @@
     <string name="user_intent_program_found">തെരഞ്ഞെടുപ്പ് %1$s പ്രോഗ്രാം കണ്ടെത്തി</string>
     <string name="user_intent_course_found">തെരഞ്ഞെടുപ്പ് %1$s കോഴ്സ് കണ്ടെത്തി</string>
     <string name="user_intent_program_message">%1$s പദ്ധതിയുമായി ബന്ധപ്പെട്ട ഒരു ഉപയോക്താവിന്റെ ഉദ്ദേശം ഉണ്ട്</string>
+
+    <string name="subodha_ai">സുബോധ എഐ</string>
+    <string name="subodha_ai_floating_action_button">സുബോധ എഐ മിതക്കുന്ന പ്രവർത്തന ബട്ടൺ</string>
+    <string name="how_may_i_assist_you">ഞാൻ നിങ്ങളെ എങ്ങനെ സഹായിക്കാമെന്ന്?</string>
+    <string name="type_a_message">ഒരു സന്ദേശം ടൈപ്പ് ചെയ്യുക</string>
+    <string name="static_text_chatbot1">സുബോധ എഐ ലേക്ക് സ്വാഗതം</string>
+    <string name="static_text_chatbot2">ഞാൻ ഇന്ന് നിങ്ങളെ എങ്ങനെ സഹായിക്കാമെന്ന്? ദയവായി നിങ്ങളുടെ ചോദ്യങ്ങൾ %1$s ല്‍ ചോദിക്കുക.</string>
+    <string name="listen">കേൾക്കാൻ ടാപ്പ് ചെയ്യുക</string>
+    <string name="send_item">അയക്കുക</string>
+    <string name="down">താഴേക്ക്</string>
+    <string name="data_is_loading_please_wait">ഡാറ്റ ലോഡിംഗ് കാണിക്കുന്നത്, ദയവായി കാത്തിരിക്കുക</string>
+    <string name="listen_off">കേൾക്കുന്നത് നിർത്താൻ ടാപ്പ് ചെയ്യുക</string>
+    <string name="something_went_wrong">അയ്യോ! ദയവായി നിങ്ങളുടെ ചോദ്യം വീണ്ടും ചോദിക്കുക.</string>
+
+
 </resources>

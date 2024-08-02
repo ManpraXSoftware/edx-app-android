@@ -821,4 +821,20 @@
     <string name="user_intent_topic_found">ಹುಡುಕಾಟದ ಸಂಖ್ಯೆ  %1$s ವಿಷಯ ಸಿಗಿದಿದೆ</string>
     <string name="user_intent_program_found">ಹುಡುಕಾಟ %1$s ಪ್ರೋಗ್ರಾಂ ಸಿಗಿತು</string>
     <string name="user_intent_course_found">ಹುಡುಕಾಟ %1$s ಕೋರ್ಸು ಸಿಗಿತು</string>
+
+
+    <string name="subodha_ai">ಸುಬೋಧ ಏಐ</string>
+    <string name="subodha_ai_floating_action_button">ಸುಬೋಧ ಏಐ ತೇರುವ ಕ್ರಿಯಾತ್ಮಕ ಬಟನ್</string>
+    <string name="how_may_i_assist_you">ನಾನು ನಿಮಗೆ ಹೇಗೆ ಸಹಾಯ ಮಾಡಬಹುದು?</string>
+    <string name="type_a_message">ಒಂದು ಸಂದೇಶವನ್ನು ಟೈಪ್ ಮಾಡಿ</string>
+    <string name="static_text_chatbot1">ಸುಬೋಧ ಏಐ ಗೆ ನಿಮಗೆ ಸ್ವಾಗತ</string>
+    <string name="static_text_chatbot2">ನಾನು ಇಂದು ನಿಮಗೆ ಹೇಗೆ ಸಹಾಯ ಮಾಡಬಹುದು? ದಯವಿಟ್ಟು ನಿಮ್ಮ ಪ್ರಶ್ನೆಗಳನ್ನು %1$s ನಲ್ಲಿ ಕೇಳಿ.</string>
+    <string name="listen">ಹುಡುಕಲು ಟ್ಯಾಪ್ ಮಾಡಿ</string>
+    <string name="send_item">ಮೋಡ್ಲು</string>
+    <string name="down">ಕೆಳಗೆ</string>
+    <string name="data_is_loading_please_wait">ಡೇಟಾ ಲೋಡ್ ಆಗುತ್ತಿದೆ ದಯವಿಟ್ಟು ಕಾಯಿರಿ</string>
+    <string name="listen_off">ಶ್ರಾವಣವನ್ನು ನಿಲ್ಲಿಸಲು ಟ್ಯಾಪ್ ಮಾಡಿ</string>
+    <string name="something_went_wrong">ಓಹೋ! ದಯವಿಟ್ಟು ನಿಮ್ಮ ಪ್ರಶ್ನೆ ಪುನರಾವರ್ತಿಸಿ.</string>
+
+
 </resources>

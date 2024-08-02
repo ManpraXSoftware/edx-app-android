@@ -1,23 +1,22 @@
 package org.edx.mobile.authentication;
 
 import com.google.inject.Inject;
-
-import org.edx.mobile.util.Config;
-
-import javax.inject.Singleton;
-
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import javax.inject.Singleton;
+import javax.net.ssl.*;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.concurrent.TimeUnit;
+
 @Singleton
 public class ApiNewLmsClient {
 
     private static Retrofit retrofit;
-
-    //private Config config;
-    String apiHostURL;
+    private final String apiHostURL;
 
     @Inject
     public ApiNewLmsClient(String apiHostURL) {
@@ -27,14 +26,58 @@ public class ApiNewLmsClient {
     public Retrofit getClient() {
         String clientBase = apiHostURL;
         if (retrofit == null) {
-            OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+            OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
+
+            // Set timeouts
+            httpClientBuilder.connectTimeout(10, TimeUnit.SECONDS);
+            httpClientBuilder.readTimeout(30, TimeUnit.SECONDS);
+            httpClientBuilder.writeTimeout(30, TimeUnit.SECONDS);
+
+            // Add logging interceptor
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            httpClient.addInterceptor(loggingInterceptor);
+            httpClientBuilder.addInterceptor(loggingInterceptor);
+
+            // Disable SSL certificate verification (Only for testing!)
+            try {
+                final TrustManager[] trustAllCerts = new TrustManager[]{
+                        new X509TrustManager() {
+                            @Override
+                            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                            }
+
+                            @Override
+                            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                            }
+
+                            @Override
+                            public X509Certificate[] getAcceptedIssuers() {
+                                return new X509Certificate[]{};
+                            }
+                        }
+                };
+
+                final SSLContext sslContext = SSLContext.getInstance("SSL");
+                sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+                final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+                httpClientBuilder.sslSocketFactory(sslSocketFactory, (X509TrustManager)trustAllCerts[0]);
+                httpClientBuilder.hostnameVerifier(new HostnameVerifier() {
+                    @Override
+                    public boolean verify(String hostname, SSLSession session) {
+                        return true;
+                    }
+                });
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            // Build OkHttpClient and Retrofit
+            OkHttpClient httpClient = httpClientBuilder.build();
+
             retrofit = new Retrofit.Builder()
                     .baseUrl(clientBase)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .client(httpClient.build())
+                    .client(httpClient)
                     .build();
         }
         return retrofit;

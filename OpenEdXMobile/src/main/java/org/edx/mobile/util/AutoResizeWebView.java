@@ -7,9 +7,13 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -154,16 +158,30 @@ public class AutoResizeWebView extends WebView {
         }
     }
 
+
     @Override
     public boolean requestFocus(int direction, Rect previouslyFocusedRect) {
         boolean result = super.requestFocus(direction, previouslyFocusedRect);
         if (result) {
-            clearFocus();
-            setFocusable(true);
-            setFocusableInTouchMode(true);
-            result = super.requestFocus(direction, previouslyFocusedRect);
+            sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
         }
         return result;
+    }
+
+    @Override
+    public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
+        super.onInitializeAccessibilityEvent(event);
+        event.setClassName(AutoResizeWebView.class.getName());
+    }
+
+    @Override
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        super.onInitializeAccessibilityNodeInfo(info);
+        info.setClassName(AutoResizeWebView.class.getName());
+        info.setFocusable(true);
+        info.setContentDescription("Response WebView");
+        info.addAction(AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_SCROLL_FORWARD.getId());
+        info.addAction(AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_SCROLL_BACKWARD.getId());
     }
 
 }

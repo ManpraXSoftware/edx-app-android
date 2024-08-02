@@ -477,4 +477,20 @@
     <string name="user_intent_topic_found">खोज के नंबर %1$s विषय मिले</string>
     <string name="user_intent_program_found">खोज के %1$s प्रोग्राम मिले</string>
     <string name="user_intent_course_found">खोज के %1$s कोर्स मिले</string>
+
+    <string name="subodha_ai">सुबोध एआई</string>
+    <string name="subodha_ai_floating_action_button">सुबोध एआई तैरता एक्शन बटन</string>
+    <string name="how_may_i_assist_you">मैं आपकी कैसे मदद कर सकता हूँ?</string>
+    <string name="type_a_message">एक संदेश टाइप करें</string>
+    <string name="static_text_chatbot1">सुबोधा एआई में आपका स्वागत है।</string>
+    <string name="static_text_chatbot2">मैं आज आपकी कैसे सहायता कर सकता हूँ? कृपया अपने प्रश्न %1$s में पूछें।</string>
+    <string name="listen">सुनने के लिए टैप करें</string>
+    <string name="send_item">भेजें</string>
+    <string name="down">नीचे</string>
+    <string name="data_is_loading_please_wait">डेटा लोड हो रहा है कृपया प्रतीक्षा करें</string>
+    <string name="listen_off">सुनने को बंद करने के लिए टैप करें</string>
+    <string name="something_went_wrong">ओह! कृपया अपना सवाल फिर से पूछें।</string>
+
+
+
 </resources>
