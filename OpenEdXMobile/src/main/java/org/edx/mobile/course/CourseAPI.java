@@ -46,6 +46,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import retrofit2.Call;
 
@@ -62,7 +65,6 @@ public class CourseAPI {
     private final CourseService courseService;
     @NonNull
     private final UserPrefs userPrefs;
-
 
     @Inject
     public CourseAPI(@NonNull CourseService courseService, @NonNull UserPrefs userPrefs) {
@@ -203,13 +205,21 @@ public class CourseAPI {
     }
 
     @NonNull
-    public CourseComponent getCourseStructureFromCache(@NonNull String blocksApiVersion, @NonNull String courseId)
-            throws Exception {
-        CourseStructureV1Model model = executeStrict(
-                courseService.getCourseStructure("only-if-cached, max-stale", blocksApiVersion, getUsername(), courseId));
-        return (CourseComponent) normalizeCourseStructure(model, courseId);
+    public Future<CourseComponent> getCourseStructureFromCache(ExecutorService executorService,@NonNull String blocksApiVersion, @NonNull String courseId) {
+        return executorService.submit(() -> {
+            try {
+                // Try to get from cache first
+                CourseStructureV1Model model = executeStrict(
+                        courseService.getCourseStructure("stale-if-error=2147483647", blocksApiVersion, getUsername(), courseId));
+                return (CourseComponent) normalizeCourseStructure(model, courseId);
+            } catch (Exception e) {
+                // If cache request fails, fall back to network request
+                CourseStructureV1Model model = executeStrict(
+                        courseService.getCourseStructure(null, blocksApiVersion, getUsername(), courseId));
+                return (CourseComponent) normalizeCourseStructure(model, courseId);
+            }
+        });
     }
-
     public static abstract class GetCourseStructureCallback
             extends ErrorHandlingCallback<CourseStructureV1Model> {
         @NonNull
@@ -464,4 +474,6 @@ public class CourseAPI {
         }
         return map;
     }
+
+
 }

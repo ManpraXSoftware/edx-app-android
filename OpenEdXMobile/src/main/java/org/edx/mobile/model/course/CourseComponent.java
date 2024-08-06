@@ -1,6 +1,8 @@
 package org.edx.mobile.model.course;
 
 import androidx.annotation.NonNull;
+
+import android.content.Context;
 import android.text.TextUtils;
 
 import org.edx.mobile.R;
@@ -9,6 +11,7 @@ import org.edx.mobile.logger.Logger;
 import org.edx.mobile.model.Filter;
 import org.edx.mobile.model.api.AuthorizationDenialReason;
 import org.edx.mobile.model.api.IPathNode;
+import org.edx.mobile.util.LocaleManager;
 import org.edx.mobile.util.VideoUtil;
 
 import java.util.ArrayList;
@@ -126,7 +129,9 @@ public class CourseComponent implements IBlock, IPathNode {
     @Override
     public String getDisplayName() {
         if (TextUtils.isEmpty(name)) {
-            return MainApplication.instance().getString(R.string.untitled_block);
+            Context localizedContext = LocaleManager.setLocale(MainApplication.instance());
+            return localizedContext.getString(R.string.untitled_block);
+           // return MainApplication.instance().getString(R.string.untitled_block);
         }
         return name;
     }

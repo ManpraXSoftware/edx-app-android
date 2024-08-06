@@ -867,16 +867,18 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-        if (result != null && !result.isEmpty()) {
-            String recognizedText = result.get(0);
-            // Pass the recognized text to your SpeechToTextHelper's onSpeechResult() method
-
-            onSpeechResult(recognizedText);
+        try {
+            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            if (result != null && !result.isEmpty()) {
+                String recognizedText = result.get(0);
+                onSpeechResult(recognizedText);
+            }
+            if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+                speechToTextHelper.onActivityResult(requestCode, resultCode, data);
+            }
         }
-        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
-            speechToTextHelper.onActivityResult(requestCode, resultCode, data);
+        catch (Exception e){
+            Log.e(TAG,e.getMessage());
         }
     }
 

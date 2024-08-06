@@ -2,6 +2,8 @@ package org.edx.mobile.services;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.util.LruCache;
 
 import com.google.inject.Inject;
@@ -11,6 +13,11 @@ import org.edx.mobile.course.CourseAPI;
 import org.edx.mobile.logger.Logger;
 import org.edx.mobile.model.Filter;
 import org.edx.mobile.model.course.CourseComponent;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * This class manages the caching mechanism of courses data.
@@ -70,15 +77,24 @@ public class CourseManager {
      */
     @Nullable
     public CourseComponent getCourseDataFromPersistableCache(@NonNull String blocksApiVersion, @NonNull String courseId) {
+        final ExecutorService executorService = Executors.newSingleThreadExecutor();
         try {
-            final CourseComponent component = courseApi.getCourseStructureFromCache(blocksApiVersion, courseId);
-            addCourseDataInAppLevelCache(courseId, component);
+            Future<CourseComponent> futureComponent = courseApi.getCourseStructureFromCache(executorService,blocksApiVersion, courseId);
+            CourseComponent component = futureComponent.get(); // This blocks until the result is available
+            if (component != null) {
+                addCourseDataInAppLevelCache(courseId, component);
+            }
+            executorService.shutdown();
             return component;
-        } catch (Exception e) {
-            // Course data doesn't exist in cache
+        } catch (ExecutionException | InterruptedException e) {
+            executorService.shutdown();
+            // Log the exception
+            Log.e("CourseDataManager", "Error retrieving course data from cache", e);
+            // Course data doesn't exist in cache or there was an error
             return null;
         }
     }
+
 
     @Deprecated
     @Nullable

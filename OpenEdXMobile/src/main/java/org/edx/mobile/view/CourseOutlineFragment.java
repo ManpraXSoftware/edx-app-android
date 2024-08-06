@@ -103,7 +103,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static org.edx.mobile.view.Router.EXTRA_COURSE_DATA;
 
 public class CourseOutlineFragment extends OfflineSupportBaseFragment
         implements LastAccessManager.LastAccessManagerCallback, RefreshListener, OnRecyclerItemClickListener, OnNavigateListener,
