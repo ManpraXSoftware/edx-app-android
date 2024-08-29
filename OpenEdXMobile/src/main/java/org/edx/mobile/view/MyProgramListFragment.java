@@ -419,13 +419,18 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                             }
                         }
                     }*/
+
                     for (Programs programs : result) {
+
                         if (programs.getTags() != null) {
                             for (MyProgramTags myProgramTags : programs.getTags()) {
                                 if (myProgramTags.getTag_title() != null && myProgramTags.getTag_title().toLowerCase().contains("teacher")) {
+
                                     MyProgramListModel myProgramListModel = new MyProgramListModel();
                                     myProgramListModel.setTagName(myProgramTags.getConverted_tag_title());
                                     myProgramListModel.setConvertedTagName(myProgramTags.getTag_title());
+                                    myProgramListModel.setProgram_language(programs.getProgram_language());
+
                                     // myProgramListModel.setProgramName(programs.getProgram_title());
                                     myProgramListModel.setProgramName(programs.getConverted_program_title());
                                     myProgramListModel.setProgramUUid(programs.getProgram_uuid());
@@ -438,6 +443,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                                     myProgramListModel.setConvertedTagName(myProgramTags.getTag_title());
                                     // myProgramListModel.setProgramName(programs.getProgram_title());
                                     myProgramListModel.setProgramName(programs.getConverted_program_title());
+                                    myProgramListModel.setProgram_language(programs.getProgram_language());
                                     myProgramListModel.setProgramUUid(programs.getProgram_uuid());
                                     myProgramListModel.setResume_program(programs.getResumePrograms());
                                     newProgramsListforStudent.add(myProgramListModel);
@@ -448,6 +454,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                                     myProgramListModel.setConvertedTagName(myProgramTags.getTag_title());
                                     // myProgramListModel.setProgramName(programs.getProgram_title());
                                     myProgramListModel.setProgramName(programs.getConverted_program_title());
+                                    myProgramListModel.setProgram_language(programs.getProgram_language());
                                     myProgramListModel.setProgramUUid(programs.getProgram_uuid());
                                     myProgramListModel.setResume_program(programs.getResumePrograms());
                                     newProgramsListforBoth.add(myProgramListModel);
@@ -482,6 +489,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                                     resumeCourse.setTagName(programListModel.getTagName());*/
 
                                     resumeCourse.setBlock_id(programListModel.getResume_program().getBlock_id());
+                                    resumeCourse.setCourse_language(programListModel.getResume_program().getCourse_language());
                                     resumeCourse.setCourse_id(programListModel.getResume_program().getCourse_id());
                                     resumeCourse.setCourse_name(programListModel.getResume_program().getConverted_course_name());
                                     resumeCourse.setProgramName(programListModel.getProgramName());
@@ -491,6 +499,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                         }
 
                         if (resumeCourse != null) {
+                            binding.cousreLangauge.setText(getString(R.string.course_language)+" ("+LocaleManager.getLanguageResourceName(context,resumeCourse.getCourse_language())+")");
                             binding.tagName.setText(resumeCourse.getTagName());
                             binding.programName.setText(context.getString(R.string.program_name) + " - " +
                                     resumeCourse.getProgramName());
@@ -503,6 +512,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                     if (myProgramListModels != null) {
                         binding.myProgramList.setVisibility(View.VISIBLE);
                     }
+
                     myProgramListAdapter.setMyProgramList(myProgramListModels);
                     initializeIntentData(myProgramListModels);
                     if(menuItem!=null) {

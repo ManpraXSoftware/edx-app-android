@@ -821,4 +821,16 @@
     <string name="user_intent_topic_found">ಹುಡುಕಾಟದ ಸಂಖ್ಯೆ  %1$s ವಿಷಯ ಸಿಗಿದಿದೆ</string>
     <string name="user_intent_program_found">ಹುಡುಕಾಟ %1$s ಪ್ರೋಗ್ರಾಂ ಸಿಗಿತು</string>
     <string name="user_intent_course_found">ಹುಡುಕಾಟ %1$s ಕೋರ್ಸು ಸಿಗಿತು</string>
+    <string name="language">ಭಾಷೆ</string>
+    <string name="program_language">ಕಾರ್ಯಕ್ರಮ ಭಾಷೆ</string>
+    <string name="course_language">ಕೋರ್ಸ್ ಭಾಷೆ</string>
+    <string name="language_english">ಇಂಗ್ಲಿಷ್</string>
+    <string name="language_hindi">ಹಿಂದಿ</string>
+    <string name="language_kannada">ಕನ್ನಡ</string>
+    <string name="language_tamil">ತಮಿಳು</string>
+    <string name="language_malayalam">ಮಲಯಾಳಂ</string>
+    <string name="language_odia">ಒರಿಯಾ</string>
+    <string name="language_bengali">ಬಂಗಾಳಿ</string>
+
+
 </resources>

@@ -446,6 +446,11 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
 
                     binding.courseDatailEnroll.setVisibility(View.VISIBLE);
                     binding.courseDatailUnenroll.setVisibility(View.GONE);
+                    binding.programLanguage.setVisibility(View.VISIBLE);
+                    if(getContext()!=null) {
+                        binding.programLanguage.setText(getString(R.string.program_language) + " : " + LocaleManager.getLanguageResourceName(getContext(), programResultList.getProgramLanguage()));
+                    }
+
                     if (programResultList.getTitle() != null
                             && !programResultList.getTitle().isEmpty()) {
                         binding.programNameInCard.setText(programResultList.getTitle());
@@ -517,6 +522,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                     courseRunsObject.setKey(courseItem.getKey());
                     courseRunsObject.setUuid(courseItem.getKey());
                     courseRunsObject.setTitle(courseItem.getTitle());
+                    courseRunsObject.setLanguage(courseItem.getLanguage());
                     courseRunsObject.setCourse_status(null);
                     courseRunsObject.setConverted_course_title(courseItem.getConvertedTitle());
                     courseRuns.add(courseRunsObject);
@@ -550,6 +556,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
 
             }
             if(!flag) {
+
                 binding.shimmerLayoutCourseButton.setVisibility(View.GONE);
             }
                 /*
@@ -612,6 +619,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                     courseRunsObject.setKey(enrolledCoursesResponse.getCourse().getId());
                     courseRunsObject.setUuid(enrolledCoursesResponse.getCourse().getId());
                     courseRunsObject.setTitle(enrolledCoursesResponse.getCourse().getName());
+                    courseRunsObject.setLanguage(enrolledCoursesResponse.getCourse().getLanguage());
                     courseRunsObject.setCourse_status(enrolledCoursesResponse.getCourse_status());
                     courseRunsObject.setConverted_course_title(enrolledCoursesResponse.getCourse().getName());
                     courseRuns.add(courseRunsObject);
@@ -648,8 +656,8 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                 binding.lnEnrollInfo.setVisibility(View.VISIBLE);
                 binding.enrollInProgram.setVisibility(View.GONE);
                 binding.unenrollFromProgram.setVisibility(View.VISIBLE);
-                binding.ivCheck.setVisibility(View.GONE);
-                binding.courseDatailEnroll.setVisibility(View.GONE);
+                binding.ivCheck.setVisibility(View.VISIBLE);
+                binding.courseDatailEnroll.setVisibility(View.VISIBLE);
                 binding.courseDatailUnenroll.setVisibility(View.GONE);
                 //  }
             }
@@ -836,6 +844,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                     menuItem.setVisible(true);
                 }
             }
+
             programModelAdapter.setPrograms(programResultLists,
                     programResultLists.get(0).getTitle());
         }
@@ -925,6 +934,10 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
         binding.shimmerLayoutProgramName.setVisibility(View.GONE);
         binding.linerProgramName.setVisibility(View.VISIBLE);
         String programName = getProgramName(programResultList);
+        binding.programLanguage.setVisibility(View.VISIBLE);
+        if(getContext()!=null) {
+            binding.programLanguage.setText(getString(R.string.program_language) + " : " + LocaleManager.getLanguageResourceName(getContext(), programResultList.getProgramLanguage()));
+        }
         binding.programNameInCard.setText(programName);
 
         List<ProgramResponseModel.AuthoringOrganization> authoringOrganizations = programResultList.getAuthoringOrganizations();
@@ -1042,6 +1055,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                         }
                         binding.courseDatailEnroll.setVisibility(View.VISIBLE);
                         binding.courseDatailUnenroll.setVisibility(View.GONE);
+
                         enrolledStatus(getString(R.string.program_is_successfully_added_to_dashboard));
 
                     } else {isEnroll=false;
@@ -1260,6 +1274,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
              */
         } else {
             CourseRuns courseRuns = (CourseRuns) item;
+            System.out.println("courseRuns"+courseRuns.getLanguage());
             navigateToAnotherScreen(courseRuns);
         }
     }
@@ -1466,7 +1481,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
         private void taskCompleted() {
             int completed = completedTasks.incrementAndGet();
             if (completed == totalTasks) {
-                Log.d("YYYYYYYYYYYYYYYYYYYYYYYYYYY ", "COmplete both task");
+                Log.d("Thread Status", "Complete both task");
                 // All tasks completed, perform any additional actions here
                 // For example, stop shimmer effects or update UI
             }
@@ -1502,9 +1517,8 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
         private void taskCompleted() {
             int completed = completedTasks.incrementAndGet();
             if (completed == totalTasks) {
-                Log.d("uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu", "Completed both tasks");
+                Log.d("Thread Status", "Completed both tasks");
                 // All tasks completed, perform any additional actions here
-                // For example, stop shimmer effects or update UI
             }
         }
     }
@@ -1626,9 +1640,11 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
         binding.rvCourses.setVisibility(View.GONE);
         binding.courseCount.setVisibility(View.GONE);
         binding.programNameInCard.setVisibility(View.GONE);
+        binding.programLanguage.setVisibility(View.GONE);
         binding.linerProgramName.setVisibility(View.GONE);
         binding.courseStatus.setVisibility(View.GONE);
         binding.errorMsgTv.setVisibility(View.GONE);
+        binding.ivCheck.setVisibility(View.GONE);
     }
 
     private void showViewsForTagScreen() {
@@ -1636,6 +1652,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
         binding.programNameInCard.setVisibility(View.VISIBLE);
         binding.linerProgramName.setVisibility(View.VISIBLE);
         binding.courseStatus.setVisibility(View.VISIBLE);
+        binding.programLanguage.setVisibility(View.VISIBLE);
         binding.errorMsgTv.setVisibility(View.VISIBLE);
     }
 

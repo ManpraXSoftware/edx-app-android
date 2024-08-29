@@ -70,7 +70,7 @@
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="137dp"
+                    android:layout_height="156dp"
                     android:layout_marginLeft="22dp"
                     android:layout_marginTop="20dp"
                     app:cardCornerRadius="10dp"
@@ -117,6 +117,16 @@
                             android:layout_marginRight="22dp"
                             android:maxLines="1"
                             android:ellipsize="end"
+                            android:textColor="@color/seach_hint_color" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/cousre_langauge"
+                            android:textSize="12dp"
+                            android:layout_marginLeft="22dp"
+                            android:text=""
+                            android:layout_marginBottom="5dp"
                             android:textColor="@color/seach_hint_color" />
 
                         <RelativeLayout

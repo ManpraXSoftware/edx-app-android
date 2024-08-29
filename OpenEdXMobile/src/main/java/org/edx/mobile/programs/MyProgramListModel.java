@@ -44,6 +44,8 @@ public class MyProgramListModel {
 
     private String programUUid;
 
+    private String program_language;
+
 
     public ResumePrograms getResume_program() {
         return resume_program;
@@ -55,4 +57,11 @@ public class MyProgramListModel {
 
     private ResumePrograms resume_program;
 
+    public String getProgram_language() {
+        return program_language;
+    }
+
+    public void setProgram_language(String program_language) {
+        this.program_language = program_language;
+    }
 }

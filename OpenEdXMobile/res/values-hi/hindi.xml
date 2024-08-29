@@ -477,4 +477,18 @@
     <string name="user_intent_topic_found">खोज के नंबर %1$s विषय मिले</string>
     <string name="user_intent_program_found">खोज के %1$s प्रोग्राम मिले</string>
     <string name="user_intent_course_found">खोज के %1$s कोर्स मिले</string>
+    <string name="language">भाषा</string>
+    <string name="program_language">प्रोग्राम भाषा</string>
+    <string name="course_language">पाठ्यक्रम भाषा</string>
+    <string name="language_english">अंग्रेज़ी</string>
+    <string name="language_hindi">हिन्दी</string>
+    <string name="language_kannada">कन्नड़</string>
+    <string name="language_tamil">तमिल</string>
+    <string name="language_malayalam">मलयालम</string>
+    <string name="language_odia">उड़िया</string>
+    <string name="language_bengali">बंगाली</string>
+
+
+
+
 </resources>

@@ -37,9 +37,19 @@ public class ResumePrograms {
         return converted_course_name;
     }
 
+    private String course_language;
+
     public void setConverted_course_name(String converted_course_name) {
         this.converted_course_name = converted_course_name;
     }
     @SerializedName("converted_course_name")
     private String converted_course_name;
+
+    public String getCourse_language() {
+        return course_language;
+    }
+
+    public void setCourse_language(String course_language) {
+        this.course_language = course_language;
+    }
 }

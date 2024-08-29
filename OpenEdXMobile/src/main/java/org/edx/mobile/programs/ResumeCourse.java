@@ -47,5 +47,15 @@ public class ResumeCourse {
         this.tagName = tagName;
     }
 
+    private String course_language;
+
     private String tagName;
+
+    public String getCourse_language() {
+        return course_language;
+    }
+
+    public void setCourse_language(String course_language) {
+        this.course_language = course_language;
+    }
 }

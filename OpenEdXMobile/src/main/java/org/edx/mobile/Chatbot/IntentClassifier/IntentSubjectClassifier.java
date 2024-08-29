@@ -160,7 +160,7 @@ public class IntentSubjectClassifier {
             return getMessageTamil(messageCode, response);
         } else if (selectedLanguage.equals("bn")) {
             return getMessageBengali(messageCode, response);
-        } else if (selectedLanguage.equals("ml-IN")) {
+        } else if (selectedLanguage.equals("ml")) {
             return getMessageMalayalam(messageCode, response);
         } else if (selectedLanguage.equals("or")) {
             return getMessageOriya(messageCode, response);

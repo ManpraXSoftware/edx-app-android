@@ -852,4 +852,17 @@
  <string name="view_previous_notification">View Previous Notifications</string>
  <string name="notification_button">Notification Button</string>
  <string name="new_string">New</string>
+ <string name="language"> Language</string>
+
+ <string name="program_language">Program Language</string>
+ <string name="course_language">Course Language</string>
+ <string name="language_english">English</string>
+ <string name="language_hindi">Hindi</string>
+ <string name="language_kannada">Kannada</string>
+ <string name="language_tamil">Tamil</string>
+ <string name="language_malayalam">Malayalam</string>
+ <string name="language_odia">Odia</string>
+ <string name="language_bengali">Bengali</string>
+
+
 </resources>

@@ -59,6 +59,18 @@
                     android:textColor="@color/grey_text"
                     android:textSize="16dp"
                     android:gravity="start" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/program_language"
+                    android:textSize="12dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="2dp"
+                    android:text="Program Language: English"
+                    android:layout_marginBottom="5dp"
+                    android:textColor="@color/seach_hint_color" />
+
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

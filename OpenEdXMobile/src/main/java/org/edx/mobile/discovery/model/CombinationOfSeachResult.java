@@ -28,6 +28,7 @@ public class CombinationOfSeachResult {
     private String tagName;
     private String programName;
     private String courseName;
+    private String language;
 
     public String getProgram_id() {
         return program_id;
@@ -38,4 +39,12 @@ public class CombinationOfSeachResult {
     }
 
     private String program_id;
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 }

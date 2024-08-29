@@ -36,6 +36,7 @@ public class CourseEntry implements Serializable {
     private String id;
     private String number;
     private String discussion_url;
+    private String language;
     private SocialURLModel social_urls;
     private CoursewareAccess courseware_access;
     @Nullable private Map<String, String> course_sharing_utm_parameters;
@@ -231,5 +232,13 @@ public class CourseEntry implements Serializable {
     @Nullable
     public String getCourseSharingUtmParams(@NonNull String sharingPlatformKey) {
         return course_sharing_utm_parameters == null ? null : course_sharing_utm_parameters.get(sharingPlatformKey);
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }

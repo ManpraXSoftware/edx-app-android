@@ -476,4 +476,15 @@
     <string name="user_intent_program_found">தேடல் %1$s நிரல் கிடைக்கப்பட்டது</string>
     <string name="user_intent_course_found">தேடல் %1$s பாடநெறி கிடைக்கப்பட்டது</string>
     <string name="user_intent_program_message">%1$s நிரலுடன் தொடர்பு உள்ள நிரலாளரின் உத்திக்கு ஒரு செயல் உள்ளது</string>
+    <string name="language">மொழி</string>
+    <string name="program_language">பிரोग்ராம் மொழி</string>
+    <string name="course_language">பாட மொழி</string>
+    <string name="language_english">ஆங்கிலம்</string>
+    <string name="language_hindi">இந்தி</string>
+    <string name="language_kannada">கன்னடம்</string>
+    <string name="language_tamil">தமிழ்</string>
+    <string name="language_malayalam">மலையாளம்</string>
+    <string name="language_odia">ஒடியா</string>
+    <string name="language_bengali">பெங்காலி</string>
+
 </resources>

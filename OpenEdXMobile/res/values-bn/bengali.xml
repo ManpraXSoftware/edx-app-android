@@ -447,4 +447,15 @@
     <string name="user_intent_program_found">অনুসন্ধানের %1$s প্রোগ্রাম পাওয়া গেছে</string>
     <string name="user_intent_course_found">অনুসন্ধানের %1$s কোর্স পাওয়া গেছে</string>
     <string name="user_intent_program_message">%1$s প্রোগ্রামের সাথে সংশ্লিষ্ট একটি ইচ্ছুক ব্যবহারকারীর উদ্দেশ্য রয়েছে</string>
+    <string name="language">ভাষা</string>
+    <string name="program_language">প্রোগ্রাম ভাষা</string>
+    <string name="course_language">কোর্স ভাষা</string>
+    <string name="language_english">ইংরেজি</string>
+    <string name="language_hindi">হিন্দি</string>
+    <string name="language_kannada">কন্নড়</string>
+    <string name="language_tamil">তামিল</string>
+    <string name="language_malayalam">মালায়ালম</string>
+    <string name="language_odia">ওড়িয়া</string>
+    <string name="language_bengali">বাংলা</string>
+
 </resources>

@@ -434,4 +434,15 @@
     <string name="user_intent_program_found">ଖୋଜ %1$s ପ୍ରୋଗ୍ରାମ ପାଇଲେ</string>
     <string name="user_intent_course_found">ଖୋଜର %1$s କୋର୍ସ ପାଇଲେ</string>
     <string name="user_intent_program_message">%1$s ପ୍ରୋଗ୍ରାମ ସହ ଏକ ଉପଭୋକ୍ତାଙ୍କ ଉଦ୍ଦେଶ୍ୟ ରହିଛି</string>
+    <string name="language">ଭାଷା</string>
+    <string name="program_language">ପ୍ରୋଗ୍ରାମ୍ ଭାଷା</string>
+    <string name="course_language">ପାଠ୍ୟକ୍ରମ ଭାଷା</string>
+    <string name="language_english">ଇଂରାଜୀ</string>
+    <string name="language_hindi">ହିନ୍ଦୀ</string>
+    <string name="language_kannada">କନ୍ନଡ଼</string>
+    <string name="language_tamil">ତାମିଲ</string>
+    <string name="language_malayalam">ମଲାୟାଲମ୍</string>
+    <string name="language_odia">ଓଡ଼ିଆ</string>
+    <string name="language_bengali">ବେଙ୍ଗାଳୀ</string>
+
 </resources>

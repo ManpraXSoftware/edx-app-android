@@ -9,15 +9,19 @@ import android.preference.PreferenceManager;
 
 import androidx.annotation.StringDef;
 
+import org.edx.mobile.R;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class LocaleManager {
     @Retention(RetentionPolicy.SOURCE)
-    @StringDef({ ENGLISH, HINDI,KANNADA,TAMIL,MALAYALAM,ODIA})
+    @StringDef({ ENGLISH, HINDI,KANNADA,TAMIL,MALAYALAM,ODIA,BENGALI})
     public @interface LocaleDef {
-        String[] SUPPORTED_LOCALES = { ENGLISH, HINDI,KANNADA,TAMIL,MALAYALAM,ODIA};
+        String[] SUPPORTED_LOCALES = { ENGLISH, HINDI,KANNADA,TAMIL,MALAYALAM,ODIA,BENGALI};
     }
 
     public static final String ENGLISH = "en";
@@ -31,6 +35,51 @@ public class LocaleManager {
     public static final String ODIA = "or";
     public static final String TAMIL = "ta";
     public static final String Empty = "";
+    public static final String BENGALI="bn";
+
+    private static final Map<String, String> LANGUAGE_MAP = new HashMap<>();
+
+    static {
+        LANGUAGE_MAP.put(ENGLISH, "English"); // English remains the same
+        LANGUAGE_MAP.put(HINDI, "हिन्दी"); // Hindi in Devanagari script
+        LANGUAGE_MAP.put(SPANISH, "Español"); // Spanish in native script
+        LANGUAGE_MAP.put(MARATHI, "मराठी"); // Marathi in Devanagari script
+        LANGUAGE_MAP.put(KANNADA, "ಕನ್ನಡ"); // Kannada in Kannada script
+        LANGUAGE_MAP.put(TELUGU, "తెలుగు"); // Telugu in Telugu script
+        LANGUAGE_MAP.put(MALAYALAM, "മലയാളം"); // Malayalam in Malayalam script
+        LANGUAGE_MAP.put(ODIA, "ଓଡ଼ିଆ"); // Odia in Odia script
+        LANGUAGE_MAP.put(TAMIL, "தமிழ்"); // Tamil in Tamil script
+        LANGUAGE_MAP.put(BENGALI, "বাংলা"); // Bengali in Bengali script
+    }
+
+    public static String getFullLanguageName(String languageCode) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return LANGUAGE_MAP.getOrDefault(languageCode, "Unknown Language");
+        }
+        return "English";
+    }
+
+    public static String getLanguageResourceName(Context context, String languageCode) {
+
+        switch (languageCode) {
+            case ENGLISH:
+                return context.getString(R.string.language_english);
+            case HINDI:
+                return context.getString(R.string.language_hindi);
+            case KANNADA:
+                return context.getString(R.string.language_kannada);
+            case TAMIL:
+                return context.getString(R.string.language_tamil);
+            case MALAYALAM:
+                return context.getString(R.string.language_malayalam);
+            case ODIA:
+                return context.getString(R.string.language_odia);
+            case BENGALI:
+                return context.getString(R.string.language_bengali);
+            default:
+                return context.getString(R.string.language_english); // Ensure you have this in strings.xml
+        }
+    }
     /**
      * SharedPreferences Key
      */
@@ -57,9 +106,6 @@ public class LocaleManager {
     public static String getLanguagePref(Context mContext) {
         SharedPreferences mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         String selected_language=mPreferences.getString(LANGUAGE_KEY, Empty);
-        if(selected_language.equals("ml")){
-            selected_language="ml-IN";
-        }
         return selected_language;
     }
     /**
@@ -73,9 +119,6 @@ public class LocaleManager {
      * update resource
      */
     private static Context updateResources(Context context, String language) {
-        if(language.equals("ml-IN")){
-            language="ml";
-        }
         Locale locale = new Locale(language);
         Locale.setDefault(locale);
         Resources res = context.getResources();
@@ -92,6 +135,8 @@ public class LocaleManager {
     /**
      * get current locale
      */
+
+
     public static Locale getLocale(Resources res) {
         Configuration config = res.getConfiguration();
         return Build.VERSION.SDK_INT >= 24 ? config.getLocales().get(0) : config.locale;

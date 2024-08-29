@@ -31,6 +31,9 @@ public class ResponseCourseModel {
         @SerializedName("key")
         private String key;
 
+        @SerializedName("language")
+        private String language;
+
         public String getConvertedTitle() {
             return convertedTitle;
         }
@@ -41,6 +44,14 @@ public class ResponseCourseModel {
 
         public String getKey() {
             return key;
+        }
+
+        public String getLanguage() {
+            return language;
+        }
+
+        public void setLanguage(String language) {
+            this.language = language;
         }
     }
 }

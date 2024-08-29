@@ -198,7 +198,7 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
             viewHolder.malayalam.setSelected(false);
             viewHolder.odia.setSelected(false);
         }
-        else if (selectedLanguage.equals("ml-IN")) {
+        else if (selectedLanguage.equals("ml")) {
             viewHolder.bengali.setSelected(false);
             viewHolder.tamil.setSelected(false);
             viewHolder.hindi.setSelected(false);

@@ -63,4 +63,14 @@ public class Programs {
     @SerializedName("converted_program_title")
     private String converted_program_title;
 
+    @SerializedName("program_language")
+    private String program_language;
+
+    public String getProgram_language() {
+        return program_language;
+    }
+
+    public void setProgram_language(String program_language) {
+        this.program_language = program_language;
+    }
 }

@@ -220,24 +220,31 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                         binding.viewMoreResults.setVisibility(View.GONE);
                     }
                     for (SearchResultList searchResultList : responseBody.getResults()) {
-                        if (searchResultList.getProgram_details() != null) {
-                            if (searchResultList.getProgram_details().getTags() != null) {
-                                for (SearchTags searchTags : searchResultList.getProgram_details().getTags()) {
+                        if (searchResultList.getProgramDetails() != null) {
+                            if (searchResultList.getProgramDetails().getTags() != null) {
+                                for (SearchResultList.SearchProgramDetails.Tag searchTags : searchResultList.getProgramDetails().getTags()) {
                                     if (searchTags.getTags() != null) {
                                         for (String tag : searchTags.getTags()) {
                                             CombinationOfSeachResult combinationOfSeachResult = new CombinationOfSeachResult();
                                             combinationOfSeachResult.setCourseName(searchResultList.getTitle());
-                                            combinationOfSeachResult.setProgramName(searchTags.getProgram_name());
-                                            combinationOfSeachResult.setProgram_id(searchTags.getProgram_id());
+                                            combinationOfSeachResult.setProgramName(searchTags.getProgramName());
+                                            combinationOfSeachResult.setProgram_id(searchTags.getProgramId());
                                             combinationOfSeachResult.setTagName(tag);
-                                            combinationOfSeachResults.add(combinationOfSeachResult);
 
+                                            // Extracting language from the first CourseRun
+                                            if (searchResultList.getCourseRuns() != null && !searchResultList.getCourseRuns().isEmpty()) {
+                                                String language = searchResultList.getCourseRuns().get(0).getLanguage();
+                                                combinationOfSeachResult.setLanguage(language);
+                                            }
+
+                                            combinationOfSeachResults.add(combinationOfSeachResult);
                                         }
                                     }
                                 }
                             }
                         }
                     }
+
                 }
                 if (combinationOfSeachResults != null && combinationOfSeachResults.size() > 0) {
                     String userType = loginPrefs.getUserType();
@@ -311,16 +318,23 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                     }
 
                     for (SearchResultList searchResultList : responseBody.getResults()) {
-                        if (searchResultList.getProgram_details() != null) {
-                            if (searchResultList.getProgram_details().getTags() != null) {
-                                for (SearchTags searchTags : searchResultList.getProgram_details().getTags()) {
+                        if (searchResultList.getProgramDetails() != null) {
+                            if (searchResultList.getProgramDetails().getTags() != null) {
+                                for (SearchResultList.SearchProgramDetails.Tag searchTags : searchResultList.getProgramDetails().getTags()) {
                                     if (searchTags.getTags() != null) {
                                         for (String tag : searchTags.getTags()) {
                                             CombinationOfSeachResult combinationOfSeachResult = new CombinationOfSeachResult();
                                             combinationOfSeachResult.setCourseName(searchResultList.getTitle());
-                                            combinationOfSeachResult.setProgramName(searchTags.getProgram_name());
-                                            combinationOfSeachResult.setProgram_id(searchTags.getProgram_id());
+                                            combinationOfSeachResult.setProgramName(searchTags.getProgramName());
+                                            combinationOfSeachResult.setProgram_id(searchTags.getProgramId());
                                             combinationOfSeachResult.setTagName(tag);
+
+                                            // Extracting language from the first CourseRun
+                                            if (searchResultList.getCourseRuns() != null && !searchResultList.getCourseRuns().isEmpty()) {
+                                                String language = searchResultList.getCourseRuns().get(0).getLanguage();
+                                                combinationOfSeachResult.setLanguage(language);
+                                            }
+
                                             combinationOfSeachResults.add(combinationOfSeachResult);
                                         }
                                     }
@@ -328,6 +342,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                             }
                         }
                     }
+
                 }
                 if (combinationOfSeachResults != null && combinationOfSeachResults.size() > 0) {
                     String userType = loginPrefs.getUserType();
@@ -391,9 +406,9 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
     public void onItemClick(View view, Object item) {
         if (item instanceof CombinationOfSeachResult) {
             CombinationOfSeachResult combinationOfSeachResult = (CombinationOfSeachResult) item;
-
-            environment.getRouter().showProgramsActivity(getActivity(), combinationOfSeachResult.getTagName(), /*combinationOfSeachResult.getProgram_id()*/ combinationOfSeachResult.getProgram_id());
             sendAnalyticsCourseDetail(combinationOfSeachResult);
+            environment.getRouter().showProgramsActivity(getActivity(), combinationOfSeachResult.getTagName(), /*combinationOfSeachResult.getProgram_id()*/ combinationOfSeachResult.getProgram_id());
+
 //            NewProgramFragment newProgramFragment = new NewProgramFragment();
 //            Bundle bundle1 = new Bundle();
 //            bundle1.putString(PROGRAM, combinationOfSeachResult.getProgramName());

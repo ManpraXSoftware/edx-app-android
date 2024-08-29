@@ -228,9 +228,18 @@
                             <LinearLayout
                                 android:id="@+id/course_status"
                                 android:layout_width="match_parent"
-                                android:layout_height="48dp"
+                                android:layout_height="wrap_content"
                                 android:layout_below="@+id/liner_program_name"
                                 android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/program_language"
+                                    android:layout_gravity="center"
+                                    android:textSize="12dp"
+                                    android:layout_marginBottom="3dp"
+                                    android:textColor="@color/white" />
 
                                 <TextView
                                     android:id="@+id/course_count"
@@ -238,7 +247,6 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:layout_marginLeft="20dp"
-                                    android:layout_marginTop="10dp"
                                     android:layout_marginRight="20dp"
                                     android:layout_marginBottom="10dp"
                                     android:gravity="center"
@@ -253,7 +261,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:layout_marginLeft="20dp"
-                                    android:layout_marginTop="10dp"
+                                    android:layout_marginTop="6dp"
                                     android:layout_marginRight="20dp"
                                     android:layout_marginBottom="10dp"
                                     android:gravity="center"
@@ -268,7 +276,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="20dp"
                                     android:layout_marginRight="20dp"
-                                    android:layout_marginTop="10dp"
+                                    android:layout_marginTop="6dp"
                                     android:layout_marginBottom="10dp"
                                     android:layout_gravity="center"
                                     android:textSize="12dp"
@@ -314,9 +322,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:gravity="center"
+                                android:layout_marginTop="10dp"
+                                android:layout_below="@+id/course_status"
                                 android:layout_centerHorizontal="true"
-                                android:layout_centerVertical="true"
                                 android:orientation="vertical">
 
                                 <TextView
@@ -346,8 +354,10 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/white"
                                 android:visibility="gone"
+                                android:layout_marginTop="8dp"
                                 android:layout_alignParentBottom="true"
-                                android:text="dfsds" />
+                                android:layout_below="@+id/course_status"
+                                android:text="" />
                         </RelativeLayout>
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>

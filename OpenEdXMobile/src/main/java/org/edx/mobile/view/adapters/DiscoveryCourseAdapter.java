@@ -21,6 +21,7 @@ import org.edx.mobile.discovery.model.CourseRuns;
 import org.edx.mobile.interfaces.OnNavigateListener;
 import org.edx.mobile.programs.ResumeCourse;
 import org.edx.mobile.util.GestureListener;
+import org.edx.mobile.util.LocaleManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,12 +80,15 @@ public class DiscoveryCourseAdapter extends RecyclerView.Adapter<DiscoveryCourse
                     holder.itemBinding.lnCourseStatus.setBackgroundColor(Color.parseColor("#F9E2A6"));
                     holder.itemBinding.courseStatus.setText(context.getString(R.string.in_progress));
                 }
+                holder.itemBinding.courseLanguageEnrolled.setText(context.getString(R.string.course_language)+" ("+LocaleManager.getLanguageResourceName(context, model.getLanguage())+")");
                 holder.itemBinding.cvCourseStatus.setVisibility(View.VISIBLE);
             }else{
+
                 holder.itemBinding.shimmerLayoutStatus.stopShimmer();
                 holder.itemBinding.shimmerLayoutStatus.setVisibility(View.GONE);
             }
         } else {
+            holder.itemBinding.courseLanguage.setText(context.getString(R.string.course_language)+" ("+ LocaleManager.getLanguageResourceName(context, model.getLanguage())+")");
             holder.itemBinding.cvCourseStatus.setVisibility(View.GONE);
         }
         holder.itemBinding.courseCardNotEnrolled.setVisibility(View.GONE);
@@ -126,6 +130,7 @@ public class DiscoveryCourseAdapter extends RecyclerView.Adapter<DiscoveryCourse
             }
         }
 
+        setGestureListeners(holder.itemBinding.courseLanguage,model);
         setGestureListeners(holder.itemBinding.viewButton,model);
 
       /*  holder.itemBinding.viewButton.setOnClickListener(new View.OnClickListener() {

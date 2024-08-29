@@ -433,4 +433,17 @@
     <string name="user_intent_program_found">തെരഞ്ഞെടുപ്പ് %1$s പ്രോഗ്രാം കണ്ടെത്തി</string>
     <string name="user_intent_course_found">തെരഞ്ഞെടുപ്പ് %1$s കോഴ്സ് കണ്ടെത്തി</string>
     <string name="user_intent_program_message">%1$s പദ്ധതിയുമായി ബന്ധപ്പെട്ട ഒരു ഉപയോക്താവിന്റെ ഉദ്ദേശം ഉണ്ട്</string>
+    <string name="language">ഭാഷ</string>
+    <string name="program_language">പ്രോഗ്രാം ഭാഷ</string>
+    <string name="course_language">കോഴ്സ് ഭാഷ</string>
+    <string name="language_english">ഇംഗ്ലീഷ്</string>
+    <string name="language_hindi">ഹിന്ദി</string>
+    <string name="language_kannada">കന്നഡ</string>
+    <string name="language_tamil">തമിഴ്</string>
+    <string name="language_malayalam">മലയാളം</string>
+    <string name="language_odia">ഒറിയ</string>
+    <string name="language_bengali">ബംഗാളി</string>
+
+
+
 </resources>

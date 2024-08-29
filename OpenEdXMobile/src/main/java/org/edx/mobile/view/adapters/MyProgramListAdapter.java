@@ -25,6 +25,7 @@ import org.edx.mobile.databinding.RowProgramEnrolledItemBinding;
 import org.edx.mobile.interfaces.OnNavigateListener;
 import org.edx.mobile.programs.MyProgramListModel;
 import org.edx.mobile.util.GestureListener;
+import org.edx.mobile.util.LocaleManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,6 +88,7 @@ public class MyProgramListAdapter extends RecyclerView.Adapter<MyProgramListAdap
         holder.itemBinding.programName.setText(model.getProgramName());
         holder.itemBinding.programName.setFocusable(true);
         holder.itemBinding.programName.setClickable(true);
+        holder.itemBinding.programLanguage.setText(context.getString(R.string.program_language)+" ("+ LocaleManager.getLanguageResourceName(context,model.getProgram_language())+")");
         //holder.itemBinding.tagsName.setLongClickable(false);
        holder.itemBinding.tagCard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,6 +161,7 @@ public class MyProgramListAdapter extends RecyclerView.Adapter<MyProgramListAdap
 
         setGestureListeners(holder.itemBinding.tagsName, model);
         setGestureListeners(holder.itemBinding.programName, model);
+        setGestureListeners(holder.itemBinding.programLanguage, model);
     }
     private void setGestureListeners(TextView textView,Object object) {
         ViewCompat.setAccessibilityDelegate(textView, new CustomAccessibilityDelegate(object,onNavigateListener));

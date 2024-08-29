@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.edx.mobile.R;
 import org.edx.mobile.comparator.TalkBackDetector.CustomAccessibilityDelegate;
 import org.edx.mobile.clipboard.ClipboardService;
 import org.edx.mobile.clipboard.ClipboardServiceHolder;
@@ -19,6 +20,7 @@ import org.edx.mobile.databinding.RowSearchItemsBinding;
 import org.edx.mobile.discovery.model.CombinationOfSeachResult;
 import org.edx.mobile.interfaces.OnNavigateListener;
 import org.edx.mobile.util.GestureListener;
+import org.edx.mobile.util.LocaleManager;
 
 import java.util.List;
 
@@ -46,6 +48,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Se
         final CombinationOfSeachResult model = searchResultLists.get(position);
         String sourceString = "<b>" + model.getCourseName() + "</b> ";
         holder.itemBinding.courseName.setText(Html.fromHtml(sourceString));
+        holder.itemBinding.courseLanguage.setText(context.getString(R.string.course_language)+" : "+LocaleManager.getLanguageResourceName(context, model.getLanguage()));
         holder.itemBinding.programName.setText(model.getProgramName());
         holder.itemBinding.tagName.setText(model.getTagName());
         holder.itemBinding.searchItem.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +111,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Se
         setGestureListeners(holder.itemBinding.courseName,model);
         setGestureListeners(holder.itemBinding.programName,model);
         setGestureListeners(holder.itemBinding.tagName,model);
+        setGestureListeners(holder.itemBinding.courseLanguage,model);
     }
 
     private void setGestureListeners(TextView textView, Object object) {

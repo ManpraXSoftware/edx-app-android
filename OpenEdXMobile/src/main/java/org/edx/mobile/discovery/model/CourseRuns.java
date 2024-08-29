@@ -28,6 +28,10 @@ public class CourseRuns {
         return title;
     }
 
+    @SerializedName("language")
+    @Expose
+    private String language;
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -61,4 +65,12 @@ public class CourseRuns {
     @SerializedName("converted_course_title")
     @Expose
     private String converted_course_title;
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 }
