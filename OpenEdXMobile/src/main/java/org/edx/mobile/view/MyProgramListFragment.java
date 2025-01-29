@@ -179,6 +179,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
             @Override
             public void onClick(View view) {
                 if (courseData != null) {
+                    LocaleManager.setCourseLanguagePref(getContext(),courseData.getCourse().getLanguage());
                    /* environment.getRouter().showCourseUnitDetail(MyProgramListFragment.this,
                             REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, null,resumeCourse.getBlock_id(), false);*/
                     //   final CourseComponent component = adapter.getItem(position).component;

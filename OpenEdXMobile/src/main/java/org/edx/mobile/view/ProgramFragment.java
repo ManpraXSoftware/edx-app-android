@@ -145,8 +145,8 @@ public class ProgramFragment extends BaseFragment implements OnRecyclerItemClick
             binding.rvProgram.setVisibility(View.GONE);
             binding.shimmerLayoutCourseButton.setVisibility(View.GONE);
             binding.ivCheck.setVisibility(View.GONE);
-            binding.courseDatailUnenroll.setVisibility(View.GONE);
-            binding.courseDatailEnroll.setVisibility(View.GONE);
+//            binding.courseDatailUnenroll.setVisibility(View.GONE);
+//            binding.courseDatailEnroll.setVisibility(View.GONE);
             binding.lnEnrollInfo.setVisibility(View.GONE);
         }
         String sourceString = "";
@@ -272,8 +272,8 @@ public class ProgramFragment extends BaseFragment implements OnRecyclerItemClick
                                 binding.enrollInProgram.setVisibility(View.VISIBLE);
                                 binding.unenrollFromProgram.setVisibility(View.GONE);
                                 binding.ivCheck.setVisibility(View.GONE);
-                                binding.courseDatailEnroll.setVisibility(View.GONE);
-                                binding.courseDatailUnenroll.setVisibility(View.VISIBLE);
+//                                binding.courseDatailEnroll.setVisibility(View.GONE);
+//                                binding.courseDatailUnenroll.setVisibility(View.VISIBLE);
                             }
                             binding.lnEnrollInfo.setVisibility(View.VISIBLE);
                             binding.errorMsgTv.setVisibility(View.GONE);
@@ -615,16 +615,16 @@ public class ProgramFragment extends BaseFragment implements OnRecyclerItemClick
                         binding.unenrollFromProgram.setVisibility(View.VISIBLE);
                         binding.ivCheck.setVisibility(View.VISIBLE);
                         if (topic_converted_name != null && !topic_converted_name.isEmpty()) {
-                            binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
-                                    topic_converted_name + " " + binding.programNameInCard.getText().toString() +
-                                    " " + getString(R.string.program));
+//                            binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
+//                                    topic_converted_name + " " + binding.programNameInCard.getText().toString() +
+//                                    " " + getString(R.string.program));
                         } else {
-                            binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
-                                    topic_name + " " + binding.programNameInCard.getText().toString() +
-                                    " " + getString(R.string.program));
+//                            binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
+//                                    topic_name + " " + binding.programNameInCard.getText().toString() +
+//                                    " " + getString(R.string.program));
                         }
-                        binding.courseDatailEnroll.setVisibility(View.VISIBLE);
-                        binding.courseDatailUnenroll.setVisibility(View.GONE);
+//                        binding.courseDatailEnroll.setVisibility(View.VISIBLE);
+//                        binding.courseDatailUnenroll.setVisibility(View.GONE);
                         enrolledStatus(getString(R.string.program_is_successfully_added_to_dashboard));
                     } else {
                         programModelAdapter.setProgramEnroll(false, program_selected_uuid);
@@ -633,8 +633,8 @@ public class ProgramFragment extends BaseFragment implements OnRecyclerItemClick
                         binding.unenrollFromProgram.setVisibility(View.GONE);
                         binding.ivCheck.setVisibility(View.GONE);
                         binding.unenrollFromProgram.setVisibility(View.GONE);
-                        binding.courseDatailEnroll.setVisibility(View.GONE);
-                        binding.courseDatailUnenroll.setVisibility(View.VISIBLE);
+//                        binding.courseDatailEnroll.setVisibility(View.GONE);
+//                        binding.courseDatailUnenroll.setVisibility(View.VISIBLE);
                         enrolledStatus(getString(R.string.program_is_successfully_removed_to_dashboard));
                     }
                 }

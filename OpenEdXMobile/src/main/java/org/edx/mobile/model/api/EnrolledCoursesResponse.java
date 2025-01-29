@@ -19,6 +19,7 @@ public class EnrolledCoursesResponse implements SectionItemInterface {
 
     private String course_status;
     private String created;
+    private String language;
     private String mode;
     private boolean is_active;
     private CourseEntry course;
@@ -120,5 +121,13 @@ public class EnrolledCoursesResponse implements SectionItemInterface {
 
     public void setDiscussionBlackedOut(boolean discussionBlackedOut) {
         isDiscussionBlackedOut = discussionBlackedOut;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }

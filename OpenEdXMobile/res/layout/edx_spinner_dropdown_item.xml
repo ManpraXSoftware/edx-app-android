@@ -4,6 +4,7 @@
     android:id="@android:id/text1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:importantForAccessibility="yes"
     android:ellipsize="marquee"
     android:paddingBottom="@dimen/vertical_input_padding"
     android:paddingLeft="@dimen/horizontal_input_padding"

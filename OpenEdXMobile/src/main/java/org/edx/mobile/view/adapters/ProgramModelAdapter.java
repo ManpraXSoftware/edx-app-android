@@ -1,12 +1,15 @@
 package org.edx.mobile.view.adapters;
 
 import android.content.Context;
+import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.edx.mobile.R;
@@ -15,7 +18,10 @@ import org.edx.mobile.clipboard.ClipboardServiceHolder;
 import org.edx.mobile.databinding.RowProgramBinding;
 import org.edx.mobile.discovery.model.ProgramResponseModel;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class
 ProgramModelAdapter extends RecyclerView.Adapter<ProgramModelAdapter.ProgramViewHolder> {
@@ -60,7 +66,6 @@ ProgramModelAdapter extends RecyclerView.Adapter<ProgramModelAdapter.ProgramView
                 }
             }
         });
-
         holder.itemBinding.programName.setOnLongClickListener(new View.OnLongClickListener() {
 
             @Override
@@ -72,21 +77,96 @@ ProgramModelAdapter extends RecyclerView.Adapter<ProgramModelAdapter.ProgramView
             }
         });
 
+
     }
 
     public void setPrograms(List<ProgramResponseModel.Program> programResultLists, String selectedProgram) {
-        this.programResultLists = programResultLists;
+        this.programResultLists =programResultLists;
         this.progamNameselect = selectedProgram;
+        // Optional: Add logging to track the final list
+        for (int i = 0; i < this.programResultLists.size(); i++) {
+            ProgramResponseModel.Program program = this.programResultLists.get(i);
+            Log.d("ProgramAdapter", i + " Program: " + program.getTitle() + ", Language: " + program.getProgramLanguage());
+        }
+
         notifyDataSetChanged();
     }
-    public void setProgramEnroll(boolean enroll,String programSelectedUid){
-        if (programSelectedUid!=null){
-            for (ProgramResponseModel.Program programResultList : programResultLists){
-                if (programResultList.getUuid().equals(programSelectedUid)){
-                    //programResultList.setProgramEnroll(enroll);
-                }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public List<ProgramResponseModel.Program> sortProgramsByLanguage(List<ProgramResponseModel.Program> programs, String currentLanguage) {
+        // Remove locale suffix if present
+        if (currentLanguage.contains("-IN")) {
+            currentLanguage = currentLanguage.substring(0, currentLanguage.length() - 3);
+        }
+
+        // Group programs by language
+        Map<String, List<ProgramResponseModel.Program>> groupedByLanguage = programs.stream()
+                .collect(Collectors.groupingBy(ProgramResponseModel.Program::getProgramLanguage));
+
+        // Prepare result list to maintain order
+        List<ProgramResponseModel.Program> sortedPrograms = new ArrayList<>();
+
+        // If selected language is English
+        if (currentLanguage.equals("en")) {
+            // 1. Add only English programs first
+            List<ProgramResponseModel.Program> englishPrograms = groupedByLanguage.getOrDefault("en", new ArrayList<>());
+            sortedPrograms.addAll(englishPrograms);
+
+            // 2. Add programs in other languages
+            List<String> otherLanguages = groupedByLanguage.keySet().stream()
+                    .filter(lang -> !lang.equals("en"))
+                    .sorted() // Sort other languages alphabetically
+                    .collect(Collectors.toList());
+
+            for (String language : otherLanguages) {
+                sortedPrograms.addAll(groupedByLanguage.get(language));
             }
         }
+        // If selected language is not English
+        else {
+            // 1. Add programs in user's selected language
+            List<ProgramResponseModel.Program> selectedLanguagePrograms = groupedByLanguage.getOrDefault(currentLanguage, new ArrayList<>());
+            sortedPrograms.addAll(selectedLanguagePrograms);
+
+            // 2. Add English language programs
+            List<ProgramResponseModel.Program> englishPrograms = groupedByLanguage.getOrDefault("en", new ArrayList<>());
+            sortedPrograms.addAll(englishPrograms);
+
+            // 3. Add programs in other languages (excluding selected language and English)
+            String finalCurrentLanguage = currentLanguage;
+            List<String> otherLanguages = groupedByLanguage.keySet().stream()
+                    .filter(lang -> !lang.equals(finalCurrentLanguage) && !lang.equals("en"))
+                    .sorted() // Sort other languages alphabetically
+                    .collect(Collectors.toList());
+
+            for (String language : otherLanguages) {
+                sortedPrograms.addAll(groupedByLanguage.get(language));
+            }
+        }
+
+        System.out.println("Current Language: " + currentLanguage);
+        System.out.println("Grouped Languages: " + groupedByLanguage.keySet());
+        System.out.println("Sorted Programs: " + sortedPrograms.stream()
+                .map(p -> p.getProgramLanguage())
+                .collect(Collectors.toList()));
+        int i=0;
+        for (ProgramResponseModel.Program program : sortedPrograms) {
+            System.out.println(i+" sortedPrograms "+program.getTitle());
+            System.out.println("sortedPrograms "+program.getLanguage());
+            System.out.println("sortedPrograms "+program.getProgramLanguage());
+            i++;
+        }
+
+        return sortedPrograms;
+    }
+
+    public void setProgramEnroll(boolean enroll,String programSelectedUid){
+//        if (programSelectedUid!=null){
+//            for (ProgramResponseModel.Program programResultList : programResultLists){
+//                if (programResultList.getUuid().equals(programSelectedUid)){
+//                    //programResultList.setProgramEnroll(enroll);
+//                }
+//            }
+//        }
         notifyDataSetChanged();
     }
 

@@ -255,35 +255,35 @@
                                     android:text="@string/enroll_in_program_to_view_course_content"
                                     android:textColor="@color/white" />
 
-                                <TextView
-                                    android:id="@+id/course_datail_unenroll"
-                                    android:layout_width="250dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="20dp"
-                                    android:layout_marginTop="6dp"
-                                    android:layout_marginRight="20dp"
-                                    android:layout_marginBottom="10dp"
-                                    android:gravity="center"
-                                    android:textSize="12dp"
-                                    android:visibility="gone"
-                                    android:text="@string/enroll_in_program_to_view_course_content"
-                                    android:textColor="@color/enroll_in_program_text_color" />
+<!--                                <TextView-->
+<!--                                    android:id="@+id/course_datail_unenroll"-->
+<!--                                    android:layout_width="250dp"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:layout_gravity="center"-->
+<!--                                    android:layout_marginLeft="20dp"-->
+<!--                                    android:layout_marginTop="6dp"-->
+<!--                                    android:layout_marginRight="20dp"-->
+<!--                                    android:layout_marginBottom="10dp"-->
+<!--                                    android:gravity="center"-->
+<!--                                    android:textSize="12dp"-->
+<!--                                    android:visibility="gone"-->
+<!--                                    android:text="@string/enroll_in_program_to_view_course_content"-->
+<!--                                    android:textColor="@color/enroll_in_program_text_color" />-->
 
-                                <TextView
-                                    android:id="@+id/course_datail_enroll"
-                                    android:layout_width="250dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="20dp"
-                                    android:layout_marginRight="20dp"
-                                    android:layout_marginTop="6dp"
-                                    android:layout_marginBottom="10dp"
-                                    android:layout_gravity="center"
-                                    android:textSize="12dp"
-                                    android:gravity="center"
-                                    android:visibility="gone"
-                                    android:layout_below="@+id/liner_program_name"
-                                    android:textColor="@color/course_detail_enroll_color" />
+<!--                                <TextView-->
+<!--                                    android:id="@+id/course_datail_enroll"-->
+<!--                                    android:layout_width="250dp"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:layout_marginLeft="20dp"-->
+<!--                                    android:layout_marginRight="20dp"-->
+<!--                                    android:layout_marginTop="6dp"-->
+<!--                                    android:layout_marginBottom="10dp"-->
+<!--                                    android:layout_gravity="center"-->
+<!--                                    android:textSize="12dp"-->
+<!--                                    android:gravity="center"-->
+<!--                                    android:visibility="gone"-->
+<!--                                    android:layout_below="@+id/liner_program_name"-->
+<!--                                    android:textColor="@color/course_detail_enroll_color" />-->
                             </LinearLayout>
 
                             <com.facebook.shimmer.ShimmerFrameLayout
