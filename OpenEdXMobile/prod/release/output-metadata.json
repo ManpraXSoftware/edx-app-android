@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.mx.subodha",
+  "variantName": "prodRelease",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 7000009,
+      "versionName": "7.0.5",
+      "outputFile": "edx-release-7.0.5.apk"
+    }
+  ],
+  "elementType": "File"
+}
