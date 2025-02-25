@@ -84,6 +84,20 @@ public class LocaleManager {
      * SharedPreferences Key
      */
     private static final String LANGUAGE_KEY = "language_key";
+
+    private static final String COURSE_LANGUAGE_KEY = "course_language_key";
+
+
+    public static void setCourseLanguagePref(Context mContext, String localeKey) {
+        SharedPreferences mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        mPreferences.edit().putString(COURSE_LANGUAGE_KEY, localeKey).apply();
+    }
+
+    public static String getCourseLanguagePref(Context mContext) {
+        SharedPreferences mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String selected_language=mPreferences.getString(COURSE_LANGUAGE_KEY, Empty);
+        return selected_language;
+    }
     /**
      * set current pref locale
      */

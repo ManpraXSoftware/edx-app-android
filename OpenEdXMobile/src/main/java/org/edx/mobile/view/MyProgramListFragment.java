@@ -89,7 +89,6 @@ import java.util.concurrent.TimeUnit;
 import de.greenrobot.event.EventBus;
 
 import static android.app.Activity.RESULT_OK;
-import static com.facebook.FacebookSdk.getApplicationContext;
 import static org.edx.mobile.view.ProgramActivity.CHATBOTFLAG;
 import static org.edx.mobile.view.ProgramActivity.MYPROGRAMFLAG;
 import static org.edx.mobile.view.ProgramActivity.PROGRAM;
@@ -179,6 +178,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
             @Override
             public void onClick(View view) {
                 if (courseData != null) {
+                    LocaleManager.setCourseLanguagePref(getContext(),courseData.getCourse().getLanguage());
                    /* environment.getRouter().showCourseUnitDetail(MyProgramListFragment.this,
                             REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, null,resumeCourse.getBlock_id(), false);*/
                     //   final CourseComponent component = adapter.getItem(position).component;
@@ -686,13 +686,13 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                                         }
                                     }
                                 }
-                                Log.d("enrolledCoursesResponses", enrolledCoursesResponses.get(0).getCourse().getId() + "" + enrolledCoursesResponses.get(0).getCourse().getName());
+                                Log.d("enrolledCoursesResponse", enrolledCoursesResponses.get(0).getCourse().getId() + "" + enrolledCoursesResponses.get(0).getCourse().getName());
                             } else {
-                                Log.e("enrolledCoursesResponses", "Response body is null");
+                                Log.e("enrolledCoursesResponse", "Response body is null");
                             }
                         }
                     } catch (Exception e) {
-                        Log.e("enrolledCoursesResponses", "Exception in onResponse", e);
+                        Log.e("enrolledCoursesResponse", "Exception in onResponse", e);
                     }
                 }
 
@@ -700,8 +700,9 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                 public void onException(Exception ex) {
                     if (ex instanceof HttpStatusException &&
                             ((HttpStatusException) ex).getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                        Log.e("enrolledCoursesResponse", "HttpStatusException in onResponse UNAUTHORIZED", ex);
                     } else {
-
+                        Log.e("enrolledCoursesResponse", "HttpStatusException in onResponse", ex);
                     }
                 }
             };
@@ -709,7 +710,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
 
 
         } catch (Exception e) {
-            Log.e("enrolledCoursesResponses", "Exception in getParticularCourse", e);
+            Log.e("enrolledCoursesResponse", "Exception in getParticularCourse", e);
         }
     }
 

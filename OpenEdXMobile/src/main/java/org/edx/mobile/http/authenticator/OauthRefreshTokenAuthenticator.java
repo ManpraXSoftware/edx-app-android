@@ -16,7 +16,6 @@ import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.util.Config;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 
 import okhttp3.Authenticator;
@@ -56,14 +55,20 @@ public class OauthRefreshTokenAuthenticator implements Authenticator {
 
     @Override
     public synchronized Request authenticate(Route route, final Response response) throws IOException {
-        logger.warn(response.toString());
+        logger.debug("Starting authentication for 401 response");
 
         final AuthResponse currentAuth = loginPrefs.getCurrentAuth();
         if (null == currentAuth || null == currentAuth.refresh_token) {
+            logger.warn("No current auth or refresh token available");
             return null;
         }
 
-        String errorCode = getErrorCode(response.peekBody(200).string());
+        String responseBody = response.peekBody(200).string();
+        logger.debug("401 Response body: " + responseBody);
+
+        String errorCode = getErrorCode(responseBody);
+        logger.debug("Parsed error code: " + errorCode);
+
 
         if (errorCode != null) {
             switch (errorCode) {
@@ -72,7 +77,11 @@ public class OauthRefreshTokenAuthenticator implements Authenticator {
                     try {
                         refreshedAuth = refreshAccessToken(currentAuth);
                     } catch (HttpStatusException e) {
+                        logger.debug("HttpStatusException: " + e.toString());
                         return null;
+                    } catch (InterruptedException e) {
+                        logger.debug("InterruptedException: " + e.toString());
+                        throw new RuntimeException(e);
                     }
                     return response.request().newBuilder()
                             .header("Authorization", refreshedAuth.token_type + " " + refreshedAuth.access_token)
@@ -90,30 +99,62 @@ public class OauthRefreshTokenAuthenticator implements Authenticator {
                     }
             }
         }
+//        } else  {
+//            try {
+//                refreshAccessToken(currentAuth);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            } catch (HttpStatusException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
         return null;
     }
 
-    @NonNull
-    private AuthResponse refreshAccessToken(AuthResponse currentAuth)
-            throws IOException, HttpStatusException {
-        // RoboGuice doesn't seem to allow this to be injected via annotation at initialization
-        // time. TODO: Investigate whether this is a bug in RoboGuice.
-        LoginService loginService = RoboGuice.getInjector(context)
-                .getInstance(RetrofitProvider.class).getNonOAuthBased().create(LoginService.class);
+    private AuthResponse refreshAccessToken(AuthResponse currentAuth) throws IOException, InterruptedException, HttpStatusException {
+        int maxRetries = 3;
+        int attempt = 0;
+        while (attempt < maxRetries) {
+            try {
+                LoginService loginService = RoboGuice.getInjector(context)
+                        .getInstance(RetrofitProvider.class)
+                        .getNonOAuthBased()
+                        .create(LoginService.class);
 
-        AuthResponse refreshTokenData = executeStrict(loginService.refreshAccessToken(
-                "refresh_token", config.getOAuthClientId(), currentAuth.refresh_token));
-        loginPrefs.storeRefreshTokenResponse(refreshTokenData);
-        return refreshTokenData;
+                AuthResponse refreshTokenData = executeStrict(loginService.refreshAccessToken(
+                        "refresh_token",
+                        config.getOAuthClientId(),
+                        currentAuth.refresh_token));
+                loginPrefs.storeRefreshTokenResponse(refreshTokenData);
+                return refreshTokenData;
+            } catch (HttpStatusException e) {
+                attempt++;
+                if (attempt >= maxRetries) throw e;
+                Thread.sleep(1000 * attempt); // Exponential backoff
+            }
+        }
+        throw new IOException("Failed to refresh token after " + maxRetries + " attempts");
     }
 
-    @Nullable
     private String getErrorCode(String responseBody) {
         try {
             JSONObject jsonObj = new JSONObject(responseBody);
-            return jsonObj.getString("error_code");
+            if (jsonObj.has("error_code")) {
+                return jsonObj.getString("error_code");
+            }
+            if (jsonObj.has("developer_message")) {
+                Object developerMessage = jsonObj.get("developer_message");
+                if (developerMessage instanceof JSONObject) {
+                    JSONObject developerMessageObj = (JSONObject) developerMessage;
+                    if (developerMessageObj.has("error_code")) {
+                        return developerMessageObj.getString("error_code");
+                    }
+                }
+            }
+            logger.warn("No error_code found in response: " + responseBody);
+            return null;
         } catch (JSONException ex) {
-            logger.warn("Unable to get error_code from 401 response");
+            logger.warn("Unable to parse error response: " + responseBody + " " + ex.toString());
             return null;
         }
     }

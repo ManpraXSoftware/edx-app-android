@@ -102,15 +102,18 @@ public class CourseUnitWebViewFragment extends CourseUnitFragment {
     private void loadUnit() {
         if (getActivity()!=null){
             String selectedLanguage = "en";
+            String courseSelectLanguage=LocaleManager.getCourseLanguagePref(getContext());
             selectedLanguage = LocaleManager.getLanguagePref(getActivity());
-
-
+            if(selectedLanguage.equals(courseSelectLanguage)){
+                selectedLanguage="";
+            }
             if(selectedLanguage.equals("hi")||selectedLanguage.equals("ta")||selectedLanguage.equals("ml")){
                 selectedLanguage = selectedLanguage + "-IN";
             }
             if(selectedLanguage.equals("en")){
                 selectedLanguage="";
             }
+
             Log.d("webview_url" , unit.getBlockUrl() + "?language=" + selectedLanguage);
             if (authWebView != null) {
                 if (!authWebView.isPageLoaded() && !isPageLoading) {

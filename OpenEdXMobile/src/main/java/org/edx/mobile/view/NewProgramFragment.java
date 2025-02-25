@@ -1,5 +1,6 @@
 package org.edx.mobile.view;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.SoundPool;
@@ -17,6 +18,8 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckedTextView;
+import android.widget.ListPopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +63,7 @@ import org.edx.mobile.discovery.model.ResponseError;
 import org.edx.mobile.discovery.net.course.CourseApi;
 import org.edx.mobile.http.HttpStatus;
 import org.edx.mobile.http.HttpStatusException;
+import org.edx.mobile.http.provider.OkHttpClientProvider;
 import org.edx.mobile.interfaces.OnNavigateListener;
 import org.edx.mobile.interfaces.TalkBackListener;
 import org.edx.mobile.logger.Logger;
@@ -85,6 +89,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import retrofit2.Call;
@@ -238,8 +243,8 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
             binding.rvProgram.setVisibility(View.GONE);
             binding.shimmerLayoutCourseButton.setVisibility(View.GONE);
             binding.ivCheck.setVisibility(View.VISIBLE);
-            binding.courseDatailUnenroll.setVisibility(View.GONE);
-            binding.courseDatailEnroll.setVisibility(View.GONE);
+//            binding.courseDatailUnenroll.setVisibility(View.GONE);
+//            binding.courseDatailEnroll.setVisibility(View.GONE);
             binding.lnEnrollInfo.setVisibility(View.GONE);
         }
         String sourceString = "";
@@ -339,8 +344,8 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                 binding.shimmerEnrollInProgram.setVisibility(View.VISIBLE);
                 binding.enrollInProgram.setVisibility(View.GONE);
                 binding.unenrollFromProgram.setVisibility(View.GONE);
-                binding.courseDatailUnenroll.setVisibility(View.GONE);
-                binding.courseDatailEnroll.setVisibility(View.GONE);
+//                binding.courseDatailUnenroll.setVisibility(View.GONE);
+//                binding.courseDatailEnroll.setVisibility(View.GONE);
                 flag=false;
                 runParallelTasks();
             }
@@ -353,8 +358,8 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
 
                 // Get private mPopup member variable and try cast to ListPopupWindow
                 Object popupWindow = popup.get(binding.optionSpinnerPrograms);
-                if (popupWindow instanceof android.widget.ListPopupWindow) {
-                    ((android.widget.ListPopupWindow) popupWindow).setHeight(500);
+                if (popupWindow instanceof ListPopupWindow) {
+                    ((ListPopupWindow) popupWindow).setHeight(500);
                 }
             } catch (Exception e) {
                 // Handle exceptions more gracefully, e.g., log or print an error message
@@ -363,7 +368,8 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
         }
 
         if (getActivity() != null) {
-            programAdapter = new ArrayAdapter<>(getActivity(), R.layout.edx_spinner_dropdown_item, programsNameLists);
+            setOptionSpinnerPrograms();
+            //programAdapter = new ArrayAdapter<>(getActivity(), R.layout.edx_spinner_dropdown_item, programsNameLists);
             programAdapter.setDropDownViewResource(R.layout.edx_spinner_dropdown_item);
             binding.optionSpinnerPrograms.setAdapter(programAdapter);
 
@@ -373,9 +379,6 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                     filterTitle = (String) parent.getItemAtPosition(position);
 
                     selected_position = position;
-
-
-
 
                     try {
                         if (!programResultLists.isEmpty() && position < programResultLists.size()) {
@@ -395,8 +398,8 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                                     binding.enrollInProgram.setVisibility(View.GONE);
                                     binding.unenrollFromProgram.setVisibility(View.GONE);
 
-                                    binding.courseDatailUnenroll.setVisibility(View.GONE);
-                                    binding.courseDatailEnroll.setVisibility(View.GONE);
+//                                    binding.courseDatailUnenroll.setVisibility(View.GONE);
+//                                    binding.courseDatailEnroll.setVisibility(View.GONE);
                                     flag=false;
 
                                     runParallelTasks();
@@ -426,6 +429,64 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
         }
     }
 
+    void setOptionSpinnerPrograms(){
+        programAdapter = new ArrayAdapter<String>(getActivity(), R.layout.edx_spinner_dropdown_item, programsNameLists) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                Context context=getContext();
+                if (view instanceof CheckedTextView) {
+                    CheckedTextView checkedTextView = (CheckedTextView) view;
+
+                    // Get the current program
+                    ProgramResponseModel.Program currentProgram = programResultLists.get(position);
+
+                    // Set the text to just the title
+                    checkedTextView.setText(currentProgram.getTitle());
+
+                    String contentDesc = String.format(
+                            " %s, %s : %s",
+                            currentProgram.getTitle(),
+                            context.getString(R.string.program_language),
+                            LocaleManager.getLanguageResourceName(context,  currentProgram.getProgramLanguage() )
+                    );
+
+                    // Set a simple content description for the selected view
+                    checkedTextView.setContentDescription(contentDesc);
+                }
+
+                return view;
+            }
+
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                Context context=getContext();
+                if (view instanceof CheckedTextView) {
+                    CheckedTextView checkedTextView = (CheckedTextView) view;
+
+                    // Get the current program
+                    ProgramResponseModel.Program currentProgram = programResultLists.get(position);
+                    checkedTextView.setText(currentProgram.getTitle());
+                    // Construct a detailed content description for dropdown items
+                    String contentDesc = String.format(
+                            " %s, %s : %s",
+                            currentProgram.getTitle(),
+                            context.getString(R.string.program_language),
+                            LocaleManager.getLanguageResourceName(context,  currentProgram.getProgramLanguage() )
+                    );
+
+                    checkedTextView.setContentDescription(contentDesc);
+                }
+
+                return view;
+            }
+        };
+
+
+    }
+
 
     String filterTitle;
     void onProgramSelection(){
@@ -439,13 +500,13 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                     sendAnalyticsFilter(programResultList);
 
                     if (true) {
-                        binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
-                                topic_name + " " + programResultList.getTitle() + " "
-                                + getString(R.string.program));
+//                        binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
+//                                topic_name + " " + programResultList.getTitle() + " "
+//                                + getString(R.string.program));
                     }
 
-                    binding.courseDatailEnroll.setVisibility(View.VISIBLE);
-                    binding.courseDatailUnenroll.setVisibility(View.GONE);
+//                    binding.courseDatailEnroll.setVisibility(View.VISIBLE);
+//                    binding.courseDatailUnenroll.setVisibility(View.GONE);
                     binding.programLanguage.setVisibility(View.VISIBLE);
                     if(getContext()!=null) {
                         binding.programLanguage.setText(getString(R.string.program_language) + " : " + LocaleManager.getLanguageResourceName(getContext(), programResultList.getProgramLanguage()));
@@ -549,14 +610,11 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
             discoveryCourseAdapter.setProgramCoursesLists(courseRuns,flag
                     /*programResultList.isProgramEnroll()*/, resumeCourse);
             if(chatBotCourseFlag){
-
                  chatBotTalkCourse(courseRuns);
             }
             else{
-
             }
             if(!flag) {
-
                 binding.shimmerLayoutCourseButton.setVisibility(View.GONE);
             }
                 /*
@@ -591,8 +649,8 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                 if(!flag&&isEnrollCheck){
 
                     binding.ivCheck.setVisibility(View.GONE);
-                    binding.courseDatailEnroll.setVisibility(View.GONE);
-                    binding.courseDatailUnenroll.setVisibility(View.VISIBLE);
+//                    binding.courseDatailEnroll.setVisibility(View.GONE);
+//                    binding.courseDatailUnenroll.setVisibility(View.VISIBLE);
                 }
 //                if(!tag_screen_flag) {
 //                    binding.lnEnrollInfo.setVisibility(View.VISIBLE);
@@ -657,8 +715,8 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                 binding.enrollInProgram.setVisibility(View.GONE);
                 binding.unenrollFromProgram.setVisibility(View.VISIBLE);
                 binding.ivCheck.setVisibility(View.VISIBLE);
-                binding.courseDatailEnroll.setVisibility(View.VISIBLE);
-                binding.courseDatailUnenroll.setVisibility(View.GONE);
+//                binding.courseDatailEnroll.setVisibility(View.VISIBLE);
+//                binding.courseDatailUnenroll.setVisibility(View.GONE);
                 //  }
             }
         }
@@ -676,8 +734,8 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
             binding.shimmerEnrollInProgram.setVisibility(View.VISIBLE);
             binding.enrollInProgram.setVisibility(View.GONE);
             binding.unenrollFromProgram.setVisibility(View.GONE);
-            binding.courseDatailUnenroll.setVisibility(View.GONE);
-            binding.courseDatailEnroll.setVisibility(View.GONE);
+//            binding.courseDatailUnenroll.setVisibility(View.GONE);
+//            binding.courseDatailEnroll.setVisibility(View.GONE);
 
 
             if(!program_uuid.isEmpty()) {
@@ -754,45 +812,21 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                 selectedLanguage = LocaleManager.getLanguagePref(getActivity());
             }
         }
-        if(organisation_screen_flag) {
-            Call<ProgramResponseModel> programResponseModel = courseApi.getProgramResponseWithOrganisationName(token, selectedLanguage, topic_name);
-            programResponseModel.enqueue(new DiscoveryCallback<ProgramResponseModel>() {
-                @Override
-                protected void onResponse(@NonNull ProgramResponseModel responseBody) {
-                    if (responseBody != null && responseBody.getPrograms() != null) {
-                        programResultLists.clear();
-                        programResultLists = responseBody.getPrograms();
-                        initializeIntentData();
 
-                        if (program_uuid.isEmpty()) {
-                        /*if (floatingActionButton != null) {
-                            floatingActionButton.show();
-                        }*/
-                        }
-                        if (!program_uuid.isEmpty()) {
-                            updateSingleProgram(programResultLists);
-                        } else {
-                            updateProgramList(programResultLists);
-                        }
-                    }
-                }
-
-                @Override
-                protected void onFailure(ResponseError responseError, @NonNull Throwable error) {
-                    super.onFailure(responseError, error);
-                }
-
-            });
-
-        }
-        else {
             Call<ProgramResponseModel> programResponseModel = courseApi.getProgramResponseWithTopicName(token, selectedLanguage, topic_name);
+            String finalSelectedLanguage1 = selectedLanguage;
+
             programResponseModel.enqueue(new DiscoveryCallback<ProgramResponseModel>() {
                 @Override
                 protected void onResponse(@NonNull ProgramResponseModel responseBody) {
+                    System.out.println("programResultLists onResponse");
                     if (responseBody != null && responseBody.getPrograms() != null) {
                         programResultLists.clear();
-                        programResultLists = responseBody.getPrograms();
+                        programResultLists=responseBody.getPrograms();
+                        sortProgramLists(programResultLists);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            programResultLists=sortProgramsByLanguage(responseBody.getPrograms(),finalSelectedLanguage1);
+                        }
                         initializeIntentData();
                        // setFocusOnMic();
                         if(chatBotFlagProgram&&tag_screen_flag){
@@ -804,9 +838,9 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                         }*/
                         }
                         if (!program_uuid.isEmpty()) {
-                            updateSingleProgram(programResultLists);
+                            updateSingleProgram(programResultLists,finalSelectedLanguage1);
                         } else {
-                            updateProgramList(programResultLists);
+                            updateProgramList(programResultLists,finalSelectedLanguage1);
                         }
                     }
                 }
@@ -817,27 +851,27 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                 }
 
             });
-        }
+
     }
 
 
-    private void updateSingleProgram(List<ProgramResponseModel.Program> programResultLists) {
+    private void updateSingleProgram(List<ProgramResponseModel.Program> programResultLists,String currentLanguage) {
 
         for (ProgramResponseModel.Program programResultList : programResultLists) {
             if (programResultList.getUuid() != null && programResultList.getUuid().equals(program_uuid)) {
                 program_selected_name=programResultList.getTitle();
                 program_selected_uuid=programResultList.getUuid();
 
-                updateProgramList(Collections.singletonList(programResultList));
+                updateProgramList(Collections.singletonList(programResultList),currentLanguage);
                 break;
             }
         }
     }
 
-    private void updateProgramList(List<ProgramResponseModel.Program> programResultLists) {
+    private void updateProgramList(List<ProgramResponseModel.Program> programResultLists,String currentLanguage) {
         if (!programResultLists.isEmpty()) {
             binding.shimmerLayoutOrganisation.stopShimmer();
-            handleProgramLists(programResultLists);
+            handleProgramLists(programResultLists,currentLanguage);
             if(program_uuid.isEmpty()) {
                 initSpinner();
                 if(menuItem!=null) {
@@ -845,16 +879,16 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                 }
             }
 
-            programModelAdapter.setPrograms(programResultLists,
-                    programResultLists.get(0).getTitle());
+//            programModelAdapter.setPrograms(programResultLists,
+//                    programResultLists.get(0).getTitle());
         }
     }
 
-    private void handleProgramLists(List<ProgramResponseModel.Program> programResultLists) {
+    private void handleProgramLists(List<ProgramResponseModel.Program> programResultLists,String currentLanguage) {
         if (!program_uuid.isEmpty()) {
             handleSingleProgram(programResultLists);
         } else {
-            handleMultiplePrograms(programResultLists);
+            handleMultiplePrograms(programResultLists,currentLanguage);
         }
     }
 
@@ -873,7 +907,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
         showProgramDetails(singleProgram);
     }
 
-    private void handleMultiplePrograms(List<ProgramResponseModel.Program> programResultLists) {
+    private void handleMultiplePrograms(List<ProgramResponseModel.Program> programResultLists,String currentLanguage) {
         programsNameLists.clear();
         for (ProgramResponseModel.Program programResultList : programResultLists) {
             if (programResultList.getTitle() != null
@@ -889,7 +923,9 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
             boolean programEnroll = isProgramEnrolled(programResultList);
             //programResultList.setProgramEnroll(programEnroll);
         }
-        sortProgramLists(programResultLists);
+
+        //sortProgramLists(programResultLists);
+
         showProgramDetails(programResultLists.get(0));
         /*if (program_uuid.isEmpty()) {
             try {
@@ -913,6 +949,86 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
             }
         }
         return false;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public List<ProgramResponseModel.Program> sortProgramsByLanguage(List<ProgramResponseModel.Program> programs, String currentLanguage) {
+        // Remove locale suffix if present
+        if (currentLanguage.contains("-IN")) {
+            currentLanguage = currentLanguage.substring(0, currentLanguage.length() - 3);
+        }
+
+        // Group programs by language and sort each group by title
+        Map<String, List<ProgramResponseModel.Program>> groupedByLanguage = programs.stream()
+                .collect(Collectors.groupingBy(program ->
+                        program.getProgramLanguage() != null ? program.getProgramLanguage() : ""))
+                .entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> {
+                            List<ProgramResponseModel.Program> sortedGroup = new ArrayList<>(entry.getValue());
+                            sortedGroup.sort(Comparator.comparing(ProgramResponseModel.Program::getTitle));
+                            return sortedGroup;
+                        }
+                ));
+
+        // Prepare result list to maintain order
+        List<ProgramResponseModel.Program> sortedPrograms = new ArrayList<>();
+
+        // If selected language is English
+        if ("en".equals(currentLanguage)) {
+            // 1. Add English programs first (already sorted by title)
+            List<ProgramResponseModel.Program> englishPrograms =
+                    groupedByLanguage.getOrDefault("en", new ArrayList<>());
+            sortedPrograms.addAll(englishPrograms);
+
+            // 2. Add programs in other languages (sorted by title)
+            List<String> otherLanguages = groupedByLanguage.keySet().stream()
+                    .filter(lang -> !lang.equals("en") && !lang.isEmpty())
+                    .collect(Collectors.toList());
+
+            // Sort other languages by their first program's title to maintain a consistent order
+            otherLanguages.sort((lang1, lang2) -> {
+                String title1 = groupedByLanguage.get(lang1).get(0).getTitle();
+                String title2 = groupedByLanguage.get(lang2).get(0).getTitle();
+                return title1.compareTo(title2);
+            });
+
+            for (String language : otherLanguages) {
+                sortedPrograms.addAll(groupedByLanguage.get(language));
+            }
+        }
+        // If selected language is not English
+        else {
+            // 1. Add programs in user's selected language (sorted by title)
+            List<ProgramResponseModel.Program> selectedLanguagePrograms =
+                    groupedByLanguage.getOrDefault(currentLanguage, new ArrayList<>());
+            sortedPrograms.addAll(selectedLanguagePrograms);
+
+            // 2. Add English language programs (sorted by title)
+            List<ProgramResponseModel.Program> englishPrograms =
+                    groupedByLanguage.getOrDefault("en", new ArrayList<>());
+            sortedPrograms.addAll(englishPrograms);
+
+            // 3. Add programs in other languages (excluding selected language and English)
+            String finalCurrentLanguage = currentLanguage;
+            List<String> otherLanguages = groupedByLanguage.keySet().stream()
+                    .filter(lang -> !lang.equals(finalCurrentLanguage) && !lang.equals("en") && !lang.isEmpty())
+                    .collect(Collectors.toList());
+
+            // Sort other languages by their first program's title to maintain a consistent order
+            otherLanguages.sort((lang1, lang2) -> {
+                String title1 = groupedByLanguage.get(lang1).get(0).getTitle();
+                String title2 = groupedByLanguage.get(lang2).get(0).getTitle();
+                return title1.compareTo(title2);
+            });
+
+            for (String language : otherLanguages) {
+                sortedPrograms.addAll(groupedByLanguage.get(language));
+            }
+        }
+
+        return sortedPrograms;
     }
 
     private void sortProgramLists(List<ProgramResponseModel.Program> programResultLists) {
@@ -1005,8 +1121,8 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
             binding.enrollInProgram.setVisibility(View.GONE);
             binding.unenrollFromProgram.setVisibility(View.VISIBLE);
             binding.ivCheck.setVisibility(View.GONE);
-            binding.courseDatailEnroll.setVisibility(View.GONE);
-            binding.courseDatailUnenroll.setVisibility(View.GONE);
+//            binding.courseDatailEnroll.setVisibility(View.GONE);
+//            binding.courseDatailUnenroll.setVisibility(View.GONE);
         }
     }
 
@@ -1040,21 +1156,21 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                         binding.unenrollFromProgram.setVisibility(View.VISIBLE);
                         binding.ivCheck.setVisibility(View.VISIBLE);
                         if (topic_converted_name != null && !topic_converted_name.isEmpty()) {
-                            binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
-                                    topic_converted_name + " " + binding.programNameInCard.getText().toString() +
-                                    " " + getString(R.string.program));
+//                            binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
+//                                    topic_converted_name + " " + binding.programNameInCard.getText().toString() +
+//                                    " " + getString(R.string.program));
 
                            //
                             // sendAnalyticsEnroll(enrollAndUnenrollData);
                         } else {
 
-                            binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
-                                    topic_name + " " + binding.programNameInCard.getText().toString() +
-                                    " " + getString(R.string.program));
+//                            binding.courseDatailEnroll.setText(getString(R.string.enrolled_in) + " " +
+//                                    topic_name + " " + binding.programNameInCard.getText().toString() +
+//                                    " " + getString(R.string.program));
                            sendAnalyticsEnroll(enrollAndUnenrollData);
                         }
-                        binding.courseDatailEnroll.setVisibility(View.VISIBLE);
-                        binding.courseDatailUnenroll.setVisibility(View.GONE);
+//                        binding.courseDatailEnroll.setVisibility(View.VISIBLE);
+//                        binding.courseDatailUnenroll.setVisibility(View.GONE);
 
                         enrolledStatus(getString(R.string.program_is_successfully_added_to_dashboard));
 
@@ -1065,8 +1181,8 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                         binding.unenrollFromProgram.setVisibility(View.GONE);
                         binding.ivCheck.setVisibility(View.GONE);
                         binding.unenrollFromProgram.setVisibility(View.GONE);
-                        binding.courseDatailEnroll.setVisibility(View.GONE);
-                        binding.courseDatailUnenroll.setVisibility(View.VISIBLE);
+//                        binding.courseDatailEnroll.setVisibility(View.GONE);
+//                        binding.courseDatailUnenroll.setVisibility(View.VISIBLE);
                         sendAnalyticsUnroll(enrollAndUnenrollData);
                         if(tag_screen_flag) {
                             enrolledStatus(getString(R.string.program_is_successfully_removed_to_dashboard));
@@ -1427,6 +1543,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                     if (enrolledCoursesResponse.getCourse() != null) {
                         if (courseRuns.getKey().equals(enrolledCoursesResponse.getCourse().getId())) {
                             sendAnalyticsCourseView(enrolledCoursesResponse, program_Uid);
+                            LocaleManager.setCourseLanguagePref(getContext(),enrolledCoursesResponse.getCourse().getLanguage());
                             environment.getRouter().showCourseDashboardTabs(getActivity(), enrolledCoursesResponse,
                                     false);
                         }
@@ -1509,6 +1626,10 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                 if (result.getEnrollmentStatus().equals("enrolled")) {
                     getMyCourseList();
                     isEnroll = true;
+                }
+                else {
+//                    binding.courseDatailUnenroll.setVisibility(View.GONE);
+//                    binding.courseDatailEnroll.setVisibility(View.VISIBLE);
                 }
                 taskCompleted();
             }
@@ -2116,9 +2237,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
     }
     private String checkMessageLanguageProgram(int messageCode,String selectedLanguage) {
         String baseString = getResources().getString(R.string.user_intent_program_found);
-
         String formattedString = baseString.replace("%1$s", String.valueOf(messageCode));
         return formattedString;
-
     }
 }
