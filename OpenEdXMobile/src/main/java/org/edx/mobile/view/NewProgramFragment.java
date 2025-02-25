@@ -63,6 +63,7 @@ import org.edx.mobile.discovery.model.ResponseError;
 import org.edx.mobile.discovery.net.course.CourseApi;
 import org.edx.mobile.http.HttpStatus;
 import org.edx.mobile.http.HttpStatusException;
+import org.edx.mobile.http.provider.OkHttpClientProvider;
 import org.edx.mobile.interfaces.OnNavigateListener;
 import org.edx.mobile.interfaces.TalkBackListener;
 import org.edx.mobile.logger.Logger;
