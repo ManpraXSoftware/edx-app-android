@@ -646,7 +646,7 @@ public class ProgramFragment extends BaseFragment implements OnRecyclerItemClick
     private void enrolledStatus(String msg) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         //Uncomment the below code to Set the message and title from the strings.xml file
-        builder.setMessage(msg).setTitle(R.string.status);
+        builder.setMessage(msg).setTitle(R.string.alert);
 
         //Setting message manually and performing action on button click
         builder.setMessage(msg)
@@ -659,7 +659,7 @@ public class ProgramFragment extends BaseFragment implements OnRecyclerItemClick
         //Creating dialog box
         AlertDialog alert = builder.create();
         //Setting the title manually
-        alert.setTitle(R.string.status);
+        alert.setTitle(R.string.alert);
         alert.show();
     }
 

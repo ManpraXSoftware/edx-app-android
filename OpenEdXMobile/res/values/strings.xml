@@ -822,7 +822,7 @@
  <string name="logout_confirmation">Logout confirmation</string>
  <string name="program_is_successfully_added_to_dashboard">Program successfully added to the dashboard</string>
  <string name="program_is_successfully_removed_to_dashboard">Program successfully removed from the dashboard</string>
- <string name="status">Status</string>
+
  <string name="completed">COMPLETED</string>
  <string name="not_started">NOT STARTED</string>
  <string name="in_progress">IN PROGRESS</string>

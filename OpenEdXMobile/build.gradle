@@ -204,7 +204,7 @@ dependencies {
     }
 
 //    Exo Player
-    implementation 'com.google.android.exoplayer:exoplayer:2.9.2'
+    implementation 'com.google.android.exoplayer:exoplayer:2.15.1'
 
     // Google cast sdk
     implementation "androidx.mediarouter:mediarouter:$androidXVersion"
@@ -316,7 +316,7 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'org.hamcrest:hamcrest-library:1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation 'com.linkedin.dexmaker:dexmaker-mockito:2.12.1'
+    //androidTestImplementation 'com.linkedin.dexmaker:dexmaker-mockito:2.12.1'
     androidTestImplementation('org.mockito:mockito-core:2.8.9') {
         exclude group: 'org.hamcrest'
     }
@@ -386,6 +386,9 @@ android {
         versionCode 7000010/*getVersionCode()*/
         versionName "7.0.6"/*getVersionName()*/
         archivesBaseName = "Subodha $versionCode $versionName"
+
+        buildConfigField "long", "BUILD_TIME", System.currentTimeMillis() + "L"
+        buildConfigField "String", "BUILD_DATE", "\"" + new Date().format('MMM dd, yyyy') + "\""
 
         renderscriptTargetApi 22
         renderscriptSupportModeEnabled true

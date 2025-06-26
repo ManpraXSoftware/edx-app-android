@@ -43,13 +43,22 @@ import org.edx.mobile.util.Config;
 import org.edx.mobile.util.LocaleManager;
 import org.edx.mobile.view.adapters.PreferedLanguageAdapter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import de.greenrobot.event.EventBus;
 import roboguice.RoboGuice;
+
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class NewUserProfileFragment extends PresenterFragment<UserProfilePresenter, UserProfilePresenter.ViewInterface>
         implements ScrollingPreferenceParent, PreferedLanguageAdapter.OnUpdateLanguage {
@@ -154,8 +163,7 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
             }
         });
 
-        String version= "VERSION "+BuildConfig.VERSION_CODE;
-        viewHolder.versionTxt.setText(version);
+        viewHolder.versionTxt.setText(getVersionInfo());
         if (selectedLanguage.equals("en")) {
             viewHolder.english.setSelected(true);
             viewHolder.hindi.setSelected(false);
@@ -892,6 +900,30 @@ public class NewUserProfileFragment extends PresenterFragment<UserProfilePresent
         });
 
 
+    }
+
+
+    private String getVersionInfo() {
+        try {
+            PackageInfo packageInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+            String versionName = packageInfo.versionName;
+            int versionCode = packageInfo.versionCode;
+
+            // Format: "Version 1.2.3 (Build 123)"
+            return String.format("Version %s (Build %d) \n %s", versionName, versionCode,getBuildDateFromConfig());
+        } catch (PackageManager.NameNotFoundException e) {
+            return "Version " + BuildConfig.VERSION_NAME + " (Build " + BuildConfig.VERSION_CODE + ")";
+        }
+    }
+
+    private String getBuildDateFromConfig() {
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy 'at' HH:mm", Locale.getDefault());
+            return "Built on " + formatter.format(new Date(BuildConfig.BUILD_TIME));
+        } catch (Exception e) {
+            // If BUILD_TIME is not available, use the string version
+            return "Built on " + BuildConfig.BUILD_DATE;
+        }
     }
 
 
