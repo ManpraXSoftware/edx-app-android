@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 7000009,
-      "versionName": "7.0.5",
-      "outputFile": "edx-release-7.0.5.apk"
+      "versionCode": 7000010,
+      "versionName": "7.0.6",
+      "outputFile": "edx-release-7.0.6.apk"
     }
   ],
   "elementType": "File"

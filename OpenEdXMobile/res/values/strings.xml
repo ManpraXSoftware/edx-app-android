@@ -822,7 +822,7 @@
  <string name="logout_confirmation">Logout confirmation</string>
  <string name="program_is_successfully_added_to_dashboard">Program successfully added to the dashboard</string>
  <string name="program_is_successfully_removed_to_dashboard">Program successfully removed from the dashboard</string>
- <string name="status">Status</string>
+
  <string name="completed">COMPLETED</string>
  <string name="not_started">NOT STARTED</string>
  <string name="in_progress">IN PROGRESS</string>
@@ -832,7 +832,7 @@
   are saved and can be changed fro your account menu</string>
  <string name="skip">Skip</string>
  <string name="skip_language_preference">Skip Language Preference</string>
- <string name="unroll_app_dialog_message">Do you want to unroll from this program? </string>
+ <string name="unroll_app_dialog_message">Do you want to unenroll from this program? </string>
  <string name="whatsapp">Whatsapp</string>
  <string name="voice_menu_item">Voice Search</string>
  <string name="menu_notification">Notification</string>

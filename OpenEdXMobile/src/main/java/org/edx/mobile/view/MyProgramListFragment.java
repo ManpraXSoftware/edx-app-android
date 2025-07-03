@@ -421,7 +421,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                     }*/
 
                     for (Programs programs : result) {
-
+                        System.out.println("programListModel programs "+programs.getProgram_title()+" programs.getResume_program() "+programs.getResume_program()+" "+" "+(programs.getResume_program() != null));
                         if (programs.getTags() != null) {
                             for (MyProgramTags myProgramTags : programs.getTags()) {
                                 if (myProgramTags.getTag_title() != null && myProgramTags.getTag_title().toLowerCase().contains("teacher")) {
@@ -473,13 +473,22 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                     } else {
                         myProgramListModels.addAll(newProgramsListforBoth);
                     }
+                    System.out.println("myProgramListModels"+myProgramListModels+"myProgramListModels.size()"+myProgramListModels.size()+" " +(myProgramListModels != null && myProgramListModels.size() > 0)+"programListModel myProgramListModels "+myProgramListModels.size());
                     //myProgramListModels.clear();
                     resumeCourse = null;
-                    if (myProgramListModels != null && myProgramListModels.size() > 0) {
+                    if ((myProgramListModels != null) &&( myProgramListModels.size() > 0)) {
                         binding.txtYourEnrolledProgram.setVisibility(View.VISIBLE);
                         for (MyProgramListModel programListModel : myProgramListModels) {
+                            System.out.println("programListModel programListModel "+programListModel.getProgramName()+" programListModel.getResume_program() "+programListModel.getResume_program()+" "+(programListModel.getResume_program() != null));
                             if (programListModel.getResume_program() != null) {
                                 if (resumeCourse == null) {
+                                    System.out.println("programListModel.getResume_program().getBlock_id() "+programListModel.getResume_program().getBlock_id());
+                                    System.out.println("resumeCourse.setCourse_language(programListModel.getResume_program().getCourse_language()) "+programListModel.getResume_program().getCourse_language());
+                                    System.out.println("programListModel.getResume_program().getCourse_id() "+programListModel.getResume_program().getCourse_id());
+                                    System.out.println("programListModel.getResume_program().getConverted_course_name() "+programListModel.getResume_program().getConverted_course_name());
+                                    System.out.println("programListModel.getProgramName() "+programListModel.getProgramName());
+                                    System.out.println("programListModel.getTagName() "+programListModel.getTagName());
+
                                     resumeCourse = new ResumeCourse();
 
                                    /* resumeCourse.setBlock_id("block-v1%3AVisionEmpower%2BG3_MAT_NCERT_Ch01%2B2021%2Btype%40sequential%2Bblock%40c5034a5f601e40849d6a7a9868bf8c03");
@@ -494,6 +503,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                                     resumeCourse.setCourse_name(programListModel.getResume_program().getConverted_course_name());
                                     resumeCourse.setProgramName(programListModel.getProgramName());
                                     resumeCourse.setTagName(programListModel.getTagName());
+                                    System.out.println("programListModel resumeCourse "+programListModel.getProgramName()+" resumeCourse "+(resumeCourse.getCourse_name()));
                                 }
                             }
                         }

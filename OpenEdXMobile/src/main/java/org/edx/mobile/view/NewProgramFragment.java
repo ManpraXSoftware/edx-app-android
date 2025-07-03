@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ListPopupWindow;
 import android.widget.Spinner;
@@ -1237,7 +1238,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Uncomment the below code to Set the message and title from the strings.xml
         // file
-        builder.setMessage(msg).setTitle(R.string.status);
+        builder.setMessage(msg).setTitle(R.string.alert);
 
         // Setting message manually and performing action on button click
         builder.setMessage(msg)
@@ -1250,7 +1251,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
         // Creating dialog box
         AlertDialog alert = builder.create();
         // Setting the title manually
-        alert.setTitle(R.string.status);
+        alert.setTitle(R.string.alert);
         alert.show();
     }
 
@@ -1275,6 +1276,15 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
 
         // Creating dialog box
         AlertDialog alert = builder.create();
+
+// 🔧 Set content descriptions to ensure TalkBack reads correctly
+        alert.setOnShowListener(d -> {
+            Button noButton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
+            if (noButton != null) noButton.setContentDescription(getString(R.string.label_no));
+
+            Button yesButton = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
+            if (yesButton != null) yesButton.setContentDescription(getString(R.string.label_yes));
+        });
         // Setting the title from resources
         alert.show();
     }
@@ -1282,7 +1292,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
 
     // To show the dialog with "Yes" on the left and "No" on the right.
     private void enrolledStatus2(String msg, EnrollAndUnenrollData.DataCreation dataCreation) {
-        showConfirmationDialog(msg, R.string.status, new DialogInterface.OnClickListener() {
+        showConfirmationDialog(msg, R.string.alert, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dialog.dismiss();
                 try {

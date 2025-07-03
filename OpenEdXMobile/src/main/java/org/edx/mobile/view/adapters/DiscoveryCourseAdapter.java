@@ -63,6 +63,15 @@ public class DiscoveryCourseAdapter extends RecyclerView.Adapter<DiscoveryCourse
     public void onBindViewHolder(@NonNull DiscoveryCourseViewHolder holder, int position) {
         final CourseRuns model = programCoursesLists.get(position);
         holder.itemBinding.course.setText(/*"COURSE "*/ context.getString(R.string.course_caps) + " " + String.valueOf(position + 1));
+
+        // Get the course title for accessibility
+        String courseTitle = "";
+        if (model.getConverted_course_title() != null && !model.getConverted_course_title().isEmpty()) {
+            courseTitle = model.getConverted_course_title();
+        } else {
+            courseTitle = model.getTitle();
+        }
+
         if (enroll) {
             holder.itemBinding.shimmerLayoutStatus.startShimmer();
             holder.itemBinding.shimmerLayoutStatus.setVisibility(View.VISIBLE);
@@ -105,13 +114,16 @@ public class DiscoveryCourseAdapter extends RecyclerView.Adapter<DiscoveryCourse
                     if (resumeCourse.getCourse_id().equals(model.getKey())) {
                         holder.itemBinding.viewButton.setVisibility(View.GONE);
                         holder.itemBinding.contnueButton.setVisibility(View.VISIBLE);
+                        holder.itemBinding.contnueButton.setContentDescription(context.getString(R.string.course_caps)+" " +courseTitle +" " + holder.itemBinding.contnueButton.getText().toString());
                     } else {
                         holder.itemBinding.viewButton.setVisibility(View.VISIBLE);
                         holder.itemBinding.contnueButton.setVisibility(View.GONE);
+                        holder.itemBinding.viewButton.setContentDescription(context.getString(R.string.course_caps)+" "+courseTitle+" " + holder.itemBinding.viewButton.getText().toString());
                     }
                 } else {
                     holder.itemBinding.viewButton.setVisibility(View.VISIBLE);
                     holder.itemBinding.contnueButton.setVisibility(View.GONE);
+                    holder.itemBinding.viewButton.setContentDescription(context.getString(R.string.course_caps)+" "+courseTitle+" "+holder.itemBinding.viewButton.getText().toString());
                 }
             }
             if(model.getConverted_course_title()!=null && !model.getConverted_course_title().isEmpty()){
