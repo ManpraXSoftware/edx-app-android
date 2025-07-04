@@ -24,9 +24,10 @@ apply plugin: 'edxapp'
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+/*
 apply plugin: 'kotlin-android-extensions'
+*/
 apply plugin: 'kotlin-kapt'
-/*apply plugin: 'kotlin-android'*/
 edx {
     platform = ANDROID
 }
@@ -321,6 +322,8 @@ dependencies {
         exclude group: 'org.hamcrest'
     }
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KOTLIN_VERSION}"
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.2'
+
 }
 
 configurations {
@@ -359,6 +362,9 @@ if (isMicrosoftEnabled) {
 }
 
 android {
+    buildFeatures {
+        viewBinding true
+    }
     compileSdkVersion COMPILE_SDK_VERSION
     buildToolsVersion BUILD_TOOLS_VERSION
 
@@ -383,8 +389,8 @@ android {
         minSdkVersion MIN_SDK_VERSION
         targetSdkVersion TARGET_SDK_VERSION
 
-        versionCode 7000010/*getVersionCode()*/
-        versionName "7.0.6"/*getVersionName()*/
+        versionCode 7000011/*getVersionCode()*/
+        versionName "7.0.7"/*getVersionName()*/
         archivesBaseName = "Subodha $versionCode $versionName"
 
         buildConfigField "long", "BUILD_TIME", System.currentTimeMillis() + "L"
