@@ -4,9 +4,12 @@ import com.google.inject.Inject;
 
 import org.edx.mobile.util.Config;
 
+import java.util.Collections;
+
 import javax.inject.Singleton;
 
 import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -30,6 +33,7 @@ public class ApiNewLmsClient {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             httpClient.addInterceptor(loggingInterceptor);
+            httpClient.protocols(Collections.singletonList(Protocol.HTTP_1_1));
             retrofit = new Retrofit.Builder()
                     .baseUrl(clientBase)
                     .addConverterFactory(GsonConverterFactory.create())

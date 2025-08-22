@@ -533,16 +533,26 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
                 public void download(List<? extends HasDownloadEntry> models) {
                     downloadEntries = models;
                     isSingleVideoDownload = false;
-                    askForPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            PermissionsUtil.WRITE_STORAGE_PERMISSION_REQUEST);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        askForPermission(new String[]{Manifest.permission.READ_MEDIA_VIDEO},
+                                PermissionsUtil.WRITE_STORAGE_PERMISSION_REQUEST);
+                    } else {
+                        askForPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                PermissionsUtil.WRITE_STORAGE_PERMISSION_REQUEST);
+                    }
                 }
 
                 @Override
                 public void download(DownloadEntry videoData) {
                     downloadEntry = videoData;
                     isSingleVideoDownload = true;
-                    askForPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            PermissionsUtil.WRITE_STORAGE_PERMISSION_REQUEST);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        askForPermission(new String[]{Manifest.permission.READ_MEDIA_VIDEO},
+                                PermissionsUtil.WRITE_STORAGE_PERMISSION_REQUEST);
+                    } else {
+                        askForPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                PermissionsUtil.WRITE_STORAGE_PERMISSION_REQUEST);
+                    }
                 }
 
                 @Override

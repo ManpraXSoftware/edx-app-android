@@ -1,6 +1,6 @@
 project.ext {
     APPLICATION_ID = "com.mx.subodha"
-    KOTLIN_VERSION = "1.6.10"
+    KOTLIN_VERSION = "1.8.10"
     //GRADLE_PLUGIN_VERSION = "7.0.3"
     GRADLE_PLUGIN_VERSION = "7.2.1"
     BUILD_TOOLS_VERSION = "30.0.3"

@@ -32,6 +32,7 @@ import org.edx.mobile.player.IPlayerEventCallback;
 import org.edx.mobile.player.TranscriptListener;
 import org.edx.mobile.player.TranscriptManager;
 import org.edx.mobile.util.LocaleUtils;
+import org.edx.mobile.util.OrientationUtils;
 import org.edx.mobile.view.adapters.TranscriptAdapter;
 import org.json.JSONObject;
 
@@ -249,16 +250,19 @@ public abstract class BaseCourseUnitVideoFragment extends CourseUnitFragment
 
     private void updateUIForOrientation() {
         final LinearLayout playerContainer = getView().findViewById(R.id.player_container);
-        final int orientation = getResources().getConfiguration().orientation;
+        final int orientation = OrientationUtils.getOrientation(requireActivity());
         if (playerContainer != null) {
-            final DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+            //final DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+            DisplayMetrics displayMetricsOrientation = new DisplayMetrics();
+            requireActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetricsOrientation);
+
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                float screenHeight = displayMetrics.heightPixels;
+                float screenHeight = displayMetricsOrientation.heightPixels;
                 playerContainer.setLayoutParams(new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, (int) screenHeight));
                 setFullScreen(true);
             } else {
-                float screenWidth = displayMetrics.widthPixels;
+                float screenWidth = displayMetricsOrientation.widthPixels;
                 float ideaHeight = screenWidth * 9 / 16;
                 playerContainer.setLayoutParams(new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, (int) ideaHeight));

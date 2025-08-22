@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:minHeight="@dimen/transcript_row_height"
+    android:text="test"
     android:paddingBottom="@dimen/widget_margin"
     android:paddingEnd="@dimen/widget_margin_double"
     android:paddingStart="@dimen/widget_margin_double"

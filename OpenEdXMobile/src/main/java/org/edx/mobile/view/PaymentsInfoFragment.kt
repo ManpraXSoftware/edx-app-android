@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import kotlinx.android.synthetic.main.fragment_payments_info.*
 import org.edx.mobile.R
 import org.edx.mobile.base.BaseFragment
+import org.edx.mobile.databinding.FragmentPaymentsBannerBinding
 import org.edx.mobile.databinding.FragmentPaymentsInfoBinding
 import org.edx.mobile.model.api.CourseUpgradeResponse
 import org.edx.mobile.model.api.EnrolledCoursesResponse
@@ -24,18 +24,19 @@ class PaymentsInfoFragment : BaseFragment() {
             return fragment
         }
     }
+    var binding: FragmentPaymentsInfoBinding? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val binding: FragmentPaymentsInfoBinding =
+         binding =
                 DataBindingUtil.inflate(inflater, R.layout.fragment_payments_info, container, false)
-        return binding.root
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val context = view.context
-        btn_close.setOnClickListener { activity?.finish() }
+        binding!!.btnClose.setOnClickListener { activity?.finish() }
         val courseData = arguments?.getSerializable(Router.EXTRA_COURSE_DATA) as EnrolledCoursesResponse
 
         val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH)
@@ -44,7 +45,7 @@ class PaymentsInfoFragment : BaseFragment() {
         // Populate access expires content
         if (!android.text.TextUtils.isEmpty(courseData.auditAccessExpires)) {
             val expiryDate = DateUtil.convertToDate(courseData.auditAccessExpires)
-            tv_audit_access_expires_on.text = ResourceUtil.getFormattedString(context.resources, R.string.audit_access_expires_on, "date",
+            binding!!.tvAuditAccessExpiresOn.text = ResourceUtil.getFormattedString(context.resources, R.string.audit_access_expires_on, "date",
                     dateFormat.format(expiryDate))
             stringBuilder.append(ResourceUtil.getFormattedString(context.resources, R.string.audit_access_expires_details, "date", dateFormat.format(expiryDate)).toString())
         }
@@ -56,7 +57,7 @@ class PaymentsInfoFragment : BaseFragment() {
             )
         }
 
-        tv_audit_access_expires_details.text = stringBuilder.toString()
+        binding!!.tvAuditAccessExpiresDetails.text = stringBuilder.toString()
 
         val courseUpgradeData = arguments?.getParcelable(Router.EXTRA_COURSE_UPGRADE_DATA) as CourseUpgradeResponse?
         PaymentsBannerFragment.loadPaymentsBannerFragment(R.id.fragment_container, courseData, null,

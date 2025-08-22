@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.mx.subodha.stage",
+  "variantName": "stageRelease",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 7000011,
+      "versionName": "7.0.7-stage",
+      "outputFile": "edx-release-7.0.7-stage.apk"
+    }
+  ],
+  "elementType": "File"
+}

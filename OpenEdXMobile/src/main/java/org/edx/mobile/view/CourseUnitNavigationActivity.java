@@ -34,6 +34,7 @@ import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.services.LastAccessManager;
 import org.edx.mobile.util.Config;
 import org.edx.mobile.util.LocaleManager;
+import org.edx.mobile.util.OrientationUtils;
 import org.edx.mobile.view.adapters.CourseUnitPagerAdapter;
 import org.edx.mobile.view.custom.DisableableViewPager;
 import org.edx.mobile.view.custom.PreLoadingListener;
@@ -381,7 +382,7 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements
     }
 
     private void updateUIForOrientation() {
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && CourseUnitPagerAdapter.isCourseUnitVideo(selectedUnit)) {
+        if (/*getResources().getConfiguration().orientation*/ OrientationUtils.getOrientation(this) == Configuration.ORIENTATION_LANDSCAPE && CourseUnitPagerAdapter.isCourseUnitVideo(selectedUnit)) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             setActionBarVisible(false);
             findViewById(R.id.course_unit_nav_bar).setVisibility(View.GONE);

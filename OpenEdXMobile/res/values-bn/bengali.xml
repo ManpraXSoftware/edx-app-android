@@ -458,4 +458,11 @@
     <string name="language_odia">ওড়িয়া</string>
     <string name="language_bengali">বাংলা</string>
 
+
+    <string name="listening">শুনছে</string>
+    <string name="search_with_voice">ভয়েস দিয়ে অনুসন্ধান করুন</string>
+    <string name="search_text">অনুসন্ধান</string>
+    <string name="respeak">পুনরায় বলুন</string>
+    <string name="no_transcription_found">কোনো ট্রান্সক্রিপশন পাওয়া যায়নি</string>
+
 </resources>

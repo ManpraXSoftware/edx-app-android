@@ -489,6 +489,10 @@
     <string name="language_bengali">बंगाली</string>
 
 
-
+    <string name="listening">सुन रहा है</string>
+    <string name="search_with_voice">आवाज़ से खोजें</string>
+    <string name="search_text">खोजें</string>
+    <string name="respeak">दोबारा बोलें</string>
+    <string name="no_transcription_found">कोई ट्रांसक्रिप्शन नहीं मिला</string>
 
 </resources>

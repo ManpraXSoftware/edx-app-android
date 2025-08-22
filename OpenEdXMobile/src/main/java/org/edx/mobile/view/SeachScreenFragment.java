@@ -1,8 +1,13 @@
 package org.edx.mobile.view;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.media.MediaRecorder;
+import android.media.SoundPool;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
@@ -10,19 +15,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.inject.Inject;
-
 import org.edx.mobile.R;
 import org.edx.mobile.annotation.Nullable;
+import org.edx.mobile.authentication.ApiLmsService;
+import org.edx.mobile.authentication.ApiNewLmsClient;
+import org.edx.mobile.authentication.LoginAPI;
 import org.edx.mobile.base.BaseFragment;
 import org.edx.mobile.clipboard.ClipboardService;
 import org.edx.mobile.clipboard.ClipboardServiceHolder;
@@ -32,8 +44,8 @@ import org.edx.mobile.discovery.DiscoveryCallback;
 import org.edx.mobile.discovery.model.CombinationOfSeachResult;
 import org.edx.mobile.discovery.model.ResponseError;
 import org.edx.mobile.discovery.model.SearchResult;
-import org.edx.mobile.discovery.model.SearchResultList;
-import org.edx.mobile.discovery.model.SearchTags;
+import org.edx.mobile.discovery.model.SearchResultModel;
+import org.edx.mobile.discovery.model.TranslatedAudioResponse;
 import org.edx.mobile.discovery.net.course.CourseApi;
 import org.edx.mobile.interfaces.OnNavigateListener;
 import org.edx.mobile.module.analytics.Analytics;
@@ -43,18 +55,19 @@ import org.edx.mobile.util.LocaleManager;
 import org.edx.mobile.view.adapters.OnRecyclerItemClickListener;
 import org.edx.mobile.view.adapters.SearchListAdapter;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 
 import static android.app.Activity.RESULT_OK;
-import static org.edx.mobile.view.ProgramActivity.PROGRAM;
-import static org.edx.mobile.view.ProgramActivity.PROGRAM_CONVERTED;
-import static org.edx.mobile.view.ProgramActivity.PROGRAM_UUID;
 
 public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemClickListener, OnNavigateListener {
     public static final String TAG = SeachScreenFragment.class.getCanonicalName();
@@ -65,6 +78,11 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
     CourseApi courseApi;
     private SearchListAdapter searchListAdapter;
     private int page = 1;
+
+    private SoundPool soundPool;
+    private int soundId;
+    @Inject
+    LoginAPI loginAPI;
     @Inject
     protected IEdxEnvironment environment;
     ClipboardService clipboardService;
@@ -181,6 +199,23 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         binding.searchResult.setLayoutManager(mLayoutManager);
         binding.searchResult.setAdapter(searchListAdapter);
         copyTextDataByLongPress();
+
+        // search with audio feature start
+        soundPool = new SoundPool.Builder().build();
+        soundId = soundPool.load(getContext(), R.raw.beep_sound_2, 1);
+
+        binding.micIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!checkMicPermission()) {
+                    ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO);
+                    return;
+                }
+                currentAudioTranscription = null;
+                isRecording = false;
+                showVoiceSearchDialog();
+            }
+        });
     }
 
 
@@ -219,21 +254,21 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                     } else {
                         binding.viewMoreResults.setVisibility(View.GONE);
                     }
-                    for (SearchResultList searchResultList : responseBody.getResults()) {
+                    for (SearchResultModel searchResultList : responseBody.getResults()) {
                         if (searchResultList.getProgramDetails() != null) {
                             if (searchResultList.getProgramDetails().getTags() != null) {
-                                for (SearchResultList.SearchProgramDetails.Tag searchTags : searchResultList.getProgramDetails().getTags()) {
+                                for (SearchResultModel.ProgramDetails.Tag searchTags : searchResultList.getProgramDetails().getTags()) {
                                     if (searchTags.getTags() != null) {
                                         for (String tag : searchTags.getTags()) {
                                             CombinationOfSeachResult combinationOfSeachResult = new CombinationOfSeachResult();
-                                            combinationOfSeachResult.setCourseName(searchResultList.getTitle());
+                                            combinationOfSeachResult.setCourseName(searchResultList.getCourseName());
                                             combinationOfSeachResult.setProgramName(searchTags.getProgramName());
                                             combinationOfSeachResult.setProgram_id(searchTags.getProgramId());
                                             combinationOfSeachResult.setTagName(tag);
 
                                             // Extracting language from the first CourseRun
-                                            if (searchResultList.getCourseRuns() != null && !searchResultList.getCourseRuns().isEmpty()) {
-                                                String language = searchResultList.getCourseRuns().get(0).getLanguage();
+                                            if (searchResultList.getCourseLang() != null && !searchResultList.getCourseLang().isEmpty()) {
+                                                String language = searchResultList.getCourseLang();
                                                 combinationOfSeachResult.setLanguage(language);
                                             }
 
@@ -317,21 +352,21 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                         binding.viewMoreResults.setVisibility(View.GONE);
                     }
 
-                    for (SearchResultList searchResultList : responseBody.getResults()) {
+                    for (SearchResultModel searchResultList : responseBody.getResults()) {
                         if (searchResultList.getProgramDetails() != null) {
                             if (searchResultList.getProgramDetails().getTags() != null) {
-                                for (SearchResultList.SearchProgramDetails.Tag searchTags : searchResultList.getProgramDetails().getTags()) {
+                                for (SearchResultModel.ProgramDetails.Tag searchTags : searchResultList.getProgramDetails().getTags()) {
                                     if (searchTags.getTags() != null) {
                                         for (String tag : searchTags.getTags()) {
                                             CombinationOfSeachResult combinationOfSeachResult = new CombinationOfSeachResult();
-                                            combinationOfSeachResult.setCourseName(searchResultList.getTitle());
+                                            combinationOfSeachResult.setCourseName(searchResultList.getCourseName());
                                             combinationOfSeachResult.setProgramName(searchTags.getProgramName());
                                             combinationOfSeachResult.setProgram_id(searchTags.getProgramId());
                                             combinationOfSeachResult.setTagName(tag);
 
                                             // Extracting language from the first CourseRun
-                                            if (searchResultList.getCourseRuns() != null && !searchResultList.getCourseRuns().isEmpty()) {
-                                                String language = searchResultList.getCourseRuns().get(0).getLanguage();
+                                            if (searchResultList.getCourseLang() != null && !searchResultList.getCourseLang().isEmpty()) {
+                                                String language = searchResultList.getCourseLang();
                                                 combinationOfSeachResult.setLanguage(language);
                                             }
 
@@ -459,4 +494,192 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
             sendAnalyticsCourseDetail(combinationOfSeachResult);
         }
     }
+
+    String currentAudioTranscription;
+    private void getAudioResponse(File audioFile) {
+        /*new Handler().postDelayed(() -> {
+            currentAudioTranscription = null;
+            if(descriptionView!=null)
+               descriptionView.setText(currentAudioTranscription==null || currentAudioTranscription.trim().isEmpty()?getString(R.string.no_transcription_found):currentAudioTranscription);
+
+        }, 100);*/
+
+        //sendAnalyticsCourseDetail(query);
+        final String token = loginPrefs.getAuthorizationHeaderJwt();
+        String selectedLanguage = "en";
+        if (!LocaleManager.getLanguagePref(getActivity()).isEmpty()) {
+            selectedLanguage = LocaleManager.getLanguagePref(getActivity());
+        }
+
+        RequestBody requestFile = RequestBody.create(MediaType.parse("audio/mp3"), audioFile);
+        MultipartBody.Part audioPart = MultipartBody.Part.createFormData("audio", audioFile.getName(), requestFile);
+        ApiNewLmsClient apiNewLmsClient=new ApiNewLmsClient(loginAPI.config);
+        ApiLmsService apiService = apiNewLmsClient.getClient().create(ApiLmsService.class);
+
+        Call<TranslatedAudioResponse> call = apiService.uploadAudioFile(token, selectedLanguage, audioPart);
+        call.enqueue(new DiscoveryCallback<TranslatedAudioResponse>() {
+            @Override
+            protected void onResponse(@NonNull TranslatedAudioResponse response) {
+
+                if (response!=null) {
+                    if(response.getText()!=null && !response.getText().trim().isEmpty()) {
+                        currentAudioTranscription = response.getText().trim();
+                        if(descriptionView!=null)
+                            descriptionView.setText(currentAudioTranscription==null || currentAudioTranscription.trim().isEmpty()?getString(R.string.no_transcription_found):currentAudioTranscription);
+                    }
+                }
+
+            }
+
+            @Override
+            protected void onFailure(ResponseError responseError, @NonNull Throwable error) {
+                super.onFailure(responseError, error);
+                if(descriptionView!=null)
+                    descriptionView.setText(getString(R.string.no_transcription_found));
+
+            }
+        });
+
+    }
+
+
+    private MediaRecorder recorder = null;
+    private String outputFilePath = "";
+    boolean isRecording = false;
+    private static final int REQUEST_RECORD_AUDIO = 1001;
+    private void startRecording() {
+        outputFilePath = requireActivity().getExternalFilesDir(null).getAbsolutePath() + "/search_audio.mp3";
+        recorder = new MediaRecorder();
+        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);  // For MP3
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);    // AAC for MP3 compatibility
+        recorder.setOutputFile(outputFilePath);
+        isRecording = true;
+        try {
+            recorder.prepare();
+            soundPool.play(soundId, 1.0f, 1.0f, 0, 0, 1.0f);
+            recorder.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        new Handler().postDelayed(() -> {
+            if(recorder!=null) {
+                stopRecording();
+                getAudioResponse(new File(outputFilePath));
+            }
+            }, 5000);
+
+    }
+
+    private boolean checkMicPermission() {
+        int result = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.RECORD_AUDIO);
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void stopRecording() {
+        try {
+            if (recorder != null) {
+                recorder.stop();
+                recorder.release();
+                recorder = null;
+                isRecording = false;
+                currentAudioTranscription =null;
+            }
+        }catch (Exception e){}
+    }
+
+    private AlertDialog voiceDialog;
+    private TextView descriptionView; // Class-level to update after transcription
+    Button negativeButton;
+    private void showVoiceSearchDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        builder.setTitle(getString(R.string.search_with_voice));
+
+        descriptionView = new TextView(requireActivity());  // Now class-level
+        descriptionView.setText(isRecording ? getString(R.string.listening) : currentAudioTranscription == null || currentAudioTranscription.isEmpty() ? getString(R.string.no_transcription_found) : currentAudioTranscription);
+        // starting focus and accessible false
+        descriptionView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+        descriptionView.setFocusable(false);
+
+        descriptionView.setPadding(80, 25, 80, 25);
+        builder.setView(descriptionView);
+
+        // Set buttons with null listeners to prevent auto-dismiss
+        builder.setPositiveButton(getString(R.string.search_text), null);
+        builder.setNegativeButton(getString(R.string.respeak), null);
+        builder.setNeutralButton(getString(R.string.back), null);  // Add <string name="back_text">Back</string> to strings.xml
+
+        voiceDialog = builder.create();  // Now class-level
+        voiceDialog.show();
+
+        Button positiveButton = voiceDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        negativeButton = voiceDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+
+        positiveButton.setContentDescription(getString(R.string.search_text));
+        negativeButton.setContentDescription(getString(R.string.respeak));
+
+        // "Search" button
+        positiveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentAudioTranscription ==null || currentAudioTranscription.trim().isEmpty()) {
+                    Toast.makeText(requireActivity(), getString(R.string.no_transcription_found), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                try {
+                    binding.editSearch.setText(currentAudioTranscription.trim());
+                    binding.searchResults.setVisibility(View.VISIBLE);
+                    binding.shimmerLayout.setVisibility(View.VISIBLE);
+                    binding.searchResult.setVisibility(View.GONE);
+                    binding.searchCount.setVisibility(View.GONE);
+                    getSearchResult(currentAudioTranscription.trim());
+                    stopRecording();
+                    voiceDialog.dismiss();
+                }catch (Exception e){}
+            }
+        });
+
+        //  "Respeak" button
+        negativeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //if (!isRecording) {
+                currentAudioTranscription = null;
+                descriptionView.setText(getString(R.string.listening));
+                    stopRecording();
+                    startRecording();
+                    //negativeButton.setText("Stop");
+                /*} else {
+                    stopRecording();
+                    negativeButton.setText("ReSpeak");
+                    Toast.makeText(requireActivity(), "Recording stopped", Toast.LENGTH_SHORT).show();
+                }*/
+            }
+        });
+        // Get AccessibilityManager to check TalkBack status
+        AccessibilityManager am = (AccessibilityManager) requireActivity().getSystemService(Context.ACCESSIBILITY_SERVICE);
+        boolean isTalkBackEnabled = am.isEnabled() && am.isTouchExplorationEnabled();
+
+        // Conditional logic: Delay for TalkBack users, immediate for normal users
+        if (isTalkBackEnabled) {
+            // For TalkBack: Detect title announcement and delay recording
+            new Handler().postDelayed(() -> {
+                if (!isRecording) {
+                    startRecording();  // Start after delay
+                    descriptionView.setText(getString(R.string.listening));
+                    // starting focus and accessible false
+                    descriptionView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
+                    descriptionView.setFocusable(true);
+                }
+            }, 3000);
+        }else {
+            // For normal users: Start recording immediately
+            if (!isRecording) {
+                startRecording();
+                descriptionView.setText(getString(R.string.listening));
+            }
+        }
+    }
+
+
 }

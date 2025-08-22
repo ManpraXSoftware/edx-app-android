@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.inject.Inject
-import kotlinx.android.synthetic.main.fragment_payments_banner.*
 import org.edx.mobile.R
 import org.edx.mobile.base.BaseFragment
 import org.edx.mobile.core.IEdxEnvironment
@@ -63,12 +62,12 @@ class PaymentsBannerFragment : BaseFragment() {
             fragmentTransaction.commitAllowingStateLoss()
         }
     }
-
+    var binding: FragmentPaymentsBannerBinding? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val binding: FragmentPaymentsBannerBinding =
+        binding =
                 DataBindingUtil.inflate(inflater, R.layout.fragment_payments_banner, container, false)
-        return binding.root
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -82,25 +81,25 @@ class PaymentsBannerFragment : BaseFragment() {
         val courseData: EnrolledCoursesResponse =
                 arguments?.getSerializable(Router.EXTRA_COURSE_DATA) as EnrolledCoursesResponse
         val showInfoButton: Boolean = arguments?.getBoolean(EXTRA_SHOW_INFO_BUTTON) ?: false
-        upgrade_to_verified_footer.visibility = View.VISIBLE
+        binding!!.upgradeToVerifiedFooter.visibility = View.VISIBLE
         if (showInfoButton) {
-            info.visibility = View.VISIBLE
-            info.setOnClickListener {
+            binding!!.info.visibility = View.VISIBLE
+            binding!!.info.setOnClickListener {
                 environment?.router?.showPaymentsInfoActivity(context, courseData, courseUpgradeData!!)
             }
         } else {
-            info.visibility = View.GONE
+            binding!!.info.visibility = View.GONE
         }
         if (!TextUtils.isEmpty(courseUpgradeData!!.price)) {
-            tv_upgrade_price.text = courseUpgradeData.price
+            binding!!.tvUpgradePrice.text = courseUpgradeData.price
         } else {
-            tv_upgrade_price.visibility = View.GONE
+            binding!!.tvUpgradePrice.visibility = View.GONE
         }
 
         val courseUnit: CourseComponent? = arguments?.getSerializable(Router.EXTRA_COURSE_UNIT) as CourseComponent?
 
         courseUpgradeData.basketUrl?.let { basketUrl ->
-            ll_upgrade_button.setOnClickListener {
+            binding!!.llUpgradeButton.setOnClickListener {
                 environment?.router?.showCourseUpgradeWebViewActivity(
                         context, basketUrl, courseData, courseUnit)
             }

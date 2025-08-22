@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import androidx.databinding.DataBindingUtil;
+
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -421,8 +423,13 @@ public class BulkDownloadFragment extends BaseFragment implements BaseFragment.P
             public void onClick(View v) {
                 final CompoundButton buttonView = (CompoundButton) v;
                 if (buttonView.isChecked()) {
-                    askForPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            PermissionsUtil.WRITE_STORAGE_PERMISSION_REQUEST);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        askForPermission(new String[]{Manifest.permission.READ_MEDIA_VIDEO},
+                                PermissionsUtil.WRITE_STORAGE_PERMISSION_REQUEST);
+                    } else {
+                        askForPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                PermissionsUtil.WRITE_STORAGE_PERMISSION_REQUEST);
+                    }
                 } else {
                     switchState = SwitchState.USER_TURNED_OFF;
                     prefManager.setBulkDownloadSwitchState(switchState, videosStatus.courseComponentId);

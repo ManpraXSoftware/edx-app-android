@@ -34,6 +34,7 @@ public class MediaConsentUtils {
         NetworkInfo info = NetworkUtil.getNetworkInfo(context);
         if (info == null || !info.isConnected()) return false;
         switch (info.getType()) {
+            case ConnectivityManager.TYPE_MOBILE:
             case ConnectivityManager.TYPE_WIFI:
             case ConnectivityManager.TYPE_BLUETOOTH:
             case ConnectivityManager.TYPE_ETHERNET:

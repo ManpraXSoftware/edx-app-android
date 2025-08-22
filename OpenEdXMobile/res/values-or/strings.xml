@@ -445,4 +445,9 @@
     <string name="language_odia">ଓଡ଼ିଆ</string>
     <string name="language_bengali">ବେଙ୍ଗାଳୀ</string>
 
+    <string name="listening">ଶୁଣୁଛି</string>
+    <string name="search_with_voice">ଭଏସ୍‌ରେ ଖୋଜନ୍ତୁ</string>
+    <string name="search_text">ଖୋଜନ୍ତୁ</string>
+    <string name="respeak">ପୁନର୍ବାର କହନ୍ତୁ</string>
+    <string name="no_transcription_found">କୌଣସି ଟ୍ରାନ୍ସକ୍ରିପ୍ସନ୍ ମିଳିଲା ନାହିଁ</string>
 </resources>

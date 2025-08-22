@@ -865,4 +865,12 @@
  <string name="language_bengali">Bengali</string>
 
 
+
+ <string name="listening">Listening</string>
+ <string name="search_with_voice">Search with Voice</string>
+ <string name="search_text">Search</string>
+ <string name="respeak">ReSpeak</string>
+ <string name="no_transcription_found">No transcription found</string>
+
+
 </resources>

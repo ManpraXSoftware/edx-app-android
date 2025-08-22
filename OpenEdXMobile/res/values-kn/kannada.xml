@@ -832,5 +832,11 @@
     <string name="language_odia">ಒರಿಯಾ</string>
     <string name="language_bengali">ಬಂಗಾಳಿ</string>
 
+    <string name="listening">ಕೇಳುತ್ತಿದೆ</string>
+    <string name="search_with_voice">ಧ್ವನಿಯೊಂದಿಗೆ ಹುಡುಕಿ</string>
+    <string name="search_text">ಹುಡುಕಿ</string>
+    <string name="respeak">ಮತ್ತೆ ಮಾತನಾಡಿ</string>
+    <string name="no_transcription_found">ಯಾವುದೇ ಟ್ರಾನ್ಸ್‌ಕ್ರಿಪ್ಷನ್ ಸಿಗಲಿಲ್ಲ</string>
+
 
 </resources>

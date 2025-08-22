@@ -97,9 +97,9 @@ public class CourseUnitVideoPlayerFragment extends BaseCourseUnitVideoFragment {
 
             playerFragment = new PlayerFragment();
             playerFragment.setCallback(this);
-            if (environment.getConfig().isVideoTranscriptEnabled()) {
+            //if (environment.getConfig().isVideoTranscriptEnabled()) {
                 playerFragment.setTranscriptCallback(this);
-            }
+            //}
 
             final BaseCourseUnitVideoFragment.HasComponent hasComponent = (BaseCourseUnitVideoFragment.HasComponent) getActivity();
             if (hasComponent != null) {

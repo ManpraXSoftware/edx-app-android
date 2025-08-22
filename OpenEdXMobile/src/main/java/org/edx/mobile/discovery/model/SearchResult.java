@@ -31,13 +31,13 @@ public class SearchResult {
         this.previous = previous;
     }
 
-    public List<SearchResultList> getResults() {
+    public List<SearchResultModel> getResults() {
         return results;
     }
 
-    public void setResults(List<SearchResultList> results) {
+    public void setResults(List<SearchResultModel> results) {
         this.results = results;
     }
 
-    private List<SearchResultList> results;
+    private List<SearchResultModel> results;
 }

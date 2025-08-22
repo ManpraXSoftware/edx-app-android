@@ -53,6 +53,7 @@ import org.edx.mobile.util.DeviceSettingUtil;
 import org.edx.mobile.util.LocaleUtils;
 import org.edx.mobile.util.NetworkUtil;
 import org.edx.mobile.util.OrientationDetector;
+import org.edx.mobile.util.OrientationUtils;
 import org.edx.mobile.util.TextUtils;
 import org.edx.mobile.util.UiUtil;
 import org.edx.mobile.util.Version;
@@ -532,11 +533,11 @@ public class PlayerFragment extends BaseFragment implements IPlayerListener, Ser
             logger.debug("playing [seek=" + seekTo + "]: " + path);
             if (googleCastDelegate.isConnected()) {
                 playVideoOnRemoteDevice(lastSavedPosition, true);
-                player.setUri(path, seekTo);
+                player.setUri(path, /*seekTo*/0l);
             } else if (prepareOnly)
-                player.setUri(path, seekTo);
+                player.setUri(path, /*seekTo*/0l);
             else
-                player.setUriAndPlay(path, seekTo);
+                player.setUriAndPlay(path, /*seekTo*/0l);
         } catch (Exception e) {
             logger.error(e);
         }
@@ -957,7 +958,7 @@ public class PlayerFragment extends BaseFragment implements IPlayerListener, Ser
 
     private boolean isScreenLandscape() {
         try {
-            int orientation = getResources().getConfiguration().orientation;
+            int orientation = OrientationUtils.getOrientation(requireActivity())/*getResources().getConfiguration().orientation*/;
             logger.debug("Current orientation = " + orientation);
             return (orientation == Configuration.ORIENTATION_LANDSCAPE);
         } catch(Exception ex) {
@@ -973,7 +974,7 @@ public class PlayerFragment extends BaseFragment implements IPlayerListener, Ser
             if (isResumed() && !isRemoving()) {
                 if (player != null) {
 
-                    player.unfreeze();
+                    //player.unfreeze();    // make uncomment if want to play video when comes from other fragment via prev/next button
                     hideProgress();
                     if (player.isPlaying() || getTouchExploreEnabled()) {
                         updateController("player unfreezed");
@@ -982,6 +983,9 @@ public class PlayerFragment extends BaseFragment implements IPlayerListener, Ser
                     if (isPrepared && !isAutoPlayDone) {
                         isAutoPlayDone = true;
                         player.start();
+                        // pause video initially at player loading time
+                        player.pause();
+                        player.seekTo(500);
                     }
 
                     if (pauseDueToDialog) {

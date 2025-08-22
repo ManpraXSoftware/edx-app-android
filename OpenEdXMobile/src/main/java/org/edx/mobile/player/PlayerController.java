@@ -762,14 +762,14 @@ public class PlayerController extends FrameLayout {
 
             if (mNextButton != null && !mFromXml) {
                 if(mNextListener!=null){
-                    mNextButton.setVisibility(View.VISIBLE);
+                    mNextButton.setVisibility(View.GONE);  // put VISIBLE when need to enable
                 }else{
                     mNextButton.setVisibility(View.GONE);
                 }
             }
             if (mPrevButton != null && !mFromXml) {
                 if(mPrevListener!=null){
-                    mPrevButton.setVisibility(View.VISIBLE);
+                    mPrevButton.setVisibility(View.GONE);  // put VISIBLE when need to enable
                 }else{
                     mPrevButton.setVisibility(View.GONE);
                 }
