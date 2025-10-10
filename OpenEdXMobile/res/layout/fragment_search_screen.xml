@@ -51,7 +51,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/search_subodha"
-                                android:layout_marginRight="35dp"
+                                android:layout_marginEnd="65dp"
                                 android:layout_marginStart="20dp"
                                 android:cursorVisible="false"
                                 android:background="@null"

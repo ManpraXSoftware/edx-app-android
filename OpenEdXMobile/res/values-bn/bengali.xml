@@ -464,5 +464,6 @@
     <string name="search_text">অনুসন্ধান</string>
     <string name="respeak">পুনরায় বলুন</string>
     <string name="no_transcription_found">কোনো ট্রান্সক্রিপশন পাওয়া যায়নি</string>
-
+    <string name="speak">কথা বলো</string>
+    <string name="stop">থামাও</string>
 </resources>

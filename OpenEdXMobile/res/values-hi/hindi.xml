@@ -494,5 +494,6 @@
     <string name="search_text">खोजें</string>
     <string name="respeak">दोबारा बोलें</string>
     <string name="no_transcription_found">कोई ट्रांसक्रिप्शन नहीं मिला</string>
-
+    <string name="speak">बोलो</string>
+    <string name="stop">रोकें</string>
 </resources>

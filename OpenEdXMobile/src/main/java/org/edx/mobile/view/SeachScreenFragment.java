@@ -4,12 +4,14 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.media.MediaRecorder;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,8 @@ import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,9 +51,13 @@ import org.edx.mobile.discovery.model.SearchResult;
 import org.edx.mobile.discovery.model.SearchResultModel;
 import org.edx.mobile.discovery.model.TranslatedAudioResponse;
 import org.edx.mobile.discovery.net.course.CourseApi;
+import org.edx.mobile.http.HttpStatus;
+import org.edx.mobile.http.HttpStatusException;
 import org.edx.mobile.interfaces.OnNavigateListener;
+import org.edx.mobile.model.api.EnrolledCoursesResponse;
 import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.prefs.LoginPrefs;
+import org.edx.mobile.myCourse.ParticularCourseTask;
 import org.edx.mobile.util.GestureListener;
 import org.edx.mobile.util.LocaleManager;
 import org.edx.mobile.view.adapters.OnRecyclerItemClickListener;
@@ -271,6 +279,10 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                                                 String language = searchResultList.getCourseLang();
                                                 combinationOfSeachResult.setLanguage(language);
                                             }
+                                            // new field added
+                                            combinationOfSeachResult.setCourse_id(searchResultList.getCourseId());
+                                            combinationOfSeachResult.setUnit_id(searchResultList.getUnit_id());
+                                            combinationOfSeachResult.setIs_enroll(searchResultList.isIs_enroll());
 
                                             combinationOfSeachResults.add(combinationOfSeachResult);
                                         }
@@ -338,7 +350,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         if (!LocaleManager.getLanguagePref(getActivity()).isEmpty()) {
             selectedLanguage = LocaleManager.getLanguagePref(getActivity());
         }
-        Call<SearchResult> search = courseApi.getSearchNextResult(token, selectedLanguage, String.valueOf(page), "100", query.trim());
+        Call<SearchResult> search = courseApi.getSearchNextResult(token, selectedLanguage, String.valueOf(page), "10", query.trim());
         search.enqueue(new DiscoveryCallback<SearchResult>() {
             @Override
             protected void onResponse(@NonNull SearchResult responseBody) {
@@ -369,6 +381,11 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                                                 String language = searchResultList.getCourseLang();
                                                 combinationOfSeachResult.setLanguage(language);
                                             }
+
+                                            // new field added
+                                            combinationOfSeachResult.setCourse_id(searchResultList.getCourseId());
+                                            combinationOfSeachResult.setUnit_id(searchResultList.getUnit_id());
+                                            combinationOfSeachResult.setIs_enroll(searchResultList.isIs_enroll());
 
                                             combinationOfSeachResults.add(combinationOfSeachResult);
                                         }
@@ -442,8 +459,12 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         if (item instanceof CombinationOfSeachResult) {
             CombinationOfSeachResult combinationOfSeachResult = (CombinationOfSeachResult) item;
             sendAnalyticsCourseDetail(combinationOfSeachResult);
-            environment.getRouter().showProgramsActivity(getActivity(), combinationOfSeachResult.getTagName(), /*combinationOfSeachResult.getProgram_id()*/ combinationOfSeachResult.getProgram_id());
-
+            if (combinationOfSeachResult.isIs_enroll()) {
+                // goto unit page directly if enrolled
+                getParticularCourse(combinationOfSeachResult.getCourse_id(), combinationOfSeachResult.getUnit_id());
+            }else {
+                environment.getRouter().showProgramsActivity(getActivity(), combinationOfSeachResult.getTagName(), /*combinationOfSeachResult.getProgram_id()*/ combinationOfSeachResult.getProgram_id());
+            }
 //            NewProgramFragment newProgramFragment = new NewProgramFragment();
 //            Bundle bundle1 = new Bundle();
 //            bundle1.putString(PROGRAM, combinationOfSeachResult.getProgramName());
@@ -489,9 +510,13 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
     public void navigateToAnotherScreen(Object item) {
         if (item instanceof CombinationOfSeachResult) {
             CombinationOfSeachResult combinationOfSeachResult = (CombinationOfSeachResult) item;
-
-            environment.getRouter().showProgramsActivity(getActivity(), combinationOfSeachResult.getTagName(), /*combinationOfSeachResult.getProgram_id()*/ combinationOfSeachResult.getProgram_id());
             sendAnalyticsCourseDetail(combinationOfSeachResult);
+            if (combinationOfSeachResult.isIs_enroll()) {
+                // goto unit page directly if enrolled
+                getParticularCourse(combinationOfSeachResult.getCourse_id(), combinationOfSeachResult.getUnit_id());
+            }else {
+                environment.getRouter().showProgramsActivity(getActivity(), combinationOfSeachResult.getTagName(), /*combinationOfSeachResult.getProgram_id()*/ combinationOfSeachResult.getProgram_id());
+            }
         }
     }
 
@@ -524,8 +549,16 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                 if (response!=null) {
                     if(response.getText()!=null && !response.getText().trim().isEmpty()) {
                         currentAudioTranscription = response.getText().trim();
-                        if(descriptionView!=null)
-                            descriptionView.setText(currentAudioTranscription==null || currentAudioTranscription.trim().isEmpty()?getString(R.string.no_transcription_found):currentAudioTranscription);
+                        if(descriptionView!=null && currentAudioTranscription != null && !currentAudioTranscription.trim().isEmpty()) {
+                           currentAudioTranscription = removeStopAtEnd(currentAudioTranscription);
+                            descriptionView.setText(currentAudioTranscription == null || currentAudioTranscription.trim().isEmpty() ? getString(R.string.no_transcription_found) : currentAudioTranscription);
+                            // starting focus and accessible descriptionView
+                            descriptionView.clearFocus();
+                            descriptionView.setFocusable(true);
+                            descriptionView.setFocusableInTouchMode(true);
+                            descriptionView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
+                            descriptionView.requestFocus();
+                        }
                     }
                 }
 
@@ -562,12 +595,12 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         } catch (IOException e) {
             e.printStackTrace();
         }
-        new Handler().postDelayed(() -> {
+      /*  new Handler().postDelayed(() -> {
             if(recorder!=null) {
                 stopRecording();
                 getAudioResponse(new File(outputFilePath));
             }
-            }, 5000);
+            }, 5000);*/
 
     }
 
@@ -593,30 +626,87 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
     Button negativeButton;
     private void showVoiceSearchDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-        builder.setTitle(getString(R.string.search_with_voice));
+        //builder.setTitle(getString(R.string.search_with_voice));
+
+        // ─── Build custom title bar with close button ───────────────────────────────────
+        // 1. Create a horizontal container for the title and close button
+        LinearLayout titleContainer = new LinearLayout(requireActivity());
+        titleContainer.setOrientation(LinearLayout.HORIZONTAL);
+        titleContainer.setGravity(Gravity.CENTER_VERTICAL);
+        titleContainer.setPadding(60, 50, 30, 10);
+
+        // 2. Create and add the title text
+        TextView titleText = new TextView(requireActivity());
+        titleText.setText(getString(R.string.search_with_voice));
+        titleText.setTextSize(18);
+        titleText.setTypeface(Typeface.DEFAULT_BOLD);   // Bold style
+        titleText.setLayoutParams(
+                new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1)
+        );
+        titleContainer.addView(titleText);
+
+        // 3. Create and add the close (X) button
+
+        // 1. Convert desired dp size to pixels
+        int sizeDp = 18; // desired icon size
+        float density = requireActivity().getResources().getDisplayMetrics().density;
+        int sizePx = (int) (sizeDp * density + 0.5f);
+
+        // 2. Create LayoutParams with exact width/height
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(sizePx, sizePx);
+
+        ImageButton closeButton = new ImageButton(requireActivity());
+        closeButton.setImageResource(R.drawable.ic_close);
+        closeButton.setBackground(null);
+        closeButton.setPadding(24, 24, 24, 24);
+        closeButton.setContentDescription(getString(R.string.close)); // Add <string name="close">Close</string>
+        closeButton.setLayoutParams(lp);
+        titleContainer.addView(closeButton);
+        // ────────────────────────────────────────────────────────────────────────────────
+
+        // 4. Create main container and description view
+        LinearLayout mainContainer = new LinearLayout(requireActivity());
+        mainContainer.setOrientation(LinearLayout.VERTICAL);
 
         descriptionView = new TextView(requireActivity());  // Now class-level
         descriptionView.setText(isRecording ? getString(R.string.listening) : currentAudioTranscription == null || currentAudioTranscription.isEmpty() ? getString(R.string.no_transcription_found) : currentAudioTranscription);
         // starting focus and accessible false
-        descriptionView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
-        descriptionView.setFocusable(false);
+        /*descriptionView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+        descriptionView.setFocusable(false);*/
 
         descriptionView.setPadding(80, 25, 80, 25);
         builder.setView(descriptionView);
 
         // Set buttons with null listeners to prevent auto-dismiss
         builder.setPositiveButton(getString(R.string.search_text), null);
-        builder.setNegativeButton(getString(R.string.respeak), null);
-        builder.setNeutralButton(getString(R.string.back), null);  // Add <string name="back_text">Back</string> to strings.xml
+        builder.setNegativeButton(getString(R.string.stop), null);
+        builder.setNeutralButton(getString(R.string.speak), null);  // Add <string name="back_text">Back</string> to strings.xml
+
+
+        // 5. Add titleContainer and descriptionView to mainContainer
+        mainContainer.addView(titleContainer);
+        mainContainer.addView(descriptionView);
+
+        // 6. Set the custom view on the dialog
+        builder.setView(mainContainer);
 
         voiceDialog = builder.create();  // Now class-level
         voiceDialog.show();
 
+
+        // Close button listener
+        closeButton.setOnClickListener(v -> {
+            stopRecording();
+            voiceDialog.dismiss();
+        });
+
         Button positiveButton = voiceDialog.getButton(AlertDialog.BUTTON_POSITIVE);
         negativeButton = voiceDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+        Button neutralButton = voiceDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
 
         positiveButton.setContentDescription(getString(R.string.search_text));
-        negativeButton.setContentDescription(getString(R.string.respeak));
+        negativeButton.setContentDescription(getString(R.string.stop));
+        neutralButton.setContentDescription(getString(R.string.speak));
 
         // "Search" button
         positiveButton.setOnClickListener(new View.OnClickListener() {
@@ -639,8 +729,8 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
             }
         });
 
-        //  "Respeak" button
-        negativeButton.setOnClickListener(new View.OnClickListener() {
+        //  "speak" button
+        neutralButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //if (!isRecording) {
@@ -656,12 +746,28 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                 }*/
             }
         });
+
+        //  "stop" button
+        negativeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //if (!isRecording) {
+                if(recorder!=null) {
+                    currentAudioTranscription = null;
+                    descriptionView.setText(getString(R.string.listening));
+                    stopRecording();
+                    getAudioResponse(new File(outputFilePath));
+                }
+                //startRecording();
+                //negativeButton.setText("Stop");
+            }
+        });
         // Get AccessibilityManager to check TalkBack status
         AccessibilityManager am = (AccessibilityManager) requireActivity().getSystemService(Context.ACCESSIBILITY_SERVICE);
         boolean isTalkBackEnabled = am.isEnabled() && am.isTouchExplorationEnabled();
 
         // Conditional logic: Delay for TalkBack users, immediate for normal users
-        if (isTalkBackEnabled) {
+     /*   if (isTalkBackEnabled) {
             // For TalkBack: Detect title announcement and delay recording
             new Handler().postDelayed(() -> {
                 if (!isRecording) {
@@ -678,8 +784,81 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                 startRecording();
                 descriptionView.setText(getString(R.string.listening));
             }
+        }*/
+    }
+
+    private static final int REQUEST_SHOW_COURSE_UNIT_DETAIL = 0;
+    EnrolledCoursesResponse courseData;
+    public void getParticularCourse(String courseId, String blockId) {
+        try {
+            ParticularCourseTask particularCourseTask = new ParticularCourseTask(getContext(), loginPrefs.getUsername(),
+                    courseId) {
+                @Override
+                public void onSuccess(@NonNull ArrayList<EnrolledCoursesResponse> result) {
+                    try {
+                        if (result != null) {
+                            // Handle successful response
+                            ArrayList<EnrolledCoursesResponse> data = result;
+                            if (data != null) {
+                                if (data != null) {
+                                    for (EnrolledCoursesResponse enrolledCoursesResponse : data) {
+                                        if (enrolledCoursesResponse.getCourse() != null) {
+                                            if (enrolledCoursesResponse.getCourse().getId() != null) {
+                                                // if (enrolledCoursesResponse.getCourse().getId().equals(resumeCourse.getCourse_id())) {
+                                                courseData = enrolledCoursesResponse;
+                                                 // redirection to course/unit page directly
+                                                if (courseData != null) {
+                                                    LocaleManager.setCourseLanguagePref(getContext(),courseData.getCourse().getLanguage());
+                                                    if (blockId.contains("sequential")) {
+
+                                                        environment.getRouter().showCourseContainerOutline(SeachScreenFragment.this,
+                                                                REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, null,
+                                                                blockId, null, false);
+                                                    } else {
+                                                        environment.getRouter().showCourseUnitDetail(SeachScreenFragment.this,
+                                                                REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, null,
+                                                                blockId, false);
+                                                    }
+                                                } else {
+                                                    Toast.makeText(getActivity(), getString(R.string.no_course_info), Toast.LENGTH_LONG).show();
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                Log.d("enrolledCoursesResponse", courseData.getCourse().getId());
+                            } else {
+                                Log.e("enrolledCoursesResponse", "Response body is null");
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e("enrolledCoursesResponse", "Exception in onResponse", e);
+                    }
+                }
+
+                @Override
+                public void onException(Exception ex) {
+                    if (ex instanceof HttpStatusException &&
+                            ((HttpStatusException) ex).getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                        Log.e("enrolledCoursesResponse", "HttpStatusException in onResponse UNAUTHORIZED", ex);
+                    } else {
+                        Log.e("enrolledCoursesResponse", "HttpStatusException in onResponse", ex);
+                    }
+                }
+            };
+            particularCourseTask.execute();
+
+
+        } catch (Exception e) {
+            Log.e("enrolledCoursesResponse", "Exception in getParticularCourse", e);
         }
     }
 
+    public static String removeStopAtEnd(String input) {
+        // (?i) – case-insensitive flag
+        // \\b(stop button|stop)\\b – whole word "stop button" or "stop"
+        // \\s*$ – any trailing spaces up to end of string
+        return input.replaceAll("(?i)\\b(stop button|stop)\\b\\s*$", "").trim();
+    }
 
 }

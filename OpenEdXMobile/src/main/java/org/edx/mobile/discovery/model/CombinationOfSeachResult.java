@@ -30,6 +30,34 @@ public class CombinationOfSeachResult {
     private String courseName;
     private String language;
 
+    private String unit_id;
+    private boolean is_enroll;
+    private String course_id;
+
+    public String getCourse_id() {
+        return course_id;
+    }
+
+    public void setCourse_id(String course_id) {
+        this.course_id = course_id;
+    }
+
+    public String getUnit_id() {
+        return unit_id;
+    }
+
+    public void setUnit_id(String unit_id) {
+        this.unit_id = unit_id;
+    }
+
+    public boolean isIs_enroll() {
+        return is_enroll;
+    }
+
+    public void setIs_enroll(boolean is_enroll) {
+        this.is_enroll = is_enroll;
+    }
+
     public String getProgram_id() {
         return program_id;
     }

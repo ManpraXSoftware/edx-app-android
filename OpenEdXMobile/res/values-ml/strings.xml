@@ -450,4 +450,8 @@
     <string name="search_text">തിരയുക</string>
     <string name="respeak">വീണ്ടും സംസാരിക്കുക</string>
     <string name="no_transcription_found">ട്രാൻസ്ക്രിപ്ഷൻ ഒന്നും കണ്ടെത്തിയില്ല</string>
+    <string name="speak">പറയൂ</string>
+    <string name="stop">നിര്‍ത്തുക</string>
+
+
 </resources>

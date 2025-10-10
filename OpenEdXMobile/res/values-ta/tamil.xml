@@ -493,4 +493,6 @@
     <string name="search_text">தேடுங்கள்</string>
     <string name="respeak">மீண்டும் பேசுங்கள்</string>
     <string name="no_transcription_found">எந்த டிரான்ஸ்கிரிப்ஷனும் கிடைக்கவில்லை</string>
+    <string name="speak">பேசு</string>
+    <string name="stop">நிறுத்து</string>
 </resources>

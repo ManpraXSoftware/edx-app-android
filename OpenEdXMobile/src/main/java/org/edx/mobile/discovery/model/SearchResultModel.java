@@ -147,4 +147,23 @@ public class SearchResultModel {
                 }
             }
         }
+
+    private String unit_id;
+    private boolean is_enroll;
+
+    public String getUnit_id() {
+        return unit_id;
+    }
+
+    public void setUnit_id(String unit_id) {
+        this.unit_id = unit_id;
+    }
+
+    public boolean isIs_enroll() {
+        return is_enroll;
+    }
+
+    public void setIs_enroll(boolean is_enroll) {
+        this.is_enroll = is_enroll;
+    }
     }

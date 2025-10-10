@@ -837,6 +837,8 @@
     <string name="search_text">ಹುಡುಕಿ</string>
     <string name="respeak">ಮತ್ತೆ ಮಾತನಾಡಿ</string>
     <string name="no_transcription_found">ಯಾವುದೇ ಟ್ರಾನ್ಸ್‌ಕ್ರಿಪ್ಷನ್ ಸಿಗಲಿಲ್ಲ</string>
+    <string name="speak">ಮಾತಾಡಿ</string>
+    <string name="stop">ನಿಲ್ಲಿಸು</string>
 
 
 </resources>

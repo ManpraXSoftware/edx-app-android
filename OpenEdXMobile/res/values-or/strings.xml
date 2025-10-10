@@ -450,4 +450,6 @@
     <string name="search_text">ଖୋଜନ୍ତୁ</string>
     <string name="respeak">ପୁନର୍ବାର କହନ୍ତୁ</string>
     <string name="no_transcription_found">କୌଣସି ଟ୍ରାନ୍ସକ୍ରିପ୍ସନ୍ ମିଳିଲା ନାହିଁ</string>
+    <string name="speak">କହନ୍ତୁ</string>
+    <string name="stop">ବନ୍ଦ କରନ୍ତୁ</string>
 </resources>
