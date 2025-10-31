@@ -57,7 +57,7 @@ public interface CourseService {
     @GET("/extandedapi/custom-course-search/")
     Call<SearchResult> getSearch(@Header(DiscoveryConstants.AUTHORIZATION) String authorization ,@Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("page_size") String page, @Query("q") String query);
 
-    @GET("/extandedapi/mx-custom-course-search/")
+    @GET("/extandedapi/custom-course-search/")
     Call<SearchResult> getSearchNextResult(@Header(DiscoveryConstants.AUTHORIZATION) String authorization ,@Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("page") String page ,@Query("page_size") String page_size, @Query("q") String query);
 
     @NonNull

@@ -1,44 +1,28 @@
 package org.edx.mobile.view;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Typeface;
-import android.media.MediaRecorder;
-import android.media.SoundPool;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
-import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.inject.Inject;
+
 import org.edx.mobile.R;
 import org.edx.mobile.annotation.Nullable;
-import org.edx.mobile.authentication.ApiLmsService;
-import org.edx.mobile.authentication.ApiNewLmsClient;
-import org.edx.mobile.authentication.LoginAPI;
 import org.edx.mobile.base.BaseFragment;
 import org.edx.mobile.clipboard.ClipboardService;
 import org.edx.mobile.clipboard.ClipboardServiceHolder;
@@ -48,34 +32,29 @@ import org.edx.mobile.discovery.DiscoveryCallback;
 import org.edx.mobile.discovery.model.CombinationOfSeachResult;
 import org.edx.mobile.discovery.model.ResponseError;
 import org.edx.mobile.discovery.model.SearchResult;
-import org.edx.mobile.discovery.model.SearchResultModel;
-import org.edx.mobile.discovery.model.TranslatedAudioResponse;
+import org.edx.mobile.discovery.model.SearchResultList;
+import org.edx.mobile.discovery.model.SearchTags;
 import org.edx.mobile.discovery.net.course.CourseApi;
-import org.edx.mobile.http.HttpStatus;
-import org.edx.mobile.http.HttpStatusException;
 import org.edx.mobile.interfaces.OnNavigateListener;
-import org.edx.mobile.model.api.EnrolledCoursesResponse;
 import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.prefs.LoginPrefs;
-import org.edx.mobile.myCourse.ParticularCourseTask;
 import org.edx.mobile.util.GestureListener;
 import org.edx.mobile.util.LocaleManager;
 import org.edx.mobile.view.adapters.OnRecyclerItemClickListener;
 import org.edx.mobile.view.adapters.SearchListAdapter;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 
 import static android.app.Activity.RESULT_OK;
+import static org.edx.mobile.view.ProgramActivity.PROGRAM;
+import static org.edx.mobile.view.ProgramActivity.PROGRAM_CONVERTED;
+import static org.edx.mobile.view.ProgramActivity.PROGRAM_UUID;
 
 public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemClickListener, OnNavigateListener {
     public static final String TAG = SeachScreenFragment.class.getCanonicalName();
@@ -86,11 +65,6 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
     CourseApi courseApi;
     private SearchListAdapter searchListAdapter;
     private int page = 1;
-
-    private SoundPool soundPool;
-    private int soundId;
-    @Inject
-    LoginAPI loginAPI;
     @Inject
     protected IEdxEnvironment environment;
     ClipboardService clipboardService;
@@ -207,23 +181,6 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         binding.searchResult.setLayoutManager(mLayoutManager);
         binding.searchResult.setAdapter(searchListAdapter);
         copyTextDataByLongPress();
-
-        // search with audio feature start
-        soundPool = new SoundPool.Builder().build();
-        soundId = soundPool.load(getContext(), R.raw.beep_sound_2, 1);
-
-        binding.micIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!checkMicPermission()) {
-                    ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO);
-                    return;
-                }
-                currentAudioTranscription = null;
-                isRecording = false;
-                showVoiceSearchDialog();
-            }
-        });
     }
 
 
@@ -262,27 +219,23 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                     } else {
                         binding.viewMoreResults.setVisibility(View.GONE);
                     }
-                    for (SearchResultModel searchResultList : responseBody.getResults()) {
+                    for (SearchResultList searchResultList : responseBody.getResults()) {
                         if (searchResultList.getProgramDetails() != null) {
                             if (searchResultList.getProgramDetails().getTags() != null) {
-                                for (SearchResultModel.ProgramDetails.Tag searchTags : searchResultList.getProgramDetails().getTags()) {
+                                for (SearchResultList.SearchProgramDetails.Tag searchTags : searchResultList.getProgramDetails().getTags()) {
                                     if (searchTags.getTags() != null) {
                                         for (String tag : searchTags.getTags()) {
                                             CombinationOfSeachResult combinationOfSeachResult = new CombinationOfSeachResult();
-                                            combinationOfSeachResult.setCourseName(searchResultList.getCourseName());
+                                            combinationOfSeachResult.setCourseName(searchResultList.getTitle());
                                             combinationOfSeachResult.setProgramName(searchTags.getProgramName());
                                             combinationOfSeachResult.setProgram_id(searchTags.getProgramId());
                                             combinationOfSeachResult.setTagName(tag);
 
                                             // Extracting language from the first CourseRun
-                                            if (searchResultList.getCourseLang() != null && !searchResultList.getCourseLang().isEmpty()) {
-                                                String language = searchResultList.getCourseLang();
+                                            if (searchResultList.getCourseRuns() != null && !searchResultList.getCourseRuns().isEmpty()) {
+                                                String language = searchResultList.getCourseRuns().get(0).getLanguage();
                                                 combinationOfSeachResult.setLanguage(language);
                                             }
-                                            // new field added
-                                            combinationOfSeachResult.setCourse_id(searchResultList.getCourseId());
-                                            combinationOfSeachResult.setUnit_id(searchResultList.getUnit_id());
-                                            combinationOfSeachResult.setIs_enroll(searchResultList.isIs_enroll());
 
                                             combinationOfSeachResults.add(combinationOfSeachResult);
                                         }
@@ -350,7 +303,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         if (!LocaleManager.getLanguagePref(getActivity()).isEmpty()) {
             selectedLanguage = LocaleManager.getLanguagePref(getActivity());
         }
-        Call<SearchResult> search = courseApi.getSearchNextResult(token, selectedLanguage, String.valueOf(page), "10", query.trim());
+        Call<SearchResult> search = courseApi.getSearchNextResult(token, selectedLanguage, String.valueOf(page), "100", query.trim());
         search.enqueue(new DiscoveryCallback<SearchResult>() {
             @Override
             protected void onResponse(@NonNull SearchResult responseBody) {
@@ -364,28 +317,23 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                         binding.viewMoreResults.setVisibility(View.GONE);
                     }
 
-                    for (SearchResultModel searchResultList : responseBody.getResults()) {
+                    for (SearchResultList searchResultList : responseBody.getResults()) {
                         if (searchResultList.getProgramDetails() != null) {
                             if (searchResultList.getProgramDetails().getTags() != null) {
-                                for (SearchResultModel.ProgramDetails.Tag searchTags : searchResultList.getProgramDetails().getTags()) {
+                                for (SearchResultList.SearchProgramDetails.Tag searchTags : searchResultList.getProgramDetails().getTags()) {
                                     if (searchTags.getTags() != null) {
                                         for (String tag : searchTags.getTags()) {
                                             CombinationOfSeachResult combinationOfSeachResult = new CombinationOfSeachResult();
-                                            combinationOfSeachResult.setCourseName(searchResultList.getCourseName());
+                                            combinationOfSeachResult.setCourseName(searchResultList.getTitle());
                                             combinationOfSeachResult.setProgramName(searchTags.getProgramName());
                                             combinationOfSeachResult.setProgram_id(searchTags.getProgramId());
                                             combinationOfSeachResult.setTagName(tag);
 
                                             // Extracting language from the first CourseRun
-                                            if (searchResultList.getCourseLang() != null && !searchResultList.getCourseLang().isEmpty()) {
-                                                String language = searchResultList.getCourseLang();
+                                            if (searchResultList.getCourseRuns() != null && !searchResultList.getCourseRuns().isEmpty()) {
+                                                String language = searchResultList.getCourseRuns().get(0).getLanguage();
                                                 combinationOfSeachResult.setLanguage(language);
                                             }
-
-                                            // new field added
-                                            combinationOfSeachResult.setCourse_id(searchResultList.getCourseId());
-                                            combinationOfSeachResult.setUnit_id(searchResultList.getUnit_id());
-                                            combinationOfSeachResult.setIs_enroll(searchResultList.isIs_enroll());
 
                                             combinationOfSeachResults.add(combinationOfSeachResult);
                                         }
@@ -459,12 +407,8 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         if (item instanceof CombinationOfSeachResult) {
             CombinationOfSeachResult combinationOfSeachResult = (CombinationOfSeachResult) item;
             sendAnalyticsCourseDetail(combinationOfSeachResult);
-            if (combinationOfSeachResult.isIs_enroll()) {
-                // goto unit page directly if enrolled
-                getParticularCourse(combinationOfSeachResult.getCourse_id(), combinationOfSeachResult.getUnit_id());
-            }else {
-                environment.getRouter().showProgramsActivity(getActivity(), combinationOfSeachResult.getTagName(), /*combinationOfSeachResult.getProgram_id()*/ combinationOfSeachResult.getProgram_id());
-            }
+            environment.getRouter().showProgramsActivity(getActivity(), combinationOfSeachResult.getTagName(), /*combinationOfSeachResult.getProgram_id()*/ combinationOfSeachResult.getProgram_id());
+
 //            NewProgramFragment newProgramFragment = new NewProgramFragment();
 //            Bundle bundle1 = new Bundle();
 //            bundle1.putString(PROGRAM, combinationOfSeachResult.getProgramName());
@@ -510,355 +454,9 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
     public void navigateToAnotherScreen(Object item) {
         if (item instanceof CombinationOfSeachResult) {
             CombinationOfSeachResult combinationOfSeachResult = (CombinationOfSeachResult) item;
+
+            environment.getRouter().showProgramsActivity(getActivity(), combinationOfSeachResult.getTagName(), /*combinationOfSeachResult.getProgram_id()*/ combinationOfSeachResult.getProgram_id());
             sendAnalyticsCourseDetail(combinationOfSeachResult);
-            if (combinationOfSeachResult.isIs_enroll()) {
-                // goto unit page directly if enrolled
-                getParticularCourse(combinationOfSeachResult.getCourse_id(), combinationOfSeachResult.getUnit_id());
-            }else {
-                environment.getRouter().showProgramsActivity(getActivity(), combinationOfSeachResult.getTagName(), /*combinationOfSeachResult.getProgram_id()*/ combinationOfSeachResult.getProgram_id());
-            }
         }
     }
-
-    String currentAudioTranscription;
-    private void getAudioResponse(File audioFile) {
-        /*new Handler().postDelayed(() -> {
-            currentAudioTranscription = null;
-            if(descriptionView!=null)
-               descriptionView.setText(currentAudioTranscription==null || currentAudioTranscription.trim().isEmpty()?getString(R.string.no_transcription_found):currentAudioTranscription);
-
-        }, 100);*/
-
-        //sendAnalyticsCourseDetail(query);
-        final String token = loginPrefs.getAuthorizationHeaderJwt();
-        String selectedLanguage = "en";
-        if (!LocaleManager.getLanguagePref(getActivity()).isEmpty()) {
-            selectedLanguage = LocaleManager.getLanguagePref(getActivity());
-        }
-
-        RequestBody requestFile = RequestBody.create(MediaType.parse("audio/mp3"), audioFile);
-        MultipartBody.Part audioPart = MultipartBody.Part.createFormData("audio", audioFile.getName(), requestFile);
-        ApiNewLmsClient apiNewLmsClient=new ApiNewLmsClient(loginAPI.config);
-        ApiLmsService apiService = apiNewLmsClient.getClient().create(ApiLmsService.class);
-
-        Call<TranslatedAudioResponse> call = apiService.uploadAudioFile(token, selectedLanguage, audioPart);
-        call.enqueue(new DiscoveryCallback<TranslatedAudioResponse>() {
-            @Override
-            protected void onResponse(@NonNull TranslatedAudioResponse response) {
-
-                if (response!=null) {
-                    if(response.getText()!=null && !response.getText().trim().isEmpty()) {
-                        currentAudioTranscription = response.getText().trim();
-                        if(descriptionView!=null && currentAudioTranscription != null && !currentAudioTranscription.trim().isEmpty()) {
-                           currentAudioTranscription = removeStopAtEnd(currentAudioTranscription);
-                            descriptionView.setText(currentAudioTranscription == null || currentAudioTranscription.trim().isEmpty() ? getString(R.string.no_transcription_found) : currentAudioTranscription);
-                            // starting focus and accessible descriptionView
-                            descriptionView.clearFocus();
-                            descriptionView.setFocusable(true);
-                            descriptionView.setFocusableInTouchMode(true);
-                            descriptionView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
-                            descriptionView.requestFocus();
-                        }
-                    }
-                }
-
-            }
-
-            @Override
-            protected void onFailure(ResponseError responseError, @NonNull Throwable error) {
-                super.onFailure(responseError, error);
-                if(descriptionView!=null)
-                    descriptionView.setText(getString(R.string.no_transcription_found));
-
-            }
-        });
-
-    }
-
-
-    private MediaRecorder recorder = null;
-    private String outputFilePath = "";
-    boolean isRecording = false;
-    private static final int REQUEST_RECORD_AUDIO = 1001;
-    private void startRecording() {
-        outputFilePath = requireActivity().getExternalFilesDir(null).getAbsolutePath() + "/search_audio.mp3";
-        recorder = new MediaRecorder();
-        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);  // For MP3
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);    // AAC for MP3 compatibility
-        recorder.setOutputFile(outputFilePath);
-        isRecording = true;
-        try {
-            recorder.prepare();
-            soundPool.play(soundId, 1.0f, 1.0f, 0, 0, 1.0f);
-            recorder.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-      /*  new Handler().postDelayed(() -> {
-            if(recorder!=null) {
-                stopRecording();
-                getAudioResponse(new File(outputFilePath));
-            }
-            }, 5000);*/
-
-    }
-
-    private boolean checkMicPermission() {
-        int result = ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.RECORD_AUDIO);
-        return result == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void stopRecording() {
-        try {
-            if (recorder != null) {
-                recorder.stop();
-                recorder.release();
-                recorder = null;
-                isRecording = false;
-                currentAudioTranscription =null;
-            }
-        }catch (Exception e){}
-    }
-
-    private AlertDialog voiceDialog;
-    private TextView descriptionView; // Class-level to update after transcription
-    Button negativeButton;
-    private void showVoiceSearchDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-        //builder.setTitle(getString(R.string.search_with_voice));
-
-        // ─── Build custom title bar with close button ───────────────────────────────────
-        // 1. Create a horizontal container for the title and close button
-        LinearLayout titleContainer = new LinearLayout(requireActivity());
-        titleContainer.setOrientation(LinearLayout.HORIZONTAL);
-        titleContainer.setGravity(Gravity.CENTER_VERTICAL);
-        titleContainer.setPadding(60, 50, 30, 10);
-
-        // 2. Create and add the title text
-        TextView titleText = new TextView(requireActivity());
-        titleText.setText(getString(R.string.search_with_voice));
-        titleText.setTextSize(18);
-        titleText.setTypeface(Typeface.DEFAULT_BOLD);   // Bold style
-        titleText.setLayoutParams(
-                new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1)
-        );
-        titleContainer.addView(titleText);
-
-        // 3. Create and add the close (X) button
-
-        // 1. Convert desired dp size to pixels
-        int sizeDp = 18; // desired icon size
-        float density = requireActivity().getResources().getDisplayMetrics().density;
-        int sizePx = (int) (sizeDp * density + 0.5f);
-
-        // 2. Create LayoutParams with exact width/height
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(sizePx, sizePx);
-
-        ImageButton closeButton = new ImageButton(requireActivity());
-        closeButton.setImageResource(R.drawable.ic_close);
-        closeButton.setBackground(null);
-        closeButton.setPadding(24, 24, 24, 24);
-        closeButton.setContentDescription(getString(R.string.close)); // Add <string name="close">Close</string>
-        closeButton.setLayoutParams(lp);
-        titleContainer.addView(closeButton);
-        // ────────────────────────────────────────────────────────────────────────────────
-
-        // 4. Create main container and description view
-        LinearLayout mainContainer = new LinearLayout(requireActivity());
-        mainContainer.setOrientation(LinearLayout.VERTICAL);
-
-        descriptionView = new TextView(requireActivity());  // Now class-level
-        descriptionView.setText(isRecording ? getString(R.string.listening) : currentAudioTranscription == null || currentAudioTranscription.isEmpty() ? getString(R.string.no_transcription_found) : currentAudioTranscription);
-        // starting focus and accessible false
-        /*descriptionView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
-        descriptionView.setFocusable(false);*/
-
-        descriptionView.setPadding(80, 25, 80, 25);
-        builder.setView(descriptionView);
-
-        // Set buttons with null listeners to prevent auto-dismiss
-        builder.setPositiveButton(getString(R.string.search_text), null);
-        builder.setNegativeButton(getString(R.string.stop), null);
-        builder.setNeutralButton(getString(R.string.speak), null);  // Add <string name="back_text">Back</string> to strings.xml
-
-
-        // 5. Add titleContainer and descriptionView to mainContainer
-        mainContainer.addView(titleContainer);
-        mainContainer.addView(descriptionView);
-
-        // 6. Set the custom view on the dialog
-        builder.setView(mainContainer);
-
-        voiceDialog = builder.create();  // Now class-level
-        voiceDialog.show();
-
-
-        // Close button listener
-        closeButton.setOnClickListener(v -> {
-            stopRecording();
-            voiceDialog.dismiss();
-        });
-
-        Button positiveButton = voiceDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-        negativeButton = voiceDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-        Button neutralButton = voiceDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
-
-        positiveButton.setContentDescription(getString(R.string.search_text));
-        negativeButton.setContentDescription(getString(R.string.stop));
-        neutralButton.setContentDescription(getString(R.string.speak));
-
-        // "Search" button
-        positiveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(currentAudioTranscription ==null || currentAudioTranscription.trim().isEmpty()) {
-                    Toast.makeText(requireActivity(), getString(R.string.no_transcription_found), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                try {
-                    binding.editSearch.setText(currentAudioTranscription.trim());
-                    binding.searchResults.setVisibility(View.VISIBLE);
-                    binding.shimmerLayout.setVisibility(View.VISIBLE);
-                    binding.searchResult.setVisibility(View.GONE);
-                    binding.searchCount.setVisibility(View.GONE);
-                    getSearchResult(currentAudioTranscription.trim());
-                    stopRecording();
-                    voiceDialog.dismiss();
-                }catch (Exception e){}
-            }
-        });
-
-        //  "speak" button
-        neutralButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //if (!isRecording) {
-                currentAudioTranscription = null;
-                descriptionView.setText(getString(R.string.listening));
-                    stopRecording();
-                    startRecording();
-                    //negativeButton.setText("Stop");
-                /*} else {
-                    stopRecording();
-                    negativeButton.setText("ReSpeak");
-                    Toast.makeText(requireActivity(), "Recording stopped", Toast.LENGTH_SHORT).show();
-                }*/
-            }
-        });
-
-        //  "stop" button
-        negativeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //if (!isRecording) {
-                if(recorder!=null) {
-                    currentAudioTranscription = null;
-                    descriptionView.setText(getString(R.string.listening));
-                    stopRecording();
-                    getAudioResponse(new File(outputFilePath));
-                }
-                //startRecording();
-                //negativeButton.setText("Stop");
-            }
-        });
-        // Get AccessibilityManager to check TalkBack status
-        AccessibilityManager am = (AccessibilityManager) requireActivity().getSystemService(Context.ACCESSIBILITY_SERVICE);
-        boolean isTalkBackEnabled = am.isEnabled() && am.isTouchExplorationEnabled();
-
-        // Conditional logic: Delay for TalkBack users, immediate for normal users
-     /*   if (isTalkBackEnabled) {
-            // For TalkBack: Detect title announcement and delay recording
-            new Handler().postDelayed(() -> {
-                if (!isRecording) {
-                    startRecording();  // Start after delay
-                    descriptionView.setText(getString(R.string.listening));
-                    // starting focus and accessible false
-                    descriptionView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
-                    descriptionView.setFocusable(true);
-                }
-            }, 3000);
-        }else {
-            // For normal users: Start recording immediately
-            if (!isRecording) {
-                startRecording();
-                descriptionView.setText(getString(R.string.listening));
-            }
-        }*/
-    }
-
-    private static final int REQUEST_SHOW_COURSE_UNIT_DETAIL = 0;
-    EnrolledCoursesResponse courseData;
-    public void getParticularCourse(String courseId, String blockId) {
-        try {
-            ParticularCourseTask particularCourseTask = new ParticularCourseTask(getContext(), loginPrefs.getUsername(),
-                    courseId) {
-                @Override
-                public void onSuccess(@NonNull ArrayList<EnrolledCoursesResponse> result) {
-                    try {
-                        if (result != null) {
-                            // Handle successful response
-                            ArrayList<EnrolledCoursesResponse> data = result;
-                            if (data != null) {
-                                if (data != null) {
-                                    for (EnrolledCoursesResponse enrolledCoursesResponse : data) {
-                                        if (enrolledCoursesResponse.getCourse() != null) {
-                                            if (enrolledCoursesResponse.getCourse().getId() != null) {
-                                                // if (enrolledCoursesResponse.getCourse().getId().equals(resumeCourse.getCourse_id())) {
-                                                courseData = enrolledCoursesResponse;
-                                                 // redirection to course/unit page directly
-                                                if (courseData != null) {
-                                                    LocaleManager.setCourseLanguagePref(getContext(),courseData.getCourse().getLanguage());
-                                                    if (blockId.contains("sequential")) {
-
-                                                        environment.getRouter().showCourseContainerOutline(SeachScreenFragment.this,
-                                                                REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, null,
-                                                                blockId, null, false);
-                                                    } else {
-                                                        environment.getRouter().showCourseUnitDetail(SeachScreenFragment.this,
-                                                                REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, null,
-                                                                blockId, false);
-                                                    }
-                                                } else {
-                                                    Toast.makeText(getActivity(), getString(R.string.no_course_info), Toast.LENGTH_LONG).show();
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                Log.d("enrolledCoursesResponse", courseData.getCourse().getId());
-                            } else {
-                                Log.e("enrolledCoursesResponse", "Response body is null");
-                            }
-                        }
-                    } catch (Exception e) {
-                        Log.e("enrolledCoursesResponse", "Exception in onResponse", e);
-                    }
-                }
-
-                @Override
-                public void onException(Exception ex) {
-                    if (ex instanceof HttpStatusException &&
-                            ((HttpStatusException) ex).getStatusCode() == HttpStatus.UNAUTHORIZED) {
-                        Log.e("enrolledCoursesResponse", "HttpStatusException in onResponse UNAUTHORIZED", ex);
-                    } else {
-                        Log.e("enrolledCoursesResponse", "HttpStatusException in onResponse", ex);
-                    }
-                }
-            };
-            particularCourseTask.execute();
-
-
-        } catch (Exception e) {
-            Log.e("enrolledCoursesResponse", "Exception in getParticularCourse", e);
-        }
-    }
-
-    public static String removeStopAtEnd(String input) {
-        // (?i) – case-insensitive flag
-        // \\b(stop button|stop)\\b – whole word "stop button" or "stop"
-        // \\s*$ – any trailing spaces up to end of string
-        return input.replaceAll("(?i)\\b(stop button|stop)\\b\\s*$", "").trim();
-    }
-
 }
