@@ -55,30 +55,30 @@ import java.util.Map;
 import de.greenrobot.event.EventBus;
 import retrofit2.Call;
 import roboguice.inject.InjectExtra;
-import roboguice.inject.InjectView;
+//import roboguice.inject.InjectView;
 
 public class CourseDiscussionPostsThreadFragment extends CourseDiscussionPostsBaseFragment {
     public static final String ARG_DISCUSSION_HAS_TOPIC_NAME = "discussion_has_topic_name";
 
-    @InjectView(R.id.spinners_container)
+    //@InjectView(R.id.spinners_container)
     private ViewGroup spinnersContainerLayout;
 
-    @InjectView(R.id.discussion_posts_filter_spinner)
+    //@InjectView(R.id.discussion_posts_filter_spinner)
     private Spinner discussionPostsFilterSpinner;
 
-    @InjectView(R.id.discussion_posts_sort_spinner)
+    //@InjectView(R.id.discussion_posts_sort_spinner)
     private Spinner discussionPostsSortSpinner;
 
-    @InjectView(R.id.create_new_item_text_view)
+    //@InjectView(R.id.create_new_item_text_view)
     private TextView createNewPostTextView;
 
-    @InjectView(R.id.create_new_item_layout)
+    //@InjectView(R.id.create_new_item_layout)
     private ViewGroup createNewPostLayout;
 
-    @InjectView(R.id.center_message_box)
+    //@InjectView(R.id.center_message_box)
     private TextView centerMessageBox;
 
-    @InjectView(R.id.loading_indicator)
+    //@InjectView(R.id.loading_indicator)
     private ProgressBar loadingIndicator;
 
     @InjectExtra(value = Router.EXTRA_DISCUSSION_TOPIC, optional = true)
@@ -137,6 +137,15 @@ public class CourseDiscussionPostsThreadFragment extends CourseDiscussionPostsBa
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        
+        // Manual findViewById since @InjectView is commented out
+        spinnersContainerLayout = view.findViewById(R.id.spinners_container);
+        discussionPostsFilterSpinner = view.findViewById(R.id.discussion_posts_filter_spinner);
+        discussionPostsSortSpinner = view.findViewById(R.id.discussion_posts_sort_spinner);
+        createNewPostTextView = view.findViewById(R.id.create_new_item_text_view);
+        createNewPostLayout = view.findViewById(R.id.create_new_item_layout);
+        centerMessageBox = view.findViewById(R.id.center_message_box);
+        loadingIndicator = view.findViewById(R.id.loading_indicator);
 
         checkIfDiscussionsBlackedOut();
 

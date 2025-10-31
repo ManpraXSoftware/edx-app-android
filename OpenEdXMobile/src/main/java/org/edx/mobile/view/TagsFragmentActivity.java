@@ -73,18 +73,15 @@ public class TagsFragmentActivity extends BaseSingleFragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_account: {
-                environment.getRouter().showUserProfile(this, loginPrefs.getUsername(), loginPrefs.getUserType());
-                return true;
-            }
-            case R.id.menu_item_search: {
-                environment.getRouter().showSeachActivity(this);
-                return true;
-            }
-            default: {
-                return super.onOptionsItemSelected(item);
-            }
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_item_account) {
+            environment.getRouter().showUserProfile(this, loginPrefs.getUsername(), loginPrefs.getUserType());
+            return true;
+        } else if (itemId == R.id.menu_item_search) {
+            environment.getRouter().showSeachActivity(this);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 }

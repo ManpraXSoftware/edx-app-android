@@ -40,16 +40,16 @@ import java.util.List;
 
 import de.greenrobot.event.EventBus;
 import retrofit2.Call;
-import roboguice.inject.InjectView;
+//import roboguice.inject.InjectView;
 
 public class CourseDiscussionTopicsFragment extends OfflineSupportBaseFragment
         implements RefreshListener {
     private static final Logger logger = new Logger(CourseDiscussionTopicsFragment.class.getName());
 
-    @InjectView(R.id.discussion_topics_searchview)
+    //@InjectView(R.id.discussion_topics_searchview)
     private SearchView discussionTopicsSearchView;
 
-    @InjectView(R.id.discussion_topics_listview)
+    //@InjectView(R.id.discussion_topics_listview)
     private ListView discussionTopicsListView;
 
     private EnrolledCoursesResponse courseData;
@@ -63,7 +63,7 @@ public class CourseDiscussionTopicsFragment extends OfflineSupportBaseFragment
     @Inject
     private Router router;
 
-    @InjectView(R.id.loading_indicator)
+    //@InjectView(R.id.loading_indicator)
     ProgressBar progressSpinner;
 
     private Call<CourseTopics> getTopicListCall;
@@ -80,6 +80,12 @@ public class CourseDiscussionTopicsFragment extends OfflineSupportBaseFragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        
+        // Manual findViewById since @InjectView is commented out
+        discussionTopicsSearchView = view.findViewById(R.id.discussion_topics_searchview);
+        discussionTopicsListView = view.findViewById(R.id.discussion_topics_listview);
+        progressSpinner = view.findViewById(R.id.loading_indicator);
+        
         errorNotification = new FullScreenErrorNotification((View) discussionTopicsListView.getParent());
 
         final LayoutInflater inflater = LayoutInflater.from(getActivity());

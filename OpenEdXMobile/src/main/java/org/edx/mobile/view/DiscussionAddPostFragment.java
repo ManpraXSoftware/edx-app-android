@@ -47,7 +47,7 @@ import java.util.Map;
 import de.greenrobot.event.EventBus;
 import retrofit2.Call;
 import roboguice.inject.InjectExtra;
-import roboguice.inject.InjectView;
+//import roboguice.inject.InjectView;
 
 public class DiscussionAddPostFragment extends BaseFragment {
 
@@ -63,25 +63,25 @@ public class DiscussionAddPostFragment extends BaseFragment {
     @InjectExtra(Router.EXTRA_DISCUSSION_TOPIC)
     private DiscussionTopic discussionTopic;
 
-    @InjectView(R.id.discussion_question_segmented_group)
+    //@InjectView(R.id.discussion_question_segmented_group)
     private RadioGroup discussionQuestionSegmentedGroup;
 
-    @InjectView(R.id.topics_spinner)
+    //@InjectView(R.id.topics_spinner)
     private AppCompatSpinner topicsSpinner;
 
-    @InjectView(R.id.title_edit_text)
+    //@InjectView(R.id.title_edit_text)
     private EditText titleEditText;
 
-    @InjectView(R.id.body_edit_text)
+    //@InjectView(R.id.body_edit_text)
     private EditText bodyEditText;
 
-    @InjectView(R.id.add_post_button)
+    //@InjectView(R.id.add_post_button)
     private ViewGroup addPostButton;
 
-    @InjectView(R.id.add_post_button_text)
+    //@InjectView(R.id.add_post_button_text)
     private TextView addPostButtonText;
 
-    @InjectView(R.id.progress_indicator)
+    //@InjectView(R.id.progress_indicator)
     private ProgressBar addPostProgressBar;
 
     @Inject
@@ -106,6 +106,15 @@ public class DiscussionAddPostFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        
+        // Manual findViewById since @InjectView is commented out
+        discussionQuestionSegmentedGroup = view.findViewById(R.id.discussion_question_segmented_group);
+        topicsSpinner = view.findViewById(R.id.topics_spinner);
+        titleEditText = view.findViewById(R.id.title_edit_text);
+        bodyEditText = view.findViewById(R.id.body_edit_text);
+        addPostButton = view.findViewById(R.id.add_post_button);
+        addPostButtonText = view.findViewById(R.id.add_post_button_text);
+        addPostProgressBar = view.findViewById(R.id.progress_indicator);
 
         discussionQuestionSegmentedGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

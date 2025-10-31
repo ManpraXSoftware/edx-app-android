@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowInsets;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -21,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -111,8 +114,11 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
         clipboardService = ClipboardServiceHolder.getClipboardService(getApplicationContext());
         // finally change the color
         com.google.firebase.analytics.FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true);
-        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.status_bar_color));
         setContentView(R.layout.activity_main_bottom_dashboard_fragment);
+        
+        // Setup status bar padding for main home screen
+        setupStatusBarPadding();
+        
         toolbar = findViewById(R.id.main_toolbar);
         back_arrow = findViewById(R.id.back_arrow);
         ln_myDashboard = findViewById(R.id.ln_my_dashboard);
@@ -242,28 +248,22 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_account: {
-                environment.getRouter().showUserProfile(this, loginPrefs.getUsername(), loginPrefs.getUserType());
-                return true;
-            }
-            case R.id.menu_item_search: {
-                environment.getRouter().showSeachActivity(this);
-                /*SeachScreenFragment seachScreenFragment = new SeachScreenFragment();
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.main_fragment, seachScreenFragment, SeachScreenFragment.TAG).addToBackStack(SeachScreenFragment.TAG)
-                        .commit();*/
-                return true;
-            }
-
-
-            case R.id.menu_item_whatsapp:{
-                openWhatsAppLink();
-                return true;
-            }
-            default: {
-                return super.onOptionsItemSelected(item);
-            }
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_item_account) {
+            environment.getRouter().showUserProfile(this, loginPrefs.getUsername(), loginPrefs.getUserType());
+            return true;
+        } else if (itemId == R.id.menu_item_search) {
+            environment.getRouter().showSeachActivity(this);
+            /*SeachScreenFragment seachScreenFragment = new SeachScreenFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.main_fragment, seachScreenFragment, SeachScreenFragment.TAG).addToBackStack(SeachScreenFragment.TAG)
+                    .commit();*/
+            return true;
+        } else if (itemId == R.id.menu_item_whatsapp) {
+            openWhatsAppLink();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -420,6 +420,39 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.main_fragment, exploreBottomFragment, ExploreFragment.TAG)
                     .commit();
+        }
+    }
+    
+    /**
+     * Setup status bar padding specifically for the main home screen
+     */
+    private void setupStatusBarPadding() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            try {
+                // Enable edge-to-edge for Android 35+
+                WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+                
+                // Handle window insets to position content below status bar
+                getWindow().getDecorView().setOnApplyWindowInsetsListener((view, insets) -> {
+                    int statusBarType = WindowInsets.Type.statusBars();
+                    android.graphics.Insets statusBarInsets = insets.getInsets(statusBarType);
+                    
+                    // Apply status bar padding to the window decor view
+                    // This ensures content appears below status bar
+                    View decorView = getWindow().getDecorView();
+                    decorView.setPadding(
+                        decorView.getPaddingLeft(),
+                        statusBarInsets.top,
+                        decorView.getPaddingRight(),
+                        decorView.getPaddingBottom()
+                    );
+                    
+                    return insets;
+                });
+                
+            } catch (Exception e) {
+                Log.e("MainBottomDashboard", "Error setting up status bar padding", e);
+            }
         }
     }
 }

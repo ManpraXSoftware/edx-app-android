@@ -10,12 +10,12 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.yaml:snakeyaml:1.14'
+        classpath 'org.yaml:snakeyaml:2.2'
         //Included for NewRelic
         //classpath "com.newrelic.agent.android:agent-gradle-plugin:6.3.1"
         //Screenshot testing library
         classpath 'com.facebook.testing.screenshot:plugin:0.8.0'
-        classpath 'com.google.gms:google-services:4.3.8'
+        classpath 'com.google.gms:google-services:4.4.2'
     }
 }
 
@@ -176,28 +176,28 @@ dependencies {
     implementation project(':android-iconify-fontawesome')
 
     implementation "androidx.appcompat:appcompat:$androidXVersion"
-    implementation "androidx.recyclerview:recyclerview:$androidXVersion"
-    implementation "androidx.cardview:cardview:$androidXVersion"
-    implementation "com.google.android.material:material:1.0.0"
+    implementation "androidx.recyclerview:recyclerview:1.3.2"
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation "com.google.android.material:material:1.12.0"
     // For the optional Nullable annotation
-    implementation "androidx.annotation:annotation:$androidXVersion"
+    implementation "androidx.annotation:annotation:1.7.1"
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
     // NOTE: Always update the version of google-services and firebase libraries using the ones
     // provided in this link: https://developers.google.com/android/guides/releases
-    implementation "com.google.android.gms:play-services-plus:16.0.0"
-    implementation "com.google.android.gms:play-services-analytics:16.0.8"
-    implementation "com.google.android.gms:play-services-auth:16.0.1"
+    implementation "com.google.android.gms:play-services-plus:17.0.0"
+    implementation "com.google.android.gms:play-services-analytics:17.0.0"
+    implementation "com.google.android.gms:play-services-auth:21.2.0"
     // Google Firebase
-    implementation "com.google.firebase:firebase-core:16.0.9"
-    implementation "com.google.firebase:firebase-messaging:18.0.0"
+    implementation "com.google.firebase:firebase-core:21.1.1"
+    implementation "com.google.firebase:firebase-messaging:23.4.1"
     // Add the dependency for the Performance Monitoring library
-    implementation 'com.google.firebase:firebase-perf:17.0.2'
+    implementation 'com.google.firebase:firebase-perf:20.5.2'
     // Firebase remote config
-    implementation 'com.google.firebase:firebase-config:16.5.0'
+    implementation 'com.google.firebase:firebase-config:21.6.1'
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     // Add the In-App Messaging dependency:
-    implementation('com.google.firebase:firebase-inappmessaging-display:17.2.0') {
+    implementation('com.google.firebase:firebase-inappmessaging-display:20.4.2') {
         // This exclusion has been added due to a conflict between this library and Roboguice
         // (which has already added the javax.inject group) causing the following error during
         // compile time: Error: Program type already present: javax.inject.Inject
@@ -205,13 +205,13 @@ dependencies {
     }
 
 //    Exo Player
-    implementation 'com.google.android.exoplayer:exoplayer:2.15.1'
+    implementation 'com.google.android.exoplayer:exoplayer:2.19.1'
 
     // Google cast sdk
     implementation "androidx.mediarouter:mediarouter:$androidXVersion"
-    implementation 'com.google.android.gms:play-services-cast-framework:16.2.0'
+    implementation 'com.google.android.gms:play-services-cast-framework:21.4.0'
 
-    implementation 'com.facebook.android:facebook-login:5.9.0'
+    implementation 'com.facebook.android:facebook-login:16.3.0'
     implementation 'com.microsoft.identity.client:msal:0.3+'
     implementation 'commons-lang:commons-lang:2.6'
     implementation 'com.google.code.gson:gson:2.7'
@@ -225,29 +225,29 @@ dependencies {
      * backport critical fixes to the 3.12.x branch through December 31, 2020.
      * Ref: https://square.github.io/okhttp/#requirements
      */
-    implementation 'com.squareup.okhttp3:okhttp:3.12.8'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.8'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
     /* Exclude dependencies defined statically at the top-
      * level, to prevent them from being resolved to the
      * latest version as a result of dynamic version
      * definitions in the transitive dependencies.
      */
-    implementation('com.squareup.retrofit2:retrofit:2.8.1') {
+    implementation('com.squareup.retrofit2:retrofit:2.11.0') {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }
-    implementation('com.squareup.retrofit2:converter-gson:2.8.1') {
+    implementation('com.squareup.retrofit2:converter-gson:2.11.0') {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
         exclude group: 'com.google.code.gson', module: 'gson'
     }
-    implementation 'androidx.multidex:multidex:2.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'de.hdodenhof:circleimageview:2.0.0'
     // implementation 'uk.co.chrisjenx:calligraphy:2.1.0'
     implementation 'uk.co.chrisjenx:calligraphy:2.1.0'
     implementation 'io.github.inflationx:viewpump:2.0.3'
     implementation 'io.github.inflationx:calligraphy3:3.1.1'
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    implementation('com.github.bumptech.glide:okhttp3-integration:4.11.0')
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    implementation('com.github.bumptech.glide:okhttp3-integration:4.16.0')
 
     // Segment Library
     implementation 'com.segment.analytics.android:analytics:4.10.1'
@@ -261,21 +261,21 @@ dependencies {
     //adding Room ORM for Database
     // database
     //implementation 'android.arch.persistence.room:rxjava2:2.4.0'
-    implementation 'androidx.room:room-rxjava2:2.4.0'
+    implementation 'androidx.room:room-rxjava2:2.6.1'
 
     // annotationProcessor 'android.arch.persistence.room:compiler:2.4.1'
 /*    implementation 'android.arch.persistence.room:runtime:1.0.0'
     annotationProcessor 'android.arch.persistence.room:compiler:1.0.0'*/
 
     // Crashlytics Kit
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
         transitive = true
     }
 
     // Branch SDK
     // Check this link for guide to updating Branch integration:
     // https://github.com/BranchMetrics/android-branch-deep-linking
-    implementation('io.branch.sdk.android:library:2.19.2') {
+    implementation('io.branch.sdk.android:library:5.4.0') {
         exclude module: 'answers-shim'
     }
 
@@ -284,14 +284,14 @@ dependencies {
     //implementation 'com.newrelic.agent.android:android-agent:6.3.1'
     //implementation 'com.newrelic.agent.android:android-agent:'
     // test project configuration
-    testImplementation 'junit:junit:4.12'
-    testImplementation("org.mockito:mockito-core:2.19.0") {
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation("org.mockito:mockito-core:5.8.0") {
         exclude group: 'org.hamcrest'
     }
-    testImplementation "org.robolectric:robolectric:4.3.1"
+    testImplementation "org.robolectric:robolectric:4.12"
     testImplementation "com.github.nimbl3:robolectric.shadows-supportv4:4.1-SNAPSHOT"
-    testImplementation "org.robolectric:shadows-multidex:4.0.1"
-    testImplementation 'org.assertj:assertj-core:2.5.0'
+    testImplementation "org.robolectric:shadows-multidex:4.12"
+    testImplementation 'org.assertj:assertj-core:3.25.3'
     /**
      * AssertJ has been deprecated and doesn't support AndroidX classes.
      * Ref: https://github.com/square/assertj-android
@@ -307,18 +307,18 @@ dependencies {
     testImplementation('com.squareup.assertj:assertj-android-appcompat-v7:1.1.1') {
         exclude group: 'com.android.support'
     }
-    testImplementation 'com.squareup.okhttp3:mockwebserver:3.12.8'
-    testImplementation('com.squareup.retrofit2:retrofit-mock:2.8.1') {
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
+    testImplementation('com.squareup.retrofit2:retrofit-mock:2.11.0') {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }
 
-    androidTestImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
     androidTestImplementation 'org.hamcrest:hamcrest-library:1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.0'
     //androidTestImplementation 'com.linkedin.dexmaker:dexmaker-mockito:2.12.1'
-    androidTestImplementation('org.mockito:mockito-core:2.8.9') {
+    androidTestImplementation('org.mockito:mockito-core:5.8.0') {
         exclude group: 'org.hamcrest'
     }
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KOTLIN_VERSION}"
@@ -329,6 +329,7 @@ dependencies {
 configurations {
     androidTestImplementation.exclude group: 'javax.inject'
     androidTestImplementation.exclude group: 'javax.annotation'
+    implementation.exclude group: 'javax.inject'
 }
 
 def config = new TaskHelper().loadConfig(project)
@@ -362,8 +363,10 @@ if (isMicrosoftEnabled) {
 }
 
 android {
+    namespace "org.edx.mobile"
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
     compileSdkVersion COMPILE_SDK_VERSION
     buildToolsVersion BUILD_TOOLS_VERSION
@@ -376,9 +379,6 @@ android {
         language {
             enableSplit = false
         }
-    }
-    dexOptions {
-        javaMaxHeapSize "2g"
     }
 
     flavorDimensions "default"
@@ -602,17 +602,39 @@ android {
 
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+    
+    // Workaround for RoboGuice @InjectView with API 35
+    tasks.withType(JavaCompile) {
+        options.compilerArgs += [
+            '-Xlint:-processing',
+            '-Aandroid.suppressUnsupportedCompileSdk=35'
+        ]
+    }
+
+            kotlinOptions {
+                jvmTarget = "17"
+            }
+
+            // Set JVM toolchain for consistent Java version across all tasks
+            java {
+                toolchain {
+                    languageVersion = JavaLanguageVersion.of(17)
+                }
+            }
 }
 
 android.applicationVariants.all { variant ->
     def variantName = variant.name.capitalize()
     def taskName = "applyConfig" + variantName
-    def configureTask = project.task(taskName) doLast {
-        AndroidHelper.saveProcessedConfig(project, config)
+    def configureTask = project.task(taskName) doLast { task ->
+        try {
+            AndroidHelper.saveProcessedConfig(task.project, config)
+        } catch (Exception e) {
+            println "Warning: Could not save processed config: ${e.message}"
+        }
     }
     def generateTask = project.tasks.getByName("generate" + variantName + "Resources")
     generateTask.dependsOn(configureTask)
@@ -632,7 +654,11 @@ android.applicationVariants.all { variant ->
     if (isMicrosoftEnabled) {
         def configJsonTask = "generate$variantName" + "MicrosoftConfigs"
         project.task(configJsonTask).doFirst {
-            AndroidHelper.saveMicrosoftAuthConfigs(project, microsoftConfig)
+            try {
+                AndroidHelper.saveMicrosoftAuthConfigs(project, microsoftConfig)
+            } catch (Exception e) {
+                println "Warning: Could not save Microsoft auth configs: ${e.message}"
+            }
         }
         generateTask.dependsOn(configJsonTask)
     } else {

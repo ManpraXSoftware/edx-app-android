@@ -309,13 +309,12 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_voice:
-
-                onMicButtonClick();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item); // Let the activity handle other items
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_item_voice) {
+            onMicButtonClick();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item); // Let the activity handle other items
         }
     }
 

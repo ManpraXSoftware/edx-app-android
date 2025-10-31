@@ -46,7 +46,7 @@ import org.edx.mobile.util.WebViewUtil;
 
 import de.greenrobot.event.EventBus;
 import roboguice.RoboGuice;
-import roboguice.inject.InjectView;
+//import roboguice.inject.InjectView;
 
 import static org.edx.mobile.util.WebViewUtil.EMPTY_HTML;
 
@@ -60,10 +60,10 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
     @Inject
     private LoginPrefs loginPrefs;
 
-    @InjectView(R.id.loading_indicator)
+    //@InjectView(R.id.loading_indicator)
     private ProgressBar progressWheel;
 
-    @InjectView(R.id.webview)
+    //@InjectView(R.id.webview)
     protected WebView webView;
 
     private FullScreenErrorNotification fullScreenErrorNotification;
@@ -92,8 +92,15 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
     private void init() {
         inflate(getContext(), R.layout.authenticated_webview, this);
         RoboGuice.injectMembers(getContext(), this);
-        RoboGuice.getInjector(getContext()).injectViewMembers(this);
-        fullScreenErrorNotification = new FullScreenErrorNotification(webView);
+        // RoboGuice.getInjector(getContext()).injectViewMembers(this); // Commented out since we're not using RoboGuice
+        
+        // Manual findViewById since @InjectView is commented out
+        webView = findViewById(R.id.webview);
+        progressWheel = findViewById(R.id.loading_indicator);
+        
+        if (webView != null) {
+            fullScreenErrorNotification = new FullScreenErrorNotification(webView);
+        }
     }
 
     public URLInterceptorWebViewClient getWebViewClient() {
@@ -185,6 +192,9 @@ public class AuthenticatedWebView extends FrameLayout implements RefreshListener
 
     @SuppressLint("SetJavaScriptEnabled")
     public void initWebView(@NonNull final FragmentActivity fragmentActivity) {
+        if (webView == null) {
+            return;
+        }
 
       /*  webView.clearCache(true);
         webView.getSettings().setJavaScriptEnabled(true);

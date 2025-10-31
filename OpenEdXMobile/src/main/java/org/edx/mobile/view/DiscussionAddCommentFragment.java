@@ -38,7 +38,7 @@ import java.util.Map;
 import de.greenrobot.event.EventBus;
 import retrofit2.Call;
 import roboguice.inject.InjectExtra;
-import roboguice.inject.InjectView;
+//import roboguice.inject.InjectView;
 
 public class DiscussionAddCommentFragment extends BaseFragment {
 
@@ -52,19 +52,19 @@ public class DiscussionAddCommentFragment extends BaseFragment {
 
     protected final Logger logger = new Logger(getClass().getName());
 
-    @InjectView(R.id.etNewComment)
+    //@InjectView(R.id.etNewComment)
     private EditText editTextNewComment;
 
-    @InjectView(R.id.btnAddComment)
+    //@InjectView(R.id.btnAddComment)
     private ViewGroup buttonAddComment;
 
-    @InjectView(R.id.btnAddCommentText)
+    //@InjectView(R.id.btnAddCommentText)
     private TextView textViewAddComment;
 
-    @InjectView(R.id.progress_indicator)
+    //@InjectView(R.id.progress_indicator)
     private ProgressBar createCommentProgressBar;
 
-    @InjectView(R.id.tvResponse)
+    //@InjectView(R.id.tvResponse)
     private TextView textViewResponse;
 
     @Inject
@@ -104,6 +104,13 @@ public class DiscussionAddCommentFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        
+        // Manual findViewById since @InjectView is commented out
+        editTextNewComment = view.findViewById(R.id.etNewComment);
+        buttonAddComment = view.findViewById(R.id.btnAddComment);
+        textViewAddComment = view.findViewById(R.id.btnAddCommentText);
+        createCommentProgressBar = view.findViewById(R.id.progress_indicator);
+        textViewResponse = view.findViewById(R.id.tvResponse);
 
         DiscussionTextUtils.renderHtml(textViewResponse, discussionResponse.getRenderedBody());
 

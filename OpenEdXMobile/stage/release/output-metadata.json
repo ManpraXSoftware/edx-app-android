@@ -16,5 +16,22 @@
       "outputFile": "edx-release-7.0.7-stage.apk"
     }
   ],
-  "elementType": "File"
+  "elementType": "File",
+  "baselineProfiles": [
+    {
+      "minApi": 28,
+      "maxApi": 30,
+      "baselineProfiles": [
+        "baselineProfiles/1/edx-release-7.0.7-stage.dm"
+      ]
+    },
+    {
+      "minApi": 31,
+      "maxApi": 2147483647,
+      "baselineProfiles": [
+        "baselineProfiles/0/edx-release-7.0.7-stage.dm"
+      ]
+    }
+  ],
+  "minSdkVersionForDexing": 24
 }

@@ -32,6 +32,7 @@ import java.text.ParseException;
 
 import de.greenrobot.event.EventBus;
 import roboguice.inject.InjectView;
+//import roboguice.inject.InjectView;
 
 import static org.edx.mobile.view.Router.EXTRA_PATH_ID;
 import static org.edx.mobile.view.Router.EXTRA_SCREEN_NAME;
@@ -40,7 +41,7 @@ public class MainDashboardActivity extends OfflineSupportBaseActivity
         implements ToolbarCallbacks {
 
     @NonNull
-    @InjectView(R.id.coordinator_layout)
+    // @InjectView(R.id.coordinator_layout)
     private CoordinatorLayout coordinatorLayout;
 
     @Inject
@@ -61,6 +62,10 @@ public class MainDashboardActivity extends OfflineSupportBaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Manual findViewById since @InjectView is commented out
+        coordinatorLayout = findViewById(R.id.coordinator_layout);
+        
         initWhatsNew();
         addClickListenerOnProfileButton();
     }

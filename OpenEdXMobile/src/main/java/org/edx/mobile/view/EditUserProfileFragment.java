@@ -169,23 +169,17 @@ public class EditUserProfileFragment extends BaseFragment implements BaseFragmen
                 popup.getMenuInflater().inflate(R.menu.change_photo, popup.getMenu());
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.take_photo: {
-                                askForPermission(new String[]{Manifest.permission.CAMERA},
-                                        PermissionsUtil.CAMERA_PERMISSION_REQUEST);
-                                break;
-                            }
-                            case R.id.choose_photo: {
-                                askForPermission(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                                        PermissionsUtil.READ_STORAGE_PERMISSION_REQUEST);
-                                break;
-                            }
-                            case R.id.remove_photo: {
-                                final Task task = new DeleteAccountImageTask(getActivity(), username);
-                                task.setProgressDialog(viewHolder.profileImageProgress);
-                                executePhotoTask(task);
-                                break;
-                            }
+                        int itemId = item.getItemId();
+                        if (itemId == R.id.take_photo) {
+                            askForPermission(new String[]{Manifest.permission.CAMERA},
+                                    PermissionsUtil.CAMERA_PERMISSION_REQUEST);
+                        } else if (itemId == R.id.choose_photo) {
+                            askForPermission(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                    PermissionsUtil.READ_STORAGE_PERMISSION_REQUEST);
+                        } else if (itemId == R.id.remove_photo) {
+                            final Task task = new DeleteAccountImageTask(getActivity(), username);
+                            task.setProgressDialog(viewHolder.profileImageProgress);
+                            executePhotoTask(task);
                         }
                         return true;
                     }

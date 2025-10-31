@@ -169,7 +169,7 @@ public abstract class MainApplication extends MultiDexApplication {
                 .addInterceptor(new CalligraphyInterceptor(
                         new CalligraphyConfig.Builder()
                                 .setDefaultFontPath("fonts/Roboto-RobotoRegular.ttf")
-                                .setFontAttrId(R.attr.fontPath)
+                                // .setFontAttrId(R.attr.fontPath) // Commented out - attribute not found
                                 .build()))
                 .build()
         );

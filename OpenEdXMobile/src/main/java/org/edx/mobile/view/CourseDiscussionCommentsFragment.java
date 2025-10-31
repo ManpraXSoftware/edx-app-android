@@ -43,17 +43,17 @@ import java.util.Map;
 import de.greenrobot.event.EventBus;
 import retrofit2.Call;
 import roboguice.inject.InjectExtra;
-import roboguice.inject.InjectView;
+//import roboguice.inject.InjectView;
 
 public class CourseDiscussionCommentsFragment extends BaseFragment implements DiscussionCommentsAdapter.Listener {
 
-    @InjectView(R.id.discussion_recycler_view)
+    //@InjectView(R.id.discussion_recycler_view)
     private RecyclerView discussionCommentsListView;
 
-    @InjectView(R.id.create_new_item_text_view)
+    //@InjectView(R.id.create_new_item_text_view)
     private TextView createNewCommentTextView;
 
-    @InjectView(R.id.create_new_item_layout)
+    //@InjectView(R.id.create_new_item_layout)
     private ViewGroup createNewCommentLayout;
 
     @Inject
@@ -99,6 +99,11 @@ public class CourseDiscussionCommentsFragment extends BaseFragment implements Di
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        
+        // Manual findViewById since @InjectView is commented out
+        discussionCommentsListView = view.findViewById(R.id.discussion_recycler_view);
+        createNewCommentTextView = view.findViewById(R.id.create_new_item_text_view);
+        createNewCommentLayout = view.findViewById(R.id.create_new_item_layout);
 
         discussionCommentsAdapter = new DiscussionCommentsAdapter(getActivity(), this,
                 discussionThread, discussionResponse);

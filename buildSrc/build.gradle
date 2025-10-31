@@ -4,12 +4,11 @@ buildscript {
     }
 }
 
+// Apply groovy plugin to root buildSrc so we can use dependencies
+apply plugin: "groovy"
+
 subprojects {
     apply plugin: "groovy"
-
-    rootProject.dependencies {
-        it.runtimeOnly project(path)
-    }
 
     it.repositories {
         mavenCentral()
@@ -22,13 +21,19 @@ subprojects {
         // get picked up. We only have one buildSrc plugin
         // so it doesn't really matter, but if we ever get more
         // we should figure this out
-        implementation  'org.codehaus.groovy:groovy-all:3.0.9'
+        implementation  'org.codehaus.groovy:groovy-all:3.0.22'
         implementation  gradleApi()
-        implementation  "org.yaml:snakeyaml:1.29"
+        implementation  "org.yaml:snakeyaml:2.2"
     }
 }
 
 repositories {
     mavenCentral()
+}
+
+// Add plugin subprojects to root buildSrc classpath
+// This makes plugin classes (like TaskHelper) available to main build scripts
+dependencies {
+    implementation project(':plugins')
 }
 

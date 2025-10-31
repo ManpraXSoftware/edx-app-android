@@ -88,14 +88,12 @@ public class UserProfileFragment
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.edit_profile: {
-                presenter.onEditProfile();
-                return true;
-            }
-            default: {
-                return super.onOptionsItemSelected(item);
-            }
+        int itemId = item.getItemId();
+        if (itemId == R.id.edit_profile) {
+            presenter.onEditProfile();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 

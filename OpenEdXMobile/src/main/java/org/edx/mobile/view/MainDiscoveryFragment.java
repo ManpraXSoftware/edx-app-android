@@ -153,16 +153,12 @@ public class MainDiscoveryFragment extends BaseFragment {
             showFragment(selectedFragment);
         }
         if (isUserSelected) {
-            switch (fragmentTabId) {
-                case R.id.option_courses:
-                    environment.getAnalyticsRegistry().trackScreenView(Analytics.Screens.FIND_COURSES);
-                    break;
-                case R.id.option_programs:
-                    environment.getAnalyticsRegistry().trackScreenView(Analytics.Screens.FIND_PROGRAMS);
-                    break;
-                case R.id.option_degrees:
-                    environment.getAnalyticsRegistry().trackScreenView(Analytics.Screens.FIND_DEGREES);
-                    break;
+            if (fragmentTabId == R.id.option_courses) {
+                environment.getAnalyticsRegistry().trackScreenView(Analytics.Screens.FIND_COURSES);
+            } else if (fragmentTabId == R.id.option_programs) {
+                environment.getAnalyticsRegistry().trackScreenView(Analytics.Screens.FIND_PROGRAMS);
+            } else if (fragmentTabId == R.id.option_degrees) {
+                environment.getAnalyticsRegistry().trackScreenView(Analytics.Screens.FIND_DEGREES);
             }
         }
     }

@@ -34,7 +34,7 @@ import org.edx.mobile.view.custom.URLInterceptorWebViewClient;
 import de.greenrobot.event.EventBus;
 import okhttp3.Request;
 import roboguice.inject.InjectExtra;
-import roboguice.inject.InjectView;
+//import roboguice.inject.InjectView;
 
 public class CourseHandoutFragment extends BaseFragment implements RefreshListener {
     protected final Logger logger = new Logger(getClass().getName());
@@ -51,7 +51,6 @@ public class CourseHandoutFragment extends BaseFragment implements RefreshListen
     @Inject
     private OkHttpClientProvider okHttpClientProvider;
 
-    @InjectView(R.id.webview)
     private WebView webView;
 
     private FullScreenErrorNotification errorNotification;
@@ -74,10 +73,15 @@ public class CourseHandoutFragment extends BaseFragment implements RefreshListen
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        errorNotification = new FullScreenErrorNotification(webView);
-        snackbarErrorNotification = new SnackbarErrorNotification(webView);
-        new URLInterceptorWebViewClient(getActivity(), webView).setAllLinksAsExternal(true);
-        loadData();
+        
+        webView = view.findViewById(R.id.webview);
+        
+        if (webView != null) {
+            errorNotification = new FullScreenErrorNotification(webView);
+            snackbarErrorNotification = new SnackbarErrorNotification(webView);
+            new URLInterceptorWebViewClient(getActivity(), webView).setAllLinksAsExternal(true);
+            loadData();
+        }
     }
 
     private void loadData() {
@@ -136,8 +140,10 @@ public class CourseHandoutFragment extends BaseFragment implements RefreshListen
     }
 
     private void hideErrorMessage() {
-        webView.setVisibility(View.VISIBLE);
-        errorNotification.hideError();
+        if (webView != null) {
+            webView.setVisibility(View.VISIBLE);
+            errorNotification.hideError();
+        }
     }
 
     @SuppressWarnings("unused")

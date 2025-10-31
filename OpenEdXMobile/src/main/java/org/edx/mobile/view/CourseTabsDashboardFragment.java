@@ -155,16 +155,16 @@ public class CourseTabsDashboardFragment extends TabsBaseFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_whatsapp:
-                openWhatsAppLink();
-                return true;
-            case R.id.menu_item_share:
-                ShareUtils.showCourseShareMenu(getActivity(), getActivity().findViewById(R.id.menu_item_share),
-                        courseData, analyticsRegistry, environment);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_item_whatsapp) {
+            openWhatsAppLink();
+            return true;
+        } else if (itemId == R.id.menu_item_share) {
+            ShareUtils.showCourseShareMenu(getActivity(), getActivity().findViewById(R.id.menu_item_share),
+                    courseData, analyticsRegistry, environment);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 

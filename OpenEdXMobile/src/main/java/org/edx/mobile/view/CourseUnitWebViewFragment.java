@@ -22,14 +22,14 @@ import org.edx.mobile.view.custom.PreLoadingListener;
 import org.edx.mobile.view.custom.URLInterceptorWebViewClient;
 
 import de.greenrobot.event.EventBus;
-import roboguice.inject.InjectView;
+//import roboguice.inject.InjectView;
 
 public class CourseUnitWebViewFragment extends CourseUnitFragment {
 
-    @InjectView(R.id.auth_webview)
+    //@InjectView(R.id.auth_webview)
     private AuthenticatedWebView authWebView;
 
-    @InjectView(R.id.swipe_container)
+    //@InjectView(R.id.swipe_container)
     protected SwipeRefreshLayout swipeContainer;
 
     private PreLoadingListener preloadingListener;
@@ -58,10 +58,24 @@ public class CourseUnitWebViewFragment extends CourseUnitFragment {
         } else {
             throw new RuntimeException("Parent activity of this Fragment should implement the PreLoadingListener interface");
         }
-        swipeContainer.setEnabled(false);
-       // authWebView.initWebView(getActivity(), true, false);
-        authWebView.initWebView(getActivity());
-        authWebView.getWebViewClient().setPageStatusListener(new URLInterceptorWebViewClient.IPageStatusListener() {
+        
+        // Manual findViewById since @InjectView is commented out
+        swipeContainer = view.findViewById(R.id.swipe_container);
+        authWebView = view.findViewById(R.id.auth_webview);
+        
+        
+        if (swipeContainer != null) {
+            swipeContainer.setEnabled(false);
+        }
+        
+        if (authWebView != null) {
+            // authWebView.initWebView(getActivity(), true, false);
+            authWebView.initWebView(getActivity());
+        } else {
+        }
+        
+        if (authWebView != null) {
+            authWebView.getWebViewClient().setPageStatusListener(new URLInterceptorWebViewClient.IPageStatusListener() {
             @Override
             public void onPageStarted() {
                 isPageLoading = true;
@@ -92,6 +106,7 @@ public class CourseUnitWebViewFragment extends CourseUnitFragment {
             public void onPageLoadProgressChanged(WebView webView, int progress) {
             }
         });
+        }
 
         // Only load the unit if it is currently visible to user or the visible unit has finished loading
         if (getUserVisibleHint() || preloadingListener.isMainUnitLoaded()) {
@@ -157,13 +172,17 @@ public class CourseUnitWebViewFragment extends CourseUnitFragment {
     @Override
     public void onResume() {
         super.onResume();
-        authWebView.onResume();
+        if (authWebView != null) {
+            authWebView.onResume();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        authWebView.onPause();
+        if (authWebView != null) {
+            authWebView.onPause();
+        }
     }
 
     @Override
@@ -175,7 +194,9 @@ public class CourseUnitWebViewFragment extends CourseUnitFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        authWebView.onDestroyView();
+        if (authWebView != null) {
+            authWebView.onDestroyView();
+        }
         EventBus.getDefault().unregister(this);
     }
 

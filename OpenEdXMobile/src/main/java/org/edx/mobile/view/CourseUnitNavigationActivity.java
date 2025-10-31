@@ -47,7 +47,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import roboguice.inject.InjectView;
+//import roboguice.inject.InjectView;
 
 public class CourseUnitNavigationActivity extends CourseBaseActivity implements
         BaseCourseUnitVideoFragment.HasComponent, PreLoadingListener {
@@ -59,13 +59,13 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements
     private List<CourseComponent> unitList = new ArrayList<>();
     private CourseUnitPagerAdapter pagerAdapter;
 
-    @InjectView(R.id.goto_next)
+    // @InjectViewCompat("goto_next")
     private Button mNextBtn;
-    @InjectView(R.id.goto_prev)
+    // @InjectViewCompat("goto_prev")
     private Button mPreviousBtn;
-    @InjectView(R.id.next_unit_title)
+    // @InjectViewCompat("next_unit_title")
     private TextView mNextUnitLbl;
-    @InjectView(R.id.prev_unit_title)
+    // @InjectViewCompat("prev_unit_title")
     private TextView mPreviousUnitLbl;
 
     private PreLoadingListener.State viewPagerState = PreLoadingListener.State.DEFAULT;
@@ -76,6 +76,15 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Manual findViewById since @InjectView is commented out
+        // Add null checks since these views might be initially hidden
+        mNextBtn = findViewById(R.id.goto_next);
+        mPreviousBtn = findViewById(R.id.goto_prev);
+        mNextUnitLbl = findViewById(R.id.next_unit_title);
+        mPreviousUnitLbl = findViewById(R.id.prev_unit_title);
+        
+        
         RelativeLayout insertPoint = (RelativeLayout) findViewById(R.id.fragment_container);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -122,8 +131,12 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements
         });
         findViewById(R.id.course_unit_nav_bar).setVisibility(View.VISIBLE);
 
-        mPreviousBtn.setOnClickListener(view -> navigatePreviousComponent());
-        mNextBtn.setOnClickListener(view -> navigateNextComponent());
+        if (mPreviousBtn != null) {
+            mPreviousBtn.setOnClickListener(view -> navigatePreviousComponent());
+        }
+        if (mNextBtn != null) {
+            mNextBtn.setOnClickListener(view -> navigateNextComponent());
+        }
     }
 
     @Override
@@ -139,12 +152,12 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_whatsapp:
-                openWhatsAppLink();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item); // Let the activity handle other items
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_item_whatsapp) {
+            openWhatsAppLink();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item); // Let the activity handle other items
         }
     }
 
@@ -300,8 +313,12 @@ public class CourseUnitNavigationActivity extends CourseBaseActivity implements
         int curIndex = pager.getCurrentItem();
         setCurrentUnit(pagerAdapter.getUnit(curIndex));
 
-        mPreviousBtn.setEnabled(curIndex > 0);
-        mNextBtn.setEnabled(curIndex < pagerAdapter.getCount() - 1);
+        if (mPreviousBtn != null) {
+            mPreviousBtn.setEnabled(curIndex > 0);
+        }
+        if (mNextBtn != null) {
+            mNextBtn.setEnabled(curIndex < pagerAdapter.getCount() - 1);
+        }
 
         findViewById(R.id.course_unit_nav_bar).requestLayout();
 

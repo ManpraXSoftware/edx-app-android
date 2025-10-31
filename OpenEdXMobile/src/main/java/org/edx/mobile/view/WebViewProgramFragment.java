@@ -24,12 +24,12 @@ import org.edx.mobile.util.links.DefaultActionListener;
 import org.edx.mobile.view.custom.URLInterceptorWebViewClient;
 
 import de.greenrobot.event.EventBus;
-import roboguice.inject.InjectView;
+//import roboguice.inject.InjectView;
 
 public class WebViewProgramFragment extends AuthenticatedWebViewFragment {
 
     @Nullable
-    @InjectView(R.id.loading_indicator)
+    //@InjectView(R.id.loading_indicator)
     private ProgressBar progressWheel;
 
     private ViewTreeObserver.OnScrollChangedListener onScrollChangedListener;
@@ -47,6 +47,14 @@ public class WebViewProgramFragment extends AuthenticatedWebViewFragment {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        
+        // Manual findViewById since @InjectView is commented out
+        progressWheel = view.findViewById(R.id.loading_indicator);
     }
 
     @Override

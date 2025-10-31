@@ -124,6 +124,7 @@
                 android:layout_marginLeft="21dp"
                 android:layout_marginRight="21dp"
                 android:layout_marginTop="5dp"
+                android:visibility="gone"
                 android:textColor="@color/search_count_color" />
 
             <androidx.recyclerview.widget.RecyclerView

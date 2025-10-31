@@ -11,6 +11,7 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.analytics.AnalyticsListener;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -30,7 +31,7 @@ import java.util.Locale;
 
 
 @SuppressWarnings("serial")
-public class VideoPlayer implements Player.EventListener, AnalyticsListener, PlayerListener {
+public class VideoPlayer implements Player.Listener, AnalyticsListener, PlayerListener {
 
     private SimpleExoPlayer exoPlayer;
     private Context context;
@@ -297,10 +298,10 @@ public class VideoPlayer implements Player.EventListener, AnalyticsListener, Pla
 
         if (VideoUtil.videoHasFormat(videoUrl, AppConstants.VIDEO_FORMAT_M3U8)) {
             mediaSource = new HlsMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(Uri.parse(videoUrl));
+                    .createMediaSource(MediaItem.fromUri(Uri.parse(videoUrl)));
         } else {
             mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(Uri.parse(videoUrl));
+                    .createMediaSource(MediaItem.fromUri(Uri.parse(videoUrl)));
         }
         return mediaSource;
     }
@@ -529,7 +530,7 @@ public class VideoPlayer implements Player.EventListener, AnalyticsListener, Pla
     @Override
     public void reset() {
         // stop and reset Exo Player
-        exoPlayer.stop(true);
+        exoPlayer.stop();
         state = PlayerState.RESET;
     }
 
@@ -568,7 +569,7 @@ public class VideoPlayer implements Player.EventListener, AnalyticsListener, Pla
                 || state == PlayerState.LAGGING
                 || state == PlayerState.PLAYBACK_COMPLETE) {
             // Stop the Exo Player
-            exoPlayer.stop(false);
+            exoPlayer.stop();
             state = PlayerState.STOPPED;
 
             logger.debug("Playback stopped");

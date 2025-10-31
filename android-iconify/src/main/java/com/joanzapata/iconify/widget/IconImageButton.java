@@ -41,14 +41,13 @@ public class IconImageButton extends ImageButton {
         String iconKey = a.getString(R.styleable.IconImageView_iconName);
         if (iconKey != null) {
             IconDrawable drawable = new IconDrawable(context, iconKey);
-            switch (Animation.values()[a.getInt(R.styleable.IconImageView_iconAnimation,
-                    Animation.NONE.ordinal())]) {
-                case SPIN:
-                    drawable.spin();
-                    break;
-                case PULSE:
-                    drawable.pulse();
-                    break;
+            int animationOrdinal = a.getInt(R.styleable.IconImageView_iconAnimation,
+                    Animation.NONE.ordinal());
+            Animation animation = Animation.values()[animationOrdinal];
+            if (animation == Animation.SPIN) {
+                drawable.spin();
+            } else if (animation == Animation.PULSE) {
+                drawable.pulse();
             }
             setImageDrawable(drawable);
         }

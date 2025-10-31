@@ -18,7 +18,7 @@ import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.analytics.AnalyticsRegistry;
 
 import de.greenrobot.event.EventBus;
-import roboguice.inject.InjectView;
+//import roboguice.inject.InjectView;
 
 import static org.edx.mobile.util.links.WebViewLink.Authority.ENROLLED_COURSE_INFO;
 
@@ -26,8 +26,6 @@ public class CourseUpgradeWebViewFragment extends AuthenticatedWebViewFragment {
     @Inject
     AnalyticsRegistry analyticsRegistry;
 
-    @InjectView(R.id.loading_indicator)
-    private ProgressBar progressWheel;
 
     public static Fragment newInstance(@NonNull String url, @Nullable String javascript,
                                        boolean isManuallyReloadable,

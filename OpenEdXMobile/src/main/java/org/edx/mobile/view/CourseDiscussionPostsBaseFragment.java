@@ -16,11 +16,11 @@ import org.edx.mobile.model.api.EnrolledCoursesResponse;
 import org.edx.mobile.view.adapters.DiscussionPostsAdapter;
 import org.edx.mobile.view.adapters.InfiniteScrollUtils;
 
-import roboguice.inject.InjectView;
+//import roboguice.inject.InjectView;
 
 
 public abstract class CourseDiscussionPostsBaseFragment extends BaseFragment implements InfiniteScrollUtils.PageLoader<DiscussionThread> {
-    @InjectView(R.id.discussion_posts_listview)
+    //@InjectView(R.id.discussion_posts_listview)
     protected ListView discussionPostsListView;
 
     @Inject
@@ -49,6 +49,10 @@ public abstract class CourseDiscussionPostsBaseFragment extends BaseFragment imp
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        
+        // Manual findViewById since @InjectView is commented out
+        discussionPostsListView = view.findViewById(R.id.discussion_posts_listview);
+        
         controller = InfiniteScrollUtils.configureListViewWithInfiniteList(discussionPostsListView, discussionPostsAdapter, this);
         discussionPostsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

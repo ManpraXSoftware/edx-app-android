@@ -3,13 +3,17 @@ package org.edx.mobile.view;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowInsets;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowCompat;
 
 import com.google.inject.Inject;
 
@@ -59,6 +63,9 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.language_selection_screen);
+        
+        // Setup status bar padding for language selection screen
+        setupStatusBarPadding();
         mNextButton = findViewById(R.id.next_button);
         mBackArrow = findViewById(R.id.back_arrow);
         mEnglish = findViewById(R.id.english);
@@ -317,5 +324,38 @@ public class LanguageSelectionScreen extends BaseFragmentActivity {
         final Map<String, String> values = new HashMap<>();
         values.put(Analytics.Keys.LANGAUGE_NAME,Language);
         environment.getAnalyticsRegistry().trackScreenView(Analytics.Events.SELECT_LANGUAGE,null,"Language Change",values);
+    }
+    
+    /**
+     * Setup status bar padding specifically for the language selection screen
+     */
+    private void setupStatusBarPadding() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            try {
+                // Enable edge-to-edge for Android 35+
+                WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+                
+                // Handle window insets to position content below status bar
+                getWindow().getDecorView().setOnApplyWindowInsetsListener((view, insets) -> {
+                    int statusBarType = WindowInsets.Type.statusBars();
+                    android.graphics.Insets statusBarInsets = insets.getInsets(statusBarType);
+                    
+                    // Apply status bar padding to the window decor view
+                    // This ensures content appears below status bar
+                    View decorView = getWindow().getDecorView();
+                    decorView.setPadding(
+                        decorView.getPaddingLeft(),
+                        statusBarInsets.top,
+                        decorView.getPaddingRight(),
+                        decorView.getPaddingBottom()
+                    );
+                    
+                    return insets;
+                });
+                
+            } catch (Exception e) {
+                Log.e("LanguageSelection", "Error setting up status bar padding", e);
+            }
+        }
     }
 }

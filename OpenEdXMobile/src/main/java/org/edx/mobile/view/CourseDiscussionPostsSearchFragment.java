@@ -35,7 +35,7 @@ import java.util.Map;
 
 import retrofit2.Call;
 import roboguice.inject.InjectExtra;
-import roboguice.inject.InjectView;
+//import roboguice.inject.InjectView;
 
 public class CourseDiscussionPostsSearchFragment extends CourseDiscussionPostsBaseFragment {
 
@@ -45,7 +45,6 @@ public class CourseDiscussionPostsSearchFragment extends CourseDiscussionPostsBa
     @InjectExtra(value = Router.EXTRA_SEARCH_QUERY, optional = true)
     private String searchQuery;
 
-    @InjectView(R.id.discussion_topics_searchview)
     private SearchView discussionTopicsSearchView;
 
     private Call<Page<DiscussionThread>> searchThreadListCall;
@@ -60,7 +59,10 @@ public class CourseDiscussionPostsSearchFragment extends CourseDiscussionPostsBa
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        discussionTopicsSearchView.setQuery(searchQuery, false);
+        discussionTopicsSearchView = view.findViewById(R.id.discussion_topics_searchview);
+        
+        if (discussionTopicsSearchView != null) {
+            discussionTopicsSearchView.setQuery(searchQuery, false);
         discussionTopicsSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -79,6 +81,7 @@ public class CourseDiscussionPostsSearchFragment extends CourseDiscussionPostsBa
                 return false;
             }
         });
+        }
 
         final Map<String, String> values = new HashMap<>();
         values.put(Analytics.Keys.SEARCH_STRING, searchQuery);
@@ -147,6 +150,8 @@ public class CourseDiscussionPostsSearchFragment extends CourseDiscussionPostsBa
     @Override
     public void onResume() {
         super.onResume();
-        SoftKeyboardUtil.clearViewFocus(discussionTopicsSearchView);
+        if (discussionTopicsSearchView != null) {
+            SoftKeyboardUtil.clearViewFocus(discussionTopicsSearchView);
+        }
     }
 }

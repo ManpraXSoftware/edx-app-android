@@ -89,14 +89,12 @@ public class MainTabsDashboardFragment extends TabsBaseFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_account: {
-                environment.getRouter().showAccountActivity(getActivity());
-                return true;
-            }
-            default: {
-                return super.onOptionsItemSelected(item);
-            }
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_item_account) {
+            environment.getRouter().showAccountActivity(getActivity());
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 

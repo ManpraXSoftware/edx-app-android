@@ -37,14 +37,14 @@ import java.util.List;
 import java.util.Locale;
 
 import roboguice.inject.InjectExtra;
-import roboguice.inject.InjectView;
+//import roboguice.inject.InjectView;
 
 public class FormFieldSelectFragment extends BaseFragment {
 
     @InjectExtra(FormFieldActivity.EXTRA_FIELD)
     private FormField formField;
 
-    @InjectView(android.R.id.list)
+    //@InjectView(android.R.id.list)
     private ListView listView;
 
     private static final String COUNTRIES = "countries";
@@ -59,6 +59,10 @@ public class FormFieldSelectFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        
+        // Manual findViewById since @InjectView is commented out
+        listView = view.findViewById(android.R.id.list);
+        
         getActivity().setTitle(formField.getLabel());
         final List<FormOption> options = new ArrayList<>();
         final FormOptions formOptions = formField.getOptions();

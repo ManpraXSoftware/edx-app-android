@@ -24,21 +24,20 @@ import org.edx.mobile.view.AuthPanelUtils;
 import org.edx.mobile.view.common.MessageType;
 import org.edx.mobile.view.common.TaskProcessCallback;
 
-import roboguice.inject.InjectView;
 
 public abstract class BaseSingleFragmentActivity extends BaseFragmentActivity implements TaskProcessCallback {
 
     public static final String FIRST_FRAG_TAG = "first_frag";
 
-    @InjectView(R.id.loading_indicator)
+    // @InjectViewCompat("loading_indicator")
     @Nullable
     ProgressBar progressSpinner;
 
-    @InjectView(R.id.center_message_box)
+    // @InjectViewCompat("center_message_box")
     @Nullable
     TextView centerMessageBox;
 
-    @InjectView(R.id.toolbar_placeholder)
+    // @InjectViewCompat("toolbar_placeholder")
     @NonNull
     View toolbarPlaceholder;
 
@@ -49,7 +48,16 @@ public abstract class BaseSingleFragmentActivity extends BaseFragmentActivity im
         // finally change the color
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.status_bar_color));
         setContentView(R.layout.activity_single_fragment_base);
-        addToolbar();
+        
+        // Manual findViewById since @InjectView is commented out
+        progressSpinner = findViewById(R.id.loading_indicator);
+        centerMessageBox = findViewById(R.id.center_message_box);
+        toolbarPlaceholder = findViewById(R.id.toolbar_placeholder);
+        
+        // Only add toolbar if we have a valid placeholder
+        if (toolbarPlaceholder != null) {
+            addToolbar();
+        }
 
         super.setToolbarAsActionBar();
     }

@@ -60,8 +60,8 @@ public class CertificateFragment extends BaseFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_share: {
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_item_share) {
                 final Map<String, CharSequence> shareTextParams = new HashMap<>();
                 shareTextParams.put("platform_name", getString(R.string.platform_name));
                 shareTextParams.put("certificate_url", courseData.getCertificateURL());
@@ -80,10 +80,8 @@ public class CertificateFragment extends BaseFragment {
                             }
                         });
                 return true;
-            }
-            default: {
-                return super.onOptionsItemSelected(item);
-            }
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 

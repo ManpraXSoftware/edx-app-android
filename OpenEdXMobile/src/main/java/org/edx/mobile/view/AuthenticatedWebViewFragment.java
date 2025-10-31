@@ -23,7 +23,7 @@ import org.edx.mobile.logger.Logger;
 import org.edx.mobile.util.UiUtil;
 import org.edx.mobile.view.custom.AuthenticatedWebView;
 
-import roboguice.inject.InjectView;
+//import roboguice.inject.InjectView;
 
 /**
  * Provides a webview which authenticates the user before loading a page,
@@ -36,19 +36,19 @@ public class AuthenticatedWebViewFragment extends BaseFragment {
     protected final Logger logger = new Logger(getClass().getName());
 
     @org.edx.mobile.annotation.Nullable
-    @InjectView(R.id.auth_webview)
+    //@InjectView(R.id.auth_webview)
     protected AuthenticatedWebView authWebView;
 
     @org.edx.mobile.annotation.Nullable
-    @InjectView(R.id.swipe_container)
+    //@InjectView(R.id.swipe_container)
     protected SwipeRefreshLayout swipeContainer;
 
     @org.edx.mobile.annotation.Nullable
-    @InjectView(R.id.content_error_text)
+    //@InjectView(R.id.content_error_text)
     protected TextView tvContentError;
 
     @org.edx.mobile.annotation.Nullable
-    @InjectView(R.id.content_error_action)
+    //@InjectView(R.id.content_error_action)
     protected Button btnContentErrorAction;
 
     private boolean isSystemUpdatingWebView = false;
@@ -101,6 +101,13 @@ public class AuthenticatedWebViewFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        
+        // Manual findViewById since @InjectView is commented out
+        authWebView = view.findViewById(R.id.auth_webview);
+        swipeContainer = view.findViewById(R.id.swipe_container);
+        tvContentError = view.findViewById(R.id.content_error_text);
+        btnContentErrorAction = view.findViewById(R.id.content_error_action);
+        
         if (!isSystemUpdatingWebView) {
             // Disable the SwipeRefreshLayout by-default to allow the subclasses to provide a proper implementation for it
             swipeContainer.setEnabled(false);

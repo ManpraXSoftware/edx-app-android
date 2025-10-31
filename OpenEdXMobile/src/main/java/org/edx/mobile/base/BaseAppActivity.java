@@ -5,6 +5,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowInsets;
+import android.view.WindowManager;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowCompat;
+
 
 import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastStateListener;
@@ -38,6 +45,10 @@ public abstract class BaseAppActivity extends RoboAppCompatActivity implements C
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Setup status bar and content positioning
+        setupStatusBarAndContent();
+        
         EventBus.getDefault().post(new NewRelicEvent(getClass().getSimpleName()));
         googleCastDelegate = GoogleCastDelegate.getInstance(MainApplication.getEnvironment(this)
                 .getAnalyticsRegistry());
@@ -67,9 +78,10 @@ public abstract class BaseAppActivity extends RoboAppCompatActivity implements C
 
     @Override
     protected void onResume() {
+        super.onResume();
+        
         // refresh the menu items to update the current state of google cast button
         invalidateOptionsMenu();
-        super.onResume();
     }
 
     @Override
@@ -102,6 +114,59 @@ public abstract class BaseAppActivity extends RoboAppCompatActivity implements C
                 }
                 invalidateOptionsMenu();
             }
+        } catch (Exception e) {
+            logger.error(e, true);
+        }
+    }
+    
+    /**
+     * Setup status bar and content positioning for all Android versions
+     */
+    private void setupStatusBarAndContent() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            try {
+                // Set status bar color
+                int statusBarColor = ContextCompat.getColor(this, R.color.status_bar_color);
+                getWindow().setStatusBarColor(statusBarColor);
+                
+                // Configure status bar text color
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    getWindow().getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                    );
+                }
+                
+                // Handle content below status bar for Android 35+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                    setupEdgeToEdgeContent();
+                }
+                
+            } catch (Exception e) {
+                logger.error(e, true);
+            }
+        }
+    }
+    
+    /**
+     * Setup edge-to-edge content for Android 35+
+     */
+    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
+    private void setupEdgeToEdgeContent() {
+        try {
+            // Enable edge-to-edge
+            WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+            
+            // Handle window insets to position content below status bar
+            getWindow().getDecorView().setOnApplyWindowInsetsListener((view, insets) -> {
+                int statusBarType = WindowInsets.Type.statusBars();
+                android.graphics.Insets statusBarInsets = insets.getInsets(statusBarType);
+                
+                // Status bar padding will be handled by individual activities that need it
+                // This prevents applying padding globally to all activities
+                
+                return insets;
+            });
+            
         } catch (Exception e) {
             logger.error(e, true);
         }

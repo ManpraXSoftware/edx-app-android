@@ -1,12 +1,16 @@
 package org.edx.mobile.view;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowInsets;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowCompat;
 
 import com.google.inject.Inject;
 
@@ -34,8 +38,12 @@ public class Welcome_screen extends BaseFragmentActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.welcom_screen);
+        
+        // Setup status bar padding for welcome screen
+        setupStatusBarPadding();
         next_button = findViewById(R.id.next_button);
         mBackArrow = findViewById(R.id.back_arrow);
         mBackArrow.setOnClickListener(new View.OnClickListener() {
@@ -51,5 +59,38 @@ public class Welcome_screen extends BaseFragmentActivity {
                 finish();
             }
         });
+    }
+    
+    /**
+     * Setup status bar padding specifically for the welcome screen
+     */
+    private void setupStatusBarPadding() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            try {
+                // Enable edge-to-edge for Android 35+
+                WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+                
+                // Handle window insets to position content below status bar
+                getWindow().getDecorView().setOnApplyWindowInsetsListener((view, insets) -> {
+                    int statusBarType = WindowInsets.Type.statusBars();
+                    android.graphics.Insets statusBarInsets = insets.getInsets(statusBarType);
+                    
+                    // Apply status bar padding to the window decor view
+                    // This ensures content appears below status bar
+                    View decorView = getWindow().getDecorView();
+                    decorView.setPadding(
+                        decorView.getPaddingLeft(),
+                        statusBarInsets.top,
+                        decorView.getPaddingRight(),
+                        decorView.getPaddingBottom()
+                    );
+                    
+                    return insets;
+                });
+                
+            } catch (Exception e) {
+                Log.e("WelcomeScreen", "Error setting up status bar padding", e);
+            }
+        }
     }
 }

@@ -306,12 +306,12 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_item_whatsapp:
-                openWhatsAppLink();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item); // Let the activity handle other items
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_item_whatsapp) {
+            openWhatsAppLink();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item); // Let the activity handle other items
         }
     }
     @Override
@@ -623,8 +623,8 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
         // Called when the user selects a contextual menu item
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.item_delete:
+            int itemId = item.getItemId();
+            if (itemId == R.id.item_delete) {
                     final int checkedItemPosition = listView.getCheckedItemPosition();
                     // Change the icon to download icon immediately
                     final View rowView = listView.getChildAt(checkedItemPosition - listView.getFirstVisiblePosition());
@@ -697,9 +697,9 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
                     snackbar.show();
                     mode.finish();
                     return true;
-                default:
+                } else {
                     return false;
-            }
+                }
         }
 
         // Called when the user exits the action mode

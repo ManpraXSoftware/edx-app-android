@@ -11,6 +11,7 @@ import com.google.inject.Inject;
 import org.edx.mobile.R;
 import org.edx.mobile.base.BaseFragmentActivity;
 import org.edx.mobile.course.CourseAPI;
+import org.edx.mobile.databinding.ActivityCourseBaseBinding;
 import org.edx.mobile.http.notifications.FullScreenErrorNotification;
 import org.edx.mobile.http.notifications.SnackbarErrorNotification;
 import org.edx.mobile.interfaces.RefreshListener;
@@ -26,8 +27,6 @@ import org.edx.mobile.view.common.MessageType;
 import org.edx.mobile.view.common.TaskProcessCallback;
 
 import retrofit2.Call;
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
 
 /**
  *  A base class to handle some common task
@@ -37,15 +36,14 @@ import roboguice.inject.InjectView;
  *  3. content_area (The layout having the views that'll be used to present data on screen)
  *  4. loading_indicator (A view or layout to show loading while data loads)
  */
-@ContentView(R.layout.activity_course_base)
 public abstract  class CourseBaseActivity  extends BaseFragmentActivity
         implements TaskProcessCallback, RefreshListener{
 
-    @InjectView(R.id.loading_indicator)
-    ProgressBar progressWheel;
-
-    @InjectView(R.id.content_area)
-    ViewGroup contentLayout;
+    private ActivityCourseBaseBinding binding;
+    
+    // View references - now accessed through binding
+    private ProgressBar progressWheel;
+    private ViewGroup contentLayout;
 
     @Inject
     CourseAPI courseApi;
@@ -75,6 +73,15 @@ public abstract  class CourseBaseActivity  extends BaseFragmentActivity
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
+        
+        // Initialize View Binding
+        binding = ActivityCourseBaseBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        
+        // Set up view references
+        progressWheel = findViewById(R.id.loading_indicator);
+        contentLayout = binding.contentArea;
+        
         super.setToolbarAsActionBar();
         errorNotification = new FullScreenErrorNotification(contentLayout);
         snackbarErrorNotification = new SnackbarErrorNotification(contentLayout);
@@ -100,6 +107,8 @@ public abstract  class CourseBaseActivity  extends BaseFragmentActivity
             getHierarchyCall.cancel();
             getHierarchyCall = null;
         }
+        // Clean up binding
+        binding = null;
     }
 
     @Override
