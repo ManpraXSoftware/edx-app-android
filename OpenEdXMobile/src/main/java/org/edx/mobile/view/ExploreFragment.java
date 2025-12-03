@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -370,20 +371,10 @@ public class ExploreFragment extends BaseFragment implements OnRecyclerItemClick
                     discoverySubjectResult.getCardColorName());*/
 
         }
-       /* else if(item instanceof OrganisationModel){
+        else if(item instanceof OrganisationModel){
             OrganisationModel organisationModel= (OrganisationModel) item;
-            NewProgramFragment newProgramFragment = new NewProgramFragment();
-            Bundle bundle1 = new Bundle();
-            bundle1.putString(PROGRAM, organisationModel.getName());
-            bundle1.putString(PROGRAM_CONVERTED,organisationModel.getName());
-            bundle1.putString(PROGRAM_UUID, "");
-            bundle1.putBoolean(TAGSCREENFLAG, true);
-            bundle1.putBoolean(ORGANISATION_SCREEN_FLAG, true);
-            newProgramFragment.setArguments(bundle1);
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.main_fragment, newProgramFragment, NewProgramFragment.TAG).addToBackStack(NewProgramFragment.TAG)
-                    .commit();
-        }*/
+            openOrganisationDetails(organisationModel);
+        }
     }
     void sendAnalyticsCourseDetail(DiscoverySubjectResult discoverySubjectResult){
         final Map<String, String> values = new HashMap<>();
@@ -509,5 +500,28 @@ public class ExploreFragment extends BaseFragment implements OnRecyclerItemClick
     @Override
     public void onDoneTalkBackListener() {
 
+    }
+
+    private void openOrganisationDetails(@NonNull OrganisationModel organisationModel) {
+        if (getActivity() == null) {
+            return;
+        }
+        String displayName = !TextUtils.isEmpty(organisationModel.getName())
+                ? organisationModel.getName()
+                : organisationModel.getKey();
+        if (MainBottomDashboardFragment.suodhaIcon() != null) {
+            MainBottomDashboardFragment.suodhaIcon().setVisibility(View.GONE);
+        }
+        if (MainBottomDashboardFragment.backIcon() != null) {
+            MainBottomDashboardFragment.backIcon().setVisibility(View.VISIBLE);
+        }
+        OrganisationDetailsFragment fragment = OrganisationDetailsFragment.newInstance(
+                organisationModel.getUuid(), displayName
+        );
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_fragment, fragment, OrganisationDetailsFragment.TAG)
+                .addToBackStack(OrganisationDetailsFragment.TAG)
+                .commit();
     }
 }

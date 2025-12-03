@@ -40,6 +40,9 @@ public interface CourseService {
     @GET("api/v1/search/programs/details/")
     Call<ProgramModel> getProgramsWithTopicName(@Header(DiscoveryConstants.AUTHORIZATION) String authorization ,@Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("program_topics") String programTopics);
 
+    @GET("api/v1/search/programs/details/")
+    Call<ProgramModel> getProgramsByOrganisationUuid(@Header(DiscoveryConstants.AUTHORIZATION) String authorization ,@Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("authoring_organization_uuids") String organisationUuids);
+
     @GET("api/v1/search/programs/")
     Call<ProgramResponseModel> getProgramResponseWithTopicName(@Header(DiscoveryConstants.AUTHORIZATION) String authorization , @Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("program_topics") String programTopics);
 

@@ -46,6 +46,10 @@ public class CourseApi extends DiscoveryBaseApi {
     public Call<ProgramModel> getProgramsWithTopicName(String auth_token, String lang, String topic_name) {
         return courseService.getProgramsWithTopicName(auth_token, lang, topic_name);
     }
+
+    public Call<ProgramModel> getProgramsByOrganisationUuid(String auth_token, String lang, String organisationUuids) {
+        return courseService.getProgramsByOrganisationUuid(auth_token, lang, organisationUuids);
+    }
     public Call<ProgramResponseModel> getProgramResponseWithTopicName(String auth_token, String lang, String topic_name) {
         return courseService.getProgramResponseWithTopicName(auth_token, lang, topic_name);
     }

@@ -823,6 +823,12 @@
  <string name="program_is_successfully_added_to_dashboard">Program successfully added to the dashboard</string>
  <string name="program_is_successfully_removed_to_dashboard">Program successfully removed from the dashboard</string>
 
+<plurals name="organisation_program_course_count">
+    <item quantity="zero">%d Courses</item>
+    <item quantity="one">%d Course</item>
+    <item quantity="other">%d Courses</item>
+</plurals>
+
  <string name="completed">COMPLETED</string>
  <string name="not_started">NOT STARTED</string>
  <string name="in_progress">IN PROGRESS</string>

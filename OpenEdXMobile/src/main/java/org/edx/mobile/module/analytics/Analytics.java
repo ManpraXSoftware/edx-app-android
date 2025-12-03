@@ -527,6 +527,7 @@ public interface Analytics {
         String TOPIC_NAME="TOPIC NAME";
         String LINKED_TOPIC_NAME="LINKED TOPIC NAME";
         String PROGRAM_UUID ="Program UUid";
+        String ORGANISATION_NAME ="Organisation Name";
 
         String RECENT_PROGRAM_NAME="RECENT PROGRAM NAME";
         String RECENT_TOPIC_NAME="RECENT TOPIC NAME";

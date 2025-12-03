@@ -37,7 +37,7 @@ public class OrganisationAdapter extends RecyclerView.Adapter<OrganisationAdapte
     public void onBindViewHolder(@NonNull NewOrganisationViewHolder holder, int position) {
         final OrganisationModel model = organisationModels.get(position);
         String imageUrl = model.getLogo_image_url();
-        holder.itemBinding.organisationName.setText(model.getKey());
+        holder.itemBinding.organisationName.setText(model.getName());
       //  if (imageUrl != null && !imageUrl.isEmpty()) {
             Glide.with(context)
                     .load(imageUrl)
