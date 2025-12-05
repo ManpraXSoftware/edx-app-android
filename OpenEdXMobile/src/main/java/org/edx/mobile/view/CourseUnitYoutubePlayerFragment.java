@@ -110,6 +110,7 @@ public class CourseUnitYoutubePlayerFragment extends CourseUnitFragment implemen
                 .controls(1)
                 // enable full screen button
                 .fullscreen(1)
+                .origin("https://www.youtube-nocookie.com")
                 .build();
 
         accessibilityManager = (AccessibilityManager) getActivity().getSystemService(Context.ACCESSIBILITY_SERVICE);
