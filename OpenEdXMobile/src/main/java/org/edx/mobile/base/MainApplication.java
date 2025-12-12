@@ -195,7 +195,8 @@ public abstract class MainApplication extends MultiDexApplication {
             FacebookSdk.setApplicationId(config.getFacebookConfig().getFacebookAppId());
             FacebookSdk.sdkInitialize(getApplicationContext());
         }
-        if (PermissionsUtil.checkPermissions(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU?Manifest.permission.READ_MEDIA_VIDEO:Manifest.permission.WRITE_EXTERNAL_STORAGE, this)) {
+        // App-specific storage doesn't require permission on Android 13+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU || PermissionsUtil.checkPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, this)) {
             deleteExtraDownloadedFiles();
         }
     }

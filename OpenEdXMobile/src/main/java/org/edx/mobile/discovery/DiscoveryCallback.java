@@ -19,16 +19,36 @@ import retrofit2.Response;
 
 public abstract class DiscoveryCallback<T> implements Callback<T> {
     private ResponseError mError;
+    private boolean isRetrying = false;
 
     protected abstract void onResponse(@NonNull final T responseBody);
 
     protected void onFailure(ResponseError responseError, @NonNull final Throwable error) {
     }
 
+    /**
+     * Called when a 401 error is detected. Override this to handle token refresh and retry.
+     * @param call The original call that failed with 401
+     * @return true if token refresh was initiated and call will be retried, false otherwise
+     */
+    protected boolean onUnauthorized(Call<T> call) {
+        return false;
+    }
+
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
         if (response.isSuccessful()) {
             onResponse(response.body());
+        } else if (response.code() == 401 && !isRetrying) {
+            // Handle 401 Unauthorized - token expired
+            mError = new ResponseError(response);
+            if (onUnauthorized(call)) {
+                // Token refresh initiated, will retry
+                return;
+            } else {
+                // No token refresh handler, call onFailure
+                onFailure(call, mError);
+            }
         } else if (response.code() == 422) {
             //special case handle response code 422 when creating post or topic or message
             mError = new ResponseError(response);
@@ -52,6 +72,15 @@ public abstract class DiscoveryCallback<T> implements Callback<T> {
         //  mError=new ResponseError(null);
         onFailure(mError, t);
 
+    }
+
+    /**
+     * Retry the original call after token refresh
+     * @param newCall The new call to execute (should be cloned from original with new token)
+     */
+    protected void retryCall(Call<T> newCall) {
+        isRetrying = true;
+        newCall.enqueue(this);
     }
 }
 

@@ -534,8 +534,8 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
                     downloadEntries = models;
                     isSingleVideoDownload = false;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        askForPermission(new String[]{Manifest.permission.READ_MEDIA_VIDEO},
-                                PermissionsUtil.WRITE_STORAGE_PERMISSION_REQUEST);
+                        // App-specific storage doesn't require permission on Android 13+
+                        onPermissionGranted(null, PermissionsUtil.WRITE_STORAGE_PERMISSION_REQUEST);
                     } else {
                         askForPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                 PermissionsUtil.WRITE_STORAGE_PERMISSION_REQUEST);
@@ -547,8 +547,8 @@ public class CourseOutlineFragment extends OfflineSupportBaseFragment
                     downloadEntry = videoData;
                     isSingleVideoDownload = true;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        askForPermission(new String[]{Manifest.permission.READ_MEDIA_VIDEO},
-                                PermissionsUtil.WRITE_STORAGE_PERMISSION_REQUEST);
+                        // App-specific storage doesn't require permission on Android 13+
+                        onPermissionGranted(null, PermissionsUtil.WRITE_STORAGE_PERMISSION_REQUEST);
                     } else {
                         askForPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                 PermissionsUtil.WRITE_STORAGE_PERMISSION_REQUEST);

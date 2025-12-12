@@ -38,6 +38,8 @@ import org.edx.mobile.R;
 import org.edx.mobile.annotation.Nullable;
 import org.edx.mobile.authentication.ApiLmsService;
 import org.edx.mobile.authentication.ApiNewLmsClient;
+import org.edx.mobile.authentication.AuthResponseJwt;
+import org.edx.mobile.authentication.DiscoveryTask;
 import org.edx.mobile.authentication.LoginAPI;
 import org.edx.mobile.base.BaseFragment;
 import org.edx.mobile.clipboard.ClipboardService;
@@ -249,7 +251,38 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         }
         page = 1;
         Call<SearchResult> search = courseApi.getSearchNextResult(token, selectedLanguage, String.valueOf(page), "100", query.trim());
+        final String finalQuery = query.trim();
+        final String finalSelectedLanguage = selectedLanguage;
         search.enqueue(new DiscoveryCallback<SearchResult>() {
+            @Override
+            protected boolean onUnauthorized(Call<SearchResult> call) {
+                if (getContext() == null) return false;
+                try {
+                    DiscoveryTask discoveryTask = new DiscoveryTask(getContext()) {
+                        @Override
+                        public void onSuccess(@NonNull AuthResponseJwt result) {
+                            // Retry with new token
+                            String newToken = loginPrefs.getAuthorizationHeaderJwt();
+                            Call<SearchResult> retryCall = courseApi.getSearchNextResult(newToken, finalSelectedLanguage, String.valueOf(page), "100", finalQuery);
+                            retryCall(retryCall);
+                        }
+
+                        @Override
+                        public void onException(Exception ex) {
+                            ResponseError error = new ResponseError(null);
+                            if (error != null) {
+                                error.setMsg("Token refresh failed");
+                            }
+                            onFailure(error, ex);
+                        }
+                    };
+                    discoveryTask.execute();
+                    return true;
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+
             @Override
             protected void onResponse(@NonNull SearchResult responseBody) {
                 List<CombinationOfSeachResult> combinationOfSeachResults = new ArrayList<>();
@@ -351,7 +384,39 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
             selectedLanguage = LocaleManager.getLanguagePref(getActivity());
         }
         Call<SearchResult> search = courseApi.getSearchNextResult(token, selectedLanguage, String.valueOf(page), "10", query.trim());
+        final String finalQuery = query.trim();
+        final String finalSelectedLanguage = selectedLanguage;
+        final int currentPage = page;
         search.enqueue(new DiscoveryCallback<SearchResult>() {
+            @Override
+            protected boolean onUnauthorized(Call<SearchResult> call) {
+                if (getContext() == null) return false;
+                try {
+                    DiscoveryTask discoveryTask = new DiscoveryTask(getContext()) {
+                        @Override
+                        public void onSuccess(@NonNull AuthResponseJwt result) {
+                            // Retry with new token
+                            String newToken = loginPrefs.getAuthorizationHeaderJwt();
+                        Call<SearchResult> retryCall = courseApi.getSearchNextResult(newToken, finalSelectedLanguage, String.valueOf(currentPage), "10", finalQuery);
+                            retryCall(retryCall);
+                        }
+
+                        @Override
+                        public void onException(Exception ex) {
+                            ResponseError error = new ResponseError(null);
+                            if (error != null) {
+                                error.setMsg("Token refresh failed");
+                            }
+                            onFailure(error, ex);
+                        }
+                    };
+                    discoveryTask.execute();
+                    return true;
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+
             @Override
             protected void onResponse(@NonNull SearchResult responseBody) {
                 List<CombinationOfSeachResult> combinationOfSeachResults = new ArrayList<>();
@@ -542,7 +607,45 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         ApiLmsService apiService = apiNewLmsClient.getClient().create(ApiLmsService.class);
 
         Call<TranslatedAudioResponse> call = apiService.uploadAudioFile(token, selectedLanguage, audioPart);
+        final String finalSelectedLanguage = selectedLanguage;
+        final File finalAudioFile = audioFile;
         call.enqueue(new DiscoveryCallback<TranslatedAudioResponse>() {
+            @Override
+            protected boolean onUnauthorized(Call<TranslatedAudioResponse> call) {
+                if (getContext() == null) return false;
+                try {
+                    DiscoveryTask discoveryTask = new DiscoveryTask(getContext()) {
+                        @Override
+                        public void onSuccess(@NonNull AuthResponseJwt result) {
+                            // Retry with new token
+                            String newToken = loginPrefs.getAuthorizationHeaderJwt();
+                            RequestBody requestFile = RequestBody.create(MediaType.parse("audio/mp3"), finalAudioFile);
+                            MultipartBody.Part audioPart = MultipartBody.Part.createFormData("audio", finalAudioFile.getName(), requestFile);
+                            ApiNewLmsClient apiNewLmsClient = new ApiNewLmsClient(loginAPI.config);
+                            ApiLmsService apiService = apiNewLmsClient.getClient().create(ApiLmsService.class);
+                            Call<TranslatedAudioResponse> retryCall = apiService.uploadAudioFile(newToken, finalSelectedLanguage, audioPart);
+                            retryCall(retryCall);
+                        }
+
+                        @Override
+                        public void onException(Exception ex) {
+                            if(descriptionView != null) {
+                                descriptionView.setText(getString(R.string.no_transcription_found));
+                            }
+                            ResponseError error = new ResponseError(null);
+                            if (error != null) {
+                                error.setMsg("Token refresh failed");
+                            }
+                            onFailure(error, ex);
+                        }
+                    };
+                    discoveryTask.execute();
+                    return true;
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+
             @Override
             protected void onResponse(@NonNull TranslatedAudioResponse response) {
 
