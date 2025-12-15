@@ -217,7 +217,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
 
 
         if (menuItem != null) {
-            menuItem.setVisible(true);
+            menuItem.setVisible(false);
         }
 
 
@@ -335,7 +335,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
         super.onResume();
         if(menuItem!=null){
 
-            menuItem.setVisible(true);
+            menuItem.setVisible(false);
             menuItem.getActionView().findViewById(R.id.action_view_icon).setVisibility(View.VISIBLE);
         }
         else {
@@ -525,7 +525,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                     myProgramListAdapter.setMyProgramList(myProgramListModels);
                     initializeIntentData(myProgramListModels);
                     if(menuItem!=null) {
-                        menuItem.setVisible(true);
+                        menuItem.setVisible(false);
                     }
                     if(!checkDialogBox()){
                         setFocusOnMic();

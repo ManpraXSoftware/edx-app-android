@@ -200,7 +200,7 @@ public class MainBottomDashboardFragment extends BaseFragmentActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.my_courses, menu);
 
-        menu.findItem(R.id.menu_item_voice).setVisible(true);
+        menu.findItem(R.id.menu_item_voice).setVisible(false);
         //menu.findItem(R.id.menu_item_notification).setVisible(true);
         menu.findItem(R.id.menu_item_account).setVisible(true);
         menu.findItem(R.id.menu_item_search).setVisible(true);

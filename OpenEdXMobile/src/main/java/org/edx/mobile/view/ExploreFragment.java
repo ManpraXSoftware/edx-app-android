@@ -139,7 +139,7 @@ public class ExploreFragment extends BaseFragment implements OnRecyclerItemClick
             loginPrefs.storeUserVoiceDialogEnabled(true);
         }*/
         if(menuItem!=null){
-            menuItem.setVisible(true);
+            menuItem.setVisible(false);
         }
         copyTextDataByLongPress();
         setHasOptionsMenu(true);
@@ -286,7 +286,7 @@ public class ExploreFragment extends BaseFragment implements OnRecyclerItemClick
                     responseBodyDiscoverySubject=responseBody;
                     initializeIntentData();
                     if(menuItem!=null) {
-                        menuItem.setVisible(true);
+                        menuItem.setVisible(false);
                     }
                    setFocusOnMic();
                 }

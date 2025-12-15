@@ -148,7 +148,7 @@ public class TagsFragment extends BaseFragment implements OnRecyclerItemClickLis
             }
         });*/
         if(menuItem!=null){
-            menuItem.setVisible(true);
+            menuItem.setVisible(false);
         }
         setHasOptionsMenu(true);
        /* new Handler().postDelayed(() -> {
@@ -310,7 +310,7 @@ public class TagsFragment extends BaseFragment implements OnRecyclerItemClickLis
                                 tagTermResultList=accordingToTeacher;
                                 //floatingActionButton.show();
                                 initializeIntentData();
-                                menuItem.setVisible(true);
+                                menuItem.setVisible(false);
                                // setFocusOnMic();
                                 utterCheck();
                                 tagsAdapter.setTags(accordingToTeacher, userType);
@@ -329,7 +329,7 @@ public class TagsFragment extends BaseFragment implements OnRecyclerItemClickLis
                                 //floatingActionButton.show();
                                 initializeIntentData();
                                // setFocusOnMic();
-                                menuItem.setVisible(true);
+                                menuItem.setVisible(false);
                                 utterCheck();
                                 tagsAdapter.setTags(accordingToStudent, userType);
                                 if (accordingToStudent == null) {
@@ -348,7 +348,7 @@ public class TagsFragment extends BaseFragment implements OnRecyclerItemClickLis
 
                             initializeIntentData();
                             //setFocusOnMic();
-                            menuItem.setVisible(true);
+                            menuItem.setVisible(false);
                             utterCheck();
                             tagsAdapter.setTags(accordingNoUserType, userType);
                             if (accordingNoUserType == null) {

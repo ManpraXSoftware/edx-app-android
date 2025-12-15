@@ -198,7 +198,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
         copyTextDataByLongPress();
         setHasOptionsMenu(true);
         if(menuItem!=null&&program_uuid.isEmpty()){
-            menuItem.setVisible(true);
+            menuItem.setVisible(false);
         }
 
         soundPool = new SoundPool.Builder().build();
@@ -875,7 +875,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
             if(program_uuid.isEmpty()) {
                 initSpinner();
                 if(menuItem!=null) {
-                    menuItem.setVisible(true);
+                    menuItem.setVisible(false);
                 }
             }
 
