@@ -13,6 +13,8 @@
     <string name="for_teacher">শিক্ষকদের জন্য</string>
     <string name="for_student">শিক্ষার্থীদের জন্য</string>
     <string name="results_for">জন্য ফলাফল</string>
+    <string name="please_wait">অনুগ্রহ করে অনুসন্ধান ফলাফলের জন্য অপেক্ষা করুন</string>
+    <string name="search_result">অনুসন্ধান ফলাফল</string>
     <string name="user_type_not_exist">ব্যবহারকারীর ধরন বিদ্যমান নেই</string>
     <string name="no_user_type">ব্যবহারকারীর ধরন নেই</string>
     <string name="course_caps">কোর্স</string>
@@ -461,9 +463,12 @@
 
     <string name="listening">শুনছে</string>
     <string name="search_with_voice">ভয়েস দিয়ে অনুসন্ধান করুন</string>
+    <string name="search_with_voice_dialogue_opened">সংলাপ খোলা হয়েছে, কথা বলতে কথা বলুন বোতাম নির্বাচন করুন</string>
+    <string name="search_with_voice_dialogue_closed">ভয়েস অনুসন্ধান সংলাপ বন্ধ হয়েছে</string>
     <string name="search_text">অনুসন্ধান</string>
     <string name="respeak">পুনরায় বলুন</string>
     <string name="no_transcription_found">কোনো ট্রান্সক্রিপশন পাওয়া যায়নি</string>
     <string name="speak">কথা বলো</string>
+    <string name="select_speak_button_to_speak">বক্তব্য দেওয়ার জন্য স্পিক বাটন নির্বাচন করুন</string>
     <string name="stop">থামাও</string>
 </resources>

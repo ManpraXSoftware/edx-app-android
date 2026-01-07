@@ -801,6 +801,8 @@
     <string name="our_partners"><b>ವಿಷಯ ಪಾಲುದಾರರು</b></string>
     <string name="search_results"><b>ಹುಡುಕಾಟ ಫಲಿತಾಂಶಗಳು</b></string>
     <string name="results_for">ಗೆ ಫಲಿತಾಂಶಗಳು</string>
+    <string name="please_wait">ದಯವಿಟ್ಟು ಹುಡುಕಾಟ ಫಲಿತಾಂಶಕ್ಕಾಗಿ ನಿರೀಕ್ಷಿಸಿ</string>
+    <string name="search_result">ಹುಡುಕಾಟ ಫಲಿತಾಂಶ</string>
     <string name="user_type_not_exist">ಬಳಕೆದಾರ ಪ್ರಕಾರವು ಅಸ್ತಿತ್ವದಲ್ಲಿಲ್ಲ</string>
     <string name="for_student">ವಿದ್ಯಾರ್ಥಿಗಳಿಗಾಗಿ</string>
     <string name="for_teacher">ಶಿಕ್ಷಕರಿಗೆ</string>
@@ -834,10 +836,13 @@
 
     <string name="listening">ಕೇಳುತ್ತಿದೆ</string>
     <string name="search_with_voice">ಧ್ವನಿಯೊಂದಿಗೆ ಹುಡುಕಿ</string>
+    <string name="search_with_voice_dialogue_opened">ಸಂವಾದ ತೆರೆಯಲಾಗಿದೆ, ಮಾತನಾಡಲು ಮಾತನಾಡಿ ಬಟನ್ ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="search_with_voice_dialogue_closed">ವಾಯ್ಸ್ ಹುಡುಕಾಟ ಸಂವಾದ ಮುಚ್ಚಲಾಗಿದೆ</string>
     <string name="search_text">ಹುಡುಕಿ</string>
     <string name="respeak">ಮತ್ತೆ ಮಾತನಾಡಿ</string>
     <string name="no_transcription_found">ಯಾವುದೇ ಟ್ರಾನ್ಸ್‌ಕ್ರಿಪ್ಷನ್ ಸಿಗಲಿಲ್ಲ</string>
     <string name="speak">ಮಾತಾಡಿ</string>
+    <string name="select_speak_button_to_speak">ಮಾತನಾಡಲು ಸ್ಪೀಕ್ ಬಟನ್ ಆಯ್ಕೆಮಾಡಿ</string>
     <string name="stop">ನಿಲ್ಲಿಸು</string>
 
 

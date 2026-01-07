@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -237,8 +238,52 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         }
     }
 
-    private void getSearchResult(String query) {
+    /**
+     * Checks if TalkBack is enabled
+     * @return true if TalkBack is enabled, false otherwise
+     */
+    private boolean isTalkBackEnabled() {
+        if (getActivity() == null) return false;
+        AccessibilityManager am = (AccessibilityManager) getActivity().getSystemService(Context.ACCESSIBILITY_SERVICE);
+        return am != null && am.isEnabled() && am.isTouchExplorationEnabled();
+    }
 
+    /**
+     * Announces message for TalkBack users only
+     * @param message The message to announce
+     */
+    private void announceForTalkBack(String message) {
+        if (isTalkBackEnabled() && getView() != null) {
+            // Use Handler to ensure announcement happens after UI updates
+            new Handler().postDelayed(() -> {
+                if (getView() != null) {
+                    getView().announceForAccessibility(message);
+                }
+            }, 100);
+        }
+    }
+
+    /**
+     * Updates the enabled/disabled state of Search and Stop buttons based on current state
+     * @param searchButtonEnabled true if search button should be enabled (has transcription)
+     * @param stopButtonEnabled true if stop button should be enabled (is recording)
+     */
+    private void updateButtonStates(boolean searchButtonEnabled, boolean stopButtonEnabled) {
+        if (voiceDialog != null && voiceDialog.isShowing()) {
+            Button positiveButton = voiceDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            Button negativeButton = voiceDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+            
+            if (positiveButton != null) {
+                positiveButton.setEnabled(searchButtonEnabled);
+            }
+            if (negativeButton != null) {
+                negativeButton.setEnabled(stopButtonEnabled);
+            }
+        }
+    }
+
+    private void getSearchResult(String query) {
+        announceForTalkBack(getString(R.string.please_wait));
         sendAnalyticsCourseDetail(query);
 
         final String token = loginPrefs.getAuthorizationHeaderJwt();
@@ -361,9 +406,21 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                 binding.searchResult.setVisibility(View.VISIBLE);
                 searchListAdapter.setSearchResult(newcombinationOfSeachResults);
                 binding.searchCount.setVisibility(View.VISIBLE);
-                binding.searchCount.setText(String.valueOf(searchListAdapter.getItemCount()) + " " + getString(R.string.results_for) + " " + binding.editSearch.getText().toString().trim());
-//                binding.searchCount.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
-                binding.seachIcon.setFocusable(true);
+                String searchQuery = binding.editSearch.getText().toString().trim();
+                String countText = String.valueOf(searchListAdapter.getItemCount()) + " " + getString(R.string.results_for) + " " + searchQuery;
+                binding.searchCount.setText(countText);
+                
+                // Set focus on search result after announcements
+                if (isTalkBackEnabled()) {
+                        if (binding.searchResults != null && binding.searchResults.getVisibility() == View.VISIBLE) {
+                            binding.searchResults.setFocusable(true);
+                            binding.searchResults.setFocusableInTouchMode(true);
+                            binding.searchResults.requestFocus();
+                            binding.searchResults.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+                            //announceForTalkBack(getString(R.string.search_result));
+                            announceForTalkBack(countText);
+                        }
+                }
             }
 
             @Override
@@ -606,7 +663,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         ApiNewLmsClient apiNewLmsClient=new ApiNewLmsClient(loginAPI.config);
         ApiLmsService apiService = apiNewLmsClient.getClient().create(ApiLmsService.class);
 
-        Call<TranslatedAudioResponse> call = apiService.uploadAudioFile(token, selectedLanguage, audioPart);
+        Call<TranslatedAudioResponse> call = apiService.uploadAudioFile(token, selectedLanguage, loginPrefs.getUsername(), audioPart);
         final String finalSelectedLanguage = selectedLanguage;
         final File finalAudioFile = audioFile;
         call.enqueue(new DiscoveryCallback<TranslatedAudioResponse>() {
@@ -623,7 +680,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                             MultipartBody.Part audioPart = MultipartBody.Part.createFormData("audio", finalAudioFile.getName(), requestFile);
                             ApiNewLmsClient apiNewLmsClient = new ApiNewLmsClient(loginAPI.config);
                             ApiLmsService apiService = apiNewLmsClient.getClient().create(ApiLmsService.class);
-                            Call<TranslatedAudioResponse> retryCall = apiService.uploadAudioFile(newToken, finalSelectedLanguage, audioPart);
+                            Call<TranslatedAudioResponse> retryCall = apiService.uploadAudioFile(newToken, finalSelectedLanguage, loginPrefs.getUsername(), audioPart);
                             retryCall(retryCall);
                         }
 
@@ -661,6 +718,8 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                             descriptionView.setFocusableInTouchMode(true);
                             descriptionView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
                             descriptionView.requestFocus();
+                            // Update button states: Search enabled (has transcription), Stop disabled (not recording)
+                            updateButtonStates(true, false);
                         }
                     }
                 }
@@ -672,6 +731,8 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                 super.onFailure(responseError, error);
                 if(descriptionView!=null)
                     descriptionView.setText(getString(R.string.no_transcription_found));
+                // Update button states: both disabled (transcription failed, not recording)
+                updateButtonStates(false, false);
 
             }
         });
@@ -747,6 +808,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                 new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1)
         );
         titleContainer.addView(titleText);
+        ViewCompat.setImportantForAccessibility(titleText, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO);
 
         // 3. Create and add the close (X) button
 
@@ -765,6 +827,8 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         closeButton.setContentDescription(getString(R.string.close)); // Add <string name="close">Close</string>
         closeButton.setLayoutParams(lp);
         titleContainer.addView(closeButton);
+        ViewCompat.setImportantForAccessibility(closeButton, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO);
+
         // ────────────────────────────────────────────────────────────────────────────────
 
         // 4. Create main container and description view
@@ -772,13 +836,14 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         mainContainer.setOrientation(LinearLayout.VERTICAL);
 
         descriptionView = new TextView(requireActivity());  // Now class-level
-        descriptionView.setText(isRecording ? getString(R.string.listening) : currentAudioTranscription == null || currentAudioTranscription.isEmpty() ? getString(R.string.no_transcription_found) : currentAudioTranscription);
+        descriptionView.setText(isRecording ? getString(R.string.listening) : currentAudioTranscription == null || currentAudioTranscription.isEmpty() ? getString(R.string.select_speak_button_to_speak) : currentAudioTranscription);
         // starting focus and accessible false
         /*descriptionView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         descriptionView.setFocusable(false);*/
 
         descriptionView.setPadding(80, 25, 80, 25);
         builder.setView(descriptionView);
+        ViewCompat.setImportantForAccessibility(descriptionView, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_NO);
 
         // Set buttons with null listeners to prevent auto-dismiss
         builder.setPositiveButton(getString(R.string.search_text), null);
@@ -794,7 +859,36 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         builder.setView(mainContainer);
 
         voiceDialog = builder.create();  // Now class-level
+        
+        // Set dismiss listener to announce when dialog closes
+        voiceDialog.setOnDismissListener(dialog -> {
+            if (isTalkBackEnabled()) {
+                // Announce dialog closed
+                if (binding != null && binding.getRoot() != null) {
+                    binding.getRoot().announceForAccessibility(getString(R.string.search_with_voice_dialogue_closed));
+                }
+            }
+        });
+        
         voiceDialog.show();
+
+        if (isTalkBackEnabled()) {
+            new Handler().postDelayed(() -> {
+                if (voiceDialog != null && voiceDialog.isShowing()) {
+                    mainContainer.announceForAccessibility(getString(R.string.search_with_voice_dialogue_opened));
+                }
+            }, 500);
+        }
+        // Announce dialog opened and set focus to speak button for TalkBack users
+        if (isTalkBackEnabled()) {
+            new Handler().postDelayed(() -> {
+                if (voiceDialog != null && voiceDialog.isShowing()) {
+                    ViewCompat.setImportantForAccessibility(titleText, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_YES);
+                    ViewCompat.setImportantForAccessibility(closeButton, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_YES);
+                    ViewCompat.setImportantForAccessibility(descriptionView, ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_YES);
+                }
+            }, 4000);
+        }
 
 
         // Close button listener
@@ -810,6 +904,13 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         positiveButton.setContentDescription(getString(R.string.search_text));
         negativeButton.setContentDescription(getString(R.string.stop));
         neutralButton.setContentDescription(getString(R.string.speak));
+
+        // Apply color selector for enabled/disabled states (darker grey when disabled)
+        positiveButton.setTextColor(ContextCompat.getColorStateList(requireActivity(), R.color.voice_search_button_selector));
+        negativeButton.setTextColor(ContextCompat.getColorStateList(requireActivity(), R.color.voice_search_button_selector));
+
+        // Set initial button states: both disabled (no transcription, not recording)
+        updateButtonStates(false, false);
 
         // "Search" button
         positiveButton.setOnClickListener(new View.OnClickListener() {
@@ -841,6 +942,8 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                 descriptionView.setText(getString(R.string.listening));
                     stopRecording();
                     startRecording();
+                    // Update button states: Stop enabled (recording), Search disabled (no transcription yet)
+                    updateButtonStates(false, true);
                     //negativeButton.setText("Stop");
                 /*} else {
                     stopRecording();
@@ -859,6 +962,8 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                     currentAudioTranscription = null;
                     descriptionView.setText(getString(R.string.listening));
                     stopRecording();
+                    // Update button states: Stop disabled (stopped recording), Search disabled (waiting for transcription)
+                    updateButtonStates(false, false);
                     getAudioResponse(new File(outputFilePath));
                 }
                 //startRecording();

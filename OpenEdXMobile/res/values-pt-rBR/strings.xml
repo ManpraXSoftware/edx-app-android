@@ -661,4 +661,9 @@ Se você não recebê-la nos próximos minutos, verifique sua caixa de spam. </s
   <string name="my_course">My Course</string>
   <string name="explore_course">Explore</string>
   <string name="courses">Courses</string>
+  <string name="please_wait">Por favor aguarde os resultados da pesquisa</string>
+  <string name="search_result">Resultado da pesquisa</string>
+  <string name="select_speak_button_to_speak">Selecione o botão falar para falar</string>
+  <string name="search_with_voice_dialogue_opened">Diálogo aberto, selecione o botão falar para falar</string>
+  <string name="search_with_voice_dialogue_closed">Diálogo de pesquisa por voz fechado</string>
 </resources>

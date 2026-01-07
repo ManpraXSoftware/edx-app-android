@@ -668,4 +668,9 @@
   <string name="my_course">Kursum</string>
   <string name="explore_course">Keşfetmek</string>
   <string name="courses">Dersler</string>
+  <string name="please_wait">Lütfen arama sonuçları için bekleyin</string>
+  <string name="search_result">Arama sonucu</string>
+  <string name="select_speak_button_to_speak">Konuşmak için konuş butonunu seçin</string>
+  <string name="search_with_voice_dialogue_opened">Diyalog açıldı, konuşmak için konuş butonunu seçin</string>
+  <string name="search_with_voice_dialogue_closed">Sesli arama diyaloğu kapatıldı</string>
 </resources>

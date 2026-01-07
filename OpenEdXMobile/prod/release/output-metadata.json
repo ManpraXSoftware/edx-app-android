@@ -4,16 +4,16 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.mx.subodha.stage",
-  "variantName": "stageRelease",
+  "applicationId": "com.mx.subodha",
+  "variantName": "prodRelease",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
       "versionCode": 7000015,
-      "versionName": "7.1.0-stage",
-      "outputFile": "edx-release-7.1.0-stage.apk"
+      "versionName": "7.1.0",
+      "outputFile": "edx-release-7.1.0.apk"
     }
   ],
   "elementType": "File",
@@ -22,14 +22,14 @@
       "minApi": 28,
       "maxApi": 30,
       "baselineProfiles": [
-        "baselineProfiles/1/edx-release-7.1.0-stage.dm"
+        "baselineProfiles/1/edx-release-7.1.0.dm"
       ]
     },
     {
       "minApi": 31,
       "maxApi": 2147483647,
       "baselineProfiles": [
-        "baselineProfiles/0/edx-release-7.1.0-stage.dm"
+        "baselineProfiles/0/edx-release-7.1.0.dm"
       ]
     }
   ],

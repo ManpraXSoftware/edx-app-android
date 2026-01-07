@@ -142,6 +142,7 @@
                 android:paddingRight="14dp"
                 android:paddingLeft="4dp"
                 android:paddingStart="4dp"
+                android:contentDescription="@string/download_to_device"
                 tools:targetApi="17"/>
         </LinearLayout>
 

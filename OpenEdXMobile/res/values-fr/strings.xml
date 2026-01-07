@@ -661,4 +661,9 @@
   <string name="my_course">Mon cours</string>
   <string name="explore_course">Explorer</string>
   <string name="courses">Cours</string>
+  <string name="please_wait">Veuillez patienter pour les résultats de recherche</string>
+  <string name="search_result">Résultat de recherche</string>
+  <string name="select_speak_button_to_speak">Sélectionnez le bouton parler pour parler</string>
+  <string name="search_with_voice_dialogue_opened">Dialogue ouvert, sélectionnez le bouton parler pour parler</string>
+  <string name="search_with_voice_dialogue_closed">Dialogue de recherche vocale fermé</string>
 </resources>

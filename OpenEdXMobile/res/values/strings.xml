@@ -816,6 +816,8 @@
  <string name="your_accessible_learning_platform">Your accessible learning platform</string>
  <string name="courses_available">courses available</string>
  <string name="results_for">results for</string>
+ <string name="please_wait">Please wait for search result</string>
+ <string name="search_result">Search result</string>
  <string name="for_student">FOR STUDENTS</string>
  <string name="for_teacher">FOR TEACHERS</string>
  <string name="are_you_sure_you_want_to_logout">Are you sure you want to log out?</string>
@@ -874,9 +876,12 @@
 
  <string name="listening">Listening</string>
  <string name="search_with_voice">Search with Voice</string>
- <string name="search_text">Search</string>
+<string name="search_with_voice_dialogue_opened">Dialog opened, Select speak button to speak.</string>
+<string name="search_with_voice_dialogue_closed">Voice search dialog closed</string>
+<string name="search_text">Search</string>
  <string name="respeak">ReSpeak</string>
  <string name="no_transcription_found">No transcription found</string>
+ <string name="select_speak_button_to_speak">Select speak button to speak</string>
  <string name="speak">Speak</string>
  <string name="stop">Stop</string>
 

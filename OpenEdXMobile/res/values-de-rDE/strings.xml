@@ -661,4 +661,9 @@ Kontrollieren Sie auch Ihren Spam-Ordner.</string>
   <string name="my_course">Mein Kurs</string>
   <string name="explore_course">Entdecken</string>
   <string name="courses">Kurse</string>
+  <string name="please_wait">Bitte warten Sie auf die Suchergebnisse</string>
+  <string name="search_result">Suchergebnis</string>
+  <string name="select_speak_button_to_speak">Wählen Sie die Schaltfläche Sprechen, um zu sprechen</string>
+  <string name="search_with_voice_dialogue_opened">Dialog geöffnet, wählen Sie die Schaltfläche Sprechen, um zu sprechen</string>
+  <string name="search_with_voice_dialogue_closed">Sprachsuche-Dialog geschlossen</string>
 </resources>

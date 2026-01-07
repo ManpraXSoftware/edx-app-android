@@ -655,4 +655,9 @@ Nếu bạn vẫn chưa nhận được sau ít phút, hãy kiểm tra thư mụ
   <string name="my_course">Khóa học của tôi</string>
   <string name="explore_course">Khám phá</string>
   <string name="courses">Các khóa học</string>
+  <string name="please_wait">Vui lòng đợi kết quả tìm kiếm</string>
+  <string name="search_result">Kết quả tìm kiếm</string>
+  <string name="select_speak_button_to_speak">Chọn nút nói để nói</string>
+  <string name="search_with_voice_dialogue_opened">Hộp thoại đã mở, chọn nút nói để nói</string>
+  <string name="search_with_voice_dialogue_closed">Hộp thoại tìm kiếm bằng giọng nói đã đóng</string>
 </resources>

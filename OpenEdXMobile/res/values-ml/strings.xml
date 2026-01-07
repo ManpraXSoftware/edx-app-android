@@ -73,6 +73,8 @@
     <string name="welocme_to_your_dashboard">നിങ്ങളുടെ ഡാഷ്‌ബോർഡിലേക്ക് സ്വാഗതം</string>
     <string name="student">വിദ്യാർത്ഥി</string>
     <string name="results_for">എന്നതിനായുള്ള ഫലങ്ങൾ</string>
+    <string name="please_wait">ദയവായി തിരയൽ ഫലത്തിനായി കാത്തിരിക്കുക</string>
+    <string name="search_result">തിരയൽ ഫലം</string>
     <string name="teacher">അധ്യാപകൻ</string>
     <string name="user_account_type">ഉപയോക്തൃ അക്കൗണ്ട് തരം</string>
     <string name="prefered_language">ഇഷ്ടപ്പെട്ട ഭാഷ</string>
@@ -447,10 +449,13 @@
 
     <string name="listening">കേൾക്കുന്നു</string>
     <string name="search_with_voice">ശബ്ദം ഉപയോഗിച്ച് തിരയുക</string>
+    <string name="search_with_voice_dialogue_opened">സംവാദം തുറന്നു, സംസാരിക്കാൻ സംസാരിക്കുക ബട്ടൺ തിരഞ്ഞെടുക്കുക</string>
+    <string name="search_with_voice_dialogue_closed">വോയ്‌സ് തിരയൽ സംവാദം അടച്ചു</string>
     <string name="search_text">തിരയുക</string>
     <string name="respeak">വീണ്ടും സംസാരിക്കുക</string>
     <string name="no_transcription_found">ട്രാൻസ്ക്രിപ്ഷൻ ഒന്നും കണ്ടെത്തിയില്ല</string>
     <string name="speak">പറയൂ</string>
+    <string name="select_speak_button_to_speak">സംസാരിക്കാൻ സ്പീക്ക് ബട്ടൺ തിരഞ്ഞെടുക്കുക</string>
     <string name="stop">നിര്‍ത്തുക</string>
 
 

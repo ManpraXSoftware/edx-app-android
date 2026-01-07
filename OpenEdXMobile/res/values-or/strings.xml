@@ -73,6 +73,8 @@
     <string name="welocme_to_your_dashboard">ଆପଣଙ୍କ ଡ୍ୟାସବୋର୍ଡକୁ ସ୍ୱାଗତ !</string>
     <string name="student">ଛାତ୍ର </string>
     <string name="results_for">ଫଳାଫଳ ପାଇଁ ଫଳାଫଳ !</string>
+    <string name="please_wait">ଦୟାକରି ସନ୍ଧାନ ଫଳାଫଳ ପାଇଁ ଅପେକ୍ଷା କରନ୍ତୁ</string>
+    <string name="search_result">ସନ୍ଧାନ ଫଳାଫଳ</string>
     <string name="teacher">ଶିକ୍ଷୟିତ୍ରୀ </string>
     <string name="user_account_type">ଉପଭୋକ୍ତା ଆକାଉଣ୍ଟ ପ୍ରକାର !</string>
     <string name="prefered_language">ପସନ୍ଦ ଯୋଗ୍ୟ ଭାଷା !</string>
@@ -447,9 +449,12 @@
 
     <string name="listening">ଶୁଣୁଛି</string>
     <string name="search_with_voice">ଭଏସ୍‌ରେ ଖୋଜନ୍ତୁ</string>
+    <string name="search_with_voice_dialogue_opened">ସଂଳାପ ଖୋଲା ହୋଇଛି, କହିବାକୁ କହନ୍ତୁ ବଟନ୍ ଚୟନ କରନ୍ତୁ</string>
+    <string name="search_with_voice_dialogue_closed">ଭଏସ୍ ସନ୍ଧାନ ସଂଳାପ ବନ୍ଦ ହୋଇଛି</string>
     <string name="search_text">ଖୋଜନ୍ତୁ</string>
     <string name="respeak">ପୁନର୍ବାର କହନ୍ତୁ</string>
     <string name="no_transcription_found">କୌଣସି ଟ୍ରାନ୍ସକ୍ରିପ୍ସନ୍ ମିଳିଲା ନାହିଁ</string>
     <string name="speak">କହନ୍ତୁ</string>
+    <string name="select_speak_button_to_speak">କହିବା ପାଇଁ ସ୍ପିକ୍ ବଟନ୍ ଚୟନ କରନ୍ତୁ</string>
     <string name="stop">ବନ୍ଦ କରନ୍ତୁ</string>
 </resources>

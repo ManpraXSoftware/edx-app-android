@@ -454,6 +454,8 @@
     <string name="course_details_congratulations">வாழ்த்துகள்!</string>
 
     <string name="results_for">க்கான முடிவுகள்</string>
+    <string name="please_wait">தயவுசெய்து தேடல் முடிவுகளுக்காக காத்திருக்கவும்</string>
+    <string name="search_result">தேடல் முடிவு</string>
     <string name="phonetic_app_name">@string/phonetic_platform_name</string>
     <string name="app_shortcut_name">@string/shortcut_name</string>
     <string name="app_name" translatable="false">Subodha</string>
@@ -490,9 +492,12 @@
 
     <string name="listening">கேட்கிறது</string>
     <string name="search_with_voice">குரலால் தேடுங்கள்</string>
+    <string name="search_with_voice_dialogue_opened">உரையாடல் திறக்கப்பட்டது, பேச பேசு பொத்தானைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="search_with_voice_dialogue_closed">குரல் தேடல் உரையாடல் மூடப்பட்டது</string>
     <string name="search_text">தேடுங்கள்</string>
     <string name="respeak">மீண்டும் பேசுங்கள்</string>
     <string name="no_transcription_found">எந்த டிரான்ஸ்கிரிப்ஷனும் கிடைக்கவில்லை</string>
     <string name="speak">பேசு</string>
+    <string name="select_speak_button_to_speak">பேச பேசு பொத்தானைத் தேர்ந்தெடுக்கவும்</string>
     <string name="stop">நிறுத்து</string>
 </resources>

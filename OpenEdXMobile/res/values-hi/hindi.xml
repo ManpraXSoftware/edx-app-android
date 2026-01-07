@@ -109,6 +109,8 @@
     <string name="welocme_to_your_dashboard">अपने डैशबोर्ड में आपका स्वागत है</string>
     <string name="student">छात्र</string>
     <string name="results_for">के परिणाम</string>
+    <string name="please_wait">कृपया खोज परिणाम के लिए प्रतीक्षा करें</string>
+    <string name="search_result">खोज परिणाम</string>
     <string name="teacher">शिक्षक</string>
     <string name="user_account_type">उपयोगकर्ता खाता प्रकार</string>
     <string name="prefered_language">पसंदीदा भाषा</string>
@@ -491,9 +493,12 @@
 
     <string name="listening">सुन रहा है</string>
     <string name="search_with_voice">आवाज़ से खोजें</string>
+    <string name="search_with_voice_dialogue_opened">संवाद खोला गया, बोलने के लिए बोलें बटन चुनें</string>
+    <string name="search_with_voice_dialogue_closed">वॉइस सर्च संवाद बंद हो गया</string>
     <string name="search_text">खोजें</string>
     <string name="respeak">दोबारा बोलें</string>
     <string name="no_transcription_found">कोई ट्रांसक्रिप्शन नहीं मिला</string>
     <string name="speak">बोलो</string>
+    <string name="select_speak_button_to_speak">बोलने के लिए बोलें बटन चुनें</string>
     <string name="stop">रोकें</string>
 </resources>

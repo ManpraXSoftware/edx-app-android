@@ -40,6 +40,7 @@ public interface ApiLmsService {
     Call<TranslatedAudioResponse> uploadAudioFile(
             @Header("Authorization") String authorization,
             @Header("Accept-Language") String language,
+            @Header("username") String username,
             @Part MultipartBody.Part audioFile
     );
 }
