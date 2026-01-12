@@ -663,7 +663,8 @@
   <string name="courses">Cours</string>
   <string name="please_wait">Veuillez patienter pour les résultats de recherche</string>
   <string name="search_result">Résultat de recherche</string>
-  <string name="select_speak_button_to_speak">Sélectionnez le bouton parler pour parler</string>
-  <string name="search_with_voice_dialogue_opened">Dialogue ouvert, sélectionnez le bouton parler pour parler</string>
-  <string name="search_with_voice_dialogue_closed">Dialogue de recherche vocale fermé</string>
+  <string name="select_speak_button_to_speak">Sélectionnez le bouton parler pour parler, puis sélectionnez Arrêter après avoir terminé</string>
+  <string name="transcription_not_understood">Désolé, je n\'ai pas pu comprendre cela. Veuillez parler à nouveau.</string>
+  <string name="search_with_voice_dialogue_opened">Dialogue ouvert, sélectionnez le bouton parler pour parler, puis sélectionnez Arrêter après avoir terminé</string>
+  <string name="search_with_voice_dialogue_closed">Dialogue de recherche avec voix fermé</string>
 </resources>

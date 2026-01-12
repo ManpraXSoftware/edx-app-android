@@ -663,7 +663,8 @@ Kontrollieren Sie auch Ihren Spam-Ordner.</string>
   <string name="courses">Kurse</string>
   <string name="please_wait">Bitte warten Sie auf die Suchergebnisse</string>
   <string name="search_result">Suchergebnis</string>
-  <string name="select_speak_button_to_speak">Wählen Sie die Schaltfläche Sprechen, um zu sprechen</string>
-  <string name="search_with_voice_dialogue_opened">Dialog geöffnet, wählen Sie die Schaltfläche Sprechen, um zu sprechen</string>
-  <string name="search_with_voice_dialogue_closed">Sprachsuche-Dialog geschlossen</string>
+  <string name="select_speak_button_to_speak">Wählen Sie die Schaltfläche Sprechen, um zu sprechen, dann wählen Sie Stopp, nachdem Sie fertig sind</string>
+  <string name="transcription_not_understood">Entschuldigung, ich konnte das nicht verstehen. Bitte sprechen Sie erneut.</string>
+  <string name="search_with_voice_dialogue_opened">Dialog geöffnet, wählen Sie die Schaltfläche Sprechen, um zu sprechen, dann wählen Sie Stopp, nachdem Sie fertig sind</string>
+  <string name="search_with_voice_dialogue_closed">Dialog Suche mit Stimme geschlossen</string>
 </resources>

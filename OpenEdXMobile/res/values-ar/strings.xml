@@ -681,7 +681,8 @@
   <string name="courses">الدورات</string>
   <string name="please_wait">يرجى الانتظار لنتائج البحث</string>
   <string name="search_result">نتيجة البحث</string>
-  <string name="select_speak_button_to_speak">حدد زر التحدث للتحدث</string>
-  <string name="search_with_voice_dialogue_opened">تم فتح الحوار، حدد زر التحدث للتحدث</string>
-  <string name="search_with_voice_dialogue_closed">تم إغلاق حوار البحث الصوتي</string>
+  <string name="select_speak_button_to_speak">حدد زر التحدث للتحدث، ثم حدد إيقاف بعد الانتهاء</string>
+  <string name="transcription_not_understood">عذراً، لم أستطع فهم ذلك. يرجى التحدث مرة أخرى.</string>
+  <string name="search_with_voice_dialogue_opened">تم فتح الحوار، حدد زر التحدث للتحدث، ثم حدد إيقاف بعد الانتهاء</string>
+  <string name="search_with_voice_dialogue_closed">تم إغلاق حوار البحث بالصوت</string>
 </resources>

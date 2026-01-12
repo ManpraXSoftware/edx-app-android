@@ -587,7 +587,8 @@
   <string name="courses">コース</string>
   <string name="please_wait">検索結果をお待ちください</string>
   <string name="search_result">検索結果</string>
-  <string name="select_speak_button_to_speak">話すボタンを選択して話す</string>
-  <string name="search_with_voice_dialogue_opened">ダイアログが開きました、話すボタンを選択して話してください</string>
-  <string name="search_with_voice_dialogue_closed">音声検索ダイアログが閉じられました</string>
+  <string name="select_speak_button_to_speak">話すボタンを選択して話してください、終了したら停止を選択してください</string>
+  <string name="transcription_not_understood">申し訳ございませんが、理解できませんでした。もう一度話してください。</string>
+  <string name="search_with_voice_dialogue_opened">ダイアログが開きました、話すボタンを選択して話してください、終了したら停止を選択してください</string>
+  <string name="search_with_voice_dialogue_closed">音声で検索ダイアログが閉じられました</string>
 </resources>

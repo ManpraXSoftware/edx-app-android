@@ -673,7 +673,8 @@
   <string name="courses">Courses</string>
   <string name="please_wait">אנא המתן לתוצאות החיפוש</string>
   <string name="search_result">תוצאת חיפוש</string>
-  <string name="select_speak_button_to_speak">בחר בכפתור דיבור כדי לדבר</string>
-  <string name="search_with_voice_dialogue_opened">תיבת דו-שיח נפתחה, בחר בכפתור דיבור כדי לדבר</string>
-  <string name="search_with_voice_dialogue_closed">תיבת דו-שיח של חיפוש קולי נסגרה</string>
+  <string name="select_speak_button_to_speak">בחר בכפתור דיבור כדי לדבר, ואז בחר עצור לאחר שתסיים</string>
+  <string name="transcription_not_understood">מצטער, לא הצלחתי להבין את זה. אנא דבר שוב.</string>
+  <string name="search_with_voice_dialogue_opened">תיבת דו-שיח נפתחה, בחר בכפתור דיבור כדי לדבר, ואז בחר עצור לאחר שתסיים</string>
+  <string name="search_with_voice_dialogue_closed">תיבת דו-שיח חיפוש עם קול נסגרה</string>
 </resources>

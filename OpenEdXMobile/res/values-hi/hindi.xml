@@ -493,12 +493,13 @@
 
     <string name="listening">सुन रहा है</string>
     <string name="search_with_voice">आवाज़ से खोजें</string>
-    <string name="search_with_voice_dialogue_opened">संवाद खोला गया, बोलने के लिए बोलें बटन चुनें</string>
-    <string name="search_with_voice_dialogue_closed">वॉइस सर्च संवाद बंद हो गया</string>
+    <string name="search_with_voice_dialogue_opened">संवाद खोला गया, बोलने के लिए बोलें बटन चुनें, फिर समाप्त करने के बाद रोकें चुनें</string>
+    <string name="search_with_voice_dialogue_closed">आवाज़ से खोज संवाद बंद हो गया</string>
     <string name="search_text">खोजें</string>
     <string name="respeak">दोबारा बोलें</string>
     <string name="no_transcription_found">कोई ट्रांसक्रिप्शन नहीं मिला</string>
+    <string name="transcription_not_understood">क्षमा करें, मैं इसे समझ नहीं सका। कृपया फिर से बोलें।</string>
     <string name="speak">बोलो</string>
-    <string name="select_speak_button_to_speak">बोलने के लिए बोलें बटन चुनें</string>
+    <string name="select_speak_button_to_speak">बोलने के लिए बोलें बटन चुनें, फिर समाप्त करने के बाद रोकें चुनें</string>
     <string name="stop">रोकें</string>
 </resources>

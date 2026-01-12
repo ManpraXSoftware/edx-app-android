@@ -663,7 +663,8 @@ Si no lo recibe en algunos minutos, asegúrese de revisar su carpeta de spam.</s
   <string name="courses">Cursos</string>
   <string name="please_wait">Por favor espere los resultados de búsqueda</string>
   <string name="search_result">Resultado de búsqueda</string>
-  <string name="select_speak_button_to_speak">Seleccione el botón hablar para hablar</string>
-  <string name="search_with_voice_dialogue_opened">Diálogo abierto, seleccione el botón hablar para hablar</string>
-  <string name="search_with_voice_dialogue_closed">Diálogo de búsqueda por voz cerrado</string>
+  <string name="select_speak_button_to_speak">Seleccione el botón hablar para hablar, luego seleccione Detener después de terminar</string>
+  <string name="transcription_not_understood">Lo siento, no pude entender eso. Por favor, hable de nuevo.</string>
+  <string name="search_with_voice_dialogue_opened">Diálogo abierto, seleccione el botón hablar para hablar, luego seleccione Detener después de terminar</string>
+  <string name="search_with_voice_dialogue_closed">Diálogo de búsqueda con voz cerrado</string>
 </resources>

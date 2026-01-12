@@ -449,13 +449,14 @@
 
     <string name="listening">കേൾക്കുന്നു</string>
     <string name="search_with_voice">ശബ്ദം ഉപയോഗിച്ച് തിരയുക</string>
-    <string name="search_with_voice_dialogue_opened">സംവാദം തുറന്നു, സംസാരിക്കാൻ സംസാരിക്കുക ബട്ടൺ തിരഞ്ഞെടുക്കുക</string>
-    <string name="search_with_voice_dialogue_closed">വോയ്‌സ് തിരയൽ സംവാദം അടച്ചു</string>
+    <string name="search_with_voice_dialogue_opened">സംവാദം തുറന്നു, സംസാരിക്കാൻ സംസാരിക്കുക ബട്ടൺ തിരഞ്ഞെടുക്കുക, തുടർന്ന് നിങ്ങൾ പൂർത്തിയാക്കിയ ശേഷം നിർത്തുക തിരഞ്ഞെടുക്കുക</string>
+    <string name="search_with_voice_dialogue_closed">ശബ്ദം ഉപയോഗിച്ച് തിരയൽ സംവാദം അടച്ചു</string>
     <string name="search_text">തിരയുക</string>
     <string name="respeak">വീണ്ടും സംസാരിക്കുക</string>
     <string name="no_transcription_found">ട്രാൻസ്ക്രിപ്ഷൻ ഒന്നും കണ്ടെത്തിയില്ല</string>
+    <string name="transcription_not_understood">ക്ഷമിക്കണം, എനിക്ക് അത് മനസ്സിലാക്കാൻ കഴിഞ്ഞില്ല. ദയവായി വീണ്ടും സംസാരിക്കുക.</string>
     <string name="speak">പറയൂ</string>
-    <string name="select_speak_button_to_speak">സംസാരിക്കാൻ സ്പീക്ക് ബട്ടൺ തിരഞ്ഞെടുക്കുക</string>
+    <string name="select_speak_button_to_speak">സംസാരിക്കാൻ സ്പീക്ക് ബട്ടൺ തിരഞ്ഞെടുക്കുക, തുടർന്ന് നിങ്ങൾ പൂർത്തിയാക്കിയ ശേഷം നിര്‍ത്തുക തിരഞ്ഞെടുക്കുക</string>
     <string name="stop">നിര്‍ത്തുക</string>
 
 

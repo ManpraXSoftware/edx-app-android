@@ -272,12 +272,92 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         if (voiceDialog != null && voiceDialog.isShowing()) {
             Button positiveButton = voiceDialog.getButton(AlertDialog.BUTTON_POSITIVE);
             Button negativeButton = voiceDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-            
+
             if (positiveButton != null) {
                 positiveButton.setEnabled(searchButtonEnabled);
             }
             if (negativeButton != null) {
                 negativeButton.setEnabled(stopButtonEnabled);
+            }
+        }
+    }
+
+    /**
+     * Calculates reading time based on text length.
+     * Average reading speed: ~150-200 words per minute (2.5-3 words/second)
+     * We use a conservative estimate of ~2.5 words/second for TalkBack
+     * This provides a more accurate delay than a fixed time.
+     */
+    private long calculateReadingTime(String text) {
+        if (text == null || text.trim().isEmpty()) {
+            return 2000; // Default 2 seconds for empty text
+        }
+        
+        // Count words (split by spaces)
+        String[] words = text.trim().split("\\s+");
+        int wordCount = words.length;
+        
+        // Calculate time: ~2.5 words per second (conservative estimate for TalkBack)
+        // Add extra time for punctuation, pauses, and processing
+        long estimatedTime = (long) (wordCount / 2.5 * 1000); // Convert to milliseconds
+        
+        // Add base time for processing and minimum reading time
+        estimatedTime += 1000; // Add 1 second base time
+        
+        // Set reasonable bounds: minimum 2 seconds, maximum 8 seconds
+        return Math.max(2000, Math.min(8000, estimatedTime));
+    }
+
+    /**
+     * Moves focus to the Speak button after a delay for TalkBack users
+     * when transcription fails or is not understood.
+     * First focuses on descriptionView to let TalkBack read the error message,
+     * then moves focus to Speak button after TalkBack finishes reading.
+     * Uses dynamic delay calculation based on text length instead of fixed delay.
+     */
+    private void moveFocusToSpeakButton() {
+        if (isTalkBackEnabled() && neutralButton != null && descriptionView != null) {
+            // Get the text from descriptionView to calculate reading time
+            String errorText = getString(R.string.transcription_not_understood);
+            
+            // Calculate reading time dynamically based on text length
+            long readingTime = calculateReadingTime(errorText);
+            
+            // First, announce and focus on descriptionView to let TalkBack read the error message
+            // Use announceForAccessibility which properly queues the announcement
+            if (voiceDialog != null && voiceDialog.isShowing() && descriptionView != null) {
+                descriptionView.setFocusable(true);
+                descriptionView.setFocusableInTouchMode(true);
+                descriptionView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
+                
+                // Announce the error message first (this queues properly)
+                descriptionView.announceForAccessibility(errorText);
+                
+                // Then request focus after a short delay to ensure announcement is queued
+                new Handler().postDelayed(() -> {
+                    if (voiceDialog != null && voiceDialog.isShowing() && descriptionView != null) {
+                        descriptionView.requestFocus();
+                        //descriptionView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+                        
+                        // After calculated reading time, move focus to Speak button
+                        new Handler().postDelayed(() -> {
+                            if (voiceDialog != null && voiceDialog.isShowing() && neutralButton != null) {
+                                neutralButton.setFocusable(true);
+                                neutralButton.setFocusableInTouchMode(true);
+                                neutralButton.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
+                                
+                                // Remove focus background/highlight to prevent filled grey color
+                                neutralButton.setBackground(null);
+                                neutralButton.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+                                
+                                neutralButton.requestFocus();
+                                //neutralButton.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+                                
+                                updateButtonStates(false, false);
+                            }
+                        }, readingTime); // Dynamic delay based on text length
+                    }
+                }, 300); // Short delay to ensure announcement is queued
             }
         }
     }
@@ -711,7 +791,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                         currentAudioTranscription = response.getText().trim();
                         if(descriptionView!=null && currentAudioTranscription != null && !currentAudioTranscription.trim().isEmpty()) {
                            currentAudioTranscription = removeStopAtEnd(currentAudioTranscription);
-                            descriptionView.setText(currentAudioTranscription == null || currentAudioTranscription.trim().isEmpty() ? getString(R.string.no_transcription_found) : currentAudioTranscription);
+                            descriptionView.setText(currentAudioTranscription == null || currentAudioTranscription.trim().isEmpty() ? getString(R.string.transcription_not_understood) : currentAudioTranscription);
                             // starting focus and accessible descriptionView
                             descriptionView.clearFocus();
                             descriptionView.setFocusable(true);
@@ -720,7 +800,19 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                             descriptionView.requestFocus();
                             // Update button states: Search enabled (has transcription), Stop disabled (not recording)
                             updateButtonStates(true, false);
+                        } else {
+                            // Response text is empty or null - show error message
+                            if(descriptionView!=null) {
+                                descriptionView.setText(getString(R.string.transcription_not_understood));
+                            }
+                            moveFocusToSpeakButton();
                         }
+                    } else {
+                        // Response is null or text is null/empty - show error message
+                        if(descriptionView!=null) {
+                            descriptionView.setText(getString(R.string.transcription_not_understood));
+                        }
+                        moveFocusToSpeakButton();
                     }
                 }
 
@@ -730,10 +822,9 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
             protected void onFailure(ResponseError responseError, @NonNull Throwable error) {
                 super.onFailure(responseError, error);
                 if(descriptionView!=null)
-                    descriptionView.setText(getString(R.string.no_transcription_found));
+                    descriptionView.setText(getString(R.string.transcription_not_understood));
                 // Update button states: both disabled (transcription failed, not recording)
-                updateButtonStates(false, false);
-
+                moveFocusToSpeakButton();
             }
         });
 
@@ -788,6 +879,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
     private AlertDialog voiceDialog;
     private TextView descriptionView; // Class-level to update after transcription
     Button negativeButton;
+    Button neutralButton; // Class-level to access in callbacks
     private void showVoiceSearchDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         //builder.setTitle(getString(R.string.search_with_voice));
@@ -860,6 +952,10 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
 
         voiceDialog = builder.create();  // Now class-level
         
+        // Prevent dialog from closing when clicking outside
+        voiceDialog.setCanceledOnTouchOutside(false);
+        voiceDialog.setCancelable(false);
+        
         // Set dismiss listener to announce when dialog closes
         voiceDialog.setOnDismissListener(dialog -> {
             if (isTalkBackEnabled()) {
@@ -899,7 +995,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
 
         Button positiveButton = voiceDialog.getButton(AlertDialog.BUTTON_POSITIVE);
         negativeButton = voiceDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-        Button neutralButton = voiceDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+        neutralButton = voiceDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
 
         positiveButton.setContentDescription(getString(R.string.search_text));
         negativeButton.setContentDescription(getString(R.string.stop));
@@ -908,6 +1004,11 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         // Apply color selector for enabled/disabled states (darker grey when disabled)
         positiveButton.setTextColor(ContextCompat.getColorStateList(requireActivity(), R.color.voice_search_button_selector));
         negativeButton.setTextColor(ContextCompat.getColorStateList(requireActivity(), R.color.voice_search_button_selector));
+        // Speak button always uses grey color (not state-based) to avoid showing filled color when focused
+        neutralButton.setTextColor(ContextCompat.getColor(requireActivity(), R.color.edx_brand_primary_accent));
+        // Remove background to prevent focus highlight/filled grey color
+        neutralButton.setBackground(null);
+        neutralButton.setBackgroundColor(android.graphics.Color.TRANSPARENT);
 
         // Set initial button states: both disabled (no transcription, not recording)
         updateButtonStates(false, false);

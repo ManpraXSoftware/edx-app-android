@@ -589,9 +589,10 @@
   <string name="profile_sharing_limited_by_you">您当前仅分享部分资料</string>
   <string name="please_wait">请稍候搜索结果</string>
   <string name="search_result">搜索结果</string>
-  <string name="select_speak_button_to_speak">选择说话按钮进行说话</string>
-  <string name="search_with_voice_dialogue_opened">对话框已打开，选择说话按钮进行说话</string>
-  <string name="search_with_voice_dialogue_closed">语音搜索对话框已关闭</string>
+  <string name="select_speak_button_to_speak">选择说话按钮进行说话，完成后选择停止</string>
+  <string name="transcription_not_understood">抱歉，我无法理解。请再次说话。</string>
+  <string name="search_with_voice_dialogue_opened">对话框已打开，选择说话按钮进行说话，完成后选择停止</string>
+  <string name="search_with_voice_dialogue_closed">使用语音搜索对话框已关闭</string>
   <!--Shown when viewing another user's profile and that user is not sharing a full profile-->
   <string name="profile_sharing_limited_by_other_user">此人当前仅分享部分资料</string>
   <!--Shown when viewing your own profile until you have confirmed you are over the age of consent (13 years old)-->

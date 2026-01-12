@@ -492,12 +492,13 @@
 
     <string name="listening">கேட்கிறது</string>
     <string name="search_with_voice">குரலால் தேடுங்கள்</string>
-    <string name="search_with_voice_dialogue_opened">உரையாடல் திறக்கப்பட்டது, பேச பேசு பொத்தானைத் தேர்ந்தெடுக்கவும்</string>
-    <string name="search_with_voice_dialogue_closed">குரல் தேடல் உரையாடல் மூடப்பட்டது</string>
+    <string name="search_with_voice_dialogue_opened">உரையாடல் திறக்கப்பட்டது, பேச பேசு பொத்தானைத் தேர்ந்தெடுக்கவும், பின்னர் நீங்கள் முடித்த பிறகு நிறுத்து தேர்ந்தெடுக்கவும்</string>
+    <string name="search_with_voice_dialogue_closed">குரலால் தேடல் உரையாடல் மூடப்பட்டது</string>
     <string name="search_text">தேடுங்கள்</string>
     <string name="respeak">மீண்டும் பேசுங்கள்</string>
     <string name="no_transcription_found">எந்த டிரான்ஸ்கிரிப்ஷனும் கிடைக்கவில்லை</string>
+    <string name="transcription_not_understood">மன்னிக்கவும், நான் அதை புரிந்து கொள்ள முடியவில்லை. தயவுசெய்து மீண்டும் பேசுங்கள்.</string>
     <string name="speak">பேசு</string>
-    <string name="select_speak_button_to_speak">பேச பேசு பொத்தானைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="select_speak_button_to_speak">பேச பேசு பொத்தானைத் தேர்ந்தெடுக்கவும், பின்னர் நீங்கள் முடித்த பிறகு நிறுத்து தேர்ந்தெடுக்கவும்</string>
     <string name="stop">நிறுத்து</string>
 </resources>

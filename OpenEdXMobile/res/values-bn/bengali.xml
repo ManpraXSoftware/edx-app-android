@@ -463,12 +463,13 @@
 
     <string name="listening">শুনছে</string>
     <string name="search_with_voice">ভয়েস দিয়ে অনুসন্ধান করুন</string>
-    <string name="search_with_voice_dialogue_opened">সংলাপ খোলা হয়েছে, কথা বলতে কথা বলুন বোতাম নির্বাচন করুন</string>
-    <string name="search_with_voice_dialogue_closed">ভয়েস অনুসন্ধান সংলাপ বন্ধ হয়েছে</string>
+    <string name="search_with_voice_dialogue_opened">সংলাপ খোলা হয়েছে, কথা বলতে কথা বলুন বোতাম নির্বাচন করুন, তারপর শেষ করার পর থামান নির্বাচন করুন</string>
+    <string name="search_with_voice_dialogue_closed">ভয়েস দিয়ে অনুসন্ধান সংলাপ বন্ধ হয়েছে</string>
     <string name="search_text">অনুসন্ধান</string>
     <string name="respeak">পুনরায় বলুন</string>
     <string name="no_transcription_found">কোনো ট্রান্সক্রিপশন পাওয়া যায়নি</string>
+    <string name="transcription_not_understood">দুঃখিত, আমি এটি বুঝতে পারিনি। অনুগ্রহ করে আবার কথা বলুন।</string>
     <string name="speak">কথা বলো</string>
-    <string name="select_speak_button_to_speak">বক্তব্য দেওয়ার জন্য স্পিক বাটন নির্বাচন করুন</string>
+    <string name="select_speak_button_to_speak">বক্তব্য দেওয়ার জন্য স্পিক বাটন নির্বাচন করুন, তারপর শেষ করার পর থামাও নির্বাচন করুন</string>
     <string name="stop">থামাও</string>
 </resources>

@@ -836,13 +836,14 @@
 
     <string name="listening">ಕೇಳುತ್ತಿದೆ</string>
     <string name="search_with_voice">ಧ್ವನಿಯೊಂದಿಗೆ ಹುಡುಕಿ</string>
-    <string name="search_with_voice_dialogue_opened">ಸಂವಾದ ತೆರೆಯಲಾಗಿದೆ, ಮಾತನಾಡಲು ಮಾತನಾಡಿ ಬಟನ್ ಆಯ್ಕೆಮಾಡಿ</string>
-    <string name="search_with_voice_dialogue_closed">ವಾಯ್ಸ್ ಹುಡುಕಾಟ ಸಂವಾದ ಮುಚ್ಚಲಾಗಿದೆ</string>
+    <string name="search_with_voice_dialogue_opened">ಸಂವಾದ ತೆರೆಯಲಾಗಿದೆ, ಮಾತನಾಡಲು ಮಾತನಾಡಿ ಬಟನ್ ಆಯ್ಕೆಮಾಡಿ, ನಂತರ ನೀವು ಮುಗಿಸಿದ ನಂತರ ನಿಲ್ಲಿಸಿ ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="search_with_voice_dialogue_closed">ಧ್ವನಿಯೊಂದಿಗೆ ಹುಡುಕಾಟ ಸಂವಾದ ಮುಚ್ಚಲಾಗಿದೆ</string>
     <string name="search_text">ಹುಡುಕಿ</string>
     <string name="respeak">ಮತ್ತೆ ಮಾತನಾಡಿ</string>
     <string name="no_transcription_found">ಯಾವುದೇ ಟ್ರಾನ್ಸ್‌ಕ್ರಿಪ್ಷನ್ ಸಿಗಲಿಲ್ಲ</string>
+    <string name="transcription_not_understood">ಕ್ಷಮಿಸಿ, ನಾನು ಅದನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಮಾತನಾಡಿ.</string>
     <string name="speak">ಮಾತಾಡಿ</string>
-    <string name="select_speak_button_to_speak">ಮಾತನಾಡಲು ಸ್ಪೀಕ್ ಬಟನ್ ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="select_speak_button_to_speak">ಮಾತನಾಡಲು ಸ್ಪೀಕ್ ಬಟನ್ ಆಯ್ಕೆಮಾಡಿ, ನಂತರ ನೀವು ಮುಗಿಸಿದ ನಂತರ ನಿಲ್ಲಿಸು ಆಯ್ಕೆಮಾಡಿ</string>
     <string name="stop">ನಿಲ್ಲಿಸು</string>
 
 

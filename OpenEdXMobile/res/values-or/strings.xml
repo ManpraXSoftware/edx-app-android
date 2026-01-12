@@ -449,12 +449,13 @@
 
     <string name="listening">ଶୁଣୁଛି</string>
     <string name="search_with_voice">ଭଏସ୍‌ରେ ଖୋଜନ୍ତୁ</string>
-    <string name="search_with_voice_dialogue_opened">ସଂଳାପ ଖୋଲା ହୋଇଛି, କହିବାକୁ କହନ୍ତୁ ବଟନ୍ ଚୟନ କରନ୍ତୁ</string>
-    <string name="search_with_voice_dialogue_closed">ଭଏସ୍ ସନ୍ଧାନ ସଂଳାପ ବନ୍ଦ ହୋଇଛି</string>
+    <string name="search_with_voice_dialogue_opened">ସଂଳାପ ଖୋଲା ହୋଇଛି, କହିବାକୁ କହନ୍ତୁ ବଟନ୍ ଚୟନ କରନ୍ତୁ, ତାପରେ ଆପଣ ଶେଷ କରିବା ପରେ ବନ୍ଦ କରନ୍ତୁ ଚୟନ କରନ୍ତୁ</string>
+    <string name="search_with_voice_dialogue_closed">ଭଏସ୍‌ରେ ଖୋଜିବା ସଂଳାପ ବନ୍ଦ ହୋଇଛି</string>
     <string name="search_text">ଖୋଜନ୍ତୁ</string>
     <string name="respeak">ପୁନର୍ବାର କହନ୍ତୁ</string>
     <string name="no_transcription_found">କୌଣସି ଟ୍ରାନ୍ସକ୍ରିପ୍ସନ୍ ମିଳିଲା ନାହିଁ</string>
+    <string name="transcription_not_understood">କ୍ଷମା, ମୁଁ ଏହାକୁ ବୁଝିପାରିଲି ନାହିଁ। ଦୟାକରି ପୁନର୍ବାର କହନ୍ତୁ।</string>
     <string name="speak">କହନ୍ତୁ</string>
-    <string name="select_speak_button_to_speak">କହିବା ପାଇଁ ସ୍ପିକ୍ ବଟନ୍ ଚୟନ କରନ୍ତୁ</string>
+    <string name="select_speak_button_to_speak">କହିବା ପାଇଁ ସ୍ପିକ୍ ବଟନ୍ ଚୟନ କରନ୍ତୁ, ତାପରେ ଶେଷ କରିବା ପରେ ବନ୍ଦ କରନ୍ତୁ ଚୟନ କରନ୍ତୁ</string>
     <string name="stop">ବନ୍ଦ କରନ୍ତୁ</string>
 </resources>
