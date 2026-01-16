@@ -227,6 +227,7 @@
     <string name="downloading_videos">ভিডিও ডাউনলোড করা হচ্ছে...</string>
     <string name="download_starting">ডাউনলোড শুরু হচ্ছে…</string>
     <string name="download_to_device">ডিভাইসে ডাউনলোড করুন</string>
+    <string name="download_to_device_button">ডিভাইসে ডাউনলোড করুন বাটন</string>
     <string name="bulk_download_switch">বাল্ক ভিডিও ডাউনলোড সুইচ.</string>
     <string name="no_connectivity">সংযোগ ত্রুটি</string>
     <string name="login_error">সাইন-ইন ত্রুটি৷</string>

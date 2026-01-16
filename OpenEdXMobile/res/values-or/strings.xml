@@ -215,6 +215,7 @@
     <string name="downloading_videos">ଭିଡିଓଗୁଡିକ ଡାଉନଲୋଡ୍ ହେଉଛି... </string>
     <string name="download_starting">ଡାଉନଲୋଡ୍ ଆରମ୍ଭ ହେଉଛି... </string>
     <string name="download_to_device">ଡିଭାଇସ୍ କୁ ଡାଉନଲୋଡ୍ କରନ୍ତୁ </string>
+    <string name="download_to_device_button">ଡିଭାଇସ୍ କୁ ଡାଉନଲୋଡ୍ କରନ୍ତୁ ବଟନ୍</string>
     <string name="bulk_download_switch">ବଲ୍କ୍ ଭିଡିଓ ଡାଉନଲୋଡ୍ ସୁଇଚ୍। </string>
     <string name="no_connectivity">ସଂଯୋଜନା ତ୍ରୁଟି </string>
     <string name="login_error">ସାଇନ୍-ଇନ୍ ତ୍ରୁଟି </string>

@@ -426,6 +426,7 @@ Se você não recebê-la nos próximos minutos, verifique sua caixa de spam. </s
   <string name="bulk_download_switch" tools:ignore="MissingTranslation">Interruptor de download de vídeos em massa.</string>
   <!--Title for bulk videos download view when in new or partial videos' download state-->
   <string name="download_to_device" tools:ignore="MissingTranslation">Baixar para Dispositivo</string>
+  <string name="download_to_device_button" tools:ignore="MissingTranslation">Botão Baixar para Dispositivo</string>
   <!--Subtitle for bulk videos download view when in new or partial videos' download state-->
   <plurals name="download_total">
     <item quantity="one">{total_videos_count} vídeo, total de {total_videos_size}</item>

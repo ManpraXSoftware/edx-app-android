@@ -167,6 +167,7 @@
     <string name="downloading_videos">ವೀಡಿಯೊಗಳನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...</string>
     <string name="download_starting">ಡೌನ್‌ಲೋಡ್ ಪ್ರಾರಂಭಿಸಲಾಗುತ್ತಿದೆ...</string>
     <string name="download_to_device">ಸಾಧನಕ್ಕೆ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ</string>
+    <string name="download_to_device_button">ಸಾಧನಕ್ಕೆ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ ಬಟನ್</string>
     <string name="bulk_download_switch">ಬೃಹತ್ ವೀಡಿಯೊಗಳ ಡೌನ್‌ಲೋಡ್ ಸ್ವಿಚ್.</string>
     <string name="no_connectivity">ಸಂಪರ್ಕ ದೋಷ</string>
     <string name="login_error">ಸೈನ್-ಇನ್ ದೋಷ</string>
@@ -586,6 +587,7 @@
     <string name="downloading_videos">ವೀಡಿಯೊಗಳನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...</string>
     <string name="download_starting">ಡೌನ್‌ಲೋಡ್ ಪ್ರಾರಂಭಿಸಲಾಗುತ್ತಿದೆ...</string>
     <string name="download_to_device">ಸಾಧನಕ್ಕೆ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ</string>
+    <string name="download_to_device_button">ಸಾಧನಕ್ಕೆ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ ಬಟನ್</string>
     <string name="bulk_download_switch">ಬೃಹತ್ ವೀಡಿಯೊಗಳ ಡೌನ್‌ಲೋಡ್ ಸ್ವಿಚ್.</string>
     <string name="no_connectivity">ಸಂಪರ್ಕ ದೋಷ</string>
     <string name="login_error">ಸೈನ್-ಇನ್ ದೋಷ</string>

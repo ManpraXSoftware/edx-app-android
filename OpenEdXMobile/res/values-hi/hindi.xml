@@ -253,6 +253,7 @@
     <string name="downloading_videos">वीडियो डाउनलोड हो रहे हैं…</string>
     <string name="download_starting">डाउनलोड शुरू करना…</string>
     <string name="download_to_device">डिवाइस पर डाउनलोड करें</string>
+    <string name="download_to_device_button">डिवाइस पर डाउनलोड करें बटन</string>
     <string name="bulk_download_switch">बल्क वीडियो डाउनलोड स्विच।</string>
     <string name="no_connectivity">कनेक्शन त्रुटि</string>
     <string name="login_error">साइन-इन त्रुटि</string>

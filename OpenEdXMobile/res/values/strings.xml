@@ -487,6 +487,7 @@
  <string name="bulk_download_switch">Bulk videos download switch.</string>
  <!-- Title for bulk videos download view when in new or partial videos' download state -->
  <string name="download_to_device">Download to Device</string>
+<string name="download_to_device_button">Download to Device Button</string>
  <!-- Subtitle for bulk videos download view when in new or partial videos' download state -->
  <plurals name="download_total">
   <item quantity="one">{total_videos_count} Video, {total_videos_size} total</item>

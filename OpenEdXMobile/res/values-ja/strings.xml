@@ -381,6 +381,7 @@
   <!--Accessibility label of bulk download switch, when its state is ON and all videos are downloading-->
   <!--Accessibility label of bulk download switch, when its state is ON and all videos have been downloaded-->
   <!--Accessibility label of full bulk download view when videos are being downloaded-->
+  <string name="download_to_device_button" tools:ignore="MissingTranslation">デバイスにダウンロードボタン</string>
   <!--Wifi New Message-->
   <!--Toggle to allow downloads using cellular data-->
   <string name="allow">許可</string>

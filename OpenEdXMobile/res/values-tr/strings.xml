@@ -433,6 +433,7 @@
   <string name="bulk_download_switch" tools:ignore="MissingTranslation">Yığın video indirme düğmesi.</string>
   <!--Title for bulk videos download view when in new or partial videos' download state-->
   <string name="download_to_device" tools:ignore="MissingTranslation">Cihaza İndir</string>
+  <string name="download_to_device_button" tools:ignore="MissingTranslation">Cihaza İndir Düğmesi</string>
   <!--Subtitle for bulk videos download view when in new or partial videos' download state-->
   <plurals name="download_total">
     <item quantity="one">{total_videos_count} Video, toplam {total_videos_size}</item>

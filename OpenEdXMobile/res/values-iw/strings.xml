@@ -435,6 +435,7 @@
   <string name="bulk_download_switch" tools:ignore="MissingTranslation">מתג הורדת קבצי וידאו במקבץ.</string>
   <!--Title for bulk videos download view when in new or partial videos' download state-->
   <string name="download_to_device" tools:ignore="MissingTranslation">הורד למכשיר</string>
+  <string name="download_to_device_button" tools:ignore="MissingTranslation">כפתור הורד למכשיר</string>
   <!--Subtitle for bulk videos download view when in new or partial videos' download state-->
   <plurals name="download_total">
     <item quantity="one">{total_videos_count} קובץ וידאו, {total_videos_size} סך הכל</item>

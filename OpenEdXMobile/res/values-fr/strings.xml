@@ -426,6 +426,7 @@
   <string name="bulk_download_switch" tools:ignore="MissingTranslation">Bouton de téléchargemenet de vidéo en masse</string>
   <!--Title for bulk videos download view when in new or partial videos' download state-->
   <string name="download_to_device" tools:ignore="MissingTranslation">Télécharger sur l\'appareil</string>
+  <string name="download_to_device_button" tools:ignore="MissingTranslation">Bouton Télécharger sur l\'appareil</string>
   <!--Subtitle for bulk videos download view when in new or partial videos' download state-->
   <plurals name="download_total">
     <item quantity="one">{total_videos_count} vidéo, {total_videos_size} au total</item>

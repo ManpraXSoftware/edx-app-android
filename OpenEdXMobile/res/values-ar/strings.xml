@@ -441,6 +441,7 @@
   <string name="bulk_download_switch" tools:ignore="MissingTranslation">مفتاح تبديل التحميل المجمّع للفيديوهات.</string>
   <!--Title for bulk videos download view when in new or partial videos' download state-->
   <string name="download_to_device" tools:ignore="MissingTranslation">تحميل في الجهاز</string>
+  <string name="download_to_device_button" tools:ignore="MissingTranslation">زر التحميل إلى الجهاز</string>
   <!--Subtitle for bulk videos download view when in new or partial videos' download state-->
   <plurals name="download_total">
     <item quantity="zero">{total_videos_count} فيديو، {total_videos_size} إجمالاً</item>

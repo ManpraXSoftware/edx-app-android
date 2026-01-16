@@ -422,6 +422,7 @@ Nếu bạn vẫn chưa nhận được sau ít phút, hãy kiểm tra thư mụ
   <string name="bulk_download_switch" tools:ignore="MissingTranslation">Chuyển đổi video số lượng lớn.</string>
   <!--Title for bulk videos download view when in new or partial videos' download state-->
   <string name="download_to_device" tools:ignore="MissingTranslation">Tải về thiết bị</string>
+  <string name="download_to_device_button" tools:ignore="MissingTranslation">Nút Tải về thiết bị</string>
   <!--Subtitle for bulk videos download view when in new or partial videos' download state-->
   <plurals name="download_total">
     <item quantity="other">{total_videos_count} Video, {total_videos_size} tổng cộng</item>

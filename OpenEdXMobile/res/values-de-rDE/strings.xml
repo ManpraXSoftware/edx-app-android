@@ -426,6 +426,7 @@ Kontrollieren Sie auch Ihren Spam-Ordner.</string>
   <string name="bulk_download_switch" tools:ignore="MissingTranslation">Wechseln zum Massendownload von Videos</string>
   <!--Title for bulk videos download view when in new or partial videos' download state-->
   <string name="download_to_device" tools:ignore="MissingTranslation">Auf mein Endgerät laden</string>
+  <string name="download_to_device_button" tools:ignore="MissingTranslation">Auf Gerät laden Schaltfläche</string>
   <!--Subtitle for bulk videos download view when in new or partial videos' download state-->
   <plurals name="download_total">
     <item quantity="one">{total_videos_count} Video, {total_videos_size} gesamt</item>

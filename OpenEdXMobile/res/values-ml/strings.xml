@@ -214,6 +214,7 @@
     <string name="downloading_videos">വീഡിയോകൾ ഡൗൺലോഡ് ചെയ്യുന്നു...</string>
     <string name="download_starting">ഡൗൺലോഡ് ആരംഭിക്കുന്നു...</string>
     <string name="download_to_device">ഉപകരണത്തിലേക്ക് ഡൗൺലോഡ് ചെയ്യുക</string>
+    <string name="download_to_device_button">ഉപകരണത്തിലേക്ക് ഡൗൺലോഡ് ചെയ്യുക ബട്ടൺ</string>
     <string name="bulk_download_switch">വീഡിയോകൾ കൂട്ടമായി  ഡൗൺലോഡ് ചെയ്യാനുള്ള  സ്വിച്ച്.</string>
     <string name="no_connectivity">കണക്ഷൻ തകരാറ്</string>
     <string name="login_error">സൈൻ ഇൻ പിശക്</string>

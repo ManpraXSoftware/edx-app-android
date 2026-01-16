@@ -249,6 +249,7 @@
     <string name="downloading_videos">வீடியோவைப் பதிவிறக்குகிறது…</string>
     <string name="download_starting">பதிவிறக்கம் தொடங்குகிறது…</string>
     <string name="download_to_device">சாதனத்தில் பதிவிறக்கவும்</string>
+    <string name="download_to_device_button">சாதனத்தில் பதிவிறக்கவும் பொத்தான்</string>
     <string name="bulk_download_switch">மொத்த வீடியோக்கள் பதிவிறக்கம் மாறவும்.</string>
     <string name="no_connectivity">இணைப்புப் பிழை</string>
     <string name="login_error">உள்நுழைவு பிழை</string>

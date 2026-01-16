@@ -426,6 +426,7 @@ Si no lo recibe en algunos minutos, asegúrese de revisar su carpeta de spam.</s
   <string name="bulk_download_switch" tools:ignore="MissingTranslation">Activación de descarga de videos masiva.</string>
   <!--Title for bulk videos download view when in new or partial videos' download state-->
   <string name="download_to_device" tools:ignore="MissingTranslation">Descargar a Dispositivo </string>
+  <string name="download_to_device_button" tools:ignore="MissingTranslation">Botón Descargar a Dispositivo</string>
   <!--Subtitle for bulk videos download view when in new or partial videos' download state-->
   <plurals name="download_total">
     <item quantity="one">{total_videos_count} Video, {total_videos_size} en total</item>

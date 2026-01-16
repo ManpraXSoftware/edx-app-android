@@ -422,6 +422,7 @@
   <string name="bulk_download_switch" tools:ignore="MissingTranslation">批量视频下载按钮。</string>
   <!--Title for bulk videos download view when in new or partial videos' download state-->
   <string name="download_to_device" tools:ignore="MissingTranslation">下载至设备中</string>
+  <string name="download_to_device_button" tools:ignore="MissingTranslation">下载至设备按钮</string>
   <!--Subtitle for bulk videos download view when in new or partial videos' download state-->
   <plurals name="download_total">
     <item quantity="other">{total_videos_count}个视频，总共{total_videos_size}</item>
