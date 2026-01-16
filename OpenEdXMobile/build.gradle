@@ -389,8 +389,8 @@ android {
         minSdkVersion MIN_SDK_VERSION
         targetSdkVersion TARGET_SDK_VERSION
 
-        versionCode 7000015/*getVersionCode()*/
-        versionName "7.1.0"/*getVersionName()*/
+        versionCode 7000016/*getVersionCode()*/
+        versionName "7.1.1"/*getVersionName()*/
         archivesBaseName = "Subodha $versionCode $versionName"
 
         buildConfigField "long", "BUILD_TIME", System.currentTimeMillis() + "L"
