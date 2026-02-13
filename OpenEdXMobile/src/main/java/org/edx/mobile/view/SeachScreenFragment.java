@@ -785,7 +785,8 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
 
             @Override
             protected void onResponse(@NonNull TranslatedAudioResponse response) {
-
+                // Enable Speak button when recording stops
+                neutralButton.setEnabled(true);
                 if (response!=null) {
                     if(response.getText()!=null && !response.getText().trim().isEmpty()) {
                         currentAudioTranscription = response.getText().trim();
@@ -824,6 +825,8 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                 if(descriptionView!=null)
                     descriptionView.setText(getString(R.string.transcription_not_understood));
                 // Update button states: both disabled (transcription failed, not recording)
+                // Enable Speak button in error scenarios so user can try again
+                neutralButton.setEnabled(true);
                 moveFocusToSpeakButton();
             }
         });
@@ -1004,11 +1007,13 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         // Apply color selector for enabled/disabled states (darker grey when disabled)
         positiveButton.setTextColor(ContextCompat.getColorStateList(requireActivity(), R.color.voice_search_button_selector));
         negativeButton.setTextColor(ContextCompat.getColorStateList(requireActivity(), R.color.voice_search_button_selector));
+        neutralButton.setTextColor(ContextCompat.getColorStateList(requireActivity(), R.color.voice_search_button_selector));
+
         // Speak button always uses grey color (not state-based) to avoid showing filled color when focused
-        neutralButton.setTextColor(ContextCompat.getColor(requireActivity(), R.color.edx_brand_primary_accent));
+        //neutralButton.setTextColor(ContextCompat.getColor(requireActivity(), R.color.edx_brand_primary_accent));
         // Remove background to prevent focus highlight/filled grey color
-        neutralButton.setBackground(null);
-        neutralButton.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+        //neutralButton.setBackground(null);
+       // neutralButton.setBackgroundColor(android.graphics.Color.TRANSPARENT);
 
         // Set initial button states: both disabled (no transcription, not recording)
         updateButtonStates(false, false);
@@ -1043,6 +1048,8 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                 descriptionView.setText(getString(R.string.listening));
                     stopRecording();
                     startRecording();
+                    // Disable Speak button when recording starts
+                    neutralButton.setEnabled(false);
                     // Update button states: Stop enabled (recording), Search disabled (no transcription yet)
                     updateButtonStates(false, true);
                     //negativeButton.setText("Stop");
