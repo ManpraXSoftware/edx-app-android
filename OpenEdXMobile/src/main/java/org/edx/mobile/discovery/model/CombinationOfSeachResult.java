@@ -25,9 +25,18 @@ public class CombinationOfSeachResult {
         this.courseName = courseName;
     }
 
+    public String getUnitName() {
+        return unitName;
+    }
+
+    public void setUnitName(String unitName) {
+        this.unitName = unitName;
+    }
+
     private String tagName;
     private String programName;
     private String courseName;
+    private String unitName;
     private String language;
 
     private String unit_id;

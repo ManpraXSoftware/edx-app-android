@@ -428,6 +428,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                                         for (String tag : searchTags.getTags()) {
                                             CombinationOfSeachResult combinationOfSeachResult = new CombinationOfSeachResult();
                                             combinationOfSeachResult.setCourseName(searchResultList.getCourseName());
+                                            combinationOfSeachResult.setUnitName(searchResultList.getUnitName());
                                             combinationOfSeachResult.setProgramName(searchTags.getProgramName());
                                             combinationOfSeachResult.setProgram_id(searchTags.getProgramId());
                                             combinationOfSeachResult.setTagName(tag);

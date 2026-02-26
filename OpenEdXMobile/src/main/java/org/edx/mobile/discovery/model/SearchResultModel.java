@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class SearchResultModel {
         private String course_id;
         private String course_name;
+        private String unit_name;
         private String course_key;
         private String course_lang;
         //private List<String> program_name;
@@ -28,6 +29,14 @@ public class SearchResultModel {
 
         public void setCourseName(String course_name) {
             this.course_name = course_name;
+        }
+
+        public String getUnitName() {
+            return unit_name;
+        }
+
+        public void setUnitName(String unit_name) {
+            this.unit_name = unit_name;
         }
 
         public String getCourseKey() {

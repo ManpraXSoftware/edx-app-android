@@ -49,6 +49,7 @@ public class SearchListAdapter extends RecyclerView.Adapter<SearchListAdapter.Se
         String sourceString = "<b>" + model.getCourseName() + "</b> ";
         holder.itemBinding.courseName.setText(Html.fromHtml(sourceString));
         holder.itemBinding.courseLanguage.setText(context.getString(R.string.course_language)+" : "+LocaleManager.getLanguageResourceName(context, model.getLanguage()));
+        holder.itemBinding.courseUnit.setText(model.getUnitName());
         holder.itemBinding.programName.setText(model.getProgramName());
         holder.itemBinding.tagName.setText(model.getTagName());
         holder.itemBinding.searchItem.setOnClickListener(new View.OnClickListener() {
