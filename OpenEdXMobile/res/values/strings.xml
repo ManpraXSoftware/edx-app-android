@@ -846,10 +846,10 @@
     <string name="user_intent_topic_found">Number of search %1$s topic Found</string>
     <string name="user_intent_program_found">Number of search %1$s program Found</string>
     <string name="user_intent_course_found">Number of search %1$s course found</string>
-    <string name="message_voice_text">Now you can search your program through voice command and navigate from any page to Whatsapp discussion group.\nTap on the button to activate it.</string>
+    <string name="message_voice_text">You can now use voice commands to find your program, join the WhatsApp group from any page, and ask questions with Subodha AI. Just tap the button to start!</string>
     <string name="title_voice_text"> New features added.</string>
     <string name="alert">Alert</string>
-    <string name="dailog_feature">Alert  New features added. Now you can search your program through voice command and navigate from any page to Whatsapp discussion group.\nTap on the button to activate it.</string>
+    <string name="dailog_feature">Alert  New features added. You can now use voice commands to find your program, join the WhatsApp group from any page, and ask questions with Subodha AI. Just tap the button to start!</string>
     <string name="view_more_notification">View More Notification</string>
     <string name="view_previous_notification">View Previous Notifications</string>
     <string name="notification_button">Notification Button</string>
@@ -860,6 +860,7 @@
     <string name="subodha_ai">Subodha AI</string>
     <string name="subodha_ai_floating_action_button">Subodha AI floating action button</string>
     <string name="how_may_i_assist_you">How may I assist you?</string>
+    <string name="subodha_ai_floating_action_button_how_may_i_assist_you"> How may I assist you? Subodha AI button</string>
     <string name="type_a_message">Type a message</string>
     <string name="static_text_chatbot1">Welcome to Subodha AI</string>
     <string name="static_text_chatbot2">How can I assist you today? Please ask your questions in %1$s.</string>
@@ -869,5 +870,8 @@
     <string name="data_is_loading_please_wait">data is loading please wait</string>
     <string name="listen_off">Tap to Turn Off Listen </string>
     <string name="something_went_wrong">Oops! Please ask your question again.</string>
+
+    <string name="course">Course</string>
+
 
 </resources>

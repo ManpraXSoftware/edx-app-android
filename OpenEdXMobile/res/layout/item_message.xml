@@ -5,6 +5,7 @@
     android:importantForAccessibility="no"
     android:contentDescription="message"
     android:focusable="false"
+    android:orientation="vertical"
     android:focusableInTouchMode="false"
     android:id="@+id/linearLayoutMessageOutter"
     >
@@ -123,7 +124,10 @@
         android:visibility="gone"
         />
 
-<!--    <org.edx.mobile.util.AccessibleWebViewScrollView-->
+
+
+
+    <!--    <org.edx.mobile.util.AccessibleWebViewScrollView-->
 <!--        android:id="@+id/item_webview"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content">-->
@@ -143,4 +147,12 @@
 <!--    </org.edx.mobile.util.AccessibleWebViewScrollView>-->
 
 </LinearLayout>
+    <LinearLayout
+        android:id="@+id/gridContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"
+        />
 </LinearLayout>

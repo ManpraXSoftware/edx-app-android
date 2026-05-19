@@ -43,7 +43,7 @@ public class Config {
     /* Individual configuration keys */
     private static final String API_HOST_URL = "API_HOST_URL";
 
-    private static final String SUBODHA_AI_BASE_URL="SUBODHA_AI_BASE_URL";
+    private static final String AI_BASE_URL="AI_BASE_URL";
     private static final String ENVIRONMENT_DISPLAY_NAME = "ENVIRONMENT_DISPLAY_NAME";
     private static final String PLATFORM_NAME = "PLATFORM_NAME";
     private static final String PLATFORM_DESTINATION_NAME = "PLATFORM_DESTINATION_NAME";
@@ -712,8 +712,8 @@ public class Config {
         return getString(API_HOST_URL);
     }
 
-    public String getSubodhaAiBaseUrl() {
-        return getString(SUBODHA_AI_BASE_URL);
+    public String getAiBaseUrl() {
+        return getString(AI_BASE_URL);
     }
 
     // User facing name of the platform like "edX"

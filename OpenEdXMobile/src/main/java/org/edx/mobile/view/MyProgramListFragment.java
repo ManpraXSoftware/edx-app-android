@@ -180,44 +180,7 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                 onExploreButtonClick.onClick();
             }
         });
-        if(getActivity()!=null){
-            floatingActionButton = getActivity().findViewById(R.id.chatbot_button);
-            if(floatingActionButton!=null) {
-                floatingActionButton.setVisibility(View.VISIBLE);
-                floatingActionButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(getContext()!=null) {
-                            Intent intent = new Intent(getContext(), ChatbotActivity.class);
-                            startActivity(intent);
-                        }
 
-                    }
-                });
-            }
-
-            ObjectAnimator flipAnim = ObjectAnimator.ofFloat(floatingActionButton, "rotationY", 0f, 360f);
-            flipAnim.setDuration(2500);
-            flipAnim.setInterpolator(new android.view.animation.DecelerateInterpolator());
-            flipAnim.setRepeatCount(0);
-            flipAnim.setRepeatMode(ObjectAnimator.RESTART);
-
-            // Start the animation
-            flipAnim.start();
-
-
-            TextView textView = getActivity().findViewById(R.id.chatbot_text);
-            textView.setVisibility(View.VISIBLE);
-            ObjectAnimator bounceAnim = ObjectAnimator.ofFloat(textView, "translationY", 0, -40, 0);
-            bounceAnim.setDuration(2500);
-            bounceAnim.setInterpolator(new BounceInterpolator());
-            bounceAnim.setRepeatCount(0);
-            bounceAnim.setRepeatMode(ObjectAnimator.RESTART);
-
-            // Start the animation
-            bounceAnim.start();
-
-        }
         binding.resumeCourseContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -289,9 +252,77 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
         if(checkDialogBox()){
             showDialog();
         }
+        aiViewFunctionality();
        // getNotification();
 
         return binding.getRoot();
+    }
+    public void aiViewFunctionality(){
+        if(getActivity()!=null){
+            floatingActionButton = getActivity().findViewById(R.id.chatbot_button);
+            if(floatingActionButton!=null) {
+                floatingActionButton.setVisibility(View.VISIBLE);
+                floatingActionButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(getContext()!=null) {
+                            Intent intent = new Intent(getContext(), ChatbotActivity.class);
+                            startActivity(intent);
+                        }
+
+                    }
+                });
+            }
+
+            LinearLayout aiButtonLinearlayout = getActivity().findViewById(R.id.ai_button_linearlayout);
+            if(aiButtonLinearlayout!=null){
+                aiButtonLinearlayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(getContext()!=null) {
+                            Intent intent = new Intent(getContext(), ChatbotActivity.class);
+                            startActivity(intent);
+                        }
+
+                    }
+                });
+            }
+            // Delay for 1.5 seconds (1500 milliseconds) before focusing for accessibility
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (aiButtonLinearlayout != null) {
+                        // Request focus for the layout
+                        aiButtonLinearlayout.requestFocus();
+
+                        // Send an accessibility event to announce focus for accessibility services
+                        aiButtonLinearlayout.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+                    }
+                }
+            }, 1500); // 1.5 seconds delay
+
+            ObjectAnimator flipAnim = ObjectAnimator.ofFloat(floatingActionButton, "rotationY", 0f, 360f);
+            flipAnim.setDuration(2500);
+            flipAnim.setInterpolator(new android.view.animation.DecelerateInterpolator());
+            flipAnim.setRepeatCount(0);
+            flipAnim.setRepeatMode(ObjectAnimator.RESTART);
+
+            // Start the animation
+            flipAnim.start();
+
+
+            TextView textView = getActivity().findViewById(R.id.chatbot_text);
+            textView.setVisibility(View.VISIBLE);
+            ObjectAnimator bounceAnim = ObjectAnimator.ofFloat(textView, "translationY", 0, -40, 0);
+            bounceAnim.setDuration(2500);
+            bounceAnim.setInterpolator(new BounceInterpolator());
+            bounceAnim.setRepeatCount(0);
+            bounceAnim.setRepeatMode(ObjectAnimator.RESTART);
+
+            // Start the animation
+            bounceAnim.start();
+
+        }
     }
 
     private boolean checkDialogBox() {
@@ -579,8 +610,9 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
         discoveryTask.execute();
     }
 
+
     private void setFocusOnMic(){
-       if (menuItem != null) {
+        if (menuItem != null) {
 
             if (menuItemView != null) {
                 menuItemView.findViewById(R.id.action_view_icon).setVisibility(View.VISIBLE);
@@ -593,12 +625,12 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                         onMicButtonClick();
                     }
                 });
+//
+//                menuItemView.findViewById(R.id.action_view_icon).requestFocus();
+//                menuItemView.findViewById(R.id.action_view_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_HOVER_ENTER);
 
-                menuItemView.findViewById(R.id.action_view_icon).requestFocus();
-                 menuItemView.findViewById(R.id.action_view_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_HOVER_ENTER);
-
-     //           menuItemView.findViewById(R.id.action_view_icon).requestFocus();
-  //              menuItemView.findViewById(R.id.action_view_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+                //           menuItemView.findViewById(R.id.action_view_icon).requestFocus();
+                //              menuItemView.findViewById(R.id.action_view_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
             } else {
 
                 Log.e(TAG, "Action view for menu item is null");
@@ -610,6 +642,38 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
         }
 
     }
+
+//    private void setFocusOnMic(){
+//       if (menuItem != null) {
+//
+//            if (menuItemView != null) {
+//                menuItemView.findViewById(R.id.action_view_icon).setVisibility(View.VISIBLE);
+//                menuItemView.findViewById(R.id.action_view_icon).setFocusable(true);
+//                menuItemView.findViewById(R.id.action_view_icon).setFocusableInTouchMode(true);
+//                menuItemView.findViewById(R.id.action_view_icon).setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
+//                menuItemView.findViewById(R.id.action_view_icon).setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        onMicButtonClick();
+//                    }
+//                });
+//
+//                menuItemView.findViewById(R.id.action_view_icon).requestFocus();
+//                 menuItemView.findViewById(R.id.action_view_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_HOVER_ENTER);
+//
+//     //           menuItemView.findViewById(R.id.action_view_icon).requestFocus();
+//  //              menuItemView.findViewById(R.id.action_view_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+//            } else {
+//
+//                Log.e(TAG, "Action view for menu item is null");
+//            }
+//
+//        } else {
+//
+//            Log.e(TAG, "Menu item not found");
+//        }
+//
+//    }
 
 
     @Override
@@ -976,14 +1040,49 @@ public class MyProgramListFragment extends OfflineSupportBaseFragment
                 alert.getWindow().getDecorView().setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS);
                 alert.dismiss();
 
-                Runnable task = new Runnable() {
+
+                       // setFocusOnMic();
+                        LinearLayout aiButtonLinearlayout = getActivity().findViewById(R.id.ai_button_linearlayout);
+                        if(aiButtonLinearlayout!=null) {
+                            aiButtonLinearlayout.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    if (getContext() != null) {
+                                        Intent intent = new Intent(getContext(), ChatbotActivity.class);
+                                        startActivity(intent);
+                                    }
+
+                                }
+                            });
+                        }
+                        else{
+                            System.out.println(" aiButtonLinearlayout is null init");
+                        }
+                aiButtonLinearlayout.sendAccessibilityEvent(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
+                aiButtonLinearlayout.setEnabled(true);
+                aiButtonLinearlayout.requestFocus();
+
+                // Send an accessibility event to announce focus for accessibility services
+                aiButtonLinearlayout.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+                new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        setFocusOnMic();
+                        if (aiButtonLinearlayout != null) {
+                            // Request focus for the layout
+                            aiButtonLinearlayout.requestFocus();
+
+                            // Send an accessibility event to announce focus for accessibility services
+                            aiButtonLinearlayout.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+                        }
+                        else {
+                            System.out.println(" aiButtonLinearlayout is null init");
+                        }
                     }
-                };
-                final ScheduledExecutorService worker = Executors.newSingleThreadScheduledExecutor();
-                worker.schedule(task, 1, TimeUnit.SECONDS);
+                }, 1000);
+
+
+
+
             }
         });
 

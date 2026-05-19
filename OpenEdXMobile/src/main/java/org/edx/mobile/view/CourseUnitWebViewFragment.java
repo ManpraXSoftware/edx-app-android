@@ -105,7 +105,7 @@ public class CourseUnitWebViewFragment extends CourseUnitFragment {
             selectedLanguage = LocaleManager.getLanguagePref(getActivity());
 
 
-            if(selectedLanguage.equals("hi")||selectedLanguage.equals("ta")){
+            if(selectedLanguage.equals("hi")||selectedLanguage.equals("ta")||selectedLanguage.equals("ml")){
                 selectedLanguage = selectedLanguage + "-IN";
             }
             if(selectedLanguage.equals("en")){

@@ -460,6 +460,12 @@
     <string name="data_is_loading_please_wait">তথ্য লোড হচ্ছে, দয়া করে অপেক্ষা করুন</string>
     <string name="listen_off">শোনার বন্ধ করতে ট্যাপ করুন</string>
     <string name="something_went_wrong">অপস! দয়া করে আপনার প্রশ্নটি আবার জিজ্ঞাসা করুন।</string>
+        <string name="subodha_ai_floating_action_button_how_may_i_assist_you">আমি আপনাকে কীভাবে সাহায্য করতে পারি? সুবোধা AI বোতাম</string>
+    <string name="course">কোর্স</string>
 
+    <!--    <string name="dailog_feature">সতর্কতা নতুন বৈশিষ্ট্য যোগ করা হয়েছে। আপনি এখন আপনার প্রোগ্রাম খুঁজে পেতে ভয়েস কমান্ড ব্যবহার করতে পারেন, যেকোনো পৃষ্ঠা থেকে হোয়াটসঅ্যাপ গ্রুপে যোগ দিতে পারেন এবং সুবোধা AI-এর সাথে প্রশ্ন জিজ্ঞাসা করতে পারেন। শুরু করতে শুধু বোতামটি ট্যাপ করুন!</string>-->
 
+<!--    <string name="message_voice_text">আপনি এখন আপনার প্রোগ্রাম খুঁজে পেতে ভয়েস কমান্ড ব্যবহার করতে পারেন, যেকোনো পৃষ্ঠা থেকে হোয়াটসঅ্যাপ গ্রুপে যোগ দিতে পারেন এবং সুবোধা AI-এর সাথে প্রশ্ন জিজ্ঞাসা করতে পারেন। শুরু করতে শুধু বোতামটি ট্যাপ করুন!</string>-->
+<!--    <string name="title_voice_text">নতুন বৈশিষ্ট্য যোগ করা হয়েছে।</string>-->
+<!--    <string name="alert">সতর্কতা</string>-->
 </resources>

@@ -16,11 +16,34 @@ import java.util.concurrent.TimeUnit;
 public class ApiNewLmsClient {
 
     private static Retrofit retrofit;
-    private final String apiHostURL;
+
+    private String apiHostURL;
 
     @Inject
     public ApiNewLmsClient(String apiHostURL) {
         this.apiHostURL = apiHostURL;
+    }
+    private static Retrofit chatbotRetrofit;
+    private String chatbotBaseUrl;
+    private String token;
+
+    @Inject
+    public ApiNewLmsClient(String chatbotBaseUrl, String token) {
+        this.chatbotBaseUrl = chatbotBaseUrl;
+        this.token=token;
+    }
+
+    public Retrofit getChatbotClient() {
+        String clientBase = chatbotBaseUrl;
+        if (chatbotRetrofit == null) {
+            OkHttpClient httpClient = buildHttpClient();
+            chatbotRetrofit = new Retrofit.Builder()
+                    .baseUrl(clientBase)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(httpClient)
+                    .build();
+        }
+        return chatbotRetrofit;
     }
 
     public Retrofit getClient() {
@@ -81,5 +104,41 @@ public class ApiNewLmsClient {
                     .build();
         }
         return retrofit;
+    }
+
+    private OkHttpClient buildHttpClient() {
+        OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
+        httpClientBuilder.connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS);
+
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        httpClientBuilder.addInterceptor(loggingInterceptor);
+
+        // SSL bypass for testing purposes
+        disableSSLVerification(httpClientBuilder);
+
+        return httpClientBuilder.build();
+    }
+
+    private void disableSSLVerification(OkHttpClient.Builder httpClientBuilder) {
+        try {
+            final TrustManager[] trustAllCerts = new TrustManager[]{
+                    new X509TrustManager() {
+                        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {}
+                        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {}
+                        public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[]{}; }
+                    }
+            };
+
+            SSLContext sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+            SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+            httpClientBuilder.sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0]);
+            httpClientBuilder.hostnameVerifier((hostname, session) -> true);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

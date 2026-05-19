@@ -1466,7 +1466,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
         private void taskCompleted() {
             int completed = completedTasks.incrementAndGet();
             if (completed == totalTasks) {
-                Log.d("YYYYYYYYYYYYYYYYYYYYYYYYYYY ", "COmplete both task");
+                Log.d("taskCompleted ", "Complete both task");
                 // All tasks completed, perform any additional actions here
                 // For example, stop shimmer effects or update UI
             }
@@ -1502,7 +1502,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
         private void taskCompleted() {
             int completed = completedTasks.incrementAndGet();
             if (completed == totalTasks) {
-                Log.d("uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu", "Completed both tasks");
+                Log.d("CheckEnrollResponseTask taskCompleted", "Completed both tasks");
                 // All tasks completed, perform any additional actions here
                 // For example, stop shimmer effects or update UI
             }

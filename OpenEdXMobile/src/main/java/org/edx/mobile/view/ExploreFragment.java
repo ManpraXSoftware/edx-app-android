@@ -1,13 +1,11 @@
 package org.edx.mobile.view;
 
 import android.animation.ObjectAnimator;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
-import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -16,10 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
-import android.view.accessibility.AccessibilityManager;
 import android.view.animation.BounceInterpolator;
-import android.widget.ActionMenuView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,7 +24,6 @@ import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.inject.Inject;
 
 import org.edx.mobile.Chatbot.IntentClassifier.IntentSubjectClassifier;
@@ -48,9 +44,7 @@ import org.edx.mobile.discovery.DiscoveryCallback;
 import org.edx.mobile.discovery.model.DiscoverySubject;
 import org.edx.mobile.discovery.model.DiscoverySubjectResult;
 import org.edx.mobile.discovery.model.OrganisationList;
-import org.edx.mobile.discovery.model.OrganisationModel;
 import org.edx.mobile.discovery.model.ResponseError;
-import org.edx.mobile.discovery.model.TagTermResult;
 import org.edx.mobile.discovery.net.course.CourseApi;
 import org.edx.mobile.http.HttpStatus;
 import org.edx.mobile.http.HttpStatusException;
@@ -64,7 +58,6 @@ import org.edx.mobile.view.adapters.NewSubjectAdapter;
 import org.edx.mobile.view.adapters.OnRecyclerItemClickListener;
 import org.edx.mobile.view.adapters.OrganisationAdapter;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,11 +66,6 @@ import java.util.Map;
 import retrofit2.Call;
 
 import static android.app.Activity.RESULT_OK;
-import static org.edx.mobile.view.ProgramActivity.ORGANISATION_SCREEN_FLAG;
-import static org.edx.mobile.view.ProgramActivity.PROGRAM;
-import static org.edx.mobile.view.ProgramActivity.PROGRAM_CONVERTED;
-import static org.edx.mobile.view.ProgramActivity.PROGRAM_UUID;
-import static org.edx.mobile.view.ProgramActivity.TAGSCREENFLAG;
 import static org.edx.mobile.view.TagsFragmentActivity.COLOR_CODE;
 import static org.edx.mobile.view.TagsFragmentActivity.SUBJECT;
 import static org.edx.mobile.view.TagsFragmentActivity.UID;
@@ -151,43 +139,12 @@ public class ExploreFragment extends BaseFragment implements OnRecyclerItemClick
         soundPool = new SoundPool.Builder().build();
         soundId = soundPool.load(getContext(), R.raw.beep_sound_2, 1);
 
-        if(getActivity()!=null){
-            floatingActionButton = getActivity().findViewById(R.id.chatbot_button);
-            if(floatingActionButton!=null) {
-                floatingActionButton.setVisibility(View.VISIBLE);
-                floatingActionButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(getActivity(), ChatbotActivity.class);
-                        startActivity(intent);
-
-                    }
-                });
-            }
-            ObjectAnimator flipAnim = ObjectAnimator.ofFloat(floatingActionButton, "rotationY", 0f, 360f);
-            flipAnim.setDuration(2500);
-            flipAnim.setInterpolator(new android.view.animation.DecelerateInterpolator());
-            flipAnim.setRepeatCount(0);
-            flipAnim.setRepeatMode(ObjectAnimator.RESTART);
-            flipAnim.start();
-
-            TextView textView = getActivity().findViewById(R.id.chatbot_text);
-            textView.setVisibility(View.VISIBLE);
-
-            // Create the bounce animation with a slower duration
-            ObjectAnimator bounceAnim = ObjectAnimator.ofFloat(textView, "translationY", 0, -40, 0);
-            bounceAnim.setDuration(2500); // Increase the duration to make it smoother
-            bounceAnim.setInterpolator(new BounceInterpolator());
-            bounceAnim.setRepeatCount(0); // Runs three times (original + 2 repeats)
-            bounceAnim.setRepeatMode(ObjectAnimator.RESTART);
-
-            // Start the animation
-            bounceAnim.start();
-
-        }
+        aiViewFunctionality();
 
         return binding.getRoot();
     }
+
+
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
 
@@ -213,6 +170,75 @@ public class ExploreFragment extends BaseFragment implements OnRecyclerItemClick
         }
 
     }
+
+    public void aiViewFunctionality(){
+        if(getActivity()!=null){
+            floatingActionButton = getActivity().findViewById(R.id.chatbot_button);
+            if(floatingActionButton!=null) {
+                floatingActionButton.setVisibility(View.VISIBLE);
+                floatingActionButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(getContext()!=null) {
+                            Intent intent = new Intent(getContext(), ChatbotActivity.class);
+                            startActivity(intent);
+                        }
+
+                    }
+                });
+            }
+
+            LinearLayout aiButtonLinearlayout = getActivity().findViewById(R.id.ai_button_linearlayout);
+            if(aiButtonLinearlayout!=null){
+                aiButtonLinearlayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(getContext()!=null) {
+                            Intent intent = new Intent(getContext(), ChatbotActivity.class);
+                            startActivity(intent);
+                        }
+
+                    }
+                });
+            }
+            // Delay for 1.5 seconds (1500 milliseconds) before focusing for accessibility
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (aiButtonLinearlayout != null) {
+                        // Request focus for the layout
+                        aiButtonLinearlayout.requestFocus();
+
+                        // Send an accessibility event to announce focus for accessibility services
+                        aiButtonLinearlayout.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+                    }
+                }
+            }, 1500); // 1.5 seconds delay
+
+            ObjectAnimator flipAnim = ObjectAnimator.ofFloat(floatingActionButton, "rotationY", 0f, 360f);
+            flipAnim.setDuration(2500);
+            flipAnim.setInterpolator(new android.view.animation.DecelerateInterpolator());
+            flipAnim.setRepeatCount(0);
+            flipAnim.setRepeatMode(ObjectAnimator.RESTART);
+
+            // Start the animation
+            flipAnim.start();
+
+
+            TextView textView = getActivity().findViewById(R.id.chatbot_text);
+            textView.setVisibility(View.VISIBLE);
+            ObjectAnimator bounceAnim = ObjectAnimator.ofFloat(textView, "translationY", 0, -40, 0);
+            bounceAnim.setDuration(2500);
+            bounceAnim.setInterpolator(new BounceInterpolator());
+            bounceAnim.setRepeatCount(0);
+            bounceAnim.setRepeatMode(ObjectAnimator.RESTART);
+
+            // Start the animation
+            bounceAnim.start();
+
+        }
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -347,8 +373,8 @@ public class ExploreFragment extends BaseFragment implements OnRecyclerItemClick
                 menuItemView.findViewById(R.id.action_view_icon).setVisibility(View.VISIBLE);
                 menuItemView.findViewById(R.id.action_view_icon).setFocusable(true);
                 menuItemView.findViewById(R.id.action_view_icon).setFocusableInTouchMode(true);
-                menuItemView.findViewById(R.id.action_view_icon).requestFocus();
-                menuItemView.findViewById(R.id.action_view_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_HOVER_ENTER);
+               // menuItemView.findViewById(R.id.action_view_icon).requestFocus();
+               //data menuItemView.findViewById(R.id.action_view_icon).sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_HOVER_ENTER);
                 menuItemView.findViewById(R.id.action_view_icon).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

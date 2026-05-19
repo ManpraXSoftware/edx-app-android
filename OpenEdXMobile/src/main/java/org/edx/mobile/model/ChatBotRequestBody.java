@@ -1,8 +1,8 @@
 package org.edx.mobile.model;
 
 public class ChatBotRequestBody {
-    private String text;
-    private String lang;
+        private String text;
+        private String lang;
 
     public ChatBotRequestBody(String field,String lang) {
         this.text = field;

@@ -8,6 +8,7 @@
     android:theme="@style/AppTheme.NoActionBar"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!-- AppBar and Toolbar -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
@@ -26,6 +27,7 @@
             app:theme="@style/ThemeOverlay.AppCompat.Dark"
             app:titleTextColor="@color/white">
 
+            <!-- Toolbar Content -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -60,37 +62,48 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/back_arrow"
-                android:layout_marginStart="50dp"
-                android:layout_centerVertical="true"
-                android:text="@string/subodha_ai"
+                    android:layout_marginStart="50dp"
+                    android:layout_centerVertical="true"
+                    android:text="@string/subodha_ai"
                     android:textStyle="bold"
-                android:textColor="@color/grey_text"
-                android:textSize="20sp" />
+                    android:textColor="@color/grey_text"
+                    android:textSize="20sp" />
             </RelativeLayout>
 
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-
+    <!-- Main Fragment and RecyclerView -->
     <FrameLayout
         android:id="@+id/main_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/input_layout"
         android:layout_below="@id/app_bar"
         android:background="@color/transparent"
         android:layout_marginBottom="80dp"
         android:padding="8dp">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-           />
+            android:layout_alignParentTop="true"/>
     </FrameLayout>
 
+    <!-- Loader (ProgressBar) -->
+    <ProgressBar
+        android:id="@+id/progress_loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:theme="@style/Widget.AppCompat.ProgressBar"
+        android:layout_gravity="center"/>
+
+    <!-- Input Layout for EditText and Voice Button -->
     <FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
@@ -99,92 +112,96 @@
             android:id="@+id/input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
             android:background="@color/transparent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
             android:paddingTop="22dp"
-            android:paddingBottom="-4dp"
-            android:paddingLeft="16dp">
+            android:paddingBottom="-4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:padding="8dp"
-                android:background="@color/white"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
                 android:layout_marginRight="70dp"
-                android:layout_height="wrap_content">
-            <EditText
-                android:id="@+id/editTextMessage"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/edit_text_background"
-                android:hint="@string/type_a_message"
-                android:layout_marginTop="12dp"
-                android:padding="8dp"
-                android:textColor="@color/grey_text"
-                android:textColorHint="@color/hint_grey_text"
-                android:inputType="text"
-                android:maxLines="1"
-                android:imeOptions="actionSearch"
-                android:layout_centerVertical="true" />
+                android:background="@color/white"
+                android:padding="8dp">
+
+                <EditText
+                    android:id="@+id/editTextMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="12dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/edit_text_background"
+                    android:hint="@string/type_a_message"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:textColor="@color/grey_text"
+                    android:textColorHint="@color/hint_grey_text" />
             </LinearLayout>
         </LinearLayout>
 
+        <!-- Voice and Send Button -->
         <LinearLayout
             android:id="@+id/voiceIconButtonLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_gravity="center_vertical|end"
+            android:layout_marginTop="10dp"
             android:background="@drawable/circle_background_blue"
             android:paddingLeft="22dp"
-            android:paddingRight="22dp"
             android:paddingTop="22dp"
-            android:paddingBottom="19dp"
-           >
+            android:paddingRight="22dp"
+            android:paddingBottom="19dp">
 
             <ImageButton
                 android:id="@+id/voiceIconButton"
                 android:layout_width="44dp"
                 android:layout_height="44dp"
+                android:layout_gravity="center"
+                android:layout_margin="4dp"
+                android:background="@drawable/circle_background_yellow_circle"
+                android:contentDescription="@string/voice_menu_item"
+                android:elevation="4dp"
                 android:focusable="true"
                 android:padding="8dp"
-                android:layout_margin="4dp"
-                android:layout_gravity="center"
-                android:visibility="visible"
-                android:background="@drawable/circle_background_yellow_circle"
                 android:scaleType="fitCenter"
-                android:elevation="4dp"
                 android:src="@drawable/baseline_keyboard_voice_24"
-                android:contentDescription="@string/voice_menu_item" />
+                android:visibility="visible" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_gravity="center_vertical|end"
+            android:layout_marginTop="10dp"
             android:paddingLeft="22dp"
-            android:paddingRight="22dp"
             android:paddingTop="22dp"
+            android:paddingRight="22dp"
             android:paddingBottom="19dp">
+
             <ImageButton
                 android:id="@+id/buttonSend"
                 android:layout_width="44dp"
                 android:layout_height="44dp"
+                android:layout_gravity="center"
+                android:layout_margin="4dp"
+                android:background="@drawable/circle_background_yellow_circle"
+                android:contentDescription="@string/send_item"
+                android:elevation="4dp"
                 android:focusable="true"
                 android:padding="8dp"
-                android:layout_margin="4dp"
-                android:layout_gravity="center"
                 android:scaleType="fitCenter"
-                android:elevation="4dp"
-                android:contentDescription="@string/send_item"
-                android:background="@drawable/circle_background_yellow_circle"
                 android:src="@drawable/ic_send"
                 android:visibility="gone" />
         </LinearLayout>
     </FrameLayout>
 
+    <!-- Floating Action Button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -199,7 +216,5 @@
         app:maxImageSize="32dp"
         app:backgroundTint="@color/transparent"
         android:visibility="gone" />
-
-
 
 </RelativeLayout>

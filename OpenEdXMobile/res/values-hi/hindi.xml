@@ -491,6 +491,18 @@
     <string name="listen_off">सुनने को बंद करने के लिए टैप करें</string>
     <string name="something_went_wrong">ओह! कृपया अपना सवाल फिर से पूछें।</string>
 
+<!--    <string name="dailog_feature">अलर्ट नई सुविधाएँ जोड़ी गई हैं। अब आप अपना प्रोग्राम खोजने के लिए आवाज़ कमांड का उपयोग कर सकते हैं, किसी भी पेज से व्हाट्सएप ग्रुप में शामिल हो सकते हैं, और सुबोधा एआई के साथ प्रश्न पूछ सकते हैं। शुरू करने के लिए बस बटन पर टैप करें!</string>-->
+
+<!--    <string name="message_voice_text">अब आप अपना प्रोग्राम खोजने के लिए आवाज़ कमांड का उपयोग कर सकते हैं, किसी भी पेज से व्हाट्सएप ग्रुप में शामिल हो सकते हैं, और सुबोधा एआई के साथ प्रश्न पूछ सकते हैं। शुरू करने के लिए बस बटन पर टैप करें!</string>-->
+<!--    <string name="title_voice_text">नई सुविधाएँ जोड़ी गई हैं।</string>-->
+<!--    <string name="alert">सतर्कता</string>-->
+
+    <string name="subodha_ai_floating_action_button_how_may_i_assist_you">मैं आपकी कैसे सहायता कर सकता हूँ? सुबोधा एआई बटन</string>
+
+    <string name="course">कोर्स</string>
+
+
+
 
 
 </resources>

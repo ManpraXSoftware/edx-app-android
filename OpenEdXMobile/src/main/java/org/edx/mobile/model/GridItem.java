@@ -1,39 +1,26 @@
-package org.edx.mobile.discovery.model;
+package org.edx.mobile.model;
 
-import com.google.gson.annotations.SerializedName;
-import java.util.List;
+public class GridItem {
 
-public class ResponseCourseModel {
+    private String programId;
 
-    @SerializedName("id")
-    private String id;
-
-    @SerializedName("topic_title")
     private String topicTitle;
 
-    @SerializedName("converted_topic_title")
     private String convertedTopicTitle;
 
-    @SerializedName("language")
     private String programLanguage;
 
-    @SerializedName("title")
     private String programTitle;
 
-
-    @SerializedName("converted_title")
     private String convertedProgramTitle;
 
-    @SerializedName("data")
-    private List<CourseItem> data;
-
     // Getters and Setters
-    public String getId() {
-        return id;
+    public String getProgramId() {
+        return programId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setProgramId(String programId) {
+        this.programId = programId;
     }
 
     public String getTopicTitle() {
@@ -52,21 +39,6 @@ public class ResponseCourseModel {
         this.convertedTopicTitle = convertedTopicTitle;
     }
 
-    public String getProgramLanguage() {
-        return programLanguage;
-    }
-
-    public void setProgramLanguage(String programLanguage) {
-        this.programLanguage = programLanguage;
-    }
-
-    public List<CourseItem> getData() {
-        return data;
-    }
-
-    public void setData(List<CourseItem> data) {
-        this.data = data;
-    }
 
     public String getProgramTitle() {
         return programTitle;
@@ -84,38 +56,38 @@ public class ResponseCourseModel {
         this.convertedProgramTitle = convertedProgramTitle;
     }
 
-    public static class CourseItem {
 
-        @SerializedName("converted_title")
-        private String convertedTitle;
 
-        @SerializedName("title")
-        private String title;
 
-        @SerializedName("key")
+        private String cousreConvertedTitle;
+
+
+        private String courseTitle;
+
+
         private String key;
 
-        @SerializedName("language")
+
         private String language;
 
-        @SerializedName("created")
+
         private String created;
 
         // Getters and Setters
-        public String getConvertedTitle() {
-            return convertedTitle;
+        public String getCousreConvertedTitle() {
+            return cousreConvertedTitle;
         }
 
-        public void setConvertedTitle(String convertedTitle) {
-            this.convertedTitle = convertedTitle;
+        public void setCousreConvertedTitle(String cousreConvertedTitle) {
+            this.cousreConvertedTitle = cousreConvertedTitle;
         }
 
-        public String getTitle() {
-            return title;
+        public String getCourseTitle() {
+            return courseTitle;
         }
 
-        public void setTitle(String title) {
-            this.title = title;
+        public void setCourseTitle(String courseTitle) {
+            this.courseTitle = courseTitle;
         }
 
         public String getKey() {
@@ -141,5 +113,12 @@ public class ResponseCourseModel {
         public void setCreated(String created) {
             this.created = created;
         }
+
+    public String getProgramLanguage() {
+        return programLanguage;
+    }
+
+    public void setProgramLanguage(String programLanguage) {
+        this.programLanguage = programLanguage;
     }
 }

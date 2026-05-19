@@ -6,13 +6,13 @@ import android.net.Uri;
 import android.view.View.OnClickListener;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.analytics.AnalyticsListener;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.ui.PlayerView;
@@ -22,12 +22,12 @@ import com.google.android.exoplayer2.util.Util;
 
 import org.edx.mobile.R;
 import org.edx.mobile.logger.Logger;
+import org.edx.mobile.util.AppConstants;
 import org.edx.mobile.util.VideoUtil;
 import org.edx.mobile.view.OnSwipeListener;
 
 import java.util.Locale;
 
-import static org.edx.mobile.util.AppConstants.VIDEO_FORMAT_M3U8;
 
 @SuppressWarnings("serial")
 public class VideoPlayer implements Player.EventListener, AnalyticsListener, PlayerListener {
@@ -82,7 +82,7 @@ public class VideoPlayer implements Player.EventListener, AnalyticsListener, Pla
     }
 
     private void initExoPlayer() {
-        exoPlayer = ExoPlayerFactory.newSimpleInstance(this.context);
+        exoPlayer = new SimpleExoPlayer.Builder(this.context).build();
         exoPlayer.addListener(this);
         exoPlayer.addAnalyticsListener(this);
         exoPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
@@ -295,11 +295,11 @@ public class VideoPlayer implements Player.EventListener, AnalyticsListener, Pla
         final DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this.context, userAgent);
         final MediaSource mediaSource;
 
-        if (VideoUtil.videoHasFormat(videoUrl, VIDEO_FORMAT_M3U8)) {
+        if (VideoUtil.videoHasFormat(videoUrl, AppConstants.VIDEO_FORMAT_M3U8)) {
             mediaSource = new HlsMediaSource.Factory(dataSourceFactory)
                     .createMediaSource(Uri.parse(videoUrl));
         } else {
-            mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
+            mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory)
                     .createMediaSource(Uri.parse(videoUrl));
         }
         return mediaSource;

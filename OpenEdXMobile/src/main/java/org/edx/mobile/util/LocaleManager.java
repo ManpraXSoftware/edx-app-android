@@ -51,7 +51,7 @@ public class LocaleManager {
     }
 
     public static String getFullLanguageName(String languageCode) {
-        return LANGUAGE_MAP.getOrDefault(languageCode, "Unknown Language");
+        return LANGUAGE_MAP.getOrDefault(languageCode, "English");
     }
     /**
      * SharedPreferences Key
@@ -79,9 +79,6 @@ public class LocaleManager {
     public static String getLanguagePref(Context mContext) {
         SharedPreferences mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         String selected_language=mPreferences.getString(LANGUAGE_KEY, Empty);
-        if(selected_language.equals("ml")){
-            selected_language="ml-IN";
-        }
         return selected_language;
     }
     /**
@@ -95,9 +92,6 @@ public class LocaleManager {
      * update resource
      */
     private static Context updateResources(Context context, String language) {
-        if(language.equals("ml-IN")){
-            language="ml";
-        }
         Locale locale = new Locale(language);
         Locale.setDefault(locale);
         Resources res = context.getResources();

@@ -550,6 +550,7 @@ public interface Analytics {
         String LINKED_PROGRAM_UUID ="LINKED PROGRAM UUID";
 
 
+        String PROGRAM_UID = "PROGRAM UID";
     }
 
     interface Values {
@@ -794,6 +795,23 @@ public interface Analytics {
 
         String USER_LOGIN_UNSUCCESSFUL="User Login Unsuccessful";
         String USER_LOGIN_SUCCESSFUL="User Login Successful";
+
+        String MIC_BUTTON_PRESS ="Mic Button Press";
+
+        String EDIT_TEXT_PRESS="Edit Text Press";
+        String VOICE_PLAY_BUTTON_PRESS="Voice Play Button Press";
+        String VOICE_STOP_BUTTON_PRESS="Voice Stop Button Press";
+        String CHATBOT_RESPONSE_SUCCESSFUL="Chatbot Response Successful";
+        String CHATBOT_RESPONSE_UNSUCCESSFUL="Chatbot Response Unsuccessful";
+        String TEXT_TO_SPEECH_SUCCESSFUL="Speech to Text Successful";
+        String TEXT_TO_SPEECH_UNSUCCESSFUL="Speech to Text Unsuccessful";
+        String COURSE_VIEW = "Course View";
+        String COURSE_ENROLL = "Course Enroll";
+        String COURSE_UNENROLL = "Course Unenroll";
+        String VOICE_RECOGNITION = "Voice Recognition";
+        String CHATBOT_INTERACTION = "Chatbot Interaction";
+        String COURSE_SCREEN_NAVIGATION = "Course Screen Navigation";
+
     }
 
     /**

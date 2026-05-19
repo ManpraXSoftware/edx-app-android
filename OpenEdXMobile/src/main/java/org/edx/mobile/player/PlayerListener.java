@@ -3,6 +3,7 @@ package org.edx.mobile.player;
 import android.graphics.Point;
 import android.view.View;
 
+import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ui.PlayerView;
 
 import java.io.Serializable;
@@ -10,6 +11,8 @@ import java.io.Serializable;
 public interface PlayerListener extends Serializable {
 
     long serialVersionUID = 5689385691113719237L;
+
+    void onPlayerError(ExoPlaybackException error);
 
     void setUri(String uri, long seekTo) throws Exception;
     void setUriAndPlay(String uri, long seekTo) throws Exception;
