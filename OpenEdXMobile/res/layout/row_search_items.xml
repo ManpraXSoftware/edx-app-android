@@ -1,126 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <!-- Use androidx CardView: MaterialCardView requires Theme.MaterialComponents. -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/search_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/search_item"
-        android:orientation="vertical">
+        android:layout_marginBottom="10dp"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="1dp"
+        app:cardUseCompatPadding="true">
 
         <LinearLayout
-            android:id="@+id/course_card_not_enrolled"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:background="@drawable/bg_search_result_card"
             android:orientation="vertical"
-           >
-
-            <TextView
-                android:id="@+id/course_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="dsdfdfsd"
-                android:textColor="@color/seach_hint_color" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/course_language"
-                android:textSize="12dp"
-                android:layout_marginBottom="3dp"
-                android:textColor="@color/seach_hint_color" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/course_unit"
-                android:textSize="12dp"
-                android:textColor="@color/seach_hint_color" />
-
-        </LinearLayout>
-
-
-        <TextView
-            android:id="@+id/program_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:layout_marginTop="3dp"
-            android:text="dssdvs"
-            android:textColor="@color/search_program_color" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/tag_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/seach_hint_color"
-                android:textSize="11dp"
-                android:layout_toLeftOf="@+id/arrow_right"
-                android:layout_marginTop="3dp"
-                android:layout_alignParentLeft="true"
-                android:layout_marginRight="40dp"
-                android:text="dsdss" />
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp">
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/course_enrolled_icon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="6dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_baseline_check_circle_24_blue"
+                    android:tint="@color/edx_success_accent"
+                    android:tintMode="src_atop"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/course_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/edx_brand_primary_accent"
+                    android:textSize="16sp"
+                    android:textStyle="normal"
+                    tools:text="Course name" />
+            </LinearLayout>
+
+            <!-- Course language (hidden per product request)
+            <TextView
+                android:id="@+id/course_language"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true">
+                android:layout_marginTop="4dp"
+                android:textColor="@color/seach_hint_color"
+                android:textSize="12sp"
+                tools:text="Language: English" />
+            -->
 
-                <ImageButton
-                    android:id="@+id/arrow_right"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_alignParentRight="true"
-                    android:background="@color/white"
-                    android:contentDescription="@string/view"
-                    android:layout_toLeftOf="@+id/arrow_right_net"
-                    android:src="@drawable/ic_baseline_chevron_right_24" />
+            <LinearLayout
+                android:id="@+id/units_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:orientation="vertical" />
 
-            </LinearLayout>
-        </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/programs_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:orientation="vertical" />
 
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="12dp"
-            android:background="@color/seach_hint_color" />
-
-        <!-- <TextView
-             android:id="@+id/course_name"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:textSize="20dp"
-             android:text="dsdfdfsd"
-             android:textColor="@color/seach_hint_color" />
-
-         <TextView
-             android:id="@+id/program_name"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:textSize="15dp"
-             android:layout_marginTop="5dp"
-             android:text="dssdvs"
-             android:textColor="@color/search_program_color" />
-
-         <TextView
-             android:id="@+id/tag_name"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:textColor="@color/seach_hint_color"
-             android:textSize="11dp"
-             android:layout_marginTop="5dp"
-             android:text="dsdss" />
-
-         <view
-             android:layout_width="match_parent"
-             android:layout_height="1dp"
-             android:layout_marginTop="10dp"
-             android:background="@color/seach_hint_color" />-->
-
-    </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </layout>

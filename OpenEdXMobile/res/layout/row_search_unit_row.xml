@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp">
+
+    <TextView
+        android:id="@+id/unit_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        tools:text="Unit title" />
+
+    <TextView
+        android:id="@+id/unit_view_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="8dp"
+        android:paddingEnd="4dp"
+        android:text="@string/view"
+        android:textAllCaps="false"
+        android:textColor="@color/edx_brand_primary_accent"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

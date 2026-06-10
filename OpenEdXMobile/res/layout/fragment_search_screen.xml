@@ -98,6 +98,7 @@
                 android:visibility="gone"
                 android:layout_marginTop="50dp"
                 android:textColor="@color/seach_hint_color"
+                android:contentDescription="@string/search_results"
                 android:text="@string/search_results" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
@@ -133,7 +134,7 @@
                 android:id="@+id/search_result"
                 android:layout_marginLeft="21dp"
                 android:layout_marginRight="21dp"
-                android:layout_marginTop="70dp" />
+                android:layout_marginTop="30dp" />
 
             <Button
                 android:id="@+id/view_more_results"

@@ -120,10 +120,18 @@ public class CourseManager {
         CourseComponent courseComponent = getCourseDataFromAppLevelCache(courseId);
         if (courseComponent == null)
             return null;
+        CourseComponent found = courseComponent.find(new Filter<CourseComponent>() {
+            @Override
+            public boolean apply(CourseComponent cc) {
+                return componentId.equals(cc.getId());
+            }
+        });
+        if (found != null) return found;
+        // Fallback: search API may return block_id instead of full id
         return courseComponent.find(new Filter<CourseComponent>() {
             @Override
-            public boolean apply(CourseComponent courseComponent) {
-                return componentId.equals(courseComponent.getId());
+            public boolean apply(CourseComponent cc) {
+                return componentId.equals(cc.getBlockId());
             }
         });
     }
@@ -143,10 +151,18 @@ public class CourseManager {
         CourseComponent courseComponent = getCachedCourseData(blocksApiVersion, courseId);
         if (courseComponent == null)
             return null;
+        CourseComponent found = courseComponent.find(new Filter<CourseComponent>() {
+            @Override
+            public boolean apply(CourseComponent cc) {
+                return componentId.equals(cc.getId());
+            }
+        });
+        if (found != null) return found;
+        // Fallback: search API may return block_id instead of full id
         return courseComponent.find(new Filter<CourseComponent>() {
             @Override
-            public boolean apply(CourseComponent courseComponent) {
-                return componentId.equals(courseComponent.getId());
+            public boolean apply(CourseComponent cc) {
+                return componentId.equals(cc.getBlockId());
             }
         });
     }

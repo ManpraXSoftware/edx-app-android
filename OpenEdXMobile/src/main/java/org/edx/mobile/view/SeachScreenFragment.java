@@ -46,6 +46,7 @@ import org.edx.mobile.base.BaseFragment;
 import org.edx.mobile.clipboard.ClipboardService;
 import org.edx.mobile.clipboard.ClipboardServiceHolder;
 import org.edx.mobile.core.IEdxEnvironment;
+import org.edx.mobile.course.CourseAPI;
 import org.edx.mobile.databinding.FragmentSearchScreenBinding;
 import org.edx.mobile.discovery.DiscoveryCallback;
 import org.edx.mobile.discovery.model.CombinationOfSeachResult;
@@ -58,9 +59,13 @@ import org.edx.mobile.http.HttpStatus;
 import org.edx.mobile.http.HttpStatusException;
 import org.edx.mobile.interfaces.OnNavigateListener;
 import org.edx.mobile.model.api.EnrolledCoursesResponse;
+import org.edx.mobile.model.course.CourseComponent;
+import org.edx.mobile.model.course.BlockType;
+import org.edx.mobile.model.Filter;
 import org.edx.mobile.module.analytics.Analytics;
 import org.edx.mobile.module.prefs.LoginPrefs;
 import org.edx.mobile.myCourse.ParticularCourseTask;
+import org.edx.mobile.services.CourseManager;
 import org.edx.mobile.util.GestureListener;
 import org.edx.mobile.util.LocaleManager;
 import org.edx.mobile.view.adapters.OnRecyclerItemClickListener;
@@ -72,6 +77,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.EnumSet;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -96,6 +102,10 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
     LoginAPI loginAPI;
     @Inject
     protected IEdxEnvironment environment;
+    @Inject
+    CourseAPI courseStructureApi;
+    @Inject
+    CourseManager courseManager;
     ClipboardService clipboardService;
     public static SeachScreenFragment newInstance(@Nullable Bundle bundle) {
         final SeachScreenFragment fragment = new SeachScreenFragment();
@@ -205,7 +215,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
             }
         });
 
-        searchListAdapter = new SearchListAdapter(getActivity(), SeachScreenFragment.this::onItemClick,this::navigateToAnotherScreen);
+        searchListAdapter = new SearchListAdapter(getActivity(), SeachScreenFragment.this::onItemClick);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         binding.searchResult.setLayoutManager(mLayoutManager);
         binding.searchResult.setAdapter(searchListAdapter);
@@ -292,18 +302,18 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         if (text == null || text.trim().isEmpty()) {
             return 2000; // Default 2 seconds for empty text
         }
-        
+
         // Count words (split by spaces)
         String[] words = text.trim().split("\\s+");
         int wordCount = words.length;
-        
+
         // Calculate time: ~2.5 words per second (conservative estimate for TalkBack)
         // Add extra time for punctuation, pauses, and processing
         long estimatedTime = (long) (wordCount / 2.5 * 1000); // Convert to milliseconds
-        
+
         // Add base time for processing and minimum reading time
         estimatedTime += 1000; // Add 1 second base time
-        
+
         // Set reasonable bounds: minimum 2 seconds, maximum 8 seconds
         return Math.max(2000, Math.min(8000, estimatedTime));
     }
@@ -319,40 +329,40 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         if (isTalkBackEnabled() && neutralButton != null && descriptionView != null) {
             // Get the text from descriptionView to calculate reading time
             String errorText = getString(R.string.transcription_not_understood);
-            
+
             // Calculate reading time dynamically based on text length
             long readingTime = calculateReadingTime(errorText);
-            
+
             // First, announce and focus on descriptionView to let TalkBack read the error message
             // Use announceForAccessibility which properly queues the announcement
             if (voiceDialog != null && voiceDialog.isShowing() && descriptionView != null) {
                 descriptionView.setFocusable(true);
                 descriptionView.setFocusableInTouchMode(true);
                 descriptionView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
-                
+
                 // Announce the error message first (this queues properly)
                 descriptionView.announceForAccessibility(errorText);
-                
+
                 // Then request focus after a short delay to ensure announcement is queued
                 new Handler().postDelayed(() -> {
                     if (voiceDialog != null && voiceDialog.isShowing() && descriptionView != null) {
                         descriptionView.requestFocus();
                         //descriptionView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
-                        
+
                         // After calculated reading time, move focus to Speak button
                         new Handler().postDelayed(() -> {
                             if (voiceDialog != null && voiceDialog.isShowing() && neutralButton != null) {
                                 neutralButton.setFocusable(true);
                                 neutralButton.setFocusableInTouchMode(true);
                                 neutralButton.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
-                                
+
                                 // Remove focus background/highlight to prevent filled grey color
                                 neutralButton.setBackground(null);
                                 neutralButton.setBackgroundColor(android.graphics.Color.TRANSPARENT);
-                                
+
                                 neutralButton.requestFocus();
                                 //neutralButton.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
-                                
+
                                 updateButtonStates(false, false);
                             }
                         }, readingTime); // Dynamic delay based on text length
@@ -488,9 +498,9 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                 searchListAdapter.setSearchResult(newcombinationOfSeachResults);
                 binding.searchCount.setVisibility(View.VISIBLE);
                 String searchQuery = binding.editSearch.getText().toString().trim();
-                String countText = String.valueOf(searchListAdapter.getItemCount()) + " " + getString(R.string.results_for) + " " + searchQuery;
+                String countText = String.valueOf(searchListAdapter.getFlatResultCount()) + " " + getString(R.string.results_for) + " " + searchQuery;
                 binding.searchCount.setText(countText);
-                
+
                 // Set focus on search result after announcements
                 if (isTalkBackEnabled()) {
                         if (binding.searchResults != null && binding.searchResults.getVisibility() == View.VISIBLE) {
@@ -578,6 +588,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                                             combinationOfSeachResult.setProgramName(searchTags.getProgramName());
                                             combinationOfSeachResult.setProgram_id(searchTags.getProgramId());
                                             combinationOfSeachResult.setTagName(tag);
+                                            combinationOfSeachResult.setUnitName(searchResultList.getUnitName());
 
                                             // Extracting language from the first CourseRun
                                             if (searchResultList.getCourseLang() != null && !searchResultList.getCourseLang().isEmpty()) {
@@ -632,7 +643,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                     }
                 }
                 searchListAdapter.updateSearchResult(newcombinationOfSeachResults);
-                binding.searchCount.setText(String.valueOf(searchListAdapter.getItemCount()) +
+                binding.searchCount.setText(String.valueOf(searchListAdapter.getFlatResultCount()) +
                         " " + "results for " + binding.editSearch.getText().toString().trim());
                 binding.searchCount.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
             }
@@ -955,11 +966,11 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         builder.setView(mainContainer);
 
         voiceDialog = builder.create();  // Now class-level
-        
+
         // Prevent dialog from closing when clicking outside
         voiceDialog.setCanceledOnTouchOutside(false);
         voiceDialog.setCancelable(false);
-        
+
         // Set dismiss listener to announce when dialog closes
         voiceDialog.setOnDismissListener(dialog -> {
             if (isTalkBackEnabled()) {
@@ -969,7 +980,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                 }
             }
         });
-        
+
         voiceDialog.show();
 
         if (isTalkBackEnabled()) {
@@ -1117,33 +1128,95 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                             // Handle successful response
                             ArrayList<EnrolledCoursesResponse> data = result;
                             if (data != null) {
-                                if (data != null) {
-                                    for (EnrolledCoursesResponse enrolledCoursesResponse : data) {
-                                        if (enrolledCoursesResponse.getCourse() != null) {
-                                            if (enrolledCoursesResponse.getCourse().getId() != null) {
-                                                // if (enrolledCoursesResponse.getCourse().getId().equals(resumeCourse.getCourse_id())) {
-                                                courseData = enrolledCoursesResponse;
-                                                 // redirection to course/unit page directly
-                                                if (courseData != null) {
-                                                    LocaleManager.setCourseLanguagePref(getContext(),courseData.getCourse().getLanguage());
-                                                    if (blockId.contains("sequential")) {
-
-                                                        environment.getRouter().showCourseContainerOutline(SeachScreenFragment.this,
-                                                                REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, null,
-                                                                blockId, null, false);
-                                                    } else {
-                                                        environment.getRouter().showCourseUnitDetail(SeachScreenFragment.this,
-                                                                REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, null,
-                                                                blockId, false);
-                                                    }
-                                                } else {
-                                                    Toast.makeText(getActivity(), getString(R.string.no_course_info), Toast.LENGTH_LONG).show();
-                                                }
-                                            }
-                                        }
+                                EnrolledCoursesResponse matchedCourse = null;
+                                for (EnrolledCoursesResponse enrolledCoursesResponse : data) {
+                                    if (enrolledCoursesResponse.getCourse() != null
+                                            && enrolledCoursesResponse.getCourse().getId() != null
+                                            && enrolledCoursesResponse.getCourse().getId().equals(courseId)) {
+                                        matchedCourse = enrolledCoursesResponse;
+                                        break;
                                     }
                                 }
-                                Log.d("enrolledCoursesResponse", courseData.getCourse().getId());
+                                courseData = matchedCourse;
+                                if (courseData != null) {
+                                    LocaleManager.setCourseLanguagePref(getContext(), courseData.getCourse().getLanguage());
+                                    if (blockId != null && !blockId.isEmpty()) {
+                                        // Preload course structure so the target unit can be found when the screen opens
+                                        final String blocksApiVersion = environment.getConfig().getApiUrlVersionConfig().getBlocksApiVersion();
+                                        courseStructureApi.getCourseStructureWithoutStale(blocksApiVersion, courseId)
+                                                .enqueue(new CourseAPI.GetCourseStructureCallback(requireContext(), courseId, null) {
+                                                    @Override
+                                                    protected void onResponse(@NonNull CourseComponent courseComponent) {
+                                                        courseManager.addCourseDataInAppLevelCache(courseId, courseComponent);
+
+                                                        // 1) Find the component (any level) that best matches the search unit_id
+                                                        CourseComponent matched = courseComponent.find(new Filter<CourseComponent>() {
+                                                            @Override
+                                                            public boolean apply(CourseComponent cc) {
+                                                                if (blockId == null) return false;
+                                                                String id = cc.getId();
+                                                                String bid = cc.getBlockId();
+                                                                return blockId.equals(id)
+                                                                        || blockId.equals(bid)
+                                                                        || (id != null && id.contains(blockId))
+                                                                        || (bid != null && bid.contains(blockId))
+                                                                        || (blockId.contains(":") && id != null && blockId.contains(id));
+                                                            }
+                                                        });
+
+                                                        CourseComponent unitToOpen = matched;
+
+                                                        // 2) If the match is a container (e.g. section/sequential/vertical),
+                                                        //    go down to its first leaf content block so we open the actual unit/content.
+                                                        if (unitToOpen != null && unitToOpen.isContainer()) {
+                                                            List<CourseComponent> leaves = new ArrayList<>();
+                                                            unitToOpen.fetchAllLeafComponents(leaves, EnumSet.allOf(BlockType.class));
+                                                            if (!leaves.isEmpty()) {
+                                                                unitToOpen = leaves.get(0);
+                                                            }
+                                                        }
+
+                                                        if (unitToOpen != null) {
+                                                            String targetId = unitToOpen.getId();
+                                                            environment.getRouter().showCourseUnitDetail(SeachScreenFragment.this,
+                                                                    REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, null,
+                                                                    targetId, false);
+                                                        } else {
+                                                            // 3) Final fallback to previous behavior using raw blockId
+                                                            if (blockId.contains("sequential")) {
+                                                                environment.getRouter().showCourseContainerOutline(SeachScreenFragment.this,
+                                                                        REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, null,
+                                                                        blockId, null, false);
+                                                            } else {
+                                                                environment.getRouter().showCourseUnitDetail(SeachScreenFragment.this,
+                                                                        REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, null,
+                                                                        blockId, false);
+                                                            }
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    protected void onFailure(@NonNull Throwable error) {
+                                                        // Fallback: open course outline so user can navigate manually
+                                                        if (getActivity() != null) {
+                                                            environment.getRouter().showCourseContainerOutline(SeachScreenFragment.this,
+                                                                    REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, null,
+                                                                    null, null, false);
+                                                        }
+                                                    }
+                                                });
+                                    } else {
+                                        // No unit_id from search: open course outline (first level)
+                                        environment.getRouter().showCourseContainerOutline(SeachScreenFragment.this,
+                                                REQUEST_SHOW_COURSE_UNIT_DETAIL, courseData, null,
+                                                null, null, false);
+                                    }
+                                } else {
+                                    Toast.makeText(getActivity(), getString(R.string.no_course_info), Toast.LENGTH_LONG).show();
+                                }
+                                if (courseData != null) {
+                                    Log.d("enrolledCoursesResponse", courseData.getCourse().getId());
+                                }
                             } else {
                                 Log.e("enrolledCoursesResponse", "Response body is null");
                             }
