@@ -1,16 +1,18 @@
-API_HOST_URL: "https://subodha-lms.visionempowertrust.org/" #'https://subodha-lms.visionempowertrust.org/' # localhost is 10.0.2.2 in Android
-ENVIRONMENT_DISPLAY_NAME: "Subodha"
-PLATFORM_NAME: "Subodha Platform"
-PLATFORM_DESTINATION_NAME: "subodha-lms.visionempowertrust.org"
-FEEDBACK_EMAIL_ADDRESS: "support@example.com"
-DISCOVERY_BASE_URL: "https://subodha-courses.visionempowertrust.org/"
-FIREBASE:
-  { ENABLED: true, ANALYTICS_ENABLED: true, ANALYTICS_SOURCE: "firebase" }
-#API_HOST_URL: 'https://staging-lms.visionempowertrust.org/' #'https://subodha-lms.visionempowertrust.org/' #'https://subodha-lms.visionempowertrust.org/' # localhost is 10.0.2.2 in Android
-#ENVIRONMENT_DISPLAY_NAME: 'Subodha'
-#PLATFORM_NAME: 'Subodha Platform'
-#PLATFORM_DESTINATION_NAME: 'staging-lms.visionempowertrust.org'
-#FEEDBACK_EMAIL_ADDRESS: 'support@example.com'
-#DISCOVERY_BASE_URL: 'https://staging-courses.visionempowertrust.org/'#'https://subodha-courses.visionempowertrust.org/'
+#API_HOST_URL: "https://subodha-lms.visionempowertrust.org/" #'https://subodha-lms.visionempowertrust.org/' # localhost is 10.0.2.2 in Android
+#ENVIRONMENT_DISPLAY_NAME: "Subodha"
+#PLATFORM_NAME: "Subodha Platform"
+#PLATFORM_DESTINATION_NAME: "subodha-lms.visionempowertrust.org"
+#FEEDBACK_EMAIL_ADDRESS: "support@example.com"
+#DISCOVERY_BASE_URL: "https://subodha-courses.visionempowertrust.org/"
 #FIREBASE:
-#   {ENABLED: true, ANALYTICS_ENABLED: true, ANALYTICS_SOURCE: 'firebase'}
+#  { ENABLED: true, ANALYTICS_ENABLED: true, ANALYTICS_SOURCE: "firebase" }
+#CERTIFICATES_ENABLED: true
+API_HOST_URL: 'https://staging-lms.visionempowertrust.org/' #'https://subodha-lms.visionempowertrust.org/' #'https://subodha-lms.visionempowertrust.org/' # localhost is 10.0.2.2 in Android
+ENVIRONMENT_DISPLAY_NAME: 'Subodha'
+PLATFORM_NAME: 'Subodha Platform'
+PLATFORM_DESTINATION_NAME: 'staging-lms.visionempowertrust.org'
+FEEDBACK_EMAIL_ADDRESS: 'support@example.com'
+DISCOVERY_BASE_URL: 'https://staging-courses.visionempowertrust.org/'#'https://subodha-courses.visionempowertrust.org/'
+FIREBASE:
+   {ENABLED: true, ANALYTICS_ENABLED: true, ANALYTICS_SOURCE: 'firebase'}
+CERTIFICATES_ENABLED: true

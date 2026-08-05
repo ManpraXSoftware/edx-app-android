@@ -7,6 +7,7 @@
   <string name="course_details_earned_cert">Ha aprobado el curso.</string>
   <!--Button that opens a full view of an earned certificate-->
   <string name="course_details_view_cert_button">Ver certificado</string>
+  <string name="open_certificate">Ver certificado</string>
   <!--Course Discovery-->
   <!--Enroll Now button text-->
   <string name="enroll_now_button_text">Inscribirse ahora</string>

@@ -286,12 +286,63 @@
 <!--                                    android:textColor="@color/course_detail_enroll_color" />-->
                             </LinearLayout>
 
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/certificate_card"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/course_status"
+                                android:layout_marginLeft="12dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginRight="12dp"
+                                android:layout_marginBottom="10dp"
+                                android:focusable="true"
+                                android:importantForAccessibility="yes"
+                                android:visibility="gone"
+                                app:cardBackgroundColor="@color/white"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="4dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:padding="16dp">
+
+                                    <TextView
+                                        android:id="@+id/certificate_program_name"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="@color/edx_brand_primary_dark"
+                                        android:textSize="18sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/certificate_message"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="8dp"
+                                        android:textColor="@color/organisation_color"
+                                        android:textSize="14sp" />
+
+                                    <Button
+                                        android:id="@+id/btn_open_certificate"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="45dp"
+                                        android:layout_marginTop="12dp"
+                                        android:background="@drawable/bg_enroll_in_program"
+                                        android:contentDescription="@string/open_certificate_content_desc"
+                                        android:text="@string/open_certificate"
+                                        android:textColor="@color/black"
+                                        android:textSize="15sp" />
+                                </LinearLayout>
+                            </androidx.cardview.widget.CardView>
+
                             <com.facebook.shimmer.ShimmerFrameLayout
                                 android:id="@+id/shimmerLayout_course"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:visibility="visible"
-                                android:layout_below="@+id/course_status"
+                                android:layout_below="@+id/certificate_card"
                                 tools:ignore="MissingConstraints">
 
                                 <LinearLayout
@@ -323,7 +374,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_marginTop="10dp"
-                                android:layout_below="@+id/course_status"
+                                android:layout_below="@+id/certificate_card"
                                 android:layout_centerHorizontal="true"
                                 android:orientation="vertical">
 
@@ -346,7 +397,7 @@
                                 android:layout_marginBottom="110dp"
                                 android:visibility="visible"
                                 android:nestedScrollingEnabled="false"
-                                android:layout_below="@+id/course_status" />
+                                android:layout_below="@+id/certificate_card" />
 
                             <TextView
                                 android:id="@+id/empty_view"

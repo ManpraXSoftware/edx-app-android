@@ -412,6 +412,7 @@
     <string name="invitation_only_button_text">କେବଳ ନିମନ୍ତ୍ରଣ </string>
     <string name="enroll_now_button_text">ବର୍ତ୍ତମାନ ନାମ ଲେଖାନ୍ତୁ ।</string>
     <string name="course_details_view_cert_button">ସାର୍ଟିଫିକେଟ୍ ଦେଖନ୍ତୁ ।</string>
+    <string name="open_certificate">ସାର୍ଟିଫିକେଟ୍ ଦେଖନ୍ତୁ ।</string>
     <string name="course_details_earned_cert">ଆପଣ ପାଠ୍ୟକ୍ରମ ପାସ୍ କରିଛନ୍ତି। </string>
     <string name="course_details_congratulations">ଅଭିନନ୍ଦନ! </string>
     <string name="app_name" translatable="false">Subodha</string>

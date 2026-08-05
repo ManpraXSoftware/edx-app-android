@@ -4,9 +4,17 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.edx.mobile.course.CourseAPI;
+import org.edx.mobile.model.api.EnrolledCoursesResponse;
+import org.edx.mobile.model.course.CourseComponent;
+import org.edx.mobile.model.course.CourseStructureV1Model;
+import org.edx.mobile.model.course.VideoBlockModel;
+
 import java.io.IOException;
 
-public class CourseUnitYoutubeVideoFragmentTest extends BaseCourseUnitVideoFragmentTest {
+import static org.edx.mobile.http.util.CallUtil.executeStrict;
+
+public class CourseUnitYoutubeVideoFragmentTest extends UiTest {
 
     private static final String YOUTUBE_IN_APP_PLAYER = "YOUTUBE_IN_APP_PLAYER";
 
@@ -23,8 +31,33 @@ public class CourseUnitYoutubeVideoFragmentTest extends BaseCourseUnitVideoFragm
         return new JsonParser().parse(serializedData);
     }
 
-    @Override
-    protected BaseCourseUnitVideoFragment getCourseUnitPlayerFragmentInstance() {
-        return CourseUnitYoutubePlayerFragment.newInstance(getVideoUnit());
+    VideoBlockModel getVideoUnit() {
+        final EnrolledCoursesResponse courseData;
+        try {
+            courseData = executeStrict(courseAPI.getEnrolledCourses()).get(0);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        final String courseId = courseData.getCourse().getId();
+        final CourseStructureV1Model model;
+        final CourseComponent courseComponent;
+        try {
+            model = executeStrict(courseAPI.getCourseStructure(config.getApiUrlVersionConfig().getBlocksApiVersion(), courseId));
+            courseComponent = (CourseComponent) CourseAPI.normalizeCourseStructure(model, courseId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return courseComponent.getVideos().get(0);
+    }
+
+    @org.junit.Test
+    public void initializeTest() {
+        final CourseUnitYoutubePlayerFragment fragment = CourseUnitYoutubePlayerFragment.newInstance(getVideoUnit());
+        org.robolectric.shadows.support.v4.SupportFragmentTestUtil.startVisibleFragment(fragment, roboguice.activity.RoboFragmentActivity.class, android.R.id.content);
+        org.junit.Assert.assertTrue(fragment.getRetainInstance());
+
+        final android.view.View view = fragment.getView();
+        org.junit.Assert.assertNotNull(view);
     }
 }

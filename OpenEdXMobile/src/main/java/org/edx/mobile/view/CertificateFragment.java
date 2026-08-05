@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.google.inject.Inject;
@@ -90,6 +91,19 @@ public class CertificateFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_certificate, container, false);
         webview = (WebView) view.findViewById(R.id.webview);
+        
+        // Apply WebSettings to fix zoom and layout rendering for the certificate
+        webview.getSettings().setSupportZoom(true);
+        webview.getSettings().setBuiltInZoomControls(true);
+        webview.getSettings().setDisplayZoomControls(false);
+        String desktopUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36";
+        webview.getSettings().setUserAgentString(desktopUserAgent);
+        webview.getSettings().setUseWideViewPort(true);
+        webview.getSettings().setLoadWithOverviewMode(true);
+        webview.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
+        webview.getSettings().setJavaScriptEnabled(true);
+        webview.setInitialScale(1);
+
         final View loadingIndicator = view.findViewById(R.id.loading_indicator);
         final URLInterceptorWebViewClient client = new URLInterceptorWebViewClient(getActivity(), webview);
         client.setPageStatusListener(new URLInterceptorWebViewClient.IPageStatusListener() {
@@ -101,6 +115,21 @@ public class CertificateFragment extends BaseFragment {
             @Override
             public void onPageFinished() {
                 loadingIndicator.setVisibility(View.GONE);
+                
+                // Inject Javascript to force 1024px width, and rely on setInitialScale(1) to zoom out
+                String javascript = "try { " +
+                             "  var meta = document.querySelector('meta[name=\"viewport\"]'); " +
+                             "  if (meta) { meta.setAttribute('content', 'width=1024, user-scalable=yes'); } " +
+                             "  else { " +
+                             "    var newMeta = document.createElement('meta'); " +
+                             "    newMeta.name = 'viewport'; " +
+                             "    newMeta.content = 'width=1024, user-scalable=yes'; " +
+                             "    document.head.appendChild(newMeta); " +
+                             "  } " +
+                             "} catch(e) {}";
+                webview.evaluateJavascript(javascript, null);
+                // Fallback for older webview engines that might ignore evaluateJavascript
+                webview.loadUrl("javascript:" + javascript);
             }
 
             @Override

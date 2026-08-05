@@ -16,6 +16,10 @@
  <string name="course_details_earned_cert">You’ve passed the course.</string>
  <!-- Button that opens a full view of an earned certificate -->
  <string name="course_details_view_cert_button">View Certificate</string>
+ <!-- Program Certificate card -->
+ <string name="open_certificate">View Certificate</string>
+ <string name="open_certificate_content_desc">Open certificate in web view</string>
+ <string name="program_certificate">Program Certificate</string>
 
  <!-- Course Discovery -->
 

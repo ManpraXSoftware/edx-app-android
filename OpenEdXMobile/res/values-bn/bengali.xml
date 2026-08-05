@@ -429,6 +429,7 @@
     <string name="invitation_only_button_text">শুধুমাত্র আমন্ত্রণ</string>
     <string name="enroll_now_button_text">এখন নথিভুক্ত করা</string>
     <string name="course_details_view_cert_button">প্রশংসাপত্র দেখ বা দেখুন</string>
+    <string name="open_certificate">প্রশংসাপত্র দেখ বা দেখুন</string>
     <string name="course_details_earned_cert">আপনি কোর্স পাস করেছেন.</string>
     <string name="course_details_congratulations">অভিনন্দন!</string>
     <string name="option">বিকল্প</string>

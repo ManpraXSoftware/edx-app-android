@@ -9,6 +9,7 @@ import org.edx.mobile.discovery.model.EnrollAndUnenrollData;
 import org.edx.mobile.discovery.model.OrganisationList;
 import org.edx.mobile.discovery.model.OrganisationModel;
 import org.edx.mobile.discovery.model.ProgramModel;
+import org.edx.mobile.discovery.model.ProgramCertificateModel;
 import org.edx.mobile.discovery.model.ProgramResponseModel;
 import org.edx.mobile.discovery.model.ResponseCourseModel;
 import org.edx.mobile.discovery.model.ResponseEnrollmentModel;
@@ -57,11 +58,18 @@ public interface CourseService {
             @Header(DiscoveryConstants.AUTHORIZATION) String authorization,
             @Path("programUuid") String programUuid
     );
+    @GET("explore-courses/v1/program-certificates/")
+    Call<ProgramCertificateModel> getProgramCertificate(
+            @Header(DiscoveryConstants.AUTHORIZATION) String authorization,
+            @Query("program_uuid") String programUuid,
+            @Query("is_app") boolean isApp
+    );
+
     @GET("/extandedapi/custom-course-search/")
-    Call<SearchResult> getSearch(@Header(DiscoveryConstants.AUTHORIZATION) String authorization ,@Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("page_size") String page, @Query("q") String query);
+    Call<SearchResult> getSearch(@Header(DiscoveryConstants.AUTHORIZATION) String authorization ,@Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("page_size") String page, @Query("q") String query, @Query("username") String username);
 
     @GET("/extandedapi/mx-custom-course-search/")
-    Call<SearchResult> getSearchNextResult(@Header(DiscoveryConstants.AUTHORIZATION) String authorization ,@Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("page") String page ,@Query("page_size") String page_size, @Query("q") String query);
+    Call<SearchResult> getSearchNextResult(@Header(DiscoveryConstants.AUTHORIZATION) String authorization ,@Header(DiscoveryConstants.ACCEPT_LANGUAGE) String lang, @Query("page") String page ,@Query("page_size") String page_size, @Query("q") String query, @Query("username") String username);
 
     @NonNull
     @FormUrlEncoded

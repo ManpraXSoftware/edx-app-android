@@ -789,6 +789,7 @@
     <string name="invitation_only_button_text">ಆಹ್ವಾನ ಮಾತ್ರ</string>
     <string name="enroll_now_button_text">ಈಗ ನೋಂದಾಯಿಸಿ</string>
     <string name="course_details_view_cert_button">ಪ್ರಮಾಣಪತ್ರವನ್ನು ವೀಕ್ಷಿಸಿ</string>
+    <string name="open_certificate">ಪ್ರಮಾಣಪತ್ರವನ್ನು ವೀಕ್ಷಿಸಿ</string>
     <string name="course_details_earned_cert">ನೀವು ಕೋರ್ಸ್‌ನಲ್ಲಿ ಉತ್ತೀರ್ಣರಾಗಿದ್ದೀರಿ.</string>
     <string name="course_details_congratulations">ಅಭಿನಂದನೆಗಳು!</string>
     <string name="app_name" translatable="false">Subodha</string>

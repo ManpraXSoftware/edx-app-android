@@ -7,6 +7,7 @@
   <string name="course_details_earned_cert">Sie haben den Kurs bestanden.</string>
   <!--Button that opens a full view of an earned certificate-->
   <string name="course_details_view_cert_button">Zertifikat ansehen</string>
+  <string name="open_certificate">Zertifikat ansehen</string>
   <!--Course Discovery-->
   <!--Enroll Now button text-->
   <string name="enroll_now_button_text">Jetzt einschreiben</string>

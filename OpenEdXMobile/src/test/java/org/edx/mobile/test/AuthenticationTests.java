@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.inject.Injector;
 
 import org.edx.mobile.authentication.AuthResponse;
+import org.edx.mobile.authentication.AuthResponseJwt;
 import org.edx.mobile.http.HttpStatus;
 import org.edx.mobile.http.authenticator.OauthRefreshTokenAuthenticator;
 import org.edx.mobile.module.prefs.LoginPrefs;
@@ -28,18 +29,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @Config(sdk = 18)
-public final class AuthenticationTests extends BaseTestCase {
+public class AuthenticationTests extends BaseTestCase {
 
     private static final String API_HOST_URL = "API_HOST_URL"; // Config key for API host url
 
+    private LoginPrefs loginPrefs;
+    private OkHttpClient client = defaultClient();
     @Rule
     public final MockWebServer mockServer = new MockWebServer();
 
-    private OkHttpClient client = defaultClient();
-
-    private LoginPrefs loginPrefs;
-
     @Before
+    @Override
     public void setUp() throws Exception {
         mockServer.setDispatcher(dispatcher);
         super.setUp();
@@ -49,7 +49,7 @@ public final class AuthenticationTests extends BaseTestCase {
     protected void inject(Injector injector) throws Exception {
         super.inject(injector);
         loginPrefs = injector.getInstance(LoginPrefs.class);
-        loginPrefs.storeAuthTokenResponse(MockDataUtil.getMockResponse("post_oauth2_access_token", AuthResponse.class), LoginPrefs.AuthBackend.PASSWORD);
+        loginPrefs.storeAuthTokenResponse(MockDataUtil.getMockResponse("post_oauth2_access_token", AuthResponse.class), new AuthResponseJwt(), LoginPrefs.AuthBackend.PASSWORD);
     }
 
     @Override
@@ -114,7 +114,7 @@ public final class AuthenticationTests extends BaseTestCase {
 
     @Test
     public void testAuthenticate_withoutRefreshToken() throws Exception {
-        loginPrefs.storeAuthTokenResponse(MockDataUtil.getMockResponse("post_oauth2_access_token_no_refresh_token", AuthResponse.class), LoginPrefs.AuthBackend.PASSWORD);
+        loginPrefs.storeAuthTokenResponse(MockDataUtil.getMockResponse("post_oauth2_access_token_no_refresh_token", AuthResponse.class), new AuthResponseJwt(), LoginPrefs.AuthBackend.PASSWORD);
 
         client = client.newBuilder()
                 .authenticator(new OauthRefreshTokenAuthenticator(context))

@@ -411,6 +411,7 @@
     <string name="invitation_only_button_text">ക്ഷണം മാത്രം</string>
     <string name="enroll_now_button_text">ഇപ്പോൾ എൻറോൾ ചെയ്യുക</string>
     <string name="course_details_view_cert_button">സർട്ടിഫിക്കറ്റ് കാണുക</string>
+    <string name="open_certificate">സർട്ടിഫിക്കറ്റ് കാണുക</string>
     <string name="course_details_earned_cert">നിങ്ങൾ കോഴ്സ് പാസായി.</string>
     <string name="course_details_congratulations">അഭിനന്ദനങ്ങൾ!</string>
     <string name="app_name" translatable="false">Subodha</string>

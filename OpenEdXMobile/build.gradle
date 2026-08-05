@@ -28,6 +28,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 */
 apply plugin: 'kotlin-kapt'
+
+kotlin {
+    jvmToolchain(17)
+}
+
 edx {
     platform = ANDROID
 }
@@ -289,7 +294,6 @@ dependencies {
         exclude group: 'org.hamcrest'
     }
     testImplementation "org.robolectric:robolectric:4.12"
-    testImplementation "com.github.nimbl3:robolectric.shadows-supportv4:4.1-SNAPSHOT"
     testImplementation "org.robolectric:shadows-multidex:4.12"
     testImplementation 'org.assertj:assertj-core:3.25.3'
     /**
@@ -629,9 +633,14 @@ android {
 android.applicationVariants.all { variant ->
     def variantName = variant.name.capitalize()
     def taskName = "applyConfig" + variantName
+    // Capture as String at configuration time so it's serializable for configuration cache
+    def configAssetsDirPath = new File(projectDir, "assets/config").absolutePath
+    def configJsonStr = new groovy.json.JsonBuilder(config).toString()
     def configureTask = project.task(taskName) doLast { task ->
         try {
-            AndroidHelper.saveProcessedConfig(task.project, config)
+            def dir = new File(configAssetsDirPath)
+            dir.mkdirs()
+            new File(dir, "config.json").text = configJsonStr
         } catch (Exception e) {
             println "Warning: Could not save processed config: ${e.message}"
         }

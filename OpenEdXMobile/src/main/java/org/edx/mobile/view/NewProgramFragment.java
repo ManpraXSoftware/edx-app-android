@@ -53,6 +53,7 @@ import org.edx.mobile.course.EnrollInCourseTask;
 import org.edx.mobile.databinding.FragmentNewProgramScreenBinding;
 import org.edx.mobile.discovery.DiscoveryCallback;
 import org.edx.mobile.discovery.model.CourseRuns;
+import org.edx.mobile.discovery.model.ProgramCertificateModel;
 import org.edx.mobile.discovery.model.EnrollAndUnenrollData;
 import org.edx.mobile.discovery.model.EnrollResponse;
 import org.edx.mobile.discovery.model.ProgramCoursesList;
@@ -153,6 +154,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
     int delay = 5000;
     private ArrayAdapter<String> programAdapter;
     private List<String> programsNameLists = new ArrayList<>();
+    private String certificateUrl;
 
     ClipboardService clipboardService;
 
@@ -268,6 +270,16 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
         LinearLayoutManager mLayoutManager1 = new LinearLayoutManager(getContext());
         binding.rvCourses.setLayoutManager(mLayoutManager1);
         binding.rvCourses.setAdapter(discoveryCourseAdapter);
+
+        binding.certificateCard.setVisibility(View.GONE);
+        binding.btnOpenCertificate.setOnClickListener(v -> {
+            if (certificateUrl != null && !certificateUrl.isEmpty()) {
+                Log.d("CertificatClick", "Opening certificate URL: " + certificateUrl);
+                startActivity(ProgramWebViewActivity.newIntent(getActivity(), certificateUrl,
+                        getString(R.string.program_certificate)));
+            }
+        });
+
         binding.enrollInProgram.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -402,6 +414,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
 //                                    binding.courseDatailEnroll.setVisibility(View.GONE);
                                     flag=false;
 
+                                    fetchProgramCertificate();
                                     runParallelTasks();
 
                                 }
@@ -507,9 +520,14 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
 
 //                    binding.courseDatailEnroll.setVisibility(View.VISIBLE);
 //                    binding.courseDatailUnenroll.setVisibility(View.GONE);
-                    binding.programLanguage.setVisibility(View.VISIBLE);
                     if(getContext()!=null) {
-                        binding.programLanguage.setText(getString(R.string.program_language) + " : " + LocaleManager.getLanguageResourceName(getContext(), programResultList.getProgramLanguage()));
+                        String lang = programResultList.getProgramLanguage();
+                        if (lang != null) {
+                            binding.programLanguage.setText(getString(R.string.program_language) + " : " + LocaleManager.getLanguageResourceName(getContext(), lang));
+                            binding.programLanguage.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.programLanguage.setVisibility(View.GONE);
+                        }
                     }
 
                     if (programResultList.getTitle() != null
@@ -563,7 +581,9 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
             }
         }
         catch (Exception e){
-
+            binding.shimmerLayoutOrganisation.setVisibility(View.GONE);
+            binding.shimmerLayoutProgramName.setVisibility(View.GONE);
+            binding.shimmerLayoutCourse.setVisibility(View.GONE);
         }
     }
     Boolean flag=false;
@@ -839,6 +859,7 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
                         }
                         if (!program_uuid.isEmpty()) {
                             updateSingleProgram(programResultLists,finalSelectedLanguage1);
+                            fetchProgramCertificate();
                         } else {
                             updateProgramList(programResultLists,finalSelectedLanguage1);
                         }
@@ -2249,4 +2270,43 @@ public class NewProgramFragment extends BaseFragment  implements OnRecyclerItemC
         String formattedString = baseString.replace("%1$s", String.valueOf(messageCode));
         return formattedString;
     }
+
+    private void fetchProgramCertificate() {
+        if (program_uuid == null || program_uuid.isEmpty()) return;
+        ApiNewLmsClient apiNewLmsClient = new ApiNewLmsClient(loginAPI.config);
+        ApiLmsService apiService = apiNewLmsClient.getClient().create(ApiLmsService.class);
+        Call<ProgramCertificateModel> call = apiService.getProgramCertificate(
+                loginPrefs.getAuthorizationHeader(),
+                program_uuid);
+        call.enqueue(new Callback<ProgramCertificateModel>() {
+            @Override
+            public void onResponse(Call<ProgramCertificateModel> call, Response<ProgramCertificateModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    showCertificateCard(response.body());
+                } else {
+                    binding.certificateCard.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProgramCertificateModel> call, Throwable t) {
+                binding.certificateCard.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void showCertificateCard(ProgramCertificateModel certInfo) {
+        if (certInfo != null
+                && certInfo.getProgramName() != null && !certInfo.getProgramName().isEmpty()
+                && certInfo.getMessage() != null && !certInfo.getMessage().isEmpty()) {
+            certificateUrl = certInfo.getCertificateUrl();
+            binding.certificateCard.setVisibility(View.VISIBLE);
+            binding.certificateProgramName.setText(certInfo.getProgramName());
+            binding.certificateMessage.setText(certInfo.getMessage());
+        } else {
+            binding.certificateCard.setVisibility(View.GONE);
+            certificateUrl = null;
+        }
+    }
+
 }

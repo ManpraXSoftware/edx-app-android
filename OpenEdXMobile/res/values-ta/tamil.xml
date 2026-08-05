@@ -451,6 +451,7 @@
     <string name="invitation_only_button_text">அழைப்பிதழ் மட்டுமே</string>
     <string name="enroll_now_button_text">இப்பொழுதே பதிவு செய்</string>
     <string name="course_details_view_cert_button">சான்றிதழைப் பார்க்கவும்</string>
+    <string name="open_certificate">சான்றிதழைப் பார்க்கவும்</string>
     <string name="course_details_earned_cert">படிப்பில் தேர்ச்சி பெற்றுவிட்டீர்கள்.</string>
     <string name="course_details_congratulations">வாழ்த்துகள்!</string>
 

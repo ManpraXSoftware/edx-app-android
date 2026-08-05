@@ -385,7 +385,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
             selectedLanguage = LocaleManager.getLanguagePref(getActivity());
         }
         page = 1;
-        Call<SearchResult> search = courseApi.getSearchNextResult(token, selectedLanguage, String.valueOf(page), "100", query.trim());
+        Call<SearchResult> search = courseApi.getSearchNextResult(token, selectedLanguage, String.valueOf(page), "100", query.trim(), loginPrefs.getUsername());
         final String finalQuery = query.trim();
         final String finalSelectedLanguage = selectedLanguage;
         search.enqueue(new DiscoveryCallback<SearchResult>() {
@@ -398,7 +398,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                         public void onSuccess(@NonNull AuthResponseJwt result) {
                             // Retry with new token
                             String newToken = loginPrefs.getAuthorizationHeaderJwt();
-                            Call<SearchResult> retryCall = courseApi.getSearchNextResult(newToken, finalSelectedLanguage, String.valueOf(page), "100", finalQuery);
+                            Call<SearchResult> retryCall = courseApi.getSearchNextResult(newToken, finalSelectedLanguage, String.valueOf(page), "100", finalQuery, loginPrefs.getUsername());
                             retryCall(retryCall);
                         }
 
@@ -504,12 +504,14 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                 // Set focus on search result after announcements
                 if (isTalkBackEnabled()) {
                         if (binding.searchResults != null && binding.searchResults.getVisibility() == View.VISIBLE) {
-                            binding.searchResults.setFocusable(true);
-                            binding.searchResults.setFocusableInTouchMode(true);
-                            binding.searchResults.requestFocus();
-                            binding.searchResults.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
-                            //announceForTalkBack(getString(R.string.search_result));
-                            announceForTalkBack(countText);
+                            new Handler().postDelayed(() -> {
+                                binding.searchResults.setFocusable(true);
+                                binding.searchResults.setFocusableInTouchMode(true);
+                                binding.searchResults.requestFocus();
+                                binding.searchResults.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
+                                //announceForTalkBack(getString(R.string.search_result));
+                                announceForTalkBack(countText);
+                            }, 500);
                         }
                 }
             }
@@ -531,7 +533,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
         if (!LocaleManager.getLanguagePref(getActivity()).isEmpty()) {
             selectedLanguage = LocaleManager.getLanguagePref(getActivity());
         }
-        Call<SearchResult> search = courseApi.getSearchNextResult(token, selectedLanguage, String.valueOf(page), "10", query.trim());
+        Call<SearchResult> search = courseApi.getSearchNextResult(token, selectedLanguage, String.valueOf(page), "10", query.trim(), loginPrefs.getUsername());
         final String finalQuery = query.trim();
         final String finalSelectedLanguage = selectedLanguage;
         final int currentPage = page;
@@ -545,7 +547,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                         public void onSuccess(@NonNull AuthResponseJwt result) {
                             // Retry with new token
                             String newToken = loginPrefs.getAuthorizationHeaderJwt();
-                        Call<SearchResult> retryCall = courseApi.getSearchNextResult(newToken, finalSelectedLanguage, String.valueOf(currentPage), "10", finalQuery);
+                        Call<SearchResult> retryCall = courseApi.getSearchNextResult(newToken, finalSelectedLanguage, String.valueOf(currentPage), "10", finalQuery, loginPrefs.getUsername());
                             retryCall(retryCall);
                         }
 
@@ -675,7 +677,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
             sendAnalyticsCourseDetail(combinationOfSeachResult);
             if (combinationOfSeachResult.isIs_enroll()) {
                 // goto unit page directly if enrolled
-                getParticularCourse(combinationOfSeachResult.getCourse_id(), combinationOfSeachResult.getUnit_id());
+                getParticularCourse(combinationOfSeachResult.getCourse_id(), combinationOfSeachResult.getUnit_id(), combinationOfSeachResult.getTagName(), combinationOfSeachResult.getProgram_id());
             }else {
                 environment.getRouter().showProgramsActivity(getActivity(), combinationOfSeachResult.getTagName(), /*combinationOfSeachResult.getProgram_id()*/ combinationOfSeachResult.getProgram_id());
             }
@@ -727,7 +729,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
             sendAnalyticsCourseDetail(combinationOfSeachResult);
             if (combinationOfSeachResult.isIs_enroll()) {
                 // goto unit page directly if enrolled
-                getParticularCourse(combinationOfSeachResult.getCourse_id(), combinationOfSeachResult.getUnit_id());
+                getParticularCourse(combinationOfSeachResult.getCourse_id(), combinationOfSeachResult.getUnit_id(), combinationOfSeachResult.getTagName(), combinationOfSeachResult.getProgram_id());
             }else {
                 environment.getRouter().showProgramsActivity(getActivity(), combinationOfSeachResult.getTagName(), /*combinationOfSeachResult.getProgram_id()*/ combinationOfSeachResult.getProgram_id());
             }
@@ -1117,7 +1119,7 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
 
     private static final int REQUEST_SHOW_COURSE_UNIT_DETAIL = 0;
     EnrolledCoursesResponse courseData;
-    public void getParticularCourse(String courseId, String blockId) {
+    public void getParticularCourse(String courseId, String blockId, final String tagName, final String programId) {
         try {
             ParticularCourseTask particularCourseTask = new ParticularCourseTask(getContext(), loginPrefs.getUsername(),
                     courseId) {
@@ -1212,7 +1214,11 @@ public class SeachScreenFragment extends BaseFragment implements OnRecyclerItemC
                                                 null, null, false);
                                     }
                                 } else {
-                                    Toast.makeText(getActivity(), getString(R.string.no_course_info), Toast.LENGTH_LONG).show();
+                                    if (tagName != null && programId != null) {
+                                        environment.getRouter().showProgramsActivity(getActivity(), tagName, programId);
+                                    } else {
+                                        Toast.makeText(getActivity(), getString(R.string.no_course_info), Toast.LENGTH_LONG).show();
+                                    }
                                 }
                                 if (courseData != null) {
                                     Log.d("enrolledCoursesResponse", courseData.getCourse().getId());

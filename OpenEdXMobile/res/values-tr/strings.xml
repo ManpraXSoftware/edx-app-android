@@ -7,6 +7,7 @@
   <string name="course_details_earned_cert">Dersten geçtiniz.</string>
   <!--Button that opens a full view of an earned certificate-->
   <string name="course_details_view_cert_button">Sertifikayı Gör</string>
+  <string name="open_certificate">Sertifikayı Gör</string>
   <!--Course Discovery-->
   <!--Enroll Now button text-->
   <string name="enroll_now_button_text">Şimdi kayıt yaptır</string>

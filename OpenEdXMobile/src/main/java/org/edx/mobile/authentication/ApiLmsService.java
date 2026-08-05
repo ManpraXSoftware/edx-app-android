@@ -1,5 +1,6 @@
 package org.edx.mobile.authentication;
 
+import org.edx.mobile.discovery.model.ProgramCertificateModel;
 import org.edx.mobile.discovery.model.ResponseEnrollmentModel;
 import org.edx.mobile.discovery.model.TranslatedAudioResponse;
 import org.edx.mobile.http.constants.ApiConstants;
@@ -42,5 +43,11 @@ public interface ApiLmsService {
             @Header("Accept-Language") String language,
             @Header("username") String username,
             @Part MultipartBody.Part audioFile
+    );
+
+    @GET("explore-courses/v1/program-certificates/")
+    Call<ProgramCertificateModel> getProgramCertificate(
+            @Header("Authorization") String authorizationHeader,
+            @Query("program_uuid") String programUuid
     );
 }

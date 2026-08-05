@@ -19,7 +19,7 @@ def edXAppPluginSetup(url, ref = null) {
         Grgit.clone(dir: dest, uri: url)
     }
 
-    def grgit = Grgit.open(dir: dest)
+    def grgit = Grgit.open(dest)
     try {
         grgit.fetch()
 

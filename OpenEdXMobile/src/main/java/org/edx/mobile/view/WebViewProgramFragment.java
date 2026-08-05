@@ -1,11 +1,13 @@
 package org.edx.mobile.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 
@@ -37,7 +39,20 @@ public class WebViewProgramFragment extends AuthenticatedWebViewFragment {
 
     public static Fragment newInstance(@NonNull String url) {
         final Fragment fragment = new WebViewProgramFragment();
-        fragment.setArguments(makeArguments(url, null, true));
+        String javascript = null;
+        if (url != null && url.contains("credential")) {
+            javascript = "var screenWidth = window.innerWidth || document.documentElement.clientWidth || screen.width; " +
+                         "var scale = screenWidth / 1024; " +
+                         "var meta = document.querySelector('meta[name=\"viewport\"]'); " +
+                         "if (meta) { meta.setAttribute('content', 'width=1024, initial-scale=' + scale + ', maximum-scale=5.0, user-scalable=yes'); } " +
+                         "else { " +
+                         "  var newMeta = document.createElement('meta'); " +
+                         "  newMeta.name = 'viewport'; " +
+                         "  newMeta.content = 'width=1024, initial-scale=' + scale + ', maximum-scale=5.0, user-scalable=yes'; " +
+                         "  document.head.appendChild(newMeta); " +
+                         "}";
+        }
+        fragment.setArguments(makeArguments(url, javascript, true));
         return fragment;
     }
 
@@ -57,9 +72,32 @@ public class WebViewProgramFragment extends AuthenticatedWebViewFragment {
         progressWheel = view.findViewById(R.id.loading_indicator);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        if (!isSystemUpdatingWebView()) {
+            // Enable zoom for ALL webview pages
+            authWebView.getWebView().getSettings().setSupportZoom(true);
+            authWebView.getWebView().getSettings().setBuiltInZoomControls(true);
+            authWebView.getWebView().getSettings().setDisplayZoomControls(false);
+
+            // Check if this is a certificate URL and set desktop mode before loading
+            if (getArguments() != null) {
+                String url = getArguments().getString("ARG_URL");
+                if (url != null && url.contains("credential")) {
+                    // Set desktop user agent for certificate pages ONLY
+                    String desktopUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36";
+                    authWebView.getWebView().getSettings().setUserAgentString(desktopUserAgent);
+                    authWebView.getWebView().getSettings().setUseWideViewPort(true);
+                    authWebView.getWebView().getSettings().setLoadWithOverviewMode(true);
+                    // Prevent Android text autosizing from squeezing the layout vertically
+                    authWebView.getWebView().getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
+                }
+            }
+        }
+        
         super.onActivityCreated(savedInstanceState);
+
         if (!isSystemUpdatingWebView()) {
             authWebView.getWebViewClient().setActionListener(new DefaultActionListener(getActivity(),
                     progressWheel, new DefaultActionListener.EnrollCallback() {
@@ -205,6 +243,15 @@ public class WebViewProgramFragment extends AuthenticatedWebViewFragment {
      */
     private boolean tryEnablingSwipeContainer() {
         if (!isSystemUpdatingWebView() && getActivity() != null) {
+            // Disable swipe to refresh for certificate pages so it doesn't intercept zoom gestures
+            if (getArguments() != null) {
+                String url = getArguments().getString("ARG_URL");
+                if (url != null && url.contains("credential")) {
+                    swipeContainer.setEnabled(false);
+                    return false;
+                }
+            }
+
             if (NetworkUtil.isConnected(getActivity())
                     && !authWebView.isShowingError()
                     && progressWheel.getVisibility() != View.VISIBLE

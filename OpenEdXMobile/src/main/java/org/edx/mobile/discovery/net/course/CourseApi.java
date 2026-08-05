@@ -7,6 +7,7 @@ import org.edx.mobile.discovery.DiscoveryRetrofitProvider;
 import org.edx.mobile.discovery.model.DiscoverySubject;
 import org.edx.mobile.discovery.model.ResponseEnrollmentModel;
 import org.edx.mobile.discovery.model.OrganisationList;
+import org.edx.mobile.discovery.model.ProgramCertificateModel;
 import org.edx.mobile.discovery.model.ProgramModel;
 import org.edx.mobile.discovery.model.ProgramResponseModel;
 import org.edx.mobile.discovery.model.ResponseCourseModel;
@@ -35,12 +36,12 @@ public class CourseApi extends DiscoveryBaseApi {
         return courseService.getTopics(auth_token, lang, subjectName);
     }
 
-    public Call<SearchResult> getSearchResult(String auth_token, String lang, String page_size, String query) {
-        return courseService.getSearch(auth_token, lang, page_size, query);
+    public Call<SearchResult> getSearchResult(String auth_token, String lang, String page_size, String query, String username) {
+        return courseService.getSearch(auth_token, lang, page_size, query, username);
     }
 
-    public Call<SearchResult> getSearchNextResult(String auth_token, String lang, String page, String page_size, String query) {
-        return courseService.getSearchNextResult(auth_token, lang, page, page_size, query);
+    public Call<SearchResult> getSearchNextResult(String auth_token, String lang, String page, String page_size, String query, String username) {
+        return courseService.getSearchNextResult(auth_token, lang, page, page_size, query, username);
     }
 
     public Call<ProgramModel> getProgramsWithTopicName(String auth_token, String lang, String topic_name) {
@@ -65,6 +66,10 @@ public class CourseApi extends DiscoveryBaseApi {
         return courseService.getEnrollment(auth_token, programId);
     }
 
+
+    public Call<ProgramCertificateModel> getProgramCertificate(String auth_token, String programUuid) {
+        return courseService.getProgramCertificate(auth_token, programUuid, true);
+    }
 
    /* public Call<AuthResponse> getEnroll(String auth_token,JSONObject data) {
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),data.toString());
